@@ -13,9 +13,7 @@ class LicenceNotFoundWithIdException extends Exception
     protected $licenceId;
 
     /**
-     * @param int $licenceId
      * @param string|null $message
-     * @param int $code
      * @param Throwable|null $previous
      */
     public function __construct(int $licenceId, string $message = null, int $code = 0, Throwable $previous = null)

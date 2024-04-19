@@ -65,7 +65,7 @@ class TransferVehicleController extends AbstractVehicleController
     {
         try {
             $this->alterVehicleForm();
-        } catch (NoOtherLicencesFoundException $ex) {
+        } catch (NoOtherLicencesFoundException) {
             // If a user has no licences, redirect them to the switchboard.
             return $this->nextStep('lva-licence/vehicles');
         }
@@ -160,8 +160,6 @@ class TransferVehicleController extends AbstractVehicleController
     /**
      * Sets the licence options within a form.
      *
-     * @param Form $form
-     * @param int $licenceId
      *
      * @throws NoOtherLicencesFoundException
      *
@@ -197,7 +195,6 @@ class TransferVehicleController extends AbstractVehicleController
     /**
      * Gets options for all other active licences given a licence id.
      *
-     * @param int $licenceId
      * @return OtherActiveLicenceListDTO
      */
     protected function getOtherActiveLicenceOptions(int $licenceId): OtherActiveLicenceListDTO

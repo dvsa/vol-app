@@ -63,12 +63,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     protected FlashMessengerHelperService $flashMessengerHelper;
     protected FormServiceManager $formServiceManager;
     protected ScriptFactory $scriptFactory;
-    protected TableFactory $tableFactory;
     protected QuerySender $querySender;
     protected QueryService $queryService;
     protected CommandService $commandService;
     protected AnnotationBuilder $transferAnnotationBuilder;
-    protected TranslationHelperService $translationHelper;
     protected FileUploadHelperService $uploadHelper;
 
     /**
@@ -98,13 +96,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         CommandService $commandService,
         AnnotationBuilder $transferAnnotationBuilder,
         TransportManagerHelperService $transportManagerHelper,
-        TranslationHelperService $translationHelper,
+        protected TranslationHelperService $translationHelper,
         $lvaAdapter,
-        TableFactory $tableFactory,
+        protected TableFactory $tableFactory,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->translationHelper = $translationHelper;
-        $this->tableFactory = $tableFactory;
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct(
@@ -1519,7 +1515,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Send Tm application emails
      *
-     * @param string $resendOrAmend
      *
      * @return void
      */
@@ -1552,8 +1547,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param array $tma
-     *
      * @return \Laminas\Http\Response
      */
     private function redirectToOperatorDeclarationPage(array $tma): \Laminas\Http\Response
@@ -1569,9 +1562,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param array  $tma
      * @param object $form
-     *
      * @return void
      */
     protected function maybeSelectOptions(array $tma, $form): void
@@ -1618,8 +1609,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param array $tma
-     *
      * @return \Laminas\Http\Response
      */
     protected function redirectToCheckAnswersPage(array $tma): \Laminas\Http\Response
@@ -1658,14 +1647,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * @deprecated To be removed when LGV Acquired Rights is no longer allowed.
-     * @param \Common\Service\Cqrs\Response $response
      * @return false|mixed
      */
     private function getAcquiredRightsErrorIfExists(\Common\Service\Cqrs\Response $response)
     {
         try {
             $errorArray = json_decode($response->getBody(), true);
-        } catch (\InvalidArgumentException $invalidArgumentException) {
+        } catch (\InvalidArgumentException) {
             // do nothing, not valid JSON.
             return false;
         }
@@ -1678,7 +1666,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * @param $application
-     * @param \Common\Form\Form $form
      * @return \Common\View\Model\Section
      */
     protected function renderWithForm($application, \Common\Form\Form $form)

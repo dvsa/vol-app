@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 use Common\Service\Lva\PeopleLvaService;
+use Dvsa\Olcs\Transfer\Command\Application\CreatePeople;
 use Psr\Container\ContainerInterface;
 use Laminas\Form\Form;
 
@@ -14,11 +15,8 @@ use Laminas\Form\Form;
  */
 class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
-    protected PeopleLvaService $peopleLvaService;
-
-    public function __construct(ContainerInterface $container, PeopleLvaService $peopleLvaService)
+    public function __construct(ContainerInterface $container, protected PeopleLvaService $peopleLvaService)
     {
-        $this->peopleLvaService = $peopleLvaService;
         parent::__construct($container);
     }
 
@@ -27,7 +25,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return bool
      */
-    public function canModify()
+    public function canModify(): bool
     {
         // i.e. they *can't* modify exceptional org types
         // but can modify all others
@@ -39,7 +37,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return string
      */
-    protected function getTableConfig()
+    protected function getTableConfig(): string
     {
         if (!$this->useDeltas()) {
             return 'lva-people';
@@ -86,9 +84,9 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @param array $params Params
      *
-     * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
+     * @return \Dvsa\Olcs\Transfer\Command\Licence\CreatePeople
      */
-    protected function getCreateCommand($params)
+    protected function getCreateCommand($params): CreatePeople
     {
         $params['id'] = $this->getApplicationId();
         return \Dvsa\Olcs\Transfer\Command\Application\CreatePeople::create($params);
@@ -101,7 +99,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
-    protected function getUpdateCommand($params)
+    protected function getUpdateCommand($params): \Dvsa\Olcs\Transfer\Command\Application\UpdatePeople
     {
         $params['person'] = $params['id'];
         $params['id'] = $this->getApplicationId();
@@ -115,7 +113,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
-    protected function getDeleteCommand($params)
+    protected function getDeleteCommand($params): \Dvsa\Olcs\Transfer\Command\Application\DeletePeople
     {
         $params['id'] = $this->getApplicationId();
         return \Dvsa\Olcs\Transfer\Command\Application\DeletePeople::create($params);

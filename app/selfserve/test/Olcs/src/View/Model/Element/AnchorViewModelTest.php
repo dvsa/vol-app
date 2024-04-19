@@ -229,10 +229,9 @@ class AnchorViewModelTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed ...$args
      * @return AnchorViewModel
      */
-    protected function setUpSut(...$args): AnchorViewModel
+    protected function setUpSut(mixed ...$args): AnchorViewModel
     {
         return $this->sut = new AnchorViewModel(...$args);
     }

@@ -82,7 +82,6 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
     /**
      * @test
      * @depends __construct_SetsDataVariable
-     * @param array $data
      */
     public function constructSetsDataVariableWithCurrentSectionNumber(array $data)
     {
@@ -93,7 +92,6 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
     /**
      * @test
      * @depends __construct_SetsDataVariable
-     * @param array $data
      */
     public function constructSetsDataVariableWithNumberOfSections(array $data)
     {
@@ -101,10 +99,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(count(static::AN_ARRAY_WITH_A_SECTION), $data[1]);
     }
 
-    /**
-     * @param mixed ...$args
-     */
-    protected function setUpSut(...$args): void
+    protected function setUpSut(mixed ...$args): void
     {
         $this->sut = new JourneyProgressDescriptionViewModel(...$args);
     }

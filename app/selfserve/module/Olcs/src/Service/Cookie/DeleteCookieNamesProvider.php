@@ -12,8 +12,6 @@ class DeleteCookieNamesProvider
     /**
      * Return a list of cookie names to be deleted in accordance with the provided preferences
      *
-     * @param Preferences $preferences
-     * @param Cookie $cookie
      *
      * @return array
      */
@@ -37,7 +35,6 @@ class DeleteCookieNamesProvider
      * Register a class that provides a list of cookie names against the specified preference
      *
      * @param string $preferenceName
-     * @param CookieNamesProviderInterface $cookieNamesProvider
      */
     public function registerCookieNamesProvider($preferenceName, CookieNamesProviderInterface $cookieNamesProvider): void
     {

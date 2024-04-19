@@ -167,7 +167,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
                 if ($result->isOk()) {
                     $surrenderData = $result->getResult();
                 }
-            } catch (NotFoundException $exception) {
+            } catch (NotFoundException) {
                 $surrenderData = [];
             }
             $viewModel->setSurrenderLink($surrenderData);

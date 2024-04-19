@@ -43,7 +43,7 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
         $mockFieldset = m::mock(Fieldset::class);
         $mockTable = m::mock(TableBuilder::class);
 
-        $mockForm = m::mock(Form::class)
+        $mockForm = m::mock(\Common\Form\Form::class)
             ->shouldReceive('get')
             ->with('table')
             ->andReturn($mockFieldset)
@@ -68,7 +68,7 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
             ->with('lva-application')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(\Common\Form\Form::class)
                 ->shouldReceive('alterForm')
                 ->with($mockForm)
                 ->once()

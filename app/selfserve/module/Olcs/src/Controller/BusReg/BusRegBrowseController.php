@@ -20,10 +20,6 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class BusRegBrowseController extends AbstractController
 {
-    protected FormHelperService $formHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -34,14 +30,10 @@ class BusRegBrowseController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory
+        protected FormHelperService $formHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory
     ) {
-        $this->formHelper = $formHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -126,7 +118,7 @@ class BusRegBrowseController extends AbstractController
             }
 
             $this->flashMessengerHelper->addCurrentUnknownError();
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             // no results found
             $this->flashMessengerHelper
                 ->addErrorMessage('selfserve.search.busreg.browse.no-results');

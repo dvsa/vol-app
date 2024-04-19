@@ -14,19 +14,11 @@ class User extends ViewModel
      * @var string
      */
     protected $template = 'user';
-    private UrlHelperService $urlHelper;
-    private TableFactory $tableService;
 
-    public function __construct(UrlHelperService $urlHelper, TableFactory $tableService)
+    public function __construct(private UrlHelperService $urlHelper, private TableFactory $tableService)
     {
-        $this->urlHelper = $urlHelper;
-        $this->tableService = $tableService;
     }
 
-    /**
-     * @param array $data
-     * @param array $params
-     */
     public function setUsers(array $data, array $params = []): void
     {
         $this->setVariable('users', $this->getTable('users', $data, $params));

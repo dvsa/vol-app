@@ -128,10 +128,6 @@ class ViewVehicleController extends AbstractVehicleController
 
     /**
      * Prepares a form.
-     *
-     * @param Form $form
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      */
     protected function prepareForm(Form $form, Request $request, RouteMatch $routeMatch): void
     {
@@ -158,9 +154,6 @@ class ViewVehicleController extends AbstractVehicleController
 
     /**
      * Sets the value options for a licence select element.
-     *
-     * @param Select $select
-     * @param array $licences
      */
     protected function setLicenceSelectValueOptions(Select $select, array $licences): void
     {
@@ -182,7 +175,6 @@ class ViewVehicleController extends AbstractVehicleController
     /**
      * Sets the licence options on a select element.
      *
-     * @param array $otherActiveLicences
      * @return array
      */
     protected function prepareLicenceSelectValueOptions(array $otherActiveLicences)
@@ -197,7 +189,6 @@ class ViewVehicleController extends AbstractVehicleController
     /**
      * Gets options for all other active licences given a licence id.
      *
-     * @param int $licenceId
      * @return OtherActiveLicenceListDTO
      */
     protected function getOtherActiveLicenceOptions(int $licenceId): OtherActiveLicenceListDTO
@@ -211,8 +202,6 @@ class ViewVehicleController extends AbstractVehicleController
     /**
      * Finds a licence vehicle by licence id and vehicle id.
      *
-     * @param int $licenceId
-     * @param int $vehicleId
      * @return array
      * @throws VehiclesNotFoundWithIdsException
      */
@@ -229,7 +218,7 @@ class ViewVehicleController extends AbstractVehicleController
 
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException | AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException) {
             throw new VehiclesNotFoundWithIdsException([$vehicleId]);
         }
 

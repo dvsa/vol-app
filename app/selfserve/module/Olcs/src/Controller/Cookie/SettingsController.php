@@ -16,32 +16,14 @@ class SettingsController extends AbstractOlcsController
     public const SUCCESS_QUERY_PARAM = 'success';
     public const SUCCESS_QUERY_VALUE = 'true';
 
-    /** @var CurrentPreferencesProvider */
-    private $currentPreferencesProvider;
-
-    /** @var SetCookieArrayGenerator */
-    private $setCookieArrayGenerator;
-
-    /** @var PreferencesFactory */
-    private $preferencesFactory;
-
     /**
      * Create service instance
      *
-     * @param CurrentPreferencesProvider $currentPreferencesProvider
-     * @param SetCookieArrayGenerator $setCookieArrayGenerator
-     * @param PreferencesFactory $preferencesFactory
      *
      * @return SettingsController
      */
-    public function __construct(
-        CurrentPreferencesProvider $currentPreferencesProvider,
-        SetCookieArrayGenerator $setCookieArrayGenerator,
-        PreferencesFactory $preferencesFactory
-    ) {
-        $this->currentPreferencesProvider = $currentPreferencesProvider;
-        $this->setCookieArrayGenerator = $setCookieArrayGenerator;
-        $this->preferencesFactory = $preferencesFactory;
+    public function __construct(private CurrentPreferencesProvider $currentPreferencesProvider, private SetCookieArrayGenerator $setCookieArrayGenerator, private PreferencesFactory $preferencesFactory)
+    {
     }
 
     /**
@@ -68,7 +50,7 @@ class SettingsController extends AbstractOlcsController
                 foreach ($cookies as $cookie) {
                     $headers->addHeader($cookie);
                 }
-            } catch (RuntimeException $e) {
+            } catch (RuntimeException) {
             }
 
             return $this->redirect()->toRoute(
@@ -103,7 +85,6 @@ class SettingsController extends AbstractOlcsController
     /**
      * Convert post data into a value suitable for the PreferencesFactory
      *
-     * @param array $preferences
      *
      * @return array
      */

@@ -34,24 +34,14 @@ class DashboardController extends AbstractController
 
     protected $lva = "application";
 
-    protected Session $session;
-    protected DashboardProcessingService $dashboardProcessingService;
-    protected DashboardTmApplications $dashboardTmApplicationsDataMapper;
-    protected TableFactory $tableFactory;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        Session $session,
-        DashboardProcessingService $dashboardProcessingService,
-        DashboardTmApplications $dashboardTmApplicationsDataMapper,
-        TableFactory $tableFactory
+        protected Session $session,
+        protected DashboardProcessingService $dashboardProcessingService,
+        protected DashboardTmApplications $dashboardTmApplicationsDataMapper,
+        protected TableFactory $tableFactory
     ) {
-        $this->session = $session;
-        $this->dashboardProcessingService = $dashboardProcessingService;
-        $this->dashboardTmApplicationsDataMapper = $dashboardTmApplicationsDataMapper;
-        $this->tableFactory = $tableFactory;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -162,8 +152,6 @@ class DashboardController extends AbstractController
 
     /**
      * Perform dashboard data Qry
-     *
-     * @param int|null $organisationId
      */
     protected function getDashboardData(?int $organisationId)
     {

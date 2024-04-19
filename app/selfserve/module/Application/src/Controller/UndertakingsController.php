@@ -31,10 +31,6 @@ class UndertakingsController extends AbstractUndertakingsController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected TranslationHelperService $translationHelper;
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -55,14 +51,10 @@ class UndertakingsController extends AbstractUndertakingsController
         CommandService $commandService,
         FlashMessengerHelperService $flashMessengerHelper,
         FormHelperService $formHelper,
-        TranslationHelperService $translationHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected TranslationHelperService $translationHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-        $this->translationHelper = $translationHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -178,24 +170,13 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateReviewElement($applicationData, $fieldset, $translator)
     {
-        switch ($applicationData['licence']['organisation']['type']['id']) {
-            case RefData::ORG_TYPE_SOLE_TRADER:
-                $person = 'application.review-declarations.review.business-owner';
-                break;
-            case RefData::ORG_TYPE_OTHER:
-                $person = 'application.review-declarations.review.person';
-                break;
-            case RefData::ORG_TYPE_PARTNERSHIP:
-                $person = 'application.review-declarations.review.partner';
-                break;
-            case RefData::ORG_TYPE_REGISTERED_COMPANY:
-            case RefData::ORG_TYPE_LLP:
-                $person = 'application.review-declarations.review.director';
-                break;
-            default:
-                $person = 'application.review-declarations.review.director';
-                break;
-        }
+        $person = match ($applicationData['licence']['organisation']['type']['id']) {
+            RefData::ORG_TYPE_SOLE_TRADER => 'application.review-declarations.review.business-owner',
+            RefData::ORG_TYPE_OTHER => 'application.review-declarations.review.person',
+            RefData::ORG_TYPE_PARTNERSHIP => 'application.review-declarations.review.partner',
+            RefData::ORG_TYPE_REGISTERED_COMPANY, RefData::ORG_TYPE_LLP => 'application.review-declarations.review.director',
+            default => 'application.review-declarations.review.director',
+        };
 
         $reviewElement = $fieldset->get('review');
         $reviewText = $translator->translateReplace(

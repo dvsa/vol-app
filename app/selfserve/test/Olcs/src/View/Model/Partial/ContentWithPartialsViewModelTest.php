@@ -245,10 +245,9 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed ...$args
      * @return ContentWithPartialsViewModel
      */
-    protected function setUpSut(...$args): ContentWithPartialsViewModel
+    protected function setUpSut(mixed ...$args): ContentWithPartialsViewModel
     {
         return $this->sut = new ContentWithPartialsViewModel(...$args);
     }

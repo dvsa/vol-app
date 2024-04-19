@@ -31,11 +31,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
 
     protected string $location = 'external';
     protected $lva = 'application';
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
-    protected TranslationHelperService $translatorHelper;
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -56,19 +51,13 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
         FlashMessengerHelperService $flashMessengerHelper,
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService,
-        TranslationHelperService $translatorHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper,
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService,
+        protected TranslationHelperService $translatorHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper,
         FormHelperService $formHelper
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-        $this->translatorHelper = $translatorHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -83,7 +72,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
      * Render the section
      *
      * @param string $titleSuffix
-     * @param \Laminas\Form\Form $form
      * @return \Common\View\Model\Section
      */
     protected function renderCreateApplication($titleSuffix, Form $form = null)

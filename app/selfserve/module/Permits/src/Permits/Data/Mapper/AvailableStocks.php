@@ -18,27 +18,21 @@ class AvailableStocks implements MapperInterface
     /**
      * Map stock options
      *
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)
     {
-        switch ($data['type']) {
-            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                return $this->mapForEcmtShortTerm($data, $form);
-            default:
-                throw new RuntimeException('This mapper does not support permit type ' . $data['type']);
-        }
+        return match ($data['type']) {
+            RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID => $this->mapForEcmtShortTerm($data, $form),
+            default => throw new RuntimeException('This mapper does not support permit type ' . $data['type']),
+        };
     }
 
     /**
      * Map stock options for ECMT short term permit type
      *
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     private function mapForEcmtShortTerm(array $data, $form)
@@ -73,7 +67,6 @@ class AvailableStocks implements MapperInterface
     /**
      * Set the id of the first radio button in the list for validation accessibility purposes
      *
-     * @param array $valueOptions
      *
      * @return array
      */

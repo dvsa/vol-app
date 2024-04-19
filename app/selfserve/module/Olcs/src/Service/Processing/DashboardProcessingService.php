@@ -17,7 +17,6 @@ class DashboardProcessingService
     /**
      * Create service instance
      *
-     * @param TableFactory $tableService
      *
      * @return DashboardProcessingService
      */

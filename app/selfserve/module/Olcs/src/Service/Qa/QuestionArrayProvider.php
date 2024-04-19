@@ -9,26 +9,19 @@ class QuestionArrayProvider
 {
     public const ONLY_HTML_ESCAPE_SUPPORTED = 'Selfserve only currently supports the htmlEscape filter for question text';
 
-    /** @var FormattedTranslateableTextParametersGenerator */
-    private $formattedTranslateableTextParametersGenerator;
-
     /**
      * Create service instance
      *
-     * @param FormattedTranslateableTextParametersGenerator $formattedTranslateableTextParametersGenerator
      *
      * @return QuestionArrayProvider
      */
-    public function __construct(
-        FormattedTranslateableTextParametersGenerator $formattedTranslateableTextParametersGenerator
-    ) {
-        $this->formattedTranslateableTextParametersGenerator = $formattedTranslateableTextParametersGenerator;
+    public function __construct(private FormattedTranslateableTextParametersGenerator $formattedTranslateableTextParametersGenerator)
+    {
     }
 
     /**
      * Get the base template variables corresponding to the provided question text data
      *
-     * @param array $question
      *
      * @return array
      */

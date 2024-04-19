@@ -32,9 +32,6 @@ class TransportManagersController extends AbstractTransportManagersController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @var bool
      */
@@ -77,15 +74,12 @@ class TransportManagersController extends AbstractTransportManagersController
         AnnotationBuilder $transferAnnotationBuilder,
         TransportManagerHelperService $transportManagerHelper,
         TranslationHelperService $translationHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper,
         ApplicationTransportManagerAdapter $lvaAdapter,
         TableFactory $tableFactory,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

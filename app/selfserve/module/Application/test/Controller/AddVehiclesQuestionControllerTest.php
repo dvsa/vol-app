@@ -8,6 +8,7 @@ use Common\Test\MockeryTestCase;
 use Common\Test\MocksServicesTrait;
 use Common\Controller\Plugin\Redirect;
 use Laminas\Mvc\Controller\Plugin\Url;
+use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Model\ViewModel;
 use Laminas\Http\Request;
 use Laminas\Router\Http\RouteMatch;
@@ -230,8 +231,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @test
      *
      * @depends indexActionWhenGettingReturnsViewModel
-     *
-     * @param ViewModel $viewModel
      */
     public function indexActionWhenGettingReturnsViewModelWithTheCorrectTemplate(ViewModel $viewModel): void
     {
@@ -441,7 +440,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param int $invalidStatusCode
      *
      * @throws BadCommandResponseException
      * @throws BailOutException
@@ -450,7 +448,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @test
      *
      * @depends indexActionIsCallable
-     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
     public function indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
@@ -526,7 +523,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param string $licenceType
      *
      * @throws BadCommandResponseException
      * @throws BadQueryResponseException
@@ -536,7 +532,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @test
      *
      * @depends indexActionIsCallable
-     *
      * @dataProvider supportedLicenceTypeDataProvider
      */
     public function indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
@@ -600,12 +595,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param array $invalidInputSet
      *
      * @test
      *
      * @depends indexActionIsCallable
-     *
      * @dataProvider invalidInputSetDataProvider
      */
     public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputRedirectBack(array $invalidInputSet): void
@@ -798,7 +791,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         // Execute
         try {
             $this->sut->indexAction($request, $this->routeMatch());
-        } catch (ResourceNotFoundException $ex) {
+        } catch (ResourceNotFoundException) {
         }
 
         // Assert
@@ -899,7 +892,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param int $invalidStatusCode
      *
      * @throws BadCommandResponseException
      * @throws BailOutException
@@ -908,7 +900,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @test
      *
      * @depends indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete
-     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
     public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsThrowsExceptionIfCommandResponseHasAStatusOtherThen200(int $invalidStatusCode): void
@@ -1043,7 +1034,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param int $invalidStatusCode
      *
      * @throws BadCommandResponseException
      * @throws BailOutException
@@ -1053,7 +1043,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      *
      * @depends indexActionIsCallable
      * @depends indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200
-     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
     public function indexActionWhenPostingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
@@ -1119,7 +1108,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param string $licenceType
      *
      * @throws BadCommandResponseException
      * @throws BadQueryResponseException
@@ -1130,7 +1118,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      *
      * @depends indexActionIsCallable
      * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404
-     *
      * @dataProvider supportedLicenceTypeDataProvider
      */
     public function indexActionWhenPostingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
@@ -1175,15 +1162,17 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return void
+     * @param ServiceManager $serviceManager
+     * @return ServiceManager
      */
-    protected function setUpDefaultServices()
+    protected function setUpDefaultServices(ServiceManager $serviceManager): ServiceManager|array
     {
         $this->redirectHelper();
         $this->urlHelper();
         $this->queryHandler();
         $this->flashMessenger();
         $this->commandHandler();
+        return $serviceManager;
     }
 
     /**
@@ -1310,10 +1299,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $command
      * @return bool
      */
-    protected function assertCommandUpdatesVehicleSectionToBeCompleted($command): bool
+    protected function assertCommandUpdatesVehicleSectionToBeCompleted(mixed $command): bool
     {
         $this->assertInstanceOf(UpdateVehicles::class, $command);
         assert($command instanceof UpdateVehicles);
@@ -1325,10 +1313,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $command
      * @return bool
      */
-    protected function assertCommandUpdatesVehicleSectionToBeIncomplete($command): bool
+    protected function assertCommandUpdatesVehicleSectionToBeIncomplete(mixed $command): bool
     {
         $this->assertInstanceOf(UpdateVehicles::class, $command);
         assert($command instanceof UpdateVehicles);
@@ -1365,7 +1352,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param array|null $data
-     * @param bool $merge
      * @return Response
      */
     protected function applicationCqrsResponse(array $data = null, bool $merge = true): Response

@@ -145,7 +145,7 @@ class InformationChangedController extends AbstractSurrenderController
         try {
             $response = $this->handleCommand(Delete::create(['id' => $this->licenceId]));
             return $response->isOk();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }
@@ -163,7 +163,7 @@ class InformationChangedController extends AbstractSurrenderController
                     return true;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }

@@ -28,8 +28,6 @@ class UndertakingsController extends AbstractUndertakingsController
     protected $lva = 'variation';
     protected string $location = 'external';
 
-    protected TranslationHelperService $translationHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -48,10 +46,8 @@ class UndertakingsController extends AbstractUndertakingsController
         CommandService $commandService,
         FlashMessengerHelperService $flashMessengerHelper,
         FormHelperService $formHelper,
-        TranslationHelperService $translationHelper
+        protected TranslationHelperService $translationHelper
     ) {
-        $this->translationHelper = $translationHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

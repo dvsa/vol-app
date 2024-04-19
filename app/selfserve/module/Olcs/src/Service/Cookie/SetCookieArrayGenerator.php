@@ -7,39 +7,19 @@ use Laminas\Http\Header\SetCookie;
 
 class SetCookieArrayGenerator
 {
-    /** @var DeleteCookieNamesProvider */
-    private $deleteCookieNamesProvider;
-
-    /** @var PreferencesSetCookieGenerator */
-    private $preferencesSetCookieGenerator;
-
-    /** @var DeleteSetCookieGenerator */
-    private $deleteSetCookieGenerator;
-
     /**
      * Create service instance
      *
-     * @param DeleteCookieNamesProvider $deleteCookieNamesProvider
-     * @param PreferencesSetCookieGenerator $preferencesSetCookieGenerator
-     * @param DeleteSetCookieGenerator $deleteSetCookieGenerator
      *
      * @return SetCookieArrayGenerator
      */
-    public function __construct(
-        DeleteCookieNamesProvider $deleteCookieNamesProvider,
-        PreferencesSetCookieGenerator $preferencesSetCookieGenerator,
-        DeleteSetCookieGenerator $deleteSetCookieGenerator
-    ) {
-        $this->deleteCookieNamesProvider = $deleteCookieNamesProvider;
-        $this->preferencesSetCookieGenerator = $preferencesSetCookieGenerator;
-        $this->deleteSetCookieGenerator = $deleteSetCookieGenerator;
+    public function __construct(private DeleteCookieNamesProvider $deleteCookieNamesProvider, private PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private DeleteSetCookieGenerator $deleteSetCookieGenerator)
+    {
     }
 
     /**
      * Return an array of SetCookie instances corresponding to the specified preferences
      *
-     * @param Preferences $preferences
-     * @param Cookie $cookie
      *
      * @return array
      */

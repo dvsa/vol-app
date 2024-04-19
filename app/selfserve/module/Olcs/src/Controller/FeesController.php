@@ -44,10 +44,6 @@ class FeesController extends AbstractController
     private $disableCardPayments = false;
 
     protected TableFactory $tableFactory;
-    protected GuidanceHelperService $guidanceHelper;
-    protected ScriptFactory $scriptFactory;
-    protected FormHelperService $formHelper;
-    protected UrlHelperService $urlHelper;
     protected TranslationHelperService $translationHelper;
 
     /**
@@ -64,17 +60,13 @@ class FeesController extends AbstractController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         TableFactory $tableFactory,
-        GuidanceHelperService $guidanceHelper,
-        ScriptFactory $scriptFactory,
-        FormHelperService $formHelper,
-        UrlHelperService $urlHelper,
+        protected GuidanceHelperService $guidanceHelper,
+        protected ScriptFactory $scriptFactory,
+        protected FormHelperService $formHelper,
+        protected UrlHelperService $urlHelper,
         TranslationHelperService $translationHelper
     ) {
         $this->tableFactory = $tableFactory;
-        $this->guidanceHelper = $guidanceHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->formHelper = $formHelper;
-        $this->urlHelper = $urlHelper;
         $this->translationHelper = $translationHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
@@ -222,9 +214,6 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    /**
-     * @param int|null $organisationId
-     */
     protected function getOutstandingFeeDataForOrganisation(?int $organisationId)
     {
         $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
@@ -235,9 +224,6 @@ class FeesController extends AbstractController
         return $response->getResult();
     }
 
-    /**
-     * @param int|null $organisationId
-     */
     protected function getOutstandingFeesForOrganisation(?int $organisationId)
     {
         $result = $this->getOutstandingFeeDataForOrganisation($organisationId);
@@ -318,9 +304,7 @@ class FeesController extends AbstractController
     /**
      * Calls command to initiate payment and then redirects
      *
-     * @param array $feeIds
      * @param string|false $storedCardReference A refernce to the stored card to use
-     *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     protected function payOutstandingFees(array $feeIds, $storedCardReference = false)

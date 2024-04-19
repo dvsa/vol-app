@@ -34,19 +34,14 @@ class AnswerFormatter extends AbstractHelper
         }
 
         foreach ($data['answer'] as $answer) {
-            switch ($data['questionType']) {
-                case RefData::QUESTION_TYPE_BOOLEAN:
-                    $answers[] = $this->translateAndEscape(
-                        $this->formatBoolean($answer),
-                        $data['escape']
-                    );
-                    break;
-                case RefData::QUESTION_TYPE_INTEGER:
-                    $answers[] = (int)$answer;
-                    break;
-                default:
-                    $answers[] = $this->translateAndEscape($answer, $data['escape']);
-            }
+            $answers[] = match ($data['questionType']) {
+                RefData::QUESTION_TYPE_BOOLEAN => $this->translateAndEscape(
+                    $this->formatBoolean($answer),
+                    $data['escape']
+                ),
+                RefData::QUESTION_TYPE_INTEGER => (int)$answer,
+                default => $this->translateAndEscape($answer, $data['escape']),
+            };
         }
 
         return implode(self::SEPARATOR, $answers);
@@ -74,11 +69,10 @@ class AnswerFormatter extends AbstractHelper
     /**
      * Format a truthy/falsy value as a string value of Yes or No
      *
-     * @param mixed $answer
      *
      * @return string
      */
-    private function formatBoolean($answer)
+    private function formatBoolean(mixed $answer)
     {
         if (!$answer) {
             return 'No';

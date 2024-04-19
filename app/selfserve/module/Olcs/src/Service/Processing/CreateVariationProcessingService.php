@@ -28,9 +28,6 @@ class CreateVariationProcessingService
     /**
      * Create service instance
      *
-     * @param FormHelperService $formHelper
-     * @param AnnotationBuilder $annotationBuilder
-     * @param CommandService $commandService
      *
      * @return CreateVariationProcessingService
      */
@@ -72,7 +69,6 @@ class CreateVariationProcessingService
     }
 
     /**
-     * @param Form $form
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

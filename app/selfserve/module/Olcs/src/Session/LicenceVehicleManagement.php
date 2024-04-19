@@ -2,6 +2,11 @@
 
 namespace Olcs\Session;
 
+/**
+ * Class LicenceVehicleManagement
+ *
+ * @template-extends \Laminas\Session\Container<string, mixed>
+ */
 class LicenceVehicleManagement extends \Laminas\Session\Container
 {
     public const SESSION_NAME = 'LicenceVehicleManagement';
@@ -32,7 +37,6 @@ class LicenceVehicleManagement extends \Laminas\Session\Container
     }
 
     /**
-     * @param string $vrm
      * @return $this
      */
     public function setVrm(string $vrm): LicenceVehicleManagement
@@ -58,7 +62,6 @@ class LicenceVehicleManagement extends \Laminas\Session\Container
     }
 
     /**
-     * @param array $vrm
      * @return $this
      */
     public function setVrms(array $vrm): LicenceVehicleManagement
@@ -84,7 +87,6 @@ class LicenceVehicleManagement extends \Laminas\Session\Container
     }
 
     /**
-     * @param array $vehicleData
      * @return $this
      */
     public function setVehicleData(array $vehicleData): LicenceVehicleManagement
@@ -116,7 +118,6 @@ class LicenceVehicleManagement extends \Laminas\Session\Container
     /**
      * Sets a licence id for which a related set of vehicles should be transferred to.
      *
-     * @param int $id
      * @return $this
      */
     public function setDestinationLicenceId(int $id)

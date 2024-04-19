@@ -19,8 +19,6 @@ class CheckAnswersController extends AbstractController
     use ExternalControllerTrait;
     use TransportManagerApplicationTrait;
 
-    protected FormHelperService $formHelper;
-    protected TranslationHelperService $translationHelper;
     protected AnnotationBuilder $transferAnnotationBuilder;
     protected CommandService $commandService;
 
@@ -35,13 +33,11 @@ class CheckAnswersController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper,
-        TranslationHelperService $translationHelper,
+        protected FormHelperService $formHelper,
+        protected TranslationHelperService $translationHelper,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService
     ) {
-        $this->formHelper = $formHelper;
-        $this->translationHelper = $translationHelper;
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->commandService = $commandService;
 

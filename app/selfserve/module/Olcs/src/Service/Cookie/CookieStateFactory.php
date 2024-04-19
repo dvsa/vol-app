@@ -8,7 +8,6 @@ class CookieStateFactory
      * Create and return a CookieState instance
      *
      * @param bool $isValid
-     * @param Preferences|null $preferences
      *
      * @return CookieState
      */

@@ -18,45 +18,33 @@ class AvailableYears implements MapperInterface
 {
     use MapFromResultTrait;
 
-    /** @var TranslationHelperService */
-    private $translator;
-
     /**
      * Create service instance
      *
-     * @param TranslationHelperService $translator
      *
      * @return AvailableYears
      */
-    public function __construct(TranslationHelperService $translator)
+    public function __construct(private TranslationHelperService $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)
     {
-        switch ($data['type']) {
-            case RefData::ECMT_PERMIT_TYPE_ID:
-                return $this->mapForEcmtAnnual($data, $form);
-            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                return $this->mapForEcmtShortTerm($data, $form);
-            default:
-                throw new RuntimeException('This mapper does not support permit type ' . $data['type']);
-        }
+        return match ($data['type']) {
+            RefData::ECMT_PERMIT_TYPE_ID => $this->mapForEcmtAnnual($data, $form),
+            RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID => $this->mapForEcmtShortTerm($data, $form),
+            default => throw new RuntimeException('This mapper does not support permit type ' . $data['type']),
+        };
     }
 
     /**
      * Map year options for ECMT annual permit type
      *
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     private function mapForEcmtAnnual(array $data, $form)
@@ -67,9 +55,7 @@ class AvailableYears implements MapperInterface
     /**
      * Map year options for ECMT short term permit type
      *
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     private function mapForEcmtShortTerm(array $data, $form)
@@ -89,10 +75,8 @@ class AvailableYears implements MapperInterface
     /**
      * Map available year options
      *
-     * @param array $data
      * @param Form  $form
      * @param string $translationPrefix
-     *
      * @return array
      */
     private function mapAvailableYears(array $data, $form, $translationPrefix)
@@ -122,7 +106,6 @@ class AvailableYears implements MapperInterface
     }
 
     /**
-     * @param Form $form
      * @param int $year
      * @param string $translationPrefix
      */
@@ -162,7 +145,6 @@ class AvailableYears implements MapperInterface
     }
 
     /**
-     * @param Form $form
      * @param array $years
      * @param string $selectedYear
      */
@@ -186,7 +168,6 @@ class AvailableYears implements MapperInterface
     /**
      * Set the id of the first radio button in the list for validation accessibility purposes
      *
-     * @param array $valueOptions
      *
      * @return array
      */

@@ -12,23 +12,16 @@ class EcmtNoOfPermits implements MapperInterface
 {
     use MapFromResultTrait;
 
-    /** @var TranslationHelperService */
-    private $translator;
-
     /**
      * Create service instance
      *
-     * @param TranslationHelperService $translator
      *
      */
-    public function __construct(TranslationHelperService $translator)
+    public function __construct(private TranslationHelperService $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
-     * @param array $data
-     *
      * @return array
      */
     public function mapForDisplay(array $data)
@@ -44,7 +37,6 @@ class EcmtNoOfPermits implements MapperInterface
     /**
      * Return an array with each element representing the number of permits required for a given emissions category
      *
-     * @param array $lineSources
      *
      * @return array
      */

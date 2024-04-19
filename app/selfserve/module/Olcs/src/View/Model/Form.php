@@ -28,7 +28,6 @@ class Form extends ViewModel
     /**
      * Set the form into the view.
      *
-     * @param LaminasForm $form
      * @return void
      */
     public function setForm(LaminasForm $form)

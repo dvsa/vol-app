@@ -35,27 +35,15 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         'default' => [FeatureToggle::MESSAGING],
     ];
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-    protected FormHelperService $formHelperService;
-    protected Navigation $navigationService;
-    protected FileUploadHelperService $uploadHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory,
-        FormHelperService $formHelperService,
-        Navigation $navigationService,
-        FileUploadHelperService $uploadHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory,
+        protected FormHelperService $formHelperService,
+        protected Navigation $navigationService,
+        protected FileUploadHelperService $uploadHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-        $this->formHelperService = $formHelperService;
-        $this->navigationService = $navigationService;
-        $this->uploadHelper = $uploadHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

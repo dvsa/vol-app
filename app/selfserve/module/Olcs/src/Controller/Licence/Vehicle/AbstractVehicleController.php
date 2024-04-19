@@ -88,7 +88,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     }
 
     /**
-     * @param array $params
      * @return ViewModel
      */
     protected function renderView(array $params): ViewModel
@@ -107,7 +106,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /**
      * Get a url based on a named route
      *
-     * @param string $route
      * @return string
      */
     protected function getLink(string $route): string
@@ -124,7 +122,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     }
 
     /**
-     * @param string $vrm
      * @return array
      * @throws Exception
      * @throws NotFoundException
@@ -205,7 +202,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /**
      * Filter out unneeded variables from the vehicle search query if present
      *
-     * @param array $query
      * @return array
      */
     protected function filterSearchQuery(array $query): array
@@ -222,21 +218,15 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /**
      * Alter the vehicle table for search results view
      *
-     * @param TableBuilder $table
      * @param $totalVehicles
      */
     protected function alterTableForSearchView(TableBuilder $table, $totalVehicles): TableBuilder
     {
-        switch ($totalVehicles) {
-            case 0:
-                $title = static::TABLE_SEARCH_TITLE_EMPTY;
-                break;
-            case 1:
-                $title = static::TABLE_SEARCH_TITLE_SINGULAR;
-                break;
-            default:
-                $title = static::TABLE_SEARCH_TITLE_PLURAL;
-        }
+        $title = match ($totalVehicles) {
+            0 => static::TABLE_SEARCH_TITLE_EMPTY,
+            1 => static::TABLE_SEARCH_TITLE_SINGULAR,
+            default => static::TABLE_SEARCH_TITLE_PLURAL,
+        };
         $table->setVariable('title', $this->translationHelper->translate($title));
         $table->setSetting('overrideTotal', false);
         return $table;
@@ -245,7 +235,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /**
      * Alter vehicle table to default view
      *
-     * @param TableBuilder $table
      * @param $totalVehicles
      */
     protected function alterTableForDefaultView(TableBuilder $table, $totalVehicles): TableBuilder

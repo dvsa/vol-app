@@ -37,9 +37,6 @@ class SafetyController extends Lva\AbstractSafetyController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -61,12 +58,9 @@ class SafetyController extends Lva\AbstractSafetyController
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

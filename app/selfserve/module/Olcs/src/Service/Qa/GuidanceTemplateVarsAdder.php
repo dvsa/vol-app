@@ -7,24 +7,18 @@ use RuntimeException;
 
 class GuidanceTemplateVarsAdder
 {
-    /** @var TranslateableTextHandler */
-    private $translateableTextHandler;
-
     /**
      * Create service instance
      *
      * @return GuidanceTemplateVarsAdder
      */
-    public function __construct(TranslateableTextHandler $translateableTextHandler)
+    public function __construct(private TranslateableTextHandler $translateableTextHandler)
     {
-        $this->translateableTextHandler = $translateableTextHandler;
     }
 
     /**
      * Conditionally append the template data representing the guidance/additional guidance
      *
-     * @param array $templateVars
-     * @param array $questionText
      * @param string $arrayKey
      *
      * @return array
@@ -37,19 +31,14 @@ class GuidanceTemplateVarsAdder
 
         $guidance = $questionText[$arrayKey];
         $filter = $guidance['filter'];
-        switch ($filter) {
-            case 'raw':
-                $valueToAppend = [
-                    'disableHtmlEscape' => true,
-                    'value' => $this->translateableTextHandler->translate($guidance['translateableText'])
-                ];
-                break;
-            case 'htmlEscape':
-                $valueToAppend = $this->translateableTextHandler->translate($guidance['translateableText']);
-                break;
-            default:
-                throw new RuntimeException('Unhandled filter name ' . $filter);
-        }
+        $valueToAppend = match ($filter) {
+            'raw' => [
+                'disableHtmlEscape' => true,
+                'value' => $this->translateableTextHandler->translate($guidance['translateableText'])
+            ],
+            'htmlEscape' => $this->translateableTextHandler->translate($guidance['translateableText']),
+            default => throw new RuntimeException('Unhandled filter name ' . $filter),
+        };
 
         $templateVars[$arrayKey] = $valueToAppend;
 

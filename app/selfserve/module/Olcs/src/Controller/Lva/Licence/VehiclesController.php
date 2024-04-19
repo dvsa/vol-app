@@ -29,8 +29,6 @@ class VehiclesController extends AbstractGoodsVehiclesController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected ResponseHelperService $responseHelper;
-
     protected static $exportDataMap = [
         'licence' => Query\Licence\GoodsVehiclesExport::class,
         'variation' => Query\Variation\GoodsVehiclesExport::class,
@@ -65,11 +63,9 @@ class VehiclesController extends AbstractGoodsVehiclesController
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
-        ResponseHelperService $responseHelper,
+        protected ResponseHelperService $responseHelper,
         LicenceLvaAdapter $lvaAdapter
     ) {
-        $this->responseHelper = $responseHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -86,7 +82,7 @@ class VehiclesController extends AbstractGoodsVehiclesController
         $this->lvaAdapter = $lvaAdapter;
     }
 
-    protected function getScripts()
+    protected function getScripts(): array
     {
         $scripts  = parent::getScripts();
         $scripts[] = 'vehicles';

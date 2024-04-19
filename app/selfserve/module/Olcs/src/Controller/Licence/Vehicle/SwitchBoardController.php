@@ -36,72 +36,15 @@ class SwitchBoardController
 
     public const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
     protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'switchboard-input';
-    /**
-     * @var FlashMessenger
-     */
-    private $flashMessenger;
 
-    /**
-     * @var FormHelperService
-     */
-    private $formHelper;
-
-    /**
-     * @var HandleQuery
-     */
-    private $queryHandler;
-
-    /**
-     * @var Redirect
-     */
-    private $redirectHelper;
-
-    /**
-     * @var ResponseHelperService
-     */
-    private $responseHelper;
-
-    /**
-     * @var LicenceVehicleManagement
-     */
-    private $session;
-
-    /**
-     * @var Url
-     */
-    private $urlHelper;
-
-    /**
-     * @var FormValidator
-     */
-    private $formValidator;
-
-    public function __construct(
-        FlashMessenger $flashMessenger,
-        FormHelperService $formHelper,
-        HandleQuery $queryHandler,
-        Redirect $redirectHelper,
-        ResponseHelperService $responseHelper,
-        LicenceVehicleManagement $session,
-        Url $urlHelper,
-        FormValidator $formValidator
-    ) {
-        $this->flashMessenger = $flashMessenger;
-        $this->formHelper = $formHelper;
-        $this->queryHandler = $queryHandler;
-        $this->redirectHelper = $redirectHelper;
-        $this->responseHelper = $responseHelper;
-        $this->session = $session;
-        $this->urlHelper = $urlHelper;
-        $this->formValidator = $formValidator;
+    public function __construct(private FlashMessenger $flashMessenger, private FormHelperService $formHelper, private HandleQuery $queryHandler, private Redirect $redirectHelper, private ResponseHelperService $responseHelper, private LicenceVehicleManagement $session, private Url $urlHelper, private FormValidator $formValidator)
+    {
     }
 
 
     /**
      * Handles a request from a user to view the switchboard for a licence.
      *
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return ViewModel|ResponseInterface
      */
     public function indexAction(Request $request, RouteMatch $routeMatch)
@@ -149,8 +92,6 @@ class SwitchBoardController
     }
 
     /**
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return Response|ResponseInterface|ViewModel
      * @throws \Exception
      */
@@ -170,39 +111,30 @@ class SwitchBoardController
             [SwitchBoardForm::FIELD_OPTIONS_NAME]
             ?? '';
 
-        switch ($selectedOption) {
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD:
-                return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_ADD, [], [], true);
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE:
-                return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_REMOVE, [], [], true);
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT:
-                return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_REPRINT, [], [], true);
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER:
-                return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_TRANSFER, [], [], true);
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW:
-                return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_LIST, [], [], true);
-            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED:
-                return $this->redirectHelper->toRoute(
-                    static::ROUTE_LICENCE_VEHICLE_LIST,
-                    [],
-                    [
-                        'query' => [
-                            ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
-                        ],
-                        'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
+        return match ($selectedOption) {
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD => $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_ADD, [], [], true),
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE => $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_REMOVE, [], [], true),
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT => $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_REPRINT, [], [], true),
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER => $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_TRANSFER, [], [], true),
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW => $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_LIST, [], [], true),
+            SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED => $this->redirectHelper->toRoute(
+                static::ROUTE_LICENCE_VEHICLE_LIST,
+                [],
+                [
+                    'query' => [
+                        ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
                     ],
-                    true
-                );
-            default:
-                throw new \Exception('Unexpected value');
-        }
+                    'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
+                ],
+                true
+            ),
+            default => throw new \Exception('Unexpected value'),
+        };
     }
 
     /**
      * Create the switchboard form and alter it based on licence vehicle status
      *
-     * @param array $licence
-     * @param array $formData
      * @return Form
      */
     protected function createSwitchBoardForm(array $licence, array $formData = null): Form
@@ -240,7 +172,6 @@ class SwitchBoardController
     /**
      * Fetch a licence based on licence id
      *
-     * @param int $licenceId
      * @return array|mixed
      */
     protected function getLicence(int $licenceId): array

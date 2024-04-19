@@ -75,9 +75,7 @@ class VariationOperatingCentres extends CommonVariationOperatingCentres
     /**
      * Apply a padlock to the totCommunityLicences field using the specified translation key as a tooltip
      *
-     * @param Form $form
      * @param string $translationKey
-     *
      * @return void
      */
     protected function alterFormWithTranslationKey(Form $form, $translationKey)

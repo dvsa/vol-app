@@ -32,7 +32,6 @@ class ViewGeneratorProvider
      * Register an instance of ViewGeneratorInterface against the specified route name
      *
      * @param string $routeName
-     * @param ViewGeneratorInterface $viewGenerator
      */
     public function registerViewGenerator($routeName, ViewGeneratorInterface $viewGenerator): void
     {

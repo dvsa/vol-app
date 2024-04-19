@@ -17,17 +17,12 @@ use Laminas\Form\Form;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
-    protected TranslationHelperService $translator;
-    protected UrlHelperService $urlHelper;
-
     public function __construct(
         FormHelperService $formHelper,
-        TranslationHelperService $translator,
-        UrlHelperService $urlHelper
+        protected TranslationHelperService $translator,
+        protected UrlHelperService $urlHelper
     ) {
         $this->formHelper = $formHelper;
-        $this->translator = $translator;
-        $this->urlHelper = $urlHelper;
     }
 
     public const DEFAULT_ADVERT_TEMPLATE = 'default-guide-oc-advert-gb-new';

@@ -7,7 +7,6 @@ class PreferencesFactory
     /**
      * Create and return a Preferences instance
      *
-     * @param array $preferencesArray
      *
      * @return Preferences
      */

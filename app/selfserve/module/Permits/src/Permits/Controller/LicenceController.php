@@ -239,10 +239,6 @@ class LicenceController extends AbstractSelfserveController
     /**
      * Common code to handle response/config after Active Application query.
      *
-     * @param array $config
-     * @param array $activeApplication
-     * @param string $overviewRoute
-     * @param string $addRoute
      * @return array
      */
     protected function handleActiveApplicationResponse(array $config, array $activeApplication, string $overviewRoute, string $addRoute)

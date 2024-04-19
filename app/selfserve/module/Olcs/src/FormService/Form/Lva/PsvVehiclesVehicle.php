@@ -14,13 +14,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class PsvVehiclesVehicle
 {
-    protected FormHelperService $formHelper;
-    protected FormServiceManager $formServiceLocator;
-
-    public function __construct(FormHelperService $formHelper, FormServiceManager $formServiceLocator)
+    public function __construct(protected FormHelperService $formHelper, protected FormServiceManager $formServiceLocator)
     {
-        $this->formHelper = $formHelper;
-        $this->formServiceLocator = $formServiceLocator;
     }
     public function alterForm($form): void
     {

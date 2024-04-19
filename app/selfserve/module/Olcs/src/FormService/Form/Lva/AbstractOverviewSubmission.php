@@ -9,13 +9,8 @@ namespace Olcs\FormService\Form\Lva;
  */
 class AbstractOverviewSubmission
 {
-    protected $translationHelper;
-    protected $formHelper;
-
-    public function __construct($translationHelper, $formHelper)
+    public function __construct(protected $translationHelper, protected $formHelper)
     {
-        $this->translationHelper = $translationHelper;
-        $this->formHelper = $formHelper;
     }
 
     /** @var array */

@@ -122,9 +122,6 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
         return $this->nextStep('licence/vehicle/reprint/confirm/GET');
     }
 
-    /**
-     * @param Form $form
-     */
     protected function configureFormActionsForIndex(Form $form): void
     {
         $form->get('formActions')
@@ -136,10 +133,6 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
             ->setAttribute('title', 'licence.vehicle.reprint.button.cancel.title');
     }
 
-    /**
-     * @param Form $form
-     * @param Request $request
-     */
     protected function configureSearchFormForIndex(Form $form, Request $request): void
     {
         $form->get('vehicleSearch')

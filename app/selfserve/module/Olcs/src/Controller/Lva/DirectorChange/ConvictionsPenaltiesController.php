@@ -36,8 +36,6 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      * @var string
      */
     protected $lva = self::LVA_VAR;
-    private TranslationHelperService $translationHelper;
-    protected FlashMessenger $flashMessengerPlugin;
 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -46,13 +44,10 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        TranslationHelperService $translationHelper,
+        private TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
-        FlashMessenger $flashMessengerPlugin
+        protected FlashMessenger $flashMessengerPlugin
     ) {
-        $this->translationHelper = $translationHelper;
-        $this->flashMessengerPlugin = $flashMessengerPlugin;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

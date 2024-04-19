@@ -4,29 +4,19 @@ namespace Olcs\Service\Qa;
 
 class TemplateVarsGenerator
 {
-    protected QuestionArrayProvider $questionArrayProvider;
-    protected GuidanceTemplateVarsAdder $guidanceTemplateVarsAdder;
-
     /**
      * Create service instance
      *
-     * @param QuestionArrayProvider $questionArrayProvider
-     * @param GuidanceTemplateVarsAdder $guidanceTemplateVarsAdder
      *
      * @return TemplateVarsGenerator
      */
-    public function __construct(
-        QuestionArrayProvider $questionArrayProvider,
-        GuidanceTemplateVarsAdder $guidanceTemplateVarsAdder
-    ) {
-        $this->questionArrayProvider = $questionArrayProvider;
-        $this->guidanceTemplateVarsAdder = $guidanceTemplateVarsAdder;
+    public function __construct(protected QuestionArrayProvider $questionArrayProvider, protected GuidanceTemplateVarsAdder $guidanceTemplateVarsAdder)
+    {
     }
 
     /**
      * Get the template variables corresponding to the provided question text data
      *
-     * @param array $questionText
      *
      * @return array
      */

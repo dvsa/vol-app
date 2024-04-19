@@ -28,21 +28,6 @@ class QaController extends AbstractOlcsController
     public const UPLOADED_FILE_CATEGORY = Category::CATEGORY_PERMITS;
     public const UPLOADED_FILE_SUBCATEGORY = Category::DOC_SUB_CATEGORY_MOT_CERTIFICATE;
 
-    /** @var FormProvider */
-    private $formProvider;
-
-    /** @var TemplateVarsGenerator */
-    private $templateVarsGenerator;
-
-    /** @var TranslationHelperService */
-    private $translationHelperService;
-
-    /** @var ViewGeneratorProvider */
-    private $viewGeneratorProvider;
-
-    /** @var ApplicationStepsPostDataTransformer */
-    private $applicationStepsPostDataTransformer;
-
     /** @var array */
     protected $documents;
 
@@ -54,27 +39,17 @@ class QaController extends AbstractOlcsController
     /**
      * Create service instance
      *
-     * @param FormProvider $formProvider
-     * @param TemplateVarsGenerator $templateVarsGenerator
-     * @param TranslationHelperService $translationHelperService
-     * @param ViewGeneratorProvider $viewGeneratorProvider
-     * @param ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
      *
      * @return QaController
      */
     public function __construct(
-        FormProvider $formProvider,
-        TemplateVarsGenerator $templateVarsGenerator,
-        TranslationHelperService $translationHelperService,
-        ViewGeneratorProvider $viewGeneratorProvider,
-        ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer,
+        private FormProvider $formProvider,
+        private TemplateVarsGenerator $templateVarsGenerator,
+        private TranslationHelperService $translationHelperService,
+        private ViewGeneratorProvider $viewGeneratorProvider,
+        private ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->formProvider = $formProvider;
-        $this->templateVarsGenerator = $templateVarsGenerator;
-        $this->translationHelperService = $translationHelperService;
-        $this->viewGeneratorProvider = $viewGeneratorProvider;
-        $this->applicationStepsPostDataTransformer = $applicationStepsPostDataTransformer;
         $this->uploadHelper = $uploadHelper;
     }
 

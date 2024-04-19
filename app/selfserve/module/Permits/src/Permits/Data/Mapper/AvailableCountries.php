@@ -16,9 +16,7 @@ class AvailableCountries implements MapperInterface
     use MapFromResultTrait;
 
     /**
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)

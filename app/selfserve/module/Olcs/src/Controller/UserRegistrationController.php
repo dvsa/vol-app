@@ -21,27 +21,15 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class UserRegistrationController extends AbstractController
 {
-    protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
-    protected TranslationHelperService $translationHelper;
-    protected UrlHelperService $urlHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
-        TranslationHelperService $translationHelper,
-        UrlHelperService $urlHelper,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected UrlHelperService $urlHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->translationHelper = $translationHelper;
-        $this->urlHelper = $urlHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -219,7 +207,7 @@ class UserRegistrationController extends AbstractController
             } else {
                 $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $errors = [
                 'licenceNumber' => ['record-not-found']
             ];

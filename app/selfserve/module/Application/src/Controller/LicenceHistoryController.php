@@ -32,8 +32,6 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -54,10 +52,8 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController
         StringHelperService $stringHelper,
         TableFactory $tableFactory,
         FormHelperService $formHelper,
-        RestrictionHelperService $restrictionHelper
+        protected RestrictionHelperService $restrictionHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

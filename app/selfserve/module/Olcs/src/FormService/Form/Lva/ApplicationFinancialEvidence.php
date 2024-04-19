@@ -21,23 +21,15 @@ class ApplicationFinancialEvidence extends FinancialEvidence
     use ButtonsAlterations;
 
     protected FormHelperService $formHelper;
-    protected AuthorizationService $authService;
-    protected UrlHelperService $urlHelper;
-    protected TranslationHelperService $translator;
-    protected ValidatorPluginManager $validatorPluginManager;
 
     public function __construct(
         FormHelperService $formHelper,
-        AuthorizationService $authService,
-        TranslationHelperService $translator,
-        UrlHelperService $urlHelper,
-        $validatorPluginManager
+        protected AuthorizationService $authService,
+        protected TranslationHelperService $translator,
+        protected UrlHelperService $urlHelper,
+        protected ValidatorPluginManager $validatorPluginManager
     ) {
         $this->formHelper = $formHelper;
-        $this->authService = $authService;
-        $this->urlHelper = $urlHelper;
-        $this->translator = $translator;
-        $this->validatorPluginManager = $validatorPluginManager;
     }
 
     /**
@@ -47,7 +39,7 @@ class ApplicationFinancialEvidence extends FinancialEvidence
      *
      * @return Form
      */
-    protected function alterForm($form)
+    protected function alterForm($form): void
     {
         parent::alterForm($form);
         $formActions = $form->get('form-actions');
@@ -57,7 +49,5 @@ class ApplicationFinancialEvidence extends FinancialEvidence
         $saveButton->setAttribute('class', 'govuk-button govuk-button--secondary');
         $formActions->get('saveAndContinue')->setLabel('lva.external.save_and_continue.button');
         $formActions->remove('cancel');
-
-        return $form;
     }
 }

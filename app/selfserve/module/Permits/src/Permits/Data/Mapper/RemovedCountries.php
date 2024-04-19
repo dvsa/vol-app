@@ -14,9 +14,7 @@ class RemovedCountries implements MapperInterface
     use MapFromResultTrait;
 
     /**
-     * @param array $data
      * @param Form $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)
@@ -33,7 +31,6 @@ class RemovedCountries implements MapperInterface
     /**
      * Add markup to the form containing a bullet list of removed countries
      *
-     * @param array $data
      * @param Form $form
      */
     public function populateRemovedCountries(array $data, $form): void

@@ -32,8 +32,6 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         ]
     ];
 
-    protected FlashMessenger $flashMessengerHelper;
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
@@ -46,10 +44,9 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessenger $flashMessengerHelper
+        protected FlashMessenger $flashMessengerHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $this->flashMessengerHelper);
     }
 
     /**
@@ -147,7 +144,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         $query = LicenceVehiclesById::create(['ids' => $vehicleIds]);
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException | AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException) {
             throw new VehiclesNotFoundWithIdsException($vehicleIds);
         }
         $licenceVehicles = $queryResult->getResult()['results'] ?? [];

@@ -29,9 +29,6 @@ class ConditionsUndertakingsController extends Lva\AbstractController
     protected string $location = 'external';
     protected $lvaAdapter;
 
-    protected LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc;
-    protected GuidanceHelperService $guidanceHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -41,12 +38,9 @@ class ConditionsUndertakingsController extends Lva\AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc,
-        GuidanceHelperService $guidanceHelper
+        protected LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc,
+        protected GuidanceHelperService $guidanceHelper
     ) {
-        $this->licenceConditionsUndertakingsReviewSvc = $licenceConditionsUndertakingsReviewSvc;
-        $this->guidanceHelper = $guidanceHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

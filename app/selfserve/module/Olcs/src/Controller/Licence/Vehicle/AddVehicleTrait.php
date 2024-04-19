@@ -13,13 +13,6 @@ use Permits\Data\Mapper\MapperManager;
 
 trait AddVehicleTrait
 {
-    /**
-     * @param TranslationHelperService $translationHelper
-     * @param FormHelperService $formHelper
-     * @param TableFactory $tableBuilder
-     * @param MapperManager $mapperManager
-     * @param FlashMessengerHelperService $flashMessenger
-     */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
@@ -31,10 +24,6 @@ trait AddVehicleTrait
     }
 
     /**
-     * @param string $vrm
-     * @param string $make
-     * @param bool $confirmDuplicateVehicle
-     * @param int $platedWeight
      * @return CreateGoodsVehicle|CreatePsvVehicle|AbstractCommand
      */
     protected function generateCreateVehicleCommand(

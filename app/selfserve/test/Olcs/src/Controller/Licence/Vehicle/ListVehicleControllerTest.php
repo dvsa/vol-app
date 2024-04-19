@@ -613,10 +613,8 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param string $type
      *
      * @test
-     *
      * @dataProvider buttonTranslationKeyTypes
      */
     public function indexActionSetToggleRemovedVehiclesActionTitleWithRelevantMessageWhenQueryParamIsSetAndLicenceHasRemovedVehicles(string $type): void
@@ -640,10 +638,8 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param string $type
      *
      * @test
-     *
      * @dataProvider buttonTranslationKeyTypes
      */
     public function indexActionDoesNotSetToggleRemovedVehiclesActionTitleWhenQueryParamIsNotSetAndLicenceDoesNotHaveRemovedVehicles(string $type): void
@@ -702,12 +698,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param array $input
      *
      * @depends indexActionIsCallable
      *
      * @dataProvider invalidInputDataProvider
-     *
      * @test
      */
     public function indexActionValidatesInputWhenInvalidReturnsRedirectResponse(array $input): void
@@ -729,8 +723,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param array $input
-     * @param string $expectedFlashMessage
      *
      * @depends indexActionIsCallable
      *
@@ -754,8 +746,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param array $input
-     * @param string $expectedFlashMessage
      *
      * @depends indexActionIsCallable
      *
@@ -780,12 +770,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param array $input
      *
      * @depends indexActionIsCallable
      *
      * @dataProvider validInputDataProvider
-     *
      * @test
      */
     public function indexActionValidatesInputWhenValidReturnsViewModel(array $input): void
@@ -1034,10 +1022,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->tableFactoryMock->shouldReceive('prepareTable', 'getTableBuilder')->andReturnUsing(fn() => $this->setUpTableBuilder())->byDefault();
     }
 
-    /**
-     * @param mixed $data
-     */
-    protected function setUpQueryResponse($data = ['count' => 0, 'results' => []]): QueryResponse
+    protected function setUpQueryResponse(mixed $data = ['count' => 0, 'results' => []]): QueryResponse
     {
         $response = m::mock(QueryResponse::class);
         $response->shouldIgnoreMissing();
@@ -1110,8 +1095,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param string $tableName
      * @param null $data
      * @param null $params
      * @return MockInterface
@@ -1132,7 +1115,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param string $url
      * @param array|null $input
      * @return Request
      */
@@ -1156,10 +1138,6 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param array $queryResultData
-     */
     protected function injectRemovedVehiclesQueryResultData(ServiceLocatorInterface $serviceLocator, array $queryResultData): void
     {
         $removedVehiclesQueryResponse = $this->setUpQueryResponse($queryResultData);

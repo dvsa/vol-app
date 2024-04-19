@@ -170,7 +170,6 @@ class PermitsController extends AbstractSelfserveController
     /**
      * Check whether the referrer is the gov.uk permits page
      *
-     * @param MvcEvent $e
      *
      * @return bool
      */

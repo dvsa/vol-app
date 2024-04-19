@@ -18,10 +18,6 @@ class LicenceVehicleLimitReachedException extends Exception
     protected $licenceNumber;
 
     /**
-     * @param int $licenceId
-     * @param string $licenceNumber
-     * @param string $message
-     * @param int $code
      * @param Throwable|null $previous
      */
     public function __construct(int $licenceId, string $licenceNumber, string $message = "", int $code = 0, Throwable $previous = null)

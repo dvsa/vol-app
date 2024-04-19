@@ -18,21 +18,13 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class MyDetailsController extends AbstractController
 {
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected ScriptFactory $scriptFactory;
-    protected FormHelperService $formHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        ScriptFactory $scriptFactory,
-        FormHelperService $formHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected ScriptFactory $scriptFactory,
+        protected FormHelperService $formHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -158,9 +150,6 @@ class MyDetailsController extends AbstractController
         return $formHelper;
     }
 
-    /**
-     * @param Form $form
-     */
     private function lockNameFields(Form $form): void
     {
         $fieldSet = $form->get('main');

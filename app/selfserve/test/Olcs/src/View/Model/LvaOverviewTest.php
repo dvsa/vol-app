@@ -108,7 +108,6 @@ class LvaOverviewTest extends MockeryTestCase
     /**
      * @test
      * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     * @param LvaOverviewSection $overviewSection
      */
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithRef(LvaOverviewSection $overviewSection)
     {
@@ -119,7 +118,6 @@ class LvaOverviewTest extends MockeryTestCase
     /**
      * @test
      * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     * @param LvaOverviewSection $overviewSection
      */
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithData(LvaOverviewSection $overviewSection)
     {
@@ -134,15 +132,8 @@ class LvaOverviewTest extends MockeryTestCase
             {
                 return new class (...$args) extends LvaOverviewSection
                 {
-                    public $ref;
-                    public $data;
-                    public $mode;
-
-                    public function __construct($ref, $data, $mode)
+                    public function __construct(public $ref, public $data, public $mode)
                     {
-                        $this->ref = $ref;
-                        $this->data = $data;
-                        $this->mode = $mode;
                     }
                 };
             }
@@ -151,23 +142,16 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * Sets up an sut which uses section models that don ot take a mode when constructed.
-     *
-     * @param mixed ...$args
      */
-    protected function setUpSutWithSectionModelThatDoesNotTakeAModeWhenConstructed(...$args): void
+    protected function setUpSutWithSectionModelThatDoesNotTakeAModeWhenConstructed(mixed ...$args): void
     {
         $this->sut = new class (...$args) extends LvaOverview {
             protected function newSectionModel(...$args): LvaOverviewSection
             {
                 return new class (...$args) extends LvaOverviewSection
                 {
-                    public $ref;
-                    public $data;
-
-                    public function __construct($ref, $data)
+                    public function __construct(public $ref, public $data)
                     {
-                        $this->ref = $ref;
-                        $this->data = $data;
                     }
                 };
             }

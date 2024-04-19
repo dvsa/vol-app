@@ -27,38 +27,14 @@ class CookieBannerListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    /** @var AcceptAllSetCookieGenerator */
-    private $acceptAllSetCookieGenerator;
-
-    /** @var BannerVisibilityProvider */
-    private $bannerVisibilityProvider;
-
-    /** @var Placeholder */
-    private $placeholder;
-
-    /** @var UrlHelperService */
-    private $urlHelper;
-
     /**
      * Create service instance
      *
-     * @param AcceptAllSetCookieGenerator $acceptAllSetCookieGenerator
-     * @param BannerVisibilityProvider $bannerVisibilityProvider
-     * @param Placeholder $placeholder
-     * @param UrlHelperService $urlHelper
      *
      * @return CookieBannerListener
      */
-    public function __construct(
-        AcceptAllSetCookieGenerator $acceptAllSetCookieGenerator,
-        BannerVisibilityProvider $bannerVisibilityProvider,
-        Placeholder $placeholder,
-        UrlHelperService $urlHelper
-    ) {
-        $this->acceptAllSetCookieGenerator = $acceptAllSetCookieGenerator;
-        $this->bannerVisibilityProvider = $bannerVisibilityProvider;
-        $this->placeholder = $placeholder;
-        $this->urlHelper = $urlHelper;
+    public function __construct(private AcceptAllSetCookieGenerator $acceptAllSetCookieGenerator, private BannerVisibilityProvider $bannerVisibilityProvider, private Placeholder $placeholder, private UrlHelperService $urlHelper)
+    {
     }
 
     /**

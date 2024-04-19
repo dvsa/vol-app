@@ -16,12 +16,10 @@ class IrhpFee implements MapperInterface
     /**
      * Map for form options
      *
-     * @param array $data
-     * @param mixed $form
      *
      * @return array
      */
-    public function mapForFormOptions(array $data, $form): array
+    public function mapForFormOptions(array $data, mixed $form): array
     {
         $applicationData = $data['application'];
 

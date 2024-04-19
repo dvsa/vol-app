@@ -104,17 +104,6 @@ class ListVehicleController
      */
     protected $redirectHelper;
 
-    /**
-     * @param HandleCommand $commandHandler
-     * @param HandleQuery $queryHandler
-     * @param TranslationHelperService $translator
-     * @param Url $urlHelper
-     * @param ResponseHelperService $responseHelper
-     * @param TableFactory $tableFactory
-     * @param FormHelperService $formHelper
-     * @param FlashMessengerHelperService $flashMessenger
-     * @param Redirect $redirectHelper
-     */
     public function __construct(
         HandleCommand $commandHandler,
         HandleQuery $queryHandler,
@@ -140,8 +129,6 @@ class ListVehicleController
     /**
      * Handles a request from a user to list the vehicles associated with one of their licences.
      *
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return ViewModel|ResponseInterface
      */
     public function indexAction(Request $request, RouteMatch $routeMatch)
@@ -209,8 +196,6 @@ class ListVehicleController
     /**
      * Handles a request from a user to change the user's opt-in preference for OCRS.
      *
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return Response|ResponseInterface|ViewModel
      * @throws BailOutException
      */
@@ -236,7 +221,6 @@ class ListVehicleController
     }
 
     /**
-     * @param array $data
      * @return InputFilter
      */
     protected function newInputFilter(array $data)
@@ -251,7 +235,6 @@ class ListVehicleController
     }
 
     /**
-     * @param string $name
      * @return Input
      */
     protected function newInput(string $name): Input
@@ -262,8 +245,6 @@ class ListVehicleController
     }
 
     /**
-     * @param string $name
-     * @param array $validColumnNames
      * @return Input
      */
     protected function newSortColumnInput(string $name, array $validColumnNames): Input
@@ -283,7 +264,6 @@ class ListVehicleController
     }
 
     /**
-     * @param string $name
      * @return Input
      */
     protected function newOrderInput(string $name): Input
@@ -311,7 +291,6 @@ class ListVehicleController
      * Checks the request for presence of vehicle search data to decide if the page
      * to show should be search results
      *
-     * @param array $input
      * @return bool
      */
     protected function isSearchResultsPage(array $input): bool
@@ -320,7 +299,6 @@ class ListVehicleController
     }
 
     /**
-     * @param int $licenceId
      * @return string
      */
     protected function buildCurrentAndRemovedCsvUrl(int $licenceId): string
@@ -332,7 +310,6 @@ class ListVehicleController
     }
 
     /**
-     * @param Request $request
      * @return string
      */
     protected function buildSearchClearUrl(Request $request): string
@@ -345,8 +322,6 @@ class ListVehicleController
     }
 
     /**
-     * @param int $licenceId
-     * @param array $queryParams
      * @return string
      */
     protected function buildToggleRemovedVehiclesUrl(int $licenceId, array $queryParams = []): string
@@ -370,7 +345,6 @@ class ListVehicleController
     /**
      * Creates a response from a set of data; formatted as csv.
      *
-     * @param array $data
      * @return Response
      */
     protected function renderCsvResponse(array $data): Response
@@ -390,7 +364,6 @@ class ListVehicleController
     }
 
     /**
-     * @param AbstractQuery $query
      * @return array|mixed
      */
     protected function listLicenceVehicles(AbstractQuery $query)
@@ -399,7 +372,6 @@ class ListVehicleController
     }
 
     /**
-     * @param Licence $query
      * @return array|mixed
      */
     protected function getLicence(Licence $query)
@@ -410,7 +382,6 @@ class ListVehicleController
     /**
      * Creates a OCRS Opt-In form.
      *
-     * @param array $data
      * @return Form
      */
     protected function createOcrsOptInForm(array $data = []): Form
@@ -430,8 +401,6 @@ class ListVehicleController
     }
 
     /**
-     * @param string $action
-     * @param array $data
      * @return Form
      */
     protected function createSearchForm(string $action, array $data = []): Form
@@ -472,8 +441,6 @@ class ListVehicleController
     /**
      * Creates a new vehicle table.
      *
-     * @param array $input
-     * @param array $currentLicenceVehicleList
      * @return TableBuilder
      */
     protected function buildHtmlCurrentLicenceVehiclesTable(array $input, array $currentLicenceVehicleList): TableBuilder
@@ -516,22 +483,15 @@ class ListVehicleController
     /**
      * Alter the vehicle table for search results view
      *
-     * @param TableBuilder $table
-     * @param int $totalVehicles
      * @return TableBuilder
      */
     protected function alterTableForSearchView(TableBuilder $table, int $totalVehicles): TableBuilder
     {
-        switch ($totalVehicles) {
-            case 0:
-                $title = AbstractVehicleController::TABLE_SEARCH_TITLE_EMPTY;
-                break;
-            case 1:
-                $title = AbstractVehicleController::TABLE_SEARCH_TITLE_SINGULAR;
-                break;
-            default:
-                $title = AbstractVehicleController::TABLE_SEARCH_TITLE_PLURAL;
-        }
+        $title = match ($totalVehicles) {
+            0 => AbstractVehicleController::TABLE_SEARCH_TITLE_EMPTY,
+            1 => AbstractVehicleController::TABLE_SEARCH_TITLE_SINGULAR,
+            default => AbstractVehicleController::TABLE_SEARCH_TITLE_PLURAL,
+        };
         $table->setVariable('title', $this->translator->translate($title));
         $table->setSetting('overrideTotal', false);
         return $table;
@@ -540,8 +500,6 @@ class ListVehicleController
     /**
      * Alter vehicle table to default view
      *
-     * @param TableBuilder $table
-     * @param int $totalVehicles
      * @return TableBuilder
      */
     protected function alterTableForDefaultView(TableBuilder $table, int $totalVehicles): TableBuilder
@@ -552,8 +510,6 @@ class ListVehicleController
     }
 
     /**
-     * @param int $licenceId
-     * @param array $input
      * @return array
      */
     protected function getLatestRemovedVehiclesData(int $licenceId, array $input): array
@@ -595,8 +551,6 @@ class ListVehicleController
     /**
      * Creates a new vehicle table.
      *
-     * @param array $input
-     * @param array $currentLicenceVehicleList
      * @return TableBuilder
      */
     protected function buildHtmlRemovedLicenceVehiclesTable(array $input, array $currentLicenceVehicleList): TableBuilder

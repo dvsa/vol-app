@@ -29,24 +29,14 @@ class GdsVerifyController extends AbstractController
 {
     protected const CACHE_PREFIX = "verify:";
 
-    protected Redis $redis;
-    protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        Redis $redis,
-        FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected Redis $redis,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->redis = $redis;
-        $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -237,8 +227,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Create a DigitalSignature and store in redis
      *
-     * @param array $types
-     * @param string $verifyId
      *
      * @throw \RuntimeException
      *
@@ -270,7 +258,6 @@ class GdsVerifyController extends AbstractController
     }
 
     /**
-     * @param array $types
      * @return array
      */
     private function normaliseTypesOfRequest(array $types): array
@@ -286,7 +273,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Generate cache key for the samlResponse to be stored under
      *
-     * @param string $samlResponse
      * @return string
      */
     private function generateSamlKeyFromResponse(string $samlResponse): string
@@ -298,7 +284,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Build cache key for storing/retrieving SAML response based on a ref
      *
-     * @param string $ref
      * @return string
      */
     private function buildSamlKeyFromRef(string $ref): string
@@ -309,7 +294,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Build cache key to whitelist this verify journey
      *
-     * @param string $id
      * @return string
      */
     private function buildVerifyJourneyKey(string $id): string
@@ -320,7 +304,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Build cache key for whitelisting user for verify
      *
-     * @param string $username
      * @return string
      */
     private function buildActiveUserKey(string $username): string
@@ -330,7 +313,6 @@ class GdsVerifyController extends AbstractController
 
     /**
      * Build cache key for storing/retrieving a digital signature
-     * @param string $verifyId
      * @return string
      */
     private function buildDigitalSignatureKey(string $verifyId): string
@@ -341,8 +323,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Extract an attribute from a SAML XML String Document
      *
-     * @param string $samlString
-     * @param string $attributeName
      * @return string
      * @throws Exception
      */
@@ -366,8 +346,6 @@ class GdsVerifyController extends AbstractController
 
     /**
      * Whitelist this users journey for verify
-     *
-     * @param string $verifyId
      */
     protected function whitelistUserVerifyRequest(string $verifyId): void
     {
@@ -395,7 +373,6 @@ class GdsVerifyController extends AbstractController
     /**
      * Retrieve a digital signature from redis based on a verify request id
      *
-     * @param string $inResponseTo
      * @return DigitalSignature
      * @throws Exception
      */

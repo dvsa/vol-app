@@ -159,8 +159,6 @@ trait ExternalControllerTrait
     /**
      * get section title
      *
-     * @param string $sectionName
-     * @param array $data
      *
      * @return string
      */

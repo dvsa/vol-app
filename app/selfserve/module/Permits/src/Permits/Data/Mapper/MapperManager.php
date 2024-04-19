@@ -29,7 +29,7 @@ class MapperManager extends AbstractPluginManager
 
         throw new \RuntimeException(sprintf(
             'Mapper must be an instance of MapperInterface; %s given',
-            is_object($plugin) ? get_class($plugin) : gettype($plugin)
+            get_debug_type($plugin)
         ));
     }
 }

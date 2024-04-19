@@ -53,7 +53,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
     {
         $params['canModify'] = true;
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
@@ -64,7 +64,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('has')->with('disqualify')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('disqualify');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockLicenceService->shouldReceive('alterForm')
             ->once()
@@ -102,7 +102,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
             ->once()
             ->with('foo');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockLicenceService->shouldReceive('alterForm')
             ->once()

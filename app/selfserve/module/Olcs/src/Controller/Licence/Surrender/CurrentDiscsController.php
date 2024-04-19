@@ -22,8 +22,6 @@ class CurrentDiscsController extends AbstractSurrenderController
      */
     protected $form;
 
-    protected ScriptFactory $scriptFactory;
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
@@ -37,9 +35,8 @@ class CurrentDiscsController extends AbstractSurrenderController
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
         FlashMessengerHelperService $flashMessengerHelper,
-        ScriptFactory $scriptFactory
+        protected ScriptFactory $scriptFactory
     ) {
-        $this->scriptFactory = $scriptFactory;
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 

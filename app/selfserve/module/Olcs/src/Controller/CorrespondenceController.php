@@ -25,18 +25,12 @@ class CorrespondenceController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

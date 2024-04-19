@@ -6,11 +6,8 @@ use Common\Service\Helper\FormHelperService;
 
 class VehiclesVehicle
 {
-    protected FormHelperService $formHelper;
-
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(protected FormHelperService $formHelper)
     {
-        $this->formHelper = $formHelper;
     }
 
     public function alterForm($form): void

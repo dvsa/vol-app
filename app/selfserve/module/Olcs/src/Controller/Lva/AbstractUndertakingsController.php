@@ -31,12 +31,6 @@ abstract class AbstractUndertakingsController extends AbstractController
 
     protected $data = [];
 
-    protected ScriptFactory $scriptFactory;
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -49,18 +43,12 @@ abstract class AbstractUndertakingsController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        ScriptFactory $scriptFactory,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        FormHelperService $formHelper
+        protected ScriptFactory $scriptFactory,
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected FormHelperService $formHelper
     ) {
-        $this->scriptFactory = $scriptFactory;
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

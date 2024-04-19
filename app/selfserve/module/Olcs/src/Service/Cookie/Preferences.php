@@ -24,10 +24,8 @@ class Preferences
     /**
      * Create instance - provide empty array to obtain default settings
      *
-     * @param array $preferencesArray
      *
      * @return Preferences
-     *
      * @throws RuntimeException
      */
     public function __construct(array $preferencesArray)

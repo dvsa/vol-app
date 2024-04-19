@@ -17,21 +17,13 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class BusRegRegistrationsController extends AbstractController
 {
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory,
-        FormHelperService $formHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory,
+        protected FormHelperService $formHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

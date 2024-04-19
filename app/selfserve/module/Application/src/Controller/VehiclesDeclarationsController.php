@@ -25,9 +25,6 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -45,12 +42,9 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

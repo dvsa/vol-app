@@ -35,8 +35,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @var array|null
      */
     private $application;
-
-    protected FormHelperService $formHelper;
     protected FileUploadHelperService $uploadHelper;
 
     /**
@@ -48,10 +46,9 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->formHelper = $formHelper;
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct(

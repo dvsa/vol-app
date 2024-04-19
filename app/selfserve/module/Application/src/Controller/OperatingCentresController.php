@@ -29,9 +29,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -54,13 +51,10 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
         TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -6,26 +6,14 @@ use Laminas\Http\Header\SetCookie;
 
 class AcceptAllSetCookieGenerator
 {
-    /** @var PreferencesSetCookieGenerator */
-    private $preferencesSetCookieGenerator;
-
-    /** @var PreferencesFactory */
-    private $preferencesFactory;
-
     /**
      * Create service instance
      *
-     * @param PreferencesSetCookieGenerator $preferencesSetCookieGenerator
-     * @param PreferencesFactory $preferencesFactory
      *
      * @return AcceptAllSetCookieGenerator
      */
-    public function __construct(
-        PreferencesSetCookieGenerator $preferencesSetCookieGenerator,
-        PreferencesFactory $preferencesFactory
-    ) {
-        $this->preferencesSetCookieGenerator = $preferencesSetCookieGenerator;
-        $this->preferencesFactory = $preferencesFactory;
+    public function __construct(private PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private PreferencesFactory $preferencesFactory)
+    {
     }
 
     /**

@@ -24,8 +24,6 @@ class BackToOverview extends AbstractHelper
      * Return a back link
      *
      * @param string|null $label Parameters
-     * @param string|null $uri
-     * @param array|null $params
      *
      * @return string
      */

@@ -21,20 +21,14 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
     use ButtonsAlterations;
 
     protected FormHelperService $formHelper;
-    protected AuthorizationService $authService;
-    protected $tableBuilder;
-    protected FormServiceManager $formServiceLocator;
 
     public function __construct(
         FormHelperService $formHelper,
-        AuthorizationService $authService,
-        $tableBuilder,
-        FormServiceManager $formServiceLocator
+        protected AuthorizationService $authService,
+        protected $tableBuilder,
+        protected FormServiceManager $formServiceLocator
     ) {
         $this->formHelper = $formHelper;
-        $this->authService = $authService;
-        $this->tableBuilder = $tableBuilder;
-        $this->formServiceLocator = $formServiceLocator;
     }
 
     /**

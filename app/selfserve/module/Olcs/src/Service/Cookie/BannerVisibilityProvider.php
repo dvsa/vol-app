@@ -6,25 +6,19 @@ use Laminas\Mvc\MvcEvent;
 
 class BannerVisibilityProvider
 {
-    /** @var CookieReader */
-    private $cookieReader;
-
     /**
      * Create service instance
      *
-     * @param CookieReader $cookieReader
      *
      * @return BannerVisibilityProvider
      */
-    public function __construct(CookieReader $cookieReader)
+    public function __construct(private CookieReader $cookieReader)
     {
-        $this->cookieReader = $cookieReader;
     }
 
     /**
      * Whether the cookie banner needs to be displayed
      *
-     * @param MvcEvent $e
      *
      * @return bool
      */

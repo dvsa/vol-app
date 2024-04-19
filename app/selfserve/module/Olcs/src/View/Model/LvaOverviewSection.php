@@ -12,13 +12,6 @@ abstract class LvaOverviewSection extends ViewModel
     ];
 
     /**
-     * Holds the section reference
-     *
-     * @var string
-     */
-    private $ref;
-
-    /**
      * Holds the template
      *
      * @var string
@@ -27,23 +20,25 @@ abstract class LvaOverviewSection extends ViewModel
 
     protected $type;
 
-    public function __construct($ref, $data, $mode)
-    {
-        $this->ref = $ref;
-
+    /**
+     * @param string $ref
+     */
+    public function __construct(
+        private $ref,
+        $data,
+        $mode
+    ) {
         $this->setVariable('identifier', $data['id']);
         $this->setVariable('identifierIndex', $data['idIndex']);
-        $this->setVariable('name', $this->getSectionName($ref, $data));
-        $this->setVariable('route', 'lva-' . $this->type . '/' . $ref);
-        $this->setVariable('link', 'section.link.' . $mode . '.' . $ref);
-        $this->setVariable('anchorRef', $ref);
+        $this->setVariable('name', $this->getSectionName($this->ref, $data));
+        $this->setVariable('route', 'lva-' . $this->type . '/' . $this->ref);
+        $this->setVariable('link', 'section.link.' . $mode . '.' . $this->ref);
+        $this->setVariable('anchorRef', $this->ref);
     }
 
     /**
      * Get section name
      *
-     * @param string $ref
-     * @param array $data
      *
      * @return string
      */

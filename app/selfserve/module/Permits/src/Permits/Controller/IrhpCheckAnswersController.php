@@ -55,8 +55,6 @@ class IrhpCheckAnswersController extends AbstractSelfserveController
         ],
     ];
 
-    protected Language $languagePreference;
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
@@ -68,9 +66,8 @@ class IrhpCheckAnswersController extends AbstractSelfserveController
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        Language $languagePreference
+        protected Language $languagePreference
     ) {
-        $this->languagePreference = $languagePreference;
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 

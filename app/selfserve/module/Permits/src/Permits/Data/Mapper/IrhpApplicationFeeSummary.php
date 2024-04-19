@@ -40,42 +40,11 @@ class IrhpApplicationFeeSummary implements MapperInterface
     public const ALREADY_PAID_STATUS = 'permits.page.fee.permit.fee.already-paid';
     public const TO_BE_PAID_STATUS = 'permits.page.fee.permit.fee.to-be-paid';
 
-
-    private TranslationHelperService $translator;
-
-    /** @var EcmtNoOfPermits */
-    private EcmtNoOfPermits $ecmtNoOfPermits;
-
-    /** @var StatusFormatter */
-    private StatusFormatter $statusFormatter;
-
-    /** @var CurrencyFormatter */
-    private CurrencyFormatter $currencyFormatter;
-
-    /** @var UrlHelperService */
-    private UrlHelperService $urlHelperService;
-
     /**
      * Create service instance
-     *
-     * @param TranslationHelperService $translator
-     * @param EcmtNoOfPermits $ecmtNoOfPermits
-     * @param StatusFormatter $statusFormatter
-     * @param CurrencyFormatter $currencyFormatter
-     * @param UrlHelperService $urlHelperService
      */
-    public function __construct(
-        TranslationHelperService $translator,
-        EcmtNoOfPermits $ecmtNoOfPermits,
-        StatusFormatter $statusFormatter,
-        CurrencyFormatter $currencyFormatter,
-        UrlHelperService $urlHelperService
-    ) {
-        $this->translator = $translator;
-        $this->ecmtNoOfPermits = $ecmtNoOfPermits;
-        $this->statusFormatter = $statusFormatter;
-        $this->currencyFormatter = $currencyFormatter;
-        $this->urlHelperService = $urlHelperService;
+    public function __construct(private TranslationHelperService $translator, private EcmtNoOfPermits $ecmtNoOfPermits, private StatusFormatter $statusFormatter, private CurrencyFormatter $currencyFormatter, private UrlHelperService $urlHelperService)
+    {
     }
 
     /**
@@ -132,7 +101,6 @@ class IrhpApplicationFeeSummary implements MapperInterface
     /**
      * Get the html representing the guidance area of the page
      *
-     * @param array $data
      *
      * @return array
      */
@@ -161,8 +129,6 @@ class IrhpApplicationFeeSummary implements MapperInterface
      * Get the fee summary table content for bilateral type
      *
      * @param array $applicationData input data
-     * @param int $totalFeeAmount
-     * @param int $outstandingFeeAmount
      *
      * @return array
      */
@@ -445,7 +411,6 @@ class IrhpApplicationFeeSummary implements MapperInterface
      * Get the single table row content for a number of permits row, using the supplied ecmtNoOfPermits data as input
      * into the mapper
      *
-     * @param array $ecmtNoOfPermitsData
      *
      * @return array
      */
@@ -634,7 +599,6 @@ class IrhpApplicationFeeSummary implements MapperInterface
      *
      * @param string $key
      * @param int $amount
-     * @param array $status
      *
      * @return array
      */
@@ -657,9 +621,7 @@ class IrhpApplicationFeeSummary implements MapperInterface
     /**
      * Get the fee amount corresponding to the specified fee type
      *
-     * @param array $fees
      * @param string $feeTypeId
-     *
      * @return int
      */
     private function getFeeAmountByType(array $fees, $feeTypeId)
@@ -674,10 +636,8 @@ class IrhpApplicationFeeSummary implements MapperInterface
     /**
      * Get the fee corresponding to the specified fee type
      *
-     * @param array $fees
      * @param string $feeTypeId
      * @param string $statusId (optional)
-     *
      * @return array
      */
     private function getFeeByTypeAndOptionalStatus(array $fees, $feeTypeId, $statusId = null)
@@ -699,7 +659,6 @@ class IrhpApplicationFeeSummary implements MapperInterface
     /**
      * Get the full amount payable using the fee breakdown data
      *
-     * @param array $feeBreakdownData
      *
      * @return int
      */

@@ -14,24 +14,14 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
  */
 class SessionTimeoutController
 {
-    private IdentityProviderInterface $identityProvider;
-    protected Redirect $redirectHelper;
-
     /**
      * SessionTimeoutController constructor.
-     * @param IdentityProviderInterface $identityProvider
-     * @param Redirect $redirectHelper
      */
-    public function __construct(
-        IdentityProviderInterface $identityProvider,
-        Redirect $redirectHelper
-    ) {
-        $this->identityProvider = $identityProvider;
-        $this->redirectHelper = $redirectHelper;
+    public function __construct(private IdentityProviderInterface $identityProvider, protected Redirect $redirectHelper)
+    {
     }
 
     /**
-     * @param Request $request
      * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction(Request $request)

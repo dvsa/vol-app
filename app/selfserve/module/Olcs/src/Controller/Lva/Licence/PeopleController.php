@@ -47,8 +47,6 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     protected $section = 'people';
 
-    protected TranslationHelperService $translationHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -68,12 +66,10 @@ class PeopleController extends Lva\AbstractPeopleController
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
-        TranslationHelperService $translationHelper,
+        protected TranslationHelperService $translationHelper,
         LicencePeopleAdapter $lvaAdapter,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->translationHelper = $translationHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -114,7 +110,7 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return Response
      */
-    public function deleteAction()
+    public function deleteAction(): Response
     {
         $licencePeopleAdapter = $this->getLicencePeopleAdapter();
         $licencePeopleAdapter->loadPeopleData($this->lva, $this->getIdentifier());

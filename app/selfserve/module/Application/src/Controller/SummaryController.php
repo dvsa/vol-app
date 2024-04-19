@@ -26,9 +26,6 @@ class SummaryController extends AbstractSummaryController
 
     protected $lva = 'application';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -38,12 +35,9 @@ class SummaryController extends AbstractSummaryController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 }

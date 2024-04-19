@@ -35,8 +35,6 @@ class Navigation implements ListenerAggregateInterface
      */
     protected $querySender;
 
-    protected AuthorizationService $authService;
-
     /**
      * @var array
      */
@@ -52,17 +50,14 @@ class Navigation implements ListenerAggregateInterface
     /**
      * Navigation constructor
      *
-     * @param LaminasNavigation $navigation
-     * @param QuerySender    $querySender
      * @param RbacUser       $identity
      *
      * @return void
      */
-    public function __construct(LaminasNavigation $navigation, QuerySender $querySender, AuthorizationService $authService)
+    public function __construct(LaminasNavigation $navigation, QuerySender $querySender, protected AuthorizationService $authService)
     {
         $this->navigation = $navigation;
         $this->querySender = $querySender;
-        $this->authService = $authService;
     }
 
     /**
@@ -105,7 +100,6 @@ class Navigation implements ListenerAggregateInterface
      * We need to have either been referred from gov.uk or meet the criteria to be eligible for permits
      * We check the referrer first, as we may be able to save an API call this way
      *
-     * @param MvcEvent $e
      *
      * @return bool
      */
@@ -138,7 +132,6 @@ class Navigation implements ListenerAggregateInterface
     /**
      * Check whether the referer is the gov.uk permits page
      *
-     * @param MvcEvent $e
      *
      * @return bool
      */
@@ -202,7 +195,6 @@ class Navigation implements ListenerAggregateInterface
     /**
      * For the benefit of unit testing
      *
-     * @param array $govUkReferers
      *
      * @return void
      */

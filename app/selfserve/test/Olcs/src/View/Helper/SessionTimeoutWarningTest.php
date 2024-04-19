@@ -68,7 +68,6 @@ class SessionTimeoutWarningTest extends MockeryTestCase
     /**
      * Builds a SessionTimeoutWarning object with default mocks.
      *
-     * @param bool $enabled
      * @param int $SECONDS_BEFORE_TIMEOUT_WARNING
      * @param int $secondsAppendToSessionTimeout
      * @param string $TIMEOUT_REDIRECT_URL

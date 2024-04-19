@@ -23,11 +23,8 @@ use Laminas\Form\Form;
  */
 class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
-    protected PeopleLvaService $peopleLvaService;
-
-    public function __construct(ContainerInterface $container, PeopleLvaService $peopleLvaService)
+    public function __construct(ContainerInterface $container, protected PeopleLvaService $peopleLvaService)
     {
-        $this->peopleLvaService = $peopleLvaService;
         parent::__construct($container);
     }
 
@@ -66,7 +63,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @return bool
      */
-    public function canModify()
+    public function canModify(): bool
     {
         return !$this->isExceptionalOrganisation();
     }
@@ -77,7 +74,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      * @return TableBuilder
      *
      */
-    public function createTable()
+    public function createTable(): TableBuilder
     {
         $table = parent::createTable();
         return parent::amendLicencePeopleListTable($table);
@@ -88,9 +85,9 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @param array $params Params
      *
-     * @return AbstractCommand
+     * @return \Dvsa\Olcs\Transfer\Command\Licence\DeletePeople|DeletePeopleViaVariation
      */
-    protected function getDeleteCommand($params)
+    protected function getDeleteCommand($params): DeletePeopleViaVariation|\Dvsa\Olcs\Transfer\Command\Licence\DeletePeople
     {
         $params['id'] = $this->getLicenceId();
         return DeletePeopleViaVariation::create($params);

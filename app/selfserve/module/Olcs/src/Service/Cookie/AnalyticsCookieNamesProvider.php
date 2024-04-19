@@ -10,9 +10,6 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 
     public const LEGACY_COOKIE_DOMAIN = '.vehicle-operator-licensing.service.gov.uk';
 
-    /** @var string */
-    private $domain;
-
     /**
      * Create service instance
      *
@@ -20,9 +17,8 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
      *
      * @return AnalyticsCookieNamesProvider
      */
-    public function __construct($domain)
+    public function __construct(private $domain)
     {
-        $this->domain = $domain;
     }
 
     /**
@@ -42,7 +38,7 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 
         $cookieArray = $cookie->getArrayCopy();
         foreach ($cookieArray as $cookieName => $cookieValue) {
-            if (substr($cookieName, 0, strlen(self::GAT_PREFIX)) == self::GAT_PREFIX) {
+            if (str_starts_with($cookieName, self::GAT_PREFIX)) {
                 $names[] = $cookieName;
             }
         }
@@ -54,7 +50,7 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
                 'domain' => $this->domain
             ];
 
-            if (strpos($this->domain, self::LEGACY_COOKIE_DOMAIN) !== false) {
+            if (str_contains($this->domain, self::LEGACY_COOKIE_DOMAIN)) {
                 $augmentedNames[] = [
                     'name' => $name,
                     'domain' => self::LEGACY_COOKIE_DOMAIN

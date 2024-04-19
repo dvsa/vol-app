@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -31,10 +32,10 @@ class LicencePsvVehiclesTest extends MockeryTestCase
 
     public function testGetForm(): void
     {
-        $mockLicenceVehicles = m::mock(Form::class);
+        $mockLicenceVehicles = m::mock(LicencePsvVehicles::class);
         $this->fsm->setService('lva-licence-vehicles_psv', $mockLicenceVehicles);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('saveAndContinue');
         $formActions->shouldReceive('remove')->with('saveAndContinue');
         $formActions->shouldReceive('has')->with('cancel');
@@ -51,7 +52,7 @@ class LicencePsvVehiclesTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 

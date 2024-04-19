@@ -3,6 +3,7 @@
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Cqrs\Response;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
@@ -21,9 +22,14 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
         $data = [
             'hasInforceLicences' => $isInForce,
             'isExceptionalType' => $isExcOrg,
+            'application' => [
+                'licenceType' => [
+                    'id' => 'lcat_exc'
+                ]
+            ]
         ];
 
-        $mockResp = m::mock(\Laminas\Http\Response::class);
+        $mockResp = m::mock(Response::class);
         $mockResp
             ->shouldReceive('isOk')->andReturn(true)
             ->shouldReceive('getResult')->andReturn($data);

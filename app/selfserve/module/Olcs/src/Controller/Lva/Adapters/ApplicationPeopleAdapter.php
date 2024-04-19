@@ -23,7 +23,7 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
      *
      * @return bool
      */
-    public function canModify()
+    public function canModify(): bool
     {
         if ($this->hasInforceLicences() === false) {
             return true;

@@ -16,9 +16,7 @@ class LicencesAvailable implements MapperInterface
     public const ECMT_RESTRICTED_HINT = 'permits.form.ecmt-licence.restricted-licence.hint';
 
     /**
-     * @param array $data
      * @param       $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)

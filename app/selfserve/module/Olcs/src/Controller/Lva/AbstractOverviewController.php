@@ -25,9 +25,6 @@ abstract class AbstractOverviewController extends AbstractController
     protected $lva;
     protected string $location = 'external';
 
-    protected FormServiceManager $formServiceManager;
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -37,12 +34,9 @@ abstract class AbstractOverviewController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormServiceManager $formServiceManager,
-        FormHelperService $formHelper
+        protected FormServiceManager $formServiceManager,
+        protected FormHelperService $formHelper
     ) {
-        $this->formServiceManager = $formServiceManager;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

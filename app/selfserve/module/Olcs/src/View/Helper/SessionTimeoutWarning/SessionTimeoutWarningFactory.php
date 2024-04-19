@@ -17,7 +17,6 @@ class SessionTimeoutWarningFactory implements FactoryInterface
 
     /**
      * SessionTimeoutWarningFactory constructor.
-     * @param SessionTimeoutWarningFactoryConfigInputFilter|null $configInputFilter
      */
     public function __construct(?SessionTimeoutWarningFactoryConfigInputFilter $configInputFilter = null)
     {
@@ -29,7 +28,6 @@ class SessionTimeoutWarningFactory implements FactoryInterface
 
     /**
      * Validates the configuration set.
-     * @param array $config
      * @throws \Exception
      */
     private function validateConfiguration(array $config): void

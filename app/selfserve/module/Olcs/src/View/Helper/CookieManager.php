@@ -18,7 +18,6 @@ class CookieManager extends AbstractHelper implements HelperInterface
     /**
      * Create service instance
      *
-     * @param array $config
      *
      * @return CookieManager
      */

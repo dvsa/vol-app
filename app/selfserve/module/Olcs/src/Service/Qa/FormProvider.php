@@ -11,52 +11,21 @@ use RuntimeException;
 
 class FormProvider
 {
-    /** @var FormFactory */
-    private $formFactory;
-
-    /** @var FieldsetPopulator */
-    private $fieldsetPopulator;
-
-    /** @var LaminasFormFactory */
-    private $laminasFormFactory;
-
-    /** @var AnnotationBuilder */
-    private $annotationBuilder;
-
-    /** @var array */
-    private $submitOptionsMappings;
-
     /**
      * Create service instance
      *
-     * @param FormFactory $formFactory
-     * @param FieldsetPopulator $fieldsetPopulator
-     * @param LaminasFormFactory $laminasFormFactory
      * @param AnnotationBuilder $annotationBuilder
-     * @param array $submitOptionsMappings
      *
      * @return FormProvider
      */
-    public function __construct(
-        FormFactory $formFactory,
-        FieldsetPopulator $fieldsetPopulator,
-        LaminasFormFactory $laminasFormFactory,
-        $annotationBuilder,
-        array $submitOptionsMappings
-    ) {
-        $this->formFactory = $formFactory;
-        $this->fieldsetPopulator = $fieldsetPopulator;
-        $this->laminasFormFactory = $laminasFormFactory;
-        $this->annotationBuilder = $annotationBuilder;
-        $this->submitOptionsMappings = $submitOptionsMappings;
+    public function __construct(private FormFactory $formFactory, private FieldsetPopulator $fieldsetPopulator, private LaminasFormFactory $laminasFormFactory, private $annotationBuilder, private array $submitOptionsMappings)
+    {
     }
 
     /**
      * Get a Form instance corresponding to the supplied form data
      *
-     * @param array $options
      * @param string $submitOptionsName
-     *
      * @return mixed
      */
     public function get(array $options, $submitOptionsName)

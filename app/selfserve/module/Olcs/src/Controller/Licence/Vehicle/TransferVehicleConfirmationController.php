@@ -68,15 +68,15 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     {
         try {
             return parent::onDispatch($e);
-        } catch (VehicleSelectionEmptyException $exception) {
+        } catch (VehicleSelectionEmptyException) {
             $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.no-vehicles');
-        } catch (VehiclesNotFoundWithIdsException $exception) {
+        } catch (VehiclesNotFoundWithIdsException) {
             $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-vehicles');
-        } catch (DestinationLicenceNotSetException $exception) {
+        } catch (DestinationLicenceNotSetException) {
             $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.no-destination-licence');
-        } catch (DestinationLicenceNotFoundWithIdException $exception) {
+        } catch (DestinationLicenceNotFoundWithIdException) {
             $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-destination');
-        } catch (LicenceNotFoundWithIdException $exception) {
+        } catch (LicenceNotFoundWithIdException) {
             $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-licence');
         } catch (LicenceVehicleLimitReachedException $exception) {
             $this->flashMessenger->addErrorMessage($this->translationHelper->translateReplace(
@@ -178,7 +178,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     /**
      * Flashes a message to the user when a licence with a given id has no vehicles.
      *
-     * @param int $licenceId
      *
      * @throws Exception
      */
@@ -195,9 +194,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     /**
      * Flashes a success message to signal that vehicles with the given ids have been transferred to a destination
      * licence.
-     *
-     * @param LicenceDTO $destinationLicence
-     * @param array $vehicleIds
      */
     protected function flashTransferOfVehiclesCompleted(LicenceDTO $destinationLicence, array $vehicleIds): void
     {
@@ -218,9 +214,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     /**
      * Transfers one or more vehicles to a destination licence.
      *
-     * @param int $currentLicenceId
-     * @param array $vehicleIds
-     * @param LicenceDTO $destinationLicence
      *
      * @throws Exception
      *
@@ -292,7 +285,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         }
         try {
             $destinationLicence = $this->getLicenceById($destinationLicenceId);
-        } catch (LicenceNotFoundWithIdException $exception) {
+        } catch (LicenceNotFoundWithIdException) {
             throw new DestinationLicenceNotFoundWithIdException($destinationLicenceId);
         }
         return $destinationLicence;
@@ -301,7 +294,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
     /**
      * Gets the licence number for a licence from a given licence id.
      *
-     * @param int $licenceId
      * @return LicenceDTO
      * @throws LicenceNotFoundWithIdException
      */
@@ -310,7 +302,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         $query = Licence::create(['id' => $licenceId]);
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException | AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException) {
             throw new LicenceNotFoundWithIdException($licenceId);
         }
         return new LicenceDTO($queryResult->getResult());
@@ -329,7 +321,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         $query = LicenceVehiclesById::create(['ids' => $vehicleIds]);
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException | AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException) {
             throw new VehiclesNotFoundWithIdsException($vehicleIds);
         }
         $licenceVehicles = $queryResult->getResult()['results'] ?? [];

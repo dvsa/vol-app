@@ -163,24 +163,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected $redirectOptions;
 
-    protected TranslationHelperService $translationHelper;
-
-    protected FormHelperService $formHelper;
-
-    protected MapperManager $mapperManager;
-
-    protected TableFactory $tableBuilder;
-
-    public function __construct(
-        TranslationHelperService $translationHelper,
-        FormHelperService $formHelper,
-        TableFactory $tableBuilder,
-        MapperManager $mapperManager
-    ) {
-        $this->translationHelper = $translationHelper;
-        $this->formHelper = $formHelper;
-        $this->mapperManager = $mapperManager;
-        $this->tableBuilder = $tableBuilder;
+    public function __construct(protected TranslationHelperService $translationHelper, protected FormHelperService $formHelper, protected TableFactory $tableBuilder, protected MapperManager $mapperManager)
+    {
     }
 
     /**
@@ -591,7 +575,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     /**
      * Handle the API response
      *
-     * @param CqrsResponse $response
      *
      * @return array
      */
@@ -607,7 +590,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     /**
      * @todo needs to handle response errors :)
      *
-     * @param CqrsResponse $response
+     *
+     * @SuppressWarnings (PHPMD.UnusedFormalParameter)
      *
      * @SuppressWarnings (PHPMD.UnusedFormalParameter)
      */
@@ -840,7 +824,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             ]);
 
             Logger::debug(
-                'Sending conditional command: ' . get_class($conditionalCommand),
+                'Sending conditional command: ' . $conditionalCommand::class,
                 $conditionalCommand->getArrayCopy()
             );
 
@@ -862,8 +846,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     /**
      * Dispatch POST command
      *
-     * @param array $config
-     * @param array $params
      *
      * @return array|null
      */

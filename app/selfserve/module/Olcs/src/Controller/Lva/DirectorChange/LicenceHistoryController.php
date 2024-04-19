@@ -31,8 +31,6 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
     protected string $location = 'external';
     protected $lva = 'variation';
 
-    private TranslationHelperService $translationHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
@@ -42,10 +40,8 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
         StringHelperService $stringHelper,
         TableFactory $tableFactory,
         FormHelperService $formHelper,
-        TranslationHelperService $translationHelper
+        private TranslationHelperService $translationHelper
     ) {
-        $this->translationHelper = $translationHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -18,8 +18,6 @@ interface ViewGeneratorInterface
     /**
      * Get an array of additional view variables to be used in the view
      *
-     * @param MvcEvent $mvcEvent
-     * @param array $result
      *
      * @return array
      */
@@ -28,9 +26,7 @@ interface ViewGeneratorInterface
     /**
      * Return a Response object in accordance with the supplied backend destination name
      *
-     * @param Redirect $redirect
      * @param string $destinationName
-     *
      * @return Response
      */
     public function handleRedirectionRequest(Redirect $redirect, $destinationName);

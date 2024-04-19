@@ -20,9 +20,6 @@ class UploadEvidenceController extends AbstractUploadEvidenceController
 
     protected $lva = 'application';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -35,13 +32,10 @@ class UploadEvidenceController extends AbstractUploadEvidenceController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

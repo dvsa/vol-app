@@ -23,18 +23,12 @@ class ViewController extends AbstractController
     public const USER_TYPE_PARTNER = 'partner';
     public const USER_TYPE_ANONYMOUS = 'anonymous';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -274,9 +268,6 @@ class ViewController extends AbstractController
 
     /**
      * Alter the operating centres table in accordance with lgv requirements
-     *
-     * @param TableBuilder $tableBuilder
-     * @param array $data
      */
     private function alterOperatingCentresTableForLgv(TableBuilder $tableBuilder, array $data): void
     {

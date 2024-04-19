@@ -19,26 +19,14 @@ class CookieListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    /** @var CookieReader */
-    private $cookieReader;
-
-    /** @var Placeholder */
-    private $placeholder;
-
     /**
      * Create service instance
      *
-     * @param CookieReader $cookieReader
-     * @param Placeholder $placeholder
      *
      * @return CookieListener
      */
-    public function __construct(
-        CookieReader $cookieReader,
-        Placeholder $placeholder
-    ) {
-        $this->cookieReader = $cookieReader;
-        $this->placeholder = $placeholder;
+    public function __construct(private CookieReader $cookieReader, private Placeholder $placeholder)
+    {
     }
 
     /**

@@ -35,7 +35,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected function getScripts()
+    protected function getScripts(): array
     {
         $scripts  = parent::getScripts();
         $scripts[] = 'vehicles';

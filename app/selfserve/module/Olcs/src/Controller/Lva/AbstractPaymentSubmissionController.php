@@ -40,9 +40,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected $disableCardPayments = false;
 
     protected TranslationHelperService $translationHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
     protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -56,14 +54,12 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         TranslationHelperService $translationHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         TableFactory $tableFactory,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
         $this->translationHelper = $translationHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
         $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

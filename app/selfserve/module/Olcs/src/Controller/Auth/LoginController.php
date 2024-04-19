@@ -37,23 +37,8 @@ class LoginController
     public const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
     public const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
 
-    /**
-     * @var ValidatableAdapterInterface
-     */
-    private $authenticationAdapter;
-
     /** @var AuthenticationServiceInterface */
     protected $authenticationService;
-
-    /**
-     * @var CurrentUser
-     */
-    private $currentUser;
-
-    /**
-     * @var FlashMessenger
-     */
-    private $flashMessenger;
 
     /**
      * @var FormHelperService
@@ -66,36 +51,20 @@ class LoginController
     protected $redirectHelper;
 
     /**
-     * @var AuthChallengeContainer
-     */
-    private AuthChallengeContainer $authChallengeContainer;
-
-    /**
      * LoginController constructor.
-     * @param ValidatableAdapterInterface $authenticationAdapter
-     * @param AuthenticationServiceInterface $authenticationService
-     * @param CurrentUser $currentUser
-     * @param FlashMessenger $flashMessenger
-     * @param FormHelperService $formHelper
-     * @param Redirect $redirectHelper
-     * @param AuthChallengeContainer $authChallengeContainer
      */
     public function __construct(
-        ValidatableAdapterInterface $authenticationAdapter,
+        private ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        CurrentUser $currentUser,
-        FlashMessenger $flashMessenger,
+        private CurrentUser $currentUser,
+        private FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
         Redirect $redirectHelper,
-        AuthChallengeContainer $authChallengeContainer
+        private AuthChallengeContainer $authChallengeContainer
     ) {
-        $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
-        $this->currentUser = $currentUser;
-        $this->flashMessenger = $flashMessenger;
         $this->formHelper = $formHelper;
         $this->redirectHelper = $redirectHelper;
-        $this->authChallengeContainer = $authChallengeContainer;
     }
 
     /**
@@ -125,9 +94,6 @@ class LoginController
     }
 
     /**
-     * @param Request $request
-     * @param RouteMatch $routeMatch
-     * @param Response $response
      * @return Response
      */
     public function postAction(Request $request, RouteMatch $routeMatch, Response $response): Response
@@ -155,26 +121,21 @@ class LoginController
 
         $this->storeFormData($form);
 
-        switch ($result->getCode() ?? 0) {
-            case static::AUTH_FAILURE_ACCOUNT_DISABLED:
-                $this->flashMessenger->addMessage(
-                    static::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED,
-                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
-                );
-                break;
-            default:
-                // VOL-2394: If the login fails for any other reason, use a generic invalid username or password error.
-                $this->flashMessenger->addMessage(
-                    static::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD,
-                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
-                );
-        }
+        match ($result->getCode() ?? 0) {
+            static::AUTH_FAILURE_ACCOUNT_DISABLED => $this->flashMessenger->addMessage(
+                static::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED,
+                static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+            ),
+            default => $this->flashMessenger->addMessage(
+                static::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD,
+                static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+            ),
+        };
 
         return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
     }
 
     /**
-     * @param array $data
      * @return Form
      */
     protected function createLoginForm(array $data = null): Form
@@ -212,7 +173,6 @@ class LoginController
     }
 
     /**
-     * @param Request $request
      * @return Result
      */
     protected function attemptAuthentication(Request $request): Result
@@ -253,7 +213,6 @@ class LoginController
     }
 
     /**
-     * @param array $messages
      * @return Response
      */
     private function handleChallengeResult(array $messages): Response
@@ -271,9 +230,6 @@ class LoginController
         }
     }
 
-    /**
-     * @param array $messages
-     */
     private function applyAuthChallengeContainer(array $messages): void
     {
         $this->authChallengeContainer

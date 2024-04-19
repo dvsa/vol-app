@@ -24,8 +24,6 @@ class ConfirmationController extends AbstractController
     protected $markup = self::OPERATOR_MARKUP;
 
     protected $signature;
-
-    protected TranslationHelperService $translationHelper;
     protected AnnotationBuilder $transferAnnotationBuilder;
     protected CommandService $commandService;
 
@@ -39,11 +37,10 @@ class ConfirmationController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        TranslationHelperService $translationHelper,
+        protected TranslationHelperService $translationHelper,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService
     ) {
-        $this->translationHelper = $translationHelper;
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->commandService = $commandService;
 

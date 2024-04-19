@@ -7,21 +7,14 @@ use RuntimeException;
 
 class CookieState
 {
-    protected bool $isValid;
-    protected ?Preferences $preferences;
-
     /**
      * Create instance
      *
-     * @param bool $isValid
-     * @param Preferences|null $preferences
      *
      * @return void
      */
-    public function __construct($isValid, ?Preferences $preferences = null)
+    public function __construct(protected bool $isValid, protected ?Preferences $preferences = null)
     {
-        $this->isValid = $isValid;
-        $this->preferences = $preferences;
     }
 
     /**
@@ -61,7 +54,7 @@ class CookieState
     {
         try {
             return $this->getPreferences()->isActive($key);
-        } catch (Exception $e) {
+        } catch (Exception) {
             // swallow any exception
         }
 

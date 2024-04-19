@@ -16,30 +16,18 @@ class CandidatePermitSelection implements MapperInterface
 {
     use MapFromResultTrait;
 
-    /** @var HtmlAdder */
-    private $htmlAdder;
-
-    /** @var TableFactory */
-    private $tableFactory;
-
     /**
      * Create service instance
      *
-     * @param HtmlAdder $htmlAdder
-     * @param TableFactory $tableFactory
      *
      * @return CandidatePermitSelection
      */
-    public function __construct(HtmlAdder $htmlAdder, TableFactory $tableFactory)
+    public function __construct(private HtmlAdder $htmlAdder, private TableFactory $tableFactory)
     {
-        $this->htmlAdder = $htmlAdder;
-        $this->tableFactory = $tableFactory;
     }
 
     /**
-     * @param array $data
      * @param Form $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)

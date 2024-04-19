@@ -26,10 +26,6 @@ abstract class AbstractDeclarationController extends AbstractController
     use TransportManagerApplicationTrait;
 
     protected $declarationMarkup;
-
-    protected TranslationHelperService $translationHelper;
-    protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
     protected AnnotationBuilder $transferAnnotationBuilder;
     protected CommandService $commandService;
 
@@ -45,15 +41,12 @@ abstract class AbstractDeclarationController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        TranslationHelperService $translationHelper,
-        FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService
     ) {
-        $this->translationHelper = $translationHelper;
-        $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->commandService = $commandService;
 
@@ -127,7 +120,6 @@ abstract class AbstractDeclarationController extends AbstractController
     /**
      * Return an array of parameters to be used as included as translateReplace inputs to the declaration markup
      *
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
@@ -210,7 +202,6 @@ abstract class AbstractDeclarationController extends AbstractController
     /**
      * Alter declaration form
      *
-     * @param Form $form
      *
      * @return void
      */

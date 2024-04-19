@@ -3,6 +3,7 @@
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\RefData;
+use Common\Service\Cqrs\Response;
 use Common\Service\Lva\PeopleLvaService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Psr\Container\ContainerInterface;
@@ -46,7 +47,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->mockResp = m::mock(\Laminas\Http\Response::class);
+        $this->mockResp = m::mock(Response::class);
         $this->mockResp->shouldReceive('isOk')->andReturn(true);
     }
 

@@ -14,11 +14,8 @@ use Common\Service\Table\TableBuilder;
  */
 class LicenceTrailers extends CommonLicenceTrailers
 {
-    protected FormHelperService $formHelper;
-
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(protected FormHelperService $formHelper)
     {
-        $this->formHelper = $formHelper;
     }
 
     /**

@@ -13,16 +13,14 @@ class ApplicationTypeOfLicence extends CommonLicenceTypeOfLicence
 {
     protected FormHelperService $formHelper;
     protected Permission $permissionService;
-    protected GuidanceHelperService $guidanceHelper;
     protected FormServiceManager $formServiceLocator;
 
     public function __construct(
         FormHelperService $formHelper,
         Permission $permissionService,
-        GuidanceHelperService $guidanceHelper,
+        protected GuidanceHelperService $guidanceHelper,
         FormServiceManager $formServiceLocator
     ) {
-        $this->guidanceHelper = $guidanceHelper;
         parent::__construct($formHelper, $permissionService, $formServiceLocator);
     }
     /**

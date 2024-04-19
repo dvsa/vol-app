@@ -180,7 +180,6 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     }
 
     /**
-     * @param array $vehicleIds
      * @return array
      * @throws \Exception
      */

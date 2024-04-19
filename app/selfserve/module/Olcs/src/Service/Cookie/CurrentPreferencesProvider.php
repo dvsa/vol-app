@@ -4,36 +4,23 @@ namespace Olcs\Service\Cookie;
 
 class CurrentPreferencesProvider
 {
-    /** @var CookieReader */
-    private $cookieReader;
-
-    /** @var PreferencesFactory */
-    private $preferencesFactory;
-
     /**
      * Create service instance
      *
-     * @param CookieReader $cookieReader
-     * @param PreferencesFactory $preferencesFactory
      *
      * @return CurrentPreferencesProvider
      */
-    public function __construct(
-        CookieReader $cookieReader,
-        PreferencesFactory $preferencesFactory
-    ) {
-        $this->cookieReader = $cookieReader;
-        $this->preferencesFactory = $preferencesFactory;
+    public function __construct(private CookieReader $cookieReader, private PreferencesFactory $preferencesFactory)
+    {
     }
 
     /**
      * Get a key/value array of the current preferences, or default preferences if none are available
      *
-     * @param mixed $cookie
      *
      * @return Preferences|null
      */
-    public function getPreferences($cookie): ?Preferences
+    public function getPreferences(mixed $cookie): ?Preferences
     {
         $cookieState = $this->cookieReader->getState($cookie);
 

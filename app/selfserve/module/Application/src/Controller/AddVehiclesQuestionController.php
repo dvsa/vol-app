@@ -73,14 +73,6 @@ class AddVehiclesQuestionController
      */
     protected $commandHandler;
 
-    /**
-     * @param Url $urlHelper
-     * @param Redirect $redirectHelper
-     * @param HandleQuery $queryHandler
-     * @param FlashMessenger $flashMessenger
-     * @param FormValidator $formValidator
-     * @param HandleCommand $commandHandler
-     */
     public function __construct(
         Url $urlHelper,
         Redirect $redirectHelper,
@@ -103,8 +95,6 @@ class AddVehiclesQuestionController
      * This handles posts instead of having a second action in order to satisfy backwards compatibility with a legacy
      * implementation.
      *
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return Response|ViewModel
      * @throws BadCommandResponseException
      * @throws BadQueryResponseException
@@ -149,8 +139,6 @@ class AddVehiclesQuestionController
     }
 
     /**
-     * @param Request $request
-     * @param RouteMatch $routeMatch
      * @return Response
      * @throws ResourceNotFoundException
      * @throws BadCommandResponseException
@@ -198,7 +186,6 @@ class AddVehiclesQuestionController
     }
 
     /**
-     * @param int $applicationId
      * @return array
      * @throws ResourceNotFoundException
      * @throws BadQueryResponseException
@@ -235,40 +222,31 @@ class AddVehiclesQuestionController
     }
 
     /**
-     * @param int $applicationId
-     * @param mixed $applicationVersion
-     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToComplete(int $applicationId, $applicationVersion): void
+    protected function updateVehicleSectionStatusToComplete(int $applicationId, mixed $applicationVersion): void
     {
         $this->updateVehicleSectionStatus($applicationId, $applicationVersion, false);
     }
 
     /**
-     * @param int $applicationId
-     * @param mixed $applicationVersion
-     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, $applicationVersion): void
+    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, mixed $applicationVersion): void
     {
         $this->updateVehicleSectionStatus($applicationId, $applicationVersion, true);
     }
 
     /**
-     * @param int $applicationId
-     * @param mixed $applicationVersion
-     * @param bool $intendingToEnterVehicleDetails
      *
      * @throws BadCommandResponseException
      * @throws BailOutException
      *
      * @return void
      */
-    protected function updateVehicleSectionStatus(int $applicationId, $applicationVersion, bool $intendingToEnterVehicleDetails)
+    protected function updateVehicleSectionStatus(int $applicationId, mixed $applicationVersion, bool $intendingToEnterVehicleDetails)
     {
         $command = UpdateVehicles::create([
             'id' => $applicationId,
@@ -284,7 +262,6 @@ class AddVehiclesQuestionController
     }
 
     /**
-     * @param array $applicationData
      * @return bool
      */
     protected function applicationHasBeenCompletedWithoutVehicles(array $applicationData): bool
@@ -303,7 +280,6 @@ class AddVehiclesQuestionController
     }
 
     /**
-     * @param array $applicationData
      * @return bool
      */
     protected function applicationHasVehicles(array $applicationData): bool

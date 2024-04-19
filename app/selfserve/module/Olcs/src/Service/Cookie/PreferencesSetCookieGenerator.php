@@ -8,32 +8,19 @@ class PreferencesSetCookieGenerator
 {
     public const COOKIE_PATH = '/';
 
-    /** @var SetCookieFactory */
-    private $setCookieFactory;
-
-    /** @var CookieExpiryGenerator */
-    private $cookieExpiryGenerator;
-
     /**
      * Create service instance
      *
-     * @param SetCookieFactory $setCookieFactory
-     * @param CookieExpiryGenerator $cookieExpiryGenerator
      *
      * @return PreferencesSetCookieGenerator
      */
-    public function __construct(
-        SetCookieFactory $setCookieFactory,
-        CookieExpiryGenerator $cookieExpiryGenerator
-    ) {
-        $this->setCookieFactory = $setCookieFactory;
-        $this->cookieExpiryGenerator = $cookieExpiryGenerator;
+    public function __construct(private SetCookieFactory $setCookieFactory, private CookieExpiryGenerator $cookieExpiryGenerator)
+    {
     }
 
     /**
      * Return a SetCookie instance corresponding to the specified preferences
      *
-     * @param Preferences $preferences
      *
      * @return SetCookie
      */

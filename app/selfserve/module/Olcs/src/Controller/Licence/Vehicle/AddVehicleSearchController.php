@@ -181,9 +181,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     }
 
     /**
-     * @param array|null $vehicleData
      * @param null $searchedVrm
-     *
      * @return array
      */
     private function createViewParametersForConfirmation(?array $vehicleData, $searchedVrm = null): array
@@ -199,10 +197,6 @@ class AddVehicleSearchController extends AbstractVehicleController
         );
     }
 
-    /**
-     * @param string $message
-     * @param string $type
-     */
     protected function setFormErrorMessage(string $message, string $type): void
     {
         $this->form->get('vehicle-search')->setMessages([
@@ -220,9 +214,9 @@ class AddVehicleSearchController extends AbstractVehicleController
     {
         try {
             $vehicleData = $this->fetchDvlaVehicleData($vrm);
-        } catch (NotFoundException $exception) {
+        } catch (NotFoundException) {
             $this->setFormErrorMessage('licence.vehicle.add.search.vrm-not-found', 'vrm_not_found');
-        } catch (Exception $exception) {
+        } catch (Exception) {
             $this->flashMessenger->addErrorMessage($this->translationHelper->translate('licence.vehicle.add.search.query-error'));
         }
         return $vehicleData ?? null;

@@ -32,8 +32,7 @@ abstract class LvaOverview extends ViewModel
     }
 
     /**
-     * @param mixed ...$args
      * @return LvaOverviewSection
      */
-    abstract protected function newSectionModel(...$args): LvaOverviewSection;
+    abstract protected function newSectionModel(mixed ...$args): LvaOverviewSection;
 }

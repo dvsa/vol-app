@@ -38,9 +38,6 @@ class BusinessTypeController extends AbstractBusinessTypeController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -67,13 +64,10 @@ class BusinessTypeController extends AbstractBusinessTypeController
         TranslationHelperService $translationHelper,
         AnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper,
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper,
         GenericBusinessTypeAdapter $lvaAdapter
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -67,15 +67,11 @@ class DeclarationFormController extends AbstractActionController
 
     protected function determineSignatureLabel($data): string
     {
-        switch ($data['licence']['organisation']['type']['id']) {
-            case RefData::ORG_TYPE_SOLE_TRADER:
-                return 'declaration-sig-label-st';
-            case RefData::ORG_TYPE_OTHER:
-                return 'declaration-sig-label-other';
-            case RefData::ORG_TYPE_PARTNERSHIP:
-                return 'declaration-sig-label-p';
-            default:
-                return 'declaration-sig-label';
-        }
+        return match ($data['licence']['organisation']['type']['id']) {
+            RefData::ORG_TYPE_SOLE_TRADER => 'declaration-sig-label-st',
+            RefData::ORG_TYPE_OTHER => 'declaration-sig-label-other',
+            RefData::ORG_TYPE_PARTNERSHIP => 'declaration-sig-label-p',
+            default => 'declaration-sig-label',
+        };
     }
 }

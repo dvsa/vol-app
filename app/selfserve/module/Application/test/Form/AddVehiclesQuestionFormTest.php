@@ -700,15 +700,13 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $value
      *
      * @test
      *
      * @depends getRadioInputReturnsAnInput
-     *
      * @dataProvider invalidRadioValueDataProvider
      */
-    public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValue($value): void
+    public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValue(mixed $value): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -870,17 +868,15 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $yesValue
      *
      * @test
      *
      * @depends userHasOptedToSubmitVehicleDetailsIsCallable
      * @depends _constructInitialisesARadioElement
      * @depends isValidIsCallable
-     *
      * @dataProvider yesRadioValidValuesDataProvider
      */
-    public function userHasOptedToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsYes($yesValue): void
+    public function userHasOptedToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsYes(mixed $yesValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -895,17 +891,15 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $noValue
      *
      * @test
      *
      * @depends userHasOptedToSubmitVehicleDetailsIsCallable
      * @depends _constructInitialisesARadioElement
      * @depends isValidIsCallable
-     *
      * @dataProvider noRadioValidValuesDataProvider
      */
-    public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsNo($noValue): void
+    public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsNo(mixed $noValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -953,17 +947,15 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $noValue
      *
      * @test
      *
      * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
      * @depends _constructInitialisesARadioElement
      * @depends isValidIsCallable
-     *
      * @dataProvider noRadioValidValuesDataProvider
      */
-    public function userHasOptedNotToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsNo($noValue): void
+    public function userHasOptedNotToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsNo(mixed $noValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -978,17 +970,15 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     }
 
     /**
-     * @param mixed $yesValue
      *
      * @test
      *
      * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
      * @depends _constructInitialisesARadioElement
      * @depends isValidIsCallable
-     *
      * @dataProvider yesRadioValidValuesDataProvider
      */
-    public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsYes($yesValue): void
+    public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsYes(mixed $yesValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1314,9 +1304,6 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $this->assertSame(static::AN_APPLICATION_VERSION, $this->sut->getApplicationVersionInput()->getValue('application-version'));
     }
 
-    /**
-     * @param string $name
-     */
     protected function setUpSut(string $name): void
     {
         $this->sut = new AddVehiclesQuestionForm($name);

@@ -17,19 +17,14 @@ use Psr\Container\ContainerInterface;
  */
 class LicenceTransportManagerAdapter extends CommonAdapter
 {
-    /** @var VariationLvaService */
-    private $lvaVariationSrv;
-
     public function __construct(
         TransferAnnotationBuilder $transferAnnotationBuilder,
         CachingQueryService $querySrv,
         CommandService $commandSrv,
-        VariationLvaService $lvaVariationSrv,
+        private VariationLvaService $lvaVariationSrv,
         ContainerInterface $container
     ) {
         parent::__construct($transferAnnotationBuilder, $querySrv, $commandSrv, $container);
-
-        $this->lvaVariationSrv = $lvaVariationSrv;
     }
 
     /**

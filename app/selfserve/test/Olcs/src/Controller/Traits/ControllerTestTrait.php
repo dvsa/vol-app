@@ -109,7 +109,6 @@ trait ControllerTestTrait
 
     /**
      * @param string $class expected Command class name
-     * @param array $expectedDtoData
      * @param array $result to be returned by $response->getResult()
      * @param boolean $ok to be returned by $response->isOk()
      * @param int $times call count
@@ -121,7 +120,6 @@ trait ControllerTestTrait
 
     /**
      * @param string $class expected Query class name
-     * @param array $expectedDtoData
      * @param array $result to be returned by $response->getResult()
      * @param boolean $ok to be returned by $response->isOk()
      * @param int $times call count
@@ -134,7 +132,6 @@ trait ControllerTestTrait
     /**
      * @param string $method controller/plugin method to mock 'handleQuery'|'handleCommand'
      * @param string $class expected Query/Command class name
-     * @param array $expectedDtoData
      * @param array $result to be returned by $response->getResult()
      * @param boolean $ok to be returned by $response->isOk()
      * @param int $times call count

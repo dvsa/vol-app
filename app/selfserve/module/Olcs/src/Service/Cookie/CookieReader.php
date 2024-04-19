@@ -7,34 +7,23 @@ use Laminas\Http\Header\Cookie;
 
 class CookieReader
 {
-    /** @var CookieStateFactory */
-    private $cookieStateFactory;
-
-    /** @var PreferencesFactory */
-    private $preferencesFactory;
-
     /**
      * Create service instance
      *
-     * @param CookieStateFactory $cookieStateFactory
-     * @param PreferencesFactory $preferencesFactory
      *
      * @return CookieReader
      */
-    public function __construct(CookieStateFactory $cookieStateFactory, PreferencesFactory $preferencesFactory)
+    public function __construct(private CookieStateFactory $cookieStateFactory, private PreferencesFactory $preferencesFactory)
     {
-        $this->cookieStateFactory = $cookieStateFactory;
-        $this->preferencesFactory = $preferencesFactory;
     }
 
     /**
      * Get CookieState object representing the current preferences cookie state
      *
-     * @param mixed $cookie
      *
      * @return CookieState
      */
-    public function getState($cookie)
+    public function getState(mixed $cookie)
     {
         if (!($cookie instanceof Cookie && isset($cookie[Preferences::COOKIE_NAME]))) {
             return $this->cookieStateFactory->create(false);
@@ -52,7 +41,7 @@ class CookieReader
                 true,
                 $this->preferencesFactory->create($contents)
             );
-        } catch (RuntimeException $e) {
+        } catch (RuntimeException) {
             return $this->cookieStateFactory->create(false);
         }
     }

@@ -27,10 +27,6 @@ class BusRegApplicationsController extends AbstractController
 {
     public const TABLE_TXC_INBOX = 'txc-inbox';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -41,14 +37,10 @@ class BusRegApplicationsController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory,
-        FormHelperService $formHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TableFactory $tableFactory,
+        protected FormHelperService $formHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

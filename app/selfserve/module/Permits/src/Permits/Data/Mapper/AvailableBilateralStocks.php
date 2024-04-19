@@ -18,27 +18,20 @@ class AvailableBilateralStocks implements MapperInterface
 {
     public const MOROCCO_CODE = 'MA';
 
-    /** @var TranslationHelperService */
-    private $translator;
-
     /**
      * Create service instance
      *
-     * @param TranslationHelperService $translator
      *
      * @return AvailableBilateralStocks
      */
-    public function __construct(TranslationHelperService $translator)
+    public function __construct(private TranslationHelperService $translator)
     {
-        $this->translator = $translator;
     }
 
     /**
      * Map stock options
      *
-     * @param array $data
      * @param Form  $form
-     *
      * @return array
      */
     public function mapForFormOptions(array $data, $form)
@@ -82,9 +75,6 @@ class AvailableBilateralStocks implements MapperInterface
     }
 
     /**
-     * @param Form $form
-     * @param array $stocks
-     * @param string|null $selectedCountryStock
      * @param bool $isMorocco
      */
     private function multipleStockOptions(Form $form, array $stocks, ?string $selectedCountryStock, $isMorocco): void
@@ -111,10 +101,6 @@ class AvailableBilateralStocks implements MapperInterface
         $irhpPermitStock->setValue($selectedCountryStock);
     }
 
-    /**
-     * @param Form $form
-     * @param array $stock
-     */
     private function singleStockOption(Form $form, array $stock): void
     {
         $markup = sprintf(
@@ -151,7 +137,6 @@ class AvailableBilateralStocks implements MapperInterface
     /**
      * Set the id of the first radio button in the list for validation accessibility purposes
      *
-     * @param array $valueOptions
      *
      * @return array
      */
@@ -167,10 +152,6 @@ class AvailableBilateralStocks implements MapperInterface
     }
 
     /**
-     * @param array $response
-     * @param array $routeParams
-     * @param array $formData
-     * @param array $data
      *
      * @return array
      *
@@ -207,8 +188,6 @@ class AvailableBilateralStocks implements MapperInterface
     /**
      * Return the stock ID for the country referenced in the route params if one exists.
      *
-     * @param array $irhpPermitApplications
-     * @param string $country
      * @return mixed|null
      */
     private function getStockIdForCurrentCountrySelection(array $irhpPermitApplications, string $country)

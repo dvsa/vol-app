@@ -19,12 +19,10 @@ class ApplicationTransportManager extends AbstractLvaFormService
     use ButtonsAlterations;
 
     protected FormHelperService $formHelper;
-    protected AuthorizationService $authService;
 
-    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    public function __construct(FormHelperService $formHelper, protected AuthorizationService $authService)
     {
         $this->formHelper = $formHelper;
-        $this->authService = $authService;
     }
 
     /**

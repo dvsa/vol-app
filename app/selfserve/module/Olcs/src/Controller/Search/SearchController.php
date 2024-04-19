@@ -31,13 +31,7 @@ class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
 
-    protected ScriptFactory $scriptFactory;
-    protected FormHelperService $formHelper;
-    protected $navigation;
-    protected FormElementManager $formElementManager;
     protected $viewHelperManager;
-    protected $dataServiceManager;
-    protected TranslationHelperService $translationHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -53,21 +47,15 @@ class SearchController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        ScriptFactory $scriptFactory,
-        FormHelperService $formHelper,
-        $navigation,
-        FormElementManager $formElementManager,
+        protected ScriptFactory $scriptFactory,
+        protected FormHelperService $formHelper,
+        protected $navigation,
+        protected FormElementManager $formElementManager,
         $viewHelperManager,
-        $dataServiceManager,
-        TranslationHelperService $translationHelper
+        protected $dataServiceManager,
+        protected TranslationHelperService $translationHelper
     ) {
-        $this->scriptFactory = $scriptFactory;
-        $this->formHelper = $formHelper;
-        $this->navigation = $navigation;
-        $this->formElementManager = $formElementManager;
         $this->viewHelperManager = $viewHelperManager;
-        $this->dataServiceManager = $dataServiceManager;
-        $this->translationHelper = $translationHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -279,7 +267,7 @@ class SearchController extends AbstractController
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $view->noResultsMessage = 'Invalid search criteria ';
         }
         return $view;

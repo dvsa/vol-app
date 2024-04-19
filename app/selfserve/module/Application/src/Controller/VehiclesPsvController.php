@@ -31,9 +31,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -61,12 +58,9 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -19,9 +19,6 @@ class OverviewController extends AbstractOverviewController
     protected $lva = 'application';
     protected string $location = 'external';
 
-    protected RestrictionHelperService $restrictionHelper;
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -35,12 +32,9 @@ class OverviewController extends AbstractOverviewController
         AuthorizationService $authService,
         FormServiceManager $formServiceManager,
         FormHelperService $formHelper,
-        RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        protected RestrictionHelperService $restrictionHelper,
+        protected StringHelperService $stringHelper
     ) {
-        $this->restrictionHelper = $restrictionHelper;
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

@@ -27,18 +27,12 @@ class PeopleController extends AbstractController
     protected $lva = 'variation';
     protected string $location = 'external';
     protected $section = 'people';
-
-    protected FormServiceManager $formServiceManager;
-    protected VariationPeopleAdapter $lvaAdapter;
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormServiceManager $formServiceManager,
-        VariationPeopleAdapter $lvaAdapter
+        protected FormServiceManager $formServiceManager,
+        protected VariationPeopleAdapter $lvaAdapter
     ) {
-        $this->formServiceManager = $formServiceManager;
-        $this->lvaAdapter = $lvaAdapter;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

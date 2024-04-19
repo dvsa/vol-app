@@ -30,12 +30,8 @@ class UserController extends AbstractController
     use Lva\Traits\ExternalControllerTrait;
     use CrudTableTrait;
 
-    protected User $user;
-    protected ScriptFactory $scriptFactory;
     protected FormHelperService $formHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TranslationHelperService $translationHelper;
-    protected GuidanceHelperService $guidanceHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -50,19 +46,15 @@ class UserController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        User $user,
-        ScriptFactory $scriptFactory,
+        protected User $user,
+        protected ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        TranslationHelperService $translationHelper,
-        GuidanceHelperService $guidanceHelper
+        protected TranslationHelperService $translationHelper,
+        protected GuidanceHelperService $guidanceHelper
     ) {
-        $this->user = $user;
-        $this->scriptFactory = $scriptFactory;
         $this->formHelper = $formHelper;
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->translationHelper = $translationHelper;
-        $this->guidanceHelper = $guidanceHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -323,7 +315,6 @@ class UserController extends AbstractController
     /**
      * Formats data for create user command
      *
-     * @param array $data
      * @return array
      */
     public function formatSaveDataForCreate(array $data)
@@ -402,9 +393,6 @@ class UserController extends AbstractController
         return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], [], false);
     }
 
-    /**
-     * @param Form $form
-     */
     protected function lockNameFields(Form $form): void
     {
         $fieldSet = $form->get('main');

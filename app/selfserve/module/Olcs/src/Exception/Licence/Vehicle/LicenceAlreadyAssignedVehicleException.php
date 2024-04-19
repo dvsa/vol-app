@@ -23,11 +23,7 @@ class LicenceAlreadyAssignedVehicleException extends Exception
     protected $vehicleVrms;
 
     /**
-     * @param int $licenceId
-     * @param string $licenceNumber
      * @param array<string> $vehicleVrms
-     * @param string $message
-     * @param int $code
      * @param Throwable|null $previous
      */
     public function __construct(int $licenceId, string $licenceNumber, array $vehicleVrms, string $message = "", int $code = 0, Throwable $previous = null)

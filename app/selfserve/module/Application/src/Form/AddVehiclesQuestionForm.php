@@ -227,20 +227,17 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
     }
 
     /**
-     * @param mixed $value
      * @return $this
      */
-    public function setApplicationVersion($value): self
+    public function setApplicationVersion(mixed $value): self
     {
         return $this->setDataAttribute(static::APPLICATION_VERSION, $value);
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
      * @return $this
      */
-    protected function setDataAttribute(string $name, $value): self
+    protected function setDataAttribute(string $name, mixed $value): self
     {
         $this->setData(array_merge($this->data ?? [], [$name => $value]));
         $this->getInputFilter()->setData($this->data);
