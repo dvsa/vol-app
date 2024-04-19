@@ -30,6 +30,11 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  runtime_platform = {
+    cpu_architecture : "ARM64",
+    operating_system_family : "LINUX"
+  }
+
   container_definitions = {
     (each.key) = {
       cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu / 2)
