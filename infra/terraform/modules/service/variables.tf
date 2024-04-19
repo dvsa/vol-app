@@ -38,5 +38,4 @@ variable "access_points" {
     })
   }))
   description = "The EFS access point"
-  default = {}
 }

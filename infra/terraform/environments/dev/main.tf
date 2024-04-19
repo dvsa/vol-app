@@ -103,14 +103,16 @@ module "service" {
   }
 
   access_points = {
-    root_directory = {
-      path = "/api/data/cache"
-    }
-    
-    creation_info = {
-      owner_gid   = 98
-      owner_uid   = 98
-      permissions = "755"
+    "api" = {
+      root_directory = {
+        path = "/api/data/cache"
+      }
+
+      creation_info = {
+        owner_gid   = 98
+        owner_uid   = 98
+        permissions = "755"
+      }
     }
   }
 }
