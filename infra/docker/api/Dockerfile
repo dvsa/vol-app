@@ -23,3 +23,5 @@ ADD --chown=www-data ./api.tar.gz /var/www/html
 COPY api.conf /etc/nginx/conf.d/api.conf
 
 USER www-data
+
+# Trigger build.
