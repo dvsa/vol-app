@@ -24,6 +24,20 @@ module "environment-remote-state" {
 module "account" {
   source = "../../modules/account"
 
+  github_oidc_subjects = concat(
+    [
+      "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml`
+      "dvsa/vol-app:environment:account-nonprod", # `.github/workflows/deploy-account.yaml`.
+    ],
+    [
+      for env in local.environments : "dvsa/vol-app:environment:${env}" # `.github/workflows/deploy-environment.yaml`
+    ],
+  )
+
+  github_oidc_readonly_subjects = [
+    for env in local.environments : "dvsa/vol-app:pull_request"
+  ]
+
   github_oidc_readonly_role_policies = merge(
     {
       DynamodbStateLock = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-lock-policy",

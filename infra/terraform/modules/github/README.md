@@ -30,9 +30,10 @@ No resources.
 | <a name="input_create_oidc_readonly_role"></a> [create\_oidc\_readonly\_role](#input\_create\_oidc\_readonly\_role) | Whether to create a readonly OIDC role. This is useful for pull requests. | `bool` | `true` | no |
 | <a name="input_create_oidc_role"></a> [create\_oidc\_role](#input\_create\_oidc\_role) | Whether to create an OIDC role. | `bool` | `true` | no |
 | <a name="input_oidc_readonly_role_policies"></a> [oidc\_readonly\_role\_policies](#input\_oidc\_readonly\_role\_policies) | The map of policies to attach to the OIDC readonly role. | `map(string)` | `{}` | no |
+| <a name="input_oidc_readonly_subjects"></a> [oidc\_readonly\_subjects](#input\_oidc\_readonly\_subjects) | The list of GitHub subjects to allow in the OIDC readonly role. | `list(string)` | `[]` | no |
 | <a name="input_oidc_role_permissions_boundary_arn"></a> [oidc\_role\_permissions\_boundary\_arn](#input\_oidc\_role\_permissions\_boundary\_arn) | The ARN of the permissions boundary to use for the role. | `string` | `null` | no |
 | <a name="input_oidc_role_policies"></a> [oidc\_role\_policies](#input\_oidc\_role\_policies) | The map of policies to attach to the OIDC role. | `map(string)` | `{}` | no |
-| <a name="input_repositories"></a> [repositories](#input\_repositories) | The list of repositories to add to the OIDC role. | `list(string)` | n/a | yes |
+| <a name="input_oidc_subjects"></a> [oidc\_subjects](#input\_oidc\_subjects) | The list of GitHub subjects to allow in the OIDC role. | `list(string)` | `[]` | no |
 
 ## Outputs
 

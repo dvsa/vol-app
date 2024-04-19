@@ -32,7 +32,7 @@ Various tools run on CI to ensure the quality of the codebase:
 
 -   [PHPStan](https://github.com/phpstan/phpstan)
 -   [Psalm](https://github.com/vimeo/psalm)
--   [PHP_CodeSniffer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+-   [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
 
 #### Security
 
@@ -78,3 +78,43 @@ The CD workflow is triggered by a successful merge to the default branch (`main`
 **Workflow**: [.github/workflows/cd.yaml](https://github.com/dvsa/vol-app/blob/main/.github/workflows/cd.yaml).
 
 ![CD workflow](./assets/cd.png)
+
+### Path to production
+
+```mermaid
+---
+config:
+    flowchart:
+        htmlLabels: false
+---
+graph LR
+    start["`Merge to **main**`"] --> dev_account
+
+    subgraph dev_account["`**Development Account**`"]
+        direction TB
+        dev["`Deploy to **Development**`"]:::success ==> dev_e2e{E2E Tests}
+        dev_e2e ===>|"`**Pass**`"| int[Integration]:::success
+        dev_e2e ==>|"`**Fail**`"| dev_stop["`Stop`"]:::negative
+
+        int["`Deploy to **Integration**`"] ==> int_e2e{E2E Tests}
+        int_e2e ===>|"`**Pass**`"| int_release[Complete]:::success
+        int_e2e ==>|"`**Fail**`"| int_rollback[Rollback]:::negative
+    end
+
+    dev_account ---> is-release{"Is Release?"} --->|"`**Yes**`"| prod_account
+    is-release -->|"`**No**`"| release_stop["`Stop`"]:::negative
+
+    subgraph prod_account["`**Production Account**`"]
+        direction TB
+        prep["`Deploy to **Pre-production**`"]:::success ==> prep_e2e{E2E Tests}
+        prep_e2e ===>|"`**Pass**`"| prod[Production]:::success
+        prep_e2e ==>|"`**Fail**`"| prep_rollback[Rollback]:::negative
+
+        prod["`Deploy to **Production**`"] ==> prod_e2e{E2E Tests}
+        prod_e2e ===>|"`**Pass**`"| prod_deploy[Complete]:::success
+        prod_e2e ==>|"`**Fail**`"| prod_rollback[Rollback]:::negative
+    end
+
+    classDef success fill:#C5E1A5,color:#000,stroke:#388e3c
+    classDef negative fill:#f7d3d3,color:#000,stroke:#c62828
+```

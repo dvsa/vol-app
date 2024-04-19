@@ -31,10 +31,10 @@ module "ecr" {
         rulePriority = 10,
         description  = "Keep last 5 release images",
         selection = {
-          tagStatus     = "tagged",
-          tagPrefixList = ["v"],
-          countType     = "imageCountMoreThan",
-          countNumber   = 5
+          tagStatus      = "tagged",
+          tagPatternList = ["*.*.*"],
+          countType      = "imageCountMoreThan",
+          countNumber    = 5
         },
         action = {
           type = "expire"
@@ -44,10 +44,9 @@ module "ecr" {
         rulePriority = 20,
         description  = "Keep last 5 non-release images",
         selection = {
-          tagStatus     = "tagged",
-          tagPrefixList = ["rc"],
-          countType     = "imageCountMoreThan",
-          countNumber   = 5
+          tagStatus   = "any",
+          countType   = "imageCountMoreThan",
+          countNumber = 5
         },
         action = {
           type = "expire"
@@ -66,7 +65,7 @@ module "ecr" {
     },
     {
       scan_frequency = "CONTINUOUS_SCAN"
-      filter         = "v*"
+      filter         = "*.*.*"
       filter_type    = "WILDCARD"
     }
   ]

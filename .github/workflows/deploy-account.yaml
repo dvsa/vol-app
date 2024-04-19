@@ -35,7 +35,7 @@ on:
         required: true
       apply:
         type: boolean
-        required: true
+        default: false
       terraform-args:
         type: string
         required: false
@@ -65,7 +65,7 @@ jobs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
     env:
       WORKING_DIR: infra/terraform/accounts/${{ inputs.account }}
-      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_{0}_TF_OIDC{1}_ROLE', inputs.account, (inputs.apply && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.apply && '' || '_READONLY'))] }}
+      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_{0}_TF_OIDC{1}_ROLE', inputs.account, (inputs.apply && '' || '_READONLY'))] || (inputs.apply && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
       AWS_REGION: ${{ vars[format('ACCOUNT_{0}_TF_AWS_REGION', inputs.account)] || vars.TF_AWS_REGION }}
     defaults:
       run:
