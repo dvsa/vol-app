@@ -26,7 +26,6 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_points"></a> [access\_points](#input\_access\_points) | The EFS access point | <pre>map(object({<br>    root_directory = object({<br>      path = string<br>    })<br>    creation_info = object({<br>      owner_gid   = number<br>      owner_uid   = number<br>      permissions = string<br>    })<br>  }))</pre> | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    cpu                = number<br>    memory             = number<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>    cidr_blocks        = list(string)<br>  }))</pre> | `{}` | no |
 | <a name="input_vpc_azs"></a> [vpc\_azs](#input\_vpc\_azs) | The environment to deploy to | `list(string)` | n/a | yes |
