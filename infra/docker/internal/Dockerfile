@@ -18,10 +18,10 @@ RUN apk add --no-cache icu-dev \
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 # place holder for copying selfserv application
-ADD --chown=www-data ./internal.tar.gz /var/www/
+# ADD --chown=www-data ./internal.tar.gz /var/www/
 
 # copy the web static content
-ADD --chown=www-data ./static.tar.gz /var/www/public/static
+# ADD --chown=www-data ./static.tar.gz /var/www/public/static
 
 # nginx server config file
 COPY ./internal.conf /etc/nginx/conf.d/internal.conf
