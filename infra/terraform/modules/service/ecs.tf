@@ -122,7 +122,18 @@ module "efs" {
     }
   }
 
-  access_points = var.access_points
+  access_points = {
+    data_cache = {
+      root_directory = {
+        path = "/${each.key}/data/cache"
+        creation_info = {
+          owner_gid   = 98
+          owner_uid   = 98
+          permissions = "755"
+        }
+      }
+    }
+  }
 
   enable_backup_policy = false
 

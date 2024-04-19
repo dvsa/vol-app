@@ -83,6 +83,8 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["IUWEB"].ids
 
+      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
+
       security_group_ids = [
         data.aws_security_group.this["IUWEB"].id
       ]
@@ -96,23 +98,12 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["SSWEB"].ids
 
+      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
+
       security_group_ids = [
         data.aws_security_group.this["SSWEB"].id
       ]
     }
   }
 
-  access_points = {
-    "api" = {
-      root_directory = {
-        path = "/api/data/cache"
-      }
-
-      creation_info = {
-        owner_gid   = 98
-        owner_uid   = 98
-        permissions = "755"
-      }
-    }
-  }
 }
