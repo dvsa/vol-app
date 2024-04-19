@@ -13,10 +13,9 @@ data "aws_ecr_repository" "this" {
 data "aws_vpc" "this" {
   filter {
     name   = "tag:Name"
-    values = "DEV/APP-VPC"
+    values = ["DEV/APP-VPC"]
   }
 }
-
 
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
@@ -37,10 +36,28 @@ data "aws_subnets" "this" {
   }
 }
 
+data "aws_subnet" "this" {
+  for_each = toset(flatten([
+    for service_name, subnet_ids in data.aws_subnets.this : [
+      for subnet_id in subnet_ids.ids : subnet_id
+    ]
+  ]))
+
+  id = each.value
+}
+
 module "service" {
   source = "../../modules/service"
 
   environment = "dev"
+
+  vpc_ids = data.aws_vpc.this.id
+
+  vpc_azs = [
+    "eu-west-1a",
+    "eu-west-1b",
+    "eu-west-1c"
+  ]
 
   services = {
     "api" = {
@@ -51,7 +68,7 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
-      vpc_ids = data.aws_vpc.this.id
+      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
 
       security_group_ids = [
         data.aws_security_group.this["API"].id
@@ -82,6 +99,18 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["SSWEB"].id
       ]
+    }
+  }
+
+  access_points = {
+    root_directory = {
+      path = "/api/data/cache"
+    }
+    
+    creation_info = {
+      owner_gid   = 98
+      owner_uid   = 98
+      permissions = "755"
     }
   }
 }

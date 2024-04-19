@@ -51,9 +51,31 @@ module "ecs_service" {
         }
       ]
 
+      mount_points = [
+        {
+          sourceVolume  = "vol-app-${var.environment}-${each.key}",
+          containerPath = "/data/cache"
+        }
+      ]
+
       readonly_root_filesystem = false
 
       memory_reservation = 100
+
+      volume = {
+        vol-app-efs = {
+          name = "vol-app-${var.environment}-${each.key}",
+          efs_volume_configuration = {
+            file_system_id     = module.efs[each.key].id
+            root_directory     = ""
+            transit_encryption = "ENABLED"
+            authorization_config = {
+              access_point_id = module.efs[each.key].access_points["data_cache"].id
+              iam             = "ENABLED"
+            }
+          }
+        }
+      }
     }
   }
 
@@ -90,29 +112,17 @@ module "efs" {
     }
   ]
 
-  # mount_targets              = { for k, v in zipmap(module.vpc.fgms_vpc_az, var.services[each.key].subnet_ids) : k => { subnet_id = v } }
-  # security_group_description = "${var.services[each.key]} EFS security group"
-  # security_group_vpc_id      = module.vpc.fgms_vpc_id
-  # security_group_rules = {
-  #   vpc = {
-  #     # relying on the defaults provdied for EFS/NFS (2049/TCP + ingress)
-  #     description = "NFS ingress from VPC private subnets"
-  #     cidr_blocks = module.vpc.fgms_private_subnets_cidr
-  #   }
-  # }
-
-  access_points = {
-    data_cache = {
-      root_directory = {
-        path = "/${each.key}/data/cache"
-        creation_info = {
-          owner_gid   = 1001
-          owner_uid   = 1001
-          permissions = "755"
-        }
-      }
+  mount_targets              = { for k, v in zipmap(var.vpc_azs, var.services[each.key].subnet_ids) : k => { subnet_id = v } }
+  security_group_description = "${each.key} EFS security group"
+  security_group_vpc_id      = var.vpc_ids
+  security_group_rules = {
+    vpc = {
+      description = "EFS ingress from VPC private subnets"
+      cidr_blocks = var.services[each.key].cidr_blocks
     }
   }
+
+  access_points = var.access_points
 
   enable_backup_policy = false
 
