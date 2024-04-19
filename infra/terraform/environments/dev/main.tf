@@ -10,6 +10,14 @@ data "aws_ecr_repository" "this" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_vpc" "this" {
+  filter {
+    name   = "tag:Name"
+    values = "DEV/APP-VPC"
+  }
+}
+
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -42,6 +50,8 @@ module "service" {
       image = "${data.aws_ecr_repository.this["api"].repository_url}:${var.api_image_tag}"
 
       subnet_ids = data.aws_subnets.this["API"].ids
+
+      vpc_ids = data.aws_vpc.this.id
 
       security_group_ids = [
         data.aws_security_group.this["API"].id
