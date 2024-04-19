@@ -109,8 +109,8 @@ jobs:
           push: ${{ inputs.should-upload-artefact-to-ecr }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          #cache-from: type=gha
+          #cache-to: type=gha,mode=max
 
       - name: Setup Notation CLI
         if: ${{ inputs.should-upload-artefact-to-ecr }}
