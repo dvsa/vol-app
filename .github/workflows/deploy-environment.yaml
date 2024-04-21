@@ -60,7 +60,7 @@ on:
         required: true
       apply:
         type: boolean
-        required: true
+        default: false
       destroy:
         type: boolean
         required: false
@@ -74,7 +74,6 @@ permissions:
   contents: read
   id-token: write
   pull-requests: write
-  deployments: write
 
 concurrency:
   group: terraform-environment-${{ inputs.environment }}
@@ -92,7 +91,7 @@ jobs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
     env:
       WORKING_DIR: infra/terraform/environments/${{ inputs.environment }}
-      AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC{1}_ROLE', inputs.environment, (inputs.apply && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.apply && '' || '_READONLY'))] }}
+      AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC{1}_ROLE', inputs.environment, (inputs.apply && '' || '_READONLY'))] || (inputs.apply && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
       AWS_REGION: ${{ vars[format('ENV_{0}_TF_AWS_REGION', inputs.environment)] || vars.TF_AWS_REGION }}
     defaults:
       run:
@@ -129,9 +128,9 @@ jobs:
         if: ${{ !inputs.apply }}
         id: plan
         env:
-          TFVAR_api_image_tag: ${{ inputs.api-image-tag }}
-          TFVAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
-          TFVAR_internal_image_tag: ${{ inputs.internal-image-tag }}
+          TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
+          TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
+          TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
         run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan
 
       - name: Get plan changes
@@ -228,9 +227,9 @@ jobs:
         id: apply
         if: ${{ inputs.apply }}
         env:
-          TFVAR_api_image_tag: ${{ inputs.api-image-tag }}
-          TFVAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
-          TFVAR_internal_image_tag: ${{ inputs.internal-image-tag }}
+          TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
+          TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
+          TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
         run: terraform apply ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Delete workspace

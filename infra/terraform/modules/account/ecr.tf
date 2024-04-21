@@ -10,8 +10,19 @@ module "ecr" {
 
   repository_name = "vol-app/${each.key}"
 
-  repository_read_access_arns       = var.ecr_read_access_arns
-  repository_read_write_access_arns = var.ecr_read_write_access_arns
+  repository_read_access_arns = concat(
+    [
+      module.github[0].oidc_readonly_role_arn,
+    ],
+    var.ecr_read_access_arns
+  )
+
+  repository_read_write_access_arns = concat(
+    [
+      module.github[0].oidc_role_arn,
+    ],
+    var.ecr_read_write_access_arns
+  )
 
   create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
@@ -20,10 +31,10 @@ module "ecr" {
         rulePriority = 10,
         description  = "Keep last 5 release images",
         selection = {
-          tagStatus     = "tagged",
-          tagPrefixList = ["v"],
-          countType     = "imageCountMoreThan",
-          countNumber   = 5
+          tagStatus      = "tagged",
+          tagPatternList = ["*.*.*"],
+          countType      = "imageCountMoreThan",
+          countNumber    = 5
         },
         action = {
           type = "expire"
@@ -33,10 +44,9 @@ module "ecr" {
         rulePriority = 20,
         description  = "Keep last 5 non-release images",
         selection = {
-          tagStatus     = "tagged",
-          tagPrefixList = ["rc"],
-          countType     = "imageCountMoreThan",
-          countNumber   = 5
+          tagStatus   = "any",
+          countType   = "imageCountMoreThan",
+          countNumber = 5
         },
         action = {
           type = "expire"
@@ -52,10 +62,17 @@ module "ecr" {
       scan_frequency = "SCAN_ON_PUSH"
       filter         = "*"
       filter_type    = "WILDCARD"
-      }, {
+    },
+    {
       scan_frequency = "CONTINUOUS_SCAN"
-      filter         = "v*"
+      filter         = "*.*.*"
       filter_type    = "WILDCARD"
     }
   ]
+}
+
+resource "aws_signer_signing_profile" "this" {
+  platform_id = "Notation-OCI-SHA384-ECDSA"
+
+  name_prefix = "vol_app_"
 }
