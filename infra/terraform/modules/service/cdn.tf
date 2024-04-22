@@ -21,7 +21,7 @@ module "cloudfront" {
   http_version    = "http2and3"
   is_ipv6_enabled = true
 
-  # `PriceClass_100` is most efficient for VOL as it's the cheapest and covers the region of the VOL user-base (UK).
+  # `PriceClass_100` is most cost efficient for VOL and covers the main region of the VOL user-base (UK).
   price_class = "PriceClass_100"
 
   wait_for_deployment = false
