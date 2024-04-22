@@ -49,6 +49,7 @@ module "cloudfront" {
     s3_oac = {
       domain_name           = module.s3_one.s3_bucket_bucket_regional_domain_name
       origin_access_control = "s3_oac"
+      origin_path           = var.assets_version
     }
   }
 
