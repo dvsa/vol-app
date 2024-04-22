@@ -4,7 +4,6 @@ FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0
 USER root
 
 # Installing require dependencies
-# Installing require dependencies
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
     && pecl install igbinary \
     && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
