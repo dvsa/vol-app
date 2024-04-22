@@ -8,6 +8,8 @@ use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -36,6 +38,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     private $application;
     protected FileUploadHelperService $uploadHelper;
+    protected string $startTime;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -50,6 +53,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         FileUploadHelperService $uploadHelper
     ) {
         $this->uploadHelper = $uploadHelper;
+        $this->startTime = (new DateTimeImmutable())->format(DateTimeInterface::ATOM);
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -66,6 +70,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     public function indexAction()
     {
         $form = $this->getForm();
+        $form->get('correlationId')->setValue($this->startTime);
 
         $request = $this->getRequest();
         if ($request->isPost() && $request->getPost('saveAndContinue') !== null) {
@@ -162,11 +167,14 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     public function operatingCentreLoadFileUpload()
     {
+        $startDateTime = new DateTimeImmutable($this->getRequest()->getPost('correlationId', $this->startTime));
         $data = $this->getData();
         foreach ($data['operatingCentres'] as $aocData) {
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
-                $documents = $aocData['operatingCentre']['adDocuments'];
-                return array_filter($documents, fn($document) => $document['isPostSubmissionUpload']);
+                return array_filter(
+                    $aocData['operatingCentre']['adDocuments'],
+                    fn($document) => $document['isPostSubmissionUpload'] && (new DateTimeImmutable($document['createdOn'])) > $startDateTime,
+                );
             }
         }
 
@@ -190,7 +198,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'licence' => $this->getLicenceId(),
             'application' => $this->getIdentifier(),
             'operatingCentre' => $this->operatingCentreId,
-            'isPostSubmissionUpload' => true
+            'isPostSubmissionUpload' => true,
         ];
 
         $this->uploadFile($file, $data);
@@ -275,7 +283,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'subCategory' => \Common\Category::DOC_SUB_CATEGORY_FINANCIAL_EVIDENCE_DIGITAL,
             'licence'     => $applicationData['licence']['id'],
             'isExternal'  => true,
-            'isPostSubmissionUpload' => true
+            'isPostSubmissionUpload' => true,
         ];
 
         $this->uploadFile($file, $data);
@@ -287,7 +295,11 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     /** Get list of financial evidence documents */
     public function financialEvidenceLoadFileUpload(): array
     {
-        return array_filter($this->getFinancialEvidenceData()['documents'], fn($doc) => $doc['isPostSubmissionUpload']);
+        $startDateTime = new DateTimeImmutable($this->getRequest()->getPost('correlationId', $this->startTime));
+        return array_filter(
+            $this->getFinancialEvidenceData()['documents'],
+            fn($doc) => $doc['isPostSubmissionUpload'] && (new DateTimeImmutable($doc['createdOn'])) > $startDateTime,
+        );
     }
 
     /**
@@ -307,7 +319,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'subCategory' => \Common\Category::DOC_SUB_CATEGORY_SUPPORTING_EVIDENCE,
             'licence'     => $applicationData['licence']['id'],
             'isExternal'  => true,
-            'isPostSubmissionUpload' => true
+            'isPostSubmissionUpload' => true,
         ];
 
         $this->uploadFile($file, $data);
@@ -319,7 +331,11 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     /** Get list of supporting evidence documents */
     public function supportingEvidenceLoadFileUpload(): array
     {
-        return array_filter($this->getData()['supportingEvidence'], fn($doc) => $doc['isPostSubmissionUpload']);
+        $startDateTime = new DateTimeImmutable($this->getRequest()->getPost('correlationId', $this->startTime));
+        return array_filter(
+            $this->getData()['supportingEvidence'],
+            fn($doc) => $doc['isPostSubmissionUpload'] && (new DateTimeImmutable($doc['createdOn'])) > $startDateTime,
+        );
     }
 
     /**
