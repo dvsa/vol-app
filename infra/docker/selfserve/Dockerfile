@@ -14,15 +14,12 @@ RUN apk add --no-cache icu-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install pdo_mysql opcache intl
 
-# php config file
+# PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
-# place holder for copying selfserv application
-ADD --chown=www-data ./selfserve.tar.gz /var/www/
+ADD --chown=www-data ./selfserve.tar.gz /var/www/html
 
 # nginx server config file
-COPY ./selfserve.conf /etc/nginx/conf.d/selfserve.conf
+COPY selfserve.conf /etc/nginx/conf.d/selfserve.conf
 
 USER www-data
-
-# Default startup command when container is launched is in the base image
