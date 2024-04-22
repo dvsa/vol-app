@@ -17,7 +17,7 @@ RUN apk add --no-cache icu-dev \
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
-ADD --chown=www-data ./selfserve.tar.gz /var/www/html
+ADD --chown=www-data ./internal.tar.gz /var/www/html
 
 # nginx server config file
 COPY internal.conf /etc/nginx/conf.d/internal.conf
