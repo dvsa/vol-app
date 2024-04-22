@@ -3,6 +3,11 @@ variable "environment" {
   description = "The environment to deploy to"
 }
 
+variable "domain_name" {
+  type        = string
+  description = "The domain name for the environment"
+}
+
 variable "services" {
   type = map(object({
     image              = string

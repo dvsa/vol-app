@@ -1,0 +1,164 @@
+data "aws_route53_zone" "this" {
+  name = var.domain_name
+}
+
+locals {
+  domain_name = trimsuffix(data.aws_route53_zone.this.name, ".")
+  subdomain   = "cdn"
+}
+
+data "aws_acm_certificate" "this" {
+  domain   = "*.${local.domain_name}"
+  statuses = ["ISSUED"]
+}
+
+module "cloudfront" {
+  source  = "terraform-aws-modules/cloudfront/aws"
+  version = "~> 3.4"
+
+  aliases = ["${local.subdomain}.${local.domain_name}"]
+
+  http_version    = "http2and3"
+  is_ipv6_enabled = true
+
+  # `PriceClass_100` is most efficient for VOL as it's the cheapest and covers the region of the VOL user-base (UK).
+  price_class = "PriceClass_100"
+
+  wait_for_deployment = false
+
+  # When you enable additional metrics for a distribution, CloudFront sends up to 8 metrics to CloudWatch in the US East (N. Virginia) Region.
+  # This rate is charged only once per month, per metric (up to 8 metrics per distribution).
+  create_monitoring_subscription = true
+
+  create_origin_access_control = true
+  origin_access_control = {
+    s3_oac = {
+      description      = "CloudFront access to S3"
+      origin_type      = "s3"
+      signing_behavior = "always"
+      signing_protocol = "sigv4"
+    }
+  }
+
+  logging_config = {
+    bucket = module.log_bucket.s3_bucket_bucket_domain_name
+    prefix = "cloudfront"
+  }
+
+  origin = {
+    s3_oac = {
+      domain_name           = module.s3_one.s3_bucket_bucket_regional_domain_name
+      origin_access_control = "s3_oac"
+    }
+  }
+
+  default_cache_behavior = {
+    target_origin_id       = "s3_oac"
+    viewer_protocol_policy = "allow-all"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
+    cached_methods         = ["GET", "HEAD"]
+
+    use_forwarded_values = false
+
+    cache_policy_name            = "Managed-CachingOptimized"
+    origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
+    response_headers_policy_name = "Managed-SimpleCORS"
+  }
+
+  ordered_cache_behavior = [
+    {
+      path_pattern           = "/static/*"
+      target_origin_id       = "s3_oac"
+      viewer_protocol_policy = "redirect-to-https"
+
+      allowed_methods = ["GET", "HEAD", "OPTIONS"]
+      cached_methods  = ["GET", "HEAD"]
+
+      use_forwarded_values = false
+
+      cache_policy_name            = "Managed-CachingOptimized"
+      origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
+      response_headers_policy_name = "Managed-SecurityHeadersPolicy"
+    },
+  ]
+
+  viewer_certificate = {
+    acm_certificate_arn = data.aws_acm_certificate.this.arn
+    ssl_support_method  = "sni-only"
+  }
+}
+
+data "aws_canonical_user_id" "current" {}
+data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
+
+module "s3_one" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 4.0"
+
+  bucket        = "vol-app-${var.environment}-assets"
+  force_destroy = true
+}
+
+module "log_bucket" {
+  source  = "terraform-aws-modules/s3-bucket/aws"
+  version = "~> 4.0"
+
+  bucket = "vol-app-${var.environment}-assets-logs"
+
+  control_object_ownership = true
+  object_ownership         = "ObjectWriter"
+
+  grant = [{
+    type       = "CanonicalUser"
+    permission = "FULL_CONTROL"
+    id         = data.aws_canonical_user_id.current.id
+    }, {
+    # https://github.com/terraform-providers/terraform-provider-aws/issues/12512
+    # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html
+    type       = "CanonicalUser"
+    permission = "FULL_CONTROL"
+    id         = data.aws_cloudfront_log_delivery_canonical_user_id.cloudfront.id
+  }]
+  force_destroy = true
+}
+
+module "records" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "~> 2.0"
+
+  zone_id = data.aws_route53_zone.this.zone_id
+
+  records = [
+    {
+      name = local.subdomain
+      type = "A"
+      alias = {
+        name    = module.cloudfront.cloudfront_distribution_domain_name
+        zone_id = module.cloudfront.cloudfront_distribution_hosted_zone_id
+      }
+    },
+  ]
+}
+
+data "aws_iam_policy_document" "s3_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${module.s3_one.s3_bucket_arn}/static/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [module.cloudfront.cloudfront_distribution_arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = module.s3_one.s3_bucket_id
+  policy = data.aws_iam_policy_document.s3_policy.json
+}
