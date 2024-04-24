@@ -33,6 +33,11 @@ jobs:
         with:
           python-version: 3.x
 
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+          cache: "npm"
+
       - run: npm install --prefer-offline
         shell: bash
 
