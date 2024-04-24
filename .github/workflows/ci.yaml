@@ -122,7 +122,7 @@ jobs:
 
   get-version:
     name: Get latest app versions
-    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker || needs.orchestrator.outputs.should-plan-terraform-environments }}
+    if: ${{ needs.orchestrator.outputs.should-build-assets || needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker || needs.orchestrator.outputs.should-plan-terraform-environments }}
     needs:
       - orchestrator
     runs-on: ubuntu-latest
