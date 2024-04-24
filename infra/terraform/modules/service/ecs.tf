@@ -54,7 +54,7 @@ module "ecs_service" {
       mount_points = [
         {
           sourceVolume  = var.services[each.key].efs_id
-          containerPath = var.access_points[path]
+          containerPath = var.access_points.path
         }
       ]
 
@@ -67,7 +67,6 @@ module "ecs_service" {
           name = var.services[each.key].efs_id
           efs_volume_configuration = {
             file_system_id     = module.efs[each.key].id
-            root_directory     = ""
             transit_encryption = "ENABLED"
             authorization_config = {
               access_point_id = module.efs[each.key].access_points["data_cache"].id
@@ -125,11 +124,11 @@ module "efs" {
   access_points = {
     data_cache = {
       root_directory = {
-        path = var.access_points[path]
+        path = var.access_points.path
         creation_info = {
-          owner_gid   = var.access_points[owner_gid]
-          owner_uid   = var.access_points[owner_uid]
-          permissions = var.access_points[permissions]
+          owner_gid   = var.access_points.owner_gid
+          owner_uid   = var.access_points.owner_uid
+          permissions = var.access_points.permissions
         }
       }
     }

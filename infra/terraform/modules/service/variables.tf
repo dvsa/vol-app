@@ -23,16 +23,6 @@ variable "assets_version" {
   description = "The version of the assets"
 }
 
-variable "domain_name" {
-  type        = string
-  description = "The domain name for the environment"
-}
-
-variable "assets_version" {
-  type        = string
-  description = "The version of the assets"
-}
-
 variable "services" {
   type = map(object({
     image              = string
@@ -48,12 +38,11 @@ variable "services" {
 }
 
 variable "access_points" {
-  type = map(object({
+  type = object({
     path        = string
     owner_gid   = number
     owner_uid   = number
     permissions = string
-  }))
+  })
   description = "The efs access point configuration"
-  default     = {}
 }
