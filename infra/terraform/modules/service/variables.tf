@@ -8,11 +8,6 @@ variable "vpc_ids" {
   description = "The VPC to deploy to"
 }
 
-variable "efs_prefix" {
-  type        = string
-  description = "The prefix assigned to EFS mount"
-}
-
 variable "vpc_azs" {
   type        = list(string)
   description = "The VPC AZ to deploy to"
@@ -21,6 +16,7 @@ variable "vpc_azs" {
 variable "services" {
   type = map(object({
     image              = string
+    efs_id             = string
     cpu                = number
     memory             = number
     security_group_ids = list(string)

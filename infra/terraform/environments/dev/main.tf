@@ -46,20 +46,12 @@ data "aws_subnet" "this" {
   id = each.value
 }
 
-data "github_release" "this" {
-    repository  = "vol-app"
-    owner       = "dvsa"
-    retrieve_by = "latest"
-}
-
 module "service" {
   source = "../../modules/service"
 
   environment = "dev"
 
   vpc_ids = data.aws_vpc.this.id
-
-  efs_prefix = data.github_release.id
 
   vpc_azs = [
     "eu-west-1a",
@@ -71,6 +63,8 @@ module "service" {
     "api" = {
       cpu    = 1024
       memory = 4096
+
+      efs_id = "${var.api_image_tag}-api-efs"
 
       image = "${data.aws_ecr_repository.this["api"].repository_url}:${var.api_image_tag}"
 
@@ -87,6 +81,8 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
+      efs_id = "${var.internal_image_tag}-internal-efs"
+
       image = "${data.aws_ecr_repository.this["internal"].repository_url}:${var.internal_image_tag}"
 
       subnet_ids = data.aws_subnets.this["IUWEB"].ids
@@ -102,6 +98,8 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
+      efs_id = "${var.selfserve_image_tag}-selfserve-efs"
+
       image = "${data.aws_ecr_repository.this["selfserve"].repository_url}:${var.selfserve_image_tag}"
 
       subnet_ids = data.aws_subnets.this["SSWEB"].ids
@@ -113,5 +111,4 @@ module "service" {
       ]
     }
   }
-
 }
