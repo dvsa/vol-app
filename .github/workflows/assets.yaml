@@ -37,6 +37,7 @@ jobs:
         with:
           node-version: 14
           cache: "npm"
+          cache-dependency-path: app/cdn/package.json # TODO... `package-lock.json`?
 
       - run: npm install --prefer-offline
         shell: bash
