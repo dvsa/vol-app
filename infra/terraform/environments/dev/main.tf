@@ -62,15 +62,16 @@ module "service" {
   ]
 
   access_points = {
-    root_directory = {
-      path = "/data/cache"
-      creation_info = {
-        owner_gid   = 98
-        owner_uid   = 98
-        permissions = "755"
-      }
-    }
+
+    path = "/data/cache"
+
+    owner_gid   = 98
+    owner_uid   = 98
+    permissions = "755"
   }
+
+  domain_name    = "dev.olcs.dev-dvsacloud.uk"
+  assets_version = var.assets_version
 
   services = {
     "api" = {

@@ -13,6 +13,16 @@ variable "vpc_azs" {
   description = "The VPC AZ to deploy to"
 }
 
+variable "domain_name" {
+  type        = string
+  description = "The domain name for the environment"
+}
+
+variable "assets_version" {
+  type        = string
+  description = "The version of the assets"
+}
+
 variable "services" {
   type = map(object({
     image              = string
@@ -29,14 +39,10 @@ variable "services" {
 
 variable "access_points" {
   type = map(object({
-    root_directory = object({
-      path = string
-      creation_info = object({
-        owner_gid   = number
-        owner_uid   = number
-        permissions = string
-      })
-    })
+    path        = string
+    owner_gid   = number
+    owner_uid   = number
+    permissions = string
   }))
   description = "The efs access point configuration"
   default     = {}
