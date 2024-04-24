@@ -1,0 +1,38 @@
+name: Assets
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        default: 5.3.0
+        required: false
+      push:
+        type: boolean
+        default: false
+        required: false
+
+jobs:
+  package:
+    name: Package
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/cdn
+    env:
+      REMOTE_REPOSITORY: "dvsa/olcs-static"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/cdn
+
+      - name: Setup PHP
+        uses: actions/setup-python@v5
+
+      - run: npm ci --prefer-offline
+        shell: bash
+
+      - run: npm run build:container
+        shell: bash
