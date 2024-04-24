@@ -44,3 +44,9 @@ jobs:
 
       - run: npm run build:container
         shell: bash
+
+      - run: ls -la
+        shell: bash
+
+      - run: ls -la public
+        shell: bash
