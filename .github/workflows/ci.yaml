@@ -18,7 +18,7 @@ jobs:
       should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-assets: ${{ steps.changed-assets-files.outputs.any_changed == 'true' || null }}
+      should-build-assets: true
       # Docker
       should-build-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
       should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
