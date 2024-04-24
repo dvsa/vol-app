@@ -12,8 +12,10 @@ data "aws_ecr_repository" "this" {
 
 data "aws_vpc" "this" {
   filter {
-    name   = "tag:Name"
-    values = ["DEV/APP-VPC"]
+    name = "tag:Name"
+    values = [
+      "DEV/APP-VPC"
+    ]
   }
 }
 
@@ -58,6 +60,17 @@ module "service" {
     "eu-west-1b",
     "eu-west-1c"
   ]
+
+  access_points = {
+    root_directory = {
+      path = "/data/cache"
+      creation_info = {
+        owner_gid   = 98
+        owner_uid   = 98
+        permissions = "755"
+      }
+    }
+  }
 
   services = {
     "api" = {
@@ -111,4 +124,5 @@ module "service" {
       ]
     }
   }
+
 }

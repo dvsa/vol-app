@@ -26,3 +26,18 @@ variable "services" {
   description = "The services to deploy"
   default     = {}
 }
+
+variable "access_points" {
+  type = map(object({
+    root_directory = object({
+      path = string
+      creation_info = object({
+        owner_gid   = number
+        owner_uid   = number
+        permissions = string
+      })
+    })
+  }))
+  description = "The efs access point configuration"
+  default     = {}
+}

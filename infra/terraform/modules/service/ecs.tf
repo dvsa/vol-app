@@ -54,7 +54,7 @@ module "ecs_service" {
       mount_points = [
         {
           sourceVolume  = var.services[each.key].efs_id
-          containerPath = "/data/cache"
+          containerPath = var.access_points[root_directory].path
         }
       ]
 
@@ -125,11 +125,11 @@ module "efs" {
   access_points = {
     data_cache = {
       root_directory = {
-        path = "/data/cache"
+        path = var.access_points[root_directory].path
         creation_info = {
-          owner_gid   = 98
-          owner_uid   = 98
-          permissions = "755"
+          owner_gid   = var.access_points[creation_info].owner_gid
+          owner_uid   = var.access_points[creation_info].owner_uid
+          permissions = var.access_points[creation_info].permissions
         }
       }
     }
