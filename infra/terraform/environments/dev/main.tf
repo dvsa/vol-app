@@ -46,6 +46,7 @@ data "aws_subnet" "this" {
   ]))
 
   id = each.value
+
 }
 
 module "service" {
@@ -84,7 +85,10 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
-      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
+      cidr_blocks = [
+        for subnet in data.aws_subnet.this :
+        subnet.cidr_block if contains(data.aws_subnets.this["API"].ids, subnet.id)
+      ]
 
       security_group_ids = [
         data.aws_security_group.this["API"].id
@@ -101,7 +105,10 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["IUWEB"].ids
 
-      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
+      cidr_blocks = [
+        for subnet in data.aws_subnet.this :
+        subnet.cidr_block if contains(data.aws_subnets.this["IUWEB"].ids, subnet.id)
+      ]
 
       security_group_ids = [
         data.aws_security_group.this["IUWEB"].id
@@ -118,7 +125,10 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["SSWEB"].ids
 
-      cidr_blocks = [for subnet in data.aws_subnet.this : subnet.cidr_block]
+      cidr_blocks = [
+        for subnet in data.aws_subnet.this :
+        subnet.cidr_block if contains(data.aws_subnets.this["SSWEB"].ids, subnet.id)
+      ]
 
       security_group_ids = [
         data.aws_security_group.this["SSWEB"].id
