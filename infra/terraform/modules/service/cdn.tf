@@ -1,3 +1,18 @@
+provider "aws" {
+  alias = "acm"
+
+  # CloudFront expects ACM resources in us-east-1 region only
+  region = "us-east-1"
+
+  # Make it faster by skipping various bits not important.
+  skip_metadata_api_check     = true
+  skip_region_validation      = true
+  skip_credentials_validation = true
+
+  # skip_requesting_account_id should be disabled to generate valid ARN in apigatewayv2_api_execution_arn
+  skip_requesting_account_id = false
+}
+
 data "aws_route53_zone" "this" {
   name = var.domain_name
 }
@@ -7,9 +22,34 @@ locals {
   subdomain   = "cdn"
 }
 
-data "aws_acm_certificate" "this" {
-  domain   = "*.${local.domain_name}"
-  statuses = ["ISSUED"]
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  domain_name = "${local.subdomain}.${local.domain_name}"
+  zone_id     = data.aws_route53_zone.this.id
+
+  create_route53_records  = false
+  validation_record_fqdns = module.route53_records.validation_route53_record_fqdns
+
+  providers = {
+    aws = aws.acm
+  }
+}
+
+module "route53_records" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  create_certificate          = false
+  create_route53_records_only = true
+
+  validation_method = "DNS"
+
+  distinct_domain_names = module.acm.distinct_domain_names
+  zone_id               = data.aws_route53_zone.this.id
+
+  acm_certificate_domain_validation_options = module.acm.acm_certificate_domain_validation_options
 }
 
 module "cloudfront" {
@@ -49,7 +89,7 @@ module "cloudfront" {
     s3_oac = {
       domain_name           = module.s3_one.s3_bucket_bucket_regional_domain_name
       origin_access_control = "s3_oac"
-      origin_path           = var.assets_version
+      origin_path           = "/${trimprefix(var.assets_version, "/")}"
     }
   }
 
@@ -84,7 +124,7 @@ module "cloudfront" {
   ]
 
   viewer_certificate = {
-    acm_certificate_arn = data.aws_acm_certificate.this.arn
+    acm_certificate_arn = module.acm.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
 }
