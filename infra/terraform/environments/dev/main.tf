@@ -46,12 +46,20 @@ data "aws_subnet" "this" {
   id = each.value
 }
 
+data "github_release" "this" {
+    repository  = "vol-app"
+    owner       = "dvsa"
+    retrieve_by = "latest"
+}
+
 module "service" {
   source = "../../modules/service"
 
   environment = "dev"
 
   vpc_ids = data.aws_vpc.this.id
+
+  efs_prefix = data.github_release.id
 
   vpc_azs = [
     "eu-west-1a",

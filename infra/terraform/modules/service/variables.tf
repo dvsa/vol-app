@@ -5,12 +5,17 @@ variable "environment" {
 
 variable "vpc_ids" {
   type        = string
-  description = "The environment to deploy to"
+  description = "The VPC to deploy to"
+}
+
+variable "efs_prefix" {
+  type        = string
+  description = "The prefix assigned to EFS mount"
 }
 
 variable "vpc_azs" {
   type        = list(string)
-  description = "The environment to deploy to"
+  description = "The VPC AZ to deploy to"
 }
 
 variable "services" {

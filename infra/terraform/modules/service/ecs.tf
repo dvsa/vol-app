@@ -53,7 +53,7 @@ module "ecs_service" {
 
       mount_points = [
         {
-          sourceVolume  = "vol-app-${var.environment}-${each.key}",
+          sourceVolume  = "${efs_prefix}-${var.environment}-${each.key}",
           containerPath = "/data/cache"
         }
       ]
@@ -64,7 +64,7 @@ module "ecs_service" {
 
       volume = {
         vol-app-efs = {
-          name = "vol-app-${var.environment}-${each.key}",
+          name = "${efs_prefix}-${var.environment}-${each.key}",
           efs_volume_configuration = {
             file_system_id     = module.efs[each.key].id
             root_directory     = ""
