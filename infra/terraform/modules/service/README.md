@@ -26,9 +26,8 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_efs_prefix"></a> [efs\_prefix](#input\_efs\_prefix) | The prefix assigned to EFS mount | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
-| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    cpu                = number<br>    memory             = number<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>    cidr_blocks        = list(string)<br>  }))</pre> | `{}` | no |
+| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    efs_id             = string<br>    cpu                = number<br>    memory             = number<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>    cidr_blocks        = list(string)<br>  }))</pre> | `{}` | no |
 | <a name="input_vpc_azs"></a> [vpc\_azs](#input\_vpc\_azs) | The VPC AZ to deploy to | `list(string)` | n/a | yes |
 | <a name="input_vpc_ids"></a> [vpc\_ids](#input\_vpc\_ids) | The VPC to deploy to | `string` | n/a | yes |
 
