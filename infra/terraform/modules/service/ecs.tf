@@ -94,14 +94,16 @@ module "efs" {
   encrypted      = true
 
   lifecycle_policy = {
-    transition_to_ia = "AFTER_7_DAYS"
+    transition_to_ia                    = "AFTER_7_DAYS"
+    transition_to_archive               = "AFTER_30_DAYS"
+    transition_to_primary_storage_class = "AFTER_1_ACCESS"
   }
 
   attach_policy                      = true
   bypass_policy_lockout_safety_check = false
   policy_statements = [
     {
-      sid = "vol-app-${var.environment}-${each.key}-policy"
+      sid = "vol-app-${each.key}-policy"
       actions = [
         "elasticfilesystem:ClientMount",
         "elasticfilesystem:ClientWrite",

@@ -40,11 +40,10 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_points"></a> [access\_points](#input\_access\_points) | The efs access point configuration | <pre>object({<br>    path        = string<br>    owner_gid   = number<br>    owner_uid   = number<br>    permissions = string<br>  })</pre> | n/a | yes |
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
-| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    efs_id             = string<br>    cpu                = number<br>    memory             = number<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>    cidr_blocks        = list(string)<br>  }))</pre> | `{}` | no |
+| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    cpu                = number<br>    memory             = number<br>    access_point       = string<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>    cidr_blocks        = list(string)<br>  }))</pre> | `{}` | no |
 | <a name="input_vpc_azs"></a> [vpc\_azs](#input\_vpc\_azs) | The VPC AZ to deploy to | `list(string)` | n/a | yes |
 | <a name="input_vpc_ids"></a> [vpc\_ids](#input\_vpc\_ids) | The VPC to deploy to | `string` | n/a | yes |
 
