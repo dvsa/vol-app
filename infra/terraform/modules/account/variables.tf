@@ -13,7 +13,7 @@ variable "github_oidc_readonly_subjects" {
 variable "create_github_resources" {
   type        = bool
   description = "Whether to create the GitHub resources."
-  default     = true
+  default     = false
 }
 
 variable "github_oidc_role_policies" {
@@ -38,4 +38,16 @@ variable "ecr_read_write_access_arns" {
   type        = list(string)
   description = "The list of ARNs to attach to the ECR read-write role."
   default     = []
+}
+
+variable "create_ecr_resources" {
+  type        = bool
+  description = "Whether to create the ECR resources."
+  default     = false
+}
+
+variable "create_assets_bucket" {
+  type        = bool
+  description = "Whether to create the assets bucket."
+  default     = false
 }
