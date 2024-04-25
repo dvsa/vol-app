@@ -26,23 +26,13 @@ variable "assets_version" {
 variable "services" {
   type = map(object({
     image              = string
-    efs_id             = string
     cpu                = number
     memory             = number
+    access_point       = string
     security_group_ids = list(string)
     subnet_ids         = list(string)
     cidr_blocks        = list(string)
   }))
   description = "The services to deploy"
   default     = {}
-}
-
-variable "access_points" {
-  type = object({
-    path        = string
-    owner_gid   = number
-    owner_uid   = number
-    permissions = string
-  })
-  description = "The efs access point configuration"
 }

@@ -62,15 +62,6 @@ module "service" {
     "eu-west-1c"
   ]
 
-  access_points = {
-
-    path = "/data/cache"
-
-    owner_gid   = 98
-    owner_uid   = 98
-    permissions = "755"
-  }
-
   domain_name    = "dev.olcs.dev-dvsacloud.uk"
   assets_version = var.assets_version
 
@@ -79,11 +70,11 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      efs_id = "${var.api_image_tag}-api-efs"
-
       image = "${data.aws_ecr_repository.this["api"].repository_url}:${var.api_image_tag}"
 
       subnet_ids = data.aws_subnets.this["API"].ids
+
+      access_point = "${var.api_image_tag}/data/cache"
 
       cidr_blocks = [
         for subnet in data.aws_subnet.this :
@@ -99,11 +90,11 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      efs_id = "${var.internal_image_tag}-internal-efs"
-
       image = "${data.aws_ecr_repository.this["internal"].repository_url}:${var.internal_image_tag}"
 
       subnet_ids = data.aws_subnets.this["IUWEB"].ids
+
+      access_point = "${var.internal_image_tag}/data/cache"
 
       cidr_blocks = [
         for subnet in data.aws_subnet.this :
@@ -119,11 +110,11 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      efs_id = "${var.selfserve_image_tag}-selfserve-efs"
-
       image = "${data.aws_ecr_repository.this["selfserve"].repository_url}:${var.selfserve_image_tag}"
 
       subnet_ids = data.aws_subnets.this["SSWEB"].ids
+
+      access_point = "${var.selfserve_image_tag}/data/cache"
 
       cidr_blocks = [
         for subnet in data.aws_subnet.this :

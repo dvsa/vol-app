@@ -53,8 +53,8 @@ module "ecs_service" {
 
       mount_points = [
         {
-          sourceVolume  = var.services[each.key].efs_id
-          containerPath = var.access_points.path
+          sourceVolume  = "vol-app-${each.key}-efs"
+          containerPath = "/data/cache"
         }
       ]
 
@@ -64,7 +64,7 @@ module "ecs_service" {
 
       volume = {
         vol-app-efs = {
-          name = var.services[each.key].efs_id
+          name = "vol-app-${each.key}-efs"
           efs_volume_configuration = {
             file_system_id     = module.efs[each.key].id
             transit_encryption = "ENABLED"
@@ -89,9 +89,13 @@ module "efs" {
   source  = "terraform-aws-modules/efs/aws"
   version = "1.6.2"
 
-  name           = var.services[each.key].efs_id
-  creation_token = var.services[each.key].efs_id
+  name           = "vol-app-${each.key}-efs"
+  creation_token = "vol-app-${each.key}-efs-token"
   encrypted      = true
+
+  lifecycle_policy = {
+    transition_to_ia = "AFTER_7_DAYS"
+  }
 
   attach_policy                      = true
   bypass_policy_lockout_safety_check = false
@@ -124,11 +128,11 @@ module "efs" {
   access_points = {
     data_cache = {
       root_directory = {
-        path = var.access_points.path
+        path = var.services[each.key].access_point
         creation_info = {
-          owner_gid   = var.access_points.owner_gid
-          owner_uid   = var.access_points.owner_uid
-          permissions = var.access_points.permissions
+          owner_gid   = 82
+          owner_uid   = 82
+          permissions = "755"
         }
       }
     }
