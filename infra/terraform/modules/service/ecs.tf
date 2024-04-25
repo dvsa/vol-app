@@ -87,7 +87,7 @@ module "efs" {
   for_each = var.services
 
   source  = "terraform-aws-modules/efs/aws"
-  version = "1.6.2"
+  version = "1.6"
 
   name           = "vol-app-${each.key}-efs"
   creation_token = "vol-app-${each.key}-efs-token"
