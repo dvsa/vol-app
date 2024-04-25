@@ -24,9 +24,13 @@ module "environment-remote-state" {
 module "account" {
   source = "../../modules/account"
 
+  create_ecr_resources    = true
+  create_assets_bucket    = true
+  create_github_resources = true
+
   github_oidc_subjects = concat(
     [
-      "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml`
+      "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
       "dvsa/vol-app:environment:account-nonprod", # `.github/workflows/deploy-account.yaml`.
     ],
     [
