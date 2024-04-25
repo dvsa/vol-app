@@ -23,5 +23,3 @@ ADD --chown=www-data ./internal.tar.gz /var/www/html
 COPY internal.conf /etc/nginx/conf.d/internal.conf
 
 USER www-data
-
-# Trigger build.
