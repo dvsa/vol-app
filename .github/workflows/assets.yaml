@@ -7,6 +7,9 @@ on:
         type: string
         default: 5.3.0
         required: false
+      version:
+        type: string
+        required: true
       push:
         type: boolean
         default: false
@@ -21,6 +24,9 @@ jobs:
         working-directory: app/cdn
     env:
       REMOTE_REPOSITORY: "dvsa/olcs-static"
+      ASSET_BUCKET: "vol-app-assets"
+      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
+      AWS_REGION: ${{ vars.TF_AWS_REGION }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -50,3 +56,14 @@ jobs:
 
       - run: ls -la public
         shell: bash
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.push }}
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.OIDC_TOKEN_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload assets to CloudFront assets bucket
+        if: ${{ inputs.push }}
+        run: aws s3 cp ./public s3://${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive --dryrun

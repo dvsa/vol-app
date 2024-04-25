@@ -168,7 +168,8 @@ jobs:
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
-      push: false
+      push: true # TODO
+      version: ${{ needs.get-version.outputs.assets }}
 
   app:
     name: App
