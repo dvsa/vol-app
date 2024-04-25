@@ -3,11 +3,10 @@ FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0
 
 USER root
 
-# Install redis with igbinary
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install igbinary \
+  && pecl install igbinary apcu_bc apcu msgpack \
   && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
-  && docker-php-ext-enable redis igbinary \
+  && docker-php-ext-enable igbinary apcu msgpack redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
 RUN apk add --no-cache icu-dev \
@@ -15,11 +14,6 @@ RUN apk add --no-cache icu-dev \
   && apk add --no-cache gettext-dev \
   && docker-php-ext-install pdo_mysql opcache intl bcmath gettext \
   && apk add --no-cache libreoffice
-
-RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install apcu_bc apcu msgpack \
-  && docker-php-ext-enable apcu msgpack \
-  && apk del pcre-dev $PHPIZE_DEPS
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
