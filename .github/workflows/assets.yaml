@@ -60,4 +60,4 @@ jobs:
 
       - name: Upload assets to CloudFront assets bucket
         if: ${{ inputs.push }}
-        run: aws s3 cp ./public s3://${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive --dryrun
+        run: aws s3 cp ./public s3://${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive
