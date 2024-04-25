@@ -89,9 +89,10 @@ module "efs" {
   source  = "terraform-aws-modules/efs/aws"
   version = "1.6"
 
-  name           = "vol-app-${each.key}-efs"
-  creation_token = "vol-app-${each.key}-efs-token"
-  encrypted      = true
+  name            = "vol-app-${each.key}-efs"
+  creation_token  = "vol-app-${each.key}-efs-token"
+  encrypted       = true
+  throughput_mode = "elastic"
 
   lifecycle_policy = {
     transition_to_ia                    = "AFTER_7_DAYS"
