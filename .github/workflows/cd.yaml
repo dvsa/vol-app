@@ -38,6 +38,8 @@ jobs:
       should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      # Assets
+      should-build-assets: ${{ steps.changed-assets-files.outputs.any_changed == 'true' || null }}
       # Docker
       should-build-and-push-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
@@ -70,6 +72,12 @@ jobs:
         with:
           files: |
             app/internal/**
+      - uses: tj-actions/changed-files@v44
+        id: changed-assets-files
+        with:
+          files: |
+            app/cdn/**
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-api-docker-files
         with:
@@ -134,6 +142,7 @@ jobs:
       api: ${{ steps.api-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
+      assets: ${{ steps.assets-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -150,12 +159,31 @@ jobs:
         uses: ./.github/actions/get-app-version
         with:
           project-path: app/internal
+      - id: assets-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/cdn
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
           echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  cdn:
+    name: CDN
+    if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    needs:
+      - orchestrator
+      - get-version
+    uses: ./.github/workflows/assets.yaml
+    with:
+      push: true
+      version: ${{ needs.get-version.outputs.assets }}
+    permissions:
+      contents: read
+      id-token: write
 
   app:
     name: App
