@@ -140,15 +140,15 @@ jobs:
       - id: api-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/api
+          project-path: app/api infra/docker/api
       - id: selfserve-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/selfserve
+          project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/internal
+          project-path: app/internal infra/docker/internal
       - id: assets-version
         uses: ./.github/actions/get-app-version
         with:
@@ -227,7 +227,7 @@ jobs:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
       app-artefact-name: ${{ matrix.project}}
-      should-upload-artefact-to-ecr: false
+      push: false
     permissions:
       contents: read
       id-token: write
