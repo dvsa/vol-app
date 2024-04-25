@@ -112,7 +112,7 @@ module "cloudfront" {
 
   ordered_cache_behavior = [
     {
-      path_pattern           = "/static/*"
+      path_pattern           = "/*"
       target_origin_id       = "s3_oac"
       viewer_protocol_policy = "redirect-to-https"
 
@@ -180,7 +180,7 @@ module "records" {
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${data.aws_s3_bucket.assets.arn}/static/*"]
+    resources = ["${data.aws_s3_bucket.assets.arn}/*"]
 
     principals {
       type        = "Service"
