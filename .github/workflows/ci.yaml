@@ -307,6 +307,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
     permissions:
       contents: read
       id-token: write
