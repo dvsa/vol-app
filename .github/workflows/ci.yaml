@@ -170,6 +170,9 @@ jobs:
     with:
       push: true # TODO
       version: ${{ needs.get-version.outputs.assets }}
+    permissions:
+      contents: read
+      id-token: write
 
   app:
     name: App
