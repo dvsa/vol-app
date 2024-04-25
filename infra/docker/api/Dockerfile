@@ -16,6 +16,11 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl \
   && apk add --no-cache libreoffice
 
+RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
+  && pecl install apcu_bc apcu \
+  && docker-php-ext-enable apcu \
+  && apk del pcre-dev $PHPIZE_DEPS
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
