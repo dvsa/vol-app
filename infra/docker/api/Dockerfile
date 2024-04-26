@@ -22,4 +22,4 @@ ADD --chown=www-data ./api.tar.gz /var/www/html
 # nginx server config file
 COPY api.conf /etc/nginx/conf.d/api.conf
 
-USER root
+USER www-data
