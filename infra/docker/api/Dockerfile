@@ -11,7 +11,7 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
 
 RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
-  && docker-php-ext-install pdo_mysql opcache intl bcmath \
+  && docker-php-ext-install pdo_mysql opcache intl \
   && apk add --no-cache libreoffice
 
 # PHP config file
@@ -22,4 +22,4 @@ ADD --chown=www-data ./api.tar.gz /var/www/html
 # nginx server config file
 COPY api.conf /etc/nginx/conf.d/api.conf
 
-USER www-data
+USER root
