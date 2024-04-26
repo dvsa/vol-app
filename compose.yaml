@@ -1,0 +1,54 @@
+services:
+  api:
+    build:
+      context: infra/docker/api
+      target: development
+    ports:
+      - "8001:80"
+    volumes:
+      - ./app/api:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.api"
+
+  selfserve:
+    build:
+      context: infra/docker/selfserve
+      target: development
+    ports:
+      - "8002:80"
+    volumes:
+      - ./app/selfserve:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.selfserve"
+
+  internal:
+    build:
+      context: infra/docker/internal
+      target: development
+    ports:
+      - "8003:80"
+    volumes:
+      - ./app/internal:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.internal"
+
+  redis:
+    image: redis
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: olcs
+      MYSQL_DATABASE: olcs_be
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: olcs

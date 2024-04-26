@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0
+FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as internal
 
 USER root
 
@@ -17,9 +17,29 @@ RUN apk add --no-cache icu-dev \
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
-ADD --chown=www-data ./internal.tar.gz /var/www/html
-
 # nginx server config file
 COPY internal.conf /etc/nginx/conf.d/internal.conf
+
+USER www-data
+
+FROM internal AS production
+
+ADD --chown=www-data ./internal.tar.gz /var/www/html
+
+FROM internal AS development
+
+USER root
+
+RUN apk add --no-cache $PHPIZE_DEPS \
+  && pecl install xdebug-3.1.5 \
+  && docker-php-ext-enable xdebug \
+  && apk del $PHPIZE_DEPS
+
+RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 USER www-data
