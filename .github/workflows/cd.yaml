@@ -43,6 +43,7 @@ jobs:
       # Docker
       should-build-and-push-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-and-push-cli-docker: ${{ steps.changed-cli-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
@@ -77,12 +78,16 @@ jobs:
         with:
           files: |
             app/cdn/**
-          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-api-docker-files
         with:
           files: |
             infra/docker/api/**
+      - uses: tj-actions/changed-files@v44
+        id: changed-cli-docker-files
+        with:
+          files: |
+            infra/docker/cli/**
       - uses: tj-actions/changed-files@v44
         id: changed-selfserve-docker-files
         with:
@@ -140,6 +145,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
+      cli: ${{ steps.cli-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
@@ -151,6 +157,10 @@ jobs:
         uses: ./.github/actions/get-app-version
         with:
           project-path: app/api infra/docker/api
+      - id: cli-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api infra/docker/cli
       - id: selfserve-version
         uses: ./.github/actions/get-app-version
         with:
@@ -167,6 +177,7 @@ jobs:
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
           echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**CLI**: \`${{ steps.cli-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
@@ -201,7 +212,7 @@ jobs:
           - selfserve
           - internal
         exclude:
-          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-and-push-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-and-push-api-docker || needs.orchestrator.outputs.should-build-and-push-cli-docker) && 'ignored' || 'api' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-and-push-selfserve-docker) && 'ignored' || 'selfserve' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-and-push-internal-docker) && 'ignored' || 'internal' }}
     uses: ./.github/workflows/php.yaml
@@ -227,17 +238,19 @@ jobs:
       matrix:
         project:
           - api
+          - cli
           - selfserve
           - internal
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-and-push-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
-      app-artefact-name: ${{ matrix.project}}
+      app-artefact-name: ${{ matrix.project == 'cli' && 'api' || matrix.project }}
       push: true
     permissions:
       contents: read

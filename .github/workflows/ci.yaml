@@ -23,6 +23,7 @@ jobs:
       # Docker
       should-build-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
       should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-cli-docker: ${{ steps.changed-cli-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
@@ -67,6 +68,12 @@ jobs:
         with:
           files: |
             infra/docker/api/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v44
+        id: changed-cli-docker-files
+        with:
+          files: |
+            infra/docker/cli/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-selfserve-docker-files
@@ -190,7 +197,7 @@ jobs:
           - selfserve
           - internal
         exclude:
-          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker || needs.orchestrator.outputs.should-build-cli-docker) && 'ignored' || 'api' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
     uses: ./.github/workflows/php.yaml
@@ -216,10 +223,12 @@ jobs:
       matrix:
         project:
           - api
+          - cli
           - selfserve
           - internal
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-api-docker && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-internal-docker && 'ignored' || 'internal' }}
     uses: ./.github/workflows/docker.yaml
