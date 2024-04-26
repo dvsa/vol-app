@@ -28,6 +28,10 @@ on:
         description: "Internal image tag"
         type: string
         required: true
+      assets-version:
+        description: "Assets version"
+        type: string
+        required: true
       apply:
         type: boolean
         required: true
@@ -56,6 +60,9 @@ on:
         type: string
         required: true
       internal-image-tag:
+        type: string
+        required: true
+      assets-version:
         type: string
         required: true
       apply:
@@ -131,7 +138,7 @@ jobs:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
-          TF_VAR_assets_version: test # TODO
+          TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan
 
       - name: Get plan changes
@@ -231,7 +238,7 @@ jobs:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
-          TF_VAR_assets_version: test # TODO
+          TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform apply ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Delete workspace

@@ -38,6 +38,8 @@ jobs:
       should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      # Assets
+      should-build-assets: ${{ steps.changed-assets-files.outputs.any_changed == 'true' || null }}
       # Docker
       should-build-and-push-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
@@ -70,6 +72,12 @@ jobs:
         with:
           files: |
             app/internal/**
+      - uses: tj-actions/changed-files@v44
+        id: changed-assets-files
+        with:
+          files: |
+            app/cdn/**
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-api-docker-files
         with:
@@ -134,6 +142,7 @@ jobs:
       api: ${{ steps.api-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
+      assets: ${{ steps.assets-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -141,21 +150,40 @@ jobs:
       - id: api-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/api
+          project-path: app/api infra/docker/api
       - id: selfserve-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/selfserve
+          project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
         uses: ./.github/actions/get-app-version
         with:
-          project-path: app/internal
+          project-path: app/internal infra/docker/internal
+      - id: assets-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/cdn
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
           echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  cdn:
+    name: CDN
+    if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    needs:
+      - orchestrator
+      - get-version
+    uses: ./.github/workflows/assets.yaml
+    with:
+      push: true
+      version: ${{ needs.get-version.outputs.assets }}
+    permissions:
+      contents: read
+      id-token: write
 
   app:
     name: App
@@ -210,7 +238,7 @@ jobs:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
       app-artefact-name: ${{ matrix.project}}
-      should-upload-artefact-to-ecr: true
+      push: true
     permissions:
       contents: read
       id-token: write
@@ -235,7 +263,7 @@ jobs:
 
   terraform-env-dev:
     name: Environment (dev)
-    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-dev-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-dev-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-assets) }}
     concurrency:
       group: terraform-environment-dev
     needs:
@@ -249,6 +277,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
       apply: true
     permissions:
       contents: read
@@ -258,7 +287,7 @@ jobs:
 
   terraform-env-int:
     name: Environment (int)
-    if: ${{ needs.orchestrator.outputs.should-apply-int-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
+    if: ${{ needs.orchestrator.outputs.should-apply-int-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-assets }}
     concurrency:
       group: terraform-environment-int
     needs:
@@ -271,6 +300,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
       apply: true
     permissions:
       contents: read
@@ -299,7 +329,7 @@ jobs:
 
   terraform-env-prep:
     name: Environment (prep)
-    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prep-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prep-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-assets) }}
     concurrency:
       group: terraform-environment-prep
     needs:
@@ -313,6 +343,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
       apply: true
     permissions:
       contents: read
@@ -322,7 +353,7 @@ jobs:
 
   terraform-env-prod:
     name: Environment (prod)
-    if: ${{ needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prod-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
+    if: ${{ needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prod-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-assets) }}
     concurrency:
       group: terraform-environment-prod
     needs:
@@ -336,6 +367,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
       apply: true
     permissions:
       contents: read

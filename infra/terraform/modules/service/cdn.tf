@@ -13,6 +13,10 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
+data "aws_s3_bucket" "assets" {
+  bucket = "vol-app-assets"
+}
+
 data "aws_route53_zone" "this" {
   name = var.domain_name
 }
@@ -87,7 +91,7 @@ module "cloudfront" {
 
   origin = {
     s3_oac = {
-      domain_name           = module.s3_one.s3_bucket_bucket_regional_domain_name
+      domain_name           = data.aws_s3_bucket.assets.bucket_regional_domain_name
       origin_access_control = "s3_oac"
       origin_path           = "/${trimprefix(var.assets_version, "/")}"
     }
@@ -108,7 +112,7 @@ module "cloudfront" {
 
   ordered_cache_behavior = [
     {
-      path_pattern           = "/static/*"
+      path_pattern           = "/*"
       target_origin_id       = "s3_oac"
       viewer_protocol_policy = "redirect-to-https"
 
@@ -131,14 +135,6 @@ module "cloudfront" {
 
 data "aws_canonical_user_id" "current" {}
 data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
-
-module "s3_one" {
-  source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.0"
-
-  bucket        = "vol-app-${var.environment}-assets"
-  force_destroy = true
-}
 
 module "log_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
@@ -184,7 +180,7 @@ module "records" {
 data "aws_iam_policy_document" "s3_policy" {
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${module.s3_one.s3_bucket_arn}/static/*"]
+    resources = ["${data.aws_s3_bucket.assets.arn}/*"]
 
     principals {
       type        = "Service"
@@ -200,6 +196,6 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = module.s3_one.s3_bucket_id
+  bucket = data.aws_s3_bucket.assets.id
   policy = data.aws_iam_policy_document.s3_policy.json
 }
