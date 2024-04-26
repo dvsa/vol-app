@@ -11,8 +11,7 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
 
 RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
-  && apk add --no-cache gettext-dev \
-  && docker-php-ext-install pdo_mysql opcache intl bcmath gettext \
+  && docker-php-ext-install pdo_mysql opcache intl bcmath \
   && apk add --no-cache libreoffice
 
 # PHP config file
