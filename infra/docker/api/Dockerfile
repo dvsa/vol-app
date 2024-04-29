@@ -16,8 +16,7 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl
 
 # Install libreoffice, cups-client
-RUN apk add --no-cache libreoffice \
-  && apk add --no-cache cups-client
+RUN apk add --no-cache libreoffice cups-client
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
