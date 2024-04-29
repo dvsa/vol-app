@@ -15,21 +15,24 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl
 
 # PHP config file
-COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
+COPY --chown=root:www-data --chmod=440 ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 # nginx server config file
-COPY internal.conf /etc/nginx/conf.d/internal.conf
-
-USER www-data
+COPY --chown=root:www-data --chmod=440 internal.conf /etc/nginx/conf.d/internal.conf
 
 FROM internal AS production
 
 ADD ./internal.tar.gz /var/www/html
-RUN chown -R www-data:www-data /var/www/html
+
+# `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
+# Set the owner (`root`) and group (`www-data`) permissions for the application files.
+RUN chown -R root:www-data /var/www/html \
+  # Only owner (`root`) and group (`www-data`) can read application files.
+  && chmod -R 440 /var/www/html \
+  # Allow the web server to write to the cache directory.
+  && chmod -R 660 /var/www/html/data/cache
 
 FROM internal AS development
-
-USER root
 
 RUN apk add --no-cache $PHPIZE_DEPS \
   && pecl install xdebug-3.1.5 \
