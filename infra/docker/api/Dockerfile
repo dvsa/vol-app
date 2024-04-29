@@ -25,7 +25,8 @@ USER www-data
 
 FROM api AS production
 
-ADD --chown=www-data ./api.tar.gz /var/www/html
+ADD ./api.tar.gz /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 FROM api AS development
 

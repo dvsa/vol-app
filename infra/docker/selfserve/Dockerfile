@@ -24,7 +24,8 @@ USER www-data
 
 FROM selfserve AS production
 
-ADD --chown=www-data ./selfserve.tar.gz /var/www/html
+ADD ./selfserve.tar.gz /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 FROM selfserve AS development
 

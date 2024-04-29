@@ -24,7 +24,8 @@ USER www-data
 
 FROM internal AS production
 
-ADD --chown=www-data ./internal.tar.gz /var/www/html
+ADD ./internal.tar.gz /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 FROM internal AS development
 
