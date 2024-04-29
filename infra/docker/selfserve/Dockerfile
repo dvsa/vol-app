@@ -15,7 +15,7 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl
 
 # PHP config file
-COPY --chown=root:www-data --chmod=440 ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
+COPY --chown=root:www-data --chmod=440 ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
 # nginx server config file
 COPY --chown=root:www-data --chmod=440 selfserve.conf /etc/nginx/conf.d/selfserve.conf
