@@ -15,8 +15,8 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
-# Install libreoffice, cups-client
-RUN apk add --no-cache libreoffice cups-client
+# Install libreoffice, cups-client, poppler-utils
+RUN apk add --no-cache libreoffice cups-client poppler-utils
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
