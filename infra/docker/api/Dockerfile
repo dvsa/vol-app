@@ -31,11 +31,14 @@ ADD ./api.tar.gz /var/www/html
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
 RUN chown -R root:www-data /var/www/html \
+  # Reset the permissions of the application files.
   && chmod -R 644 /var/www/html \
-  # Add group (`www-data`) write permissions to the cache directory.
-  && chmod -R 664 /var/www/html/data/cache \
   # Add owner (`root`) and group (`www-data`) execute permissions on directories.
-  && find /var/www/html -type d -exec chmod 755 {} \;
+  && find /var/www/html -type d -exec chmod 755 {} \; \
+  # Add group (`www-data`) write permissions to the cache directory files.
+  && chmod -R 664 /var/www/html/data/cache \
+  # Add group (`www-data`) write permissions on the cache directories.
+  && find /var/www/html/data/cache -type d -exec chmod 775 {} \;
 
 USER www-data
 
