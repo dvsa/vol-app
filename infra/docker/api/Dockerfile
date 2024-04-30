@@ -18,25 +18,22 @@ RUN apk add --no-cache icu-dev \
 RUN apk add --no-cache libreoffice cups-client
 
 # PHP config file
-COPY --chown=www-data --chmod=440 ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
+COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
 # nginx server config file
-COPY --chown=www-data --chmod=440 api.conf /etc/nginx/conf.d/api.conf
+COPY api.conf /etc/nginx/conf.d/api.conf
 
 FROM api AS production
 
 ADD ./api.tar.gz /var/www/html
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
-RUN chown -R www-data:www-data /var/www/html \
-  # Only owner (`www-data`) and group (`www-data`) can read application files.
-  && chmod -R 440 /var/www/html \
-  # Only the owner (`www-data`) can read the configuration files.
-  && chmod -R 400 /var/www/html/config \
-  # Only the owner (`www-data`) can write to the cache directory.
-  && chmod -R 600 /var/www/html/data/cache \
-  # Give the owner (`www-data`) and group (`www-data`) execute permissions on directories.
-  && find /var/www/html -type d -exec chmod 550 {} \;
+RUN chown -R root:www-data /var/www/html \
+  && chmod -R 644 /var/www/html \
+  # Add group (`www-data`) write permissions to the cache directory.
+  && chmod -R 664 /var/www/html/data/cache \
+  # Add owner (`root`) and group (`www-data`) execute permissions on directories.
+  && find /var/www/html -type d -exec chmod 755 {} \;
 
 USER www-data
 
