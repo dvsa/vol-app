@@ -1,6 +1,7 @@
 # hadolint global ignore=DL3018,SC2086
 FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as selfserve
 
+# hadolint ignore=DL3002
 USER root
 
 # Installing require dependencies
