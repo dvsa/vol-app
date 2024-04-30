@@ -7,6 +7,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Laminas\Http\Response;
 use Laminas\Session\Container;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\HelperPluginManager;
@@ -121,6 +122,26 @@ class SearchController extends AbstractController implements LeftViewProvider
     public function indexAction()
     {
         return $this->backAction();
+    }
+
+    public function oppositionAction(): Response
+    {
+        return $this->indexAction();
+    }
+
+    public function casesAction(): Response
+    {
+        return $this->indexAction();
+    }
+
+    public function documentsAction(): Response
+    {
+        return $this->indexAction();
+    }
+
+    public function feesAction(): Response
+    {
+        return $this->indexAction();
     }
 
     /**
