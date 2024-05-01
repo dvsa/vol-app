@@ -15,6 +15,11 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
+RUN apk add --no-cache clamav \
+  && freshclam
+
+COPY /clamav /etc/clamav
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
