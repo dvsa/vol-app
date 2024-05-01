@@ -52,6 +52,9 @@ module "ecs_service" {
         }
       ]
 
+      # Have to explicitly set the user to null to avoid the default user being set to root.
+      user = null
+
       environment = [
         {
           name  = "ENVIRONMENT_NAME"
