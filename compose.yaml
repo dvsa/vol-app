@@ -12,7 +12,7 @@ services:
       context: infra/docker/api
       target: development
     expose:
-      - 80
+      - 8080
     volumes:
       - ./app/api:/var/www/html
     environment:
@@ -27,7 +27,7 @@ services:
       context: infra/docker/selfserve
       target: development
     expose:
-      - 80
+      - 8080
     volumes:
       - ./app/selfserve:/var/www/html
     environment:
@@ -42,7 +42,7 @@ services:
       context: infra/docker/internal
       target: development
     expose:
-      - 80
+      - 8080
     volumes:
       - ./app/internal:/var/www/html
     environment:

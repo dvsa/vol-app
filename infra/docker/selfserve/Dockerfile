@@ -21,6 +21,8 @@ COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 # nginx server config file
 COPY selfserve.conf /etc/nginx/conf.d/selfserve.conf
 
+EXPOSE 8080
+
 FROM selfserve AS production
 
 ADD ./selfserve.tar.gz /var/www/html

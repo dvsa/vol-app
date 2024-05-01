@@ -46,7 +46,8 @@ module "ecs_service" {
       port_mappings = [
         {
           name          = "http"
-          containerPort = 80
+          hostPort      = 8080
+          containerPort = 8080
           protocol      = "tcp"
         }
       ]
