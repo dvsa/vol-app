@@ -30,9 +30,9 @@ data "aws_subnets" "this" {
 }
 
 data "aws_secretsmanager_secret" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = toset(local.service_names)
 
-  name = "DEVAPPDEV-BASE-SM-APPLICATION-${each.key}"
+  name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
 data "aws_cognito_user_pools" "this" {
@@ -61,7 +61,7 @@ module "service" {
             "secretsmanager:GetSecretValue"
           ]
           resources = [
-            data.aws_secretsmanager_secret.this["API"].arn
+            data.aws_secretsmanager_secret.this["api"].arn
           ]
         },
         {
@@ -139,7 +139,7 @@ module "service" {
             "secretsmanager:GetSecretValue"
           ]
           resources = [
-            data.aws_secretsmanager_secret.this["IUWEB"].arn
+            data.aws_secretsmanager_secret.this["internal"].arn
           ]
         },
         {
@@ -173,7 +173,7 @@ module "service" {
             "secretsmanager:GetSecretValue"
           ]
           resources = [
-            data.aws_secretsmanager_secret.this["SSWEB"].arn
+            data.aws_secretsmanager_secret.this["selfserve"].arn
           ]
         },
         {
