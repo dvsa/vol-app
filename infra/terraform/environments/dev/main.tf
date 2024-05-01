@@ -96,7 +96,7 @@ module "service" {
             "cognito-idp:AdminDeleteUser",
             "cognito-idp:AdminCreateUser",
           ]
-          resources = [data.aws_cognito_user_pool.this.arn]
+          resources = [data.aws_cognito_user_pools.this.arn]
         },
         {
           effect = "Allow"
