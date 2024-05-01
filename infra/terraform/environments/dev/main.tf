@@ -67,7 +67,7 @@ module "service" {
         {
           effect = "Allow"
           actions = [
-            "ssm:GetParameterByPath"
+            "ssm:GetParametersByPath"
           ]
           resources = [
             "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
@@ -145,7 +145,7 @@ module "service" {
         {
           effect = "Allow"
           actions = [
-            "ssm:GetParameterByPath"
+            "ssm:GetParametersByPath"
           ]
           resources = [
             "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
@@ -179,7 +179,7 @@ module "service" {
         {
           effect = "Allow"
           actions = [
-            "ssm:GetParameterByPath"
+            "ssm:GetParametersByPath"
           ]
           resources = [
             "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
