@@ -25,6 +25,8 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
+  tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
+
   enable_execute_command = true
 
   task_exec_iam_role_arn = module.ecs_cluster[each.key].task_exec_iam_role_arn
