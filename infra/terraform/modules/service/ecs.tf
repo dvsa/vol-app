@@ -10,8 +10,8 @@ module "ecs_cluster" {
 
   cluster_settings = [
     {
-      "name" : "containerInsights",
-      "value" : "enabled"
+      name  = "containerInsights"
+      value = "enabled"
     }
   ]
 }
@@ -25,10 +25,17 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
+  enable_execute_command = true
+
   task_exec_iam_role_arn = module.ecs_cluster[each.key].task_exec_iam_role_arn
 
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
+
+  runtime_platform = {
+    operating_system_family = "LINUX",
+    cpu_architecture        = "ARM64"
+  }
 
   container_definitions = {
     (each.key) = {
