@@ -15,6 +15,11 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
+RUN apk add --no-cache clamav \
+  && freshclam
+
+COPY /clamav /etc/clamav
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
@@ -55,4 +60,4 @@ RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
 
-USER www-data
+#USER www-data
