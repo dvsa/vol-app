@@ -21,6 +21,8 @@ COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 # nginx server config file
 COPY internal.conf /etc/nginx/conf.d/internal.conf
 
+EXPOSE 8080
+
 FROM internal AS production
 
 ADD ./internal.tar.gz /var/www/html

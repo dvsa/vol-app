@@ -24,6 +24,8 @@ COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 # nginx server config file
 COPY api.conf /etc/nginx/conf.d/api.conf
 
+EXPOSE 8080
+
 FROM api AS production
 
 ADD ./api.tar.gz /var/www/html
