@@ -35,7 +35,7 @@ data "aws_secretsmanager_secret" "this" {
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${each.key}"
 }
 
-data "aws_cognito_user_pool" "this" {
+data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
 
