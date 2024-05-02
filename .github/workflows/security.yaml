@@ -1,0 +1,16 @@
+name: Security
+
+on:
+  workflow_call:
+    inputs:
+      project:
+        type: string
+        required: true
+
+jobs:
+  check:
+    name: Check if running
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo hello
