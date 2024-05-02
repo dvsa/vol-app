@@ -210,3 +210,7 @@ jobs:
           path: app/${{ inputs.project }}
       - name: Install Snyk
         run: npm install snyk
+      - name: Authenticate Snyk
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+      - name: Snyk test
+        run: snyk test
