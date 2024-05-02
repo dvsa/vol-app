@@ -170,6 +170,8 @@ jobs:
           php-version: "7.4"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -190,3 +192,7 @@ jobs:
           name: ${{ inputs.artefact-name }}
           path: app/${{ inputs.project }}/${{ inputs.project }}.tar.gz
           retention-days: ${{ inputs.retention-days }}
+      - name: Scan dependencies
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}

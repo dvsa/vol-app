@@ -3,6 +3,10 @@ name: Security
 on:
   workflow_call:
     inputs:
+      ref:
+        type: string
+        default: 5.3.0
+        required: false
       project:
         type: string
         required: true
@@ -14,7 +18,15 @@ jobs:
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
+    env:
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
+      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ inputs.project }}
       - name: Setup Snyk
         uses: snyk/actions/setup@master
       - name: Scan dependencies
