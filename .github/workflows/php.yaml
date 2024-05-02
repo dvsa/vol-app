@@ -190,8 +190,7 @@ jobs:
           name: ${{ inputs.artefact-name }}
           path: app/${{ inputs.project }}/${{ inputs.project }}.tar.gz
           retention-days: ${{ inputs.retention-days }}
-      - name: Run Snyk Auth
-        run: npx snyk auth SNYK_TOKEN=${{ secrets.SNYK_TOKEN }}
+      - uses: actions/checkout@master
       - name: Scan Dependencies
         uses: snyk/actions/php@master
         continue-on-error: true
