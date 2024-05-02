@@ -314,3 +314,25 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
+
+  security:
+    name: security
+    needs:
+      - app
+      - orchestrator
+    strategy:
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}\
+    uses: ./.github/workflows/security.yaml
+    with:
+      project: ${{ matrix.project }}
+    permissions:
+      contents: read
+    secrets: inherit
