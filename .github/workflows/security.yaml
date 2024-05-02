@@ -8,9 +8,16 @@ on:
         required: true
 
 jobs:
-  check:
-    name: Check if running
+  dependency-scan:
+    name: Dependency Scan
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
     steps:
-      - run: echo hello
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+      - name: Scan dependencies
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
