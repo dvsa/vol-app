@@ -20,7 +20,6 @@ class LicenceOverviewHelperService
     /**
      * Create service instance
      *
-     * @param UrlHelperService $urlHelperService
      *
      * @return LicenceOverviewHelperService
      */
@@ -84,7 +83,6 @@ class LicenceOverviewHelperService
     /**
      * Gets authorisation view data appropriate to the specified licence data
      *
-     * @param array $licence
      *
      * @return array
      */

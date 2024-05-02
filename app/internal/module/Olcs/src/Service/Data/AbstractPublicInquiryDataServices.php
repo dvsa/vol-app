@@ -23,9 +23,6 @@ class AbstractPublicInquiryDataServices
     /**
      * Create service instance
      *
-     * @param AbstractDataServiceServices $abstractDataServiceServices
-     * @param ApplicationDataService $applicationDataService
-     * @param LicenceDataService $licenceDataService
      *
      * @return AbstractPublicInquiryDataServices
      */

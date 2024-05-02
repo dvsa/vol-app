@@ -27,18 +27,14 @@ class TransportManagerController extends AbstractController implements Transport
      */
     protected $tmDetailsCache = [];
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TranslationHelperService $translationHelper;
-    protected $navigation;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TranslationHelperService $translationHelper,
-        $navigation
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TranslationHelperService $translationHelper,
+        protected $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -46,9 +42,6 @@ class TransportManagerController extends AbstractController implements Transport
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->translationHelper = $translationHelper;
-        $this->navigation = $navigation;
     }
 
     /**
@@ -150,7 +143,7 @@ class TransportManagerController extends AbstractController implements Transport
                 }
 
                 $form = $this->processMergeFormMessages($response, $form, $toTmId);
-            } catch (NotFoundException $e) {
+            } catch (NotFoundException) {
                 $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
                 $form->setMessages($formMessages);
             }

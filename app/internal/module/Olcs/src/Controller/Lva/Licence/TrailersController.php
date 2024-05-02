@@ -32,7 +32,6 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
 
     protected $lva = 'licence';
     protected string $location = 'internal';
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -56,7 +55,7 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
         ScriptFactory $scriptFactory,
         DateHelperService $dateHelper,
         QuerySender $querySender,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -69,6 +68,5 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
             $dateHelper,
             $querySender
         );
-        $this->navigation = $navigation;
     }
 }

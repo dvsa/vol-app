@@ -28,17 +28,13 @@ class PublicationController extends AbstractInternalController implements LeftVi
         'publish' => ['requireRows' => true],
     ];
 
-    protected WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+        protected WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
     ) {
-        $this->webDavJsonWebTokenGenerationService = $webDavJsonWebTokenGenerationService;
-
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

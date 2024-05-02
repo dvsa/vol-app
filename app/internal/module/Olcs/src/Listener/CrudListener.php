@@ -25,10 +25,6 @@ class CrudListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    protected $controller;
-
-    protected $identifier;
-
     protected $defaultCrudConfig = [
         'add' => [
             'requireRows' => false
@@ -42,19 +38,15 @@ class CrudListener implements ListenerAggregateInterface
     ];
 
     protected $crudConfig = [];
-    protected FlashMessengerHelperService $flashMessenger;
 
     /**
      * Pass the controller in
      *
      * @param \Laminas\Mvc\Controller\AbstractActionController $controller
      */
-    public function __construct($controller, FlashMessengerHelperService $flashMessenger, $identifier = 'id', array $crudConfig = [])
+    public function __construct(protected $controller, protected FlashMessengerHelperService $flashMessenger, protected $identifier = 'id', array $crudConfig = [])
     {
-        $this->controller = $controller;
-        $this->identifier = $identifier;
         $this->crudConfig = array_merge($this->defaultCrudConfig, $crudConfig);
-        $this->flashMessenger = $flashMessenger;
     }
 
     /**
@@ -68,7 +60,6 @@ class CrudListener implements ListenerAggregateInterface
     /**
      * Check for crud actions before hitting the controller action
      *
-     * @param MvcEvent $e
      * @return mixed
      */
     public function onDispatch(MvcEvent $e)
@@ -160,10 +151,9 @@ class CrudListener implements ListenerAggregateInterface
      * Set the event result
      *
      * @param MvcEvent $e
-     * @param mixed $result
      * @return mixed
      */
-    protected function setResult($e, $result)
+    protected function setResult($e, mixed $result)
     {
         $e->setResult($result);
 

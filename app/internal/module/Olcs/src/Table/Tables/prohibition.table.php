@@ -57,24 +57,21 @@ return [
         ],
         [
             'title' => 'Trailer',
-            'formatter' => function ($data) {
-                switch ($data['isTrailer']) {
-                    case 'Y':
-                        return 'Yes';
-                    case 'N':
-                        return 'No';
-                    default:
-                        return '-';
-                }
+            'formatter' => fn($data) => match ($data['isTrailer']) {
+                'Y' => 'Yes',
+                'N' => 'No',
+                default => '-',
             }
         ],
         [
             'title' => 'Imposed at',
             'format' => '{{imposedAt}}'
+        // phpcs:disable
         ],
         [
             'title' => 'Type',
             'formatter' => fn($data) => $data['prohibitionType']['description']
         ]
+        // phpcs:enable
     ]
 ];

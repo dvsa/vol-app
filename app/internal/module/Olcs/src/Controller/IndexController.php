@@ -30,36 +30,25 @@ class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected UserListInternal $userListInternalDataService;
-    protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService;
     protected SubCategory $subCategoryDataService;
-    protected TaskSubCategory $taskSubCategoryDataService;
-    protected DocumentSubCategory $documentSubCategoryDataService;
-    protected DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService;
-    protected ScannerSubCategory $scannerSubCategoryDataService;
-    protected SubCategoryDescription $subCategoryDescriptionDataService;
-    protected IrhpPermitPrintCountry $irhpPermitPrintCountryDataService;
-    protected IrhpPermitPrintStock $irhpPermitPrintStockDataService;
-    protected IrhpPermitPrintRangeType $irhpPermitPrintRangeTypeDataService;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
-        UserListInternal $userListInternalDataService,
-        UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected UserListInternal $userListInternalDataService,
+        protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService,
         SubCategory $subCategoryDataService,
-        TaskSubCategory $taskSubCategoryDataService,
-        DocumentSubCategory $documentSubCategoryDataService,
-        DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService,
-        ScannerSubCategory $scannerSubCategoryDataService,
-        SubCategoryDescription $subCategoryDescriptionDataService,
-        IrhpPermitPrintCountry $irhpPermitPrintCountryDataService,
-        IrhpPermitPrintStock $irhpPermitPrintStockDataService,
-        IrhpPermitPrintRangeType $irhpPermitPrintRangeTypeDataService
+        protected TaskSubCategory $taskSubCategoryDataService,
+        protected DocumentSubCategory $documentSubCategoryDataService,
+        protected DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService,
+        protected ScannerSubCategory $scannerSubCategoryDataService,
+        protected SubCategoryDescription $subCategoryDescriptionDataService,
+        protected IrhpPermitPrintCountry $irhpPermitPrintCountryDataService,
+        protected IrhpPermitPrintStock $irhpPermitPrintStockDataService,
+        protected IrhpPermitPrintRangeType $irhpPermitPrintRangeTypeDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -67,18 +56,7 @@ class IndexController extends AbstractController implements LeftViewProvider
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->userListInternalDataService = $userListInternalDataService;
-        $this->userListInternalExcludingDataService = $userListInternalExcludingDataService;
         $this->subCategoryDataService = $subCategoryDataService;
-        $this->taskSubCategoryDataService = $taskSubCategoryDataService;
-        $this->documentSubCategoryDataService = $documentSubCategoryDataService;
-        $this->documentSubCategoryWithDocsDataService = $documentSubCategoryWithDocsDataService;
-        $this->scannerSubCategoryDataService = $scannerSubCategoryDataService;
-        $this->subCategoryDescriptionDataService = $subCategoryDescriptionDataService;
-        $this->irhpPermitPrintCountryDataService = $irhpPermitPrintCountryDataService;
-        $this->irhpPermitPrintStockDataService = $irhpPermitPrintStockDataService;
-        $this->irhpPermitPrintRangeTypeDataService = $irhpPermitPrintRangeTypeDataService;
     }
 
     /**

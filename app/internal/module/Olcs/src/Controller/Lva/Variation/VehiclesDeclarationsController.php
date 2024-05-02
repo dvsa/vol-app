@@ -33,8 +33,6 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected $navigation;
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -55,11 +53,10 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
         StringHelperService $stringHelper,
-        $navigation,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected $navigation,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->stringHelper = $stringHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -69,6 +66,5 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $scriptFactory,
             $dataHelper
         );
-        $this->navigation = $navigation;
     }
 }

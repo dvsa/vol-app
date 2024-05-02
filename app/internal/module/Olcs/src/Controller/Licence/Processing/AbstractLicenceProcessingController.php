@@ -31,8 +31,6 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
     use ProcessingControllerTrait;
 
     protected $helperClass = \Olcs\Helper\LicenceProcessingHelper::class;
-
-    protected SubCategory $subCategoryDataService;
     protected TreeRouteStack $router;
 
     public function __construct(
@@ -43,7 +41,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         $navigation,
-        SubCategory $subCategoryDataService,
+        protected SubCategory $subCategoryDataService,
         FlashMessengerHelperService $flashMessengerHelper,
         TreeRouteStack $router
     ) {
@@ -57,7 +55,6 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
             $navigation,
             $flashMessengerHelper
         );
-        $this->subCategoryDataService = $subCategoryDataService;
         $this->router = $router;
     }
 

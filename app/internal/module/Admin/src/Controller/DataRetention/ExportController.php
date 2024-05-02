@@ -19,19 +19,15 @@ use Olcs\Data\Mapper\DataRetentionExport as Mapper;
 class ExportController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-data-retention';
-    protected TableFactory $tableFactory;
-    protected ResponseHelperService $responseHelperService;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        TableFactory $tableFactory,
-        ResponseHelperService $responseHelperService
+        protected TableFactory $tableFactory,
+        protected ResponseHelperService $responseHelperService
     ) {
-        $this->tableFactory = $tableFactory;
-        $this->responseHelperService = $responseHelperService;
         parent::__construct($translationHelper, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

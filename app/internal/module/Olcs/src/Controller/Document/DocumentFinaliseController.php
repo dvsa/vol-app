@@ -25,8 +25,6 @@ class DocumentFinaliseController extends AbstractDocumentController
     ];
 
     private $redirect;
-    private FlashMessengerHelperService $flashMessengerHelper;
-    private WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -34,8 +32,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         array $config,
-        FlashMessengerHelperService $flashMessengerHelper,
-        WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+        private FlashMessengerHelperService $flashMessengerHelper,
+        private WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -44,8 +42,6 @@ class DocumentFinaliseController extends AbstractDocumentController
             $viewHelperManager,
             $config
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->webDavJsonWebTokenGenerationService = $webDavJsonWebTokenGenerationService;
     }
 
     /**

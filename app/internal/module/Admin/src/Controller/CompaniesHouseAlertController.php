@@ -58,16 +58,13 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         ]
     ];
 
-    protected HelperPluginManager $viewHelperPluginManager;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        HelperPluginManager $viewHelperPluginManager
+        protected HelperPluginManager $viewHelperPluginManager
     ) {
-        $this->viewHelperPluginManager = $viewHelperPluginManager;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

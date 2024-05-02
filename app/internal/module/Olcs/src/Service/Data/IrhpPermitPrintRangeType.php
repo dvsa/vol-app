@@ -17,11 +17,6 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
 class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataInterface
 {
     /**
-     * @var TranslationHelperService
-     */
-    private $translator;
-
-    /**
      * @var int
      */
     private $irhpPermitStock;
@@ -30,16 +25,15 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataIn
      * Create service instance
      *
      * @param AbstractDataServiceServices $abstractDataServiceServices
-     * @param TranslationHelperService $translationHelperService
+     * @param TranslationHelperService $translator
      *
      * @return IrhpPermitPrintRangeType
      */
     public function __construct(
         AbstractDataServiceServices $abstractDataServiceServices,
-        TranslationHelperService $translationHelperService
+        private TranslationHelperService $translator
     ) {
         parent::__construct($abstractDataServiceServices);
-        $this->translator = $translationHelperService;
     }
 
     /**

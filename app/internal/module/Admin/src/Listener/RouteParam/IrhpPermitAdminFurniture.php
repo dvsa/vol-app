@@ -61,7 +61,6 @@ class IrhpPermitAdminFurniture implements
     }
 
     /**
-     * @param Navigation $navigationService
      * @return $this
      */
     public function setNavigationService(Navigation $navigationService)

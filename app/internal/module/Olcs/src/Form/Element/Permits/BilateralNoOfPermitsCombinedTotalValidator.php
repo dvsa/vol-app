@@ -7,15 +7,13 @@ class BilateralNoOfPermitsCombinedTotalValidator
     /**
      * Verify that at least one of the sibling no of permits elements contains a non-zero value
      *
-     * @param mixed $value
      * @param array $context
-     *
      * @return bool
      */
-    public static function validateNonZeroValuePresent($value, $context)
+    public static function validateNonZeroValuePresent(mixed $value, $context)
     {
         foreach ($context as $name => $value) {
-            if ((strpos($name, 'journey') !== false) && is_string($value)) {
+            if ((str_contains($name, 'journey')) && is_string($value)) {
                 $trimmedValue = trim($value);
                 if (ctype_digit($trimmedValue)) {
                     if (intval($trimmedValue) > 0) {

@@ -73,8 +73,6 @@ class TemplateController extends AbstractInternalController implements LeftViewP
     /**
      * Uses description field from Item response to add title to Edit modal
      *
-     * @param  Form  $form
-     * @param  array $formData
      * @return Form
      */
     public function alterFormForEdit(Form $form, array $formData)

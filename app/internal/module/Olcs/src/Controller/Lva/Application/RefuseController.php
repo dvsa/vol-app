@@ -31,9 +31,6 @@ class RefuseController extends AbstractRefuseController
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -52,12 +49,10 @@ class RefuseController extends AbstractRefuseController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -41,9 +41,6 @@ class VehiclesController extends AbstractGenericVehiclesController implements Ap
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -76,12 +73,10 @@ class VehiclesController extends AbstractGenericVehiclesController implements Ap
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         ResponseHelperService $responseHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

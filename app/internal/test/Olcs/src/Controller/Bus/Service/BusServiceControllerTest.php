@@ -1,24 +1,19 @@
 <?php
 
-/**
- * Bus Service Controller Test
- */
+declare(strict_types=1);
 
 namespace OlcsTest\Controller\Bus\Service;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
 use Laminas\Navigation\Navigation;
 use Olcs\Controller\Bus\Service\BusServiceController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Common\RefData;
 
-/**
- * Bus Service Controller Test
- */
 class BusServiceControllerTest extends MockeryTestCase
 {
     protected $sut;
@@ -80,10 +75,10 @@ class BusServiceControllerTest extends MockeryTestCase
         )->andReturn($mockForm);
         $this->formHelper->shouldReceive('populateFormTable')->with(
             m::type('object'),
-            m::type(tableFactory::class)
+            m::type(TableBuilder::class)
         )->andReturn($mockForm);
 
-        $mockTable = m::mock(tableFactory::class);
+        $mockTable = m::mock(TableBuilder::class);
 
         $this->tableFactory->shouldReceive('prepareTable')->with(
             m::type('string'),

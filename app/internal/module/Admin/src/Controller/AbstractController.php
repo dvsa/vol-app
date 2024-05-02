@@ -21,12 +21,8 @@ abstract class AbstractController extends LaminasAbstractActionController implem
 {
     use GenericRenderView;
 
-    protected Placeholder $placeholder;
-
-    public function __construct(
-        Placeholder $placeholder
-    ) {
-        $this->placeholder = $placeholder;
+    public function __construct(protected Placeholder $placeholder)
+    {
     }
 
     /**

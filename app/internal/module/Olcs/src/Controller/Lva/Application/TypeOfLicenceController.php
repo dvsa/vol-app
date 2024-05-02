@@ -35,9 +35,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     protected $lva = 'application';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -57,13 +54,11 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
+        protected RestrictionHelperService $restrictionHelper,
         FormHelperService $formHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -27,7 +27,6 @@ class AddressesController extends AbstractAddressesController implements Variati
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -47,7 +46,7 @@ class AddressesController extends AbstractAddressesController implements Variati
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -59,6 +58,5 @@ class AddressesController extends AbstractAddressesController implements Variati
             $formServiceManager,
             $scriptFactory
         );
-        $this->navigation = $navigation;
     }
 }

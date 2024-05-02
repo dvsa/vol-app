@@ -19,14 +19,11 @@ trait FinancialEvidenceAlterations
      * Make form alterations
      *
      * @param \Laminas\Form\Form $form
-     * @return \Laminas\Form\Form
      */
-    protected function alterForm($form)
+    protected function alterForm($form): void
     {
         parent::alterForm($form);
 
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
-
-        return $form;
     }
 }

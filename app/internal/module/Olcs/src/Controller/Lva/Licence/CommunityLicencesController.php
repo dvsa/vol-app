@@ -32,8 +32,6 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -54,7 +52,7 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
         ScriptFactory $scriptFactory,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -66,6 +64,5 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
             $transferAnnotationBuilder,
             $commandService
         );
-        $this->navigation = $navigation;
     }
 }

@@ -15,7 +15,6 @@ class BilateralApplicationValidationModifier
     /**
      * Create service instance
      *
-     * @param ApplicationFormPopulator $applicationFormPopulator
      *
      * @return BilateralApplicationValidationModifier
      */
@@ -28,12 +27,10 @@ class BilateralApplicationValidationModifier
      * Selectively remove form validation so that it doesn't get applied on elements that are hidden at the time of
      * form submission
      *
-     * @param array $data
-     * @param mixed $form
      *
      * @return array
      */
-    public function mapForFormOptions(array $data, $form)
+    public function mapForFormOptions(array $data, mixed $form)
     {
         $this->applicationFormPopulator->populate($form, $data);
 

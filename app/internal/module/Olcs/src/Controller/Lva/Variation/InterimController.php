@@ -35,8 +35,6 @@ class InterimController extends AbstractInterimController implements VariationCo
     protected $updateInterimCommand = UpdateInterim::class;
 
     protected StringHelperService $stringHelper;
-    protected FormServiceManager $formServiceManager;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -57,11 +55,10 @@ class InterimController extends AbstractInterimController implements VariationCo
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager,
-        $navigation
+        protected FormServiceManager $formServiceManager,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->formServiceManager = $formServiceManager;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -71,6 +68,5 @@ class InterimController extends AbstractInterimController implements VariationCo
             $scriptFactory,
             $tableFactory
         );
-        $this->navigation = $navigation;
     }
 }

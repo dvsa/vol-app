@@ -13,15 +13,12 @@ class ConfirmItem extends AbstractParameterProvider
      */
     private $paramNames;
 
-    private $multi;
-
     /**
      * @param $paramNames
      */
-    public function __construct($paramNames, $multi = false)
+    public function __construct($paramNames, private $multi = false)
     {
         $this->paramNames = (array) $paramNames;
-        $this->multi = $multi;
     }
 
     /**

@@ -70,7 +70,6 @@ class LicenceStatusMarker extends AbstractMarker
     /**
      * Get the active LicenceStatusRule data
      *
-     * @param array $licence
      *
      * @return array|boolean
      */

@@ -25,14 +25,13 @@ class AbstractHistoryController extends AbstractInternalController implements Le
     protected $mapperClass = Mapper::class;
     protected $editContentTitle = 'Action';
     protected $editViewTemplate = 'sections/processing/pages/event-history-popup';
-    protected TableFactory $tableFactory;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        TableFactory $tableFactory
+        protected TableFactory $tableFactory
     ) {
         parent::__construct(
             $translationHelper,
@@ -40,7 +39,6 @@ class AbstractHistoryController extends AbstractInternalController implements Le
             $flashMessenger,
             $navigation
         );
-        $this->tableFactory = $tableFactory;
     }
     /**
      * Get left view

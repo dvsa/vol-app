@@ -19,10 +19,6 @@ use LmcRbacMvc\Service\AuthorizationService;
 abstract class AbstractDeclarationsInternalController extends AbstractController implements
     ApplicationControllerInterface
 {
-    protected FormServiceManager $formServiceManager;
-    protected TranslationHelperService $translationHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -33,14 +29,10 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormServiceManager $formServiceManager,
-        TranslationHelperService $translationHelper,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected FormServiceManager $formServiceManager,
+        protected TranslationHelperService $translationHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->formServiceManager = $formServiceManager;
-        $this->translationHelper = $translationHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

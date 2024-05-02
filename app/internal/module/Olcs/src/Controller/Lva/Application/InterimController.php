@@ -35,9 +35,6 @@ class InterimController extends AbstractInterimController implements Application
     protected string $location = 'internal';
     protected $updateInterimCommand = UpdateInterim::class;
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,12 +55,10 @@ class InterimController extends AbstractInterimController implements Application
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

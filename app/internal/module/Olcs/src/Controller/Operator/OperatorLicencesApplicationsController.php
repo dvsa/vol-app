@@ -17,15 +17,13 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
     OperatorControllerInterface,
     LeftViewProvider
 {
-    protected ApplicationStatus $operAppStatusService;
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        ApplicationStatus $operAppStatusService
+        protected ApplicationStatus $operAppStatusService
     ) {
-        $this->operAppStatusService = $operAppStatusService;
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
     /**

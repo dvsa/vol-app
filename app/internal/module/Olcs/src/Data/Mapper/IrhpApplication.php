@@ -13,19 +13,14 @@ use Laminas\Form\FormInterface;
  */
 class IrhpApplication implements MapperInterface
 {
-    /** @var ApplicationStepsPostDataTransformer */
-    private $applicationStepsPostDataTransformer;
-
     /**
      * Create service instance
      *
-     * @param ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
      *
      * @return IrhpApplication
      */
-    public function __construct(ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer)
+    public function __construct(private ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer)
     {
-        $this->applicationStepsPostDataTransformer = $applicationStepsPostDataTransformer;
     }
 
     /**
@@ -80,9 +75,7 @@ class IrhpApplication implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
      * @param array $applicationSteps|null
-     *
      * @return array
      */
     public function mapFromForm(array $data, array $applicationSteps = null)
@@ -141,8 +134,6 @@ class IrhpApplication implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array $errors
      * @return array
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
@@ -154,7 +145,6 @@ class IrhpApplication implements MapperInterface
     /**
      * Map the list of open windows/stocks/countries into right format for NoOfPermits form generation method
      *
-     * @param array $irhpWindows
      * @param int $permitTypeId
      * @return array
      */

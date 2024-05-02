@@ -41,12 +41,8 @@ class OperatorController extends AbstractController implements OperatorControlle
      * @var string
      */
     protected $section;
-
-    protected DateHelperService $dateHelper;
     protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected Licence $licenceDataService;
     protected QueryService $queryService;
     protected Navigation $navigation;
 
@@ -55,20 +51,17 @@ class OperatorController extends AbstractController implements OperatorControlle
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        DateHelperService $dateHelper,
+        protected DateHelperService $dateHelper,
         AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService,
+        protected CommandService $commandService,
         FlashMessengerHelperService $flashMessengerHelper,
-        Licence $licenceDataService,
+        protected Licence $licenceDataService,
         QueryService $queryService,
         Navigation $navigation
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->dateHelper = $dateHelper;
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->licenceDataService = $licenceDataService;
         $this->queryService = $queryService;
         $this->navigation = $navigation;
     }

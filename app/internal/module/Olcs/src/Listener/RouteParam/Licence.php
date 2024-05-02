@@ -79,8 +79,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
 
     /**
-     * @param Surrender $surrender
-     *
      * @return $this
      */
     public function setSurrenderService(Surrender $surrender)
@@ -207,11 +205,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
                 'Unable to get getUnreadConversationCountForLicence as non-OK response from UnreadCountByLicenceAndRoles query; defaulting to E',
                 [
                     'query' => [
-                        'class' => get_class($query),
+                        'class' => $query::class,
                         'data' => $query->getArrayCopy(),
                     ],
                     'exception' => [
-                        'class' => get_class($e),
+                        'class' => $e::class,
                         'message' => $e->getMessage(),
                         'trace' => $e->getTraceAsString(),
                     ],
@@ -581,7 +579,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
             try {
                 $surrender = $this->getSurrenderService()->fetchSurrenderData($licence['id']);
-            } catch (DataServiceException $responseException) {
+            } catch (DataServiceException) {
                 //unable to get data fail gracefully
                 return false;
             }

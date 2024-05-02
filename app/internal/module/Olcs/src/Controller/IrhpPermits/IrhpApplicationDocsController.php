@@ -25,14 +25,13 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
 
     protected DocumentSubCategory $docSubCategoryDataService;
     protected TranslationHelperService $translationHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         DocumentSubCategory $docSubCategoryDataService,
         TranslationHelperService $translationHelper
     ) {
@@ -44,7 +43,6 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
         );
         $this->docSubCategoryDataService = $docSubCategoryDataService;
         $this->translationHelper = $translationHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**

@@ -35,10 +35,7 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -60,13 +57,11 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
+        protected RestrictionHelperService $restrictionHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

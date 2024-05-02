@@ -21,7 +21,6 @@ interface BuilderInterface
     public function buildViewFromTemplate($template);
 
     /**
-     * @param ViewModel $view
      * @return ViewModel
      */
     public function buildView(ViewModel $view);

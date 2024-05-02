@@ -17,19 +17,12 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class ApplicationOperatingCentres extends AbstractOperatingCentres
 {
-    protected AuthorizationService $authService;
-    protected $tableBuilder;
-    protected FormServiceManager $formServiceLocator;
-
     public function __construct(
         FormHelperService $formHelper,
-        AuthorizationService $authService,
-        $tableBuilder,
-        FormServiceManager $formServiceLocator
+        protected AuthorizationService $authService,
+        protected $tableBuilder,
+        protected FormServiceManager $formServiceLocator
     ) {
-        $this->authService = $authService;
-        $this->tableBuilder = $tableBuilder;
-        $this->formServiceLocator = $formServiceLocator;
         parent::__construct($formHelper);
     }
 

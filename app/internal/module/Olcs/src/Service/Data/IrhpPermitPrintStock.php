@@ -19,11 +19,6 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
     public const COUNTRY_ID_MOROCCO = 'MA';
 
     /**
-     * @var TranslationHelperService
-     */
-    private $translator;
-
-    /**
      * @var int
      */
     private $irhpPermitType;
@@ -37,16 +32,15 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
      * Create service instance
      *
      * @param AbstractDataServiceServices $abstractDataServiceServices
-     * @param TranslationHelperService $translationHelperService
+     * @param TranslationHelperService $translator
      *
      * @return IrhpPermitPrintStock
      */
     public function __construct(
         AbstractDataServiceServices $abstractDataServiceServices,
-        TranslationHelperService $translationHelperService
+        private TranslationHelperService $translator
     ) {
         parent::__construct($abstractDataServiceServices);
-        $this->translator = $translationHelperService;
     }
 
     /**
@@ -116,7 +110,6 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
     /**
      * Generate a label for an item in the returned data
      *
-     * @param array $datum
      *
      * @return string
      */

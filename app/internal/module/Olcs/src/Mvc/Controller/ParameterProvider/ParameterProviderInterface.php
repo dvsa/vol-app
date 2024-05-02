@@ -11,7 +11,6 @@ use Laminas\Mvc\Controller\Plugin\Params;
 interface ParameterProviderInterface
 {
     /**
-     * @param Params $params
      * @return void
      */
     public function setParams(Params $params);

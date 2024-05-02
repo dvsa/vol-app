@@ -112,16 +112,14 @@ class PiController extends AbstractInternalController implements CaseControllerI
     protected TranslationHelperService $translationHelper;
     protected FormHelperService $formHelper;
     protected Navigation $navigation;
-    protected ScriptFactory $scriptService;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
-        ScriptFactory $scriptService
+        protected ScriptFactory $scriptService
     ) {
-        $this->scriptService = $scriptService;
         parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
 

@@ -31,8 +31,6 @@ class SubmitController extends AbstractSubmitController implements VariationCont
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected FormServiceManager $formServiceManager;
-    protected $navigation;
 
 
     /**
@@ -52,11 +50,10 @@ class SubmitController extends AbstractSubmitController implements VariationCont
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager,
-        $navigation
+        protected FormServiceManager $formServiceManager,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->formServiceManager = $formServiceManager;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -65,6 +62,5 @@ class SubmitController extends AbstractSubmitController implements VariationCont
             $translationHelper,
             $formHelper
         );
-        $this->navigation = $navigation;
     }
 }

@@ -23,8 +23,6 @@ class VariationSchedule41Controller extends Schedule41Controller implements Appl
 
     protected StringHelperService $stringHelper;
 
-    protected $navigation;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
@@ -32,10 +30,9 @@ class VariationSchedule41Controller extends Schedule41Controller implements Appl
         TableFactory $tableFactory,
         FlashMessengerHelperService $flashMessengerHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $tableFactory, $flashMessengerHelper);
         $this->stringHelper = $stringHelper;
-        $this->navigation = $navigation;
     }
 }

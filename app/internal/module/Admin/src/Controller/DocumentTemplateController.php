@@ -59,20 +59,14 @@ class DocumentTemplateController extends AbstractInternalController implements L
         'editAction' => ['forms/document-template']
     ];
 
-    protected Scan $scannerAntiVirusService;
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        Scan $scannerAntiVirusService,
-        SubCategory $subCategoryDataService
+        protected Scan $scannerAntiVirusService,
+        protected SubCategory $subCategoryDataService
     ) {
-        $this->scannerAntiVirusService = $scannerAntiVirusService;
-        $this->subCategoryDataService = $subCategoryDataService;
-
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

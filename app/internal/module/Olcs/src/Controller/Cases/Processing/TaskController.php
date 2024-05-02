@@ -21,7 +21,6 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     }
 
     protected TreeRouteStack $router;
-    protected SubCategory $subCategoryDataService;
 
     protected string $helperClass;
 
@@ -31,7 +30,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService
+        protected SubCategory $subCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -40,7 +39,6 @@ class TaskController extends AbstractController implements CaseControllerInterfa
             $viewHelperManager
         );
         $this->router = $router;
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

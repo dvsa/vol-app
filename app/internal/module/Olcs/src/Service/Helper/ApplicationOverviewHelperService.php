@@ -23,8 +23,6 @@ class ApplicationOverviewHelperService
     /**
      * Create service instance
      *
-     * @param LicenceOverviewHelperService $licenceOverviewHelperService
-     * @param UrlHelperService $urlHelperService
      *
      * @return ApplicationOverviewHelperService
      */
@@ -103,8 +101,6 @@ class ApplicationOverviewHelperService
     /**
      * Gets authorisation view data appropriate to the specified application and licence data
      *
-     * @param array $application
-     * @param array $licence
      *
      * @return array
      */

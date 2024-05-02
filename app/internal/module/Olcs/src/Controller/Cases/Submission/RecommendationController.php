@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
 use Laminas\Form\FormInterface;
 use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
@@ -104,7 +105,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Index
      *
-     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -114,7 +115,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Details
      *
-     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
+     * @return ViewModel
      */
     public function detailsAction()
     {
@@ -124,7 +125,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Delete
      *
-     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
+     * @return ViewModel
      */
     public function deleteAction()
     {

@@ -15,16 +15,13 @@ use Olcs\Data\Mapper\Continuation as ContinuationMapper;
 
 class ContinuationController extends AbstractController
 {
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected LessThan $lessThanValidator;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
-        LessThan $lessThanValidator
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected LessThan $lessThanValidator
     ) {
         parent::__construct(
             $scriptFactory,
@@ -32,8 +29,6 @@ class ContinuationController extends AbstractController
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->lessThanValidator = $lessThanValidator;
     }
 
     /**

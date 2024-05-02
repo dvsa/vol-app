@@ -13,8 +13,6 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 abstract class AbstractPublishController extends \Common\Controller\Lva\AbstractController
 {
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation    $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -23,10 +21,8 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

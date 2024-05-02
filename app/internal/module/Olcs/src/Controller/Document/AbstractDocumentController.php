@@ -71,17 +71,14 @@ abstract class AbstractDocumentController extends AbstractController
 
     private $caseData;
 
-    protected array $config;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        array $config
+        protected array $config
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->config = $config;
     }
 
     /**
@@ -95,16 +92,12 @@ abstract class AbstractDocumentController extends AbstractController
      */
     public function getRouteParamKeyForType($type)
     {
-        switch ($type) {
-            case 'busReg':
-                return 'busRegId';
-            case 'irfoOrganisation':
-                return 'organisation';
-            case 'irhpApplication':
-                return 'irhpAppId';
-            default:
-                return $type;
-        }
+        return match ($type) {
+            'busReg' => 'busRegId',
+            'irfoOrganisation' => 'organisation',
+            'irhpApplication' => 'irhpAppId',
+            default => $type,
+        };
     }
 
     /**
@@ -137,7 +130,6 @@ abstract class AbstractDocumentController extends AbstractController
     /**
      * Closes a task by id.
      *
-     * @param  int $taskId
      * @return Response
      */
     protected function closeTask(int $taskId): Response

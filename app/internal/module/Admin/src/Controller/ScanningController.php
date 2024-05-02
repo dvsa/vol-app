@@ -20,24 +20,8 @@ class ScanningController extends LaminasAbstractActionController
     public const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
     public const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected FormHelperService $formHelper;
-    protected ScannerSubCategory $scannerSubCategoryDataService;
-    protected SubCategoryDescription $subCategoryDescriptionDataService;
-    protected ScriptFactory $scriptFactory;
-
-    public function __construct(
-        FlashMessengerHelperService $flashMessengerHelper,
-        FormHelperService $formHelper,
-        ScannerSubCategory $scannerSubCategoryDataService,
-        SubCategoryDescription $subCategoryDescriptionDataService,
-        ScriptFactory $scriptFactory
-    ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formHelper = $formHelper;
-        $this->scannerSubCategoryDataService = $scannerSubCategoryDataService;
-        $this->subCategoryDescriptionDataService = $subCategoryDescriptionDataService;
-        $this->scriptFactory = $scriptFactory;
+    public function __construct(protected FlashMessengerHelperService $flashMessengerHelper, protected FormHelperService $formHelper, protected ScannerSubCategory $scannerSubCategoryDataService, protected SubCategoryDescription $subCategoryDescriptionDataService, protected ScriptFactory $scriptFactory)
+    {
     }
 
     /**

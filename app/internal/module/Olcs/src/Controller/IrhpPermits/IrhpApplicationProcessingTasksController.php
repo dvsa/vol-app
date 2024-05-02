@@ -21,17 +21,14 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService
+        protected SubCategory $subCategoryDataService
     ) {
-        $this->subCategoryDataService = $subCategoryDataService;
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $router);
     }
 

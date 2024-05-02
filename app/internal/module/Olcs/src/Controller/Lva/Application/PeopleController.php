@@ -38,9 +38,6 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -66,13 +63,11 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
         ApplicationPeopleAdapter $lvaAdapter,
-        RestrictionHelperService $restrictionHelper,
+        protected RestrictionHelperService $restrictionHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

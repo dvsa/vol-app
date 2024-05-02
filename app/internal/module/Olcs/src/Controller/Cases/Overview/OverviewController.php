@@ -268,17 +268,11 @@ class OverviewController extends AbstractInternalController implements
      */
     public function alterFormForEdit($form, $initialData)
     {
-        switch ($initialData['fields']['caseType']) {
-            case 'case_t_app':
-                $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-                break;
-            case 'case_t_tm':
-                $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-                break;
-            default:
-                $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
-                break;
-        }
+        $unwantedOptions = match ($initialData['fields']['caseType']) {
+            'case_t_app' => ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''],
+            'case_t_tm' => ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''],
+            default => ['case_t_tm' => '', 'case_t_app' => ''],
+        };
 
         $options = $form->get('fields')
             ->get('caseType')

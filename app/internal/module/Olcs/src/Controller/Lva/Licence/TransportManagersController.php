@@ -41,7 +41,6 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected $lva = 'licence';
     protected string $location = 'internal';
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -69,7 +68,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         AnnotationBuilder $transferAnnotationBuilder,
         TransportManagerHelperService $transportManagerHelper,
         LicenceTransportManagerAdapter $lvaAdapter,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -84,7 +83,6 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
             $transportManagerHelper,
             $lvaAdapter
         );
-        $this->navigation = $navigation;
     }
 
     /**

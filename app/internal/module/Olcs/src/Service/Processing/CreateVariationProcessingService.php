@@ -33,10 +33,6 @@ class CreateVariationProcessingService
     /**
      * Create service instance
      *
-     * @param FormHelperService $formHelper
-     * @param AnnotationBuilder $annotationBuilder
-     * @param CommandService $commandService
-     * @param DateHelperService $dateHelper
      *
      * @return CreateVariationProcessingService
      */

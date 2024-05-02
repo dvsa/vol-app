@@ -23,10 +23,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
     use Lva\Traits\LicenceControllerTrait;
     use CheckForCrudAction;
 
-    protected OppositionHelperService $oppositionHelper;
-    protected ComplaintsHelperService $complaintsHelper;
-
-    protected $navigation;
     protected $lva;
 
     protected FlashMessengerHelperService $flashMessengerHelper;
@@ -36,15 +32,12 @@ class LicenceController extends AbstractController implements LicenceControllerI
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        OppositionHelperService $oppositionHelper,
-        ComplaintsHelperService $complaintsHelper,
-        $navigation,
+        protected OppositionHelperService $oppositionHelper,
+        protected ComplaintsHelperService $complaintsHelper,
+        protected $navigation,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->oppositionHelper = $oppositionHelper;
-        $this->complaintsHelper = $complaintsHelper;
-        $this->navigation = $navigation;
         $this->flashMessengerHelper = $flashMessengerHelper;
     }
 

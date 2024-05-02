@@ -30,8 +30,6 @@ class ReviveApplicationController extends AbstractReviveApplicationController
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected FormServiceManager $formServiceManager;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -50,11 +48,10 @@ class ReviveApplicationController extends AbstractReviveApplicationController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager,
-        $navigation
+        protected FormServiceManager $formServiceManager,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->formServiceManager = $formServiceManager;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -63,6 +60,5 @@ class ReviveApplicationController extends AbstractReviveApplicationController
             $translationHelper,
             $formHelper
         );
-        $this->navigation = $navigation;
     }
 }

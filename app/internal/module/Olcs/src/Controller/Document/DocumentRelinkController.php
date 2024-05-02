@@ -32,17 +32,14 @@ class DocumentRelinkController extends AbstractDocumentController
         'transportManager' => 'Transport manager ID'
     ];
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         array $config,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TranslationHelperService $translationHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -51,8 +48,6 @@ class DocumentRelinkController extends AbstractDocumentController
             $viewHelperManager,
             $config
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->translationHelper = $translationHelper;
     }
 
     /**

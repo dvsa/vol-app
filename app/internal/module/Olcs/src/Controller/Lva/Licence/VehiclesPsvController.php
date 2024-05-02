@@ -29,8 +29,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -57,7 +55,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -72,6 +70,5 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
             $translatorHelper,
             $guidanceHelper
         );
-        $this->navigation = $navigation;
     }
 }

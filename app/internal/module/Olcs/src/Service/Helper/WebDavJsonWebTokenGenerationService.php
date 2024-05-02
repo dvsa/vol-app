@@ -16,13 +16,11 @@ class WebDavJsonWebTokenGenerationService
 
     private int $defaultLifetimeSeconds;
     private string $privateKey;
-    private string $urlPattern;
 
-    public function __construct(string $privateKey, int $defaultLifetimeSeconds, string $urlPattern)
+    public function __construct(string $privateKey, int $defaultLifetimeSeconds, private string $urlPattern)
     {
         $this->defaultLifetimeSeconds = $this->parseDefaultLifetimeSeconds($defaultLifetimeSeconds);
         $this->privateKey = $this->parsePrivateKey($privateKey);
-        $this->urlPattern = $urlPattern;
     }
 
     public function generateToken(string $subject, string $document, int $lifetimeSeconds = null): string

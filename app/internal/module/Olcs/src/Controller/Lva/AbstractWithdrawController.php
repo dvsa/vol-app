@@ -20,8 +20,6 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
     protected $successMessageKey =  'application-withdrawn-successfully';
     protected $titleKey          =  'internal-application-withdraw-title';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -34,10 +32,8 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
         AuthorizationService $authService,
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

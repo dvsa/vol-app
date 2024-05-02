@@ -30,16 +30,13 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
 
     protected $defaultData = ['stockId' => 'route'];
 
-    protected ScriptFactory $scriptFactory;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        ScriptFactory $scriptFactory
+        protected ScriptFactory $scriptFactory
     ) {
-        $this->scriptFactory = $scriptFactory;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

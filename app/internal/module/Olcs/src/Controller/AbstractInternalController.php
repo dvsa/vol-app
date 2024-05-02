@@ -261,25 +261,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
      */
     protected $listData;
 
-    protected TranslationHelperService $translationHelperService;
-
-    protected FormHelperService $formHelperService;
-
-    protected FlashMessengerHelperService $flashMessengerHelperService;
-
-    protected Navigation $navigation;
-
-    public function __construct(
-        TranslationHelperService $translationHelper,
-        FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessenger,
-        Navigation $navigation
-    ) {
-
-        $this->translationHelperService = $translationHelper;
-        $this->formHelperService = $formHelper;
-        $this->flashMessengerHelperService = $flashMessenger;
-        $this->navigation = $navigation;
+    public function __construct(protected TranslationHelperService $translationHelperService, protected FormHelperService $formHelperService, protected FlashMessengerHelperService $flashMessengerHelperService, protected Navigation $navigation)
+    {
     }
 
     /**
@@ -526,7 +509,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
             } elseif ($response->isClientError() || $response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             // This is to force compatability with how this Abstract has been used
             return $this->notFoundAction();
         }
@@ -725,7 +708,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
      * Map from form
      *
      * @param string $mapperClass
-     * @param array  $data
      *
      * @return array
      */
@@ -1151,7 +1133,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     {
         $query = $this->getRequest()->getUri()->getQuery();
         $action = $table->getVariable('action');
-        if ($query && strpos('?', (string) $action) === false) {
+        if ($query && !str_contains('?', (string) $action)) {
             $action .= '?' . $query;
             $table->setVariable('action', $action);
         }

@@ -39,7 +39,6 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -71,7 +70,7 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         ResponseHelperService $responseHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -89,6 +88,5 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
             $goodsVehiclesVehicleMapper,
             $responseHelper
         );
-        $this->navigation = $navigation;
     }
 }

@@ -11,17 +11,8 @@ use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
  */
 class Table extends AbstractPlugin
 {
-    /**
-     * @var TableBuilder
-     */
-    private $tableBuilder;
-
-    /**
-     * @param TableBuilder $tableBuilder
-     */
-    public function __construct(TableBuilder $tableBuilder)
+    public function __construct(private TableBuilder $tableBuilder)
     {
-        $this->tableBuilder = $tableBuilder;
     }
 
     /**

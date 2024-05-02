@@ -83,7 +83,6 @@ class IrhpApplicationFurniture implements
     }
 
     /**
-     * @param Navigation $navigationService
      * @return $this
      */
     public function setNavigationService(Navigation $navigationService)
@@ -249,7 +248,6 @@ class IrhpApplicationFurniture implements
     }
 
     /**
-     * @param array $irhpApplication
      * @return string
      */
     private function getPageTitle(array $irhpApplication)
@@ -261,7 +259,6 @@ class IrhpApplicationFurniture implements
     }
 
     /**
-     * @param array $irhpApplication
      * @return string
      */
     private function getSubTitle(array $irhpApplication)

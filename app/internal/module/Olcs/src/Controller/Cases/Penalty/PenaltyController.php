@@ -56,14 +56,12 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         'indexAction' => ['table-actions']
     ];
 
-    protected TableFactory $tableFactory;
-
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        TableFactory $tableFactory
+        protected TableFactory $tableFactory
     ) {
         parent::__construct(
             $translationHelper,
@@ -71,7 +69,6 @@ class PenaltyController extends AbstractInternalController implements CaseContro
             $flashMessenger,
             $navigation
         );
-        $this->tableFactory = $tableFactory;
     }
 
     /**

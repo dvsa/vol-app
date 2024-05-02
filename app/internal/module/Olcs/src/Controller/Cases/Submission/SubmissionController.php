@@ -187,30 +187,20 @@ class SubmissionController extends AbstractInternalController implements Submiss
     protected FormHelperService $formHelperService;
     protected FlashMessengerHelperService $flashMessengerHelperService;
     protected Navigation $navigation;
-    protected UrlHelperService $urlHelper;
-    protected Submission $submissionDataService;
     protected FileUploadHelperService $uploadHelper;
-    protected array $configHelper;
-    protected ViewRenderer $viewRenderer;
-    private Permission $permissionService;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        UrlHelperService $urlHelper,
-        array $configHelper,
-        ViewRenderer $viewRenderer,
-        Submission $submissionDataService,
-        Permission $permissionService,
+        protected UrlHelperService $urlHelper,
+        protected array $configHelper,
+        protected ViewRenderer $viewRenderer,
+        protected Submission $submissionDataService,
+        private Permission $permissionService,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->urlHelper = $urlHelper;
-        $this->configHelper = $configHelper;
-        $this->viewRenderer = $viewRenderer;
-        $this->submissionDataService = $submissionDataService;
-        $this->permissionService = $permissionService;
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);

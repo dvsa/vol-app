@@ -38,18 +38,15 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
             FeatureToggle::MESSAGING
         ],
     ];
-    protected ScriptFactory $scriptFactory;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        ScriptFactory $scriptFactory
+        protected ScriptFactory $scriptFactory
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
-
-        $this->scriptFactory = $scriptFactory;
     }
 
     abstract protected function getConversationViewRoute(): string;

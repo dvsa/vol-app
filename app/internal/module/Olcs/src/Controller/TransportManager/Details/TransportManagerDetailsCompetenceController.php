@@ -76,9 +76,6 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected $deleteCommand = DeleteDto::class;
     protected $deleteParams = ['ids' => 'id'];
     protected $hasMultiDelete = true;
-    protected TransferAnnotationBuilder $transferAnnotationBuilder;
-    protected QueryService $queryService;
-    protected TransportManagerHelperService $transportMangerHelper;
     protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
@@ -86,14 +83,11 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        TransferAnnotationBuilder $transferAnnotationBuilder,
-        QueryService $queryService,
-        TransportManagerHelperService $transportMangerHelper,
+        protected TransferAnnotationBuilder $transferAnnotationBuilder,
+        protected QueryService $queryService,
+        protected TransportManagerHelperService $transportMangerHelper,
         FileUploadHelperService $uploadHelper
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->queryService = $queryService;
-        $this->transportMangerHelper = $transportMangerHelper;
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);

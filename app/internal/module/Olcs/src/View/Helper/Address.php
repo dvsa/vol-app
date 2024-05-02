@@ -11,11 +11,8 @@ use Common\Service\Table\Formatter\Address as AddressFormatter;
  */
 class Address extends AbstractHelper
 {
-    private AddressFormatter $addressFormatter;
-
-    public function __construct(AddressFormatter $addressFormatter)
+    public function __construct(private AddressFormatter $addressFormatter)
     {
-        $this->addressFormatter = $addressFormatter;
     }
     /**
      * @param $address

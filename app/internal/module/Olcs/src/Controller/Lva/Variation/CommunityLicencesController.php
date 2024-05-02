@@ -35,7 +35,6 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -59,7 +58,7 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -73,6 +72,5 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
             $transferAnnotationBuilder,
             $commandService
         );
-        $this->navigation = $navigation;
     }
 }

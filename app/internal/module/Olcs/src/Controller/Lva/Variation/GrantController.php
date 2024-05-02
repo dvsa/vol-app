@@ -34,7 +34,6 @@ class GrantController extends AbstractGrantController implements VariationContro
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -54,7 +53,7 @@ class GrantController extends AbstractGrantController implements VariationContro
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -66,6 +65,5 @@ class GrantController extends AbstractGrantController implements VariationContro
             $scriptFactory,
             $translationHelper
         );
-        $this->navigation = $navigation;
     }
 }

@@ -11,17 +11,8 @@ use Laminas\View\Helper\Placeholder as ViewPlaceholder;
  */
 class Placeholder extends AbstractPlugin
 {
-    /**
-     * @var ViewPlaceholder
-     */
-    private $placeholder;
-
-    /**
-     * @param ViewPlaceholder $placeholder
-     */
-    public function __construct(ViewPlaceholder $placeholder)
+    public function __construct(private ViewPlaceholder $placeholder)
     {
-        $this->placeholder = $placeholder;
     }
 
     /**

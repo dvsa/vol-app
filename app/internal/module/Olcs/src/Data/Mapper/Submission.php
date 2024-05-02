@@ -56,7 +56,6 @@ class Submission implements MapperInterface
      * 'fields' contains an array called submissionSections which must be mapped as two individual values against the
      * 'fields' array in order to preset the type and sections values. These two fields are in fact one element.
      *
-     * @param array $data
      *
      * @return array
      */
@@ -75,8 +74,6 @@ class Submission implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array         $errors
      *
      * @return array
      */

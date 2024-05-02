@@ -76,7 +76,7 @@ class HearingAppealController extends AbstractInternalController implements Case
                     ]
                 )
             );
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $this->placeholder()->setPlaceholder('no-appeal', true);
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
         }

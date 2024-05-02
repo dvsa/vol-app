@@ -30,29 +30,23 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     protected $section = 'grace-periods';
 
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TableFactory $tableFactory;
     protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
-    protected $navigation;
 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FlashMessengerHelperService $flashMessengerHelper,
-        TableFactory $tableFactory,
+        protected TableFactory $tableFactory,
         FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
-        $navigation
+        protected ScriptFactory $scriptFactory,
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
             $authService
         );
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->navigation = $navigation;
     }
 
     /**

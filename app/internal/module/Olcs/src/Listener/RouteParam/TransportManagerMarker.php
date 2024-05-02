@@ -133,7 +133,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         );
 
         $routeName = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
-        if (substr($routeName, 0, 13) == 'lva-variation') {
+        if (str_starts_with($routeName, 'lva-variation')) {
             $this->addTransportManagerFromLicenceData($routeParam->getValue());
             $this->getMarkerService()->addData('page', 'transportManagerVariation');
         } else {

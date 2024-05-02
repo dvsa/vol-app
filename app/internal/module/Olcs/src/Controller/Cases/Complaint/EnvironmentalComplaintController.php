@@ -12,7 +12,6 @@ use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\CreateEnvironmentalComplai
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\DeleteEnvironmentalComplaint as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\UpdateEnvironmentalComplaint as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaint as ItemDto;
-use Laminas\View\Model\ConsoleModel;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -112,7 +111,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
     /**
      * Index Action
      *
-     * @return ConsoleModel|ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -122,7 +121,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
     /**
      * details action
      *
-     * @return ConsoleModel|ViewModel
+     * @return ViewModel
      */
     public function detailsAction()
     {

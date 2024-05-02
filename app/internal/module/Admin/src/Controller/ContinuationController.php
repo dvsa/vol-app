@@ -35,25 +35,17 @@ class ContinuationController extends AbstractController
     protected $detailRoute = 'admin-dashboard/admin-continuation/detail';
 
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected ScriptFactory $scriptFactory;
-    protected TranslationHelperService $translationHelper;
-    protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
 
     public function __construct(
         Placeholder $placeholder,
         FlashMessengerHelperService $flashMessengerHelper,
-        ScriptFactory $scriptFactory,
-        TranslationHelperService $translationHelper,
-        TableFactory $tableFactory,
-        FormHelperService $formHelper
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected TableFactory $tableFactory,
+        protected FormHelperService $formHelper
     ) {
         parent::__construct($placeholder);
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->translationHelper = $translationHelper;
-        $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
     }
 
     /**

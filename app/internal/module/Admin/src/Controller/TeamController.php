@@ -105,26 +105,16 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         ]
     ];
 
-    protected HelperPluginManager $viewHelperPluginManager;
-    protected SubCategory $subCategory;
-    protected TableFactory $tableFactory;
-    protected UserWithName $userWithName;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        HelperPluginManager $viewHelperPluginManager,
-        TableFactory $tableFactory,
-        SubCategory $subCategory,
-        UserWithName $userWithName
+        protected HelperPluginManager $viewHelperPluginManager,
+        protected TableFactory $tableFactory,
+        protected SubCategory $subCategory,
+        protected UserWithName $userWithName
     ) {
-        $this->viewHelperPluginManager = $viewHelperPluginManager;
-        $this->subCategory = $subCategory;
-        $this->tableFactory = $tableFactory;
-        $this->userWithName = $userWithName;
-
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

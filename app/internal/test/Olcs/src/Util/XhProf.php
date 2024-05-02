@@ -21,8 +21,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
 
     /**
      * Constructor.
-     *
-     * @param array $options
      */
     public function __construct(array $options = [])
     {
@@ -51,7 +49,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * An error occurred.
      *
-     * @param PHPUnit_Framework_Test $test
      * @param Exception              $e
      * @param float                  $time
      */
@@ -62,8 +59,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * A failure occurred.
      *
-     * @param PHPUnit_Framework_Test                 $test
-     * @param PHPUnit_Framework_AssertionFailedError $e
      * @param float                                  $time
      */
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
@@ -73,8 +68,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * Incomplete test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
      * @param float                  $time
      */
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
@@ -84,8 +77,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * Risky test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
      * @param float                  $time
      * @since  Method available since Release 4.0.0
      */
@@ -96,8 +87,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * Skipped test.
      *
-     * @param PHPUnit_Framework_Test $test
-     * @param Exception              $e
      * @param float                  $time
      */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
@@ -106,8 +95,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
 
     /**
      * A test started.
-     *
-     * @param PHPUnit_Framework_Test $test
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {
@@ -128,7 +115,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * A test ended.
      *
-     * @param PHPUnit_Framework_Test $test
      * @param float                  $time
      */
     public function endTest(\PHPUnit_Framework_Test $test, $time)
@@ -143,7 +129,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
             $run = $runs->save_run($data, $this->options['appNamespace']);
 
             $this->runs[$execTime][] = [
-                'class' => get_class($test),
+                'class' => $test::class,
                 'test' => $test->getName(),
                 'url' => $this->options['xhprofWeb'] . '?run=' . $run . '&source=' . $this->options['appNamespace']
             ];
@@ -152,8 +138,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
 
     /**
      * A test suite started.
-     *
-     * @param PHPUnit_Framework_TestSuite $suite
      */
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {
@@ -162,8 +146,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
 
     /**
      * A test suite ended.
-     *
-     * @param PHPUnit_Framework_TestSuite $suite
      */
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
     {

@@ -26,7 +26,6 @@ class Submission
     /**
      * Create service instance
      *
-     * @param RefData $refDataService
      *
      * @return Submission
      */

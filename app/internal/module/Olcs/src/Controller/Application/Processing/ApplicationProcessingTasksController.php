@@ -26,8 +26,6 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -38,7 +36,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService,
+        protected SubCategory $subCategoryDataService,
         $navigation
     ) {
         parent::__construct(
@@ -53,7 +51,6 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
             $router,
             $navigation
         );
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
 

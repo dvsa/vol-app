@@ -13,9 +13,6 @@ class RevocationsSlaTest extends MockeryTestCase
      * testMapFromResult
      *
      * @dataProvider mapFromFormDataProvider
-     *
-     * @param array $input
-     * @param array $expected
      */
     public function testMapFromForm(array $input, array $expected)
     {
@@ -85,7 +82,6 @@ class RevocationsSlaTest extends MockeryTestCase
      *
      * @dataProvider mapFromResultDataProvider
      *
-     * @param array $input
      * @param array $expected
      */
     public function testMapFromResult(array $input, $expected)

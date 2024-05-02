@@ -20,7 +20,6 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     use GenericReceipt;
     use IrhpFeesTrait;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
     protected UrlHelperService $urlHelper;
     protected IdentityProviderInterface $identityProvider;
     protected TranslationHelperService $translationHelper;
@@ -31,7 +30,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         UrlHelperService $urlHelper,
         IdentityProviderInterface $identityProvider,
         TranslationHelperService $translationHelper,
@@ -43,7 +42,6 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
         $this->urlHelper = $urlHelper;
         $this->identityProvider = $identityProvider;
         $this->translationHelper = $translationHelper;

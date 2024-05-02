@@ -164,25 +164,16 @@ class IrhpApplicationController extends AbstractInternalController implements
         'addAction' => ['forms/irhp-bilateral-application'],
         'editAction' => ['forms/irhp-application', 'forms/irhp-bilateral-application'],
     ];
-    protected FieldsetPopulator $QaFieldsetPopulator;
-    protected BilateralApplicationValidationModifierMapper $bilateralApplicationValidationModifierMapper;
-    protected NoOfPermits $noOfPermitsMapper;
-    protected IrhpApplicationMapper $irhpApplicationMapper;
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        FieldsetPopulator $QaFieldsetPopulator,
-        BilateralApplicationValidationModifierMapper $bilateralApplicationValidationModifierMapper,
-        NoOfPermits $noOfPermitsMapper,
-        IrhpApplicationMapper $irhpApplicationMapper
+        protected FieldsetPopulator $QaFieldsetPopulator,
+        protected BilateralApplicationValidationModifierMapper $bilateralApplicationValidationModifierMapper,
+        protected NoOfPermits $noOfPermitsMapper,
+        protected IrhpApplicationMapper $irhpApplicationMapper
     ) {
-        $this->QaFieldsetPopulator = $QaFieldsetPopulator;
-        $this->bilateralApplicationValidationModifierMapper = $bilateralApplicationValidationModifierMapper;
-        $this->noOfPermitsMapper = $noOfPermitsMapper;
-        $this->irhpApplicationMapper = $irhpApplicationMapper;
-
         parent::__construct($translationHelper, $formHelperService, $flashMessenger, $navigation);
     }
 
@@ -741,9 +732,6 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     /**
      * @param  int   $irhpApplicationId
-     * @param  Form  $form
-     * @param  array $formData
-     * @param  array $licence
      * @return mixed
      * @throws NotFoundException
      */
@@ -809,8 +797,6 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Perform query to obtain application steps for given application ID and populate form.
      *
-     * @param  int  $irhpApplicationId
-     * @param  Form $form
      * @return mixed
      */
     protected function questionAnswerFormSetup(int $irhpApplicationId, Form $form)

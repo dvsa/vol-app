@@ -38,11 +38,6 @@ abstract class AbstractInterimController extends AbstractController
 
     protected $updateInterimCommand;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
-    protected TableFactory $tableFactory;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -54,16 +49,11 @@ abstract class AbstractInterimController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
-        TableFactory $tableFactory
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TableFactory $tableFactory
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->tableFactory = $tableFactory;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

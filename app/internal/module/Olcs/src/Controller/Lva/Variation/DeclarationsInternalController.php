@@ -23,7 +23,6 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -41,7 +40,7 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
         TranslationHelperService $translationHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -52,6 +51,5 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
             $translationHelper,
             $flashMessengerHelper
         );
-        $this->navigation = $navigation;
     }
 }

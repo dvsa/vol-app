@@ -17,8 +17,6 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -27,7 +25,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         $navigation,
-        SubCategory $subCategoryDataService
+        protected SubCategory $subCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -38,7 +36,6 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
             $translationHelper,
             $navigation
         );
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

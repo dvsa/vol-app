@@ -37,8 +37,6 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -65,7 +63,7 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
         AnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
         GenericBusinessTypeAdapter $lvaAdapter,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -80,6 +78,5 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
             $queryService,
             $lvaAdapter
         );
-        $this->navigation = $navigation;
     }
 }

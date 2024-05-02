@@ -38,18 +38,16 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
     protected FormHelperService $formHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         FormHelperService $formHelper
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -109,7 +107,6 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
     /**
      * Process form
      *
-     * @param array $data
      *
      * @return void
      */

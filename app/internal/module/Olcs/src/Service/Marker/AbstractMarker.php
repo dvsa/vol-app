@@ -43,8 +43,6 @@ abstract class AbstractMarker implements MarkerInterface
     }
 
     /**
-     * @param \Laminas\View\Helper\Partial $partialHelper
-     *
      * @return AbstractMarker
      */
     public function setPartialHelper(\Laminas\View\Helper\Partial $partialHelper)

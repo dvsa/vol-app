@@ -36,8 +36,6 @@ class SafetyController extends Lva\AbstractSafetyController implements LicenceCo
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -58,7 +56,7 @@ class SafetyController extends Lva\AbstractSafetyController implements LicenceCo
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -70,6 +68,5 @@ class SafetyController extends Lva\AbstractSafetyController implements LicenceCo
             $scriptFactory,
             $translationHelper
         );
-        $this->navigation = $navigation;
     }
 }

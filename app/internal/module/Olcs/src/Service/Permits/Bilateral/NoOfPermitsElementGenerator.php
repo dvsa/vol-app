@@ -21,8 +21,6 @@ class NoOfPermitsElementGenerator
     /**
      * Create service instance
      *
-     * @param TranslationHelperService $translator
-     * @param FormFactory $formFactory
      *
      * @return NoOfPermitsElementGenerator
      */
@@ -35,7 +33,6 @@ class NoOfPermitsElementGenerator
     /**
      * Return a Laminas text element corresponding to the provided field data
      *
-     * @param array $field
      *
      * @return BilateralNoOfPermitsElement
      */

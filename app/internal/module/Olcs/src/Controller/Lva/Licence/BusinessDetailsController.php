@@ -34,7 +34,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
 
     protected $lva = 'licence';
     protected string $location = 'internal';
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,7 +57,7 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         IdentityProviderInterface $identityProvider,
         TableFactory $tableFactory,
         FileUploadHelperService $fileUploadHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -71,6 +70,5 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
             $tableFactory,
             $fileUploadHelper
         );
-        $this->navigation = $navigation;
     }
 }

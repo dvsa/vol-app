@@ -19,19 +19,15 @@ class DocumentUploadController extends AbstractDocumentController
     public const ERR_UPLOAD_DEF = '4';
     public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected DocumentSubCategory $documentSubcategoryDataService;
-    protected Scan $avScanner;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         array $config,
-        FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategory $docSubcategoryDataService,
-        Scan $avScanner
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected DocumentSubCategory $documentSubcategoryDataService,
+        protected Scan $avScanner
     ) {
         parent::__construct(
             $scriptFactory,
@@ -40,9 +36,6 @@ class DocumentUploadController extends AbstractDocumentController
             $viewHelperManager,
             $config
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->documentSubcategoryDataService = $docSubcategoryDataService;
-        $this->avScanner = $avScanner;
     }
 
     /**

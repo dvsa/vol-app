@@ -20,8 +20,6 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
     protected $successMessageKey =  'application-refused-successfully';
     protected $titleKey          =  'internal-application-refuse-title';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -34,10 +32,8 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
         AuthorizationService $authService,
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService, $flashMessengerHelper, $translationHelper);
     }
 

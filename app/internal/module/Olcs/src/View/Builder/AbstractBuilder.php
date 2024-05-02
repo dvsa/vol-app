@@ -32,7 +32,6 @@ abstract class AbstractBuilder implements BuilderInterface
     }
 
     /**
-     * @param ViewModel $view
      * @return ViewModel
      */
     abstract protected function decorateView(ViewModel $view);

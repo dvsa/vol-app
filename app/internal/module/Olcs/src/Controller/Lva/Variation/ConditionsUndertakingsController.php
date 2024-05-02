@@ -28,7 +28,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -50,7 +49,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
         VariationConditionsUndertakingsAdapter $lvaAdapter,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -63,7 +62,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
             $tableFactory,
             $lvaAdapter
         );
-        $this->navigation = $navigation;
     }
 
     /**

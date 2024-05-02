@@ -12,7 +12,7 @@ class ControllerPluginManagerHelper
      */
     public function getMockPlugin($class)
     {
-        if (strpos($class, '\\') === false) {
+        if (!str_contains($class, '\\')) {
             $class = 'Laminas\Mvc\Controller\Plugin\\' . $class;
         }
 

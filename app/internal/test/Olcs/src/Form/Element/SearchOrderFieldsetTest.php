@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Form\Element;
 
 use Common\Service\Data\Search\Search as SearchDataService;
@@ -7,9 +9,6 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * SearchOrderFieldset Test
- */
 class SearchOrderFieldsetTest extends TestCase
 {
     public function testSearchAwareTraitByProxy()
@@ -36,11 +35,14 @@ class SearchOrderFieldsetTest extends TestCase
             ]
         ];
 
+        $index = 'index-name';
+        $options = ['index' => $index];
+
         $service = m::mock(SearchDataService::class);
-        $service->shouldReceive('setIndex')->once();
+        $service->expects('setIndex')->with($index);
         $service->shouldReceive('getOrderOptions')->withNoArgs()->once()->andReturn($orderOptions);
 
-        $sut = new SearchOrderFieldset();
+        $sut = new SearchOrderFieldset(null, $options);
         $sut->setSearchService($service);
         $sut->init();
 

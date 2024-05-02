@@ -65,7 +65,7 @@ class RenderMarkersTest extends TestCase
 
         $this->assertSame(
             '<div class="notice-container">HTML2</div>',
-            $this->sut->__invoke([get_class($mockMarker2)])
+            $this->sut->__invoke([$mockMarker2::class])
         );
     }
 }

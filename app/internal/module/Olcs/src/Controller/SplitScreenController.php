@@ -14,11 +14,8 @@ use Laminas\View\Model\ViewModel;
 
 class SplitScreenController extends AbstractActionController
 {
-    protected ScriptFactory $scriptFactory;
-
-    public function __construct(ScriptFactory $scriptFactory)
+    public function __construct(protected ScriptFactory $scriptFactory)
     {
-        $this->scriptFactory = $scriptFactory;
     }
 
     public function indexAction()

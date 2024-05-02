@@ -176,7 +176,6 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Alter form
      *
-     * @param  FormInterface $form
      * @param  string        $type
      * @return FormInterface
      */
@@ -233,7 +232,6 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Process form and redirect back to list
      *
-     * @param  array $data
      * @return Response
      */
     protected function processForm(array $data)

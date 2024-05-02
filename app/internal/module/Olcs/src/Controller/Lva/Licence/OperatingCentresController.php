@@ -35,8 +35,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -59,7 +57,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         FileUploadHelperService $uploadHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -72,6 +70,5 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
             $variationLvaService,
             $uploadHelper
         );
-        $this->navigation = $navigation;
     }
 }

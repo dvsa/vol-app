@@ -76,9 +76,6 @@ class LoginControllerFactoryTest extends MockeryTestCase
         $this->sut = new LoginControllerFactory();
     }
 
-    /**
-     * @param ServiceManager $serviceManager
-     */
     protected function setUpDefaultServices(ServiceManager $serviceManager)
     {
         $serviceManager->setService(InternalCommandAdapter::class, $this->createMock(InternalCommandAdapter::class));

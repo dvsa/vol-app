@@ -29,8 +29,6 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -51,7 +49,7 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
         StringHelperService $stringHelper,
         TableFactory $tableFactory,
         FormHelperService $formHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -63,6 +61,5 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
             $tableFactory,
             $formHelper
         );
-        $this->navigation = $navigation;
     }
 }

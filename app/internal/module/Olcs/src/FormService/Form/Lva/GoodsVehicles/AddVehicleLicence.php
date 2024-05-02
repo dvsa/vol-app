@@ -11,11 +11,8 @@ use Common\Service\Helper\FormHelperService;
  */
 class AddVehicleLicence
 {
-    protected FormHelperService $formHelper;
-
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(protected FormHelperService $formHelper)
     {
-        $this->formHelper = $formHelper;
     }
 
     public function getForm($request, $params = [])

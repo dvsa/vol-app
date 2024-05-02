@@ -34,7 +34,6 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,7 +57,7 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
         ScriptFactory $scriptFactory,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -72,6 +71,5 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
             $guidanceHelper,
             $scriptFactory
         );
-        $this->navigation = $navigation;
     }
 }

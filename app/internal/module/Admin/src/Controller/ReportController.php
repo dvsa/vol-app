@@ -29,18 +29,16 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
     protected FormHelperService $formHelper;
-    protected Placeholder $placeholder;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         FormHelperService $formHelper,
-        Placeholder $placeholder
+        protected Placeholder $placeholder
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
-        $this->placeholder = $placeholder;
     }
 
     /**

@@ -24,18 +24,15 @@ abstract class AbstractCloseConversationController extends AbstractController im
     protected array $toggleConfig = [
         'default' => [FeatureToggle::MESSAGING],
     ];
-    private FlashMessengerHelperService $flashMessengerHelperService;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelperService
+        private FlashMessengerHelperService $flashMessengerHelperService
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-
-        $this->flashMessengerHelperService = $flashMessengerHelperService;
     }
 
     abstract protected function getRedirect(): Response;

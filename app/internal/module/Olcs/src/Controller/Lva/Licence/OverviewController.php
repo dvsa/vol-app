@@ -34,11 +34,7 @@ class OverviewController extends AbstractController implements LicenceController
 
     protected $lva = 'licence';
     protected string $location = 'internal';
-
-    protected LicenceOverviewHelperService $licenceOverviewHelper;
     protected FormHelperService $formHelper;
-    protected $navigation;
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -51,15 +47,12 @@ class OverviewController extends AbstractController implements LicenceController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        LicenceOverviewHelperService $licenceOverviewHelper,
+        protected LicenceOverviewHelperService $licenceOverviewHelper,
         FormHelperService $formHelper,
-        $navigation,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected $navigation,
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->licenceOverviewHelper = $licenceOverviewHelper;
         $this->formHelper = $formHelper;
-        $this->navigation = $navigation;
-        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

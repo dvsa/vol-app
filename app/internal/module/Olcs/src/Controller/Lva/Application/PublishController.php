@@ -23,10 +23,6 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -42,14 +38,11 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
         AuthorizationService $authService,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService, $formHelper);
     }

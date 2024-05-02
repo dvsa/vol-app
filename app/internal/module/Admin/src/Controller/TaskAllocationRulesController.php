@@ -98,23 +98,15 @@ class TaskAllocationRulesController extends AbstractInternalController
         ],
     ];
 
-    protected TableFactory $tableFactory;
-    protected UserListInternal $userListInternalDataService;
-
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        TableFactory $tableFactory,
-        UserListInternal $userListInternalDataService,
-        SubCategory $subCategoryDataService
+        protected TableFactory $tableFactory,
+        protected UserListInternal $userListInternalDataService,
+        protected SubCategory $subCategoryDataService
     ) {
-        $this->tableFactory = $tableFactory;
-        $this->userListInternalDataService = $userListInternalDataService;
-        $this->subCategoryDataService = $subCategoryDataService;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

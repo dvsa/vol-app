@@ -16,7 +16,6 @@ trait ApplicationControllerTrait
     /**
      * @param \Laminas\View\Model\ViewModel $view
      * @param string|null                   $title
-     * @param array                         $variables
      *
      * @return mixed
      */

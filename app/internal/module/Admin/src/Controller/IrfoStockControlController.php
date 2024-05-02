@@ -73,19 +73,15 @@ class IrfoStockControlController extends AbstractInternalController implements L
     protected $createCommand = CreateDto::class;
 
     protected $addContentTitle = 'Add IRFO Stock Control';
-    protected DateHelperService $dateHelperService;
-    protected IrfoCountry $irfoCountryDataService;
 
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        DateHelperService $dateHelperService,
-        IrfoCountry $irfoCountryDataService
+        protected DateHelperService $dateHelperService,
+        protected IrfoCountry $irfoCountryDataService
     ) {
-        $this->dateHelperService = $dateHelperService;
-        $this->irfoCountryDataService = $irfoCountryDataService;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     public function getLeftView()

@@ -127,7 +127,6 @@ class TransportManagerApplication
     /**
      * Map TMA statuses which should not be visible to the relevant visible statuses
      *
-     * @param array $data
      *
      * @return mixed
      */

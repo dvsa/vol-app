@@ -90,10 +90,6 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      * @var string
      */
     protected $section = 'inspection-request';
-
-    protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest;
-    protected AnnotationBuilder $annotationBuilderService;
-    protected QueryService $queryService;
     protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
@@ -101,13 +97,10 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest,
-        AnnotationBuilder $annotationBuilderService,
-        QueryService $queryService
+        protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest,
+        protected AnnotationBuilder $annotationBuilderService,
+        protected QueryService $queryService
     ) {
-        $this->operatingCentresForInspectionRequest = $operatingCentresForInspectionRequest;
-        $this->annotationBuilderService = $annotationBuilderService;
-        $this->queryService = $queryService;
         $this->flashMessengerHelper = $flashMessenger;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);

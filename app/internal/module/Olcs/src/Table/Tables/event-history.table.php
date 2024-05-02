@@ -33,7 +33,7 @@ return [
                 $eventData = $row['eventData'];
 
                 // if the eventData represents a document store path, extract the filename
-                if (strpos($eventData, 'documents/') === 0) {
+                if (str_starts_with($eventData, 'documents/')) {
                     $eventDataComponents = explode('/', $eventData);
                     return $eventDataComponents[count($eventDataComponents) - 1];
                 }

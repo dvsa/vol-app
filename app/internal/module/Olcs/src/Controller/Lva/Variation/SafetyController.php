@@ -37,7 +37,6 @@ class SafetyController extends Lva\AbstractSafetyController implements Variation
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -61,7 +60,7 @@ class SafetyController extends Lva\AbstractSafetyController implements Variation
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -75,6 +74,5 @@ class SafetyController extends Lva\AbstractSafetyController implements Variation
             $scriptFactory,
             $translationHelper
         );
-        $this->navigation = $navigation;
     }
 }

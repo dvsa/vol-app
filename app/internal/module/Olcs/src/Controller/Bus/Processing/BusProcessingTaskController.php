@@ -27,7 +27,6 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
     }
 
     protected TreeRouteStack $router;
-    protected SubCategory $subCategoryDataService;
 
     protected string $helperClass;
 
@@ -37,7 +36,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService
+        protected SubCategory $subCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -46,7 +45,6 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
             $viewHelperManager
         );
         $this->router = $router;
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

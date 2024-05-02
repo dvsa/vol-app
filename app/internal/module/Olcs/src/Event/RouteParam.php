@@ -5,8 +5,7 @@ namespace Olcs\Event;
 use Laminas\EventManager\Event;
 
 /**
- * Class RouteParam
- * @package Olcs\Event
+ * @psalm-suppress MissingTemplateParam
  */
 class RouteParam extends Event
 {

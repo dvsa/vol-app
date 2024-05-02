@@ -28,17 +28,14 @@ class InterimRefundsController extends AbstractInternalController implements Lef
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
 
-    protected DateHelperService $dateHelper;
-
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        DateHelperService $dateHelper
+        protected DateHelperService $dateHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
-        $this->dateHelper = $dateHelper;
     }
 
     /**

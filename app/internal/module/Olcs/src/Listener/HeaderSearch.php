@@ -129,7 +129,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      *
      * @return HeaderSearch
      */
-    public function setViewHelperManager($viewHelperManager)
+    public function setViewHelperManager(mixed $viewHelperManager)
     {
         $this->viewHelperManager = $viewHelperManager;
         return $this;

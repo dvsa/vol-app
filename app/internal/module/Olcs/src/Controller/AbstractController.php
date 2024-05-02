@@ -60,7 +60,7 @@ class AbstractController extends LaminasAbstractActionController
      *
      * @return mixed
      */
-    public function fromRoute($param, $default = null)
+    public function fromRoute($param, mixed $default = null)
     {
         return $this->params()->fromRoute($param, $default);
     }
@@ -73,7 +73,7 @@ class AbstractController extends LaminasAbstractActionController
      *
      * @return mixed
      */
-    public function fromPost($param, $default = null)
+    public function fromPost($param, mixed $default = null)
     {
         return $this->params()->fromPost($param, $default);
     }
@@ -86,7 +86,7 @@ class AbstractController extends LaminasAbstractActionController
      *
      * @return mixed
      */
-    public function getQueryOrRouteParam($name, $default = null)
+    public function getQueryOrRouteParam(mixed $name, mixed $default = null)
     {
         if ($queryValue = $this->params()->fromQuery($name, $default)) {
             return $queryValue;
@@ -106,7 +106,7 @@ class AbstractController extends LaminasAbstractActionController
      *
      * @return void
      */
-    public function setTableFilters($filters)
+    public function setTableFilters(mixed $filters)
     {
         $this->placeholder()->setPlaceholder('tableFilters', $filters);
     }

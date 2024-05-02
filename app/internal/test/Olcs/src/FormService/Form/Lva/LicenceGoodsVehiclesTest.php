@@ -1,19 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Form;
+use Laminas\Form\ElementInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceGoodsVehicles;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Licence Goods Vehicles Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceGoodsVehiclesTest extends MockeryTestCase
 {
     protected $sut;
@@ -43,7 +41,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
         $isCrudPressed = true;
 
         // Mocks
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockTableElement = m::mock(\Laminas\Form\Fieldset::class);
         $mockValidator = m::mock();
 
@@ -56,7 +54,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
             ->shouldReceive('populateFormTable')
             ->with($mockTableElement, $mockTable);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
 

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Validator\ValidateIf;
@@ -10,7 +13,6 @@ use Laminas\InputFilter\InputFilter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorPluginManager;
-use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialEvidence;
@@ -80,7 +82,7 @@ class FinancialEvidenceTest extends MockeryTestCase
         $request = m::mock(\Laminas\Http\Request::class);
 
         // Mocks
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
 
         $validatorChain = m::mock(ValidatorChain::class);
         $validatorChain->shouldReceive('attach');
@@ -93,7 +95,7 @@ class FinancialEvidenceTest extends MockeryTestCase
 
         $mockForm->shouldReceive('getInputFilter')->andReturn($inputFilter);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('get->setLabel')->once();
 
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);

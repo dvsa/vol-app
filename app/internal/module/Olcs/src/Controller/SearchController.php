@@ -30,9 +30,6 @@ class SearchController extends AbstractController implements LeftViewProvider
     public const CONTAINER = 'searchForm';
 
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected $navigation;
-    protected RoleService $roleService;
-    protected Placeholder $placeholder;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -40,15 +37,12 @@ class SearchController extends AbstractController implements LeftViewProvider
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         FlashMessengerHelperService $flashMessengerHelper,
-        $navigation,
-        RoleService $roleService,
-        Placeholder $placeholder
+        protected $navigation,
+        protected RoleService $roleService,
+        protected Placeholder $placeholder
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->navigation = $navigation;
-        $this->roleService = $roleService;
-        $this->placeholder = $placeholder;
     }
 
     /**
@@ -358,7 +352,6 @@ class SearchController extends AbstractController implements LeftViewProvider
     }
 
     /**
-     * @param  string $searchIndex
      * @return bool
      */
     protected function canAccessSearchIndex(string $searchIndex): bool

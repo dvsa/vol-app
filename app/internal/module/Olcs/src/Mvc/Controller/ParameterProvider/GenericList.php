@@ -8,8 +8,6 @@ namespace Olcs\Mvc\Controller\ParameterProvider;
 class GenericList extends AbstractParameterProvider
 {
     private $paramNames;
-    private $defaultSort;
-    private $defaultOrder;
     private $defaultLimit = 10;
 
     /**
@@ -21,11 +19,9 @@ class GenericList extends AbstractParameterProvider
      *
      * @return void
      */
-    public function __construct($paramNames, $defaultSort = 'id', $defaultOrder = 'DESC')
+    public function __construct($paramNames, private $defaultSort = 'id', private $defaultOrder = 'DESC')
     {
         $this->paramNames = (array) $paramNames;
-        $this->defaultSort = $defaultSort;
-        $this->defaultOrder = $defaultOrder;
     }
 
     /**

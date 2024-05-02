@@ -70,11 +70,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected $otherLicenceForm;
 
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
-    protected QueryService $queryService;
-    protected NiTextTranslation $niTextTranslationUtil;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -84,10 +79,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         TranslationHelperService $translationHelper,
         $navigation,
         TransportManagerHelperService $transportManagerHelper,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService,
-        QueryService $queryService,
-        NiTextTranslation $niTextTranslationUtil,
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService,
+        protected QueryService $queryService,
+        protected NiTextTranslation $niTextTranslationUtil,
         FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
@@ -101,10 +96,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $transportManagerHelper,
             $uploadHelper
         );
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-        $this->queryService = $queryService;
-        $this->niTextTranslationUtil = $niTextTranslationUtil;
     }
 
     /**

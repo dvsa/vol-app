@@ -41,8 +41,6 @@ class LicenceDecisionsController extends AbstractController implements
     ];
 
     protected $undoCommand;
-
-    protected FlashMessengerHelperService $flashMessengerHelper;
     protected $navigation;
 
     public function __construct(
@@ -50,7 +48,7 @@ class LicenceDecisionsController extends AbstractController implements
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         $navigation
     ) {
         parent::__construct(
@@ -59,7 +57,6 @@ class LicenceDecisionsController extends AbstractController implements
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
         $this->navigation = $navigation;
     }
 
@@ -747,15 +744,13 @@ class LicenceDecisionsController extends AbstractController implements
     }
 
     /**
-     * @param array $data
-     *
      * @throws NotFoundException
      */
     protected function withdrawSurrender(array $data)
     {
         try {
             $this->handleQuery(ByLicence::create($data));
-        } catch (NotFoundException $exception) {
+        } catch (NotFoundException) {
             return;
         }
         $this->undoCommand = Withdraw::create($data);

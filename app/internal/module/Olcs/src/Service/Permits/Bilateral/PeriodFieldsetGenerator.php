@@ -20,7 +20,6 @@ class PeriodFieldsetGenerator
     /**
      * Create service instance
      *
-     * @param FormFactory $formFactory
      *
      * @return PeriodFieldsetGenerator
      */
@@ -32,9 +31,7 @@ class PeriodFieldsetGenerator
     /**
      * Return a Fieldset element corresponding to the provided data
      *
-     * @param array $period
      * @param string $type
-     *
      * @return Fieldset
      */
     public function generate(array $period, $type)
@@ -66,7 +63,6 @@ class PeriodFieldsetGenerator
      * Associate an implementation of FieldsetPopulatorInterface with a type attribute as returned by the backend
      *
      * @param string $type
-     * @param FieldsetPopulatorInterface $fieldsetPopulator
      */
     public function registerFieldsetPopulator($type, FieldsetPopulatorInterface $fieldsetPopulator)
     {

@@ -38,8 +38,6 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -68,7 +66,7 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         ResponseHelperService $responseHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -84,7 +82,5 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
             $goodsVehiclesVehicleMapper,
             $responseHelper
         );
-
-        $this->navigation = $navigation;
     }
 }

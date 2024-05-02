@@ -24,17 +24,14 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public const EMPTY_LABEL = 'Please select';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         array $config,
-        FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -43,8 +40,6 @@ class DocumentGenerationController extends AbstractDocumentController
             $viewHelperManager,
             $config
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->docSubcategoryWithDocsDataService = $docSubcategoryWithDocsDataService;
     }
 
     /**

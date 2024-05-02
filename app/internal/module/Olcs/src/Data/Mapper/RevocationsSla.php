@@ -66,7 +66,7 @@ class RevocationsSla implements MapperInterface
      *
      * @return array
      */
-    public static function mapFromErrors($form, array $errors)
+    public static function mapFromErrors(mixed $form, array $errors)
     {
         return $errors;
     }

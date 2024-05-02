@@ -16,7 +16,6 @@ class StandardFieldsetPopulator implements FieldsetPopulatorInterface
     /**
      * Create service instance
      *
-     * @param NoOfPermitsElementGenerator $noOfPermitsElementGenerator
      *
      * @return StandardFieldsetPopulator
      */

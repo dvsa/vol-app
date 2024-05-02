@@ -37,7 +37,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -63,7 +62,7 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
         FileUploadHelperService $fileUploadHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -78,6 +77,5 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
             $tableFactory,
             $fileUploadHelper
         );
-        $this->navigation = $navigation;
     }
 }

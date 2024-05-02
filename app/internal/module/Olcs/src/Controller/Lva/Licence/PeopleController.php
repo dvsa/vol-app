@@ -35,8 +35,6 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -59,7 +57,7 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
         GuidanceHelperService $guidanceHelper,
         LicencePeopleAdapter $lvaAdapter,
         FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -72,6 +70,5 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
             $lvaAdapter,
             $flashMessengerHelper
         );
-        $this->navigation = $navigation;
     }
 }

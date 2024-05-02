@@ -44,8 +44,6 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         'application' => Query\Application\GoodsVehiclesExport::class,
     ];
 
-    protected ResponseHelperService $responseHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -72,10 +70,8 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
-        ResponseHelperService $responseHelper
+        protected ResponseHelperService $responseHelper
     ) {
-        $this->responseHelper = $responseHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

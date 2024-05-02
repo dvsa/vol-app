@@ -22,9 +22,6 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     protected $successMessageKey;
     protected $titleKey;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TranslationHelperService $translationHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -34,12 +31,9 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        TranslationHelperService $translationHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected TranslationHelperService $translationHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->translationHelper = $translationHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

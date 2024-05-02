@@ -93,17 +93,13 @@ class UserManagementController extends AbstractInternalController implements Lef
         ]
     ];
 
-    protected UrlHelperService $urlHelper;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        UrlHelperService $urlHelperService
+        protected UrlHelperService $urlHelper
     ) {
-        $this->urlHelper = $urlHelperService;
-
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

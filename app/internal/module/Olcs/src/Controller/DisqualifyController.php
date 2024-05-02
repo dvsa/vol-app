@@ -12,17 +12,14 @@ use Laminas\View\Model\ViewModel;
 
 class DisqualifyController extends AbstractController
 {
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper
+        protected FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**

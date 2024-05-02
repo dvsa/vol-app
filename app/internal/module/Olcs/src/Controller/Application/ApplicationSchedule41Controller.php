@@ -37,10 +37,6 @@ class ApplicationSchedule41Controller extends Schedule41Controller implements Ap
 
     protected StringHelperService $stringHelper;
 
-    protected $navigation;
-
-    protected RestrictionHelperService $restrictionHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
@@ -48,12 +44,10 @@ class ApplicationSchedule41Controller extends Schedule41Controller implements Ap
         TableFactory $tableFactory,
         FlashMessengerHelperService $flashMessengerHelper,
         StringHelperService $stringHelper,
-        $navigation,
-        RestrictionHelperService $restrictionHelper
+        protected $navigation,
+        protected RestrictionHelperService $restrictionHelper
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $tableFactory, $flashMessengerHelper);
         $this->stringHelper = $stringHelper;
-        $this->navigation = $navigation;
-        $this->restrictionHelper = $restrictionHelper;
     }
 }

@@ -96,7 +96,7 @@ class Module
 
                 $controllerManager = $e->getApplication()->getServiceManager()->get('ControllerManager');
                 $controllerClass = $controllerManager->get($routeMatch->getParam('controller'));
-                $controllerFQCN = get_class($controllerClass);
+                $controllerFQCN = $controllerClass::class;
 
                 $container = $e->getApplication()->getServiceManager();
                 $config = $container->get('Config');

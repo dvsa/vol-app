@@ -36,7 +36,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
     protected $lva = 'variation';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -66,7 +65,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -83,6 +82,5 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
             $translatorHelper,
             $guidanceHelper
         );
-        $this->navigation = $navigation;
     }
 }

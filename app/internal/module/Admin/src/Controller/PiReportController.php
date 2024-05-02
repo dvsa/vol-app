@@ -45,16 +45,13 @@ class PiReportController extends AbstractInternalController implements LeftViewP
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
 
-    private DateHelperService $dateHelperService;
-
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        DateHelperService $dateHelperService
+        private DateHelperService $dateHelperService
     ) {
-        $this->dateHelperService = $dateHelperService;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**

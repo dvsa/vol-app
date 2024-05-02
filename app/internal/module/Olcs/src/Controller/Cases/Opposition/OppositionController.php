@@ -9,7 +9,6 @@ use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as CasesWithOppositi
 use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
 use Dvsa\Olcs\Transfer\Query\Opposition\Opposition as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Opposition\OppositionList as OppositionListDto;
-use Laminas\View\Model\ConsoleModel;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -147,7 +146,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * details action
      *
-     * @return ViewModel|ConsoleModel
+     * @return ViewModel
      */
     public function detailsAction()
     {
@@ -157,7 +156,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Generate action.
      *
-     * @return ViewModel|ConsoleModel
+     * @return ViewModel
      */
     public function generateAction()
     {

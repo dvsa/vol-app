@@ -54,8 +54,6 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     protected $updateDtoClass = UpdateDto::class;
     protected $queryDtoClass = BusinessDetailsDto::class;
 
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -68,9 +66,8 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         Licence $licenceDataService,
         QueryService $queryService,
         \Laminas\Navigation\Navigation $navigation,
-        TranslationHelperService $translatorHelper
+        protected TranslationHelperService $translationHelper
     ) {
-        $this->translationHelper = $translatorHelper;
         parent::__construct(
             $scriptFactory,
             $formHelper,

@@ -64,16 +64,14 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $tableName = 'condition';
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
-    protected HelperPluginManager $viewHelperManager;
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
-        HelperPluginManager $viewHelperManager
+        protected HelperPluginManager $viewHelperManager
     ) {
 
-        $this->viewHelperManager = $viewHelperManager;
         parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
     /**

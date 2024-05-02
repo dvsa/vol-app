@@ -40,11 +40,6 @@ class LoginController implements InjectApplicationEventInterface
     public const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
     public const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
 
-    /**
-     * @var ValidatableAdapterInterface
-     */
-    private $authenticationAdapter;
-
     /** @var AuthenticationServiceInterface */
     protected $authenticationService;
 
@@ -52,16 +47,6 @@ class LoginController implements InjectApplicationEventInterface
      * @var event;
      */
     private $event;
-
-    /**
-     * @var CurrentUser
-     */
-    private $currentUser;
-
-    /**
-     * @var FlashMessenger
-     */
-    private $flashMessenger;
 
     /**
      * @var FormHelperService
@@ -79,47 +64,23 @@ class LoginController implements InjectApplicationEventInterface
     protected $urlHelper;
 
     /**
-     * @var Layout
-     */
-    private $layout;
-
-    /**
-     * @var AuthChallengeContainer
-     */
-    private AuthChallengeContainer $authChallengeContainer;
-
-    /**
      * LoginController constructor.
-     * @param ValidatableAdapterInterface $authenticationAdapter
-     * @param AuthenticationServiceInterface $authenticationService
-     * @param CurrentUser $currentUser
-     * @param FlashMessenger $flashMessenger
-     * @param FormHelperService $formHelper
-     * @param Layout $layout
-     * @param Redirect $redirectHelper
-     * @param Url $urlHelper
-     * @param AuthChallengeContainer $authChallengeContainer
      */
     public function __construct(
-        ValidatableAdapterInterface $authenticationAdapter,
+        private ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        CurrentUser $currentUser,
-        FlashMessenger $flashMessenger,
+        private CurrentUser $currentUser,
+        private FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
-        Layout $layout,
+        private Layout $layout,
         Redirect $redirectHelper,
         Url $urlHelper,
-        AuthChallengeContainer $authChallengeContainer
+        private AuthChallengeContainer $authChallengeContainer
     ) {
-        $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
-        $this->currentUser = $currentUser;
-        $this->flashMessenger = $flashMessenger;
         $this->formHelper = $formHelper;
-        $this->layout = $layout;
         $this->redirectHelper = $redirectHelper;
         $this->urlHelper = $urlHelper;
-        $this->authChallengeContainer = $authChallengeContainer;
     }
 
 
@@ -149,9 +110,6 @@ class LoginController implements InjectApplicationEventInterface
     }
 
     /**
-     * @param Request $request
-     * @param RouteMatch $routeMatch
-     * @param Response $response
      * @return Response
      */
     public function postAction(Request $request, RouteMatch $routeMatch, Response $response): Response
@@ -179,20 +137,16 @@ class LoginController implements InjectApplicationEventInterface
 
         $this->storeFormData($form);
 
-        switch ($result->getCode() ?? 0) {
-            case static::AUTH_FAILURE_ACCOUNT_DISABLED:
-                $this->flashMessenger->addMessage(
-                    static::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED,
-                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
-                );
-                break;
-            default:
-                // VOL-2394: If the login fails for any other reason, use a generic invalid username or password error.
-                $this->flashMessenger->addMessage(
-                    static::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD,
-                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
-                );
-        }
+        match ($result->getCode() ?? 0) {
+            static::AUTH_FAILURE_ACCOUNT_DISABLED => $this->flashMessenger->addMessage(
+                static::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED,
+                static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+            ),
+            default => $this->flashMessenger->addMessage(
+                static::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD,
+                static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+            ),
+        };
 
         return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
     }
@@ -218,7 +172,6 @@ class LoginController implements InjectApplicationEventInterface
     }
 
     /**
-     * @param array $data
      * @return Form
      */
     protected function createLoginForm(array $data = null): Form
@@ -255,7 +208,6 @@ class LoginController implements InjectApplicationEventInterface
     }
 
     /**
-     * @param Request $request
      * @return Result
      */
     protected function attemptAuthentication(Request $request): Result
@@ -273,9 +225,6 @@ class LoginController implements InjectApplicationEventInterface
     /**
      * Handles successful authentication.
      *
-     * @param Result $result
-     * @param Response $response
-     * @param Request $request
      * @return Response
      */
     private function handleSuccessfulAuthentication(Result $result, Response $response, Request $request)
@@ -316,11 +265,10 @@ class LoginController implements InjectApplicationEventInterface
         // Check that the goto URL is valid, ie it begins with the server name from the request
         $uri = $request->getUri();
         $serverUrl = $uri->getScheme() . '://' . $uri->getHost() . '/';
-        return strpos($gotoUrl, $serverUrl) === 0;
+        return str_starts_with($gotoUrl, $serverUrl);
     }
 
     /**
-     * @param array $messages
      * @return Response
      */
     private function handleChallengeResult(array $messages): Response
@@ -335,9 +283,6 @@ class LoginController implements InjectApplicationEventInterface
         }
     }
 
-    /**
-     * @param array $messages
-     */
     private function applyAuthChallengeContainer(array $messages): void
     {
         $this->authChallengeContainer

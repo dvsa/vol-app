@@ -32,25 +32,19 @@ class TaskController extends AbstractController
 
     public const METHOD_ADD = 'Add';
     public const METHOD_EDIT = 'Edit';
-
-    protected FlashMessengerHelperService $flashMessengerHelper;
     protected SubCategory $subCategoryDataService;
-
-    protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         SubCategory $subCategoryDataService,
-        UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService
+        protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->flashMessengerHelper = $flashMessengerHelper;
         $this->subCategoryDataService = $subCategoryDataService;
-        $this->userListInternalExcLtdRdOnlyDataService = $userListInternalExcLtdRdOnlyDataService;
     }
 
 
@@ -696,20 +690,14 @@ class TaskController extends AbstractController
         $taskDetails = $this->getTaskDetails($taskId);
         $taskType = strtolower($taskDetails['linkType']);
 
-        switch ($taskType) {
-            case 'transport manager':
-                return ['tm', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
-            case 'bus registration':
-                return ['busreg', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
-            case 'irfo organisation':
-                return ['organisation', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
-            case 'submission':
-                return ['submission', $taskDetails['linkId'], $taskDetails['linkDisplay'], $taskDetails['caseId']];
-            case 'irhp application':
-                return ['irhpapplication', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
-            default:
-                return [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
-        }
+        return match ($taskType) {
+            'transport manager' => ['tm', $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
+            'bus registration' => ['busreg', $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
+            'irfo organisation' => ['organisation', $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
+            'submission' => ['submission', $taskDetails['linkId'], $taskDetails['linkDisplay'], $taskDetails['caseId']],
+            'irhp application' => ['irhpapplication', $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
+            default => [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay'], null],
+        };
     }
 
     /**

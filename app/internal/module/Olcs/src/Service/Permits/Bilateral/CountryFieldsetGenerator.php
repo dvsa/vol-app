@@ -24,9 +24,6 @@ class CountryFieldsetGenerator
     /**
      * Create service instance
      *
-     * @param TranslationHelperService $translator
-     * @param FormFactory $formFactory
-     * @param PeriodFieldsetGenerator $periodFieldsetGenerator
      *
      * @return CountryFieldsetGenerator
      */
@@ -43,7 +40,6 @@ class CountryFieldsetGenerator
     /**
      * Return a Fieldset element corresponding to the provided data
      *
-     * @param array $country
      *
      * @return Fieldset
      */
@@ -92,10 +88,8 @@ class CountryFieldsetGenerator
     /**
      * Return a Laminas Select element corresponding to the provided list of periods
      *.
-     * @param array $periods
      * @param string $periodLabel
      * @param int|null $selectedPeriodId
-     *
      * @return Select
      */
     private function generatePeriodSelector(array $periods, $periodLabel, $selectedPeriodId)

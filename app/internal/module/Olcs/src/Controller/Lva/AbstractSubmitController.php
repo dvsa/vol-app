@@ -20,8 +20,6 @@ abstract class AbstractSubmitController extends AbstractApplicationDecisionContr
     protected $successMessageKey =  'application-submitted-successfully';
     protected $titleKey          =  'internal-application-submit-title';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -34,10 +32,8 @@ abstract class AbstractSubmitController extends AbstractApplicationDecisionContr
         AuthorizationService $authService,
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService, $flashMessengerHelper, $translationHelper);
     }
 

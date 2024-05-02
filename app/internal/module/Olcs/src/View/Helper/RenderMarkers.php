@@ -47,7 +47,7 @@ class RenderMarkers extends AbstractHelper
         $html = '';
         $html .= '<div class="notice-container">';
         foreach ($markers as $marker) {
-            if (empty($showMarkers) || in_array(get_class($marker), $showMarkers)) {
+            if (empty($showMarkers) || in_array($marker::class, $showMarkers)) {
                 $html .= $marker->render();
             }
         }

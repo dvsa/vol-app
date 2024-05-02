@@ -12,17 +12,11 @@ use Olcs\View\Model\ViewModel as OlcsViewModel;
 final class Builder extends AbstractBuilder
 {
     /**
-     * @var OlcsViewModel
-     */
-    private $layout;
-
-    /**
      * @param $headerViewTemplate
      * @param string $baseTemplate
      */
-    public function __construct(OlcsViewModel $viewModel)
+    public function __construct(private OlcsViewModel $layout)
     {
-        $this->layout = $viewModel;
     }
 
     public function setLeft(ViewModel $left)

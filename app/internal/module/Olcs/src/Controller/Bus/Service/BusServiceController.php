@@ -51,16 +51,13 @@ class BusServiceController extends AbstractInternalController implements BusRegC
 
     protected $editContentTitle = 'Register service';
 
-    protected TableFactory $tableFactory;
-
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
-        TableFactory $tableFactory
+        protected TableFactory $tableFactory
     ) {
-        $this->tableFactory = $tableFactory;
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
 

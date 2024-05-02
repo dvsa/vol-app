@@ -38,9 +38,6 @@ class OverviewController extends AbstractController implements ApplicationContro
     protected StringHelperService $stringHelper;
     protected ApplicationOverviewHelperService $applicationOverviewHelper;
     protected FormHelperService $formHelper;
-    protected RestrictionHelperService $restrictionHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,16 +55,13 @@ class OverviewController extends AbstractController implements ApplicationContro
         StringHelperService $stringHelper,
         ApplicationOverviewHelperService $applicationOverviewHelper,
         FormHelperService $formHelper,
-        RestrictionHelperService $restrictionHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->applicationOverviewHelper = $applicationOverviewHelper;
         $this->formHelper = $formHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

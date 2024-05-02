@@ -21,8 +21,6 @@ class ApplicationFormPopulator
     /**
      * Create service instance
      *
-     * @param FormFactory $formFactory
-     * @param CountryFieldsetGenerator $countryFieldsetGenerator
      *
      * @return ApplicationFormPopulator
      */
@@ -35,8 +33,6 @@ class ApplicationFormPopulator
     /**
      * Add form elements corresponding to the provided bilateral metadata
      *
-     * @param Form $form
-     * @param array $data
      *
      * @return void
      */

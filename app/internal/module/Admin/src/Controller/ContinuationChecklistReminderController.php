@@ -19,30 +19,19 @@ class ContinuationChecklistReminderController extends AbstractController
     use CrudActionTrait;
 
     public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
-
-    protected DateHelperService $dateHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected ScriptFactory $scriptFactory;
-    protected FormHelperService $formHelper;
-    protected ResponseHelperService $responseHelper;
-    protected TableFactory $tableFactory;
 
     public function __construct(
         Placeholder $placeholder,
-        DateHelperService $dateHelper,
+        protected DateHelperService $dateHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        ScriptFactory $scriptFactory,
-        FormHelperService $formHelper,
-        ResponseHelperService $responseHelper,
-        TableFactory $tableFactory
+        protected ScriptFactory $scriptFactory,
+        protected FormHelperService $formHelper,
+        protected ResponseHelperService $responseHelper,
+        protected TableFactory $tableFactory
     ) {
         parent::__construct($placeholder);
-        $this->dateHelper = $dateHelper;
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->formHelper = $formHelper;
-        $this->responseHelper = $responseHelper;
-        $this->tableFactory = $tableFactory;
     }
 
     /**

@@ -114,7 +114,6 @@ class IrhpPermitController extends AbstractInternalController implements
     /**
      * Handles POST from candidate deselection index page variant
      *
-     * @param array $postParams
      *
      * @return \Laminas\Http\Response
      */

@@ -35,8 +35,6 @@ class OperatorProcessingTasksController extends OperatorController
      */
     protected $subNavRoute = 'operator_processing';
 
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -49,10 +47,9 @@ class OperatorProcessingTasksController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         Navigation $navigation,
-        SubCategory $subCategoryDataService
+        protected SubCategory $subCategoryDataService
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $dateHelper, $transferAnnotationBuilder, $commandService, $flashMessengerHelper, $licenceDataService, $queryService, $navigation);
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

@@ -43,8 +43,6 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected StringHelperService $stringHelper;
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -73,7 +71,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         TransportManagerHelperService $transportManagerHelper,
         VariationTransportManagerAdapter $lvaAdapter,
         StringHelperService $stringHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -89,6 +87,5 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
             $lvaAdapter
         );
         $this->stringHelper = $stringHelper;
-        $this->navigation = $navigation;
     }
 }

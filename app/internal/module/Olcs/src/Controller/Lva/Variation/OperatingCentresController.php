@@ -38,7 +38,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -64,10 +63,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         VariationLvaService $variationLvaService,
         StringHelperService $stringHelper,
         FileUploadHelperService $uploadHelper,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

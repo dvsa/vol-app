@@ -18,7 +18,6 @@ class SubmissionSections extends AbstractHelper
     /**
      * Render a SubmissionSections element from the provided $element
      *
-     * @param  ElementInterface $element
      * @throws Exception\InvalidArgumentException
      * @throws Exception\DomainException
      * @return string

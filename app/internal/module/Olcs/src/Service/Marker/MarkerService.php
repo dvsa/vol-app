@@ -28,8 +28,6 @@ class MarkerService implements FactoryInterface
     }
 
     /**
-     * @param MarkerPluginManager $markerPluginManager
-     *
      * @return MarkerService
      */
     public function setMarkerPluginManager(\Olcs\Service\Marker\MarkerPluginManager $markerPluginManager)
@@ -42,9 +40,8 @@ class MarkerService implements FactoryInterface
      * Add data to populate markers
      *
      * @param string $key  A key eg "licence", "application"
-     * @param mixed  $data
      */
-    public function addData($key, $data)
+    public function addData($key, mixed $data)
     {
         $this->data[$key] = $data;
     }

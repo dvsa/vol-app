@@ -35,9 +35,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
     use Traits\ApplicationControllerTrait;
     use CheckForCrudAction;
 
-    protected PluginManager $dataServiceManager;
-    protected OppositionHelperService $oppositionHelper;
-    protected ComplaintsHelperService $complaintsHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
 
     protected $navigation;
@@ -47,9 +44,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        PluginManager $dataServiceManager,
-        OppositionHelperService $oppositionHelper,
-        ComplaintsHelperService $complaintsHelper,
+        protected PluginManager $dataServiceManager,
+        protected OppositionHelperService $oppositionHelper,
+        protected ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         $navigation
     ) {
@@ -59,9 +56,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $tableFactory,
             $viewHelperManager
         );
-        $this->dataServiceManager = $dataServiceManager;
-        $this->oppositionHelper = $oppositionHelper;
-        $this->complaintsHelper = $complaintsHelper;
         $this->flashMessengerHelper = $flashMessengerHelper;
         $this->navigation = $navigation;
     }

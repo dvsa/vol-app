@@ -433,7 +433,6 @@ trait FeesActionTrait
     /**
      * Determine reversal url from transaction data
      *
-     * @param  array $transaction
      * @return string
      */
     protected function getReverseLink(array $transaction)
@@ -623,7 +622,7 @@ trait FeesActionTrait
             $message = implode('; ', $responseContent->messages);
             $error = strlen($message) > 0 ? $message : 'unknown-error';
             $this->addErrorMessage($error);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->addErrorMessage('unknown-error');
         }
     }
@@ -1382,7 +1381,6 @@ trait FeesActionTrait
 
     /**
      * @param  array $feeData  from FeeList query
-     * @param  array $postData
      * @return boolean
      */
     protected function shouldConfirmPayment(array $feeData, array $postData)

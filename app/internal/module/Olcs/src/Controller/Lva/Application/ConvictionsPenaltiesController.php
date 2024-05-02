@@ -34,9 +34,6 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
     protected $lva = 'application';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,13 +55,11 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
+        protected RestrictionHelperService $restrictionHelper,
         ScriptFactory $scriptFactory,
-        $navigation
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

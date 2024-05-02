@@ -293,225 +293,198 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
      */
     private function getPreselectedSectionsForType($submissionType)
     {
-        switch ($submissionType) {
-            case 'submission_type_o_bus_reg':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'annex',
-                    'bus-reg-app-details',
-                    'transport-authority-comments',
-                    'total-bus-registrations',
-                    'registration-details',
-                ];
-                break;
-            case 'submission_type_o_clo_fep':
-                $sections = [
+        $sections = match ($submissionType) {
+            'submission_type_o_bus_reg' => [
+                'case-outline',
+                'people',
+                'annex',
+                'bus-reg-app-details',
+                'transport-authority-comments',
+                'total-bus-registrations',
+                'registration-details',
+            ],
+            'submission_type_o_clo_fep' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'waive-fee-late-fee'
+            ],
+            'submission_type_o_clo_g' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'intelligence-unit-check',
+                'interim',
+                'advertisement',
+                'auth-requested-applied-for',
+                'transport-managers',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'local-licence-history',
+                'maintenance-tachographs-hours',
+                'objections',
+                'financial-information',
+                'oppositions'
+            ],
+            'submission_type_o_clo_psv' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'intelligence-unit-check',
+                'auth-requested-applied-for',
+                'transport-managers',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'total-bus-registrations',
+                'local-licence-history',
+                'registration-details',
+                'maintenance-tachographs-hours',
+                'objections',
+                'financial-information',
+                'oppositions'
+            ],
+            'submission_type_o_env' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'intelligence-unit-check',
+                'interim',
+                'advertisement',
+                'auth-requested-applied-for',
+                'transport-managers',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'local-licence-history',
+                'conviction-fpn-offence-history',
+                'te-reports',
+                'site-plans',
+                'planning-permission',
+                'applicants-comments',
+                'applicants-responses',
+                'visibility-access-egress-size',
+                'environmental-complaints',
+                'objections',
+                'financial-information',
+                'maps',
+                'oppositions'
+            ],
+            'submission_type_o_irfo' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'operating-centres',
+                'transport-managers',
+                'fitness-and-repute',
+                'maintenance-tachographs-hours'
+            ],
+            'submission_type_o_mlh_otc' => [
+                'case-outline',
+                'most-serious-infringement',
+                'people',
+                'previous-history',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'linked-licences-app-numbers',
+                'lead-tc-area',
+                'auth-requested-applied-for',
+                'transport-managers',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'linked-mlh-history',
+                'maintenance-tachographs-hours',
+                'financial-information'
+            ],
+            'submission_type_o_ni_tru' => [
+                'case-outline',
+                'most-serious-infringement',
+                'people',
+                'previous-history',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'linked-licences-app-numbers',
+                'current-submissions',
+                'transport-managers',
+                'maintenance-tachographs-hours',
+                'prohibition-history',
+                'conviction-fpn-offence-history',
+                'annual-test-history'
+            ],
+            'submission_type_o_mlh_clo' => [
+                'lead-tc-area'
+            ],
+            'submission_type_o_otc' => [
+                'case-outline',
+                'most-serious-infringement',
+                'people',
+                'previous-history',
+                'operating-centres',
+                'te-reports',
+                'linked-licences-app-numbers',
+                'current-submissions',
+                'transport-managers',
+                'maintenance-tachographs-hours',
+                'prohibition-history',
+                'conviction-fpn-offence-history',
+                'annual-test-history'
+            ],
+            'submission_type_o_tm' => array_merge(
+                [
                     'case-outline',
                     'people',
                     'previous-history',
                     'other-issues',
                     'annex',
-                    'waive-fee-late-fee'
-                ];
-                break;
-            case 'submission_type_o_clo_g':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'conditions-and-undertakings',
                     'intelligence-unit-check',
-                    'interim',
-                    'advertisement',
-                    'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
-                    'local-licence-history',
-                    'maintenance-tachographs-hours',
-                    'objections',
-                    'financial-information',
                     'oppositions'
-                ];
-                break;
-            case 'submission_type_o_clo_psv':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'intelligence-unit-check',
-                    'auth-requested-applied-for',
-                    'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'total-bus-registrations',
-                    'local-licence-history',
-                    'registration-details',
-                    'maintenance-tachographs-hours',
-                    'objections',
-                    'financial-information',
-                    'oppositions'
-                ];
-                break;
-            case 'submission_type_o_env':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'intelligence-unit-check',
-                    'interim',
-                    'advertisement',
-                    'auth-requested-applied-for',
-                    'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'local-licence-history',
-                    'conviction-fpn-offence-history',
-                    'te-reports',
-                    'site-plans',
-                    'planning-permission',
-                    'applicants-comments',
-                    'applicants-responses',
-                    'visibility-access-egress-size',
-                    'environmental-complaints',
-                    'objections',
-                    'financial-information',
-                    'maps',
-                    'oppositions'
-                ];
-                break;
-            case 'submission_type_o_irfo':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'transport-managers',
-                    'fitness-and-repute',
-                    'maintenance-tachographs-hours'
-                ];
-                break;
-            case 'submission_type_o_mlh_otc':
-                $sections = [
-                    'case-outline',
-                    'most-serious-infringement',
-                    'people',
-                    'previous-history',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'linked-licences-app-numbers',
-                    'lead-tc-area',
-                    'auth-requested-applied-for',
-                    'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'linked-mlh-history',
-                    'maintenance-tachographs-hours',
-                    'financial-information'
-                ];
-                break;
-            case 'submission_type_o_ni_tru':
-                $sections = [
-                    'case-outline',
-                    'most-serious-infringement',
-                    'people',
-                    'previous-history',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'linked-licences-app-numbers',
-                    'current-submissions',
-                    'transport-managers',
-                    'maintenance-tachographs-hours',
-                    'prohibition-history',
-                    'conviction-fpn-offence-history',
-                    'annual-test-history'
-                ];
-                break;
-            case 'submission_type_o_mlh_clo':
-                $sections = [
-                    'lead-tc-area'
-                ];
-                break;
-            case 'submission_type_o_otc':
-                $sections = [
-                    'case-outline',
-                    'most-serious-infringement',
-                    'people',
-                    'previous-history',
-                    'operating-centres',
-                    'te-reports',
-                    'linked-licences-app-numbers',
-                    'current-submissions',
-                    'transport-managers',
-                    'maintenance-tachographs-hours',
-                    'prohibition-history',
-                    'conviction-fpn-offence-history',
-                    'annual-test-history'
-                ];
-                break;
-            case 'submission_type_o_tm':
-                $sections = array_merge(
-                    [
-                        'case-outline',
-                        'people',
-                        'previous-history',
-                        'other-issues',
-                        'annex',
-                        'intelligence-unit-check',
-                        'transport-managers',
-                        'continuous-effective-control',
-                        'fitness-and-repute',
-                        'oppositions'
-                    ],
-                    $this->getTmOnlySections()
-                );
-                break;
-            case 'submission_type_o_schedule_41':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'linked-licences-app-numbers',
-                    'lead-tc-area',
-                    'auth-requested-applied-for',
-                    'site-plans',
-                    'applicants-comments',
-                    'applicants-responses',
-                    'environmental-complaints',
-                    'waive-fee-late-fee'
-                ];
-                break;
-            case 'submission_type_o_impounding':
-                $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'statements'
-                ];
-                break;
-            default:
-                $sections = [];
-        }
+                ],
+                $this->getTmOnlySections()
+            ),
+            'submission_type_o_schedule_41' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'operating-centres',
+                'conditions-and-undertakings',
+                'linked-licences-app-numbers',
+                'lead-tc-area',
+                'auth-requested-applied-for',
+                'site-plans',
+                'applicants-comments',
+                'applicants-responses',
+                'environmental-complaints',
+                'waive-fee-late-fee'
+            ],
+            'submission_type_o_impounding' => [
+                'case-outline',
+                'people',
+                'previous-history',
+                'other-issues',
+                'annex',
+                'statements'
+            ],
+            default => [],
+        };
 
         return array_merge(
             $this->getMandatorySections(),

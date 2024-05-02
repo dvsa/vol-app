@@ -35,11 +35,6 @@ abstract class AbstractGrantController extends AbstractController
         'variation' => VarGrantCmd::class
     ];
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected FormHelperService $formHelper;
-    protected ScriptFactory $scriptFactory;
-    protected TranslationHelperService $translationHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -51,16 +46,11 @@ abstract class AbstractGrantController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
-        FormHelperService $formHelper,
-        ScriptFactory $scriptFactory,
-        TranslationHelperService $translationHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper
     ) {
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formHelper = $formHelper;
-        $this->scriptFactory = $scriptFactory;
-        $this->translationHelper = $translationHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -226,7 +216,6 @@ abstract class AbstractGrantController extends AbstractController
     /**
      * Renders a form.
      *
-     * @param  Form $form
      * @return ViewModel
      */
     protected function renderForm(Form $form): ViewModel
@@ -244,8 +233,6 @@ abstract class AbstractGrantController extends AbstractController
     /**
      * Renders a grant authority form.
      *
-     * @param  Form  $form
-     * @param  array $grantData
      * @return ViewModel
      */
     protected function renderGrantAuthorityForm(Form $form, array $grantData): ViewModel

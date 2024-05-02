@@ -24,8 +24,6 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
     protected $successMessageKey = 'application-revive-application-successfully';
     protected $titleKey          = 'internal-application-revive-application-title';
 
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
      * @param AuthorizationService        $authService
@@ -38,10 +36,8 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
         AuthorizationService $authService,
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService, $flashMessengerHelper, $translationHelper);
     }
 

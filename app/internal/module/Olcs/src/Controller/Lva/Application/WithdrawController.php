@@ -30,8 +30,6 @@ class WithdrawController extends AbstractWithdrawController
     protected $lva = 'application';
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
-    protected RestrictionHelperService $restrictionHelper;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -50,12 +48,10 @@ class WithdrawController extends AbstractWithdrawController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper,
-        $navigation
+        protected RestrictionHelperService $restrictionHelper,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->restrictionHelper = $restrictionHelper;
-        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

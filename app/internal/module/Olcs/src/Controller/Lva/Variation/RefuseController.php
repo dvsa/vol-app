@@ -32,8 +32,6 @@ class RefuseController extends AbstractRefuseController implements VariationCont
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
-    protected FormServiceManager $formServiceManager;
-    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -52,11 +50,10 @@ class RefuseController extends AbstractRefuseController implements VariationCont
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager,
-        $navigation
+        protected FormServiceManager $formServiceManager,
+        protected $navigation
     ) {
         $this->stringHelper = $stringHelper;
-        $this->formServiceManager = $formServiceManager;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -65,6 +62,5 @@ class RefuseController extends AbstractRefuseController implements VariationCont
             $translationHelper,
             $formHelper
         );
-        $this->navigation = $navigation;
     }
 }

@@ -25,8 +25,6 @@ class AddressesController extends AbstractAddressesController implements Licence
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected $navigation;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -43,9 +41,8 @@ class AddressesController extends AbstractAddressesController implements Licence
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $flashMessengerHelper, $formServiceManager, $scriptFactory);
-        $this->navigation = $navigation;
     }
 }
