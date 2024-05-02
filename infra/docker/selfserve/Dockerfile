@@ -1,6 +1,7 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0
+FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as selfserve
 
+# hadolint ignore=DL3002
 USER root
 
 # Installing require dependencies
@@ -15,11 +16,43 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl
 
 # PHP config file
-COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
-
-ADD --chown=www-data ./selfserve.tar.gz /var/www/html
+COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
 # nginx server config file
 COPY selfserve.conf /etc/nginx/conf.d/selfserve.conf
+
+EXPOSE 8080
+
+FROM selfserve AS production
+
+ADD ./selfserve.tar.gz /var/www/html
+
+# `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
+# https://github.com/docker/docs/issues/7305
+RUN chown -R root:www-data /var/www/html \
+  # Reset the permissions of the application files.
+  && chmod -R 644 /var/www/html \
+  # Add owner (`root`) and group (`www-data`) execute permissions on directories.
+  && find /var/www/html -type d -exec chmod 755 {} \; \
+  # Add group (`www-data`) write permissions to the cache directory files.
+  && chmod -R 664 /var/www/html/data/cache \
+  # Add group (`www-data`) write permissions on the cache directories.
+  && find /var/www/html/data/cache -type d -exec chmod 775 {} \;
+
+USER www-data
+
+FROM selfserve AS development
+
+RUN apk add --no-cache $PHPIZE_DEPS \
+  && pecl install xdebug-3.1.5 \
+  && docker-php-ext-enable xdebug \
+  && apk del $PHPIZE_DEPS
+
+RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 USER www-data

@@ -1,0 +1,75 @@
+services:
+  proxy:
+    container_name: proxy
+    image: nginxproxy/nginx-proxy:1.5
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  api:
+    build:
+      context: infra/docker/api
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/api:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.api"
+      VIRTUAL_HOST: api.local.olcs.dev-dvsacloud.uk
+
+  selfserve:
+    build:
+      context: infra/docker/selfserve
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/selfserve:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.selfserve"
+      VIRTUAL_HOST: ssweb.local.olcs.dev-dvsacloud.uk
+
+  internal:
+    build:
+      context: infra/docker/internal
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/internal:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.internal"
+      VIRTUAL_HOST: iuweb.local.olcs.dev-dvsacloud.uk
+
+  redis:
+    image: redis:7
+    expose:
+      - 6379
+
+  db:
+    image: mysql:8.0
+    command: --log_bin_trust_function_creators=1
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: olcs
+      MYSQL_DATABASE: olcs_be
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: olcs
+
+volumes:
+  db-data:
