@@ -201,6 +201,7 @@ jobs:
       retention-days: 1
     permissions:
       contents: read
+    secrets: inherit
 
   docker:
     name: Docker
