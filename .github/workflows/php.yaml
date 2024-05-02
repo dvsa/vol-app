@@ -201,6 +201,6 @@ jobs:
       - uses: snyk/actions/setup@master
       - uses: shivammathur/setup-php@v2
       - name: Snyk test
-        run: snyk test
+        uses: snyk/actions/php@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
