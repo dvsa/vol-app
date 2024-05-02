@@ -20,6 +20,11 @@ variable "services" {
     memory             = number
     security_group_ids = list(string)
     subnet_ids         = list(string)
+    task_iam_role_statements = list(object({
+      effect    = string
+      actions   = list(string)
+      resources = list(string)
+    }))
   }))
   description = "The services to deploy"
   default     = {}
