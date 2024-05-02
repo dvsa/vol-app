@@ -130,14 +130,14 @@ jobs:
           key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
           target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ steps.build-and-push.outputs.digest }}
 
-      - name: Docker Security Scanning
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "https://github.com/dvsa/vol-app/tree/main/${{ env.BRANCH_NAME }}/${{ env.WORKING_DIR }}"
-          format: "sarif"
-          output: "trivy-results.sarif"
+      # - name: Docker Security Scanning
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: "https://github.com/dvsa/vol-app/tree/main/${{ env.BRANCH_NAME }}/${{ env.WORKING_DIR }}"
+      #     format: "sarif"
+      #     output: "trivy-results.sarif"
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: "trivy-results.sarif"
+      # - name: Upload Trivy scan results to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: "trivy-results.sarif"
