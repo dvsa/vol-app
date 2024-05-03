@@ -18,8 +18,10 @@ variable "services" {
     image              = string
     cpu                = number
     memory             = number
+    lb_listener_arn    = string
     security_group_ids = list(string)
     subnet_ids         = list(string)
+    vpc_id             = string
     task_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)

@@ -1,3 +1,43 @@
+resource "aws_lb_target_group" "this" {
+  for_each = var.services
+
+  name        = "vol-app-${var.environment}-${each.key}-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = each.value.vpc_id
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 300
+    timeout             = 60
+    protocol            = "HTTP"
+    port                = 8080
+    path                = "/healthcheck"
+    matcher             = "200-499"
+  }
+}
+
+resource "aws_lb_listener_rule" "this" {
+  for_each = var.services
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    query_string {
+      key   = "infra"
+      value = "ecs"
+    }
+  }
+}
+
 module "ecs_cluster" {
   for_each = var.services
 
@@ -61,12 +101,28 @@ module "ecs_service" {
         {
           name  = "ENVIRONMENT_NAME"
           value = var.environment
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.services[each.key].image
+        },
+        {
+          name  = "CDN_URL"
+          value = module.cloudfront.cloudfront_distribution_domain_name
         }
       ]
 
       readonly_root_filesystem = false
 
       memory_reservation = 100
+    }
+  }
+
+  load_balancer = {
+    service = {
+      target_group_arn = aws_lb_target_group.this[each.key].arn
+      container_name   = each.key
+      container_port   = 8080
     }
   }
 

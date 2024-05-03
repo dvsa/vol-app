@@ -39,6 +39,28 @@ data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
 
+data "aws_lb" "this" {
+  for_each = toset(local.legacy_service_names)
+
+  name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
+}
+
+data "aws_lb_listener" "this" {
+  for_each = toset(local.legacy_service_names)
+
+  load_balancer_arn = data.aws_lb.this[each.key].arn
+  port              = each.key == "API" ? 80 : 443
+}
+
+data "aws_vpc" "this" {
+  filter {
+    name = "tag:Name"
+    values = [
+      "DEV/APP-VPC"
+    ]
+  }
+}
+
 module "service" {
   source = "../../modules/service"
 
@@ -124,6 +146,10 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["API"].id
       ]
+
+      lb_listener_arn = data.aws_lb_listener.this["API"].arn
+
+      vpc_id = data.aws_vpc.this.id
     }
 
     "internal" = {
@@ -158,6 +184,10 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["IUWEB"].id
       ]
+
+      lb_listener_arn = data.aws_lb_listener.this["IUWEB"].arn
+
+      vpc_id = data.aws_vpc.this.id
     }
 
     "selfserve" = {
@@ -192,6 +222,10 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["SSWEB"].id
       ]
+
+      lb_listener_arn = data.aws_lb_listener.this["SSWEB"].arn
+
+      vpc_id = data.aws_vpc.this.id
     }
   }
 }
