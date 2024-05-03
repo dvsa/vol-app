@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7165906abd6c4127c89e31fda14f63bc",
+    "content-hash": "997fb4b7174eff9531a2d01b674f7792",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4439,16 +4439,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v7.0.3",
+            "version": "v7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "eb42aab7ef460c7b01924ca7bd752d2996df7c04"
+                "reference": "b04295ab59f68beb7852fab11ebc89876bc71c44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/eb42aab7ef460c7b01924ca7bd752d2996df7c04",
-                "reference": "eb42aab7ef460c7b01924ca7bd752d2996df7c04",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/b04295ab59f68beb7852fab11ebc89876bc71c44",
+                "reference": "b04295ab59f68beb7852fab11ebc89876bc71c44",
                 "shasum": ""
             },
             "require": {
@@ -4468,14 +4468,14 @@
                 "laminas/laminas-mvc-plugin-prg": "^1.7",
                 "laminas/laminas-navigation": "^2.15",
                 "laminas/laminas-servicemanager": "^3.3",
-                "laminas/laminas-stdlib": "^3.0",
+                "laminas/laminas-stdlib": "^3.7",
                 "laminas/laminas-text": "^2.9",
                 "laminas/laminas-validator": "^2.11",
                 "laminas/laminas-view": "^2.23",
                 "olcs/olcs-logging": "^6.0|^7.0",
-                "olcs/olcs-transfer": "^7.0.1",
+                "olcs/olcs-transfer": "^7.1.0",
                 "olcs/olcs-utils": "^6.0",
-                "php": "~8.0.0",
+                "php": "^8.0",
                 "psr/container": "^1.1|^2"
             },
             "require-dev": {
@@ -4509,9 +4509,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v7.0.3"
+                "source": "https://github.com/dvsa/olcs-common/tree/v7.2.0"
             },
-            "time": "2024-04-22T09:44:51+00:00"
+            "time": "2024-05-03T15:05:38+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -4569,16 +4569,16 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v7.0.1",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "fa56bc7dd9ee127fe593c13239fbc3887fd45c6b"
+                "reference": "144bbdbdf426174e4db22d188fe8c519af6e5b23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/fa56bc7dd9ee127fe593c13239fbc3887fd45c6b",
-                "reference": "fa56bc7dd9ee127fe593c13239fbc3887fd45c6b",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/144bbdbdf426174e4db22d188fe8c519af6e5b23",
+                "reference": "144bbdbdf426174e4db22d188fe8c519af6e5b23",
                 "shasum": ""
             },
             "require": {
@@ -4594,7 +4594,7 @@
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.11.1",
                 "laminas/laminas-xml": "^1.4.0",
-                "php": "~8.0.0",
+                "php": "^8.0",
                 "psr/container": "^1.1|^2"
             },
             "require-dev": {
@@ -4620,9 +4620,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v7.0.1"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v7.1.1"
             },
-            "time": "2024-04-17T10:45:52+00:00"
+            "time": "2024-04-29T11:14:43+00:00"
         },
         {
             "name": "olcs/olcs-utils",
