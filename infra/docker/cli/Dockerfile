@@ -5,7 +5,7 @@ FROM ghcr.io/dvsa/dvsa-docker-images/php/8.0/cli:0 AS cli
 USER root
 
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install igbinary apcu_bc apcu \
+  && pecl install igbinary apcu \
   && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
