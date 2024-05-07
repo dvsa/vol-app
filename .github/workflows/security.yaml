@@ -21,6 +21,8 @@ jobs:
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
+      WORKING_DIR: infra/docker/${{ inputs.project }}
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
     steps:
       - uses: actions/checkout@v4
         with:
