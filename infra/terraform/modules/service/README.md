@@ -28,6 +28,8 @@
 
 | Name | Type |
 |------|------|
+| [aws_lb_listener_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_rule) | resource |
+| [aws_lb_target_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
 | [aws_s3_bucket_policy.bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_canonical_user_id.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/canonical_user_id) | data source |
 | [aws_cloudfront_log_delivery_canonical_user_id.cloudfront](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/cloudfront_log_delivery_canonical_user_id) | data source |
@@ -42,7 +44,7 @@
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
-| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    image              = string<br>    cpu                = number<br>    memory             = number<br>    security_group_ids = list(string)<br>    subnet_ids         = list(string)<br>  }))</pre> | `{}` | no |
+| <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    version    = string<br>    repository = string<br>    cpu        = number<br>    memory     = number<br>    task_iam_role_statements = list(object({<br>      effect    = string<br>      actions   = list(string)<br>      resources = list(string)<br>    }))<br>    add_cdn_url_to_env        = optional(bool, false)<br>    lb_listener_arn           = string<br>    listener_rule_priority    = optional(number, 10)<br>    listener_rule_host_header = optional(string, "*")<br>    security_group_ids        = list(string)<br>    subnet_ids                = list(string)<br>    vpc_id                    = string<br>  }))</pre> | `{}` | no |
 
 ## Outputs
 
