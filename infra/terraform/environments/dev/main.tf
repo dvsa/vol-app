@@ -74,7 +74,8 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["api"].repository_url}:${var.api_image_tag}"
+      version    = var.api_image_tag
+      repository = "${data.aws_ecr_repository.this["api"].repository_url}"
 
       task_iam_role_statements = [
         {
@@ -147,7 +148,8 @@ module "service" {
         data.aws_security_group.this["API"].id
       ]
 
-      lb_listener_arn = data.aws_lb_listener.this["API"].arn
+      lb_listener_arn           = data.aws_lb_listener.this["API"].arn
+      listener_rule_host_header = "api.*"
 
       vpc_id = data.aws_vpc.this.id
     }
@@ -156,7 +158,10 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["internal"].repository_url}:${var.internal_image_tag}"
+      version    = var.internal_image_tag
+      repository = "${data.aws_ecr_repository.this["internal"].repository_url}"
+
+      add_cdn_url_to_env = true
 
       task_iam_role_statements = [
         {
@@ -194,7 +199,10 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["selfserve"].repository_url}:${var.selfserve_image_tag}"
+      version    = var.selfserve_image_tag
+      repository = "${data.aws_ecr_repository.this["selfserve"].repository_url}"
+
+      add_cdn_url_to_env = true
 
       task_iam_role_statements = [
         {

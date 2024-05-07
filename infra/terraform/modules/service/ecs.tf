@@ -23,7 +23,7 @@ resource "aws_lb_listener_rule" "this" {
   for_each = var.services
 
   listener_arn = each.value.lb_listener_arn
-  priority     = 10
+  priority     = each.value.listener_rule_priority
 
   action {
     type             = "forward"
@@ -31,9 +31,8 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   condition {
-    query_string {
-      key   = "infra"
-      value = "ecs"
+    host_header {
+      values = [each.value.listener_rule_host_header]
     }
   }
 }
@@ -84,7 +83,7 @@ module "ecs_service" {
       cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu / 2)
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory / 4)
       essential = true
-      image     = var.services[each.key].image
+      image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
       port_mappings = [
         {
           name          = "http"
@@ -97,20 +96,24 @@ module "ecs_service" {
       # Have to explicitly set the user to null to avoid the default user being set to root.
       user = null
 
-      environment = [
-        {
-          name  = "ENVIRONMENT_NAME"
-          value = var.environment
-        },
-        {
-          name  = "APP_VERSION"
-          value = var.services[each.key].image
-        },
-        {
-          name  = "CDN_URL"
-          value = module.cloudfront.cloudfront_distribution_domain_name
-        }
-      ]
+      environment = concat(
+        [
+          {
+            name  = "ENVIRONMENT_NAME"
+            value = var.environment
+          },
+          {
+            name  = "APP_VERSION"
+            value = var.services[each.key].version
+          },
+        ],
+        each.value.add_cdn_url_to_env ? [
+          {
+            name  = "CDN_URL"
+            value = module.cloudfront.cloudfront_distribution_domain_name
+          }
+        ] : []
+      )
 
       readonly_root_filesystem = false
 
