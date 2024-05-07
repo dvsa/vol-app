@@ -235,7 +235,7 @@ jobs:
     with:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
-      app-artefact-name: ${{ matrix.project}}
+      app-artefact-name: ${{ matrix.project == 'cli' && 'api' || matrix.project }}
       push: false
     permissions:
       contents: read
