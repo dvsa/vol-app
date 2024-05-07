@@ -190,7 +190,8 @@ module "service" {
         data.aws_security_group.this["IUWEB"].id
       ]
 
-      lb_listener_arn = data.aws_lb_listener.this["IUWEB"].arn
+      lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
+      listener_rule_host_header = "iuweb.*"
 
       vpc_id = data.aws_vpc.this.id
     }
@@ -231,7 +232,8 @@ module "service" {
         data.aws_security_group.this["SSWEB"].id
       ]
 
-      lb_listener_arn = data.aws_lb_listener.this["SSWEB"].arn
+      lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
+      listener_rule_host_header = "ssweb.*"
 
       vpc_id = data.aws_vpc.this.id
     }
