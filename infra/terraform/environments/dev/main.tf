@@ -75,7 +75,7 @@ module "service" {
       memory = 4096
 
       version    = var.api_image_tag
-      repository = "${data.aws_ecr_repository.this["api"].repository_url}"
+      repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = [
         {
@@ -159,7 +159,7 @@ module "service" {
       memory = 4096
 
       version    = var.internal_image_tag
-      repository = "${data.aws_ecr_repository.this["internal"].repository_url}"
+      repository = data.aws_ecr_repository.this["internal"].repository_url
 
       add_cdn_url_to_env = true
 
@@ -200,7 +200,7 @@ module "service" {
       memory = 4096
 
       version    = var.selfserve_image_tag
-      repository = "${data.aws_ecr_repository.this["selfserve"].repository_url}"
+      repository = data.aws_ecr_repository.this["selfserve"].repository_url
 
       add_cdn_url_to_env = true
 
