@@ -329,7 +329,7 @@ jobs:
         exclude:
           - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}\
+          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
     uses: ./.github/workflows/security.yaml
     with:
       project: ${{ matrix.project }}
