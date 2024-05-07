@@ -203,7 +203,7 @@ jobs:
     uses: ./.github/workflows/php.yaml
     with:
       project: ${{ matrix.project }}
-      should-upload-artefact: ${{ !!needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)] }}
+      should-upload-artefact: ${{ !!(needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)] || (matrix.project == 'api' && needs.orchestrator.outputs.should-build-cli-docker)) }}
       artefact-name: ${{ matrix.project}}
       retention-days: 1
     permissions:
