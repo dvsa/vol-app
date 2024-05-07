@@ -33,4 +33,3 @@ jobs:
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - run: echo ${{needs.orchestrator.outputs.should-build-api}}
