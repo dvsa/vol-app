@@ -1,5 +1,5 @@
 locals {
-  repositories = var.create_ecr_resources ? ["api", "selfserve", "internal"] : []
+  repositories = var.create_ecr_resources ? ["api", "cli", "selfserve", "internal"] : []
 }
 
 module "ecr" {
