@@ -38,7 +38,7 @@ jobs:
       - name: Scan docker image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "https://github.com/dvsa/vol-app/tree/${{ env.BRANCH_NAME }}/${{ env.WORKING_DIR }}"
+          image-ref: "https://github.com/dvsa/vol-app/tree/${{ env.BRANCH_NAME }}/${{ env.WORKING_DIR }}/Dockerfile"
           format: "sarif"
           output: "trivy-results.sarif"
 
