@@ -5,7 +5,7 @@ resource "aws_lb_target_group" "this" {
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = each.value.vpc_id
+  vpc_id      = coalesce(each.value.vpc_id, var.vpc_id)
 
   health_check {
     healthy_threshold   = 2
