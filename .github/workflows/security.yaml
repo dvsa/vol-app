@@ -10,9 +10,6 @@ on:
       project:
         type: string
         required: true
-  schedule:
-    # Weekly on Monday at 00:00 UTC
-    - cron: 0 0 * * 1
 
 jobs:
   dependency-scan:
@@ -36,3 +33,4 @@ jobs:
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - run: echo ${{needs.orchestrator.outputs.should-build-api}}
