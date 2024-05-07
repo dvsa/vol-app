@@ -216,7 +216,13 @@ class FeesController extends AbstractController
 
     protected function getOutstandingFeeDataForOrganisation(?int $organisationId)
     {
-        $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
+        $query = OutstandingFees::create(
+            [
+                'id'            => $organisationId,
+                'hideExpired'   => true,
+                'onlySubmitted' => true,
+            ],
+        );
         $response = $this->handleQuery($query);
 
         $this->disableCardPayments = $response->getResult()['disableCardPayments'];

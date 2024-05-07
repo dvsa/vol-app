@@ -34,7 +34,7 @@
         "olcs/olcs-auth": "^8.0",
         "olcs/olcs-common": "^7.2.0",
         "olcs/olcs-logging": "^7.2",
-        "olcs/olcs-transfer": "^7.0",
+        "olcs/olcs-transfer": "^7.1.1",
         "olcs/olcs-utils": "^6.0.0",
         "psr/container": "^1.1|^2",
         "aws/aws-sdk-php": "^3.300"
