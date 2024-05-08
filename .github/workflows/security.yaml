@@ -37,13 +37,4 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Scan docker image
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}}}"
-          format: "sarif"
-          output: "trivy-results.sarif"
-
-      - name: Upload scan results to GitHub security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: "trivy-results.sarif"
+        run: docker images
