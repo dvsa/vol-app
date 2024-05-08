@@ -39,6 +39,28 @@ data "aws_cognito_user_pools" "this" {
   name = "DVSA-DEVAPPDEV-COGNITO-USERS"
 }
 
+data "aws_lb" "this" {
+  for_each = toset(local.legacy_service_names)
+
+  name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
+}
+
+data "aws_lb_listener" "this" {
+  for_each = toset(local.legacy_service_names)
+
+  load_balancer_arn = data.aws_lb.this[each.key].arn
+  port              = each.key == "API" ? 80 : 443
+}
+
+data "aws_vpc" "this" {
+  filter {
+    name = "tag:Name"
+    values = [
+      "DEV/APP-VPC"
+    ]
+  }
+}
+
 module "service" {
   source = "../../modules/service"
 
@@ -52,7 +74,8 @@ module "service" {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["api"].repository_url}:${var.api_image_tag}"
+      version    = var.api_image_tag
+      repository = data.aws_ecr_repository.this["api"].repository_url
 
       task_iam_role_statements = [
         {
@@ -124,13 +147,21 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["API"].id
       ]
+
+      lb_listener_arn           = data.aws_lb_listener.this["API"].arn
+      listener_rule_host_header = "api.*"
+
+      vpc_id = data.aws_vpc.this.id
     }
 
     "internal" = {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["internal"].repository_url}:${var.internal_image_tag}"
+      version    = var.internal_image_tag
+      repository = data.aws_ecr_repository.this["internal"].repository_url
+
+      add_cdn_url_to_env = true
 
       task_iam_role_statements = [
         {
@@ -158,13 +189,21 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["IUWEB"].id
       ]
+
+      lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
+      listener_rule_host_header = "iuweb.*"
+
+      vpc_id = data.aws_vpc.this.id
     }
 
     "selfserve" = {
       cpu    = 1024
       memory = 4096
 
-      image = "${data.aws_ecr_repository.this["selfserve"].repository_url}:${var.selfserve_image_tag}"
+      version    = var.selfserve_image_tag
+      repository = data.aws_ecr_repository.this["selfserve"].repository_url
+
+      add_cdn_url_to_env = true
 
       task_iam_role_statements = [
         {
@@ -192,6 +231,11 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["SSWEB"].id
       ]
+
+      lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
+      listener_rule_host_header = "ssweb.*"
+
+      vpc_id = data.aws_vpc.this.id
     }
   }
 }
