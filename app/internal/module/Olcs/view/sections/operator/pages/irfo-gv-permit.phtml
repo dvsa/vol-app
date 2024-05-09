@@ -1,38 +1,42 @@
 <?php
 $entity = $this->placeholder('details')->getValue();
+$isInternalReadOnly = $this->placeholder('isInternalReadOnly')->getValue();
 
 $actions = [];
-if ($entity['isApprovable']) {
-    $actions[] = [
-        'url' => $this->url(null, ['action' => 'approve'], [], true),
-        'label' => 'Approve',
-        'class' => 'govuk-button'
-    ];
-}
-if ($entity['isGeneratable']) {
-    $actions[] = [
-        'url' => $this->url(null, ['action' => 'generate'], [], true),
-        'label' => 'Generate',
-        'class' => 'govuk-button'
-    ];
-}
-if ($entity['irfoPermitStatus']['id'] === 'irfo_perm_s_pending') {
-    $actions[] = [
-        'url' => $this->url(null, ['action' => 'withdraw'], [], true),
-        'label' => 'Withdraw',
-        'class' => 'govuk-button govuk-button--secondary'
-    ];
-    $actions[] = [
-        'url' => $this->url(null, ['action' => 'refuse'], [], true),
-        'label' => 'Refuse',
-        'class' => 'govuk-button govuk-button--secondary'
-    ];
-} else {
-    $actions[] = [
-        'url' => $this->url(null, ['action' => 'reset'], [], true),
-        'label' => 'Reset',
-        'class' => 'govuk-button govuk-button--secondary'
-    ];
+
+if (!$isInternalReadOnly) {
+    if ($entity['isApprovable']) {
+        $actions[] = [
+            'url' => $this->url(null, ['action' => 'approve'], [], true),
+            'label' => 'Approve',
+            'class' => 'govuk-button',
+        ];
+    }
+    if ($entity['isGeneratable']) {
+        $actions[] = [
+            'url' => $this->url(null, ['action' => 'generate'], [], true),
+            'label' => 'Generate',
+            'class' => 'govuk-button',
+        ];
+    }
+    if ($entity['irfoPermitStatus']['id'] === 'irfo_perm_s_pending') {
+        $actions[] = [
+            'url' => $this->url(null, ['action' => 'withdraw'], [], true),
+            'label' => 'Withdraw',
+            'class' => 'govuk-button govuk-button--secondary',
+        ];
+        $actions[] = [
+            'url' => $this->url(null, ['action' => 'refuse'], [], true),
+            'label' => 'Refuse',
+            'class' => 'govuk-button govuk-button--secondary',
+        ];
+    } else {
+        $actions[] = [
+            'url' => $this->url(null, ['action' => 'reset'], [], true),
+            'label' => 'Reset',
+            'class' => 'govuk-button govuk-button--secondary',
+        ];
+    }
 }
 
 echo $this->render('partials/read-only/main',

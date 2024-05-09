@@ -2,6 +2,10 @@
 
 namespace Olcs\Controller\Operator;
 
+use Common\Rbac\Service\Permission;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoGvPermit as ApproveDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GenerateIrfoGvPermit as GenerateDto;
@@ -10,6 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoGvPermit as WithdrawDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -47,6 +52,19 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     protected $tableName = 'operator.irfo.gv-permits';
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
+    private Permission $permissionService;
+
+
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelperService,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        Permission $permissionService
+    ) {
+        $this->permissionService = $permissionService;
+        parent::__construct($translationHelperService, $formHelperService, $flashMessengerHelperService, $navigation);
+    }
 
     /**
      * get Method leftView
@@ -98,6 +116,12 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         'organisation' => 'route',
         'irfoPermitStatus' => 'irfo_perm_s_pending'
     ];
+
+    public function detailsAction()
+    {
+        $this->placeholder()->setPlaceholder('isInternalReadOnly', $this->permissionService->isInternalReadOnly());
+        return parent::detailsAction();
+    }
 
     /**
      * not found action

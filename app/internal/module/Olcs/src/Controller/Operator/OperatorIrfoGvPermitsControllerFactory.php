@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Operator;
 
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -25,11 +26,14 @@ class OperatorIrfoGvPermitsControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
+        $permissionService = $container->get(Permission::class);
+
         return new OperatorIrfoGvPermitsController(
             $translationHelper,
             $formHelper,
             $flashMessenger,
-            $navigation
+            $navigation,
+            $permissionService
         );
     }
 }
