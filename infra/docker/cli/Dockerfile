@@ -1,39 +1,28 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as internal
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.0/cli:0 AS cli
 
 # hadolint ignore=DL3002
 USER root
 
-# Installing require dependencies
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install igbinary \
+  && pecl install igbinary apcu \
   && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
-  && docker-php-ext-enable redis igbinary \
+  && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
+# Install icu-dev, intl, pdo_mysql, opcache
 RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
-COPY /clamav/clamd.conf /etc/clamav/clamd.conf
-COPY /clamav/freshclam.conf /etc/clamav/freshclam.conf
-
-RUN apk add --no-cache clamav \
-  && freshclam --foreground --stdout
-
-COPY /clamav/supervisord.conf /etc/supervisor/conf.d/clamd.conf
-
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
-# nginx server config file
-COPY internal.conf /etc/nginx/conf.d/internal.conf
-
 EXPOSE 8080
 
-FROM internal AS production
+FROM cli AS production
 
-ADD ./internal.tar.gz /var/www/html
+ADD ./api.tar.gz /var/www/html
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
@@ -49,7 +38,7 @@ RUN chown -R root:www-data /var/www/html \
 
 USER www-data
 
-FROM internal AS development
+FROM cli AS development
 
 RUN apk add --no-cache $PHPIZE_DEPS \
   && pecl install xdebug-3.1.5 \

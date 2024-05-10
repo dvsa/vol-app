@@ -1,3 +1,42 @@
+resource "aws_lb_target_group" "this" {
+  for_each = var.services
+
+  name        = "vol-app-${var.environment}-${each.key}-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = coalesce(each.value.vpc_id, var.vpc_id)
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 300
+    timeout             = 60
+    protocol            = "HTTP"
+    port                = 8080
+    path                = "/healthcheck"
+    matcher             = "200-499"
+  }
+}
+
+resource "aws_lb_listener_rule" "this" {
+  for_each = var.services
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = each.value.listener_rule_priority
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = [each.value.listener_rule_host_header]
+    }
+  }
+}
+
 module "ecs_cluster" {
   for_each = var.services
 
@@ -10,8 +49,8 @@ module "ecs_cluster" {
 
   cluster_settings = [
     {
-      "name" : "containerInsights",
-      "value" : "enabled"
+      name  = "containerInsights"
+      value = "enabled"
     }
   ]
 }
@@ -25,31 +64,56 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
+  tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
+
+  enable_execute_command = true
+
   task_exec_iam_role_arn = module.ecs_cluster[each.key].task_exec_iam_role_arn
 
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
+
+  runtime_platform = {
+    operating_system_family = "LINUX",
+    cpu_architecture        = "ARM64"
+  }
 
   container_definitions = {
     (each.key) = {
       cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu / 2)
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory / 4)
       essential = true
-      image     = var.services[each.key].image
+      image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
       port_mappings = [
         {
           name          = "http"
-          containerPort = 80
+          hostPort      = 8080
+          containerPort = 8080
           protocol      = "tcp"
         }
       ]
 
-      environment = [
-        {
-          name  = "ENVIRONMENT_NAME"
-          value = var.environment
-        }
-      ]
+      # Have to explicitly set the user to null to avoid the default user being set to root.
+      user = null
+
+      environment = concat(
+        [
+          {
+            name  = "ENVIRONMENT_NAME"
+            value = var.environment
+          },
+          {
+            name  = "APP_VERSION"
+            value = var.services[each.key].version
+          },
+        ],
+        each.value.add_cdn_url_to_env ? [
+          {
+            name  = "CDN_URL"
+            value = module.cloudfront.cloudfront_distribution_domain_name
+          }
+        ] : []
+      )
 
       mount_points = [
         {
@@ -75,6 +139,14 @@ module "ecs_service" {
           }
         }
       }
+    }
+  }
+
+  load_balancer = {
+    service = {
+      target_group_arn = aws_lb_target_group.this[each.key].arn
+      container_name   = each.key
+      container_port   = 8080
     }
   }
 
