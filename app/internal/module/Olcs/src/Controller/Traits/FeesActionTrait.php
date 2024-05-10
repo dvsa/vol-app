@@ -210,8 +210,6 @@ trait FeesActionTrait
             $params['status'] = $status;
         }
 
-        $params['onlySubmitted'] = true;
-
         $results = $this->getFees($params);
 
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);

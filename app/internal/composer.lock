@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa853db416c64a9bcc06b041b81aba07",
+    "content-hash": "259dae4e13ea8bb216a0d0cb4ee43573",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4632,16 +4632,16 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v7.1.1",
+            "version": "v7.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "144bbdbdf426174e4db22d188fe8c519af6e5b23"
+                "reference": "fa56bc7dd9ee127fe593c13239fbc3887fd45c6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/144bbdbdf426174e4db22d188fe8c519af6e5b23",
-                "reference": "144bbdbdf426174e4db22d188fe8c519af6e5b23",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/fa56bc7dd9ee127fe593c13239fbc3887fd45c6b",
+                "reference": "fa56bc7dd9ee127fe593c13239fbc3887fd45c6b",
                 "shasum": ""
             },
             "require": {
@@ -4657,7 +4657,7 @@
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.11.1",
                 "laminas/laminas-xml": "^1.4.0",
-                "php": "^8.0",
+                "php": "~8.0.0",
                 "psr/container": "^1.1|^2"
             },
             "require-dev": {
@@ -4683,9 +4683,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v7.1.1"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v7.0.1"
             },
-            "time": "2024-04-29T11:14:43+00:00"
+            "time": "2024-04-17T10:45:52+00:00"
         },
         {
             "name": "olcs/olcs-utils",
