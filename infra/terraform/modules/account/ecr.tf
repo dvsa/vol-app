@@ -6,7 +6,7 @@ module "ecr" {
   for_each = toset(local.repositories)
 
   source  = "terraform-aws-modules/ecr/aws"
-  version = "~> 1.6"
+  version = "~> 2.2"
 
   repository_name = "vol-app/${each.key}"
 

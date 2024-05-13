@@ -34,7 +34,7 @@ locals {
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   domain_name = "${local.subdomain}.${local.domain_name}"
   zone_id     = data.aws_route53_zone.public.id
@@ -49,7 +49,7 @@ module "acm" {
 
 module "route53_records" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   create_certificate          = false
   create_route53_records_only = true
