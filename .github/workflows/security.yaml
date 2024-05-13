@@ -15,15 +15,9 @@ jobs:
   dependency-scan:
     name: Dependency Scan
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app/${{ inputs.project }}
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
-      WORKING_DIR: infra/docker/${{ inputs.project }}
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      REGISTRY_MIRROR: ghcr.io
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,5 +30,3 @@ jobs:
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Scan docker image
-        run: docker images
