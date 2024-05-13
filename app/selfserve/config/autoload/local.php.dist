@@ -8,7 +8,6 @@ return [
     // Debugging, display environment and version on interface
     'version' => [
         'environment' => 'localdev',
-        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
         'description' => 'olcs.localdev',
     ],
 

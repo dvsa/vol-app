@@ -6,10 +6,15 @@ $environment = getenv('ENVIRONMENT_NAME');
 // But for now, it's not. So we have to do it here.
 $isProduction = strtoupper($environment) === 'APP';
 
+// ECS will now set the version via. environment variables.
+// Once fully migrated, the `../version` file can be removed, and this can be simplified.
+$ecsVersion = getenv('APP_VERSION');
+$ec2Version = file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : null;
+
 return [
     'version' => $isProduction ? null : [
         'environment' => $environment,
-        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
+        'release' => ($ecsVersion ?: $ec2Version ?: 'LOCAL'),
         'description' => '%domain%',
     ],
     'api_router' => [
