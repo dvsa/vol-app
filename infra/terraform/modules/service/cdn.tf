@@ -39,6 +39,8 @@ module "acm" {
   domain_name = "${local.subdomain}.${local.domain_name}"
   zone_id     = data.aws_route53_zone.public.id
 
+  validation_method = "DNS"
+
   create_route53_records  = false
   validation_record_fqdns = module.route53_records.validation_route53_record_fqdns
 

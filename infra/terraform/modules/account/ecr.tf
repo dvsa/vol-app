@@ -60,14 +60,22 @@ module "ecr" {
   registry_scan_rules = [
     {
       scan_frequency = "SCAN_ON_PUSH"
-      filter         = "*"
-      filter_type    = "WILDCARD"
+      filter = [
+        {
+          filter      = "*",
+          filter_type = "WILDCARD"
+        }
+      ],
     },
     {
       scan_frequency = "CONTINUOUS_SCAN"
-      filter         = "*.*.*"
-      filter_type    = "WILDCARD"
-    }
+      filter = [
+        {
+          filter      = "*.*.*",
+          filter_type = "WILDCARD"
+        },
+      ],
+    },
   ]
 }
 
