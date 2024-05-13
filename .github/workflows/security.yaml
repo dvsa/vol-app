@@ -10,16 +10,34 @@ on:
       project:
         type: string
         required: true
+  schedule:
+    # Weekly on Monday at 00:00 UTC
+    - cron: 0 0 * * 1
 
 jobs:
   dependency-scan:
     name: Dependency Scan
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
+      SCHEDULE_REMOTE_REPOSITORY: ${{ matrix.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', matrix.project) }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Scheduled Scan
+        if: github.event_name == 'shedule'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.SCHEDULE_REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ matrix.project }}
+      - name: Non-Scheduled Scan
+        uses: actions/checkout@v4
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
