@@ -1,12 +1,7 @@
 name: Security Terraform
 
 on:
-  push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
+  workflow_call:
 
 jobs:
   terraform-scan:
