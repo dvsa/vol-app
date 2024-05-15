@@ -347,10 +347,10 @@ jobs:
 
   security-terraform:
     name: Security Terraform
-    needs:
-      - terraform-lint
-      - terraform-account
-      - terraform-env
+    # needs:
+    #   - terraform-lint
+    #   - terraform-account
+    #   - terraform-env
 
     uses: ./.github/workflows/security-terraform.yaml
     permissions:
