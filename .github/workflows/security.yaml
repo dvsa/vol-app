@@ -16,7 +16,7 @@ on:
 
 jobs:
   scheduled-dependency-scan-api:
-    if: github.event_name == 'schedule' || github.event.inputs.project == 'api'
+    if: github.event_name == 'schedule' || inputs.project == 'api'
     name: Scheuled Dependency Scan API
     runs-on: ubuntu-latest
     defaults:
@@ -39,7 +39,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-selfserve:
-    if: github.event_name == 'schedule' || github.event.inputs.project == 'selfserve'
+    if: github.event_name == 'schedule' || inputs.project == 'selfserve'
     name: Scheuled Dependency Scan Selfserve
     runs-on: ubuntu-latest
     defaults:
@@ -62,7 +62,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-internal:
-    if: github.event_name == 'schedule' || github.event.inputs.project == 'internal'
+    if: github.event_name == 'schedule' || inputs.project == 'internal'
     name: Scheuled Dependency Scan Internal
     runs-on: ubuntu-latest
     defaults:
