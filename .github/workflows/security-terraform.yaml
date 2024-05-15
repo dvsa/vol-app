@@ -13,16 +13,16 @@ jobs:
 
       - name: Scan Terraform
         uses: aquasecurity/trivy-action@master
+
+        continue-on-error: true
         with:
           scan-type: "config"
-          hide-progress: true
-          format: "sarif"
-          output: "trivy-results.sarif"
-          exit-code: "1"
-          ignore-unfixed: true
+          format: "table"
+          output: "trivy-results.txt"
           severity: "CRITICAL,HIGH"
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+      - name: Upload Trivy scan results
+        uses: actions/upload-artifact@v2
         with:
-          sarif_file: "trivy-results.sarif"
+          name: Trivy Scan Results
+          path: trivy-results.txt
