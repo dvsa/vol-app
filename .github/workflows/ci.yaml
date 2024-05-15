@@ -324,8 +324,8 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  security:
-    name: security
+  dependency-scan:
+    name: Dependency Scanning
     needs:
       - app
       - orchestrator
@@ -339,7 +339,7 @@ jobs:
           - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
           - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
-    uses: ./.github/workflows/security.yaml
+    uses: ./.github/workflows/dependency-scan.yaml
     with:
       project: ${{ matrix.project }}
     permissions:
