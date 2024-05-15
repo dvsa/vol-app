@@ -13,6 +13,11 @@ variable "assets_version" {
   description = "The version of the assets"
 }
 
+variable "vpc_id" {
+  type        = string
+  description = "The VPC ID"
+}
+
 variable "services" {
   type = map(object({
     version    = string
@@ -30,7 +35,7 @@ variable "services" {
     listener_rule_host_header = optional(string, "*")
     security_group_ids        = list(string)
     subnet_ids                = list(string)
-    vpc_id                    = string
+    vpc_id                    = optional(string, null)
   }))
   description = "The services to deploy"
   default     = {}

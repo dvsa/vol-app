@@ -17,21 +17,29 @@ data "aws_s3_bucket" "assets" {
   bucket = "vol-app-assets"
 }
 
-data "aws_route53_zone" "this" {
+data "aws_route53_zone" "public" {
   name = var.domain_name
 }
 
+data "aws_route53_zone" "private" {
+  name = var.domain_name
+
+  private_zone = true
+}
+
 locals {
-  domain_name = trimsuffix(data.aws_route53_zone.this.name, ".")
+  domain_name = trimsuffix(data.aws_route53_zone.public.name, ".")
   subdomain   = "cdn"
 }
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   domain_name = "${local.subdomain}.${local.domain_name}"
-  zone_id     = data.aws_route53_zone.this.id
+  zone_id     = data.aws_route53_zone.public.id
+
+  validation_method = "DNS"
 
   create_route53_records  = false
   validation_record_fqdns = module.route53_records.validation_route53_record_fqdns
@@ -43,7 +51,7 @@ module "acm" {
 
 module "route53_records" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
+  version = "~> 5.0"
 
   create_certificate          = false
   create_route53_records_only = true
@@ -51,7 +59,7 @@ module "route53_records" {
   validation_method = "DNS"
 
   distinct_domain_names = module.acm.distinct_domain_names
-  zone_id               = data.aws_route53_zone.this.id
+  zone_id               = data.aws_route53_zone.public.id
 
   acm_certificate_domain_validation_options = module.acm.acm_certificate_domain_validation_options
 }
@@ -163,7 +171,7 @@ module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 2.0"
 
-  zone_id = data.aws_route53_zone.this.zone_id
+  zone_id = data.aws_route53_zone.private.zone_id
 
   records = [
     {

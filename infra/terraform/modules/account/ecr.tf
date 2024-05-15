@@ -6,7 +6,7 @@ module "ecr" {
   for_each = toset(local.repositories)
 
   source  = "terraform-aws-modules/ecr/aws"
-  version = "~> 1.6"
+  version = "~> 2.2"
 
   repository_name = "vol-app/${each.key}"
 
@@ -60,14 +60,22 @@ module "ecr" {
   registry_scan_rules = [
     {
       scan_frequency = "SCAN_ON_PUSH"
-      filter         = "*"
-      filter_type    = "WILDCARD"
+      filter = [
+        {
+          filter      = "*",
+          filter_type = "WILDCARD"
+        }
+      ],
     },
     {
       scan_frequency = "CONTINUOUS_SCAN"
-      filter         = "*.*.*"
-      filter_type    = "WILDCARD"
-    }
+      filter = [
+        {
+          filter      = "*.*.*",
+          filter_type = "WILDCARD"
+        },
+      ],
+    },
   ]
 }
 
