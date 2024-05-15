@@ -18,6 +18,9 @@ jobs:
   dependency-scan:
     name: Dependency Scan
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
@@ -35,8 +38,11 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-api:
-    name: Scheuled Dependency Scan API
+    name: Scheuled Dependency Scan api
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/api
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: dvsa/olcs-backend
@@ -54,8 +60,11 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-selfserve:
-    name: Scheuled Dependency Scan Selfserve
+    name: Scheuled Dependency Scan selfserve
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/selfserve
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: dvsa/olcs-selfserve
@@ -73,8 +82,11 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-internal:
-    name: Scheuled Dependency Scan Internal
+    name: Scheuled Dependency Scan internal
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/internal
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: dvsa/olcs-internal
