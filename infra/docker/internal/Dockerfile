@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as internal
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.2/fpm-nginx:0 AS internal
 
 # hadolint ignore=DL3002
 USER root
