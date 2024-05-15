@@ -15,30 +15,9 @@ on:
     - cron: 0 0 * * 1
 
 jobs:
-  dependency-scan:
-    name: Dependency Scan
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app/${{ inputs.project }}
-    env:
-      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
-      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
-          path: app/${{ inputs.project }}
-      - name: Setup Snyk
-        uses: snyk/actions/setup@master
-      - name: Scan ${{ inputs.project }}
-        run: snyk test
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
   scheduled-dependency-scan-api:
-    name: Scheuled Dependency Scan api
+    if: github.event_name == 'schedule' || github.event.inputs.project == 'api'
+    name: Scheuled Dependency Scan API
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -54,13 +33,14 @@ jobs:
           path: app/api
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan API
+      - name: Scan api
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-selfserve:
-    name: Scheuled Dependency Scan selfserve
+    if: github.event_name == 'schedule' || github.event.inputs.project == 'selfserve'
+    name: Scheuled Dependency Scan Selfserve
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -76,13 +56,14 @@ jobs:
           path: app/selfserve
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan Selfserve
+      - name: Scan selfserve
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   scheduled-dependency-scan-internal:
-    name: Scheuled Dependency Scan internal
+    if: github.event_name == 'schedule' || github.event.inputs.project == 'internal'
+    name: Scheuled Dependency Scan Internal
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -98,7 +79,7 @@ jobs:
           path: app/internal
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan Internal
+      - name: Scan internal
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
