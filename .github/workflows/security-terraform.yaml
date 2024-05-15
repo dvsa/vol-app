@@ -17,11 +17,14 @@ jobs:
         continue-on-error: true
         with:
           scan-type: "config"
-          format: "sarif"
-          output: "trivy-results.sarif"
+          format: "table"
+          output: "trivy-results.txt"
           severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
 
-      - name: Upload Results to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: "trivy-results.sarif"
+      # - name: Upload Results to GitHub Code Scanning
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: "trivy-results.sarif"
+
+      - name: Display Trivy scan results (TXT)
+        run: cat trivy-results.txt
