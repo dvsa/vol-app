@@ -1,0 +1,19 @@
+name: Security Terraform
+
+on:
+  workflow_call:
+
+jobs:
+  terraform-scan:
+    name: Terraform Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Trivy
+        uses: aquasecurity/trivy-action@master
+
+      - name: Scan Terraform
+        run: |
+          find infra/terrform -type d -exec trivy config --severity HIGH,CRITICAL --exit-code 1 --format table {} \;
