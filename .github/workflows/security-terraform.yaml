@@ -26,3 +26,6 @@ jobs:
         with:
           name: Trivy Scan Results
           path: trivy-results.txt
+
+      - name: Display Trivy Results
+        run: cat trivy-results.txt
