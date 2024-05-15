@@ -33,7 +33,7 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
         $sut = $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$sut, '__invoke']);
+        $this->assertIsCallable($sut->__invoke(...));
     }
 
     /**
@@ -60,9 +60,7 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
     }
 
     /**
-     * @param ServiceManager $serviceManager
      * @return (FormValidator|LicenceVehicleManagement|\Mockery\MockInterface)[]
-     *
      * @psalm-return array{'Laminas\\Mvc\\Plugin\\FlashMessenger\\FlashMessenger'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\FormHelperService'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\HandleQuery'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\Redirect'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\ResponseHelperService'::class: \Mockery\MockInterface, 'Laminas\\Mvc\\Controller\\Plugin\\Url'::class: \Mockery\MockInterface, 'Olcs\\Session\\LicenceVehicleManagement'::class: LicenceVehicleManagement, 'Common\\Form\\FormValidator'::class: FormValidator}
      */
     protected function setUpDefaultServices(ServiceManager $serviceManager): array

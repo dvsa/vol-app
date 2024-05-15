@@ -15,7 +15,7 @@ class QuestionArrayProvider
      *
      * @return QuestionArrayProvider
      */
-    public function __construct(private FormattedTranslateableTextParametersGenerator $formattedTranslateableTextParametersGenerator)
+    public function __construct(private readonly FormattedTranslateableTextParametersGenerator $formattedTranslateableTextParametersGenerator)
     {
     }
 

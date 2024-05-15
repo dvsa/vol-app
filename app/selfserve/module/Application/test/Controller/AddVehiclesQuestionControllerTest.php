@@ -205,7 +205,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'indexAction']);
+        $this->assertIsCallable($this->sut->indexAction(...));
     }
 
     /**
@@ -1162,7 +1162,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param ServiceManager $serviceManager
      * @return ServiceManager
      */
     protected function setUpDefaultServices(ServiceManager $serviceManager): ServiceManager|array

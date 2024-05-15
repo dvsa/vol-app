@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa;
 
 use Mockery as m;
@@ -26,6 +28,8 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
         self::GAT_2_KEY => 'aaaabbb',
         'foo' => 'bar',
     ];
+
+    private $cookie;
 
     public function setUp(): void
     {

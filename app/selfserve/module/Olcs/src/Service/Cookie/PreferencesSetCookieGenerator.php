@@ -14,7 +14,7 @@ class PreferencesSetCookieGenerator
      *
      * @return PreferencesSetCookieGenerator
      */
-    public function __construct(private SetCookieFactory $setCookieFactory, private CookieExpiryGenerator $cookieExpiryGenerator)
+    public function __construct(private readonly SetCookieFactory $setCookieFactory, private readonly CookieExpiryGenerator $cookieExpiryGenerator)
     {
     }
 

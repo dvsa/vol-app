@@ -21,7 +21,7 @@ class LicenceTransportManagerAdapter extends CommonAdapter
         TransferAnnotationBuilder $transferAnnotationBuilder,
         CachingQueryService $querySrv,
         CommandService $commandSrv,
-        private VariationLvaService $lvaVariationSrv,
+        private readonly VariationLvaService $lvaVariationSrv,
         ContainerInterface $container
     ) {
         parent::__construct($transferAnnotationBuilder, $querySrv, $commandSrv, $container);

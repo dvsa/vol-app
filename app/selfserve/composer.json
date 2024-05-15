@@ -6,7 +6,7 @@
        "url": "https://github.com/dvsa/laminas-form.git"
     }],
     "require": {
-        "php": "~8.0.0",
+        "php": "~8.2.0",
         "ext-redis": "*",
         "doctrine/annotations": "^1.14.2",
         "doctrine/doctrine-module": "^5",

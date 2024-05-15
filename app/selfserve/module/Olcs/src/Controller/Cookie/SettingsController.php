@@ -22,7 +22,7 @@ class SettingsController extends AbstractOlcsController
      *
      * @return SettingsController
      */
-    public function __construct(private CurrentPreferencesProvider $currentPreferencesProvider, private SetCookieArrayGenerator $setCookieArrayGenerator, private PreferencesFactory $preferencesFactory)
+    public function __construct(private readonly CurrentPreferencesProvider $currentPreferencesProvider, private readonly SetCookieArrayGenerator $setCookieArrayGenerator, private readonly PreferencesFactory $preferencesFactory)
     {
     }
 

@@ -42,7 +42,7 @@ class ConfirmationController extends AbstractSurrenderController
     private function getSignatureFullName(): string
     {
         $names = [];
-        $attributes = json_decode($this->data['surrender']["digitalSignature"]["attributes"]);
+        $attributes = json_decode((string) $this->data['surrender']["digitalSignature"]["attributes"]);
         $names[] = $attributes->firstname ?? '';
         $names[] = $attributes->surname ?? '';
 
@@ -51,7 +51,7 @@ class ConfirmationController extends AbstractSurrenderController
 
     private function getSignatureDate(): string
     {
-        $unixTimeStamp = strtotime($this->data['surrender']["digitalSignature"]['createdOn']);
+        $unixTimeStamp = strtotime((string) $this->data['surrender']["digitalSignature"]['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 

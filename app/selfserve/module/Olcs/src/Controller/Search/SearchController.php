@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Search Controller
- */
-
 namespace Olcs\Controller\Search;
 
 use Common\Controller\Lva\AbstractController;
@@ -24,14 +20,13 @@ use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Search Controller
- */
 class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
 
     protected $viewHelperManager;
+
+    public $navigationId;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil

@@ -12,7 +12,7 @@ class GuidanceTemplateVarsAdder
      *
      * @return GuidanceTemplateVarsAdder
      */
-    public function __construct(private TranslateableTextHandler $translateableTextHandler)
+    public function __construct(private readonly TranslateableTextHandler $translateableTextHandler)
     {
     }
 

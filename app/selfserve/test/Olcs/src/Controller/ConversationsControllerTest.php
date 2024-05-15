@@ -32,6 +32,17 @@ use ReflectionClass;
 
 class ConversationsControllerTest extends TestCase
 {
+    public $mockNiTextTranslationUtil;
+    public $mockAuthService;
+    public $mockFlashMessengerHelper;
+    public $mockTableFactory;
+    public $mockFormHelperService;
+    public $mockNavigation;
+    public $mockForm;
+    public $mockParams;
+    public $mockUploadHelper;
+    public $mockUser;
+    public $mockFormActions;
     protected $sut;
 
     public function setUp(): void

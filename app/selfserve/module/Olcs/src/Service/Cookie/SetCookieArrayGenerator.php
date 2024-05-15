@@ -13,7 +13,7 @@ class SetCookieArrayGenerator
      *
      * @return SetCookieArrayGenerator
      */
-    public function __construct(private DeleteCookieNamesProvider $deleteCookieNamesProvider, private PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private DeleteSetCookieGenerator $deleteSetCookieGenerator)
+    public function __construct(private readonly DeleteCookieNamesProvider $deleteCookieNamesProvider, private readonly PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private readonly DeleteSetCookieGenerator $deleteSetCookieGenerator)
     {
     }
 

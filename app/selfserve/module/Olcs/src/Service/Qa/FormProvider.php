@@ -18,7 +18,7 @@ class FormProvider
      *
      * @return FormProvider
      */
-    public function __construct(private FormFactory $formFactory, private FieldsetPopulator $fieldsetPopulator, private LaminasFormFactory $laminasFormFactory, private $annotationBuilder, private array $submitOptionsMappings)
+    public function __construct(private readonly FormFactory $formFactory, private readonly FieldsetPopulator $fieldsetPopulator, private readonly LaminasFormFactory $laminasFormFactory, private $annotationBuilder, private array $submitOptionsMappings)
     {
     }
 

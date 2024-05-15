@@ -89,7 +89,7 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'setVariable']);
+        $this->assertIsCallable($this->sut->setVariable(...));
     }
 
     /**
@@ -137,7 +137,7 @@ class AnchorViewModelTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'setVariables']);
+        $this->assertIsCallable($this->sut->setVariables(...));
     }
 
     /**

@@ -131,13 +131,13 @@ class ConfirmationController extends AbstractController
 
     private function getSignatureDate($signature): string
     {
-        $unixTimeStamp = strtotime($signature['createdOn']);
+        $unixTimeStamp = strtotime((string) $signature['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 
     private function getSignatureFullName($signature): string
     {
-        $attributes = json_decode($signature['attributes']);
+        $attributes = json_decode((string) $signature['attributes']);
         return $attributes->firstname . ' ' . $attributes->surname;
     }
 

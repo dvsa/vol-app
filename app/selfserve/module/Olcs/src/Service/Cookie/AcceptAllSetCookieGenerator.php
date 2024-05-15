@@ -12,7 +12,7 @@ class AcceptAllSetCookieGenerator
      *
      * @return AcceptAllSetCookieGenerator
      */
-    public function __construct(private PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private PreferencesFactory $preferencesFactory)
+    public function __construct(private readonly PreferencesSetCookieGenerator $preferencesSetCookieGenerator, private readonly PreferencesFactory $preferencesFactory)
     {
     }
 

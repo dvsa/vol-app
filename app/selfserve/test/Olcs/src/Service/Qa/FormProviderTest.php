@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa;
 
 use ArrayObject;
@@ -36,7 +38,7 @@ class FormProviderTest extends MockeryTestCase
 
     private $laminasFormFactory;
 
-    private $customAnnotationBuilder;
+    private $annotationBuilder;
 
     private $formProvider;
 

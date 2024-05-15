@@ -1,30 +1,31 @@
 <?php
 
-/**
- * Class User Forgot Username Controller Test
- */
+declare(strict_types=1);
 
 namespace OlcsTest\Controller;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
-use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\RemindUsernameSelfserve as RemindUsernameDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserForgotUsernameController as Sut;
-use OlcsTest\Bootstrap;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Class User Forgot Username Controller Test
- */
 class UserForgotUsernameControllerTest extends TestCase
 {
     protected $sut;
     protected $sm;
+
+    private $mockniTextTranslationUtil;
+
+    private $mockauthService;
+
+    private $mockflashMessengerHelper;
+
+    private $mockformHelper;
 
     public function setUp(): void
     {

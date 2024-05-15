@@ -82,7 +82,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $templateUrl = $this->getUrl()->fromRoute(
             'getfile',
             [
-                'identifier' => base64_encode($templateIdentifier)
+                'identifier' => base64_encode((string) $templateIdentifier)
             ],
             [
                 'query' => [

@@ -19,7 +19,7 @@ class ConfirmedUpdatedCountries implements MapperInterface
     public function mapFromForm($data)
     {
         $fields = $data['fields'];
-        $fields['countries'] = explode(',', $fields['countries']);
+        $fields['countries'] = explode(',', (string) $fields['countries']);
 
         return $fields;
     }

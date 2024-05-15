@@ -39,7 +39,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     {
         $this->setUpSut();
         // Assert
-        $this->assertTrue(method_exists($this->sut, 'indexAction') && is_callable([$this->sut, 'indexAction']));
+        $this->assertTrue(method_exists($this->sut, 'indexAction') && is_callable($this->sut->indexAction(...)));
     }
 
     /**

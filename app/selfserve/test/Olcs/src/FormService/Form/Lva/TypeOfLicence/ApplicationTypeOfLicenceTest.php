@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Rbac\Service\Permission;
@@ -27,10 +29,10 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->guidanceHelper = m::mock(GuidanceHelperService::class);
+        $guidanceHelper = m::mock(GuidanceHelperService::class);
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
         $this->permission = m::mock(Permission::class);
-        $this->sut = new ApplicationTypeOfLicence($this->fh, $this->permission, $this->guidanceHelper, $this->fsm);
+        $this->sut = new ApplicationTypeOfLicence($this->fh, $this->permission, $guidanceHelper, $this->fsm);
     }
 
     public function testAlterForm(): void

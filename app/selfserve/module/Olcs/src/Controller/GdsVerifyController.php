@@ -367,7 +367,7 @@ class GdsVerifyController extends AbstractController
     private function validateRedisSamlResponseReferenceKey($key): bool
     {
         // Essentially, we verify the reference key is a SHA1.
-        return (bool)preg_match('/^[0-9a-f]{40}$/i', $key);
+        return (bool)preg_match('/^[0-9a-f]{40}$/i', (string) $key);
     }
 
     /**
@@ -401,7 +401,7 @@ class GdsVerifyController extends AbstractController
         }
 
         if (!$this->isFromVerify()) {
-            return urldecode($samlResponse);
+            return urldecode((string) $samlResponse);
         }
 
         return $samlResponse;
@@ -416,7 +416,7 @@ class GdsVerifyController extends AbstractController
     {
         $verifyReferer = 'signin.service.gov.uk';
         $referer = $_SERVER['HTTP_REFERER'];
-        $refererHost =  parse_url($referer, PHP_URL_HOST);
+        $refererHost =  parse_url((string) $referer, PHP_URL_HOST);
         $trimmedHost = implode('.', array_slice(explode('.', $refererHost), -4, 4));
 
         return $trimmedHost === $verifyReferer;

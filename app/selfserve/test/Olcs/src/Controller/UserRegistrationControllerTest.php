@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Class User Registration Controller Test
- */
+declare(strict_types=1);
 
 namespace OlcsTest\Controller;
 
@@ -17,17 +15,27 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserRegistrationController as Sut;
-use OlcsTest\Bootstrap;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Class User Registration Controller Test
- */
 class UserRegistrationControllerTest extends TestCase
 {
     protected $sut;
     protected $sm;
+
+    private $mockTranslationHelper;
+
+    private $mockniTextTranslationUtil;
+
+    private $mockauthService;
+
+    private $mockFlashMessengerHelper;
+
+    private $mockFormHelper;
+
+    private $mockScriptFactory;
+
+    private $mockUrlHelper;
 
     public function setUp(): void
     {

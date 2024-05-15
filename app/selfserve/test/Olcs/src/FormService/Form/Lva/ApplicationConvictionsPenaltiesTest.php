@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
@@ -27,6 +29,12 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
     protected $fh;
 
     protected $formName = 'Lva\ConvictionsPenalties';
+
+    private $urlHelper;
+
+    private $translator;
+
+    private $formHelper;
 
     public function setUp(): void
     {

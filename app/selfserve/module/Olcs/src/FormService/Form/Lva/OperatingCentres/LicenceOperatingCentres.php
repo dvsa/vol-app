@@ -57,7 +57,7 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
         }
 
         foreach ($this->lockElements as $lockElementRef) {
-            $lockElementRefComponents = explode('->', $lockElementRef);
+            $lockElementRefComponents = explode('->', (string) $lockElementRef);
             $lockElement = $dataElement;
             foreach ($lockElementRefComponents as $elementRef) {
                 if (null === $lockElement) {

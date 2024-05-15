@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Service\Helper\FormHelperService;
@@ -24,6 +26,10 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     protected $fsm;
 
     protected $fh;
+
+    private $guidanceHelper;
+
+    private $authService;
 
     public function setUp(): void
     {

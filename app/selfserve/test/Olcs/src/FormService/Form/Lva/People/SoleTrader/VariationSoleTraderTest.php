@@ -1,25 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\FormService\FormServiceManager;
 use Common\Service\Lva\PeopleLvaService;
-use Common\Service\Translator\TranslationLoader;
 use Laminas\Form\ElementInterface;
-use Laminas\I18n\Translator\LoaderPluginManager;
-use Laminas\Mvc\Service\ServiceManagerConfig;
-use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\VariationSoleTrader as Sut;
 use Laminas\Form\Form;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Variation Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationSoleTraderTest extends MockeryTestCase
 {
     protected $sut;
@@ -31,6 +24,8 @@ class VariationSoleTraderTest extends MockeryTestCase
     protected $sm;
 
     protected $mockVariationService;
+
+    private $peopleLvaService;
 
     public function setUp(): void
     {

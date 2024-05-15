@@ -17,7 +17,7 @@ class SessionTimeoutController
     /**
      * SessionTimeoutController constructor.
      */
-    public function __construct(private IdentityProviderInterface $identityProvider, protected Redirect $redirectHelper)
+    public function __construct(private readonly IdentityProviderInterface $identityProvider, protected Redirect $redirectHelper)
     {
     }
 

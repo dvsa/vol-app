@@ -22,8 +22,8 @@ class SelectedCandidatePermits implements MapperInterface
     {
         $candidatePermitIds = [];
         foreach ($data['fields'] as $name => $value) {
-            if (str_starts_with($name, self::CANDIDATE_PREFIX) && $value == '1') {
-                $candidatePermitIds[] = substr($name, strlen(self::CANDIDATE_PREFIX));
+            if (str_starts_with((string) $name, self::CANDIDATE_PREFIX) && $value == '1') {
+                $candidatePermitIds[] = substr((string) $name, strlen(self::CANDIDATE_PREFIX));
             }
         }
 

@@ -29,7 +29,7 @@ return [
             'width' => '20%',
             'formatter' => function ($row) {
                 if (isset($row['correspondence']['document']['issuedDate'])) {
-                    return date(Module::$dateFormat, strtotime($row['correspondence']['document']['issuedDate']));
+                    return date(Module::$dateFormat, strtotime((string) $row['correspondence']['document']['issuedDate']));
                 }
                 return '';
             },

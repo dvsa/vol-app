@@ -12,6 +12,10 @@ use Laminas\Validator\InArray;
 use Laminas\Validator\NotEmpty;
 use Laminas\Validator\Uri;
 
+/**
+ * @template TFilteredValues
+ * @extends InputFilter<TFilteredValues>
+ */
 class SessionTimeoutWarningFactoryConfigInputFilter extends InputFilter
 {
     public const CONFIG_ENABLED = 'enabled';

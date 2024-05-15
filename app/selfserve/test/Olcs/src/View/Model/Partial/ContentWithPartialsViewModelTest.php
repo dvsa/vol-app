@@ -87,7 +87,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'setVariable']);
+        $this->assertIsCallable($this->sut->setVariable(...));
     }
 
     /**
@@ -152,7 +152,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'setVariables']);
+        $this->assertIsCallable($this->sut->setVariables(...));
     }
 
     /**

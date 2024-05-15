@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Elements\Types\Html;
@@ -12,12 +14,10 @@ use Mockery as m;
 use RuntimeException;
 use Laminas\Form\Element\Hidden;
 
-/**
- * AvailableYearsTest
- */
 class AvailableYearsTest extends TestCase
 {
     private $availableYears;
+    private $translationHelperService;
 
     public function setUp(): void
     {

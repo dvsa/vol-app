@@ -24,7 +24,7 @@ class AvailableBilateralStocks implements MapperInterface
      *
      * @return AvailableBilateralStocks
      */
-    public function __construct(private TranslationHelperService $translator)
+    public function __construct(private readonly TranslationHelperService $translator)
     {
     }
 

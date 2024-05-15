@@ -37,7 +37,7 @@ class SwitchBoardController
     public const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
     protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'switchboard-input';
 
-    public function __construct(private FlashMessenger $flashMessenger, private FormHelperService $formHelper, private HandleQuery $queryHandler, private Redirect $redirectHelper, private ResponseHelperService $responseHelper, private LicenceVehicleManagement $session, private Url $urlHelper, private FormValidator $formValidator)
+    public function __construct(private readonly FlashMessenger $flashMessenger, private readonly FormHelperService $formHelper, private readonly HandleQuery $queryHandler, private readonly Redirect $redirectHelper, private readonly ResponseHelperService $responseHelper, private readonly LicenceVehicleManagement $session, private readonly Url $urlHelper, private readonly FormValidator $formValidator)
     {
     }
 

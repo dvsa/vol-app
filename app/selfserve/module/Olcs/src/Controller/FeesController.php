@@ -118,7 +118,7 @@ class FeesController extends AbstractController
                 $this->getRequest()->getPost('storedCards')['card'] :
                 false;
 
-            $feeIds = explode(',', $this->params('fee'));
+            $feeIds = explode(',', (string) $this->params('fee'));
             return $this->payOutstandingFees($feeIds, $storedCardReference);
         }
 
@@ -256,7 +256,7 @@ class FeesController extends AbstractController
         $outstandingFees = $this->getOutstandingFeesForOrganisation($organisationId);
 
         if (!empty($outstandingFees)) {
-            $ids = explode(',', $this->params('fee'));
+            $ids = explode(',', (string) $this->params('fee'));
             foreach ($outstandingFees as $fee) {
                 if (in_array($fee['id'], $ids)) {
                     $fees[] = $fee;
@@ -375,7 +375,7 @@ class FeesController extends AbstractController
         }
         $result = $response->getResult();
         $view = new ViewModel(
-            ['licenceExpiryDate' => date('d F Y', strtotime($result['licenceExpiryDate']))]
+            ['licenceExpiryDate' => date('d F Y', strtotime((string) $result['licenceExpiryDate']))]
         );
         $view->setTemplate('pages/fees/late');
         return $this->render($view);

@@ -36,7 +36,7 @@ class IrhpApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function handleRedirectionRequest(Redirect $redirect, $destinationName)
+    public function handleRedirectionRequest(Redirect $redirect, $destinationName): never
     {
         throw new RuntimeException(self::ERR_NOT_SUPPORTED);
     }

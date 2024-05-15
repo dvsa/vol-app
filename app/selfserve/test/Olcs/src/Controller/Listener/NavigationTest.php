@@ -22,6 +22,24 @@ use Common\Service\Cqrs\Response as CqrsResponse;
  */
 class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
+    /**
+     * @var (\Common\Service\Cqrs\Response & \Mockery\MockInterface)
+     */
+    public $mockResponse;
+    public $mockAuthService;
+    public $dashboardPermitsKey;
+    public $dashboardPermitsPage;
+    public $dashboardMessagingKey;
+    public $dashboardMessagingPage;
+    /**
+     * @var string
+     */
+    public $dashboardMenuKey;
+    /**
+     * @var (\Laminas\Navigation\Page\AbstractPage & \Mockery\MockInterface)
+     */
+    public $mockDashboardMenu;
+    public $messagingToggle;
     /** @var NavigationListener */
     protected $sut;
 

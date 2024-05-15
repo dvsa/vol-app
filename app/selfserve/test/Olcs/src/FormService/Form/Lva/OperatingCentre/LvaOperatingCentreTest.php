@@ -322,7 +322,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
                     'guide' => static::GUIDE_NI_NEW
                 ]
             ],
@@ -339,7 +339,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
                     'guide' => static::GUIDE_NI_NEW
                 ]
             ],
@@ -358,7 +358,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
                     'guide' => static::GUIDE_NI_NEW
                 ]
             ],
@@ -377,7 +377,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => true,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_VAR),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_VAR),
                     'guide' => static::GUIDE_NI_VAR
                 ]
             ]
@@ -403,7 +403,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
                     'guide' => static::GUIDE_GB_NEW
                 ]
             ],
@@ -420,7 +420,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
                     'guide' => static::GUIDE_GB_NEW
                 ]
             ],
@@ -439,7 +439,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
                     'guide' => static::GUIDE_GB_NEW
                 ]
             ],
@@ -453,7 +453,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => false,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
                     'guide' => static::GUIDE_GB_NEW
                 ]
             ],
@@ -467,7 +467,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
                     'isVariation' => true,
-                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_VAR),
+                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_VAR),
                     'guide' => static::GUIDE_GB_VAR
                 ]
             ]

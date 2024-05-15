@@ -20,6 +20,11 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 class MyDetailsControllerTest extends TestCase
 {
+    public $mockniTextTranslationUtil;
+    public $mockauthService;
+    public $mockflashMessengerHelper;
+    public $mockscriptFactory;
+    public $mockformHelper;
     protected $sut;
     protected $sm;
 

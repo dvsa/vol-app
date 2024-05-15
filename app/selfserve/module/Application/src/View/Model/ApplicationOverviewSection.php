@@ -18,7 +18,7 @@ class ApplicationOverviewSection extends LvaOverviewSection
     public function __construct($ref, $data, $sectionDetails)
     {
         $filter = new \Laminas\Filter\Word\DashToCamelCase();
-        $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
+        $index = lcfirst((string) $filter->filter(str_replace('_', '-', $ref)));
 
         $status = $data['applicationCompletion'][$index . 'Status'] ?? null;
 

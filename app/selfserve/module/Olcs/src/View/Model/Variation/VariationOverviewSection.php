@@ -23,7 +23,7 @@ class VariationOverviewSection extends LvaOverviewSection
     {
         // @NOTE Can we replace this with UnderscoreToCamelCase
         $filter = new \Laminas\Filter\Word\DashToCamelCase();
-        $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
+        $index = lcfirst((string) $filter->filter(str_replace('_', '-', $ref)));
 
         switch ($sectionDetails['status']) {
             case 1:

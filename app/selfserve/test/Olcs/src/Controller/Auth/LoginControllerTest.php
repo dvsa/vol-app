@@ -123,7 +123,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'indexAction']);
+        $this->assertIsCallable($this->sut->indexAction(...));
     }
 
     /**
@@ -243,7 +243,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'postAction']);
+        $this->assertIsCallable($this->sut->postAction(...));
     }
 
     /**

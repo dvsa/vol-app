@@ -180,7 +180,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $this->routeParams = $params->fromRoute() ?: [];
         $this->postParams = $params->fromPost() ?: [];
         $this->queryParams = $params->fromQuery() ?: [];
-        $this->action = strtolower($e->getRouteMatch()->getParam('action'));
+        $this->action = strtolower((string) $e->getRouteMatch()->getParam('action'));
 
         /** @todo find a better place for these */
         $this->retrieveData();

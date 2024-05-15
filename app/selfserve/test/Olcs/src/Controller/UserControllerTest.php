@@ -32,6 +32,18 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class UserControllerTest extends MockeryTestCase
 {
+    /**
+     * @var (\Dvsa\Olcs\Utils\Translation\NiTextTranslation & \Mockery\MockInterface)
+     */
+    public $mockNiTextTranslationUtil;
+    /**
+     * @var (\LmcRbacMvc\Service\AuthorizationService & \Mockery\MockInterface)
+     */
+    public $mockAuthService;
+    public $mockUser;
+    public $mockScriptFactory;
+    public $mockFlashMessengerHelper;
+    public $mockTranslationHelper;
     /** @var  \Olcs\Controller\UserController | m\MockInterface */
     private $sut;
 

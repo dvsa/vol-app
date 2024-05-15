@@ -45,7 +45,7 @@ class CandidatePermitSelection implements MapperInterface
 
         $tableMarkup = $table->__toString();
 
-        $tableMarkupElements = explode('{checkboxPlaceholder}', $tableMarkup);
+        $tableMarkupElements = explode('{checkboxPlaceholder}', (string) $tableMarkup);
         $tableMarkupElementsCount = count($tableMarkupElements);
         $candidatePermits = $data['unpaginatedUnpaidPermits']['results'];
 

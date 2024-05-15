@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
@@ -18,11 +20,6 @@ use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Application Financial Evidence Form Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class ApplicationFinancialEvidenceTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -41,6 +38,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $translator;
 
+    private $vpm;
 
     public function setUp(): void
     {

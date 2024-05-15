@@ -217,17 +217,17 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $hasProcessedCertificateFiles = $this->processFiles(
             $form,
             'details->certificate',
-            [$this, 'processCertificateUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getCertificates']
+            $this->processCertificateUpload(...),
+            $this->deleteFile(...),
+            $this->getCertificates(...)
         );
 
         $hasProcessedResponsibilitiesFiles = $this->processFiles(
             $form,
             'responsibilities->file',
-            [$this, 'processResponsibilityFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getResponsibilityFiles']
+            $this->processResponsibilityFileUpload(...),
+            $this->deleteFile(...),
+            $this->getResponsibilityFiles(...)
         );
 
         $hasProcessedFiles = ($hasProcessedCertificateFiles || $hasProcessedResponsibilitiesFiles);
@@ -470,7 +470,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $ids = explode(',', $this->params('grand_child_id'));
+            $ids = explode(',', (string) $this->params('grand_child_id'));
 
             $commandClass = $this->deleteCommandMap[$type];
             $command = $this->transferAnnotationBuilder

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
@@ -10,16 +12,13 @@ use Olcs\FormService\Form\Lva\LicenceBusinessDetails;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
 
-/**
- * Licence Business Details Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $fsm;
+
+    private $formHelper;
 
     public function setUp(): void
     {

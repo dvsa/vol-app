@@ -41,7 +41,7 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
      * SessionTimeoutWarning constructor.
      */
     public function __construct(
-        private HeadMeta $headMeta,
+        private readonly HeadMeta $headMeta,
         bool $enabled,
         int $secondsBeforeExpiryWarning,
         string $timeoutRedirectUrl

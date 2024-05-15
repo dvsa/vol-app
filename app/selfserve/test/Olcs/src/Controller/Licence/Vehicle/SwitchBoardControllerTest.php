@@ -34,6 +34,7 @@ use Olcs\Session\LicenceVehicleManagement;
 
 class SwitchBoardControllerTest extends MockeryTestCase
 {
+    public $sut;
     /**
      * @var FlashMessenger
      */

@@ -21,6 +21,19 @@ use LmcRbacMvc\Mvc\Controller\Plugin\IsGranted;
  */
 class ViewControllerTest extends MockeryTestCase
 {
+    /**
+     * @var (\Dvsa\Olcs\Utils\Translation\NiTextTranslation & \Mockery\MockInterface)
+     */
+    public $mockNiUtil;
+    /**
+     * @var (\LmcRbacMvc\Service\AuthorizationService & \Mockery\MockInterface)
+     */
+    public $mockAuth;
+    /**
+     * @var (\Common\Service\Helper\FlashMessengerHelperService & \Mockery\MockInterface)
+     */
+    public $mockFlash;
+    public $mockTable;
     /** @var  ViewController|m\MockInterface */
     private $sut;
     /** @var  \Laminas\ServiceManager\ServiceLocatorInterface|m\MockInterface */

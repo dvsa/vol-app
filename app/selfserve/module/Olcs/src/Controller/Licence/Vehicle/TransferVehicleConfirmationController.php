@@ -237,7 +237,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
             }
             if (isset($errors['LIC_TRAN_2']) || isset($errors['LIC_TRAN_3'])) {
                 $invalidVehiclesJson = $errors['LIC_TRAN_2'] ?? $errors['LIC_TRAN_3'];
-                $invalidVehicleVrms = json_decode($invalidVehiclesJson, true);
+                $invalidVehicleVrms = json_decode((string) $invalidVehiclesJson, true);
                 throw new LicenceAlreadyAssignedVehicleException(
                     $destinationLicence->getId(),
                     $destinationLicence->getLicenceNumber(),

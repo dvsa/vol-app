@@ -54,13 +54,13 @@ class LoginController
      * LoginController constructor.
      */
     public function __construct(
-        private ValidatableAdapterInterface $authenticationAdapter,
+        private readonly ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        private CurrentUser $currentUser,
-        private FlashMessenger $flashMessenger,
+        private readonly CurrentUser $currentUser,
+        private readonly FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
         Redirect $redirectHelper,
-        private AuthChallengeContainer $authChallengeContainer
+        private readonly AuthChallengeContainer $authChallengeContainer
     ) {
         $this->authenticationService = $authenticationService;
         $this->formHelper = $formHelper;

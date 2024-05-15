@@ -26,7 +26,7 @@ class VariationOverview extends LvaOverview
     {
         $this->setVariable('applicationId', $data['id']);
         $this->setVariable('licNo', $data['licence']['licNo'] ?? '');
-        $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
+        $this->setVariable('createdOn', date('d F Y', strtotime((string) $data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);

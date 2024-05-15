@@ -117,9 +117,9 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $this->processFiles(
                 $form,
                 'financialEvidence->files',
-                [$this, 'financialEvidenceProcessFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'financialEvidenceLoadFileUpload']
+                $this->financialEvidenceProcessFileUpload(...),
+                $this->deleteFile(...),
+                $this->financialEvidenceLoadFileUpload(...)
             );
         } else {
             $form->remove('financialEvidence');
@@ -136,9 +136,9 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                 $this->processFiles(
                     $form,
                     'operatingCentres->' . (string)$i . '->file',
-                    [$this, 'operatingCentreProcessFileUpload'],
-                    [$this, 'deleteFile'],
-                    [$this, 'operatingCentreLoadFileUpload']
+                    $this->operatingCentreProcessFileUpload(...),
+                    $this->deleteFile(...),
+                    $this->operatingCentreLoadFileUpload(...)
                 );
             }
         } elseif ($form->has('operatingCentres')) {
@@ -149,9 +149,9 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $this->processFiles(
                 $form,
                 'supportingEvidence->files',
-                [$this, 'supportingEvidenceProcessFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'supportingEvidenceLoadFileUpload']
+                $this->supportingEvidenceProcessFileUpload(...),
+                $this->deleteFile(...),
+                $this->supportingEvidenceLoadFileUpload(...)
             );
         } elseif ($form->has('supportingEvidence')) {
             $form->remove('supportingEvidence');

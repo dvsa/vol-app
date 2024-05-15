@@ -10,7 +10,7 @@ class CurrentPreferencesProvider
      *
      * @return CurrentPreferencesProvider
      */
-    public function __construct(private CookieReader $cookieReader, private PreferencesFactory $preferencesFactory)
+    public function __construct(private readonly CookieReader $cookieReader, private readonly PreferencesFactory $preferencesFactory)
     {
     }
 

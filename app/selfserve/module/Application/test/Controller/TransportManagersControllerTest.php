@@ -42,7 +42,7 @@ class TransportManagersControllerTest extends MockeryTestCase
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'isInitialized']);
+        $this->assertIsCallable($this->sut->isInitialized(...));
     }
 
     /**

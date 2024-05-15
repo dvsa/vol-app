@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
@@ -22,6 +24,10 @@ class VariationBusinessTypeTest extends MockeryTestCase
     protected $fsm;
 
     protected $fh;
+
+    private $guidanceHelper;
+
+    private $authService;
 
     public function setUp(): void
     {

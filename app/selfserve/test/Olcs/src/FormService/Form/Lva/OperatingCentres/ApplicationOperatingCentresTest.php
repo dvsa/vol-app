@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Common\Form\Elements\Validators\TableRequiredValidator;
@@ -10,7 +12,6 @@ use Laminas\InputFilter\InputInterface;
 use Laminas\Validator\ValidatorChain;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
-use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
 use Mockery as m;
@@ -22,11 +23,6 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\RefData;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Application Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ApplicationOperatingCentresTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -41,6 +37,8 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
     protected $mockFormHelper;
 
     protected $tableBuilder;
+
+    private $authService;
 
     public function setUp(): void
     {

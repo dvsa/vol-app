@@ -94,9 +94,9 @@ class QaController extends AbstractOlcsController
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'MultipleFileUpload',
-                [$this, 'processFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'getDocuments']
+                $this->processFileUpload(...),
+                $this->deleteFile(...),
+                $this->getDocuments(...)
             );
 
             if (!empty($form->getMessages())) {

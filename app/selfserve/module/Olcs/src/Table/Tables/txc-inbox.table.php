@@ -83,7 +83,7 @@ return [
             'formatter' => function ($row) {
                 // DateTime formatter require data set at root of array
                 if (isset($row['busReg']['ebsrSubmissions'][0]['submittedDate'])) {
-                    return date(Common\Module::$dateTimeFormat, strtotime($row['busReg']['ebsrSubmissions'][0]['submittedDate']));
+                    return date(Common\Module::$dateTimeFormat, strtotime((string) $row['busReg']['ebsrSubmissions'][0]['submittedDate']));
                 }
 
                 return '';

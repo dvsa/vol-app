@@ -13,7 +13,7 @@ class CookieReader
      *
      * @return CookieReader
      */
-    public function __construct(private CookieStateFactory $cookieStateFactory, private PreferencesFactory $preferencesFactory)
+    public function __construct(private readonly CookieStateFactory $cookieStateFactory, private readonly PreferencesFactory $preferencesFactory)
     {
     }
 
@@ -31,7 +31,7 @@ class CookieReader
 
         $json = $cookie[Preferences::COOKIE_NAME];
 
-        $contents = json_decode($json, true);
+        $contents = json_decode((string) $json, true);
         if (is_null($contents)) {
             return $this->cookieStateFactory->create(false);
         }

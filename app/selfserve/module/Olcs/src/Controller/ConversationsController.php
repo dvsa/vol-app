@@ -161,8 +161,8 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             'correlationId'  => $data['correlationId'],
         ];
 
-        $appOrLicNoPrefix = substr($data['form-actions']['inputs']['appOrLicNo'], 0, 1);
-        $appOrLicNoSuffix = substr($data['form-actions']['inputs']['appOrLicNo'], 1);
+        $appOrLicNoPrefix = substr((string) $data['form-actions']['inputs']['appOrLicNo'], 0, 1);
+        $appOrLicNoSuffix = substr((string) $data['form-actions']['inputs']['appOrLicNo'], 1);
         switch ($appOrLicNoPrefix) {
             case MessagingAppOrLicNo::PREFIX_LICENCE:
                 $processedData['licence'] = $appOrLicNoSuffix;
@@ -247,9 +247,9 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             $hasProcessedFiles = $this->processFiles(
                 $form,
                 'form-actions->file',
-                [$this, 'processFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'getUploadedFiles'],
+                $this->processFileUpload(...),
+                $this->deleteFile(...),
+                $this->getUploadedFiles(...),
                 'form-actions->file->fileCount',
             );
 

@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 
 class FormFactory
 {
-    public function __construct(private ContainerInterface $serviceLocator)
+    public function __construct(private readonly ContainerInterface $serviceLocator)
     {
     }
 

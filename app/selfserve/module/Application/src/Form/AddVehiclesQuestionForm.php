@@ -20,6 +20,8 @@ use Laminas\Validator\ValidatorChain;
 
 /**
  * @see AddVehiclesQuestionFormTest
+ * @template TFilteredValues
+ * @extends Form<TFilteredValues>
  */
 class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface, FormWithCsrfInterface
 {

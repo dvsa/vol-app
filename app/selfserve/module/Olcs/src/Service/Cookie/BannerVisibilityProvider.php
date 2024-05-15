@@ -12,7 +12,7 @@ class BannerVisibilityProvider
      *
      * @return BannerVisibilityProvider
      */
-    public function __construct(private CookieReader $cookieReader)
+    public function __construct(private readonly CookieReader $cookieReader)
     {
     }
 
