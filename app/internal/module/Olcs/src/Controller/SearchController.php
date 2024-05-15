@@ -156,7 +156,7 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         $searchIndex = $elasticSearch->getSearchData()['index'];
         if (!$this->canAccessSearchIndex($searchIndex)) {
-            throw new UnauthorizedException("User not allowed to access ${searchIndex} search index");
+            throw new UnauthorizedException("User not allowed to access {$searchIndex} search index");
         }
 
         $this->loadScripts(['table-actions']);

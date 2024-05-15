@@ -20,6 +20,10 @@ use Mockery as m;
 class BusShortControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $translationHelper;
+    protected $formHelper;
+    protected $flashMessengerHelper;
+    protected $navigation;
 
     public function setUp(): void
     {

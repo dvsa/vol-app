@@ -14,6 +14,8 @@ class IrhpApplicationTest extends MockeryTestCase
 {
     private $applicationStepsPostDataTransformer;
 
+    protected $sut;
+
     public function setUp(): void
     {
         $this->applicationStepsPostDataTransformer = m::mock(ApplicationStepsPostDataTransformer::class);

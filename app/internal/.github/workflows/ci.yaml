@@ -14,10 +14,10 @@ jobs:
   static-analysis:
     uses: dvsa/.github/.github/workflows/php-static.yml@main
     with:
-      php-version: '8.0'
+      php-version: '8.2'
 
   tests:
     uses: dvsa/.github/.github/workflows/php-tests.yml@main
     with:
-      php-versions: "[\"8.0\"]"
+      php-versions: "[\"8.2\"]"
       fail-fast: false

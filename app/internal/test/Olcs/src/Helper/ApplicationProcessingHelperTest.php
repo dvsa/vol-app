@@ -12,6 +12,8 @@ use Olcs\Helper\ApplicationProcessingHelper;
  */
 class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
 {
+    public $sut;
+
     public function setUp(): void
     {
         $this->sut = new ApplicationProcessingHelper();

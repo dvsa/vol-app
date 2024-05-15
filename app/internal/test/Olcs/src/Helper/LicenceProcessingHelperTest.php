@@ -10,6 +10,8 @@ use Olcs\Helper\LicenceProcessingHelper;
  */
 class LicenceProcessingHelperTest extends \PHPUnit\Framework\TestCase
 {
+    protected $sut;
+
     public function setUp(): void
     {
         $this->sut = new LicenceProcessingHelper();

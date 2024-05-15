@@ -31,6 +31,13 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class OverviewControllerTest extends AbstractLvaControllerTestCase
 {
+    protected $mockNiTextTranslationUtil;
+    protected $mockAuthService;
+    protected $mockLicenceOverviewHelper;
+    protected $mockFormHelper;
+    protected $mockNavigation;
+    protected $mockFlashMessenger;
+
     public function setUp(): void
     {
         parent::setUp();

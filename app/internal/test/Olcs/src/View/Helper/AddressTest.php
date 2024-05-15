@@ -13,6 +13,7 @@ use Mockery as m;
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
     protected $addressFormatter;
+    protected $sut;
 
     protected function setUp(): void
     {

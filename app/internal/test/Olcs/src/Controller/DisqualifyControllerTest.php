@@ -19,6 +19,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class DisqualifyControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $mockScriptFactory;
+    protected $mockFormHelper;
+    protected $mockTableFactory;
+    protected $mockViewHelperManager;
+    protected $mockFlashMessengerHelper;
 
     protected function setUp(): void
     {

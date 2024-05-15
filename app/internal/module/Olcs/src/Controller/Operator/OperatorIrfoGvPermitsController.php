@@ -52,7 +52,6 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     protected $tableName = 'operator.irfo.gv-permits';
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
-    private Permission $permissionService;
 
 
     public function __construct(
@@ -60,9 +59,8 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        Permission $permissionService
+        private Permission $permissionService
     ) {
-        $this->permissionService = $permissionService;
         parent::__construct($translationHelperService, $formHelperService, $flashMessengerHelperService, $navigation);
     }
 

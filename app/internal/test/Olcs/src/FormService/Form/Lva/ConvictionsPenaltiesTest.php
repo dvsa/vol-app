@@ -18,6 +18,10 @@ use Mockery as m;
 class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = ConvictionsPenalties::class;
+    protected $translator;
+    protected $urlHelper;
+    protected $classArgs;
+
 
     public function setUp(): void
     {

@@ -29,6 +29,17 @@ use Olcs\Controller\Auth\LoginController;
 
 class LoginControllerTest extends MockeryTestCase
 {
+    protected $authenticationAdapter;
+    protected $authenticationService;
+    protected $currentUser;
+    protected $flashMessenger;
+    protected $formHelper;
+    protected $layout;
+    protected $redirectHelper;
+    protected $url;
+    protected $authChallengeContainer;
+
+
     public const EMPTY_FORM_DATA = [
         'username' => null,
         'password' => null,
@@ -135,7 +146,7 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
+     * @depends indexActionReturnsViewModel
      */
     public function indexActionReturnsViewModelWithLoginForm()
     {
@@ -158,7 +169,7 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
+     * @depends indexActionReturnsViewModel
      */
     public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails()
     {
@@ -264,7 +275,7 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
     public function postActionSuccessfulCognitoAuthRedirectsToDashboard()
     {

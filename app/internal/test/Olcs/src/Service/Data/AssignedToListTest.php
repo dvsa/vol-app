@@ -14,6 +14,8 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
 {
     /** @var AssignedToList */
     private $sut;
+    protected $queryA;
+    protected $queryB;
 
     protected function setUp(): void
     {

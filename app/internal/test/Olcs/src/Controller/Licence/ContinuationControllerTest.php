@@ -27,6 +27,14 @@ use Mockery as m;
  */
 class ContinuationControllerTest extends AbstractLvaControllerTestCase
 {
+    protected $sut;
+    protected $mockScriptFactory;
+    protected $mockFormHelper;
+    protected $mockTableFactory;
+    protected $mockViewHelperManager;
+    protected $mockFlashMessengerHelper;
+    protected $mockLessThanValidator;
+
     public function setUp(): void
     {
         parent::setUp();

@@ -6,7 +6,7 @@
       "url": "https://github.com/dvsa/laminas-form.git"
     }],
     "require": {
-        "php": "~8.0.0",
+        "php": "~8.2.0",
         "ext-redis": "*",
         "dvsa/laminas-config-cloud-parameters": "^0.2.0",
         "laminas/laminas-authentication": "^2.5",

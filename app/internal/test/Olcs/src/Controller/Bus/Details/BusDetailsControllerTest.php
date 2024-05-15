@@ -20,6 +20,10 @@ use Laminas\Navigation\Navigation;
 class BusDetailsControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $translationHelper;
+    protected $formHelper;
+    protected $flashMessengerHelper;
+    protected $navigation;
 
     public function setUp(): void
     {

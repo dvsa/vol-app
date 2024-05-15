@@ -23,6 +23,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
 {
+    protected $sut;
+    protected $translationHelper;
+    protected $formHelper;
+    protected $flashMessengerHelper;
+    protected $navigation;
+    protected $pluginManagerHelper;
+
     public function setUp(): void
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();

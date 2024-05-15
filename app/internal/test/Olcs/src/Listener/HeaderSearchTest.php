@@ -33,6 +33,8 @@ class HeaderSearchTest extends TestCase
     private $mockViewHlprMngr;
     /** @var  IdentityProviderInterface | m\MockInterface  */
     private $mockAuthService;
+    /** @var  TranslationHelperService | m\MockInterface  */
+    private $mockTransHelper;
 
     public function setUp(): void
     {

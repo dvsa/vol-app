@@ -13,6 +13,9 @@ use Olcs\Service\Data\DocumentSubCategory;
  */
 class DocumentSearchTraitTest extends MockeryTestCase
 {
+    protected $mockFormHelper;
+    protected $docSubCategoryDataService;
+
     public const CAT_ID = 8001;
 
     /** @var Stub\StubDocumentSearchTrait */

@@ -13,6 +13,10 @@ use Olcs\Service\Marker\MarkerService;
 
 class CaseMarkerTest extends TestCase
 {
+    protected $sut;
+    protected $mockQueryService;
+    protected $mockAnnotationBuilderService;
+
     public function setUp(): void
     {
         $this->sut = new CaseMarker();

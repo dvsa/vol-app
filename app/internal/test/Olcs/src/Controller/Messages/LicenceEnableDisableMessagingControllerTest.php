@@ -40,6 +40,16 @@ use Mockery as m;
  */
 class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerTestCase
 {
+    protected $mockNavigation;
+    protected $mockScriptFactory;
+    protected $mockFormHelper;
+    protected $mockTableFactory;
+    protected $mockViewHelperManager;
+    protected $mockFlashMessengerHelper;
+    protected $mockDataServiceManager;
+    protected $mockOppositionHelper;
+    protected $mockComplaintsHelper;
+
     public function setUp(): void
     {
         parent::setUp();

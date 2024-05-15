@@ -29,6 +29,18 @@ class OppositionControllerTest extends MockeryTestCase
      */
     protected $pluginManagerHelper;
 
+    protected $sut;
+
+    protected $translationHelper;
+
+    protected $formHelper;
+
+    protected $flashMessengerHelper;
+
+    protected $navigation;
+
+    protected $routeMatchHelper;
+
     public function setUp(): void
     {
 

@@ -33,6 +33,24 @@ class IndexControllerTest extends MockeryTestCase
 
     protected $sm;
 
+    protected $mockScriptFactory;
+    protected $mockFormHelper;
+    protected $mockTableFactory;
+    protected $mockViewHelperManager;
+    protected $mockFlashMessengerHelper;
+    protected $mockUserListInternalDataService;
+    protected $mockUserListInternalExcludingDataService;
+    protected $mockSubCategoryDataService;
+    protected $mockTaskSubCategoryDataService;
+    protected $mockDocumentSubCategoryDataService;
+    protected $mockDocumentSubCategoryWithDocsDataService;
+    protected $mockScannerSubCategoryDataService;
+    protected $mockSubCategoryDescriptionDataService;
+    protected $mockIrhpPermitPrintCountryDataService;
+    protected $mockIrhpPermitPrintStockDataService;
+    protected $mockIrhpPermitPrintRangeTypeDataService;
+
+
     public function setUp(): void
     {
         $this->mockScriptFactory = m::mock(ScriptFactory::class);

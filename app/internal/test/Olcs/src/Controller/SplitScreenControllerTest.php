@@ -22,6 +22,7 @@ use Olcs\Controller\SplitScreenController;
 class SplitScreenControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $mockScriptFactory;
 
     public function setUp(): void
     {

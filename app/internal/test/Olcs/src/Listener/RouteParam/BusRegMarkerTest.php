@@ -13,6 +13,7 @@ use Olcs\Service\Marker\MarkerService;
 
 class BusRegMarkerTest extends TestCase
 {
+    protected $sut;
     public function setUp(): void
     {
         $this->sut = new BusRegMarker();

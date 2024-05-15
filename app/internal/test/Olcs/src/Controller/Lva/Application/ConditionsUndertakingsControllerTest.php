@@ -30,6 +30,27 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
 
+    protected $mockNiTextTranslationUtil;
+
+    protected $mockAuthService;
+
+    protected $mockFormHelper;
+
+    protected $mockFlashMessengerHelper;
+
+    protected $mockFormServiceManager;
+
+    protected $mockTableFactory;
+
+    protected $mockStringHelper;
+
+    protected $mockLvaAdapter;
+
+    protected $mockRestrictionHelper;
+
+    protected $mockNavigation;
+
+
     public function setUp(): void
     {
         parent::setUp();

@@ -21,6 +21,8 @@ class FinancialHistoryTest extends MockeryTestCase
     /** @var  \Common\FormService\FormServiceManager */
     protected $fsm;
 
+    protected $translator;
+
 
     public function setUp(): void
     {

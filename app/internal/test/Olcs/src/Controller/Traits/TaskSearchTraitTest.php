@@ -18,6 +18,9 @@ class TaskSearchTraitTest extends MockeryTestCase
 
     /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait */
     private $sut;
+    protected $mockFormHelper;
+    protected $mockSubCategoryDataService;
+    protected $mockForm;
 
     public function setUp(): void
     {

@@ -22,6 +22,16 @@ class ConfirmTest extends TestCase
 {
     protected $sut;
     private $permissionService;
+    protected $translationHelper;
+    protected $formHelper;
+    protected $flashMessengerHelper;
+    protected $navigation;
+    protected $urlHelper;
+    protected $configHelper;
+    protected $viewRenderer;
+    protected $submissionService;
+    protected $uploadHelper;
+
     public function setUp(): void
     {
 

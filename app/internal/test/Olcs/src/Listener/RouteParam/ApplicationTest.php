@@ -15,6 +15,8 @@ use Laminas\Navigation\Page\AbstractPage;
 
 class ApplicationTest extends MockeryTestCase
 {
+    protected $sut;
+
     public function setUp(): void
     {
         $this->sut = new Application();

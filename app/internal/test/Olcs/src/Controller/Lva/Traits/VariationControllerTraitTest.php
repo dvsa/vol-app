@@ -24,6 +24,10 @@ class VariationControllerTraitTest extends MockeryTestCase
 {
     protected $sut;
     protected $sm;
+    protected $mockNiTextTranslationUtil;
+    protected $mockAuthService;
+    protected $mockStringHelper;
+
 
     public function setUp(): void
     {

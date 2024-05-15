@@ -27,6 +27,17 @@ use Psr\Container\ContainerInterface;
  */
 class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
 {
+    protected $mockScriptFactory;
+    protected $mockFormHelper;
+    protected $mockTableFactory;
+    protected $mockViewHelperManager;
+    protected $mockOppositionHelper;
+    protected $mockComplaintsHelper;
+    protected $mockNavigation;
+    protected $mockSubCategoryDataService;
+    protected $mockFlashMessenger;
+    protected $mockRouter;
+
     public function testIndexActionRedirects()
     {
         $controller = $this->getController('index');
