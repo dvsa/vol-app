@@ -18,33 +18,75 @@ jobs:
   dependency-scan:
     name: Dependency Scan
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        project:
-          - api
-          - selfserve
-          - internal
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
-      SCHEDULE_REMOTE_REPOSITORY: ${{ matrix.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', matrix.project) }}
     steps:
-      - name: Scheduled Scan
-        if: github.event_name == 'shedule'
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ env.SCHEDULE_REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
-          path: app/${{ matrix.project }}
-      - name: Non-Scheduled Scan
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
           path: app/${{ inputs.project }}
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan dependencies
+      - name: Scan ${{ inputs.project }}
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  scheduled-dependency-scan-api:
+    name: Scheuled Dependency Scan API
+    runs-on: ubuntu-latest
+    env:
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
+      REMOTE_REPOSITORY: dvsa/olcs-backend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/api
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+      - name: Scan API
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  scheduled-dependency-scan-selfserve:
+    name: Scheuled Dependency Scan Selfserve
+    runs-on: ubuntu-latest
+    env:
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
+      REMOTE_REPOSITORY: dvsa/olcs-selfserve
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/selfserve
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+      - name: Scan Selfserve
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  scheduled-dependency-scan-internal:
+    name: Scheuled Dependency Scan Internal
+    runs-on: ubuntu-latest
+    env:
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
+      REMOTE_REPOSITORY: dvsa/olcs-internal
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/internal
+      - name: Setup Snyk
+        uses: snyk/actions/setup@master
+      - name: Scan Internal
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
