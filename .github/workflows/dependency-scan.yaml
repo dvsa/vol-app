@@ -1,4 +1,4 @@
-name: Security
+name: Dependency Scanning
 
 on:
   workflow_call:
@@ -29,7 +29,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
           path: app/api
       - name: Setup Snyk
         uses: snyk/actions/setup@master
@@ -52,7 +51,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
           path: app/selfserve
       - name: Setup Snyk
         uses: snyk/actions/setup@master
@@ -75,7 +73,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ${{ env.REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
           path: app/internal
       - name: Setup Snyk
         uses: snyk/actions/setup@master
