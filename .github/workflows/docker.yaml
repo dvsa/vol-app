@@ -26,7 +26,6 @@ on:
 
 env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
-  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   REGISTRY_MIRROR: ghcr.io
   AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
