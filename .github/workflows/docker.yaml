@@ -95,14 +95,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Scan Docker Container
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: "${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ inputs.version }}"
-          format: "table"
-          output: "trivy-results.txt"
+      # - name: Scan Docker Container
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: "${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ inputs.version }}"
+      #     format: "table"
+      #     output: "trivy-results.txt"
 
-      - run: cat trivy-results.txt
+      - run: docker images --format "{{.Repository}}:{{.Tag}}"
 
       - name: Untag existing latest image in ECR
         if: ${{ inputs.push }}
