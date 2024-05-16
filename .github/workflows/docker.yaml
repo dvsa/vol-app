@@ -75,7 +75,6 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
             ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
-            localhost:5000/dvsa/vol-app
           tags: |
             type=sha,prefix=,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
@@ -120,9 +119,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Inspect
-        run: |
-          docker buildx imagetools inspect localhost:5000/dvsa/vol-app:latest
+      - name: Build & Push Docker image to local registry
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.WORKING_DIR }}
+          target: production
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: localhost:5000/dvsa/vol-app
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
