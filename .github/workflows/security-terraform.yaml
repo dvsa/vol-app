@@ -23,8 +23,10 @@ jobs:
           exit-code: 1
           scan-ref: "infra/terraform"
           scan-type: "config"
-          format: "sarif"
-          output: "trivy-results.sarif"
+          format: "table"
+          output: "trivy-results.txt"
+
+      - run: cat trivy-results.txt
 
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
