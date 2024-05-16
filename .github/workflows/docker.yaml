@@ -113,9 +113,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - run: echo ${{ steps.meta.outputs.tags }}
-
-      - name: Scan Docker Container
+      - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ steps.meta.outputs.tags }}
