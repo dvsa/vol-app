@@ -2,6 +2,9 @@ name: Security Terraform
 
 on:
   workflow_call:
+  schedule:
+    # Weekly on Monday at 00:00 UTC
+    - cron: 0 0 * * 1
 
 jobs:
   terraform-scan:
