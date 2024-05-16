@@ -26,10 +26,9 @@ jobs:
           format: "table"
           output: "trivy-results.txt"
 
-      - run: cat trivy-results.txt
-
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: "trivy-results.sarif"
+        run: cat trivy-results.txt
+        # uses: github/codeql-action/upload-sarif@v2
+        # with:
+        #   sarif_file: "trivy-results.sarif"
