@@ -48,6 +48,12 @@ jobs:
   build:
     name: Build ${{ inputs.push && 'and push' || '' }}
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -69,6 +75,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
             ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
+            localhost:5000/dvsa/vol-app
           tags: |
             type=sha,prefix=,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
@@ -113,10 +120,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Inspect
+        run: |
+          docker buildx imagetools inspect localhost:5000/dvsa/vol-app:latest
+
       - name: Scan Docker Image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ steps.build-and-push.outputs.digest }}
+          image-ref: localhost:5000/dvsa/vol-app:latest
           format: "table"
           output: "trivy-results.txt"
 

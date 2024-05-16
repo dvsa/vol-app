@@ -21,7 +21,6 @@ jobs:
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
-          severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
 
       - name: Upload Results to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
