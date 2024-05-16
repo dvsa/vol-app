@@ -16,13 +16,13 @@ jobs:
 
       - name: Scan Terraform
         uses: aquasecurity/trivy-action@master
-        continue-on-error: true
         with:
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
 
       - name: Upload Results to GitHub Code Scanning
+        if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: "trivy-results.sarif"
