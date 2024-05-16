@@ -102,8 +102,6 @@ jobs:
       #     format: "table"
       #     output: "trivy-results.txt"
 
-      - run: docker images --format "{{.Repository}}:{{.Tag}}"
-
       - name: Untag existing latest image in ECR
         if: ${{ inputs.push }}
         run: |
@@ -121,6 +119,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - run: docker images --format "{{.Repository}}:{{.Tag}}"
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
