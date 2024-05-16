@@ -20,6 +20,7 @@ jobs:
       - name: Scan Terraform
         uses: aquasecurity/trivy-action@master
         with:
+          exit-code: 1
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
