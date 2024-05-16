@@ -61,15 +61,6 @@ data "aws_lb_listener" "this" {
   port              = each.key == "API" ? 80 : 443
 }
 
-data "aws_vpc" "this" {
-  filter {
-    name = "tag:Name"
-    values = [
-      "DEV/APP-VPC"
-    ]
-  }
-}
-
 data "aws_subnet" "this" {
   for_each = toset(flatten([
     for service_name, subnet_ids in data.aws_subnets.this : [
@@ -78,7 +69,6 @@ data "aws_subnet" "this" {
   ]))
 
   id = each.value
-
 }
 
 module "service" {
@@ -174,11 +164,8 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
-      access_point = "${var.api_image_tag}/data/cache"
-
       cidr_blocks = [
-        for subnet in data.aws_subnet.this :
-        subnet.cidr_block if contains(data.aws_subnets.this["API"].ids, subnet.id)
+        for subnet in data.aws_subnet.this : subnet.cidr_block if contains(data.aws_subnets.this["API"].ids, subnet.id)
       ]
 
       security_group_ids = [
@@ -221,11 +208,8 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["IUWEB"].ids
 
-      access_point = "${var.internal_image_tag}/data/cache"
-
       cidr_blocks = [
-        for subnet in data.aws_subnet.this :
-        subnet.cidr_block if contains(data.aws_subnets.this["IUWEB"].ids, subnet.id)
+        for subnet in data.aws_subnet.this : subnet.cidr_block if contains(data.aws_subnets.this["IUWEB"].ids, subnet.id)
       ]
 
       security_group_ids = [
@@ -268,11 +252,8 @@ module "service" {
 
       subnet_ids = data.aws_subnets.this["SSWEB"].ids
 
-      access_point = "${var.selfserve_image_tag}/data/cache"
-
       cidr_blocks = [
-        for subnet in data.aws_subnet.this :
-        subnet.cidr_block if contains(data.aws_subnets.this["SSWEB"].ids, subnet.id)
+        for subnet in data.aws_subnet.this : subnet.cidr_block if contains(data.aws_subnets.this["SSWEB"].ids, subnet.id)
       ]
 
       security_group_ids = [

@@ -78,6 +78,21 @@ module "ecs_service" {
     cpu_architecture        = "ARM64"
   }
 
+  volume = {
+    vol-app-efs = {
+      name = "vol-app-${var.environment}-${each.key}-efs"
+
+      efs_volume_configuration = {
+        file_system_id     = module.efs[each.key].id
+        transit_encryption = "ENABLED"
+        authorization_config = {
+          access_point_id = module.efs[each.key].access_points["data_cache"].id
+          iam             = "ENABLED"
+        }
+      }
+    }
+  }
+
   container_definitions = {
     (each.key) = {
       cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu / 2)
@@ -117,28 +132,14 @@ module "ecs_service" {
 
       mount_points = [
         {
-          sourceVolume  = "vol-app-${each.key}-efs"
-          containerPath = "/data/cache"
+          sourceVolume  = "vol-app-${var.environment}-${each.key}-efs"
+          containerPath = "/var/www/html/data/cache"
         }
       ]
 
       readonly_root_filesystem = false
 
       memory_reservation = 100
-
-      volume = {
-        vol-app-efs = {
-          name = "vol-app-${each.key}-efs"
-          efs_volume_configuration = {
-            file_system_id     = module.efs[each.key].id
-            transit_encryption = "ENABLED"
-            authorization_config = {
-              access_point_id = module.efs[each.key].access_points["data_cache"].id
-              iam             = "ENABLED"
-            }
-          }
-        }
-      }
     }
   }
 
@@ -159,12 +160,12 @@ module "efs" {
   for_each = var.services
 
   source  = "terraform-aws-modules/efs/aws"
-  version = "1.6"
+  version = "~> 1.6"
 
-  name            = "vol-app-${each.key}-efs"
-  creation_token  = "vol-app-${each.key}-efs-token"
-  encrypted       = true
+  name            = "vol-app-${var.environment}-${each.key}-efs"
   throughput_mode = "elastic"
+
+  enable_backup_policy = false
 
   lifecycle_policy = {
     transition_to_ia                    = "AFTER_7_DAYS"
@@ -172,8 +173,6 @@ module "efs" {
     transition_to_primary_storage_class = "AFTER_1_ACCESS"
   }
 
-  attach_policy                      = true
-  bypass_policy_lockout_safety_check = false
   policy_statements = [
     {
       sid = "vol-app-${each.key}-policy"
@@ -190,31 +189,22 @@ module "efs" {
     }
   ]
 
-  mount_targets              = { for k, v in zipmap(var.vpc_azs, var.services[each.key].subnet_ids) : k => { subnet_id = v } }
-  security_group_description = "${each.key} EFS security group"
+  mount_targets = { for k, v in zipmap(var.vpc_azs, var.services[each.key].subnet_ids) : k => { subnet_id = v } }
+
+  security_group_description = "EFS security group for vol-app-${var.environment}-${each.key} EFS"
   security_group_vpc_id      = var.vpc_ids
   security_group_rules = {
     vpc = {
-      description = "EFS ingress from VPC private subnets"
-      cidr_blocks = var.services[each.key].cidr_blocks
+      description              = "EFS ingress from VPC private subnets"
+      source_security_group_id = var.services[each.key].security_group_ids[0]
     }
   }
 
   access_points = {
     data_cache = {
       root_directory = {
-        path = var.services[each.key].access_point
-        creation_info = {
-          owner_gid   = 82
-          owner_uid   = 82
-          permissions = "755"
-        }
+        path = "/${var.services[each.key].version}"
       }
     }
   }
-
-  enable_backup_policy = false
-
-  create_replication_configuration = false
-
 }
