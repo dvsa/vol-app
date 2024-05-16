@@ -10,9 +10,6 @@ jobs:
   terraform-scan:
     name: Terraform Scan
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "infra/terraform"
 
     steps:
       - uses: actions/checkout@v4
@@ -21,6 +18,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           exit-code: 1
+          scan-ref: "infra/terraform"
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
