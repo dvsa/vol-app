@@ -16,7 +16,6 @@ jobs:
 
       - name: Scan Terraform
         uses: aquasecurity/trivy-action@master
-
         continue-on-error: true
         with:
           scan-type: "config"
