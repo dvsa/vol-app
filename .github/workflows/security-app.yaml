@@ -36,11 +36,13 @@ jobs:
         run: snyk test --sarif-file-output=snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
 
       - name: Upload Results to GitHub Code Scanning
+        if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: app/internal/snyk-results.sarif
+          sarif_file: app/api/snyk-results.sarif
 
   dependency-scan-selfserve:
     if: github.event_name == 'schedule' || inputs.project == 'selfserve'
@@ -63,11 +65,13 @@ jobs:
         run: snyk test --sarif-file-output=snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
 
       - name: Upload Results to GitHub Code Scanning
+        if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: app/internal/snyk-results.sarif
+          sarif_file: app/selfserve/snyk-results.sarif
 
   dependency-scan-internal:
     if: github.event_name == 'schedule' || inputs.project == 'internal'
@@ -90,8 +94,10 @@ jobs:
         run: snyk test --sarif-file-output=snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
 
       - name: Upload Results to GitHub Code Scanning
+        if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: app/internal/snyk-results.sarif
