@@ -33,9 +33,14 @@ jobs:
       - name: Setup Snyk
         uses: snyk/actions/setup@master
       - name: Scan api repository
-        run: snyk test
+        run: snyk test --sarif-file-output=snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Results to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: app/internal/snyk-results.sarif
 
   dependency-scan-selfserve:
     if: github.event_name == 'schedule' || inputs.project == 'selfserve'
@@ -55,9 +60,14 @@ jobs:
       - name: Setup Snyk
         uses: snyk/actions/setup@master
       - name: Scan selfserve repository
-        run: snyk test
+        run: snyk test --sarif-file-output=snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Upload Results to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: app/internal/snyk-results.sarif
 
   dependency-scan-internal:
     if: github.event_name == 'schedule' || inputs.project == 'internal'
