@@ -1,5 +1,7 @@
 <?php
 
+$feeStatusFormatter = new \Common\Service\Table\Formatter\FeeStatus();
+
 echo $this->render(
     'partials/read-only/main',
     [
@@ -35,7 +37,7 @@ echo $this->render(
                 [
                     'label' => 'Status:',
                     'noEscape' => true,
-                    'value' => \Common\Service\Table\Formatter\FeeStatus::format($fee),
+                    'value' => $feeStatusFormatter->format($fee),
                     'class' => 'full-width',
                 ],
             ],

@@ -1,5 +1,7 @@
 <?php
 
+$transactionStatusFormatter = new \Common\Service\Table\Formatter\TransactionStatus();
+
 echo $this->render(
     'partials/read-only/main',
     [
@@ -53,9 +55,7 @@ echo $this->render(
                 ],
                 [
                     'label' => 'Recommended by:',
-                    'value' => isset($transaction['waiveRecommenderUser']['loginId'])
-                        ? $transaction['waiveRecommenderUser']['loginId']
-                        : '',
+                    'value' => $transaction['waiveRecommenderUser']['loginId'] ?? '',
                     'hideIfEmpty' => true,
                     'class' => 'full-width',
                 ],
@@ -69,7 +69,7 @@ echo $this->render(
                 [
                     'label' => 'Status:',
                     'noEscape' => true,
-                    'value' => \Common\Service\Table\Formatter\TransactionStatus::format($transaction),
+                    'value' => $transactionStatusFormatter->format($transaction),
                     'class' => 'full-width',
                 ],
             ],
