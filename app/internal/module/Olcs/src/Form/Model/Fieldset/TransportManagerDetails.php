@@ -26,7 +26,7 @@ class TransportManagerDetails
     /**
      * @Form\Options({"label": "internal-transport-manager-id"})
      * @Form\Name("transport-manager-id")
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      */
     public $transportManagerId = null;
 

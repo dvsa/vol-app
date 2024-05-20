@@ -14,7 +14,7 @@ class OperatorId
     /**
      * @Form\Options({"label": "internal-operator-id"})
      * @Form\Name("operator-id")
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      */
     public $operatorId = null;
 }

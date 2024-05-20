@@ -23,7 +23,7 @@ class CreatePermit extends Base
     public $title = null;
 
     /**
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "Stock"
      * })
@@ -57,7 +57,7 @@ class CreatePermit extends Base
 
     /**
      * @Form\Type("Laminas\Form\Element\Hidden")
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "Current total vehicle authorization"
      * })

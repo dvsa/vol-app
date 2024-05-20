@@ -47,7 +47,7 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
 
     /**
      * @Form\Type("Laminas\Form\Element\Hidden")
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "Current total vehicle authorization"
      * })

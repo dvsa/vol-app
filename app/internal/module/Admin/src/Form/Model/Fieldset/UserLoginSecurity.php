@@ -42,7 +42,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Account locked"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"locked", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Readonly")
+     * @Form\Type("Common\Form\Elements\Types\ReadonlyElement")
      */
     public $locked = null;
 
@@ -50,7 +50,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Password last reset"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"passwordLastReset", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Readonly")
+     * @Form\Type("Common\Form\Elements\Types\ReadonlyElement")
      */
     public $passwordLastReset = null;
 

@@ -13,7 +13,7 @@ class FeeRateDetails
     use IdTrait;
 
     /**
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "ID:"
      * })
@@ -22,7 +22,7 @@ class FeeRateDetails
     public $idReadOnly;
 
     /**
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "Fee Type:"
      * })
@@ -31,7 +31,7 @@ class FeeRateDetails
     public $feeType;
 
     /**
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Type("\Common\Form\Elements\Types\ReadonlyElement")
      * @Form\Options({
      *     "label": "Description:"
      * })
