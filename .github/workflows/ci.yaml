@@ -326,7 +326,6 @@ jobs:
   security-app:
     name: Security App
     needs:
-      - app
       - orchestrator
     strategy:
       matrix:
@@ -343,11 +342,12 @@ jobs:
       project: ${{ matrix.project }}
     permissions:
       contents: read
+      security-events: write
     secrets: inherit
 
   security-terraform:
     name: Security Terraform
-
     uses: ./.github/workflows/security-terraform.yaml
     permissions:
       contents: read
+      security-events: write
