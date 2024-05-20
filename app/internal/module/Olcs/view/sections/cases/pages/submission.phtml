@@ -12,12 +12,15 @@ $isInternalReadOnly = $this->placeholder('isInternalReadOnly')->getValue();
 
 $freetext = '';
 
-$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+if (is_array($selectedSectionsArray)) {
+  $selectedIds = array_column($selectedSectionsArray, 'sectionId');
+} else {
+  $selectedIds = [];
+}
 foreach ($allSections as $sectionId => $sectionDescription) {
     if (array_key_exists($sectionId, $selectedSectionsArray))
     {
-        $additionalConfig = isset($submissionConfig[$sectionId]['config']) ? $submissionConfig[$sectionId]['config']
-            : [];
+        $additionalConfig = $submissionConfig[$sectionId]['config'] ?? [];
         $selectedSectionsArray[$sectionId]['config'] = $additionalConfig;
 
         $freetext .= $this->submissionSectionDetails(
