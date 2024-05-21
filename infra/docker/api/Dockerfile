@@ -1,11 +1,11 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 AS api
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.2/fpm-nginx:0 AS api
 
 # hadolint ignore=DL3002
 USER root
 
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install igbinary apcu_bc apcu \
+  && pecl install igbinary apcu \
   && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
@@ -46,10 +46,10 @@ USER www-data
 
 FROM api AS development
 
-RUN apk add --no-cache $PHPIZE_DEPS \
-  && pecl install xdebug-3.1.5 \
+RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
+  && pecl install xdebug \
   && docker-php-ext-enable xdebug \
-  && apk del $PHPIZE_DEPS
+  && apk del linux-headers $PHPIZE_DEPS
 
 RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \

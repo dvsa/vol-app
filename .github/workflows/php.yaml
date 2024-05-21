@@ -5,7 +5,6 @@ on:
     inputs:
       ref:
         type: string
-        default: 5.3.0
         required: false
       project:
         type: string
@@ -41,7 +40,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: "8.2"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
@@ -76,7 +75,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: "8.2"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
@@ -128,7 +127,7 @@ jobs:
   #     - name: Setup PHP
   #       uses: shivammathur/setup-php@v2
   #       with:
-  #         php-version: "7.4"
+  #         php-version: "8.2"
   #         coverage: none
   #         extensions: intl, pdo_mysql, redis, mbstring
   #         tools: ${{ matrix.task.tools }}
@@ -167,7 +166,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "7.4"
+          php-version: "8.2"
           coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory

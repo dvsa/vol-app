@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/7.4/fpm-nginx:0 as selfserve
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.2/fpm-nginx:0 AS selfserve
 
 # hadolint ignore=DL3002
 USER root
@@ -51,10 +51,10 @@ USER www-data
 
 FROM selfserve AS development
 
-RUN apk add --no-cache $PHPIZE_DEPS \
-  && pecl install xdebug-3.1.5 \
+RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
+  && pecl install xdebug \
   && docker-php-ext-enable xdebug \
-  && apk del $PHPIZE_DEPS
+  && apk del linux-headers $PHPIZE_DEPS
 
 RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
