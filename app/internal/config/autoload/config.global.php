@@ -79,7 +79,7 @@ return [
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
-    'asset_path' => '/static/public',
+    'asset_path' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'https://cdn.%domain%' : '/static/public'),
 
     /**
      * Configure the location of the application log
