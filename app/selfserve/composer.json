@@ -1,10 +1,6 @@
 {
     "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
-    "repositories": [{
-       "type": "vcs",
-       "url": "https://github.com/dvsa/laminas-form.git"
-    }],
     "require": {
         "php": "~8.2.0",
         "ext-redis": "*",
