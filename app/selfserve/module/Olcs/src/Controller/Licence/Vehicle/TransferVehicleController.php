@@ -107,8 +107,7 @@ class TransferVehicleController extends AbstractVehicleController
         $validationErrors = [];
         if (empty($selectedVehicles)) {
             $validationErrors[] = 'licence.vehicle.transfer.error.no-vehicle-selected';
-        }
-        if (count($selectedVehicles) > static::VEHICLE_TRANSFER_LIMIT) {
+        } elseif (count($selectedVehicles) > static::VEHICLE_TRANSFER_LIMIT) {
             $validationErrors[] = 'licence.vehicle.transfer.error.too-many-vehicles-selected';
         }
 
