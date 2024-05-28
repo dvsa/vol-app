@@ -141,7 +141,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
         $formData = $request->getQuery();
         $form->setData($formData);
 
-        if (array_key_exists('vehicleSearch', $formData)) {
+        if (array_key_exists('vehicleSearch', $formData->toArray())) {
             $form->isValid();
         }
 

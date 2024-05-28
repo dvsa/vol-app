@@ -215,7 +215,7 @@ class TransferVehicleController extends AbstractVehicleController
         $formData = $this->getRequest()->getQuery();
         $form->setData($formData);
 
-        if (array_key_exists('vehicleSearch', $formData)) {
+        if (array_key_exists('vehicleSearch', $formData->toArray())) {
             $form->isValid();
         }
 
