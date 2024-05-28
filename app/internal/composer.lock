@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c2067f928c2e11169a67e2c0aa6495d",
+    "content-hash": "98e7389934cb281ba7a792e232fa0701",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2281,16 +2281,16 @@
         },
         {
             "name": "laminas/laminas-form",
-            "version": "3.19.1",
+            "version": "3.19.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dvsa/laminas-form.git",
-                "reference": "c6f6c68f9b7f0793a805b10309198ad455ca900e"
+                "url": "https://github.com/laminas/laminas-form.git",
+                "reference": "f2ae01f6574ff9ca5139232c168e80b557b2b2aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/laminas-form/zipball/c6f6c68f9b7f0793a805b10309198ad455ca900e",
-                "reference": "c6f6c68f9b7f0793a805b10309198ad455ca900e",
+                "url": "https://api.github.com/repos/laminas/laminas-form/zipball/f2ae01f6574ff9ca5139232c168e80b557b2b2aa",
+                "reference": "f2ae01f6574ff9ca5139232c168e80b557b2b2aa",
                 "shasum": ""
             },
             "require": {
@@ -2350,33 +2350,7 @@
                     "Laminas\\Form\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\Form\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@static-analysis",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "static-analysis": [
-                    "psalm --shepherd --stats"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2387,14 +2361,20 @@
                 "laminas"
             ],
             "support": {
-                "issues": "https://github.com/laminas/laminas-form/issues",
-                "forum": "https://discourse.laminas.dev",
                 "chat": "https://laminas.dev/chat",
-                "source": "https://github.com/laminas/laminas-form",
                 "docs": "https://docs.laminas.dev/laminas-form/",
-                "rss": "https://github.com/laminas/laminas-form/releases.atom"
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-form/issues",
+                "rss": "https://github.com/laminas/laminas-form/releases.atom",
+                "source": "https://github.com/laminas/laminas-form"
             },
-            "time": "2024-01-11T15:32:31+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2024-02-19T07:08:43+00:00"
         },
         {
             "name": "laminas/laminas-http",

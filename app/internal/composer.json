@@ -1,10 +1,6 @@
 {
     "name": "olcs/olcs-internal",
     "description": "OLCS Internal Web Site",
-    "repositories": [{
-      "type": "vcs",
-      "url": "https://github.com/dvsa/laminas-form.git"
-    }],
     "require": {
         "php": "~8.2.0",
         "ext-redis": "*",
