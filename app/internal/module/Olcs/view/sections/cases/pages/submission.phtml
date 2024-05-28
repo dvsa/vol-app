@@ -12,11 +12,10 @@ $isInternalReadOnly = $this->placeholder('isInternalReadOnly')->getValue();
 
 $freetext = '';
 
-if (is_array($selectedSectionsArray)) {
-  $selectedIds = array_column($selectedSectionsArray, 'sectionId');
-} else {
-  $selectedIds = [];
-}
+$selectedSectionsArray = is_array($selectedSectionsArray) ? $selectedSectionsArray : [];
+
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+
 foreach ($allSections as $sectionId => $sectionDescription) {
     if (array_key_exists($sectionId, $selectedSectionsArray))
     {
