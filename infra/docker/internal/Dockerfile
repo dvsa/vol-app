@@ -56,7 +56,11 @@ RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
   && docker-php-ext-enable xdebug \
   && apk del linux-headers $PHPIZE_DEPS
 
-RUN echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+RUN \
+  # Disable OPCache in development.
+  echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
+  # Setup Xdebug.
+  && echo "[xdebug]" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.remote_log=/tmp/xdebug.log" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
