@@ -55,8 +55,6 @@ module "dynamodb_table" {
       type = "S"
     }
   ]
-
-  point_in_time_recovery_enabled = true
 }
 
 module "dynamodb_state_lock_policy" {
