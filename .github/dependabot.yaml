@@ -34,6 +34,8 @@ updates:
       # Accounts
       - "/infra/terraform/accounts/nonprod"
       - "/infra/terraform/accounts/prod"
+      # Misc
+      - "/infra/terraform/accounts/_init"
       # Environments
       - "/infra/terraform/environments/dev"
       - "/infra/terraform/environments/int"
