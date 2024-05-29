@@ -5,9 +5,9 @@ slug: /
 
 # Introduction
 
-The Vehicle Operator Licence (VOL) application documentation.
+Welcome to the Vehicle Operator Licence (VOL) application repository!
 
-This repository is a mono-repository, and contains the following:
+This repository is a mono-repository, and built up of the following components:
 
 -   ![PHP](./assets/languages/php.svg) Application code (`/app`)
 -   ![Markdown](./assets/languages/markdown.svg) Documentation (`/docs`)
