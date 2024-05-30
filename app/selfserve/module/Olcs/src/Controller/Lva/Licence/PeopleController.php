@@ -107,10 +107,8 @@ class PeopleController extends Lva\AbstractPeopleController
 
     /**
      * Disallow deleting
-     *
-     * @return Response
      */
-    public function deleteAction(): Response
+    public function deleteAction()
     {
         $licencePeopleAdapter = $this->getLicencePeopleAdapter();
         $licencePeopleAdapter->loadPeopleData($this->lva, $this->getIdentifier());
