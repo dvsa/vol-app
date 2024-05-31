@@ -1,0 +1,84 @@
+services:
+  proxy:
+    container_name: proxy
+    image: nginxproxy/nginx-proxy:1.5
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      default:
+        aliases:
+          - api.local.olcs.dev-dvsacloud.uk
+          - ssweb.local.olcs.dev-dvsacloud.uk
+          - iuweb.local.olcs.dev-dvsacloud.uk
+
+  api:
+    build:
+      context: infra/docker/api
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/api:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.api"
+      VIRTUAL_HOST: api.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 8080
+
+  selfserve:
+    build:
+      context: infra/docker/selfserve
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/selfserve:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.selfserve"
+      VIRTUAL_HOST: ssweb.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 8080
+
+  internal:
+    build:
+      context: infra/docker/internal
+      target: development
+    expose:
+      - 8080
+    volumes:
+      - ./app/internal:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.internal"
+      VIRTUAL_HOST: iuweb.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 8080
+
+  redis:
+    image: redis:7
+    expose:
+      - 6379
+
+  db:
+    image: mysql:8.0
+    command: --log_bin_trust_function_creators=1 --sql_mode=NO_ENGINE_SUBSTITUTION
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: olcs
+      MYSQL_DATABASE: olcs_be
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: olcs
+
+volumes:
+  db-data:

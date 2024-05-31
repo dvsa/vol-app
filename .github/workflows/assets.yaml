@@ -1,0 +1,62 @@
+name: Assets
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+      version:
+        type: string
+        required: true
+      push:
+        type: boolean
+        default: false
+        required: false
+
+jobs:
+  build:
+    name: ${{ inputs.push && 'Deploy' || 'Build' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/cdn
+    env:
+      REMOTE_REPOSITORY: "dvsa/olcs-static"
+      ASSET_BUCKET: "vol-app-assets"
+      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
+      AWS_REGION: ${{ vars.TF_AWS_REGION }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/cdn
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 14
+          cache: "npm"
+          cache-dependency-path: app/cdn/package.json
+
+      - run: npm install --prefer-offline
+        shell: bash
+
+      - run: npm run build:container
+        shell: bash
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.push }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload assets to CloudFront assets bucket
+        if: ${{ inputs.push }}
+        run: aws s3 cp ./public s3://${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive

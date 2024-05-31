@@ -1,0 +1,54 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "weekly"
+    groups:
+      root-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-action-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/website"
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "weekly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "terraform"
+    directories:
+      # Accounts
+      - "/infra/terraform/accounts/nonprod"
+      - "/infra/terraform/accounts/prod"
+      # Misc
+      - "/infra/terraform/accounts/_init"
+      # Environments
+      - "/infra/terraform/environments/dev"
+      - "/infra/terraform/environments/int"
+      - "/infra/terraform/environments/prep"
+      - "/infra/terraform/environments/prod"
+      # Modules
+      - "/infra/terraform/modules/account"
+      - "/infra/terraform/modules/github"
+      - "/infra/terraform/modules/remote-state"
+      - "/infra/terraform/modules/service"
+    schedule:
+      interval: "monthly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"

@@ -1,0 +1,37 @@
+name: Conventional Commits
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+  workflow_call:
+    inputs:
+      title:
+        description: "PR title"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-pr-title-${{ github.event.pull_request.id || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check-pr-title:
+    name: Check PR title
+    runs-on: ubuntu-latest
+    env:
+      TITLE: ${{ inputs.title || github.event.pull_request.title }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "npm"
+      - run: npm ci
+      - name: Validate PR title
+        run: echo "$TITLE" | npx --no commitlint
