@@ -20,13 +20,14 @@ Less volatile parts of the codebase are often overlooked, leading to issues bein
 
 ## Proposal
 
-To address these issues, we propose the introduction of code owners. Code owners are team members responsible for specific parts of the codebase.
+To address these issues, we propose the introduction of code owners. Code owners are team members that are acting lead maintainer of a specific repository or part of the codebase.
 
 They are responsible for:
 
 -   Reviewing pull requests that affect their assigned code.
 -   Keeping dependencies up to date (or creating tickets for them if they require large refactors).
 -   Identifying improvements and creating tickets for them.
+-   Release management for their assigned code (if applicable).
 
 ### Time Investment
 
