@@ -13,7 +13,7 @@ This runbook is for setting up Terraform that builds the `vol-app` in an AWS acc
 
 ## Steps
 
-1. Change into the [`infra/terraform/accounts/.init`](https://github.com/dvsa/vol-app/tree/main/infra/terraform/accounts/.init) directory.
+1. Change into the [`infra/terraform/accounts/_init`](https://github.com/dvsa/vol-app/tree/main/infra/terraform/accounts/_init) directory.
 
     :::warning
 
