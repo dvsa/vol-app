@@ -70,7 +70,6 @@ class ImpoundingFields
      *     "label": "Hearing date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss'</div>'"
      * })
      * @Form\Filter("Laminas\Filter\DateTimeSelect", options={"null_on_empty":true})
      * @Form\Validator("ValidateIf",

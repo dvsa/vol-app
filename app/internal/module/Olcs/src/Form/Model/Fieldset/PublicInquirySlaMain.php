@@ -63,7 +63,6 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Date of written decision",
      *     "create_empty_option": true,
-     *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset>'",
      *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "tcWrittenDecisionDate"

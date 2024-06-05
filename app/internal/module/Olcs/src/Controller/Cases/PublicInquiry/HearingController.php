@@ -272,21 +272,8 @@ class HearingController extends AbstractInternalController implements CaseContro
         }
 
         $element = $form->get('fields')->get('hearingDate');
-        $pattern = $element->getOption('pattern');
+        $element->setOption('hint', $hint);
 
-        if (!empty($pattern)) {
-            if (strstr($pattern, '{{SLA_HINT}}')) {
-                $pattern = str_replace('{{SLA_HINT}}', '<p class="hint">' . $hint . '</p>', $pattern);
-
-                $element->setOption('pattern', $pattern);
-            } elseif (strstr($pattern, '</div>')) {
-                $pattern = str_replace('</div>', '<p class="hint">' . $hint . '</p></div>', $pattern);
-
-                $element->setOption('pattern', $pattern);
-            }
-        } else {
-            $this->setOption('hint', $hint);
-        }
         return $form;
     }
 }

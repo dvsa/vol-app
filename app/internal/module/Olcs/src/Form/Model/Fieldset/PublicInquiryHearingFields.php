@@ -51,7 +51,6 @@ class PublicInquiryHearingFields extends Base
      *     "label": "Date of PI",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Time of PI</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
@@ -211,7 +210,6 @@ class PublicInquiryHearingFields extends Base
      *     "label": "Date adjournment agreed",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Time adjournment agreed</label>'HH:mm:ss'</div>'",
      *     "field": "adjournedDate"
      * })
      * @Form\Filter({"name":"DateTimeSelect", "options":{"null_on_empty":true}})

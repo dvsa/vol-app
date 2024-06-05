@@ -45,7 +45,6 @@ class NonPiFields extends CaseBase
      *     "label": "Meeting date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Meeting time</label>'HH:mm:ss'</div>'",
      *     "field": "hearingDate"
      * })
      * @Form\Filter("DateTimeSelectNullifier")
