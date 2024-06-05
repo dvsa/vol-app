@@ -60,7 +60,6 @@ class SystemInfoMessageDetails
      *      "create_empty_option": true,
      *      "max_year_delta": "+1",
      *      "min_year_delta": "0",
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
@@ -84,7 +83,6 @@ class SystemInfoMessageDetails
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
      *      "min_year_delta": "0",
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({

@@ -29,7 +29,6 @@ class PermitWindowDetails
      *     "max_year_delta": "+1",
      *     "min_year_delta": "0",
      *     "display_every_minute": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""startDate"">Time</label>'HH:mm:ss'</div>'",
      *     "render_delimiters": false
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
@@ -77,7 +76,6 @@ class PermitWindowDetails
      *     "max_year_delta": "+10",
      *     "min_year_delta": "0",
      *     "display_every_minute": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""endDate"">Time</label>'HH:mm:ss'</div>'",
      *     "render_delimiters": false
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
