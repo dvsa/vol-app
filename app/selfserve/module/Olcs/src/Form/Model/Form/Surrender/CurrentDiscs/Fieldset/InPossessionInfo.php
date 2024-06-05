@@ -11,14 +11,11 @@ class InPossessionInfo
      * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Type("Number")
      * @Form\Options({
      *     "label":"licence.surrender.current_discs.destroy.number.label",
      * })
      * @Form\Attributes({
      *      "class":"govuk-input govuk-!-width-one-third",
-     *      "step": "any",
-     *      "min": 0
      * })
      * @Form\Validator("ValidateIf",
      *      options={

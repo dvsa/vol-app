@@ -9,16 +9,12 @@ class StolenInfo
     /**
      * @Form\Name("number")
      * @Form\Required(true)
-     * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Type("Number")
      * @Form\Options({
      *     "label":"licence.surrender.current_discs.stolen.number.label",
      * })
      * @Form\Attributes({
      *      "class":"govuk-input govuk-!-width-one-third",
-     *      "step": "any",
-     *      "min": 0
      * })
      * @Form\Validator("ValidateIf",
      *      options={
@@ -26,6 +22,12 @@ class StolenInfo
      *          "context_values": {"Y"},
      *          "inject_post_data": "stolenSection->stolen",
      *          "validators": {
+     *              {
+     *                  "name": "NotEmpty",
+     *                  "options": {
+     *                      "messages": {"isEmpty" : "Value is required and can't be empty"},
+     *                  }
+     *              },
      *              {
      *                  "name": "Digits",
      *                  "options": {
