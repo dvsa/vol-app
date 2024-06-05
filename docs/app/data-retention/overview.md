@@ -1,4 +1,7 @@
-## Data Retention System Overview
+---
+sidebar_position: 1
+---
+# Data Retention System Overview
 
 The Data Retention system is designed to manage the lifecycle of records in compliance with regulatory and internal data management policies. This system uses a set of "populate rules" to determine when records are eligible for deletion, ensuring data is handled securely and efficiently.
 

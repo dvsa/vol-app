@@ -1,4 +1,7 @@
-## Data Cleanup Process Overview
+---
+sidebar_position: 2
+---
+# Delete & Cleanup Procedure
 
 The `sp_dr_cleanup` systematically cleans up data across related tables in the database, based on the data retention rules. This procedure is integral to maintaining the integrity and performance of the system by removing outdated records, and helps remain compliant with data protection and retention legislation.
 
