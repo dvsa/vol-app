@@ -3,6 +3,8 @@ module "github" {
 
   source = "../../modules/github"
 
+  oidc_role_prefix = "vol-app"
+
   create_oidc_provider      = true
   create_oidc_role          = true
   create_oidc_readonly_role = true
