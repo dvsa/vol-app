@@ -90,7 +90,7 @@ module "s3_state_policy" {
   version = "~> 5.28"
 
   name        = "${local.identifier}-policy"
-  description = "Policy to allow access to the Terraform state in S3"
+  description = "Policy to allow full access to the Terraform state in S3"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -100,6 +100,30 @@ module "s3_state_policy" {
         Action = [
           "s3:GetObject",
           "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Resource = module.s3[0].s3_bucket_arn
+      }
+    ]
+  })
+}
+
+module "s3_state_readonly_policy" {
+  count = var.create_bucket && var.create_bucket_policy ? 1 : 0
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "~> 5.28"
+
+  name        = "${local.identifier}-readonly-policy"
+  description = "Policy to allow readonly access to the Terraform state in S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
           "s3:ListBucket"
         ]
         Resource = module.s3[0].s3_bucket_arn

@@ -20,6 +20,7 @@
 | <a name="module_dynamodb_table"></a> [dynamodb\_table](#module\_dynamodb\_table) | terraform-aws-modules/dynamodb-table/aws | ~> 4.0 |
 | <a name="module_s3"></a> [s3](#module\_s3) | terraform-aws-modules/s3-bucket/aws | ~> 4.0 |
 | <a name="module_s3_state_policy"></a> [s3\_state\_policy](#module\_s3\_state\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | ~> 5.28 |
+| <a name="module_s3_state_readonly_policy"></a> [s3\_state\_readonly\_policy](#module\_s3\_state\_readonly\_policy) | terraform-aws-modules/iam/aws//modules/iam-policy | ~> 5.28 |
 
 ## Resources
 
@@ -42,5 +43,6 @@
 | Name | Description |
 |------|-------------|
 | <a name="output_dynamodb_state_lock_policy_arn"></a> [dynamodb\_state\_lock\_policy\_arn](#output\_dynamodb\_state\_lock\_policy\_arn) | The ARN of the IAM policy that allows DynamoDB access for state locking |
-| <a name="output_s3_state_policy_arn"></a> [s3\_state\_policy\_arn](#output\_s3\_state\_policy\_arn) | The ARN of the IAM policy that allows S3 access for state locking |
+| <a name="output_s3_state_policy_arn"></a> [s3\_state\_policy\_arn](#output\_s3\_state\_policy\_arn) | The ARN of the IAM policy that allows S3 access for the state |
+| <a name="output_s3_state_readonly_policy_arn"></a> [s3\_state\_readonly\_policy\_arn](#output\_s3\_state\_readonly\_policy\_arn) | The ARN of the IAM policy that allows S3 read-only access for the state |
 <!-- END_TF_DOCS -->
