@@ -324,29 +324,21 @@ jobs:
     secrets: inherit
 
   security-app:
-    name: Security App
+    name: Security
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
     needs:
       - orchestrator
-    strategy:
-      matrix:
-        project:
-          - api
-          - selfserve
-          - internal
-        exclude:
-          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
     uses: ./.github/workflows/security-app.yaml
-    with:
-      project: ${{ matrix.project }}
     permissions:
       contents: read
       security-events: write
     secrets: inherit
 
   security-terraform:
-    name: Security Terraform
+    name: Security
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts || needs.orchestrator.outputs.should-plan-terraform-environments }}
+    needs:
+      - orchestrator
     uses: ./.github/workflows/security-terraform.yaml
     permissions:
       contents: read

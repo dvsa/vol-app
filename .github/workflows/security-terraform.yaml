@@ -1,4 +1,4 @@
-name: Security Terraform
+name: Security
 
 on:
   workflow_call:
@@ -11,21 +11,18 @@ env:
 
 jobs:
   terraform-scan:
-    name: Terraform Scan
+    name: Terraform
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Scan Terraform
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.20.0
         with:
           exit-code: 1
           scan-ref: "infra/terraform"
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
-
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v3
