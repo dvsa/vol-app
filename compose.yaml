@@ -69,7 +69,6 @@ services:
   db:
     image: mysql:8.0
     command: --log_bin_trust_function_creators=1 --sql_mode=NO_ENGINE_SUBSTITUTION
-    restart: always
     volumes:
       - db-data:/var/lib/mysql
     ports:
