@@ -41,7 +41,9 @@ variable "services" {
   default     = {}
 }
 
-variable "job_command" {
-  type        = string
+variable "jobs" {
+  type        = map(object({
+    job_command = string
+    }))
   description = "The application command to run"
 }

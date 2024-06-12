@@ -234,10 +234,9 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
+
+  jobs = {
+    job_command = "/opt/dvsa/olcs/api/vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php queue:process-queue"
+  }
 }
 
-module "batchjob" {
-  source = "../../modules/service"
-
-  job_command = "/opt/dvsa/olcs/api/vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php queue:process-queue"
-}

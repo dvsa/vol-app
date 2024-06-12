@@ -97,7 +97,7 @@ module "batch" {
       platform_capabilities = ["FARGATE"]
 
       container_properties = jsonencode({
-        command = "${var.job_command}"
+        command = "${var.jobs.job_command}"
         image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
