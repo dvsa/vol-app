@@ -40,3 +40,8 @@ variable "services" {
   description = "The services to deploy"
   default     = {}
 }
+
+variable "job_command" {
+  type        = string
+  description = "The application command to run"
+}

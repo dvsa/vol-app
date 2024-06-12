@@ -235,3 +235,9 @@ module "service" {
     }
   }
 }
+
+module "batchjob" {
+  source = "../../modules/service"
+
+  job_command = "/opt/dvsa/olcs/api/vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php queue:process-queue"
+}
