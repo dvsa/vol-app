@@ -90,6 +90,7 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-accounts-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/accounts/**
             infra/terraform/modules/**
@@ -99,6 +100,7 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-environments-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/environments/{dev,int,prep,prod}/**
             infra/terraform/modules/**
