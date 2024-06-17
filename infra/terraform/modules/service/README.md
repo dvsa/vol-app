@@ -45,6 +45,7 @@
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
+| <a name="input_jobs"></a> [jobs](#input\_jobs) | The application command to run | <pre>map(object({<br>    command = string<br>    image = string<br>    memory = number<br>    security_group_ids = list(string)<br>    subnets = list(string)      <br>  }))</pre> | n/a | yes |
 | <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    version    = string<br>    repository = string<br>    cpu        = number<br>    memory     = number<br>    task_iam_role_statements = list(object({<br>      effect    = string<br>      actions   = list(string)<br>      resources = list(string)<br>    }))<br>    add_cdn_url_to_env        = optional(bool, false)<br>    lb_listener_arn           = string<br>    listener_rule_priority    = optional(number, 10)<br>    listener_rule_host_header = optional(string, "*")<br>    security_group_ids        = list(string)<br>    subnet_ids                = list(string)<br>    vpc_id                    = optional(string, null)<br>  }))</pre> | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID | `string` | n/a | yes |
 
