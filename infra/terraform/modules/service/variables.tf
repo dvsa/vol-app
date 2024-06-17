@@ -42,8 +42,13 @@ variable "services" {
 }
 
 variable "jobs" {
-  type        = map(object({
-    job_command = string
+  type = map(object({
+    jobs = list(string) 
+      command = string
+      image = string
+      memory = number
+      security_group_ids = list(string)
+      subnets = list(string)      
     }))
   description = "The application command to run"
 }

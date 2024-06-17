@@ -32,8 +32,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = ["${aws_security_group.api.id}"]
-        subnets            = values(module.subnets_asg_api.subnet_ids_az)
+        security_group_ids = ["${var.jobs.security_group_ids}"]
+        subnets            = values(var.jobs.subnets)
 
         # `tags = {}` here is not applicable for spot
       }
@@ -46,8 +46,8 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-        security_group_ids = ["${aws_security_group.api.id}"]
-        subnets            = values(module.subnets_asg_api.subnet_ids_az)
+        security_group_ids = ["${var.jobs.security_group_ids}"]
+        subnets            = values(var.jobs.subnets)
 
         # `tags = {}` here is not applicable for spot
       }
@@ -98,13 +98,13 @@ module "batch" {
 
       container_properties = jsonencode({
         command = "${var.jobs.job_command}"
-        image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
+        image   = "${var.jobs.image}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
           { type = "VCPU", value = "1" },
-          { type = "MEMORY", value = "2048" }
+          { type = "MEMORY", value = "${var.jobs.memory}" }
         ],
         executionRoleArn = module.iam_assumable_role_vol_api_task_exec_role.iam_role_arn
         #### CW Log group to be created later
