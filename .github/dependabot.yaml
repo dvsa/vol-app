@@ -36,7 +36,6 @@ updates:
       - "/infra/terraform/environments/int"
       - "/infra/terraform/environments/prep"
       - "/infra/terraform/environments/prod"
-    versioning-strategy: "increase-if-necessary"
     schedule:
       interval: "weekly"
     groups:
@@ -51,7 +50,6 @@ updates:
       - "/infra/terraform/accounts/prod"
       # Misc
       - "/infra/terraform/accounts/_init"
-    versioning-strategy: "increase-if-necessary"
     schedule:
       interval: "weekly"
     groups:
@@ -66,7 +64,6 @@ updates:
       - "/infra/terraform/modules/github"
       - "/infra/terraform/modules/remote-state"
       - "/infra/terraform/modules/service"
-    versioning-strategy: "increase-if-necessary"
     schedule:
       interval: "weekly"
     groups:
