@@ -71,7 +71,7 @@ return [
     'webdav' => [
         // Private key used to sign JWT tokens when generating WebDAV links. (PEM Format)
         // Can be a path to a .pem file or base64 encoded private key in PEM format.
-        'private_key' => '/etc/pki/tls/private/jwtRS256.pem',
+        'private_key' => '%webdav_jwt_private_key%',
         // The default length in seconds the JWT is valid for.
         'default_lifetime_seconds' => 21600,
         // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
