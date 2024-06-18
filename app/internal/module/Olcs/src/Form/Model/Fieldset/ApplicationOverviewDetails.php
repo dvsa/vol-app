@@ -78,6 +78,16 @@ class ApplicationOverviewDetails
     public $overrideOppositionDate = null;
 
     /**
+     * @Form\Options({
+     *      "checked_value":"Y",
+     *      "unchecked_value":"N",
+     *      "label":"overview.fieldset.check.application-referred-to-pi"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $applicationReferredToPi = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */

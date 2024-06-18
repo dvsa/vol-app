@@ -23,8 +23,8 @@ trait ApplicationOverviewTrait
     public function indexAction()
     {
         /**
- * @var \Laminas\Http\Request $request
-*/
+        * @var \Laminas\Http\Request $request
+        */
         $request = $this->getRequest();
 
         if ($request->isPost() && $this->isButtonPressed('cancel')) {
@@ -132,13 +132,14 @@ trait ApplicationOverviewTrait
     {
         return [
             'details' => [
-                'receivedDate'           => $application['receivedDate'] ?? null,
-                'targetCompletionDate'   => $application['targetCompletionDate'] ?? null,
-                'leadTcArea'             => $application['licence']['organisation']['leadTcArea']['id'] ?? null,
-                'translateToWelsh'       => $application['licence']['translateToWelsh'] ?? null,
-                'overrideOppositionDate' => $application['overrideOoo'] ?? null,
-                'version'                => $application['version'] ?? null,
-                'id'                     => $application['id'] ?? null,
+                'receivedDate'            => $application['receivedDate'] ?? null,
+                'targetCompletionDate'    => $application['targetCompletionDate'] ?? null,
+                'leadTcArea'              => $application['licence']['organisation']['leadTcArea']['id'] ?? null,
+                'translateToWelsh'        => $application['licence']['translateToWelsh'] ?? null,
+                'overrideOppositionDate'  => $application['overrideOoo'] ?? null,
+                'applicationReferredToPi' => $application['applicationReferredToPi'] ?? null,
+                'version'                 => $application['version'] ?? null,
+                'id'                      => $application['id'] ?? null,
             ],
             'tracking' => $application['applicationTracking'] ?? null,
         ];
@@ -215,6 +216,7 @@ trait ApplicationOverviewTrait
             'leadTcArea' => $details['leadTcArea'],
             'tracking' => $formData['tracking'],
             'overrideOppositionDate' => $details['overrideOppositionDate'],
+            'applicationReferredToPi' => $details['applicationReferredToPi'],
             'validateAppCompletion' => true,
         ];
 
