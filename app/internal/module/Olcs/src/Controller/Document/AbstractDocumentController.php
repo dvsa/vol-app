@@ -278,11 +278,4 @@ abstract class AbstractDocumentController extends AbstractController
         }
         return (string) $url_pattern;
     }
-
-    protected function getOsType(): string
-    {
-        $query = MyAccount::create([]);
-        $response = $this->handleQuery($query)->getResult();
-        return $response['osType']['id'] ?? RefData::USER_OS_TYPE_WINDOWS_7;
-    }
 }

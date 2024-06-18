@@ -84,7 +84,6 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'Y',
-                    'osType' => 'windows_10'
                 ],
                 "expected" => [
                     'id' => 987,
@@ -126,7 +125,6 @@ class UserTest extends MockeryTestCase
                     ],
                     'userSettings' => [
                         'translateToWelsh' => 'Y',
-                        'osType' => 'windows_10'
                     ],
                 ]
             ],
@@ -396,7 +394,6 @@ class UserTest extends MockeryTestCase
                     ],
                     'userSettings' => [
                         'translateToWelsh' => 'Y',
-                        'osType' => 'windows_10'
                     ],
                 ],
                 "expected" => [
@@ -434,7 +431,6 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'Y',
-                    'osType' => 'windows_10'
                 ],
             ],
             // edit - transport-manager

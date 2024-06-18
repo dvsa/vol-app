@@ -228,11 +228,6 @@ class UserManagementController extends AbstractInternalController implements Lef
                 //transport manager and operator, we don't modify the form
         }
 
-        //Hide OS type select for non internal users
-        if ($data['userType']['userType'] != RefData::USER_TYPE_INTERNAL) {
-            $form->get('userSettings')->remove('osType');
-        }
-
         return $form;
     }
 
