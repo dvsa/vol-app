@@ -2305,21 +2305,6 @@ $routes = [
         ],
         'may_terminate' => true,
     ],
-     'historic-tm' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/historic-tm/:historicId[/]',
-            'constraints' => [
-                'action' => 'details',
-                'historicId' => '[0-9]+',
-            ],
-            'defaults' => [
-                'controller' => 'HistoricTmController',
-                'action' => 'details',
-            ],
-        ],
-        'may_terminate' => true,
-     ],
     'create_transport_manager' => [
         'type' => 'segment',
         'options' => [
