@@ -28,7 +28,7 @@ env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
   REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   REGISTRY_MIRROR: ghcr.io
-  AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
+  AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_{0}', (inputs.push && 'OIDC_ROLE' || 'OIDC_READONLY_ROLE'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
   AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
 jobs:

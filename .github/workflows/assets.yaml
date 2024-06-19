@@ -24,7 +24,7 @@ jobs:
     env:
       REMOTE_REPOSITORY: "dvsa/olcs-static"
       ASSET_BUCKET: "vol-app-assets"
-      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
+      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_{0}', (inputs.push && 'OIDC_ROLE' || 'OIDC_READONLY_ROLE'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
       AWS_REGION: ${{ vars.TF_AWS_REGION }}
     steps:
       - uses: actions/checkout@v4
