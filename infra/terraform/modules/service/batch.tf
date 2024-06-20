@@ -1,5 +1,7 @@
 
 module "batch" {
+  for_each = var.jobs
+
   source = "terraform-aws-modules/batch/aws"
 
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
@@ -96,14 +98,14 @@ module "batch" {
       platform_capabilities = ["FARGATE"]
 
       container_properties = jsonencode({
-        command = var.jobs.command
-        image = var.jobs.image
+        command = each.value["command"]
+        image = each.value["image"]
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
           { type = "VCPU", value = "1" },
-          { type = "MEMORY", value = var.jobs.memory }
+          { type = "MEMORY", value = each.value["memory"] }
         ],
         executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
