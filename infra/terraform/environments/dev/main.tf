@@ -242,8 +242,10 @@ module "service" {
         image = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
       }]
       memory              = 2048
-      security_group_ids  = data.aws_security_group.this["API"].id
       subnets             = data.aws_subnets.this["API"].ids
+      security_group_ids  = [
+        data.aws_security_group.this["API"].id
+      ]
     }
   }
 }
