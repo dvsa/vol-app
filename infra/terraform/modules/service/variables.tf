@@ -43,8 +43,10 @@ variable "services" {
 
 variable "jobs" {
   type = map(object({
-    command            = string
-    image              = string
+    job_config = list(object({
+      command            = string
+      image              = string
+    }))
     memory             = number
     security_group_ids = list(string)
     subnets            = list(string)
