@@ -105,7 +105,7 @@ module "batch" {
           { type = "VCPU", value = "1" },
           { type = "MEMORY", value = "${var.jobs.memory}" }
         ],
-        executionRoleArn = module.iam_assumable_role_vol_api_task_exec_role.iam_role_arn
+        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
 /*        logConfiguration = {
           logDriver = "awslogs"
