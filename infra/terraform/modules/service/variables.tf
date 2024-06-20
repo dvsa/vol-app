@@ -42,13 +42,8 @@ variable "services" {
 }
 
 variable "jobs" {
-  type = map(object({
-    commands           = object({command = string, argument = string})
-    image              = object({image_string = string})
-    memory             = number
-    security_group_ids = list(string)
-    subnets            = list(string)
-  }))
-  description = "The application command to run"
+  type = map(string)
+  description = "The application command config to run"
   default = {}
+
 }
