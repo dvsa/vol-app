@@ -32,8 +32,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs.security_group_ids
-      subnets               = var.jobs.subnets
+      security_group_ids    = "DEV/APP/DEV-OLCS-PRI-API-SG"
+      subnet_ids            = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
 
         # `tags = {}` here is not applicable for spot
       }
@@ -46,8 +46,8 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs.security_group_ids
-      subnets               = var.jobs.subnets
+      security_group_ids    = "DEV/APP/DEV-OLCS-PRI-API-SG"
+      subnet_ids            = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
         # `tags = {}` here is not applicable for spot
       }
     }
@@ -90,6 +90,7 @@ module "batch" {
   }
 
   job_definitions = {
+    for_each = var.jobs
     job_configuration = {
       name                  = "batch-test-job"
       propagate_tags        = true

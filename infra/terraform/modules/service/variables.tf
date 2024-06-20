@@ -46,10 +46,8 @@ variable "jobs" {
     job_config = list(object({
       command            = string
       image              = string
+      memory             = number
     }))
-    memory             = number
-    security_group_ids = list(string)
-    subnets            = list(string)
   }))
   description = "The application command to run"
   default = {}
