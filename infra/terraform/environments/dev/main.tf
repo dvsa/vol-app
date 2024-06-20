@@ -240,12 +240,8 @@ module "service" {
       job_config = [{
         command = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php queue:process-queue"
         image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
+        memory              = 2048
       }]
-      memory              = 2048
-      subnets             = data.aws_subnets.this["API"].ids
-      security_group_ids  = [
-        data.aws_security_group.this["API"].id
-      ]
     }
   }
 }
