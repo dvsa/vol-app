@@ -90,14 +90,14 @@ module "batch" {
   }
 
   job_definitions = {
-    for_each = var.jobs
     job_configuration = {
       name                  = "batch-test-job"
       propagate_tags        = true
       platform_capabilities = ["FARGATE"]
 
       container_properties = jsonencode({
-        job_config = var.jobs[each.key].job_config
+        command = var.jobs.command
+        image = var.jobs.image
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
