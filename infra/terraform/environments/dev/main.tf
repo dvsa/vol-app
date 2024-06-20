@@ -237,11 +237,9 @@ module "service" {
 
   jobs = {
     "test_job" = {
-      job_config = [{
-        command = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php queue:process-queue"
-        image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
-        memory              = 2048
-      }]
+      command = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php queue:process-queue"
+      image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest"
+      memory  = 2048
+      }
     }
-  }
 }
