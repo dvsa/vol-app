@@ -1,6 +1,5 @@
 
 module "batch" {
-  for_each = var.jobs
   source = "terraform-aws-modules/batch/aws"
 
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
@@ -33,8 +32,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs[each.key].security_group_ids
-      subnets               = var.jobs[each.key].subnets
+      security_group_ids    = var.jobs.security_group_ids
+      subnets               = var.jobs.subnets
 
         # `tags = {}` here is not applicable for spot
       }
@@ -47,8 +46,8 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs[each.key].security_group_ids
-      subnets               = var.jobs[each.key].subnets
+      security_group_ids    = var.jobs.security_group_ids
+      subnets               = var.jobs.subnets
         # `tags = {}` here is not applicable for spot
       }
     }
@@ -91,21 +90,20 @@ module "batch" {
   }
 
   job_definitions = {
-  for_each = var.jobs  
     job_configuration = {
       name                  = "batch-test-job"
       propagate_tags        = true
       platform_capabilities = ["FARGATE"]
 
       container_properties = jsonencode({
-        command = var.jobs[each.key].command
-        image   = var.jobs[each.key].image
+        command = var.jobs.command
+        image   = var.jobs.image
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
           { type = "VCPU", value = "1" },
-          { type = "MEMORY", value = var.jobs[each.key].memory }
+          { type = "MEMORY", value = var.jobs.memory }
         ],
         executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
