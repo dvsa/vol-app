@@ -32,8 +32,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs[each.key].security_group_ids
-      subnets               = var.jobs[each.key].subnets
+      security_group_ids    = "${var.jobs.security_group_ids}"
+      subnets               = "${var.jobs.subnets}"
 
         # `tags = {}` here is not applicable for spot
       }
@@ -46,8 +46,8 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-      security_group_ids    = var.jobs[each.key].security_group_ids
-      subnets               = var.jobs[each.key].subnets
+      security_group_ids    = "${var.jobs.security_group_ids}"
+      subnets               = "${var.jobs.subnets}"
         # `tags = {}` here is not applicable for spot
       }
     }
