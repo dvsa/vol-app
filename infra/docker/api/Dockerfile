@@ -63,5 +63,3 @@ RUN \
   && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 USER www-data
-
-# Trigger CI.

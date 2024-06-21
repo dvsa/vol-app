@@ -7,5 +7,3 @@ terraform {
     region         = "eu-west-1"
   }
 }
-
-# Trigger CI.
