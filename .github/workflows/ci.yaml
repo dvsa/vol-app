@@ -7,6 +7,25 @@ permissions:
   contents: read
 
 jobs:
+  security-app:
+    name: Security
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/security-app.yaml
+    permissions:
+      contents: read
+      security-events: write
+    secrets: inherit
+
+  security-terraform:
+    name: Security
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/security-terraform.yaml
+    permissions:
+      contents: read
+      security-events: write
+
   orchestrator:
     name: Orchestrator
     runs-on: ubuntu-latest
@@ -322,24 +341,3 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
-
-  security-app:
-    name: Security
-    if: ${{ needs.orchestrator.outputs.should-build-app }}
-    needs:
-      - orchestrator
-    uses: ./.github/workflows/security-app.yaml
-    permissions:
-      contents: read
-      security-events: write
-    secrets: inherit
-
-  security-terraform:
-    name: Security
-    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts || needs.orchestrator.outputs.should-plan-terraform-environments }}
-    needs:
-      - orchestrator
-    uses: ./.github/workflows/security-terraform.yaml
-    permissions:
-      contents: read
-      security-events: write
