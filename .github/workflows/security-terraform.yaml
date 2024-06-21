@@ -6,9 +6,6 @@ on:
     # Weekly on Monday at 00:00 UTC
     - cron: 0 0 * * 1
 
-env:
-  TRIVY_TF_EXCLUDE_DOWNLOADED_MODULES: false
-
 jobs:
   terraform-scan:
     name: Terraform
@@ -23,6 +20,8 @@ jobs:
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
+          severity: "CRITICAL"
+          limit-severities-for-sarif: true
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v3
