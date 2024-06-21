@@ -43,7 +43,7 @@ variable "services" {
 
 variable "jobs" {
   type = map(object({
-    command   = string
+    command   = list(string)
     image     = string
     memory    = number
   }))
