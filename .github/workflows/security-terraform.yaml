@@ -7,7 +7,7 @@ on:
     - cron: 0 0 * * 1
 
 env:
-  TRIVY_TF_EXCLUDE_DOWNLOADED_MODULES: true
+  TRIVY_TF_EXCLUDE_DOWNLOADED_MODULES: false
 
 jobs:
   terraform-scan:
