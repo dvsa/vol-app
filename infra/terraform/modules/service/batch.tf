@@ -94,8 +94,9 @@ module "batch" {
   job_definitions = {
     job_configuration = {
       name                  = "batch-test-job"
+      type                  = "container"
       propagate_tags        = true
-      platform_capabilities = ["FARGATE"]
+      platform_capabilities = ["FARGATE",]
 
       container_properties = jsonencode({
         command = each.value["command"]
@@ -107,7 +108,7 @@ module "batch" {
           { type = "VCPU", value = "1" },
           { type = "MEMORY", value = each.value["memory"] }
         ],
-        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
 /*        logConfiguration = {
           logDriver = "awslogs"
