@@ -108,12 +108,18 @@ jobs:
         with:
           context: ${{ env.WORKING_DIR }}
           target: production
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           push: ${{ inputs.push }}
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Scan
+        uses: aquasecurity/trivy-action@0.23.0
+        with:
+          image-ref: ${{ steps.build-and-push.outputs.imageid }}
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
