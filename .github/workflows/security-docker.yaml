@@ -20,6 +20,7 @@ jobs:
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
+          severity: "MEDIUM,HIGH,CRITICAL"
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v3

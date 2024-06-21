@@ -9,28 +9,22 @@ permissions:
 jobs:
   security-app:
     name: Security
-    needs:
-      - orchestrator
     uses: ./.github/workflows/security-app.yaml
     permissions:
       contents: read
       security-events: write
     secrets: inherit
 
-  security-terraform:
+  security-docker:
     name: Security
-    needs:
-      - orchestrator
-    uses: ./.github/workflows/security-terraform.yaml
+    uses: ./.github/workflows/security-docker.yaml
     permissions:
       contents: read
       security-events: write
 
-  security-docker:
+  security-terraform:
     name: Security
-    needs:
-      - orchestrator
-    uses: ./.github/workflows/security-docker.yaml
+    uses: ./.github/workflows/security-terraform.yaml
     permissions:
       contents: read
       security-events: write
