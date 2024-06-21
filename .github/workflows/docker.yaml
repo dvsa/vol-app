@@ -114,9 +114,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: List images
-        run: docker image ls
-
       - name: Scan
         uses: aquasecurity/trivy-action@master
         with:
