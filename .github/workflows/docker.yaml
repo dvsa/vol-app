@@ -115,11 +115,9 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.23.0
         with:
           image-ref: ${{ steps.build-and-push.outputs.imageid }}
-          format: "sarif"
-          output: "trivy-results.sarif"
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
