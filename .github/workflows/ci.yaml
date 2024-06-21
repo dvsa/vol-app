@@ -26,6 +26,15 @@ jobs:
       contents: read
       security-events: write
 
+  security-docker:
+    name: Security
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/security-docker.yaml
+    permissions:
+      contents: read
+      security-events: write
+
   orchestrator:
     name: Orchestrator
     runs-on: ubuntu-latest

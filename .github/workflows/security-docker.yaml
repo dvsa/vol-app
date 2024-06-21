@@ -6,12 +6,9 @@ on:
     # Weekly on Monday at 00:00 UTC
     - cron: 0 0 * * 1
 
-env:
-  TRIVY_TF_EXCLUDE_DOWNLOADED_MODULES: true
-
 jobs:
-  terraform-scan:
-    name: Terraform
+  docker-scan:
+    name: Docker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +16,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           exit-code: 1
-          scan-ref: "infra/terraform"
+          scan-ref: "infra/docker"
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
