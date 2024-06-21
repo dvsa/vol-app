@@ -140,5 +140,5 @@ module "batch" {
     }
   }
 
-  tags = {JobDefinition = "BatchTestName"}
+//  tags = local.default_tags
 }
