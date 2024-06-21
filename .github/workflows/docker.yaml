@@ -120,7 +120,7 @@ jobs:
       - name: Scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ steps.build-and-push.outputs.digest }}
+          image-ref: ${{ steps.build-and-push.outputs.imageid }}
           format: "sarif"
           output: "trivy-results.sarif"
 
