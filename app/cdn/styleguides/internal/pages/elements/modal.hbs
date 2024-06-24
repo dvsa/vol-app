@@ -1,0 +1,128 @@
+---
+title: Home
+asset: '../../../'
+subtitle:
+filterList:
+  - header: Team
+    type: dropdown
+    filters:
+      - Licensing team 1
+  - header: Owner
+    type: dropdown
+    filters:
+      - Terry Fox
+  - header: Category
+    type: dropdown
+    filters:
+      - Application
+  - header: Sub category
+    type: dropdown
+    filters:
+      - Goods app
+  - header: Date
+    type: dropdown
+    filters:
+      - Today
+      - This week
+      - This month
+      - All dates
+  - header: Status
+    type: dropdown
+    filters:
+      - All
+      - Open
+      - Closed
+  - header:
+    type: checkboxes
+    filters:
+      - Urgent only
+actions:
+  - label: Edit
+    class: secondary disabled
+  - label: Close
+    class: secondary disabled
+  - label: Reassign
+    class: secondary disabled
+table:
+  - title: <strong>89</strong> Tasks
+    headers:
+      - label: Link
+        class: sortable
+      - label: Category
+        class: sortable descending
+      - label: Sub category
+        class: sortable
+      - label: Description
+        class: sortable
+      - label: Date
+        class: sortable
+      - label: Owner
+        class: sortable
+      - label: Name
+        class: sortable
+      - label: <input name="row" type="checkbox">
+        class: non-sortable
+    columns:
+      - <strong><a href="licence/">OB0016152</a></strong> (MLH)
+      - Application
+      - Address change assisted digital
+      - <a href="">Address change</a>
+      - 12/3/13
+      - Gillian Fox
+      - Don Tarmacadam
+      - <input name="row" type="checkbox">
+    rows: 20
+
+---
+
+<div class="content">
+
+<div class="overlay"></div>
+  <div class="modal__wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        <h1 class="modal__title">Add subsidiary company</h1>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        <div class="notice-container">
+          <div class="notice--success">
+            <p>Subsidiary company added successfully</p>
+          </div>
+        </div>
+        <form action="">
+          <fieldset>
+            <div class="field">
+              <label for="">Company name</label>
+              <input type="text" class="long">
+            </div>
+            <div class="field">
+              <label for="">Company number</label>
+              <input type="text" class="long">
+            </div>
+          </fieldset>
+          <fieldset class="actions-container">
+            <input type="submit" class="action--primary large" value="Save">
+            <input type="submit" class="action--primary large" value="Save and add another">
+            <input type="submit" class="action--secondary large" value="Cancel">
+          </fieldset>
+        </form>
+      </div><!-- .modal__content -->
+    </div><!-- .modal -->
+  </div><!-- .modal__wrapper -->
+
+  <div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+  </div>
+
+</div>
+
+
+
+
+
+

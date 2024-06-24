@@ -1,0 +1,116 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Responsibilities
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups: 
+    - group:
+      - name: Operator name
+        value: Don Tarmacadam Limited
+    - group: 
+      - name: Licence No.
+        value: OB1272523
+      - name: Application ID
+        value: 126254
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Which operating centre(s) will you be responsible for?
+          type: multi select
+          placholder: Choose operating centre(s)
+          values:
+            - 124 Eleanor Grove, Baschurch
+            - Unit 4, Battelfields Industrial Estate, Shrewsbury
+            - 240 Timmuses Drive, Yeaton   
+        - label: What type of manager will you be for this licence?
+          type: radios inline
+          values:
+            - Internal 
+            - External 
+    - legend: Hours per week
+      fields: 
+        - label: How many houurs will you spend on your Transport Manager duties?
+          type: hours-per-week
+table:
+  - title: <strong>Other licences</strong>
+    headers:
+      - label: Type
+        class: sortable
+      - label: Licence No.
+        class: sortable
+      - label: Total vehicle auth.
+        class: sortable
+      - label: Hours per week
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">Licence holder</a>
+      - OB162527
+      - 12
+      - 86
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+        link: add-other-licence.html
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Add application</h3>
+  </div>
+  {{#each read-only }}{{> _read-only }}{{/each }}
+  {{#each form }}{{> _forms }}{{/each }}
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+  <form>
+    <fieldset id="additional-information">
+      <legend>Additional information</legend>
+      <p class="hint">Please provide additional information relating to any prior insolvency proceedings. You may also upload evidence such as legal documents.</p>
+      <div class="field">  
+        <label for="additional-info" class="visually-hidden">Additional information</label>
+        <textarea id="additional-info" class="extra-long" placeholder="Enter text here"></textarea>
+      </div>
+      <div class="field file-upload">
+        <input type="file" multiple>
+        <input type="submit" value="Upload" class="action--primary">
+      </div>
+    </fieldset><!-- .additional-information -->
+  </form>
+  <div class="actions-container">
+    <a class="action--primary large" href="">Save</a>
+    <a class="action--secondary large" href="">Print</a>
+    <a class="action--secondary large" href="">Cancel</a>
+  </div>
+</div>

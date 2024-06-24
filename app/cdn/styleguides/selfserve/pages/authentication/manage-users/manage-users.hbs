@@ -1,0 +1,170 @@
+---
+title: Manage users
+bodyClass: manage-users
+subtitle: Operator Licensing Ltd.
+layout: base.hbs
+user: operator
+form:
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Username
+          type: text
+          class: medium
+          name: username
+        - label: First name
+          type: text
+          class: long
+          name: firstname
+        - label: Last name
+          type: text
+          class: long
+          name: lastname
+        - label: Email address
+          type: text
+          class: long
+          name: email
+        - label: Confirm email address
+          type: text
+          class: long
+        - label: Permission
+          type: radios selfserve
+          hint: Administrators are able to manage and add other users
+          values:
+            - Administrator
+            - Standard user
+        - label: This user will be sent a confirmation email with temporary password, which they will have to update when they sign in.
+          type: html
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Username
+          type: text
+          class: medium
+        - label: First name
+          type: text
+          class: long
+        - label: Last name
+          type: text
+          class: long
+        - label: Email address
+          type: text
+          class: long
+        - label: Permission
+          type: radios selfserve
+          hint: Administrators are able to manage and add other users
+          values:
+            - Administrator
+            - Standard user
+            - Transport manager
+    actions:
+      - label: Save
+        class: primary large
+      - label: Delete user
+        class: tertiary large
+---
+
+<div class="overlay js-add-modal" style="display:none;"></div>
+<div class="modal__wrapper js-add-modal" style="display:none;">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title">Add new user</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form}}
+        {{#is @index 0 }}
+          {{> _forms }}
+        {{/is }}
+      {{/each}}
+    </div>
+  </div>
+</div><!-- .modal__wrapper -->
+
+
+<div class="overlay js-edit-modal" style="display:none;"></div>
+<div class="modal__wrapper js-edit-modal" style="display:none;">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title">Edit user</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form}}
+        {{#is @index 1 }}
+          {{> _forms }}
+        {{/is }}
+      {{/each}}
+    </div><!-- .modal__content -->
+  </div><!-- .modal -->
+</div><!-- .modal__wrapper -->
+
+
+<div class="overlay js-confirm-modal" style="display:none;"></div>
+<div class="modal__wrapper js-confirm-modal" style="display:none;">
+  <div class="modal--alert">
+    <div class="modal__header">
+      <h2 class="modal__title">Permanently remove user?</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <p>Are you sure you want to permanently remove this user? This action cannot be undone, and they will no longer be able to access this account.</p>
+      <div class="actions-container">
+        <a href="" class="action--primary large js-remove">Remove</a>
+        <a href="" class="action--secondary large">Cancel</a>
+      </div>
+    </div><!-- .modal__content -->
+  </div><!-- .modal -->
+</div><!-- .modal__wrapper -->
+
+<div class="row">
+  
+  <div class="three-quarters">
+  
+      <!-- Licences -->
+      <form>
+        <div class="table__header">
+          <h3>3 users</h3>
+          <div class="actions-container">
+            <a href="" class="action--primary js-add-new-user">Add new user</a>
+          </div>
+        </div><!-- .table__header -->
+        <div class="table__wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email address</th>
+                <th>Permission</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b><a href="" class="js-edit-user">Katy Hasley</a></b></td>
+                <td>katy.hasley@operatorlicensing.com</td>
+                <td>Administrator</td>
+                <td class="right"><a href="">Remove</a></td>
+              </tr>
+              <tr id="dave">
+                <td><b><a href="" class="js-edit-user">David Ashburn</a></b></td>
+                <td>dave.ashburn@operatorlicensing.com</td>
+                <td>Standard user</td>
+                <td class="right"><a href="">Remove</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- .table__wrapper -->
+      </form>
+  
+  </div><!-- .two-thirds -->
+
+</div>
+
+<script type="text/javascript" src="/js/authentication-prototype.js"></script>
+

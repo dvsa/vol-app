@@ -1,0 +1,80 @@
+---
+title: Convictions and penalties
+user: operator
+subtitle: Step 12 of 13
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Back to overview
+---
+
+<div class="row">
+  <div class="two-thirds">
+    <div class="article">
+      <p>Has anyone you’ve named in your application received any penalties or got any unspent convictions?</p>
+      <p>This question also applies to:</p>
+      <ul>
+        <li>Directors, Partners and Transport Managers</li>
+        <li>companies that are (or have been) directed by anybody you’ve named</li>
+        <li>your parent company, if you’re a limited company</li>
+        <li>your employees and agents</li>
+      </ul>
+      <p>To see which offences this covers read the <a href="guides/convictions-penalties.html">convictions and penalties guidelines</a>.</p>
+      <form action="">
+        <fieldset>
+          <fieldset>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <div class="field confirm">
+            <label for="">
+              <input type="checkbox" class="inline">
+                I'll tell the Department immediately about any relevant convictions that occur between the submission of this application and a decision being made.
+            </label>
+          </div>
+        </fieldset>
+      </form>
+      <div class="actions-container">
+        <a href="" class="action--primary large">Save and continue</a>
+        <a href="" class="action--tertiary list large">Save and return to overview</a>
+      </div>
+    </div><!-- .article -->
+  </div><!-- .two-thirds -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB12524/525</dd>
+        <dt>Progress</dt>
+        <dd>7 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </div>
+  </div>
+
+</div><!-- .row -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-upload, .js-post').hide();
+
+    $(document).on('change', 'input[name="evidence"]', function(e) {
+      e.preventDefault();
+      if ($(this).val() === 'upload') {
+        $('.js-upload').show();
+        $('.js-post').hide();
+      } else {
+        $('.js-post').show();
+        $('.js-upload').hide()
+      }
+    });
+
+  });
+</script>
+

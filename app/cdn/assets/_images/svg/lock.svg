@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="10px" height="12px" viewBox="0 0 10 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>lock</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-2" sketch:type="MSArtboardGroup" transform="translate(-283.000000, -472.000000)" fill="#7D7E86">
+            <path d="M288,472 C286.158333,472 284.666667,473.534286 284.666667,475.428571 L284.666667,477.142857 L283,477.142857 L283,484 L293,484 L293,477.142857 L291.333333,477.142857 L291.333333,475.428571 C291.333333,473.534286 289.841667,472 288,472 L288,472 Z M288,473.714286 C288.991667,473.714286 289.666667,474.408571 289.666667,475.428571 L289.666667,477.142857 L286.333333,477.142857 L286.333333,475.428571 C286.333333,474.408571 287.008333,473.714286 288,473.714286 L288,473.714286 Z" id="lock" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

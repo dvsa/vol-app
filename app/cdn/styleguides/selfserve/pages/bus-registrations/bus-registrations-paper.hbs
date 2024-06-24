@@ -1,0 +1,112 @@
+---
+title: Bus registrations
+layout: base.hbs
+header-text: <p>To register, update or cancel bus services you need to upload a TransXChange file in .ZIP format.<p />
+      <p><b><a href="">Register, update or cancel services</a></b></p>
+user: bus operator
+---
+
+
+
+<div class="row">
+
+  <div class="one-quarter">
+    <form class="filters">
+      <fieldset>
+        <legend>Search</legend>
+        <div class="field">
+          <label for="search">Enter keywords</label>
+          <input id="search" name="search" type="search" class="extra-long">
+        </div>
+      </fieldset>
+    </form>
+    {{> _support }}
+  </div><!-- three-eights -->
+
+  <div class="three-quarters">
+    <!-- Registered bus services -->
+
+     <div class="table__wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Registration number</th>
+            <th>Variation</th>
+            <th>Service number(s)</th>
+            <th>Submitted</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/6</a></strong><span class="status green">Registered</span></td>
+            <td>1</td>
+            <td>576,570</td>
+            <td>13 May 2013</td>
+            <td>New service</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/5</a></strong><span class="status green">Registered</span></td>
+            <td>1</td>
+            <td>8,11,55</td>
+            <td>13 May 2013</td>
+            <td>Change</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/4</a></strong><span class="status green">Registered</span></td>
+            <td>3</td>
+            <td>128,925</td>
+            <td>13 May 2013</td>
+            <td>Change</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/3</a></strong><span class="status green">Registered</span></td>
+            <td>5</td>
+            <td>44,50</td>
+            <td>13 May 2013</td>
+            <td>Change</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/2</a></strong><span class="status green">Registered</span></td>
+            <td>2</td>
+            <td>91,104</td>
+            <td>13 May 2013</td>
+            <td>Change</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PC1057277/1</a></strong><span class="status green">Registered</span></td>
+            <td>5</td>
+            <td>576,570</td>
+            <td>13 May 2013</td>
+            <td>Change</td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- .table__wrapper -->
+
+    <div class="table__footer">
+      <div class="results-settings">
+        <p>Show:</p>
+        <ul class="results-settings__list">
+          <li class="results-settings__item current">10</li>
+          <li class="results-settings__item"><a href="">25</a></li>
+          <li class="results-settings__item"><a href="">50</a></li>
+        </ul><!-- .results-settings__list -->
+        <p>results per page</p>
+      </div><!-- .results-settings -->
+      <ul class="pagination right-aligned" role="menu">
+        <li class="pagination__item"><a href="" rel="previous">Previous</a></li>
+        <li class="pagination__item"><a href="">1</a></li>
+        <li class="pagination__item"><a href="">2</a></li>
+        <li class="pagination__item current">3</li>
+        <li class="pagination__item"><a href="">4</a></li>
+        <li class="pagination__item"><a href="">5</a></li>
+        <li class="pagination__item">...</li>
+        <li class="pagination__item"><a href="">14</a></li>
+        <li class="pagination__item"><a href="" rel="next">Next</a></li>
+      </ul><!-- .pagination.right-aligned -->
+    </div><!-- .table__footer -->
+  </div><!-- .five-eights -->
+
+</div>
+

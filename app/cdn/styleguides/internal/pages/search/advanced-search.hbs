@@ -1,0 +1,87 @@
+---
+layout: search-results.hbs
+asset: '../../../../'
+sectionTitle: Submissions
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Search for
+          type: select
+          values:      
+            - Licences
+            - Applications
+            - Cases
+            - Bus regs
+            - People
+            - Vehicles
+          class:
+    - legend: Licences
+      fields:
+        - label: Licence no.
+          type: text
+          values:      
+          class: medium
+        - label: Licence no.
+          type: multi select
+          placholder: Choose a licence
+          values:
+            - Option 1
+            - Option 2
+            - Option 3
+            - Option 4
+            - Option 5
+            - Option 6   
+          class: medium
+        - label: Operator / trading name
+          type: text
+          values:      
+          class: long
+        - label: Correspondance postcode
+          type: text
+          values:      
+          class: short
+        - label:
+          type: Correspondance postcode
+          values:      
+          class: text
+        - label: Address line 1
+          type: text
+          values:      
+          class: long
+        - label: Operator ID
+          type: text
+          values:      
+          class: medium
+        - label: Fabs reference
+          type: text
+          values:      
+          class: medium
+        - label: Company no.
+          type: text
+          values:      
+          class: medium
+    actions:
+      - label: Search
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header"> 
+        <h2 class="modal__title">Advanced search</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+
+
+

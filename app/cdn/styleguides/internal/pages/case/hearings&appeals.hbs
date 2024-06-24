@@ -1,0 +1,96 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Hearings &amp; appeals
+subSectionTitle: Public inquiry
+
+read-only:
+  - title: Service level agreement
+    editable: true
+    type: fields
+    groups:
+    - group:
+      - name: Call up letter issued
+        value: 16 Aug 2012 <span class="status green">Pass</span>
+      - name: Target date
+        value: 24 Aug 2012
+    - group:
+      - name: Brief to TC
+        value: 16 Aug 2012 <span class="status red">Fail</span>
+      - name: Target date
+        value: 24 Aug 2012
+    - group:
+      - name: Written outcome
+        value: Written reason lorem ipsum sit dolor amet
+        class: full-width
+    - group:
+      - name: Date of written reason
+        value: 16 Aug 2012
+      - name: Target date
+        value: 24 Aug 2012
+    - group:
+      - name: Date of TC's written reason
+        value: 16 Aug 2012 <span class="status orange">Warning</span>
+      - name: Target date
+        value: 24 Aug 2012
+    - group:
+      - name: Written reason letter sent
+        value: 16 Aug 2012 <span class="status grey">Inactive</span>
+      - name: Target date
+        value: 24 Aug 2012
+    - group:
+      - name: Decision letter sent after written decision date
+        value: 16 Sep 2012
+      - name: Target date
+        value: 24 Aug 2012
+verticalNavItems:
+  - label: Appeals & stays
+    link: index.html
+  - label: Public inquiry
+    link:
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Hearings &amp; appeals</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="section-header">
+    <h3>Public inquiry</h3><a class="action--secondary" href="">Close public inquiry</a>
+  </div>
+  <hr/>
+  <h3>Agreed and legislation</h3>
+  <div class="read-only">
+    <div class="read-only__header">
+      <h4 class="read-only__title">Service level agreement</h4>
+      <div class="actions-container">
+        <a href="/case/86/pi/sla/edit" class="action--secondary">Edit</a>
+      </div>
+    </div>
+    <ul class="definition-list">
+      <div class="definition-list__item">
+        <dt>Date call up letter issued</dt>
+        <dd><span class="status grey">Inactive</span></dd>
+      </div>
+      <div class="definition-list__item">
+        <dt>Target date</dt>
+        <dd></dd>
+      </div>
+      <div class="definition-list__item">
+        <dt>Date brief to TC</dt>
+        <dd><span class="status grey">Inactive</span></dd>
+      </div>
+      <div class="definition-list__item">
+        <dt>Target date</dt>
+        <dd></dd>
+      </div>
+      <div class="definition-list__item full-width">
+        <dt>Written outcome</dt>
+        <dd></dd>
+      </div>
+    </ul>
+  </div>
+
+
+</div>

@@ -1,0 +1,42 @@
+/**
+ * Search
+ */
+
+.search-navigation {
+  @extend %list--reset;
+  @extend %paragraph;
+  &__item {
+    font-weight: 600;
+  }
+}
+
+.search-results {
+  list-style: none;
+}
+
+.search-result {
+  border-bottom: 1px solid $grey-3;
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+}
+
+.search-result__header {
+  margin-bottom: 10px;
+  h4 {
+    display: block;
+    margin-bottom: 0;
+  }
+}
+
+.search-result__extract {
+  margin-bottom: 10px;
+}
+
+.search-result__extract p,
+.search-result__meta p {
+  @extend %paragraph--small;
+}
+
+.search-result__meta p {
+  margin-bottom: 0;
+}

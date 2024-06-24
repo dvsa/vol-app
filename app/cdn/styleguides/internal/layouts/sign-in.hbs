@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-GB" class="no-js not-ie8">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ title }}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{asset}}styles/internal.css" media="all" rel="stylesheet" type="text/css">
+    <script type="text/javascript" async="" src="{{asset}}js/internal.js"></script>
+  </head>
+
+  <body class="internal sign-in">
+
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+          <h2 class="global-header__title"><a href="/styleguides/internal/">OLCS</a></h2>
+      </div>
+    </div><!-- global-header -->
+
+    {{#if system-messages}}
+      <div class="system-messages">
+        <ul class="system-messages__wrapper">
+          <li class="system-message__item">The system will be down tomorrow between 10:00am and 11:00am for general maintenance.<a href="">Close</a></li>
+        </ul>
+      </div>
+    {{/if }}
+
+    <div class="page-wrapper">
+      <div id="main" role="main">
+        {{> body }}
+      </div><!-- #main -->
+    </div><!-- .page-wrapper-->
+
+  </body>
+</html>

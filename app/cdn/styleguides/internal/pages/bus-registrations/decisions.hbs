@@ -1,0 +1,32 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Decisions
+layout: bus-registrations.hbs
+verticalNavItems:
+  - label: Decisions
+    link:  decisions.html
+  - label: History
+    link:  history.html
+  - label: Tasks
+    link:  tasks.html
+  - label: Notes
+    link:  notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="empty__wrapper">
+    <h4 class="empty__title">Decisions</h4>
+    <div class="empty">
+      <p>This are currently no decisions for this bus registration variation</p>
+      <a class="action--primary" href="">Grant</a>
+      <a class="action--secondary" href="">Refuse</a>
+      <a class="action--secondary" href="">Admin cancel</a>
+    </div><!-- empty -->
+  </div><!-- empty__wrapper -->
+</div>

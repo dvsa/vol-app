@@ -1,0 +1,67 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Docs & attachments
+filterList:
+  - header: Category
+    type: dropdown
+    filters:
+      - All
+  - header: Sub-category
+    type: dropdown
+    filters:
+      - All
+  - header: Format
+    type: dropdown
+    filters:
+      - All
+  - header:
+    type: checkboxes
+    filters:
+      - Digital only
+table:
+  - title: <strong>10</strong> Docs and attachments
+    headers:
+      - label: Description
+        class: sortable descending
+      - label: Category
+        class: sortable
+      - label: Sub-category
+        class: sortable
+      - label: Format
+        class: sortable
+      - label: Date
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">December-accounts.PDF</a>
+      - Bus registration
+      - Sub category (digital)
+      - PDF
+      - 13/3/13 14:02
+      - <input type="checkbox">
+    rows: 10
+    actions:
+      - label: Generate
+        class: primary
+      - label: Upload
+        class: secondary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+---
+
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters}}
+  </div>
+
+  <div class="table-col">
+    {{#each table}}
+      {{#is @index 0}} 
+        {{> _table}}
+      {{/is}} 
+    {{/each}}
+  </div>

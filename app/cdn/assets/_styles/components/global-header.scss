@@ -1,0 +1,44 @@
+// Global Header
+//
+// The global GOV.UK standard header to contain the GOV.UK logo,
+// page title and relevant navigation links
+
+.global-header {
+
+  background: $black;
+  color: $white;
+  padding: 8px 0;
+
+  &__wrapper {
+    @extend %page-wrapper;
+    @extend %contain-floats;
+  }
+
+  // Internal only styles
+  @if $app == 'internal' {
+    background: #111;
+    position: relative;
+    overflow: visible;
+    padding: 7px 0;
+    &__wrapper {
+      @media(max-width: $mobile-column-stack) {
+        padding-bottom: 1em;
+      }
+    }
+    &__title {
+      float: left;
+      font-weight: bold;
+      margin-right: $gutter-half;
+      margin-bottom: 0;
+      font-size: 25px;
+    }
+    a {
+      color: $white;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+} // .global-header

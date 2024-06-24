@@ -1,0 +1,57 @@
+/**
+ * Guidance
+ */
+
+.help__summary {
+  @extend %paragraph;
+  display: inline-block;
+  color: $link-colour;
+  text-decoration: underline;
+  border: 3px solid transparent;
+  @if $app == 'internal'  {
+    font-size: font-size(3);
+  }
+  &:hover {
+    color: $link-hover-colour;
+    cursor: pointer;
+  }
+  &:active,
+  &:focus {
+    outline: 0;
+    border-color: $yellow;
+  }
+}
+
+%help__text {
+  border-left: 4px solid $grey-2;
+}
+
+.help__text {
+
+  @extend %paragraph;
+  @extend %help__text;
+  padding: 15px 15px 0px;
+  margin-bottom: 10px;
+
+  > .help__text {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .no-details & {
+    display: none;
+  }
+  ul {
+    &:not(:last-child) {
+      margin-bottom: $gutter-half;
+    }
+  }
+
+  &--removePadding{
+    padding-bottom: 0;
+    margin-bottom: 30px;
+
+    > .field{
+      margin-bottom: 0;
+    }
+  }
+}

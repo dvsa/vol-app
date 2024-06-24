@@ -1,0 +1,110 @@
+---
+title: Directors
+subtitle: OB123245
+user: operator
+layout: base.hbs
+back-link: index.html
+---
+
+<div class="overlay js-confirm-remove" style="display:none;"></div>
+<div class="modal__wrapper js-confirm-remove" style="display:none;">
+  <div class="modal--alert">
+    <div class="modal__header">
+      <h2 class="modal__title">Remove vehicle</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <p>Are you sure you want to remove the vehicle <br /><span class="js-replace-with-ls">LL65 UVE</span> from this licence?</p>
+      <p>If you do, you'll need to destroy the licence disc. You don’t need to return the disc to the Central Licence Office.</p>
+      <div class="actions-container">
+        <a href="" class="action--primary large">Remove</a>
+        <a href="" class="action--secondary large">Cancel</a>
+      </div>
+    </div><!-- .modal__content -->
+  </div><!-- .modal -->
+</div><!-- .modal__wrapper -->
+
+
+<div class="row">
+  <div class="three-quarters">
+    <p>Complete your Director's date of births.</p>
+    <form novalidate>
+      <div class="table__header">
+        <div class="actions-container">
+          <a class="action--tertiary" href="add-vehicle.html">Add a director</a>
+        </div>
+      </div><!-- .table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead class="mobile-hidden">
+            <tr>
+              <th class="sortable"><a href="#">Name</a></th>
+              <th class="">Date of birth (eg 3 12 1960)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="">Mr Daniel Holmes</a></td>
+              <td>
+                <fieldset class="date">
+                  <div class="field inline-text">
+                    <input type="text" maxlength="2">
+                  </div>
+                  <div class="field inline-text">
+                    <input type="text" maxlength="2" value="06">
+                  </div>
+                  <div class="field inline-text">
+                    <input type="text" maxlength="4" value="1982">
+                  </div>
+                </fieldset>
+              </td>
+              <td class="right"><a href="">Remove</a></td>
+            </tr>
+            <tr>
+              <td><a href="">Mrs Sheila Holmes</a></td>
+              <td>
+                <fieldset class="date">
+                  <div class="field inline-text">
+                    <input type="text" maxlength="2">
+                  </div>
+                  <div class="field inline-text">
+                    <input type="text" maxlength="2" value="11">
+                  </div>
+                  <div class="field inline-text">
+                    <input type="text" maxlength="4" value="1966">
+                  </div>
+                </fieldset>
+              </td>
+              <td class="right"><a href="">Remove</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+      <hr />
+      <hr />
+      <fieldset class="actions-container">
+        <button type="submit" class="action--primary large">Save and continue</button>
+        <button type="submit" class="action--tertiary large">Save and return to overview</button>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(document).on('click', '.action--primary', function(e) {
+      e.preventDefault();
+      $('th').eq(1).removeClass('invalid');
+      $('.validation-wrapper .date').unwrap();
+      $('.date input').each(function(index) {
+        if ($(this).val() === '') {
+          $('th').eq(1).addClass('invalid');
+          $(this).parents('.date').wrap('<div class="validation-wrapper"></div>');
+        }
+      });
+      OLCS.eventEmitter.emit("render");
+    });
+  });
+</script>
+

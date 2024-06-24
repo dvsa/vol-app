@@ -1,0 +1,215 @@
+---
+title: Bus registrations
+layout: base.hbs
+user: bus operator
+---
+
+<div class="row">
+
+  <div class="full-width">
+    <div class="tabs">
+      <ul class="tab-list">
+        <li class="tab-list__item active"><a href="services.html" aria-select="false" tabindex="0">Registrations</a></li>
+        <li class="tab-list__item"><a href="online-submissions.html" aria-select="false" tabindex="-1">Applications</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="one-quarter">
+    <form class="filters" onSubmit="return fooSearch();">
+      <fieldset>
+        <legend>Search</legend>
+        <div class="field">
+          <label for="search">Enter keywords</label>
+          <input id="search" name="search" type="search" class="extra-long">
+        </div>
+        <div class="field inline">
+          <label for="" id="showCancelledServices">
+            Show cancelled services
+            <input type="checkbox" class="checkbox inline">
+          </label>
+        </div>
+      </fieldset>
+    </form>
+    {{> _support }}
+  </div>
+
+  <div class="three-quarters">
+
+    <!-- Registered bus services -->
+
+    <div class="table__header">
+      <h3>20 Registrations</h3>
+      <div class="actions-container">
+        <a href="register-change.html" class="action--primary">Register, change or cancel</a>
+      </div>
+    </div>
+
+     <div class="table__wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Registration number</th>
+            <th>Variation</th>
+            <th>Service number(s)</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/1</a></strong><span class="status green">Registered</span></td>
+            <td>30</td>
+            <td>108 (109)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/3</a></strong><span class="status green">Registered</span></td>
+            <td>29</td>
+            <td>221</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/6</a></strong><span class="status green">Registered</span></td>
+            <td>26</td>
+            <td>6</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/9</a></strong><span class="status green">Registered</span></td>
+            <td>42</td>
+            <td>219A (219)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr class="cancelled">
+            <td><strong><a href="bus-registration.html">PB0000092/15</a></strong><span class="status grey">Cancelled</span></td>
+            <td>36</td>
+            <td>222</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/26</a></strong><span class="status green">Registered</span></td>
+            <td>24</td>
+            <td>42 (42A)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/28</a></strong><span class="status green">Registered</span></td>
+            <td>41</td>
+            <td>59 (57)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/29</a></strong><span class="status green">Registered</span></td>
+            <td>27</td>
+            <td>43 (44)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr class="cancelled">
+            <td><strong><a href="bus-registration.html">PB0000092/39</a></strong><span class="status grey">Cancelled</span></td>
+            <td>41</td>
+            <td>218 (217)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/40</a></strong><span class="status green">Registered</span></td>
+            <td>38</td>
+            <td>95 (93, 93A, 95A)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr class="cancelled">
+            <td><strong><a href="bus-registration.html">PB0000092/44</a></strong><span class="status grey">Cancelled</span></td>
+            <td>20</td>
+            <td>456</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/54</a></strong><span class="status green">Registered</span></td>
+            <td>28</td>
+            <td>1</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/84</a></strong><span class="status green">Registered</span></td>
+            <td>37</td>
+            <td>11</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/89</a></strong><span class="status green">Registered</span></td>
+            <td>30</td>
+            <td>32</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/112</a></strong><span class="status green">Registered</span></td>
+            <td>36</td>
+            <td>220</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/120</a></strong><span class="status green">Registered</span></td>
+            <td>30</td>
+            <td>20 (21, 21A, 22)</td>
+            <td>22 April 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/132</a></strong><span class="status green">Registered</span></td>
+            <td>38</td>
+            <td>X19</td>
+            <td>2 September 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/134</a></strong><span class="status green">Registered</span></td>
+            <td>30</td>
+            <td>226</td>
+            <td>2 September 2002</td>
+          </tr>
+          <tr class="cancelled">
+            <td><strong><a href="bus-registration.html">PB0000092/143</a></strong><span class="status grey">Cancelled</span></td>
+            <td>33</td>
+            <td>67 (67A)</td>
+            <td>1 September 2002</td>
+          </tr>
+          <tr>
+            <td><strong><a href="bus-registration.html">PB0000092/186</a></strong><span class="status green">Registered</span></td>
+            <td>10</td>
+            <td>31</td>
+            <td>2 October 2013</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- column -->
+
+</div><!-- row -->
+
+<!-- Fake Functionality -->
+
+<style>
+  tr.cancelled {
+    display: none;
+  }
+</style>
+
+<script type="text/javascript">
+
+  function fooSearch() {
+    var response = document.getElementById('search').value;
+    if (response == 'PB0000092/28') {
+      location = 'services--search--single.html';
+    } else {
+      location = 'services--search.html';
+    }
+    return false;
+  }
+
+  $('#showCancelledServices input').change(function() {
+    if ($(this).prop('checked')) {
+      $('tr.cancelled').show();
+    } else {
+      $('tr.cancelled').hide();
+    }
+  });
+
+</script>

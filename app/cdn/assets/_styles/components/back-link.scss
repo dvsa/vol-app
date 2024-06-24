@@ -1,0 +1,31 @@
+/**
+ * Back link
+ */
+
+.back-link {
+  color: $black;
+    margin-top: 15px 0;
+    padding-left: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid $black;
+    position: relative;
+    &:hover {
+      color: $black;
+    }
+    &:focus {
+      color: $black;
+    }
+    &::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-right: 6px solid $black;
+      border-bottom: 5px solid transparent;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      margin-top: -6px;
+  }
+}

@@ -1,0 +1,63 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Other employment
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+table:
+  - title: <strong>Other employment</strong>
+    headers:
+      - label: Name
+        class: sortable
+      - label: Address
+        class: sortable
+      - label: Position held
+        class: sortable
+      - label: Hours per week
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">Sainsbury's</a>
+      - 104 Meole Brace Retail Park, Shrewsbsury
+      - Retail manager
+      - 10
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+        link: add-licence.html
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }}
+    {{#is @index 1 }} 
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+
+</div>

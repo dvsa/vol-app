@@ -1,0 +1,105 @@
+---
+layout: base.hbs
+user: operator
+title: Application overview
+subtitle: Application OB6153563
+breadcrumbs:
+  - link: home.html
+    label: Home
+page-actions:
+  - Print your application
+  - Withdraw your application
+  - Request an interim
+---
+
+
+<div class="notice-container">
+  <div class="notice--success">
+    <p role="alert">You payment was successful</p>
+  </div>
+</div><!-- end .notice-container -->
+
+
+<div class="row">
+
+  <div class="two-thirds">
+
+    <div class="article">
+      <p>Thank you, your application has been submitted.</p>
+      <div class="confirmation">
+        <p>Your application reference number is</p>
+        <h2>OB6153563/9</h2><p><a href="">View receipt</a></p>
+      </div>
+      <h2>What do I need to do next?</h2>
+      <p>Before your application can be considered you need to complete the outstanding items below</p>
+
+      <div class="incomplete-section">
+        <h3>Approve Transport Managers</h3>
+        <div class="table__wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>DOB</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Morgan Patel <span class="status green">Approved</span></td>
+                <td>7 May 1962</td>
+                <td class="right"><a class="remove" href="">View details</a></td>
+              </tr>
+              <tr>
+                <td>Dave Willis <span class="status red">Awaiting approval</span></td>
+                <td>13 May 1978</td>
+                <td class="right"><a class="remove" href="">View details</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- .table__wrapper -->
+      </div>
+
+      <h3 class="important">Important</h3>
+      <p>You are advised that you cannot lawfully operate goods vehicles with a gross plated weight exceeding 3.5 tonnes for the carriage of goods in connection with your trade or business or for hire or reward until your application has been granted, any relevant grant fee has been paid and the licence documents issued or until you have been issued with an interim licence.  If you do so, and this is brought to the attention of the Traffic Commissioner you risk having your application refused.</p>
+
+      <hr />
+      <h3>Request an interim licence</h3>
+      <p>If you need to start operating urgently you can <a href="request-interim.html">request an interim licence</a> which will allow you to operate whilst you're waiting for a decision on your application.</p>
+      <p><a href="">Back to home</a></p>
+
+    </div><!-- .article -->
+
+  </div><!-- .two-thirds -->
+
+
+  <div class="one-third">
+
+    <div class="sidebar">
+
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB6153563/9</dd>
+        <dt>Payment reference</dt>
+        <dd>16178167</dd> <a href="">Print recipt</a>
+        <dt>Created</dt>
+        <dd>14 September 2015</dd>
+        <dt>Submitted</dt>
+        <dd>2 November 2015</dd>
+        <dt>Status</dt>
+        <dd>Awaiting Transport Managers</dd>
+      </dl><!-- .meta -->
+
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  OLCS.ready(function() {
+    OLCS.eventEmitter.emit("render");
+  });
+</script>
+
+

@@ -1,0 +1,77 @@
+---
+title: Search results
+header-text: <p>We've found <b>230</b> lorry and bus operators that match your search.</p>
+layout: base.hbs
+back-link: find-lorry-operators.html
+service: find-lorry-and-bus-operators
+table:
+  - headers:
+      - label: Licence
+        class: sortable
+      - label: Business name
+        class: sortable descending
+      - label: Address
+        class: sortable descending
+    columns:
+      - <a href="licence-details.html">OH1058363</a><span class="status green">Valid</span>
+      - AB Agri Limited
+      - Unit 3, Selhurst Park, Leeds, LS7 1NF
+    rows: 20
+breadcrumbs:
+  - link: ../search/
+    label: Back to search
+---
+
+<div class="row">
+
+  <div class="one-quarter">
+    <form class="filters form__filter">
+      <fieldset>
+        <legend>Edit search</legend>
+        <div class="field">
+          <label for="search">Enter a town, city or postcode</label>
+          <input id="search" name="search" type="search" class="extra-long" value="LS7">
+        </div>
+        <div class="field">
+          <label>Filter</label>
+          <select name="">
+            <option value="">All</option>
+          </select>
+        </div>
+        <input type="submit" class="action--primary" value="Update results">
+      </fieldset>
+    </form>
+  </div><!-- three-eights -->
+
+  <div class="three-quarters">
+    <!-- Registered bus services -->
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+    <div class="table__footer">
+      <div class="results-settings">
+        <p>Show:</p>
+        <ul class="results-settings__list">
+          <li class="results-settings__item"><a href="">10</a></li>
+          <li class="results-settings__item current">25</li>
+          <li class="results-settings__item"><a href="">50</a></li>
+        </ul>
+        <p>results per page</p>
+      </div>
+      <ul class="pagination right-aligned" role="menu">
+        <li class="pagination__item"><a href="" rel="previous">Previous</a></li>
+        <li class="pagination__item current">1</li>
+        <li class="pagination__item"><a href="">2</a></li>
+        <li class="pagination__item"><a href="">3</a></li>
+        <li class="pagination__item"><a href="">4</a></li>
+        <li class="pagination__item"><a href="">5</a></li>
+        <li class="pagination__item">...</li>
+        <li class="pagination__item"><a href="">14</a></li>
+        <li class="pagination__item"><a href="" rel="next">Next</a></li>
+      </ul>
+    </div>
+  </div><!-- .five-eights -->
+
+</div>

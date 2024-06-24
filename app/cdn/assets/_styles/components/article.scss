@@ -1,0 +1,53 @@
+/**
+ * Article
+ *
+ * Used for long form text based sections, e.g.
+ * guides
+ */
+
+.article {
+
+  color: $black;
+
+  p + h2,
+  p + h3,
+  p + h4,
+  details + h2,
+  details + h3,
+  details + h4,
+  ul + h2,
+  ul + h3,
+  ul + h4 {
+    margin-top: $gutter-two-thirds;
+  }
+
+  h2,
+  h3,
+  h4 {
+    margin-bottom: .5em;
+  }
+
+  ul {
+    @extend %paragraph;
+    padding-left: 1em;
+    &:not(:lastchild) {
+      margin-bottom: $gutter-half;
+    }
+  }
+
+  li {
+    margin-bottom: 0.125em;
+    @if $app == 'internal' {
+      font-size: font-size(3);
+    }
+  }
+
+  p + ul {
+    margin: -6px 0 .5em 0;
+  }
+
+  & + & {
+    margin-top: 1.5em;
+  }
+
+}// .article

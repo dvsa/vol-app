@@ -1,0 +1,26 @@
+/**
+ * Links
+ */
+
+.disabled {
+  text-decoration: none;
+  color: $grey-1;
+}
+
+.download {
+  @extend %govuk-link;
+  font-weight: 600;
+  padding: 5px 0;
+  display: inline-block;
+  cursor: pointer;
+  &:before {
+    @include svg('selfserve-document');
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5em;
+  }
+  &.print-form {
+    margin-bottom: 1.5em;
+  }
+}

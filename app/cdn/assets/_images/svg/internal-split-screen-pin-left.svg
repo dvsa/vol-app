@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>internal-split-screen-pin-left</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-2" sketch:type="MSArtboardGroup" transform="translate(-101.000000, -173.000000)" fill="#7D7E86">
+            <path d="M101,173 L101,185 L113,185 L113,173 L101,173 Z M102,174 L102,179 L112,179 L112,174 L102,174 Z" id="internal-split-screen-pin-left" sketch:type="MSShapeGroup" transform="translate(107.000000, 179.000000) scale(-1, 1) rotate(90.000000) translate(-107.000000, -179.000000) "></path>
+        </g>
+    </g>
+</svg>

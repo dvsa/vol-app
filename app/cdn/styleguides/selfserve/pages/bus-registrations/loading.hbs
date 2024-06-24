@@ -1,0 +1,22 @@
+---
+layout: base.hbs
+user: bus operator
+---
+
+<div class="row">
+  <div class="centered">
+    <h1>We are processing your upload</h1>
+    <p>This can take a few minutes, please bear with us.</p>
+    <span class="preloader-icon--large"></span>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  $(document).on('ready', function() {
+    setTimeout(function(){
+      location.replace('unsuccess.html')
+    }, 4000);
+  });
+
+</script>

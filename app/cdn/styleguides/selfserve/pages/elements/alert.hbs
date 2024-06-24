@@ -1,0 +1,44 @@
+---
+title: Alert
+---
+
+<div class="overlay"></div>
+
+<div class="modal__wrapper">
+  <div class="modal--alert">
+    <div class="modal__header">
+      <h1 class="modal__title">Alert header</h1>
+      <a href="#" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <p>Are you really sure you want to perform this action?</p>
+      <form>
+        <div class="actions-container">
+          <input class="action--primary large" type="submit" value="Yes">
+          <span class="action--tertiary large" id="_no">No, Cancel</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="two-thirds">
+    <div class="article">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga itaque dolore vero nostrum, inventore praesentium totam tenetur id! Perspiciatis quae voluptatum veniam, libero pariatur dolores totam tempore ex dicta cum.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  function pageScripts() {
+    $('body').addClass('disable-scroll');
+    $('.modal__close, #_no').click(function() {
+      OLCS.modal.hide();
+    });
+  }
+
+  $(document).ready(pageScripts());
+
+</script>

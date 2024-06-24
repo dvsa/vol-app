@@ -1,0 +1,140 @@
+---
+sectionTitle:
+asset: '../../../../'
+subSectionTitle: Notes
+layout: application.hbs
+table:
+  title: <strong>15</strong> Notes
+  headers:
+    - label: Type
+      class: sortable
+    - label: Note
+      class: sortable
+    - label: Author
+      class: sortable
+    - label: Created
+      class: sortable descending
+    - label: <input name="row" type="checkbox">
+      class: not-sortable
+  columns:
+    - Licence
+    - Lorem ipsum sit dolor amet peso dosa limi
+    - Gillian Fox
+    - 12/3/13
+    - <input name="row" type="checkbox">
+  rows: 15
+form:
+  - title: Overview
+    fieldsets:
+    - legend:
+      fields:
+        - label: Interim requested
+          type: radios inline
+          values:
+            - Yes
+            - No
+        - label: Interim reason
+          type: textarea
+        - label: Interim start date
+          type: date
+        - label: Interim end date
+          type: date
+        - label: Vehicle authority
+          type: text
+          class: small
+        - label: Trailer authority
+          type: text
+          class: small
+---
+
+<div class="content__header"><h3 class="title">Interim application</h3></div>
+
+<div class="four-fifths">
+  {{#each form }}{{> _forms }}{{/each }}
+  <form>
+    <fieldset>
+      <div class="table__header">
+        <h4>Operating centres</h4>
+      </div><!-- table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Operating centre address</th>
+              <th>Vehicles</th>
+              <th>Trailers</th>
+              <th>Listed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unit 5, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+            <tr>
+              <td>Unit 4, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+            <tr>
+              <td>Unit 3, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+            <tr>
+              <td>Unit 2, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+    </fieldset>
+
+    <fieldset>
+      <div class="table__header">
+        <h4>Vehicles</h4>
+      </div><!-- table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>VRM</th>
+              <th>Gross plated weight (Kg)</th>
+              <th>Listed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>VRM1</td>
+              <td>7200kg</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+            <tr>
+              <td>VRM2</td>
+              <td>7200kg</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+             <tr>
+              <td>VRM3</td>
+              <td>7200kg</td>
+              <td><input type="checkbox" checked></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+    </fieldset>
+
+    <div class="actions-container">
+      <a href="" class="action--primary large">Save</a>
+      <a href="" class="action--secondary large">Grant</a>
+      <a href="" class="action--secondary large">Refuse</a>
+    </div>
+
+  </form>
+</div><!-- .four-fifths -->

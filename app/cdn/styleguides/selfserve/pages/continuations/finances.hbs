@@ -1,0 +1,37 @@
+---
+title: Finances
+subtitle: OB123456
+layout: base.hbs
+user: operator
+---
+
+<div class="row">
+
+  <div class="three-quarters">
+    <div class="guidance">
+      <p>You are required to show that you have access to <strong>£56,526</strong> in order to continue your licence.</p>
+      <p>The following questions apply to your business bank accounts.</p>
+    </div>
+    <form action="finances.html">
+      <div class="field">
+        <fieldset class="radio-button__fieldset">
+          <legend class="">Do you have an overdraft facility?</legend>
+          <p class="form-hint">If you've recently submitted an application to change this licence, you should choose yes.</p>
+          <input type="radio" class="radio-button radio-button--inline radio-button--yes" name="q3" id="q3[Y]" value="Y">
+          <label class ="radio-button__label radio-button__label--inline" for="q3[Y]">Yes</label>
+          <input type="radio" class="radio-button radio-button--inline radio-button--no" name="q3" id="q3[N]" value="N">
+          <label class="radio-button__label radio-button__label--inline" for="q3[N]">No</label>
+          <div class="radio-button__hidden-content--no help__text">
+            <p>You need to <a href="#">update your licence</a>.</p>
+          </div>
+        </fieldset>
+      </div>
+      <div class="actions-container" data-group="form-actions">
+        <button type="submit"  class="action--primary large" id="form-actions[saveAndContinue]" value="">Continue</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
