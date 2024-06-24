@@ -1,0 +1,46 @@
+---
+title: Bus services
+layout: base.hbs
+user: bus operator
+---
+
+<div class="row">
+
+  <div class="full-width">
+    <div class="tabs">
+      <ul class="tab-list">
+        <li class="tab-list__item"><a href="services.html" aria-select="false" tabindex="-1">Services</a></li>
+        <li class="tab-list__item active"><a href="Online-submissions.html" aria-select="true" tabindex="0">Online submissions</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="one-quarter">
+    <form class="filters">
+      <fieldset>
+        <legend>Search</legend>
+        <div class="field">
+          <label for="search">Enter keywords</label>
+          <input id="search" name="search" type="search" class="extra-long">
+        </div>
+      </fieldset>
+    </form>
+    {{> _support }}
+  </div>
+
+  <div class="three-quarters">
+
+    <!-- Registered bus services -->
+    <div class="empty__wrapper">
+      <h3 class="empty__title">Online submissions</h3>
+      <div class="empty">
+        <p>You haven't submitted an online applications to register, change or cancel a bus service.</p>
+        <div class="actions-container">
+          <a class="action--primary" href="">Register, change or cancel bus services</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

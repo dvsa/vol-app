@@ -1,0 +1,22 @@
+// Pace
+// https://github.com/HubSpot/pace
+// -----------------------------------------------------------------
+
+.pace {
+  pointer-events: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: $green;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 3px;
+}

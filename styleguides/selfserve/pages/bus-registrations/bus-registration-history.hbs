@@ -1,0 +1,150 @@
+---
+title: Bus service details
+subtitle: PC1057277/5
+layout: base.hbs
+user: bus operator
+breadcrumbs:
+  - link: bus-services.html
+    label: Back to bus services
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Service number(s)
+        value: 576, 570
+      - name: Service type
+        value: Rural bus service
+    - group:
+      - name: Registration type
+        value: Electronic
+    - group:
+      - name: Variation number
+        value: 5
+      - name: Status
+        value: Registered
+    - group:
+      - name: Start point
+        value: Leeds city centre
+      - name: End point
+        value: Chapel Allerton
+      - name: Via
+        value: Harrogate
+    - group:
+      - name: Date received
+        value: 30 May 2012
+      - name: Effective date
+        value: 30 Aug 2012
+      - name: End date
+        value: 30 Au 2015
+    - group:
+      - name: Supported by subsidies?
+        value: No
+    - group:
+      - name: TAOs covered by route
+        value: North East of England <br /> Wales
+      - name: Local authorities convered by route
+        value: Shropshire County Council
+      - name: N&P reference
+        value: 986
+table:
+  - title: Service history
+    headers:
+      - label: Variation No.
+        class: not-sortable
+      - label: Received
+        class: not-sortable
+      - label: Effective
+        class: not-sortable
+      - label: End
+        class: not-sortable
+    columns:
+      - <a href="licence/"><b>3</b></span>
+      - 12 May 2012
+      - 12 August 2012
+      - 12 August 2013
+    rows: 4
+---
+
+<div class="overlay"></div>
+
+<div class="modal__wrapper">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title">Variation 4</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each read-only }}{{> _read-only }}{{/each }}
+      <hr />
+    </div>
+    <div class="actions-container">
+      <a href="" class="action--primary large">Close</a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="three-quarters">
+    {{#each read-only }}{{> _read-only }}{{/each }}
+    <hr />
+
+    <form action="">
+      <div class="table__header">
+        <h3>Variation history</h3>
+      </div><!-- .table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <th>Variation number</th>
+            <th>Received</th>
+            <th>Effective</th>
+            <th>End</th>
+          </thead>
+          <tbody>
+            <tr class="current">
+              <td><b>5</b></td>
+              <td>12 May 2012</td>
+              <td>12 August 2012</td>
+              <td>12 August 2013</td>
+            </tr>
+            <tr>
+              <td><a href="licences.html"><b>4</b></a></td>
+              <td>12 May 2012</td>
+              <td>12 Aug 2012</td>
+              <td>12 Aug 2013</td>
+            </tr>
+            <tr>
+              <td><a href="licences.html"><b>3</b></a></td>
+              <td>12 May 2012</td>
+              <td>12 Aug 2012</td>
+              <td>12 Aug 2013</td>
+            </tr>
+            <tr>
+              <td><a href="licences.html"><b>2</b></a></td>
+              <td>2 Jan 2013</td>
+              <td>7 Jan 2013</td>
+              <td>24 Apr 2012</td>
+            </tr>
+            <tr>
+              <td><a href="licences.html">1</a></td>
+              <td>12 May 2012</td>
+              <td>12 Aug 2012</td>
+              <td>1 Jan 2012</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+
+    <h3>Documents</h3>
+    
+    <p><a href="" class="download"><b>Uploaded EBSR pack</b></a><span> (1.4MB)</span><br />
+    <p><a href="" class="download"><b>Official VOSA record</b></a><span> (156KB)</span><br />
+    <p><a href="" class="download"><b>Route track map</b></a><span> (1.2MB)</span></p>
+
+  </div><!-- .three-quarters -->
+
+</div>

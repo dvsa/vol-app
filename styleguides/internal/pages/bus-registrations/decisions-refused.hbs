@@ -1,0 +1,41 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Decisions
+layout: bus-registrations.hbs
+verticalNavItems:
+  - label: Decisions
+    link:  decisions.html
+  - label: History
+    link:  history.html
+  - label: Tasks
+    link:  tasks.html
+  - label: Notes
+    link:  notes.html
+read-only:
+  - title: Decisions
+    editable: true
+    type: fields
+    groups: 
+    - group:
+      - name: Decision
+        value: Refused
+    - group:
+      - name: Reason
+        value: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+        class: full-width
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each read-only}}
+    {{#is @index 0 }} 
+    {{> _read-only }}
+    {{/is }} 
+  {{/each}}
+</div>

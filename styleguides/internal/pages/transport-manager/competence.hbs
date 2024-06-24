@@ -1,0 +1,70 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Competence
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+form:
+  - fieldsets:
+    - legend: Certificate of professional competence
+      fields:
+        - label: Upload a copy of your certificate of professional competence or exemption certificate
+          type: file-upload
+table:
+  - title: <strong>Qualifications</strong>
+    headers:
+      - label: Qualification
+        class: sortable
+      - label: Level
+        class: sortable
+      - label: Year
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">MVQ Transport Management</a>
+      - MVQ
+      - 2012
+      - <input type="checkbox">
+    rows: 4
+    actions:
+      - label: Add
+        class: primary
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+  
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Competence</h3>
+  </div>
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+  {{#each form }}{{> _forms }}{{/each }}
+  <div class="actions-container">
+    <a href="" class="action--primary large">Save</a>
+    <a href="" class="action--secondary large">Cancel</a>
+  </div>
+
+</div>

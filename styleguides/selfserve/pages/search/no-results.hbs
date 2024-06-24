@@ -1,0 +1,56 @@
+---
+title: Search results
+layout: base.hbs
+---
+
+<div class="row">
+  
+  <div class="one-quarter">
+    <form class="filters">
+      <fieldset>
+        <legend>Edit search</legend>
+        <div class="field">
+          <label for="search">Keywords</label>
+          <input id="search" name="search" type="search" class="extra-long js-focus" value="foo">
+          <p class="hint--small">Try searching for an operator name, licence number, person, postcode, town or city.</p>
+        </div>
+        <div class="field">
+          <label>Licence type</label>
+          <select name="">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Licence status</label>
+          <select name="">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Traffic area</label>
+          <select name="">
+            <option value="">All</option>
+          </select>
+        </div>
+        <input type="submit" class="action--primary large" value="Update results">
+        <a href="index.html">Start again</a>
+      </fieldset>
+    </form>
+  </div><!-- three-eights -->
+  
+  <div class="three-quarters">
+    <div class="article">
+      <p>There were no results for your search.</p>
+      <p>Try using different keywords, or picking another:</p>
+      <ul>
+        <li>licence type</li>
+        <li>licence status</li>
+        <li>traffic area</li>
+      </ul>
+      <p>You can look for every result in a category by choosing “all” from the dropdown lists.</p>
+    </div>
+  </div><!-- .five-eights -->
+
+</div>
+
+<script type="text/javascript" src="/js/search-prototype.js"></script>

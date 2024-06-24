@@ -1,0 +1,242 @@
+---
+title: OH1058363
+subtitle: AB Agri Limited
+layout: base.hbs
+breadcrumbs:
+  - link: operator-results.html
+    label: Back to operator search
+read-only:
+  - title: Licence details
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Licence type
+        value: Standard national
+      - name: Licence status
+        value: Valid
+      - name: Licence start date
+        value: 12 May 2014
+      - name: Review date
+        value: 12 Feb 2016
+      - name: Continuation date
+        value: 12 May 2016
+    - group:
+      - name: Total vehicle authority
+        value: 124
+      - name: Vehicles in possession
+        value: 156
+      - name: Total trailer authority
+        value: 11
+      - name: Trailer is possession
+        value: 11
+    - group:
+      - name: Traffic area
+        value: North East England
+      - name: Lead Traffic Commmissioner
+        value: Kevin Rooney
+    - group:
+      - name: Community licences
+        value: 0
+    - group:
+      - name: Existing PI records
+        value: 0
+      - name: Operator disqualified
+        value: No
+      - name: Multiple licence holder
+        value: Yes
+  - title: Opertor details
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Registered company name
+        value: AB Agri Limited
+      - name: Company No.
+        value: 17265252
+      - name: Registerd address
+        value: 14 Mayweather Road, Leatherby, Leeds, LS8 1AN
+      - name: Subsidiaries
+        value: Big Storage Company
+    - group:
+      - name: Existing PI records
+        value: 0
+      - name: Operator disqualified
+        value: No
+      - name: Multiple licence holder
+        value: Yes
+  - title: Contact details
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Correspondance name
+        value: James McGill
+      - name: Correspondance address
+        value: 14 Mayweather Road, Leatherby, Leeds, LS8 1AN
+      - name: Telephone no
+        value: 0113 262 171
+      - name: Email address
+        value: james.mcgill@bigtrucks.com
+table:
+  - title: Directors
+    headers:
+      - label: Name
+        class: not-sortable
+      - label: Disqualified
+        class: not-sortable
+    columns:
+      - James McGill
+      - No
+    rows: 4
+  - title: Transport Managers
+    headers:
+      - label: First name
+        class: not-sortable
+      - label: Last name
+        class: not-sortable
+    columns:
+      - James
+      - McGill
+    rows: 1
+  - title: Operating centers
+    headers:
+      - label: Address
+        class: not-sortable
+      - label: Interim
+        class: not-sortable
+      - label: Vehicle auth.
+        class: not-sortable
+      - label: Trailer auth.
+        class: not-sortable
+      - label: Added
+        class: not-sortable
+      - label: Removed
+        class: not-sortable
+    columns:
+      - 114 Lidgett Lane, LS7 4PS
+      - No
+      - 32
+      - 2
+      - 12 May 2014
+      - N/A
+    rows: 4
+  - title: Vehicles
+    headers:
+      - label: Vehicle registration No.
+        class: not-sortable
+      - label: Interim
+        class: not-sortable
+      - label: Plated weight
+        class: not-sortable
+      - label: Sepcified date
+        class: not-sortable
+    columns:
+      - LL07 UVE
+      - No
+      - 1500 Kg
+      - 12 May 2012
+    rows: 4
+  - title: Applications
+    headers:
+      - label: Application ID
+        class: not-sortable
+      - label: Received
+        class: not-sortable
+      - label: Published
+        class: not-sortable
+      - label: Granted
+        class: not-sortable
+      - label: Objections
+        class: not-sortable
+      - label: Representations
+        class: not-sortable
+    columns:
+      - 167262
+      - 23 Jan 2015
+      - 30 Jan 2015 (1717126)
+      - 14 Feb 2015
+      - N/A
+      - N/A
+    rows: 1
+  - title: Conditions & undertakings
+    headers:
+      - label: Type
+        class: not-sortable
+      - label: Description
+        class: not-sortable
+      - label: Added
+        class: not-sortable
+      - label: Status
+        class: not-sortable
+    columns:
+      - Condition
+      - Lorem ipsum dolor sit amet, consectetur.
+      - 12 May 2012
+      - Valid
+    rows: 1
+  - title: Other licences
+    headers:
+      - label: Licence No.
+        class: not-sortable
+      - label: Status
+        class: not-sortable
+      - label: Continuation date
+        class: not-sortable
+    columns:
+      - <a href="">OB273631</a>
+      - Valid
+      - 12 May 2012
+    rows: 3
+---
+
+<div class="row">
+  
+  <!-- 
+  <div class="one-quarter">
+    <h4>On this page</h4>
+    <ul class="vertical-navigation">
+      <li><a href="">Licence details</a></li>
+      <li><a href="">Operator details</a></li>
+      <li><a href="">Contact details</a></li>
+      <li><a href="">Directors</a></li>
+      <li><a href="">Transport managers</a></li>
+      <li><a href="">Operating centers </a></li>
+      <li><a href="">Vehicles</a></li>
+      <li><a href="">Applications</a></li>
+      <li><a href="">Coditions &amp; undertakings</a></li>
+      <li><a href="">Other licences</a></li>
+    </ul>
+  </div> 
+  -->
+  
+  <div class="full-width">
+
+    {{#each read-only}}
+      {{#is @index 0 }}
+        {{> _read-only }}
+      {{/is }}
+    {{/each}}
+    {{#each read-only}}
+      {{#is @index 1 }}
+        {{> _read-only }}
+      {{/is }}
+    {{/each}}
+    {{#each read-only}}
+      {{#is @index 2 }}
+        {{> _read-only }}
+      {{/is }}
+    {{/each}}
+
+    {{#each table}}
+      {{> _table }}
+    {{/each}}
+  
+    <div class="actions-container">
+      <a class="action--tertiary large" href="">Back to top</a>
+      <a class="action--tertiary large" href="operator-results.html">Back to operator search</a>
+    </div>
+
+  </div><!-- .three-quarters -->
+
+</div>

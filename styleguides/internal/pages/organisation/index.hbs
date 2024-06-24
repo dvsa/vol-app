@@ -1,0 +1,60 @@
+---
+layout: organisation.hbs
+asset: '../../../../'
+sectionTitle: Licence details
+subSectionTitle: Business details
+verticalNavItems:
+  - label: Business details
+    link:  index.html
+  - label: People
+    link:  people.html
+  - label: Licences & applications
+    link:  index.html
+  - label: Users
+    link:  users.html
+form:
+  - title: Business details
+    fieldsets:
+    - legend:
+      fields:
+        - label: Business type
+          type: select
+          values:
+            - Limited company
+          class:
+        - label: Registered company number
+          type: inline-search
+          class: medium
+          values:
+            - Find company
+          hint: If you don't have your company number to hand, or are having problems retrieving your company details, please enter them manually below.
+        - label: Operator name
+          type: text
+          class: medium
+        - label: Nature of business (SIC)
+          type: text
+          class: medium
+          hint: Please use a SIC approved business type. You can find a list of approved business types <a href="">here</a>
+    - legend: Registed address
+      fields:
+        - type: full-address
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Operator profile</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Business details</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

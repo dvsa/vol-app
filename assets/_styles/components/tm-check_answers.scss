@@ -1,0 +1,16 @@
+.tm-check-your-answers {
+  &__heading {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    .govuk-heading-m {
+      display: inline;
+    }
+    dd.app-check-your-answers__change {
+      @include govuk-font(19);
+      display: inline;
+      float: right;
+      border-bottom: none;
+      padding: 0;
+    }
+  }
+}

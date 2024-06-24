@@ -1,0 +1,75 @@
+---
+layout: base.hbs
+title: PC1057277/3
+breadcrumb: Bus registration 
+subtitle: John Smith LTD, Variation 2 <span class="status green">New</span>
+status: Suspended
+horizontalNavItems:
+  - label: Service details
+    link:  index.html
+  - label: Short notice
+    link:  bus-registrations.html
+  - label: Register service
+    link:  register-service.html
+  - label: Docs & attachments
+    link:  docs&attachments.html
+  - label: Processing
+    link:  history.html
+  - label: Fees
+    link:  fees.html
+recordActions:
+  - title: Quick actions
+    actions:
+      - Create variation
+      - Create cancellation
+      - Request new route map
+      - Re-publish
+      - Withdraw
+  - title: Decisions
+    actions:
+      - Grant
+      - Refuse
+      - Admin cancel
+---
+
+<div class="four-fifths--left">
+  <div class="content">
+  {{> body }}  
+  </div>
+</div>
+
+<div class="sidebar--right">
+
+  <div class="small-module">
+    <h4 class="title">Operator details</h4>
+    <p class="small-module__details">
+      <a href="">Don Tarmacadam Ltd</a><br />
+      Limited Company<br />
+      North East England
+    </p>
+  </div>
+
+  <div class="small-module">
+    <h4 class="title">Licence details</h4>
+    <p class="small-module__details">
+      <a href="">OB1625270</a><br />
+      Standard National<br />
+      Valid
+    </p>
+  </div>
+
+  <div class="notice-container">
+    <p class="notice--warning">
+      <b>Refused by short notice</b><br>
+      07-08-2013
+    </p>
+  </div>
+
+  {{> _record-actions }}
+
+  <div class="latest-note">
+    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
+    <a class="latest-note__link">View all 13 notes</a>
+  </div>
+  
+</div>

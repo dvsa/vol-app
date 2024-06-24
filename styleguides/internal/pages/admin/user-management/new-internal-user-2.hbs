@@ -1,0 +1,139 @@
+---
+layout: user-management.hbs
+asset: '../../../../'
+subSectionTitle: Users
+table:
+  - title: <strong>24</strong> Users
+    headers:
+      - label: Name
+        class: sortable descending
+      - label: Email address
+        class: sortable
+      - label: Type
+        class: sortable
+      - label: Role
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">Ruben Loftus-Cheek</a></strong>
+      - ruben.loftus-cheek@gmail.com
+      - Operator
+      - Admin
+      - <input type="checkbox">
+    rows: 20
+    actions:
+    - label: New user
+      class: primary
+      link: new-user.html
+    - label: Edit
+      class: secondary disabled
+    - label: Disable
+      class: secondary disabled
+verticalNavItems:
+  - label: Users
+    link:
+    filterList:
+    - header: Type
+      type: dropdown
+      filters:
+        - All
+    - header: Role
+      type: dropdown
+      filters:
+        - All
+  - label: Teams
+    link: published.html
+  - label: Printers
+    link: recipients.html
+form:
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Type
+          type: select
+          values:
+            - Internal
+            - Partner
+            - Transport Manager
+            - Local authority
+            - Self service
+            - Self service (No licence)
+        - label: Role
+          type: multi select
+        - label: Team
+          type: select
+          values:
+            - Licensing
+            - Team 2
+    - legend: Personal
+      fields:
+        - label: Username
+          type: text
+          class: medium
+        - label: First name
+          type: text
+          class: medium
+        - label: Last name
+          type: text
+          class: medium
+        - label: Date of birth
+          type: date
+    - legend: Contact
+      fields:
+        - label: Email address
+          type: text
+          class: long
+        - label: Confirm email address
+          type: text
+          class: long
+        - label: Phone
+          type: text
+          class: medium
+        - label: Fax
+          type: text
+          class: medium
+    - legend: Office address
+      fields:
+        - label: Address
+          type: full-address
+    actions:
+      - label: Save
+        class: primary
+      - label: Cancel
+        class: secondary
+
+---
+
+<div class="overlay"></div>
+<div class="modal__wrapper">
+  <div class="modal">
+    <div class="modal__header">
+      <h2 class="modal__title">Add new user</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form }}{{> _forms }}{{/each }}
+    </div>
+  </div>
+</div>
+
+<div class="sidebar--left">
+  <h4 class="title">User management</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div><!-- .four-fifths-right -->
+
+
+
+
+
+
+

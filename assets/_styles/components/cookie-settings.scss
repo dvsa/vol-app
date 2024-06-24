@@ -1,0 +1,118 @@
+.gem-c-heading {
+  @include govuk-text-colour;
+  @include govuk-font(27, $weight: bold);
+  margin: 0;
+}
+
+.gem-c-heading--font-size-24 {
+  @include govuk-font(24, $weight: bold);
+}
+
+.gem-c-heading--font-size-19 {
+  @include govuk-font(19, $weight: bold);
+}
+
+// special case for publications and consultations pages
+// separated to allow normalisation of the component for wider use
+.gem-c-heading--mobile-top-margin {
+  margin-top: govuk-spacing(6);
+  margin-bottom: govuk-spacing(3);
+
+  @include govuk-media-query($from: tablet) {
+    margin-top: 0;
+    margin-bottom: govuk-spacing(6);
+  }
+}
+
+.gem-c-heading--padding {
+  padding: govuk-spacing(3) 0;
+}
+
+// border color will default to black
+// can be changed using the branding functionality
+.gem-c-heading--border-top-1 {
+  border-top-style: solid;
+  border-top-width: 1px;
+}
+
+.gem-c-heading--border-top-2 {
+  border-top-style: solid;
+  border-top-width: 2px;
+}
+
+.gem-c-heading--border-top-5 {
+  border-top-style: solid;
+  border-top-width: 5px;
+}
+
+.cookie-settings__gov-services {
+  margin-top: 50px;
+}
+
+.gem-c-govspeak {
+    p {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        &:first-child {
+            margin-top: 0px;
+        }
+    }
+}
+
+.cookie-settings__form-wrapper {
+    > p {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    ul {
+        margin-top: 19px;
+        margin-left: 40px;
+    }
+
+    .govuk-heading-m {
+        margin-bottom: 20px;
+    }
+
+    .govuk-button {
+        padding-top: 9px;
+        padding-bottom: 6px;
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 2px solid transparent;
+        background-color: #00823b;
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
+.gem-c-notice {
+  @include govuk-text-colour;
+  @include govuk-responsive-padding(4);
+  @include govuk-responsive-margin(8, "bottom");
+
+  clear: both;
+  border: $govuk-border-width solid govuk-colour("blue");
+
+  .govuk-govspeak, {
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .govuk-body:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.gem-c-notice__title {
+  @include govuk-font(24, $weight: bold);
+  margin-top: 0;
+  @include govuk-responsive-margin(4, "bottom");
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+

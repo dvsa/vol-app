@@ -1,0 +1,73 @@
+---
+layout_script: false
+asset: '../../../../'
+layout: search-results.hbs
+sectionTitle: Vehicles
+filterList:
+  - header: Type of licence
+    type: checkboxes
+    filters:
+      - Goods
+      - PSV
+  - header:
+    type: checkboxes
+    filters:
+      - Show Section 26 vehicles
+
+table:
+  - title: <strong>24</strong> Vehicle results
+    headers:
+      - label: Licence No.
+        class: sortable
+      - label: VRM
+        class: sortable descending
+      - label: Gross plated weight
+        class: sortable
+      - label: Operator name
+        class: sortable
+      - label: Specified
+        class: sortable
+      - label: Removed
+        class: sortable
+      - label: Disc No.
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">N/a</a></strong>
+      - LL08 UVE<span class="status red">Section 26</span>
+      - 3200 Kg
+      - Don Tarmacadam Ltd.
+      - 12/03/12
+      - 21/03/14
+      - 17262727
+      - <input type="checkbox">
+    rows: 20
+    actions:
+      - label: Section 26
+        class: secondary disabled
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Filter by:</h4>
+  {{> _filters }}
+</div><!-- end .one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div><!-- end .four-fifths-right -->
+
+
+
+
+
+

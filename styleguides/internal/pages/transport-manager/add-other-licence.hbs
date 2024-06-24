@@ -1,0 +1,105 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Licences & applications
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other licences & employment
+    link: other-licences-employment.html
+  - label: Convictions & penalties
+    link: convictions-penalties.html
+  - label: Competence
+    link: competence.html
+table:
+  - title: <strong>Licences & applications</strong>
+    headers:
+      - label: Licence No.
+        class: sortable
+      - label: No. of operating centres
+        class: sortable
+      - label: Manager type
+        class: sortable
+      - label: Hours per week
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">OB1242325</a>
+      - 2
+      - Internal
+      - 12
+      - <input type="checkbox">
+    rows: 10
+    actions:
+      - label: Add
+        class: primary
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Licence No.
+          type: text
+          class: medium
+        - label: Type
+          type: radios
+          values:
+            - Licence holder
+            - Licence applicant
+            - Transport Manager
+        - label: Which operating centre(s) will you be responsible for?
+          type: multiple
+        - label: Hours worked per week?
+          type: text
+          class: short
+    actions:
+      - label: Save
+        class: primary large
+      - label: Print
+        class: secondary large
+      - label: Cancel
+        class: secondary large
+
+
+---
+
+<div class="overlay  js-hidden"></div>
+<div class="modal__wrapper js-hidden">
+  <div class="modal">
+    <div class="modal__header"> 
+      <h2 class="modal__title">Add other licence</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form }}{{> _forms }}{{/each }}
+    </div>
+  </div>
+</div>
+
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+</div>
+
+
+
+
+
+

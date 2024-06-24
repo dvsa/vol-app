@@ -1,0 +1,11 @@
+$asset-path : '/static/public/assets/';
+$govuk-image-url-function : 'olcs-image-url';
+$govuk-font-url-function : 'olcs-font-url';
+
+@function olcs-image-url($filename) {
+  @return url($asset-path + 'images/'+ $filename);
+}
+
+@function olcs-font-url($filename) {
+  @return url($asset-path + 'fonts/' + $filename);
+}

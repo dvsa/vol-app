@@ -1,0 +1,78 @@
+---
+layout: base.hbs
+title: OB1625270
+breadcrumb: Licence
+user: operator
+subtitle: Don Tarmacadam <span class="status red">Revoked</span>
+status: Suspended
+horizontalNavItems:
+  - label: Licence details
+    link:  index.html
+  - label: Cases
+    link:  cases.html
+  - label: Bus registrations
+    link:  bus-registrations.html
+  - label: Opposition
+    link:  opposition.html
+  - label: Applications
+    link:  environmental.html
+  - label: Docs & attachments
+    link:  docs&attachments.html
+  - label: Processing
+    link:  tasks.html
+  - label: Fees
+    link:  fees.html
+recordActions:
+  - title: Quick actions
+    actions:
+      - Create case
+      - Create variation
+      - Print licence
+  - title: Decisions
+    actions:
+      - Surrender
+      - Curtail
+      - Revoke
+---
+
+<div class="table-col">
+  <div class="content">
+    {{> body}}
+  </div>
+</div>
+
+<div class="sidebar--right">
+
+  <div class="small-module">
+    <h4 class="title">Operator details</h4>
+    <p class="small-module__details">
+      <a href="">Don Tarmacadam Ltd</a><br />
+      Limited Company<br />
+      North East England
+    </p>
+  </div>
+
+  <div class="small-module">
+    <h4 class="title">Licence details</h4>
+    <p class="small-module__details">
+      <a href="">OB1625270</a><br />
+      Standard National<br />
+      Valid
+    </p>
+  </div>
+
+  <div class="notice-container">
+    <p class="notice--danger">
+      <b>Licence due to be revoked:</b><br />
+      07-08-2013<br /><a href="">Edit revokaction</a>
+    </p>
+  </div>
+
+  {{> _record-actions }}
+
+  <div class="latest-note">
+    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
+    <a class="latest-note__link">View all 13 notes</a>
+  </div>
+
+</div>

@@ -1,0 +1,279 @@
+/**
+ * Tables
+ */
+
+// Create an actionable header bar with right-side actions-container
+%header-with-actions {
+  float: left;
+  width: 100%;
+  padding-bottom: 8px;
+  position: relative;
+  @if $app == 'internal' {
+    h3,
+    h4 {
+      float: left;
+      display: block;
+      margin: 0;
+    }
+  }
+  .govuk-button-group {
+    display: block;
+    @if $app == 'selfserve' {
+      margin-bottom: 10px;
+    }
+    @if $app == 'internal' {
+      float: right;
+      margin: -7px -5px -2px 0;
+    }
+  }
+  select {
+    margin: 3px 3px 0 0;
+  }
+}
+
+.table {
+  &--2-column {
+    td, th {
+      width: 50%;
+    }
+  }
+
+  &--3-column {
+    td, th {
+      &:first-child {
+        width: 50%;
+      }
+      width: 25%;
+    }
+  }
+  .field {
+    margin-bottom: 0;
+  }
+}
+
+.table__wrapper {
+  display: block;
+  width: 100%;
+  position: relative;
+  float: left;
+  + .table__header,
+  + .table__form {
+    margin-top: 2em;
+  }
+  // prevent tables from causing entire page to stretch
+  .field > & {
+    @extend %page-wrapper !optional;
+    overflow-x: auto;
+  }
+}
+
+.table__header {
+  @extend %header-with-actions !optional;
+  span {
+    @extend %paragraph;
+    font-weight: 400;
+    color: $grey-1;
+  }
+  p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: left;
+  }
+}
+
+.table__footer {
+  width: 100%;
+  clear: right;
+  overflow: auto;
+  padding-top: $gutter-half;
+}
+
+table {
+  [type="checkbox"],
+  [type="radio"] {
+    margin: 0.25em auto 0;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+  }
+  a:focus {
+    outline: none;
+  }
+}
+
+
+tr {
+  &.hover {
+    background: $grey-3;
+    cursor: pointer;
+  }
+  &.current {
+    background: $light-blue-25;
+  }
+  &.disabled {
+    cursor: default;
+    a {
+      text-decoration: underline;
+    }
+    a:hover {
+      cursor: pointer;
+      color: $black;
+    }
+  }
+}
+
+th {
+  &.invalid {
+    color: $error-colour;
+  }
+}
+
+td {
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  .right-aligned {
+    margin-left: 0.5em;
+  }
+}
+
+
+
+.td--right-aligned {
+    text-align: right;
+    padding-left: 0.5em;
+}
+
+
+tfoot {
+  th,
+  td {
+    font-weight: 600;
+  }
+}
+
+.right {
+  text-align: right;
+  a,
+  [type="checkbox"],
+  [type="radio"] {
+    float: right;
+    margin: 3px 0 7px 7px;
+  }
+}
+
+.new {
+  color: $primary-colour;
+  margin-right: 5px;
+}
+
+.table-search__input {
+  width: 200px;
+  height: 14px;
+  margin-top: -7px;
+}
+
+.sortable {
+  a {
+    position: relative;
+    &:after {
+      @if $app != 'print' {
+        @include svg('dropdown-down');
+        content: '';
+      }
+    }
+  }
+}
+
+// This hack is to break any long safety inspector names onto
+// two lines as per OLCS-11334
+#lva-safety {
+  td {
+    max-width: 250px;
+    > [type="submit"] {
+      word-break: break-word;
+      text-align: left;
+      max-width: 100%;
+    }
+  }
+}
+
+// Prevent accidental text-highligting when trying to select
+// multiple rows
+.table--no-select {
+  tr {
+    // 'user-select' is a non-standard feature but works in all browsers
+    // scss-lint:disable VendorPrefix
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    // scss-lint:enable VendorPrefix
+    user-select: none;
+  }
+}
+
+// Selfserve theme
+// ---------------
+
+@if $app == 'selfserve' {
+
+  .director-change {
+    fieldset{
+      div {
+          &.table__empty{
+            border-left: 5px solid #bfc1c3;
+            padding-left:1em;
+            margin-top:1em;
+        }
+      }
+
+    }
+  }
+}
+
+// Internal theme
+// ---------------
+
+@if $app == 'internal' {
+
+  .table__wrapper {
+    border-radius: 3px;
+    margin-bottom: 0.5em;
+  }
+
+  tr {
+    &.urgent {
+      border-left: 5px solid $mellow-red;
+    }
+    &.hover,
+    &.checked {
+      background: $grey-4;
+    }
+  }
+
+  // add to column title to prevent heading wrapping
+  .no-wrap {
+      white-space: nowrap;
+  }
+
+}
+
+.checklist-table {
+  tr:first-child {
+    th, td {
+      border-top: none;
+    }
+  }
+  td {
+    font-size: font-size(5);
+  }
+  thead {
+    border-bottom: 1px solid $grey-2;
+  }
+}
+
+table.no-row-border-separator tr td {
+  border-color: transparent;
+}

@@ -1,0 +1,114 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+form:
+  - fieldsets:
+    - legend: Opposition details
+      fields:
+        - label: Opposition type
+          type: select
+          values:
+            - Please select
+        - label: Objector body (optional)
+          type: text
+          class: long
+        - label: Received
+          type: date
+          hint: Out of objection date
+        - label: Objector type
+          type: select
+          values:
+            - Please select
+        - label: Valid
+          type: select
+          values:
+            - Yes
+            - No
+            - Not decided
+        - label: Valid details
+          type: textarea
+        - label:
+          type: checkboxes
+          values:
+            - Copied
+            - Willing to attend PI
+            - In time
+        - label: Status
+          type: select
+          values:
+            - Acknowledged
+        - label: Affected centre
+          type: multi select
+          class: extra-long
+          values:
+            - Operating centres 1, Shrewsbury
+            - Operating centres 2, Shrewsbury
+            - Operating centres 3, Shrewsbury
+            - Operating centres 4, Shrewsbury
+            - Operating centres 5, Shrewsbury
+        - label: Grounds
+          type: multi select
+          class: extra-long
+          values:
+            - Opposition ground 1
+            - Opposition ground 2
+            - Opposition ground 3
+            - Opposition ground 4
+            - Opposition ground 5
+  - fieldsets:
+    - legend: Contact details
+      fields:
+        - label: First name
+          type: text
+          class: long
+        - label: Last name
+          type: text
+          class: long
+        - label: Phone no.
+          type: text
+          class: medium
+        - label: Email
+          type: text
+          class: long
+  - fieldsets:
+    - legend: Contact address
+      fields:
+        - type: address
+
+  - title: <strong>Vehicles to be suspended</strong>
+    headers:
+      - label: VRM
+        class: sortable descending
+      - label: Plated weight (kg)
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - LL08 URE
+      - 500
+      - <input type="checkbox">
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+  <div class="overlay js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Add oppositon</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+
+
+

@@ -1,0 +1,125 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Docs & attachments
+filterList:
+  - header: Category
+    type: dropdown
+    filters:
+      - All
+  - header: Sub-category
+    type: dropdown
+    filters:
+      - All
+  - header: Format
+    type: dropdown
+    filters:
+      - All
+  - header:
+    type: checkboxes
+    filters:
+      - Digital only
+table:
+  - title: <strong>15</strong> Docs and attachments
+    headers:
+      - label: Description
+        class: sortable descending
+      - label: Category
+        class: sortable
+      - label: Sub-category
+        class: sortable
+      - label: Format
+        class: sortable
+      - label: Date
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <a href="">December-accounts.PDF</a>
+      - Bus registration
+      - Sub category (digital)
+      - PDF
+      - 13/3/13 14:02
+      - <input type="checkbox">
+    rows: 15
+    actions:
+      - label: Generate
+        class: primary
+      - label: Upload
+        class: secondary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+
+form:
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Category
+          type: select
+          values:
+            - GV publishable application
+          class:
+        - label: Sub-category
+          type: select
+          values:
+            - GV var app - wrong TOA
+          class:
+    - legend: Bookmarks
+      fields:
+        - label: Bookmarks 1
+          type: checkboxes
+          values:
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        - label: Bookmarks 2
+          type: checkboxes
+          values:
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        - label: Bookmarks 3
+          type: checkboxes
+          values:
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            - Lorem ipsum dolor sit amet, consectetur adipiscing elit
+    actions:
+      - label: Generate
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Generate document</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters}}
+  </div>
+
+  <div class="table-col">
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+  </div>
+
+
+
+

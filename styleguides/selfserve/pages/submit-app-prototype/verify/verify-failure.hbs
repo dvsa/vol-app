@@ -1,0 +1,46 @@
+---
+title: Post Office was unable to verify your identity
+user: operator
+---
+
+<div class="notice-container">
+  <div class="notice--danger">
+    <p role="alert">Unable to verify user</p>
+  </div>
+</div><!-- end .notice-container -->
+
+<div class="row">
+  
+  <div class="two-thirds">
+    <div class="article">
+      <p>There are a few reason why this might happen, including:</p>
+      <ul>
+        <li>you've recently had a change in your circumstances and they aren't yet updated online</li>
+        <li>you live outside the UK</li>
+        <li>this is a new service and we are still improving how people can be verified</li>
+      </ul>
+      <h3>What to do next</h3>
+      <p>You can try the following:</p>
+      <p>1. <a href="">Try to verify again using another certified company</a><br />
+      2. <a href="print-declarations.html">Print, sign and post your declaration</a></p>
+    </div>
+  
+  </div><!-- .two-thirds -->
+  
+  <div class="one-third">
+    <div class="sidebar">
+      {{> _support}}
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" src="/js/submit-app-prototype.js"></script>
+
+<script type="text/javascript">
+  OLCS.ready(function() {
+    OLCS.eventEmitter.emit("render");
+  });
+</script>
+
+

@@ -1,0 +1,103 @@
+---
+title: Financial evidence
+user: operator
+subtitle: Step 4 of 12
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Home
+  - link: application-overview.html
+    label: Licence overview
+---
+
+<div class="row">
+  <div class="two-thirds">
+    <div class="article">
+      <p>To be granted a licence, you’ll need to show you have enough money to keep your vehicles and run your business. <a href="">Read more about financial evidence</a></p>
+      <h3>How much will you need?</h3>
+      <h2>£12,998</h2>
+      <p>This figure’s based on:</p>
+      <ul>
+        <li>an application for 20 vehicles</li>
+        <li>maintenance of 19 vehicles on your other licences</li>
+      </ul>
+    </div>
+    <form>
+      <h3>Send a copy to us</h3>
+      <p>Once you have your financial evidence, you should either upload or post a copy to us. See the <a href="">types of evidence we accept</a>.</p><hr />
+      <fieldset>
+        <legend>How would you like to send your evidence?</legend>
+        <div class="field inline checkbox">
+          <label><input type="radio" name="evidence" value="upload">Upload files</label>
+        </div>
+        <div class="field inline checkbox">
+          <label><input type="radio" name="evidence" value="post">Send in the post</label>
+        </div>
+      </fieldset>
+      <fieldset class="js-upload">
+        <fieldset class="file-uploader" id="FileUploader2">
+          <ul class="attach-action__list">
+            <li class="attach-action">
+              <label class="attach-action__label">
+                Attach file
+                <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+              </label>
+              <p class="attach-action__hint">PDF, DOC, JPG, PNG or GIF</p>
+            </li>
+          </ul><!-- attach-actions -->
+        </fieldset><!-- .file-uploader -->
+      </fieldset>
+      <fieldset class="js-post">
+        <div class="article">
+          <p>If you’d rather post a copy, send it as soon as possible to:<p/>
+          <p>
+          Office of the Traffic Commissioner<br />
+          The Central Licensing Office<br />
+          Hillcrest House<br />
+          Leeds, LS9 6NF</p>
+          <p>Make sure you include your application reference: <b>OB1523424/133</b>.
+          </p>
+        </div>
+      </fieldset>
+      <div class="actions-container">
+        <a href="" class="action--primary large">Save and continue</a>
+        <a href="" class="action--tertiary list large">Save and return to overview</a>
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB12524/525</dd>
+        <dt>Progress</dt>
+        <dd>4 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-upload, .js-post').hide();
+
+    $(document).on('change', 'input[name="evidence"]', function(e) {
+      e.preventDefault();
+      if ($(this).val() === 'upload') {
+        $('.js-upload').show();
+        $('.js-post').hide();
+      } else {
+        $('.js-post').show();
+        $('.js-upload').hide()
+      }
+    });
+
+  });
+</script>
+

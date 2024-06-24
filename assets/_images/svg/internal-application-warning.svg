@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="18px" height="15px" viewBox="0 0 18 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>internal-application-warning</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-2" sketch:type="MSArtboardGroup" transform="translate(-26.000000, -435.000000)" fill="#7D7E86">
+            <path d="M43.8015834,449.102462 L35.4553053,435.274065 C35.3527291,435.104427 35.1642656,435 34.9601861,435 C34.7561066,435 34.567643,435.104427 34.4650669,435.274065 L26.0771861,449.17208 C25.9746099,449.341718 25.9741927,449.551317 26.0764112,449.721698 C26.179047,449.89208 26.3678682,449.997252 26.5727225,449.997252 L43.355696,449.997252 C43.6718881,449.997252 43.9278814,449.751011 43.9278814,449.447634 C43.9278814,449.316469 43.8805569,449.196985 43.8015834,449.102462 L43.8015834,449.102462 Z M34.061855,446.236374 L35.8588748,446.236374 L35.8588748,447.898798 L34.061855,447.898798 L34.061855,446.236374 Z M34.061855,439.941069 L35.8588748,439.941069 L35.8588748,444.971908 L34.061855,444.971908 L34.061855,439.941069 Z" id="internal-application-warning" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

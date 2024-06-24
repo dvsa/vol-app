@@ -1,0 +1,114 @@
+---
+title: System messages
+asset: '../../../'
+form:
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Display to
+          type: radios
+          values:
+            - Internal
+            - Self service
+        - label: Message
+          type: textarea
+        - label: Start
+          type: date-time
+        - label: End
+          type: date-time
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+<div class="overlay js-hidden"></div>
+<div class="modal__wrapper js-hidden">
+  <div class="modal">
+    <div class="modal__header">
+      <h1 class="modal__title">Add new message</h1>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form }}{{> _forms }}{{/each }}
+    </div>
+  </div>
+</div>
+
+<form novalidate="novalidate">
+  <div class="table__header">
+    <h3><strong>24</strong> System messages</h3>
+    <div class="actions-container">
+      <a class="action--primary" href="">New message</a>
+    </div><!-- end .actions-container -->
+  </div><!-- end .table__header -->
+  <div class="table__wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable descending"><a href="">Message</a></th>
+          <th class="sortable descending"><a href="">Displayed to</a></th>
+          <th class="sortable"><a href="">Start</a></th>
+          <th class="sortable"><a href="">End</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status green">Active</span></td>
+          <td>Internal</td>
+          <td>15:00, 24/09/2016</td>
+          <td>08:00, 25/09/2016</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status green">Active</span></td>
+          <td>Self service</td>
+          <td>15:00, 24/09/2016</td>
+          <td>08:00, 25/09/2016</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status grey">Inactive</span></td>
+          <td>Self service</td>
+          <td>15:00, 24/09/2015</td>
+          <td>08:00, 25/09/2015</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status grey">Inactive</span></td>
+          <td>Self service</td>
+          <td>15:00, 24/09/2015</td>
+          <td>08:00, 25/09/2015</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status grey">Inactive</span></td>
+          <td>Internal</td>
+          <td>15:00, 24/09/2015</td>
+          <td>08:00, 25/09/2015</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status grey">Inactive</span></td>
+          <td>Internal</td>
+          <td>15:00, 24/09/2015</td>
+          <td>08:00, 25/09/2015</td>
+        </tr>
+        <tr>
+          <td><strong><a href="">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</a></strong><span class="status grey">Inactive</span></td>
+          <td>Internal</td>
+          <td>15:00, 24/09/2015</td>
+          <td>08:00, 25/09/2015</td>
+        </tr>
+      </tbody>
+    </table>
+  </div><!-- end .table__wrapper -->
+</form>
+
+
+
+<script type="text/javascript">
+  $(document).on('click', '.action--primary', function(e) {
+    e.preventDefault();
+    $('.js-hidden').show();
+  });
+
+</script>
+

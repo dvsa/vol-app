@@ -1,0 +1,85 @@
+---
+title: Search results
+header-text: <p>We've found <b>18 vehicles</b> that match your search</p>
+layout: base.hbs
+user: local authority
+table:
+  - headers:
+      - label: VRM
+        class: sortable descending
+      - label: Disc No.
+        class: sortable
+      - label: Operator
+        class: sortable
+      - label: Licence No.
+        class: sortable descending
+      - label: Specified / removed
+        class: sortable
+    columns:
+      - <strong><a href="">LL07 UVE</a></strong>
+      - 42351
+      - Big Trucks Ltd.
+      - <a href="">OB162526</a> <span class="status green">Valid</span>
+      - 12 May 2013 /N/A
+    rows: 20
+---
+
+<div class="row">
+  
+  <div class="one-quarter">
+    <form class="filters">
+      <fieldset>
+        <legend>Edit search</legend>
+        <div class="field">
+          <label>Keywords</label>
+          <input type="search" placeholder="e.g. VW11 URE">
+        </div>
+        <div class="field">
+          <label>Licence status</label>
+          <select name="">
+            <option value="">Please select</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Licence type</label>
+          <select name="">
+            <option value="">Please select</option>
+          </select>
+        </div>
+        <input type="submit" class="action--primary large" value="Update results">
+      </fieldset>
+    </form>
+  </div><!-- three-eights -->
+  
+  <div class="three-quarters">
+    <!-- Registered bus services -->
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+    <div class="table__footer">
+      <div class="results-settings">
+        <p>Show:</p>
+        <ul class="results-settings__list">
+          <li class="results-settings__item current">10</li>
+          <li class="results-settings__item"><a href="">25</a></li>
+          <li class="results-settings__item"><a href="">50</a></li>
+        </ul>
+        <p>results per page</p>
+      </div>
+      <ul class="pagination right-aligned" role="menu">
+        <li class="pagination__item"><a href="" rel="previous">Previous</a></li>
+        <li class="pagination__item"><a href="">1</a></li>
+        <li class="pagination__item"><a href="">2</a></li>
+        <li class="pagination__item current">3</li>
+        <li class="pagination__item"><a href="">4</a></li>
+        <li class="pagination__item"><a href="">5</a></li>
+        <li class="pagination__item">...</li>
+        <li class="pagination__item"><a href="">14</a></li>
+        <li class="pagination__item"><a href="" rel="next">Next</a></li>
+      </ul>
+    </div><
+  </div><!-- .five-eights -->
+
+</div>
