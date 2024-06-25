@@ -37,7 +37,7 @@ jobs:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
           path: app/${{ inputs.project }}
-          fetch-depth: ${{ inputs.ref && 0 || 1 }}
+          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
