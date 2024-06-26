@@ -26,6 +26,7 @@ They are responsible for:
 
 -   Reviewing pull requests that affect their assigned code.
 -   Keeping dependencies up to date (or creating tickets for them if they require large refactors).
+-   Increasing the static analysis level.
 -   Identifying improvements and creating tickets for them.
 -   Release management for their assigned code (if applicable).
 
@@ -46,5 +47,40 @@ A quarterly session will be held to rotate code ownership among team members. Du
 ## Metrics for Success
 
 -   Reduction in the number of unmaintained dependencies.
+-   Increased static analysis level.
 -   Decreased turnaround time for code reviews.
 -   Early detection and resolution of issues in less volatile parts of the codebase.
+
+### Current state
+
+Snapshot as of 2024-06-26:
+
+#### Outdated Dependencies
+
+| Repository       | Outdated Dependencies | Total major versions behind |
+| ---------------- | --------------------- | --------------------------- |
+| `olcs-auth`      | 3 major               | 4                           |
+| `olcs-backend`   | 21 major, 8 minor     | 27                          |
+| `olcs-common`    | 8 major               | 11                          |
+| `olcs-internal`  | 7 major, 9 minor      | 8                           |
+| `olcs-logging`   | 3 major               | 5                           |
+| `olcs-selfserve` | 8 major, 7 minor      | 9                           |
+| `olcs-transfer`  | 5 major               | 6                           |
+| `olcs-utils`     | 3 major               | 4                           |
+| `olcs-xmltools`  | 3 major               | 4                           |
+
+#### Static analysis levels
+
+Psalm most strict level is 0. PHPStan most strict level is 8.
+
+| Repository       | Psalm | PHPStan |
+| ---------------- | ----- | ------- |
+| `olcs-auth`      | 3     | 5       |
+| `olcs-backend`   | 8     | 0       |
+| `olcs-common`    | 8     | 0       |
+| `olcs-internal`  | 8     | 0       |
+| `olcs-logging`   | 5     | 5       |
+| `olcs-selfserve` | 8     | 0       |
+| `olcs-transfer`  | 5     | 5       |
+| `olcs-utils`     | 5     | 5       |
+| `olcs-xmltools`  | 5     | 5       |
