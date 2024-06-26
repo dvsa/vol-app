@@ -12,7 +12,7 @@ jobs:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   static-analysis:
-    uses: dvsa/.github/.github/workflows/php-static.yml@main
+    uses: ./.github/workflows/static-analysis.yaml
     with:
       php-version: '8.2'
 
