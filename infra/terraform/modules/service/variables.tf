@@ -45,7 +45,7 @@ variable "jobs" {
   type = map(object({
     command   = list(string)
     image     = string
-    memory    = number
+    memory    = string
   }))
   description = "The application command to run"
   default = {}
