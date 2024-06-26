@@ -61,6 +61,10 @@ jobs:
     needs:
       - warm-cache
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/dvsa/vol-app/${{ inputs.project }}:latest
+      volumes:
+        - app/${{ inputs.project }}:/var/www/html
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
@@ -73,12 +77,6 @@ jobs:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
           path: app/${{ inputs.project }}
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          coverage: none
-          extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
