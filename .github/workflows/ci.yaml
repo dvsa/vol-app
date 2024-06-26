@@ -7,6 +7,28 @@ permissions:
   contents: read
 
 jobs:
+  security-app:
+    name: Security
+    uses: ./.github/workflows/security-app.yaml
+    permissions:
+      contents: read
+      security-events: write
+    secrets: inherit
+
+  security-docker:
+    name: Security
+    uses: ./.github/workflows/security-docker.yaml
+    permissions:
+      contents: read
+      security-events: write
+
+  security-terraform:
+    name: Security
+    uses: ./.github/workflows/security-terraform.yaml
+    permissions:
+      contents: read
+      security-events: write
+
   orchestrator:
     name: Orchestrator
     runs-on: ubuntu-latest
@@ -90,6 +112,7 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-accounts-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/accounts/**
             infra/terraform/modules/**
@@ -99,6 +122,7 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-environments-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/environments/{dev,int,prep,prod}/**
             infra/terraform/modules/**
@@ -322,32 +346,3 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
-
-  security-app:
-    name: Security App
-    needs:
-      - orchestrator
-    strategy:
-      matrix:
-        project:
-          - api
-          - selfserve
-          - internal
-        exclude:
-          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
-    uses: ./.github/workflows/security-app.yaml
-    with:
-      project: ${{ matrix.project }}
-    permissions:
-      contents: read
-      security-events: write
-    secrets: inherit
-
-  security-terraform:
-    name: Security Terraform
-    uses: ./.github/workflows/security-terraform.yaml
-    permissions:
-      contents: read
-      security-events: write
