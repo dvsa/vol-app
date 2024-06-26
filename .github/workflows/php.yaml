@@ -64,7 +64,7 @@ jobs:
     container:
       image: ghcr.io/dvsa/vol-app/${{ inputs.project }}:latest
       volumes:
-        - app/${{ inputs.project }}:/var/www/html
+        - ${{ github.workspace}}/app/${{ inputs.project }}:/var/www/html
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
