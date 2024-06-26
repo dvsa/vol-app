@@ -61,7 +61,11 @@ jobs:
     needs:
       - warm-cache
     runs-on: ubuntu-latest
-    container: ghcr.io/dvsa/vol-app/${{ inputs.project }}:latest
+    container:
+      image: ghcr.io/dvsa/vol-app/${{ inputs.project }}:latest
+      # volumes:
+      #   - ${{ github.workspace}}/app/${{ inputs.project }}:/var/www/html
+      options: --user 82
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
