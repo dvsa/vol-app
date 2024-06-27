@@ -104,8 +104,6 @@ module "batch" {
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
-        memory = each.value["memory"],
-        vcpus = 1,
 /*        resourceRequirements = [
           { type = "VCPU", value = 1 },
           { type = "MEMORY", value = each.value["memory"] }
