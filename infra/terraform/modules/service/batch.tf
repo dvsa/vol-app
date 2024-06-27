@@ -99,9 +99,9 @@ module "batch" {
       platform_capabilities = ["FARGATE",]
 
       container_properties = jsonencode({
-        command = each.value["command"]
-        image = each.value["image"]
-        fargatePlatformConfiguration = {
+        command = each.value["command"],
+        image = each.value["image"],
+/*        fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
