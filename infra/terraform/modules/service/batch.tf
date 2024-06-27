@@ -101,15 +101,14 @@ module "batch" {
       container_properties = jsonencode({
         command = each.value["command"],
         image = each.value["image"],
-        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
-/*        resourceRequirements = [
+        resourceRequirements = [
           { type = "VCPU", value = 1 },
-          { type = "MEMORY", value = each.value["memory"] }
+          { type = "MEMORY", value = 2048 }
         ],
-        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003-D"
+        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
 /*        logConfiguration = {
           logDriver = "awslogs"
