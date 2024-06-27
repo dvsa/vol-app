@@ -106,7 +106,7 @@ module "batch" {
         },
         resourceRequirements = [
           { type = "VCPU", value = 1 },
-          { type = "MEMORY", value = 2048 }
+          { type = "MEMORY", value = each.value["memory"] },
         ],
         jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
