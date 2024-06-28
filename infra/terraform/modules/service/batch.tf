@@ -106,18 +106,18 @@ module "batch" {
         },
         resourceRequirements = [
           { type = "VCPU", value = 1 },
-          { type = "MEMORY", value = each.value["memory"] }
-        ]
+          { type = "MEMORY", value = each.value["memory"] },
+        ],
         jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
         #### CW Log group to be created later
-/*        logConfiguration = {
+        logConfiguration = {
           logDriver = "awslogs"
           options = {
-            awslogs-group         = local.vol_api_log_group
-            awslogs-region        = var.region
+            awslogs-group         = "/aws/ecs/vol-app-dev-api-cluster"
+            awslogs-region        = "eu-west-1"
             awslogs-stream-prefix = "ecs"
           }
-        }*/
+        }
       })
 
       attempt_duration_seconds = 60
