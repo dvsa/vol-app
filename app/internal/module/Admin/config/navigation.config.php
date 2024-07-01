@@ -451,6 +451,12 @@ return [
                             'label' => 'Notice periods',
                             'route' => 'admin-dashboard/admin-bus-registration/notice-period',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-bus-registration/local-authority',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Local Authorities (LTA)',
+                            'route' => 'admin-dashboard/admin-bus-registration/local-authority',
+                        ],
                     ],
                 ],
                 [

@@ -42,6 +42,19 @@ return [
                                     ],
                                 ],
                             ],
+                            'local-authority' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => 'local-authority[/:action][/:id]',
+                                    'constraints' => [
+                                        'action' => '(index|edit)',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\LocalAuthorityController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'admin-data-retention' => [
@@ -938,6 +951,7 @@ return [
             Admin\Controller\IrhpPermitSectorController::class => Admin\Controller\IrhpPermitSectorControllerFactory::class,
             Admin\Controller\IrhpPermitStockController::class => Admin\Controller\IrhpPermitStockControllerFactory::class,
             Admin\Controller\IrhpPermitWindowController::class => Admin\Controller\IrhpPermitWindowControllerFactory::class,
+            Admin\Controller\LocalAuthorityController::class => Admin\Controller\LocalAuthorityControllerFactory::class,
             Admin\Controller\MyDetailsController::class => Admin\Controller\MyDetailsControllerFactory::class,
             Admin\Controller\PartnerController::class => Admin\Controller\PartnerControllerFactory::class,
             Admin\Controller\PaymentProcessingFeesController::class => Admin\Controller\PaymentProcessingFeesControllerFactory::class,
