@@ -1,5 +1,6 @@
 
 module "batch" {
+  for_each = var.jobs
 
   source = "terraform-aws-modules/batch/aws"
 
@@ -91,7 +92,6 @@ module "batch" {
   }
 
   job_definitions = {
-    for_each = var.jobs
     job_configuration = {
       name                  = "batch-test-job"
       type                  = "container"
