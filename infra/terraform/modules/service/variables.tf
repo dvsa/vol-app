@@ -40,3 +40,13 @@ variable "services" {
   description = "The services to deploy"
   default     = {}
 }
+
+variable "jobs" {
+  type = map(object({
+    command   = list(string)
+    image     = string
+    memory    = string
+  }))
+  description = "The application command to run"
+  default = {}
+}
