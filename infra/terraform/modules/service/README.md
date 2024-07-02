@@ -45,7 +45,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
-| <a name="input_batch_name_prefix"></a> [batch\_name\_prefix](#input\_batch\_name\_prefix) | The Batch environment name prefix | `string(list)` | n/a | yes |
+| <a name="input_batch_name_prefix"></a> [batch\_name\_prefix](#input\_batch\_name\_prefix) | The Batch environment name prefix | `list(string)` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_jobs"></a> [jobs](#input\_jobs) | The application command to run | <pre>map(object({<br>    command   = list(string)<br>    image     = string<br>    memory    = string<br>  }))</pre> | `{}` | no |
