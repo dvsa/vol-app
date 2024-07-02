@@ -18,11 +18,6 @@ variable "vpc_id" {
   description = "The VPC ID"
 }
 
-variable "batch_name_prefix" {
-  type        = list(string)
-  description = "The Batch environment name prefix"
-}
-
 variable "services" {
   type = map(object({
     version    = string
