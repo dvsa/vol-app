@@ -18,7 +18,6 @@
 |------|--------|---------|
 | <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
 | <a name="module_batch_environment"></a> [batch\_environment](#module\_batch\_environment) | terraform-aws-modules/batch/aws | n/a |
-| <a name="module_batch_jobs"></a> [batch\_jobs](#module\_batch\_jobs) | terraform-aws-modules/batch/aws | n/a |
 | <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
 | <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | terraform-aws-modules/ecs/aws//modules/cluster | ~> 5.10 |
 | <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | terraform-aws-modules/ecs/aws//modules/service | ~> 5.10 |
@@ -45,7 +44,6 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
-| <a name="input_batch_name_prefix"></a> [batch\_name\_prefix](#input\_batch\_name\_prefix) | The Batch environment name prefix | `list(string)` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_jobs"></a> [jobs](#input\_jobs) | The application command to run | <pre>map(object({<br>    command   = list(string)<br>    image     = string<br>    memory    = string<br>  }))</pre> | `{}` | no |
