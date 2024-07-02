@@ -19,7 +19,7 @@ variable "vpc_id" {
 }
 
 variable "batch_name_prefix" {
-  type        = string(list)
+  type        = list(string)
   description = "The Batch environment name prefix"
 }
 
