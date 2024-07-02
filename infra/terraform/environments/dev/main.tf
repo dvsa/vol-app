@@ -235,6 +235,8 @@ module "service" {
     }
   }
 
+  batch_name_prefix = "batch-test"
+
   jobs = {
     "firstJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "queue:process-queue"],
