@@ -4,14 +4,14 @@ module "batch_environment" {
   source   = "terraform-aws-modules/batch/aws"
   version  = "~> 2.0.0"
 
-  create_instance_iam_role = each.value["create_roles"]
+  create_instance_iam_role = each.value["create_role"]
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
   instance_iam_role_path        = "/batch/"
   instance_iam_role_description = "IAM instance role/profile for AWS Batch ECS instance(s)"
   instance_iam_role_tags = {
     ModuleCreatedRole = "Yes"
   }
-  create_service_iam_role = each.value["create_roles"]
+  create_service_iam_role = each.value["create_role"]
   service_iam_role_name        = "${var.environment}-batch-test-batch-role"
   service_iam_role_path        = "/batch/"
   service_iam_role_description = "IAM service role for AWS Batch"
@@ -58,7 +58,7 @@ module "batch_environment" {
 
   # Job queus and scheduling policies
   job_queues = {
-    create_job_queues = each.value["create_queues"]
+    create_job_queues = each.value["create_queue"]
     low_priority = {
       name     = "BatchTestLowPriorityFargate"
       state    = "ENABLED"
