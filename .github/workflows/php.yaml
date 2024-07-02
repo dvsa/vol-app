@@ -73,6 +73,11 @@ jobs:
       # Temporary until this repository becomes a mono-repository.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ inputs.project }}
       - name: Install Composer
         run: |
           EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
@@ -90,11 +95,6 @@ jobs:
           RESULT=$?
           rm composer-setup.php
           exit $RESULT
-      - uses: actions/checkout@v4
-        with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
-          ref: ${{ inputs.ref || null }}
-          path: app/${{ inputs.project }}
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
