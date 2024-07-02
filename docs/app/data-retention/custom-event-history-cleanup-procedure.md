@@ -6,7 +6,7 @@ sidebar_position: 5
 ## `sp_custom_event_history_cleanup` Procedure Overview
 
 ## Purpose
-The `sp_custom_event_history_cleanup` stored procedure is designed to cleanse the `event_history` table by removing entries that are no longer linked to any active records across various entities. This procedure helps maintain data integrity and reduces storage overhead by eliminating orphaned records.
+The `sp_custom_event_history_cleanup` stored procedure is designed to cleanse the `event_history` table by removing entries that are no longer linked to any active records across various entities.
 
 ## Parameters
 - **`p_user_id` (INT):** The ID of the user performing the cleanup operation.

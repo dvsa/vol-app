@@ -5,6 +5,9 @@ sidebar_position: 3
 
 ## `sp_cleanup_organisation_user` Procedure Documentation
 
+## Important Note
+This procedure does not currently seem to be invoked by the olcs-backend D&DR command handlers or referenced in the data_retention_rule table as a custom procedure. Has it ever been used? Is it Still required?
+
 ## Overview
 The `sp_cleanup_organisation_user` procedure maintains data integrity within the `organisation_user` table by removing records that are linked to users marked as deleted.
 

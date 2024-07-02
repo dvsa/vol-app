@@ -6,6 +6,9 @@ sidebar_position: 4
 
 ## `sp_cleanup_publication_police_data` Procedure Documentation
 
+## Important Note
+This procedure does not currently seem to be invoked by the olcs-backend D&DR command handlers or referenced in the data_retention_rule table as a custom procedure. Has it ever been used? Is it Still required?
+
 ## Overview
 The `sp_cleanup_publication_police_data` procedure is designed to remove orphaned records from the `publication_police_data` table that no longer have corresponding entries in the `publication_link` table. This helps in maintaining the integrity of the database by ensuring that data references remain consistent.
 
