@@ -91,7 +91,7 @@ module "batch" {
     }
   }
 
-  job_definitions = {
+/*  job_definitions = {
     job_configuration = {
       name                  = "batch-test-job"
       type                  = "container"
@@ -139,7 +139,7 @@ module "batch" {
         JobDefinition = "BatchTest"
       }
     }
-  }
+  }*/
 
 //  tags = local.default_tags
 }
