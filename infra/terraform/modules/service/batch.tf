@@ -1,8 +1,8 @@
 
 module "batch_environment" {
   for_each = var.jobs
-  source = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0.0"
+  source   = "terraform-aws-modules/batch/aws"
+  version  = "~> 2.0.0"
 
   create_instance_iam_role = each.value["create_roles"]
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
@@ -35,8 +35,8 @@ module "batch_environment" {
         type      = "FARGATE"
         max_vcpus = 4
 
-      security_group_ids    = "DEV/APP/DEV-OLCS-PRI-API-SG"
-      subnet_ids            = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
+        security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
+        subnet_ids         = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
 
         # `tags = {}` here is not applicable for spot
       }
@@ -49,8 +49,8 @@ module "batch_environment" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-      security_group_ids    = "DEV/APP/DEV-OLCS-PRI-API-SG"
-      subnet_ids            = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
+        security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
+        subnet_ids         = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
         # `tags = {}` here is not applicable for spot
       }
     }
@@ -98,11 +98,11 @@ module "batch_environment" {
       name                  = "batch-test-job"
       type                  = "container"
       propagate_tags        = true
-      platform_capabilities = ["FARGATE",]
+      platform_capabilities = ["FARGATE", ]
 
       container_properties = jsonencode({
         command = each.value["command"],
-        image = each.value["image"],
+        image   = each.value["image"],
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
@@ -143,5 +143,5 @@ module "batch_environment" {
     }
   }
 
-//  tags = local.default_tags
+  //  tags = local.default_tags
 }

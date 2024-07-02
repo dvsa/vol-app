@@ -240,22 +240,36 @@ module "service" {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "queue:process-queue"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
+<<<<<<< HEAD
       create_role = true,
       create_queue = true,
       }
+=======
+    }
+>>>>>>> c27ac359fc5cb4b50e6dd2cf914f3d1a443c5208
     "secondJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "batch:duplicate-vehicle-removal"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
+<<<<<<< HEAD
       create_role = false,
       create_queue = false,
       }
+=======
+    }
+>>>>>>> c27ac359fc5cb4b50e6dd2cf914f3d1a443c5208
     "thirdJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "batch:duplicate-vehicle-warning"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
+<<<<<<< HEAD
       create_role = false,
       create_queue = false,
       }
     }
 }
+=======
+    }
+  }
+}
+>>>>>>> c27ac359fc5cb4b50e6dd2cf914f3d1a443c5208
