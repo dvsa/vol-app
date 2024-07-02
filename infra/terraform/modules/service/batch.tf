@@ -1,5 +1,6 @@
 
-module "batch" {
+module "batch_environment" {
+  for_each = var.batch_name_prefix
   source = "terraform-aws-modules/batch/aws"
 
   instance_iam_role_name        = "${var.environment}-${var.batch_name_prefix}-ecs-instance-role"
@@ -142,7 +143,7 @@ module "batch" {
 //  tags = local.default_tags
 }
 
-module "jobs" {
+module "batch_jobs" {
   for_each = var.jobs
 
   source = "terraform-aws-modules/batch/aws"
