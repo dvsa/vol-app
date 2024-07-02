@@ -235,7 +235,7 @@ module "service" {
     }
   }
 
-  batch_name_prefix = "batch-test"
+  batch_name_prefix = ["batch-test"]
 
   jobs = {
     "firstJob" = {
