@@ -2,6 +2,7 @@
 module "batch_environment" {
   for_each = var.jobs
   source = "terraform-aws-modules/batch/aws"
+  version = "~> 2.0.0"
 
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
   instance_iam_role_path        = "/batch/"
