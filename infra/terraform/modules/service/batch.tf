@@ -11,7 +11,7 @@ module "batch_environment" {
   instance_iam_role_tags = {
     ModuleCreatedRole = "Yes"
   }
-  create_service_iam_role = = each.value["create_roles"]
+  create_service_iam_role = each.value["create_roles"]
   service_iam_role_name        = "${var.environment}-batch-test-batch-role"
   service_iam_role_path        = "/batch/"
   service_iam_role_description = "IAM service role for AWS Batch"

@@ -43,17 +43,11 @@ variable "services" {
 
 variable "jobs" {
   type = map(object({
-<<<<<<< HEAD
     command       = list(string)
     image         = string
     memory        = string
     create_role   = bool
     create_queue  = bool
-=======
-    command = list(string)
-    image   = string
-    memory  = string
->>>>>>> c27ac359fc5cb4b50e6dd2cf914f3d1a443c5208
   }))
   description = "The application command to run"
   default     = {}
