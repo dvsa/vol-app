@@ -234,22 +234,22 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
-  
+
   jobs = {
     "firstJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "queue:process-queue"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
-      }
+    }
     "secondJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "batch:duplicate-vehicle-removal"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
-      }
+    }
     "thirdJob" = {
       command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "batch:duplicate-vehicle-warning"],
       image   = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
       memory  = "2048",
-      }
     }
+  }
 }
