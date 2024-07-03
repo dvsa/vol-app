@@ -90,7 +90,8 @@ module "batch_environment" {
     }
   }
 
-  job_definitions = {  
+  job_definitions = {
+    job_configuration = {  
       name                  = "${var.job_definitions["processQueue"]["job_name"]}-job"
       type                  = "container"
       propagate_tags        = true
@@ -129,4 +130,5 @@ module "batch_environment" {
       }
     }
   //  tags = local.default_tags
+  }
 }
