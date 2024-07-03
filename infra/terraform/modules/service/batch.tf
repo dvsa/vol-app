@@ -3,14 +3,14 @@ module "batch" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0.0"
 
-  instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
+  instance_iam_role_name        = "${var.environment}-batch-app-ecs-instance-role"
   instance_iam_role_path        = "/batch/"
   instance_iam_role_description = "IAM instance role/profile for AWS Batch ECS instance(s)"
   instance_iam_role_tags = {
     ModuleCreatedRole = "Yes"
   }
 
-  service_iam_role_name        = "${var.environment}-batch-test-batch-role"
+  service_iam_role_name        = "${var.environment}-batch-app-batch-role"
   service_iam_role_path        = "/batch/"
   service_iam_role_description = "IAM service role for AWS Batch"
   service_iam_role_tags = {
@@ -18,7 +18,7 @@ module "batch" {
   }
 
   create_spot_fleet_iam_role      = false
-  spot_fleet_iam_role_name        = "${var.environment}-batch-test-spot-role"
+  spot_fleet_iam_role_name        = "${var.environment}-batch-app-spot-role"
   spot_fleet_iam_role_path        = "/batch/"
   spot_fleet_iam_role_description = "IAM spot fleet role for AWS Batch"
   spot_fleet_iam_role_tags = {
