@@ -1,5 +1,5 @@
 
-module "batch_environment" {
+module "batch" {
   source   = "terraform-aws-modules/batch/aws"
   version  = "~> 2.0.0"
 
