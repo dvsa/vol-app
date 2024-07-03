@@ -1,7 +1,7 @@
 
 module "batch" {
-  source   = "terraform-aws-modules/batch/aws"
-  version  = "~> 2.0.0"
+  source  = "terraform-aws-modules/batch/aws"
+  version = "~> 2.0.0"
 
   instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
   instance_iam_role_path        = "/batch/"
@@ -91,7 +91,7 @@ module "batch" {
   }
 
   job_definitions = {
-    job_configuration = {  
+    job_configuration = {
       name                  = "${var.job_definitions["processQueue"]["job_name"]}-job"
       type                  = "container"
       propagate_tags        = true
@@ -129,6 +129,6 @@ module "batch" {
         JobDefinition = "BatchTest"
       }
     }
-  //  tags = local.default_tags
+    //  tags = local.default_tags
   }
 }

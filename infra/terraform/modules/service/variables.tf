@@ -43,10 +43,10 @@ variable "services" {
 
 variable "job_definitions" {
   type = map(object({
-    job_name      = string
-    command       = list(string)
-    image         = string
-    memory        = string
+    job_name = string
+    command  = list(string)
+    image    = string
+    memory   = string
   }))
   description = "The application command to run"
   default     = {}
