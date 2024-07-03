@@ -34,7 +34,7 @@ module "batch" {
         max_vcpus = 4
 
         security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1A", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1B", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1C"]
+        subnet_ids         = ["DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1A", "DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1B", "DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1C"]
 
         # `tags = {}` here is not applicable for spot
       }
@@ -48,7 +48,7 @@ module "batch" {
         max_vcpus = 4
 
         security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1A", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1B", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1C"]
+        subnet_ids         = ["DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1A", "DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1B", "DEV/APP/${upper(var.environment)}-OLCS-PRI-BATCH-1C"]
         # `tags = {}` here is not applicable for spot
       }
     }
