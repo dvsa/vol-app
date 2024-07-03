@@ -32,6 +32,7 @@ jobs:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
           path: app/cdn
+          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
       - name: Setup Python
         uses: actions/setup-python@v5

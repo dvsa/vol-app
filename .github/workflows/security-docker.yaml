@@ -7,8 +7,8 @@ on:
     - cron: 0 0 * * 1
 
 jobs:
-  terraform-scan:
-    name: Terraform
+  docker-scan:
+    name: Docker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,11 +16,11 @@ jobs:
         uses: aquasecurity/trivy-action@0.23.0
         with:
           exit-code: 1
-          scan-ref: "infra/terraform"
+          scan-ref: "infra/docker"
           scan-type: "config"
           format: "sarif"
           output: "trivy-results.sarif"
-          severity: "CRITICAL"
+          severity: "MEDIUM,HIGH,CRITICAL"
           limit-severities-for-sarif: true
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
