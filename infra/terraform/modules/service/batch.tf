@@ -27,28 +27,28 @@ module "batch" {
 
   compute_environments = {
     a_fargate = {
-      name_prefix = "batch-test-fargate"
+      name_prefix = "batch-app-fargate"
 
       compute_resources = {
         type      = "FARGATE"
         max_vcpus = 4
 
         security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
+        subnet_ids         = ["DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1A", "DEV/APP/DEV-OLCS-PRI-BATCH-1B", "DEV/APP/DEV-OLCS-PRI-BATCH-1C"]
 
         # `tags = {}` here is not applicable for spot
       }
     }
 
     b_fargate_spot = {
-      name_prefix = "batch-test-fargate_spot"
+      name_prefix = "batch-app-fargate_spot"
 
       compute_resources = {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
         security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/DEV-OLCS-PRI-API-1A", "DEV/APP/DEV-OLCS-PRI-API-1B", "DEV/APP/DEV-OLCS-PRI-API-1C"]
+        subnet_ids         = ["DEV/APP/DEV-OLCS-PRI-BATCH-1A", "DEV/APP/DEV-OLCS-PRI-BATCH-1B", "DEV/APP/DEV-OLCS-PRI-BATCH-1C"]
         # `tags = {}` here is not applicable for spot
       }
     }
