@@ -1,4 +1,4 @@
-# RFC-006: Making Docker images more accessible
+# RFC-007: Static non-prod platform environmentq
 
 ## Summary
 
