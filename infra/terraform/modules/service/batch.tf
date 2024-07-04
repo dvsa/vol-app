@@ -1,4 +1,12 @@
 
+provider "aws" {
+  region = local.region
+}
+
+locals {
+  region = "eu-west-1"
+}
+
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0.0"
@@ -108,6 +116,14 @@ module "batch" {
           { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
         ],
         jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+        logConfiguration = {
+          logDriver = "awslogs"
+          options = {
+            awslogs-group         = aws_cloudwatch_log_group.this.id
+            awslogs-region        = local.region
+            awslogs-stream-prefix = var.job_definitions["processQueue"]["job_name"]
+          }
+        }
       })
 
       attempt_duration_seconds = 60
