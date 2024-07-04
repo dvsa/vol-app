@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 locals {
-  name = "vol-app-batch"
+  name   = "vol-app-batch"
   region = "eu-west-1"
 }
 
