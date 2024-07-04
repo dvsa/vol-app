@@ -8,8 +8,8 @@ locals {
   region = "eu-west-1"
 }
 
-resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/batch/${local.name}"
+resource "aws_cloudwatch_log_group" "batch" {
+  name              = "/aws/batch/${local.name}-${var.environment}-${job_name}"
   retention_in_days = 30
 }
 
@@ -125,7 +125,7 @@ module "batch" {
         logConfiguration = {
           logDriver = "awslogs"
           options = {
-            awslogs-group         = aws_cloudwatch_log_group.this.id
+            awslogs-group         = aws_cloudwatch_log_group.batch.id
             awslogs-region        = local.region
             awslogs-stream-prefix = var.job_definitions["processQueue"]["job_name"]
           }
