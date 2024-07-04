@@ -1,18 +1,4 @@
 
-provider "aws" {
-  region = local.region
-}
-
-locals {
-  name   = "vol-app-batch"
-  region = "eu-west-1"
-}
-
-resource "aws_cloudwatch_log_group" "batch" {
-  name              = "/aws/batch/${local.name}-${var.environment}-${job_name}"
-  retention_in_days = 30
-}
-
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0.0"
@@ -122,14 +108,6 @@ module "batch" {
           { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
         ],
         jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
-        logConfiguration = {
-          logDriver = "awslogs"
-          options = {
-            awslogs-group         = aws_cloudwatch_log_group.batch.id
-            awslogs-region        = local.region
-            awslogs-stream-prefix = var.job_definitions["processQueue"]["job_name"]
-          }
-        }
       })
 
       attempt_duration_seconds = 60
