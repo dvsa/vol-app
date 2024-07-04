@@ -8,6 +8,11 @@ locals {
   region = "eu-west-1"
 }
 
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/aws/batch/${local.name}"
+  retention_in_days = 30
+}
+
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0.0"
