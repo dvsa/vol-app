@@ -27,8 +27,7 @@ module "batch" {
 
   compute_environments = {
     a_fargate = {
-      name = "vol-app-${var.environment}-compute-environment"
-      name_prefix = "fargate"
+      name_prefix = "batch-app-fargate"
 
       compute_resources = {
         type      = "FARGATE"
@@ -42,8 +41,7 @@ module "batch" {
     }
 
     b_fargate_spot = {
-      name = "vol-app-${var.environment}-compute-environment"
-      name_prefix = "fargate_spot"
+      name_prefix = "batch-app-fargate_spot"
 
       compute_resources = {
         type      = "FARGATE_SPOT"
