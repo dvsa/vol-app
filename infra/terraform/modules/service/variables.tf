@@ -48,8 +48,6 @@ variable "job_definitions" {
     image    = string
     memory   = string
   }))
-
   description = "The batch job defintion settings"
   default     = {}
 }
-
