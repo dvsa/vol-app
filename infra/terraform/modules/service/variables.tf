@@ -40,3 +40,14 @@ variable "services" {
   description = "The services to deploy"
   default     = {}
 }
+
+variable "job_definitions" {
+  type = map(object({
+    job_name = string
+    command  = list(string)
+    image    = string
+    memory   = string
+  }))
+  description = "The batch job defintion settings"
+  default     = {}
+}

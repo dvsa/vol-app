@@ -17,11 +17,12 @@
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
+| <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 2.0.0 |
 | <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
 | <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | terraform-aws-modules/ecs/aws//modules/cluster | ~> 5.10 |
 | <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | terraform-aws-modules/ecs/aws//modules/service | ~> 5.10 |
 | <a name="module_log_bucket"></a> [log\_bucket](#module\_log\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 4.0 |
-| <a name="module_records"></a> [records](#module\_records) | terraform-aws-modules/route53/aws//modules/records | ~> 2.0 |
+| <a name="module_records"></a> [records](#module\_records) | terraform-aws-modules/route53/aws//modules/records | ~> 3.1 |
 | <a name="module_route53_records"></a> [route53\_records](#module\_route53\_records) | terraform-aws-modules/acm/aws | ~> 5.0 |
 
 ## Resources
@@ -45,6 +46,7 @@
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
+| <a name="input_job_definitions"></a> [job\_definitions](#input\_job\_definitions) | The batch job defintion settings | <pre>map(object({<br>    job_name = string<br>    command  = list(string)<br>    image    = string<br>    memory   = string<br>  }))</pre> | `{}` | no |
 | <a name="input_services"></a> [services](#input\_services) | The services to deploy | <pre>map(object({<br>    version    = string<br>    repository = string<br>    cpu        = number<br>    memory     = number<br>    task_iam_role_statements = list(object({<br>      effect    = string<br>      actions   = list(string)<br>      resources = list(string)<br>    }))<br>    add_cdn_url_to_env        = optional(bool, false)<br>    lb_listener_arn           = string<br>    listener_rule_priority    = optional(number, 10)<br>    listener_rule_host_header = optional(string, "*")<br>    security_group_ids        = list(string)<br>    subnet_ids                = list(string)<br>    vpc_id                    = optional(string, null)<br>  }))</pre> | `{}` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The VPC ID | `string` | n/a | yes |
 
