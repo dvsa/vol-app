@@ -33,8 +33,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"
-        subnet_ids         = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
+        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
+        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
 
         # `tags = {}` here is not applicable for spot
       }
@@ -47,8 +47,8 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-        security_group_ids = "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"
-        subnet_ids         = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
+        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
+        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
         # `tags = {}` here is not applicable for spot
       }
     }
@@ -107,7 +107,7 @@ module "batch" {
           { type = "VCPU", value = "1" },
           { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
         ],
-        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
       })
 
       attempt_duration_seconds = 60
