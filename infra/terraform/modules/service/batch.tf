@@ -3,14 +3,18 @@ module "batch" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0.0"
 
-  instance_iam_role_name        = "${var.environment}-batch-test-ecs-instance-role"
+
+  instance_iam_role_name        = "${var.environment}-batch-app-ecs-instance-role"
+
   instance_iam_role_path        = "/batch/"
   instance_iam_role_description = "IAM instance role/profile for AWS Batch ECS instance(s)"
   instance_iam_role_tags = {
     ModuleCreatedRole = "Yes"
   }
 
-  service_iam_role_name        = "${var.environment}-batch-test-batch-role"
+
+  service_iam_role_name        = "${var.environment}-batch-app-batch-role"
+
   service_iam_role_path        = "/batch/"
   service_iam_role_description = "IAM service role for AWS Batch"
   service_iam_role_tags = {
@@ -18,7 +22,9 @@ module "batch" {
   }
 
   create_spot_fleet_iam_role      = false
-  spot_fleet_iam_role_name        = "${var.environment}-batch-test-spot-role"
+
+  spot_fleet_iam_role_name        = "${var.environment}-batch-app-spot-role"
+
   spot_fleet_iam_role_path        = "/batch/"
   spot_fleet_iam_role_description = "IAM spot fleet role for AWS Batch"
   spot_fleet_iam_role_tags = {
@@ -33,8 +39,10 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1A", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1B", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1C"]
+
+        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
+        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
+
 
         # `tags = {}` here is not applicable for spot
       }
@@ -47,8 +55,10 @@ module "batch" {
         type      = "FARGATE_SPOT"
         max_vcpus = 4
 
-        security_group_ids = "DEV/APP/DEV-OLCS-PRI-API-SG"
-        subnet_ids         = ["DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1A", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1B", "DEV/APP/upper(${var.environment})-OLCS-PRI-BATCH-1C"]
+
+        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
+        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
+
         # `tags = {}` here is not applicable for spot
       }
     }
@@ -107,7 +117,9 @@ module "batch" {
           { type = "VCPU", value = "1" },
           { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
         ],
-        jobRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+
+        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+
       })
 
       attempt_duration_seconds = 60
@@ -131,4 +143,6 @@ module "batch" {
     }
     //  tags = local.default_tags
   }
+
 }
+
