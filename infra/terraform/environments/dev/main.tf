@@ -31,7 +31,7 @@ data "aws_subnets" "this" {
 
 data "aws_secretsmanager_secret" "this" {
   for_each = toset(setsubtract(local.service_names, ["cli"]))
-  
+
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
 
@@ -237,16 +237,16 @@ module "service" {
 
   // Batch CLI Jobs configuration
   batch_environment = "DEV/APP/DEV"
-  batch_role = "arn:aws:iam::054614622558:role/batch-execution-role"
+  batch_role        = "arn:aws:iam::054614622558:role/batch-execution-role"
 
   jobs = {
     "processQueue" = {
-      job_name    = "processQueue",
-      command     = "queue:process-queue",
-      repository  = data.aws_ecr_repository.this["cli"].repository_url
-      version     = var.cli_image_tag
-      memory      = "2048",
-      cpu         = "1"
+      job_name   = "processQueue",
+      command    = "queue:process-queue",
+      repository = data.aws_ecr_repository.this["cli"].repository_url
+      version    = var.cli_image_tag
+      memory     = "2048",
+      cpu        = "1"
     }
   }
 }

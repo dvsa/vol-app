@@ -43,31 +43,31 @@ variable "services" {
 
 variable "jobs" {
   type = map(object({
-    job_name    = string
-    command     = string
-    repository  = string
-    version     = string
-    memory      = string
-    cpu         = string
+    job_name   = string
+    command    = string
+    repository = string
+    version    = string
+    memory     = string
+    cpu        = string
   }))
   description = "The batch job defintion settings"
   default     = {}
 }
 
 variable "batch_environment" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "The environment tag in which batch is running"
 }
 
 variable "batch_command" {
-  type = string
-  default = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"
+  type        = string
+  default     = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"
   description = "The base command batch will run"
 }
 
 variable "batch_role" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "The execution role batch will use"
 }

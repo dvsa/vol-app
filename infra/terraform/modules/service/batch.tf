@@ -75,8 +75,8 @@ module "batch" {
       platform_capabilities = ["FARGATE", ]
 
       container_properties = jsonencode({
-        command           = [var.batch_command, var.jobs["processQueue"]["command"],]
-        image             = "${var.jobs["processQueue"]["repository"]}:${var.jobs["processQueue"]["version"]}"
+        command = [var.batch_command, var.jobs["processQueue"]["command"], ]
+        image   = "${var.jobs["processQueue"]["repository"]}:${var.jobs["processQueue"]["version"]}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
