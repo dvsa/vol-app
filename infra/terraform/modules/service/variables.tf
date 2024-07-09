@@ -44,7 +44,7 @@ variable "services" {
 variable "jobs" {
   type = map(object({
     job_name    = string
-    argument    = string
+    command     = string
     repository  = string
     version     = string
     memory      = string
