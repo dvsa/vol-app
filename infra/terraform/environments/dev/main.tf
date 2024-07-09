@@ -65,7 +65,6 @@ module "service" {
   source = "../../modules/service"
 
   environment = "dev"
-  batch_environment = "DEV/APP/DEV"
 
   domain_name    = "dev.olcs.dev-dvsacloud.uk"
   assets_version = var.assets_version
@@ -235,6 +234,10 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
+
+  // Batch CLI Jobs configuration
+  batch_environment = "DEV/APP/DEV"
+  batch_role = "arn:aws:iam::054614622558:role/batch-execution-role"
 
   jobs = {
     "processQueue" = {

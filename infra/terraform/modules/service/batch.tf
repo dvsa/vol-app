@@ -84,7 +84,7 @@ module "batch" {
           { type = "VCPU", value = var.jobs["processQueue"]["cpu"] },
           { type = "MEMORY", value = var.jobs["processQueue"]["memory"] },
         ],
-        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
+        executionRoleArn = var.batch_role
       })
 
       attempt_duration_seconds = 60

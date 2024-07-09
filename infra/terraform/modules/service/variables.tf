@@ -57,9 +57,19 @@ variable "jobs" {
 variable "batch_environment" {
   type = string
   default = ""
+  description = "The environment tag in which batch is running"
 }
 
 variable "batch_command" {
   type = string
   default = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"
+  description = "The base command batch will run"
 }
+
+variable "batch_role" {
+  type = string
+  default = ""
+  description = "The execution role batch will use"
+}
+
+arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003
