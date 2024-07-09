@@ -41,13 +41,23 @@ variable "services" {
   default     = {}
 }
 
-variable "job_definitions" {
+variable "jobs" {
   type = map(object({
     job_name = string
-    command  = list(string)
-    image    = string
+    argument = string
+    repository = string
+    version    = string
     memory   = string
+    cpu      = string
+    batch_environment = string
+    batch_subnets = list(string)
+    batch_security_groups = list(string)
   }))
   description = "The batch job defintion settings"
   default     = {}
+}
+
+variable "batch_command" {
+  type = string
+  default = "/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"
 }

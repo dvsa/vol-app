@@ -1,5 +1,5 @@
 locals {
-  service_names = ["api", "selfserve", "internal"]
+  service_names = ["api", "selfserve", "internal", "cli"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 }
@@ -235,12 +235,17 @@ module "service" {
     }
   }
 
-  job_definitions = {
+  jobs = {
     "processQueue" = {
       job_name = "processQueue",
-      command  = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "queue:process-queue"],
-      image    = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
+      command  = "queue:process-queue",
+      repository  = data.aws_ecr_repository.this["cli"].repository_url
+      version     = var.cli_image_tag
       memory   = "2048",
+      cpu      = "1"
     }
+    batch_environment = "DEV/APP/DEV"
+    batch_security_groups = data.aws_subnets.this["API"].ids
+    batch_subnets = ["${batch_environment}-OLCS-PRI-BATCH-1A", "${batch_environment}-OLCS-PRI-BATCH-1B", "${batch_environment}-OLCS-PRI-BATCH-1C"]
   }
 }

@@ -17,14 +17,6 @@ module "batch" {
     ModuleCreatedRole = "Yes"
   }
 
-  create_spot_fleet_iam_role      = false
-  spot_fleet_iam_role_name        = "${var.environment}-batch-app-spot-role"
-  spot_fleet_iam_role_path        = "/batch/"
-  spot_fleet_iam_role_description = "IAM spot fleet role for AWS Batch"
-  spot_fleet_iam_role_tags = {
-    ModuleCreatedRole = "Yes"
-  }
-
   compute_environments = {
     a_fargate = {
       name_prefix = "batch-app-fargate"
@@ -33,23 +25,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-API-SG"]
-        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1C"]
-
-        # `tags = {}` here is not applicable for spot
-      }
-    }
-
-    b_fargate_spot = {
-      name_prefix = "batch-app-fargate_spot"
-
-      compute_resources = {
-        type      = "FARGATE_SPOT"
-        max_vcpus = 4
-
-        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-API-SG"]
-        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(${var.environment})) : upper(${var.environment})-OLCS-PRI-BATCH-1C"]
-        # `tags = {}` here is not applicable for spot
+        security_group_ids = var.jobs.batch_security_group_ids
+        subnets            = var.jobs.batch_subnets
       }
     }
   }
@@ -92,20 +69,20 @@ module "batch" {
 
   job_definitions = {
     job_configuration = {
-      name                  = "${var.job_definitions["processQueue"]["job_name"]}-job"
+      name                  = "${var.jobs["processQueue"]["job_name"]}-job"
       type                  = "container"
       propagate_tags        = true
       platform_capabilities = ["FARGATE", ]
 
       container_properties = jsonencode({
-        command = var.job_definitions["processQueue"]["command"],
-        image   = var.job_definitions["processQueue"]["image"],
+        command           = [var.jobs["processQueue"]["command"],]
+        image             = "${var.jobs["processQueue"]["repository"]}:${var.jobs["processQueue"]["version"]}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
-          { type = "VCPU", value = "1" },
-          { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
+          { type = "VCPU", value = var.jobs["processQueue"]["cpu"] },
+          { type = "MEMORY", value = var.jobs["processQueue"]["memory"] },
         ],
         executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
       })
@@ -124,11 +101,6 @@ module "batch" {
           }
         }
       }
-
-      tags = {
-        JobDefinition = "BatchTest"
-      }
     }
-    //  tags = local.default_tags
   }
 }
