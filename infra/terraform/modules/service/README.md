@@ -44,8 +44,9 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
-| <a name="input_batch_command"></a> [batch\_command](#input\_batch\_command) | n/a | `string` | `"/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"` | no |
-| <a name="input_batch_environment"></a> [batch\_environment](#input\_batch\_environment) | n/a | `string` | `""` | no |
+| <a name="input_batch_command"></a> [batch\_command](#input\_batch\_command) | The base command batch will run | `string` | `"/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php"` | no |
+| <a name="input_batch_environment"></a> [batch\_environment](#input\_batch\_environment) | The environment tag in which batch is running | `string` | `""` | no |
+| <a name="input_batch_role"></a> [batch\_role](#input\_batch\_role) | The execution role batch will use | `string` | `""` | no |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |
 | <a name="input_jobs"></a> [jobs](#input\_jobs) | The batch job defintion settings | <pre>map(object({<br>    job_name    = string<br>    command     = string<br>    repository  = string<br>    version     = string<br>    memory      = string<br>    cpu         = string<br>  }))</pre> | `{}` | no |
