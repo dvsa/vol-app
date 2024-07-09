@@ -49,7 +49,6 @@ variable "jobs" {
     version    = string
     memory   = string
     cpu      = string
-    batch_environment = string
     batch_subnets = list(string)
     batch_security_groups = list(string)
   }))
