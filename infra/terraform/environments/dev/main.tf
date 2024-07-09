@@ -30,9 +30,10 @@ data "aws_subnets" "this" {
 }
 
 data "aws_secretsmanager_secret" "this" {
+  
   for_each = toset(local.service_names)
 
-  name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
+  name = setsubtract(["DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"], ["cli"])
 }
 
 data "aws_cognito_user_pools" "this" {
