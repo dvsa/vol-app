@@ -246,6 +246,6 @@ module "service" {
     }
     batch_environment = "DEV/APP/DEV"
     batch_security_groups = data.aws_subnets.this["API"].ids
-    batch_subnets = ["${batch_environment}-OLCS-PRI-BATCH-1A", "${batch_environment}-OLCS-PRI-BATCH-1B", "${batch_environment}-OLCS-PRI-BATCH-1C"]
+    batch_subnets = ["DEV/APP/DEV-OLCS-PRI-BATCH-1A", "DEV/APP/DEV-OLCS-PRI-BATCH-1B", "DEV/APP/DEV-OLCS-PRI-BATCH-1C"]
   }
 }
