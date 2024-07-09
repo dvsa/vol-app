@@ -238,12 +238,12 @@ module "service" {
 
   jobs = {
     "processQueue" = {
-      job_name = "processQueue",
-      command  = "queue:process-queue",
+      job_name    = "processQueue",
+      command     = "queue:process-queue",
       repository  = data.aws_ecr_repository.this["cli"].repository_url
       version     = var.cli_image_tag
-      memory   = "2048",
-      cpu      = "1"
+      memory      = "2048",
+      cpu         = "1"
     }
   }
 }
