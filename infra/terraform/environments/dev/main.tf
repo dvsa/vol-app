@@ -65,6 +65,7 @@ module "service" {
   source = "../../modules/service"
 
   environment = "dev"
+  batch_environment = "DEV/APP/DEV"
 
   domain_name    = "dev.olcs.dev-dvsacloud.uk"
   assets_version = var.assets_version
@@ -244,7 +245,5 @@ module "service" {
       memory   = "2048",
       cpu      = "1"
     }
-    batch_security_groups = data.aws_subnets.this["API"].ids
-    batch_subnets = ["DEV/APP/DEV-OLCS-PRI-BATCH-1A", "DEV/APP/DEV-OLCS-PRI-BATCH-1B", "DEV/APP/DEV-OLCS-PRI-BATCH-1C"]
   }
 }

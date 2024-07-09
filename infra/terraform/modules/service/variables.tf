@@ -43,17 +43,20 @@ variable "services" {
 
 variable "jobs" {
   type = map(object({
-    job_name = string
-    argument = string
-    repository = string
-    version    = string
-    memory   = string
-    cpu      = string
-    batch_subnets = list(string)
-    batch_security_groups = list(string)
+    job_name    = string
+    argument    = string
+    repository  = string
+    version     = string
+    memory      = string
+    cpu         = string
   }))
   description = "The batch job defintion settings"
   default     = {}
+}
+
+variable "batch_environment" {
+  type = string
+  default = ""
 }
 
 variable "batch_command" {
