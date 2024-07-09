@@ -71,5 +71,3 @@ variable "batch_role" {
   default = ""
   description = "The execution role batch will use"
 }
-
-arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003
