@@ -25,7 +25,7 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = ["${var.batch_environment})--OLCS-PRI-API-SG"]
+        security_group_ids = ["${var.batch_environment})-OLCS-PRI-API-SG"]
         subnets            = ["${var.batch_environment})-OLCS-PRI-BATCH-1A", "${var.batch_environment})-OLCS-PRI-BATCH-1B", "${var.batch_environment})-OLCS-PRI-BATCH-1C"]
       }
     }
