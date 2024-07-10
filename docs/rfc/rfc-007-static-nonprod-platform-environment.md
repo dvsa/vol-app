@@ -1,4 +1,4 @@
-# RFC-007: Static non-prod platform environmentq
+# RFC-007: Static non-prod platform environments
 
 ## Summary
 
