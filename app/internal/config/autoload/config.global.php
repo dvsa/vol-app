@@ -89,7 +89,15 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-iuweb/iuweb.log')
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-iuweb/iuweb.log'),
+                        'filters' => [
+                            'priority' => [
+                                'name' => 'priority',
+                                'options' => [
+                                    'priority' => \Laminas\Log\Logger::WARN
+                                ]
+                            ],
+                        ]
                     ],
                 ]
             ]
@@ -98,7 +106,15 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-iuweb/iuweb.log')
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-iuweb/iuweb.log'),
+                        'filters' => [
+                            'priority' => [
+                                'name' => 'priority',
+                                'options' => [
+                                    'priority' => \Laminas\Log\Logger::WARN
+                                ]
+                            ],
+                        ]
                     ],
                 ]
             ]
