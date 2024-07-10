@@ -8,7 +8,7 @@ This RFC proposes having a static platform environment (possibly QA) to be used 
 
 ### Application container release pipeline
 
-As per [rfc-005](https://github.com/dvsa/vol-app/blob/main/docs/rfc/rfc-005-add-terraform-to-mono-repository.md) the scope of terraform code deployed to the application repo was limited to prevent further Terraform dependency complexity. As the time of writing this has not been superseded by any future request for comment that amends this stance.
+As per [rfc-005](./rfc-005-add-terraform-to-mono-repository.md) the scope of terraform code deployed to the application repo was limited to prevent further Terraform dependency complexity. As the time of writing this has not been superseded by any future request for comment that amends this stance.
 
 The existing pipeline fundamentally guides the deployment of containers to ECS clusters that sit upon the entirety of the VOL cloud infrastructure. Any change to just the container image (which as per current understanding will be a significant amount of the change requests going forward) will be efficient as per design. This means that container change will be ready for rapid promotion through the remaining three environment leading to decrease in release cadence.
 
