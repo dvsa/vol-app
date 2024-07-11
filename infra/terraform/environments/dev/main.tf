@@ -11,7 +11,7 @@ data "aws_ecr_repository" "this" {
 }
 
 data "aws_security_group" "this" {
-  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
+  for_each = toset(setsubtract(local.legacy_service_names, ["BATCH"]))
 
   name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
@@ -40,13 +40,13 @@ data "aws_cognito_user_pools" "this" {
 }
 
 data "aws_lb" "this" {
-  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
+  for_each = toset(setsubtract(local.legacy_service_names, ["BATCH"]))
 
   name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
-  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
+  for_each = toset(setsubtract(local.legacy_service_names, ["BATCH"]))
 
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
