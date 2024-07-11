@@ -236,7 +236,7 @@ module "service" {
   }
   
   batch = {
-    version    = var.cli_image_tag
+    version    = "latest"
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
     iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"
