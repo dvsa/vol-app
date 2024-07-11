@@ -246,7 +246,7 @@ module "service" {
     jobs = [
       {
         name     = "process-queue",
-        command = ["queue:process-queue"],
+        commands = ["queue:process-queue"],
         memory   = 1024,
       },
     ]
