@@ -242,7 +242,7 @@ module "service" {
 
     iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"
     security_group_ids = [data.aws_subnets.this["API"].ids]
-    subnet_ids = [data.aws_subnets.this["BATCH"].ids]
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
 
     jobs = [
       {
