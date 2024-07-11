@@ -1,6 +1,6 @@
 locals {
 
-  job_definitions = { for job in var.batch.jobs : job.name => {
+  job_definitions = { for j, s in var.batch.jobs : job.name => {
     name = job.name 
     type = "container"
     propagate_tags        = true
@@ -62,8 +62,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = [var.batch["security_group_ids"]]
-        subnets            = [var.batch["subnet_ids"]]
+        security_group_ids = [var.batch.security_group_ids]
+        subnets            = [var.batch.subnet_ids]
       }
     }
   }
