@@ -234,25 +234,9 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
-
-  // Batch CLI Jobs configuration
- /* batch_environment = "DEV/APP/DEV"
-  batch_role        = "arn:aws:iam::054614622558:role/batch-execution-role"
-
-  jobs = {
-    "processQueue" = {
-      job_name   = "processQueue",
-      command    = "queue:process-queue",
-      repository = data.aws_ecr_repository.this["cli"].repository_url
-      version    = var.cli_image_tag
-      memory     = "2048",
-      cpu        = "1"
-    }
-  }
-}*/
-
+  
   batch = {
-    version    = cli_image_tag
+    version    = var.cli_image_tag
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
     iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"

@@ -42,7 +42,6 @@ variable "services" {
 }
 
 variable "batch" {
-  description = "Configuration for the batch process"
   type = map(object({
     version                  = string
     repository               = string
@@ -56,4 +55,5 @@ variable "batch" {
       memory   = optional(number, 2048)
       }))
     }))
+    description = "Configuration for the batch process"
   }
