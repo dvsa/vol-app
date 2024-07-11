@@ -1,7 +1,7 @@
 locals {
 
-  job_definitions = { for jobs in var.batch.jobs : jobs.name => {
-    name = jobs.name 
+  job_definitions = { for job in var.batch.job : job.name => {
+    name = job.name 
     type = "container"
     propagate_tags        = true
     platform_capabilities = ["FARGATE", ]
