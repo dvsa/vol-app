@@ -1,13 +1,13 @@
 locals {
 
-  jobs = { for job in var.batch.job_configuration["jobs"] : job.name => {
+  jobs = { for job in var.batch.jobs : job.name => {
     name = job.name 
     type = "container"
     propagate_tags        = true
     platform_capabilities = ["FARGATE", ]
 
     container_properties = jsonencode({
-        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.batch["jobs"]["commands"] ]
+        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.batch["commands"] ]
         image   = "${"var.batch.repository"}:${"var.batch.version"}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
