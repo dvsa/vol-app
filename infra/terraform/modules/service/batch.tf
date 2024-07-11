@@ -1,3 +1,40 @@
+locals {
+
+  jobs = { for job in var.batch.jobs : job.name => {
+    name = job.name 
+    type = "container"
+    propagate_tags        = true
+    platform_capabilities = ["FARGATE", ]
+
+    container_properties = jsonencode({
+        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.batch["jobs"]["command"] ]
+        image   = "${"var.batch.repository"}:${"var.batch.version"}"
+        fargatePlatformConfiguration = {
+          platformVersion = "LATEST"
+        },
+        resourceRequirements = [
+          { type = "VCPU", value = var.batch["jobs"][cpu] },
+          { type = "MEMORY", value = var.batch["jobs"][memory] },
+        ],
+        executionRoleArn = var.batch["iam_role_arn"]
+      })
+      
+    attempt_duration_seconds = 60
+    retry_strategy = {
+      attempts = 3
+      evaluate_on_exit = {
+        retry_error = {
+          action       = "RETRY"
+          on_exit_code = 1
+        }
+        exit_success = {
+          action       = "EXIT"
+          on_exit_code = 0
+         }}}  
+    }
+  }
+}
+
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
@@ -25,8 +62,8 @@ module "batch" {
         type      = "FARGATE"
         max_vcpus = 4
 
-        security_group_ids = ["${var.batch_environment})-OLCS-PRI-API-SG"]
-        subnets            = ["${var.batch_environment})-OLCS-PRI-BATCH-1A", "${var.batch_environment})-OLCS-PRI-BATCH-1B", "${var.batch_environment})-OLCS-PRI-BATCH-1C"]
+        security_group_ids = var.batch.security_group_ids
+        subnets            = var.batch.subnet_ids
       }
     }
   }
@@ -75,7 +112,7 @@ module "batch" {
       platform_capabilities = ["FARGATE", ]
 
       container_properties = jsonencode({
-        command = [var.batch_command, var.jobs["processQueue"]["command"], ]
+        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.jobs["processQueue"]["command"], ]
         image   = "${var.jobs["processQueue"]["repository"]}:${var.jobs["processQueue"]["version"]}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"

@@ -1,7 +1,7 @@
 locals {
   service_names = ["api", "selfserve", "internal", "cli"]
 
-  legacy_service_names = ["API", "IUWEB", "SSWEB"]
+  legacy_service_names = ["API", "IUWEB", "SSWEB", "BATCH"]
 }
 
 data "aws_ecr_repository" "this" {
@@ -11,7 +11,7 @@ data "aws_ecr_repository" "this" {
 }
 
 data "aws_security_group" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
 
   name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
@@ -40,13 +40,13 @@ data "aws_cognito_user_pools" "this" {
 }
 
 data "aws_lb" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
 
   name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = toset(setsubtract(local.legacy_service_names, ["cli"]))
 
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
@@ -236,7 +236,7 @@ module "service" {
   }
 
   // Batch CLI Jobs configuration
-  batch_environment = "DEV/APP/DEV"
+ /* batch_environment = "DEV/APP/DEV"
   batch_role        = "arn:aws:iam::054614622558:role/batch-execution-role"
 
   jobs = {
@@ -248,5 +248,23 @@ module "service" {
       memory     = "2048",
       cpu        = "1"
     }
+  }
+}*/
+
+  batch = {
+    version    = var.cli_image_tag
+    repository = data.aws_ecr_repository.this["cli"].repository_url
+
+    iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"
+    security_group_ids = data.aws_subnets.this["API"].ids
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
+
+    jobs = [
+      {
+        name     = "process-queue",
+        command = ["queue:process-queue"],
+        memory   = 1024,
+      },
+    ]
   }
 }
