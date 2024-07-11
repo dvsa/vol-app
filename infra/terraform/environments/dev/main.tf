@@ -241,7 +241,7 @@ module "service" {
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
     iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"
-    security_group_ids = data.aws_security_group.this["API"].ids
+    security_group_ids = data.aws_security_group.this["API"].id
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
     jobs = [
