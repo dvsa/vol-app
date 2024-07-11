@@ -11,7 +11,7 @@ data "aws_ecr_repository" "this" {
 }
 
 data "aws_security_group" "this" {
-  for_each = toset(setsubtract(local.legacy_service_names, ["BATCH"]))
+  for_each = toset(local.legacy_service_names)
 
   name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
@@ -241,8 +241,8 @@ module "service" {
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
     iam_role_arn = "arn:aws:iam::054614622558:role/batch-execution-role"
-    security_group_ids = data.aws_subnets.this["API"].ids
-    subnet_ids = data.aws_subnets.this["BATCH"].ids
+    security_group_ids = [data.aws_subnets.this["API"].ids]
+    subnet_ids = [data.aws_subnets.this["BATCH"].ids]
 
     jobs = [
       {
