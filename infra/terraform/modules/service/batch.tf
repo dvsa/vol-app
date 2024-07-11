@@ -1,6 +1,6 @@
 locals {
 
-  jobs = { for job in var.batch.jobs : job.name => {
+  jobs = flatten({ for job in var.batch.jobs : job.name => {
     name = job.name 
     type = "container"
     propagate_tags        = true
@@ -32,7 +32,7 @@ locals {
           on_exit_code = 0
          }}}  
     }
-  }
+  })
 }
 
 
