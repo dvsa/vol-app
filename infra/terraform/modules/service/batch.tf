@@ -1,6 +1,6 @@
 locals {
 
-  job_definitions = { for job in var.batch.jobs : jobs.name => {
+  job_definitions = { for job in var.batch : jobs.name => {
     name = jobs.name 
     type = "container"
     propagate_tags        = true
