@@ -102,42 +102,5 @@ module "batch" {
         JobQueue = "High priority job queue"
       }
     }
-  }
-
-  job_definitions = {
-    job_configuration = {
-      name                  = "${var.jobs["processQueue"]["job_name"]}-job"
-      type                  = "container"
-      propagate_tags        = true
-      platform_capabilities = ["FARGATE", ]
-
-      container_properties = jsonencode({
-        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.jobs["processQueue"]["command"], ]
-        image   = "${var.jobs["processQueue"]["repository"]}:${var.jobs["processQueue"]["version"]}"
-        fargatePlatformConfiguration = {
-          platformVersion = "LATEST"
-        },
-        resourceRequirements = [
-          { type = "VCPU", value = var.jobs["processQueue"]["cpu"] },
-          { type = "MEMORY", value = var.jobs["processQueue"]["memory"] },
-        ],
-        executionRoleArn = var.batch_role
-      })
-
-      attempt_duration_seconds = 60
-      retry_strategy = {
-        attempts = 3
-        evaluate_on_exit = {
-          retry_error = {
-            action       = "RETRY"
-            on_exit_code = 1
-          }
-          exit_success = {
-            action       = "EXIT"
-            on_exit_code = 0
-          }
-        }
-      }
-    }
-  }
+  }  
 }
