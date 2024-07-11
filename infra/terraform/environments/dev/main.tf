@@ -236,7 +236,7 @@ module "service" {
   }
   
   batch = {
-    job_configuration = {
+    "job_configuration" = {
     version    = var.cli_image_tag
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
