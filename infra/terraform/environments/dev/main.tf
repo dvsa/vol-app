@@ -236,6 +236,7 @@ module "service" {
   }
   
   batch = {
+    job_configuration = {
     version    = "latest"
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
@@ -250,5 +251,5 @@ module "service" {
         memory   = 1024,
       },
     ]
-  }
+  }}
 }
