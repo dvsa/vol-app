@@ -13,8 +13,8 @@ locals {
           platformVersion = "LATEST"
         },
         resourceRequirements = [
-          { type = "VCPU", value = var.batch["jobs"][cpu] },
-          { type = "MEMORY", value = var.batch["jobs"][memory] },
+          { type = "VCPU", value = var.batch["jobs"]["cpu"] },
+          { type = "MEMORY", value = var.batch["jobs"]["memory"] },
         ],
         executionRoleArn = var.batch["iam_role_arn"]
       })
