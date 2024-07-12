@@ -56,3 +56,4 @@ variable "batch" {
     })
     description = "Configuration for the batch process"
   }
+
