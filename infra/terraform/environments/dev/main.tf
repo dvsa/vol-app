@@ -251,11 +251,6 @@ module "service" {
         commands = ["queue:process-queue"],
         memory   = 1024,
       },
-      {
-        name     = "another-command",
-        commands = ["another:command"],
-        memory   = 1024,
-      },
     ]
   }
 }
