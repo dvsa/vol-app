@@ -249,7 +249,7 @@ module "service" {
       {
         name     = "process-queue",
         commands = ["queue:process-queue"],
-        memory   = 1024,
+        memory   = 2048,
       },
     ]
   }
