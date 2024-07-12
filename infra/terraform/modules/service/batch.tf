@@ -1,69 +1,92 @@
+locals {
+  default_retry_policy = {
+    attempts = 1
+    evaluate_on_exit = {
+      retry_error = {
+        action       = "RETRY"
+        on_exit_code = 1
+      }
+      exit_success = {
+        action       = "EXIT"
+        on_exit_code = 0
+      }
+    }
+  }
+
+  jobs = { for job in var.batch.jobs : job.name => {
+    name                  = job.name
+    type                  = "container"
+    propagate_tags        = true
+    platform_capabilities = ["FARGATE"]
+
+    container_properties = jsonencode({
+      command = concat([
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php"
+      ], job.commands)
+
+      image = "${var.batch.repository}:${var.batch.version}"
+
+      fargatePlatformConfiguration = {
+        platformVersion = "LATEST"
+      },
+
+      resourceRequirements = [
+        {
+          type  = "VCPU",
+          value = tostring(job.cpu),
+        },
+        {
+          type  = "MEMORY",
+          value = tostring(job.memory)
+        },
+      ],
+
+      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-region        = "eu-west-1"
+          awslogs-stream-prefix = job.name
+        }
+      }
+    })
+
+    attempt_duration_seconds = 60
+    retry_strategy           = local.default_retry_policy
+  } }
+}
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0.0"
+  version = "~> 2.0"
 
-  instance_iam_role_name        = "${var.environment}-batch-app-ecs-instance-role"
-  instance_iam_role_path        = "/batch/"
-  instance_iam_role_description = "IAM instance role/profile for AWS Batch ECS instance(s)"
-  instance_iam_role_tags = {
-    ModuleCreatedRole = "Yes"
-  }
+  instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
+  instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
 
-  service_iam_role_name        = "${var.environment}-batch-app-batch-role"
-  service_iam_role_path        = "/batch/"
-  service_iam_role_description = "IAM service role for AWS Batch"
-  service_iam_role_tags = {
-    ModuleCreatedRole = "Yes"
-  }
-
-  create_spot_fleet_iam_role      = false
-  spot_fleet_iam_role_name        = "${var.environment}-batch-app-spot-role"
-  spot_fleet_iam_role_path        = "/batch/"
-  spot_fleet_iam_role_description = "IAM spot fleet role for AWS Batch"
-  spot_fleet_iam_role_tags = {
-    ModuleCreatedRole = "Yes"
-  }
+  service_iam_role_name        = "vol-app-${var.environment}-batch-service"
+  service_iam_role_description = "Service role for vol-app-${var.environment}-batch"
 
   compute_environments = {
-    a_fargate = {
-      name_prefix = "batch-app-fargate"
+    fargate = {
+      name_prefix = "vol-app-${var.environment}-fargate"
 
       compute_resources = {
-        type      = "FARGATE"
-        max_vcpus = 4
-
-        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
-        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
-
-        # `tags = {}` here is not applicable for spot
-      }
-    }
-
-    b_fargate_spot = {
-      name_prefix = "batch-app-fargate_spot"
-
-      compute_resources = {
-        type      = "FARGATE_SPOT"
-        max_vcpus = 4
-
-        security_group_ids = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-API-SG"]
-        subnets            = ["${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1A", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1B", "${var.environment} =\"dev\" ? format(\"%s/%s\",\"DEV/APP\",upper(var.environment)) : upper(var.environment)}-OLCS-PRI-BATCH-1C"]
-        # `tags = {}` here is not applicable for spot
+        type               = "FARGATE"
+        max_vcpus          = 4
+        security_group_ids = var.services["api"]["security_group_ids"]
+        subnets            = var.batch.subnet_ids
       }
     }
   }
 
-  # Job queus and scheduling policies
   job_queues = {
     low_priority = {
       name     = "BatchTestLowPriorityFargate"
       state    = "ENABLED"
       priority = 1
-
-      tags = {
-        JobQueue = "Low priority job queue"
-      }
     }
 
     high_priority = {
@@ -83,52 +106,13 @@ module "batch" {
           weight_factor    = 0.2
         }]
       }
-
-      tags = {
-        JobQueue = "High priority job queue"
-      }
     }
   }
 
-  job_definitions = {
-    job_configuration = {
-      name                  = "${var.job_definitions["processQueue"]["job_name"]}-job"
-      type                  = "container"
-      propagate_tags        = true
-      platform_capabilities = ["FARGATE", ]
+  job_definitions = local.jobs
+}
 
-      container_properties = jsonencode({
-        command = var.job_definitions["processQueue"]["command"],
-        image   = var.job_definitions["processQueue"]["image"],
-        fargatePlatformConfiguration = {
-          platformVersion = "LATEST"
-        },
-        resourceRequirements = [
-          { type = "VCPU", value = "1" },
-          { type = "MEMORY", value = var.job_definitions["processQueue"]["memory"] },
-        ],
-        executionRoleArn = "arn:aws:iam::054614622558:role/vol-app-dev-api-service-20240418150301367500000003"
-      })
-
-      attempt_duration_seconds = 60
-      retry_strategy = {
-        attempts = 3
-        evaluate_on_exit = {
-          retry_error = {
-            action       = "RETRY"
-            on_exit_code = 1
-          }
-          exit_success = {
-            action       = "EXIT"
-            on_exit_code = 0
-          }
-        }
-      }
-
-      tags = {
-        JobDefinition = "BatchTest"
-      }
-    }
-    //  tags = local.default_tags
-  }
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/aws/batch"
+  retention_in_days = 1
 }

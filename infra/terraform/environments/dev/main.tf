@@ -1,7 +1,72 @@
 locals {
-  service_names = ["api", "selfserve", "internal"]
+  service_names = ["api", "selfserve", "internal", "cli"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
+
+  task_iam_role_statements = [
+    {
+      effect = "Allow"
+      actions = [
+        "secretsmanager:GetSecretValue"
+      ]
+      resources = [
+        data.aws_secretsmanager_secret.this["api"].arn
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "ssm:GetParametersByPath"
+      ]
+      resources = [
+        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "sts:AssumeRole"
+      ]
+      resources = [
+        "arn:aws:iam::000081644369:role/txc-int-consumer-role"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "cognito-idp:AdminUpdateUserAttributes",
+        "cognito-idp:AdminSetUserPassword",
+        "cognito-idp:AdminRespondToAuthChallenge",
+        "cognito-idp:AdminResetUserPassword",
+        "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminGetUser",
+        "cognito-idp:AdminEnableUser",
+        "cognito-idp:AdminDisableUser",
+        "cognito-idp:AdminDeleteUser",
+        "cognito-idp:AdminCreateUser",
+      ]
+      resources = data.aws_cognito_user_pools.this.arns
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "sqs:SendMessageBatch",
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:PurgeQueue",
+        "sqs:ListDeadLetterSourceQueues",
+        "sqs:GetQueueAttributes",
+        "sqs:DeleteMessageBatch",
+        "sqs:DeleteMessage"
+      ]
+      resources = [
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY-DLQ",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-DLQ",
+        "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET"
+      ]
+    }
+  ]
 }
 
 data "aws_ecr_repository" "this" {
@@ -17,7 +82,7 @@ data "aws_security_group" "this" {
 }
 
 data "aws_subnets" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = toset(setunion(local.legacy_service_names, ["BATCH"]))
 
   filter {
     name = "tag:Name"
@@ -30,7 +95,7 @@ data "aws_subnets" "this" {
 }
 
 data "aws_secretsmanager_secret" "this" {
-  for_each = toset(local.service_names)
+  for_each = toset(setsubtract(local.service_names, ["cli"]))
 
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
@@ -79,70 +144,7 @@ module "service" {
       version    = var.api_image_tag
       repository = data.aws_ecr_repository.this["api"].repository_url
 
-      task_iam_role_statements = [
-        {
-          effect = "Allow"
-          actions = [
-            "secretsmanager:GetSecretValue"
-          ]
-          resources = [
-            data.aws_secretsmanager_secret.this["api"].arn
-          ]
-        },
-        {
-          effect = "Allow"
-          actions = [
-            "ssm:GetParametersByPath"
-          ]
-          resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
-          ]
-        },
-        {
-          effect = "Allow"
-          actions = [
-            "sts:AssumeRole"
-          ]
-          resources = [
-            "arn:aws:iam::000081644369:role/txc-int-consumer-role"
-          ]
-        },
-        {
-          effect = "Allow"
-          actions = [
-            "cognito-idp:AdminUpdateUserAttributes",
-            "cognito-idp:AdminSetUserPassword",
-            "cognito-idp:AdminRespondToAuthChallenge",
-            "cognito-idp:AdminResetUserPassword",
-            "cognito-idp:AdminInitiateAuth",
-            "cognito-idp:AdminGetUser",
-            "cognito-idp:AdminEnableUser",
-            "cognito-idp:AdminDisableUser",
-            "cognito-idp:AdminDeleteUser",
-            "cognito-idp:AdminCreateUser",
-          ]
-          resources = data.aws_cognito_user_pools.this.arns
-        },
-        {
-          effect = "Allow"
-          actions = [
-            "sqs:SendMessageBatch",
-            "sqs:SendMessage",
-            "sqs:ReceiveMessage",
-            "sqs:PurgeQueue",
-            "sqs:ListDeadLetterSourceQueues",
-            "sqs:GetQueueAttributes",
-            "sqs:DeleteMessageBatch",
-            "sqs:DeleteMessage"
-          ]
-          resources = [
-            "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY-DLQ",
-            "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-INSOLVENCY",
-            "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-DLQ",
-            "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET"
-          ]
-        }
-      ]
+      task_iam_role_statements = local.task_iam_role_statements
 
       subnet_ids = data.aws_subnets.this["API"].ids
 
@@ -235,12 +237,20 @@ module "service" {
     }
   }
 
-  job_definitions = {
-    "processQueue" = {
-      job_name = "processQueue",
-      command  = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", "queue:process-queue"],
-      image    = "054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/cli:latest",
-      memory   = "2048",
-    }
+  batch = {
+    version    = var.cli_image_tag
+    repository = data.aws_ecr_repository.this["cli"].repository_url
+
+    task_iam_role_statements = local.task_iam_role_statements
+
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
+
+    jobs = [
+      {
+        name     = "process-queue",
+        commands = ["queue:process-queue"],
+        memory   = 1024,
+      },
+    ]
   }
 }
