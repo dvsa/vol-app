@@ -7,7 +7,8 @@ locals {
     platform_capabilities = ["FARGATE", ]
 
     container_properties = jsonencode({
-        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", var.batch["commands"] ]
+        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", job.commands ]
+        //command = concat(["/var/www/html/vendor/bin/laminas","--container=/var/www/html/config/container-cli.php"], job.commands)
         image   = "${"var.batch.repository"}:${"var.batch.version"}"
         fargatePlatformConfiguration = {
           platformVersion = "LATEST"
