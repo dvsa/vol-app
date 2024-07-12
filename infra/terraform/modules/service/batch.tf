@@ -1,25 +1,25 @@
 locals {
 
   jobs = { for job in var.batch.jobs : job.name => {
-    name = job.name 
-    type = "container"
+    name                  = job.name
+    type                  = "container"
     propagate_tags        = true
     platform_capabilities = ["FARGATE", ]
 
     container_properties = jsonencode({
-        command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", job.commands ]
-        //command = concat(["/var/www/html/vendor/bin/laminas","--container=/var/www/html/config/container-cli.php"], job.commands)
-        image   = "${"var.batch.repository"}:${"var.batch.version"}"
-        fargatePlatformConfiguration = {
-          platformVersion = "LATEST"
-        },
-        resourceRequirements = [
-          { type = "VCPU", value = tostring(job.cpu) },
-          { type = "MEMORY", value = tostring(job.memory) },
-        ],
-        executionRoleArn = var.batch["iam_role_arn"]
-      })
-      
+      command = ["/var/www/html/vendor/bin/laminas --container=/var/www/html/config/container-cli.php", job.commands]
+      //command = concat(["/var/www/html/vendor/bin/laminas","--container=/var/www/html/config/container-cli.php"], job.commands)
+      image = "${"var.batch.repository"}:${"var.batch.version"}"
+      fargatePlatformConfiguration = {
+        platformVersion = "LATEST"
+      },
+      resourceRequirements = [
+        { type = "VCPU", value = tostring(job.cpu) },
+        { type = "MEMORY", value = tostring(job.memory) },
+      ],
+      executionRoleArn = var.batch["iam_role_arn"]
+    })
+
     attempt_duration_seconds = 60
     retry_strategy = {
       attempts = 3
@@ -31,7 +31,7 @@ locals {
         exit_success = {
           action       = "EXIT"
           on_exit_code = 0
-         }}}  
+    } } }
     }
   }
 }
@@ -103,7 +103,7 @@ module "batch" {
         JobQueue = "High priority job queue"
       }
     }
-  } 
+  }
 
-  job_definitions = local.jobs  
+  job_definitions = local.jobs
 }

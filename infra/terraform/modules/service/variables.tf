@@ -43,17 +43,17 @@ variable "services" {
 
 variable "batch" {
   type = object({
-    version                  = string
-    repository               = string
-    subnet_ids               = list(string)
-    iam_role_arn             = string
+    version      = string
+    repository   = string
+    subnet_ids   = list(string)
+    iam_role_arn = string
     jobs = list(object({
       name     = string
       commands = list(string)
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
-      }))
-    })
-    description = "Configuration for the batch process"
-  }
+    }))
+  })
+  description = "Configuration for the batch process"
+}
 
