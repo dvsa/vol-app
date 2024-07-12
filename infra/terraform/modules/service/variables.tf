@@ -42,7 +42,7 @@ variable "services" {
 }
 
 variable "batch" {
-  type = map(object({
+  type = object({
     version                  = string
     repository               = string
     subnet_ids               = list(string)
@@ -53,6 +53,6 @@ variable "batch" {
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       }))
-    }))
+    })
     description = "Configuration for the batch process"
   }
