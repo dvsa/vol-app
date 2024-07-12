@@ -46,7 +46,6 @@ variable "batch" {
     version                  = string
     repository               = string
     subnet_ids               = list(string)
-    security_group_ids       = list(string)
     iam_role_arn             = string
     jobs = list(object({
       name     = string
