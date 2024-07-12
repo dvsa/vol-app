@@ -103,5 +103,7 @@ module "batch" {
         JobQueue = "High priority job queue"
       }
     }
-  }  
+  } 
+
+  job_definitions = local.jobs  
 }
