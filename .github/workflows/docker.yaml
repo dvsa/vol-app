@@ -117,7 +117,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Scan
-        uses: aquasecurity/trivy-action@0.23.0
+        uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: ${{ steps.build-and-push.outputs.imageid }}
 
