@@ -36,7 +36,7 @@ jobs:
       # Docs
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # App
-      should-build-app: ${{ steps.changed-app-files.outputs.any_changed == 'true' || null }}
+      should-build-app: ${{ steps.changed-app-files.outputs.any_changed == 'true' || steps.changed-docker-files.outputs.any_changed == 'true' || null }}
       should-build-api: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/api') || null }}
       should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/selfserve') || null }}
       should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/internal') || null }}
@@ -67,7 +67,7 @@ jobs:
         with:
           dir_names: true
           files: |
-            app/api/**
+            app/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-docker-files
