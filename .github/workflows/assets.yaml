@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    name: ${{ inputs.push && 'Deploy' || 'Build' }}
+    name: Build${{ inputs.push && ' and Push' }}
     runs-on: ubuntu-latest
     defaults:
       run:
