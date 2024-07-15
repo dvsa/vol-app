@@ -68,13 +68,13 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          flavor: latest=true
           images: |
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
             ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
           tags: |
             type=sha,prefix=,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
+            type=raw,value=latest
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
