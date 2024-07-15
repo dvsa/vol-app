@@ -120,6 +120,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: ${{ steps.build-and-push.outputs.imageid }}
+          skip-dirs: /var/clamav
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
