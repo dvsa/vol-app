@@ -127,6 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
+      cli: ${{ steps.cli-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
@@ -139,6 +140,10 @@ jobs:
         uses: ./.github/actions/get-app-version
         with:
           project-path: app/api infra/docker/api
+      - id: cli-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api infra/docker/cli
       - id: selfserve-version
         uses: ./.github/actions/get-app-version
         with:
@@ -305,6 +310,7 @@ jobs:
     with:
       environment: ${{ matrix.environment }}
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}

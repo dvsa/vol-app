@@ -285,6 +285,7 @@ jobs:
     with:
       environment: dev
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
@@ -308,6 +309,7 @@ jobs:
     with:
       environment: int
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
@@ -351,6 +353,7 @@ jobs:
     with:
       environment: prep
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
@@ -375,6 +378,7 @@ jobs:
     with:
       environment: prod
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}

@@ -14,7 +14,7 @@ locals {
   }
 
   jobs = { for job in var.batch.jobs : job.name => {
-    name                  = job.name
+    name                  = "vol-app-${var.environment}-${job.name}"
     type                  = "container"
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
@@ -26,6 +26,22 @@ locals {
       ], job.commands)
 
       image = "${var.batch.repository}:${var.batch.version}"
+
+      environment = [
+        {
+          name  = "ENVIRONMENT_NAME"
+          value = var.environment
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.batch.version
+        },
+      ],
+
+      runtimePlatform = {
+        operating_system_family = "LINUX",
+        cpu_architecture        = "ARM64"
+      }
 
       fargatePlatformConfiguration = {
         platformVersion = "LATEST"
@@ -83,29 +99,10 @@ module "batch" {
   }
 
   job_queues = {
-    low_priority = {
-      name     = "BatchTestLowPriorityFargate"
+    default = {
+      name     = "vol-app-${var.environment}-default"
       state    = "ENABLED"
       priority = 1
-    }
-
-    high_priority = {
-      name     = "BatchTestHighPriorityFargate"
-      state    = "ENABLED"
-      priority = 99
-
-      fair_share_policy = {
-        compute_reservation = 1
-        share_decay_seconds = 3600
-
-        share_distribution = [{
-          share_identifier = "A1*"
-          weight_factor    = 0.1
-          }, {
-          share_identifier = "A2"
-          weight_factor    = 0.2
-        }]
-      }
     }
   }
 
