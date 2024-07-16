@@ -39,8 +39,8 @@ locals {
       ],
 
       runtimePlatform = {
-        operating_system_family = "LINUX",
-        cpu_architecture        = "ARM64"
+        operatingSystemFamily = "LINUX",
+        cpuArchitecture       = "ARM64"
       }
 
       fargatePlatformConfiguration = {
