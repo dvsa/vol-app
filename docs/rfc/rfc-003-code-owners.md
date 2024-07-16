@@ -30,6 +30,8 @@ They are responsible for:
 -   Identifying improvements and creating tickets for them.
 -   Release management for their assigned code (if applicable).
 
+Code owners will be assigned using the [GitHub CODEOWNERS](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners#codeowners-file-location) functionality.
+
 ### Time Investment
 
 Allocate roughly 5% of a developer's capacity each sprint (equivalent to one half-day per sprint) for code owner tasks. This can be done once a month, so a full day every two sprints to work on these tasks. _Sprints should be planned with this in mind; sprint work will take precedence over code-owner tasks._
@@ -40,7 +42,7 @@ The scrum events will be used to coordinate the code owner's activities:
 
 -   **Sprint Planning**: Allocate time for code owner tasks.
 -   **Daily Stand-ups**: Briefly discuss ongoing code owner activities.
--   **Retrospective**: Discuss the effectiveness of the code owner's activities and identify improvements.
+-   **Retrospective**: Discuss the effectiveness of code owner activity and identify improvements.
 
 A quarterly session will be held to rotate code ownership among team members. During the session, the code owners will summarize the work done in their respective areas over the previous quarter.
 
