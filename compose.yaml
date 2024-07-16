@@ -12,6 +12,7 @@ services:
           - api.local.olcs.dev-dvsacloud.uk
           - ssweb.local.olcs.dev-dvsacloud.uk
           - iuweb.local.olcs.dev-dvsacloud.uk
+          - cdn.local.olcs.dev-dvsacloud.uk
 
   api:
     build:
@@ -60,6 +61,17 @@ services:
       PHP_IDE_CONFIG: "serverName=vol.local.internal"
       VIRTUAL_HOST: iuweb.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
+
+  cdn:
+    image: node:20
+    volumes:
+      - ./app/cdn:/var/www/html
+    tty: true
+    ports:
+      - 7001:7001
+    environment:
+      VIRTUAL_HOST: cdn.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 7001
 
   redis:
     image: redis:7
