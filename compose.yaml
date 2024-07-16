@@ -65,7 +65,7 @@ services:
   cdn:
     image: node:20
     volumes:
-      - ./app/cdn:app/cdn
+      - ./app/cdn:/var/www/html
     platform: linux/x86_64
     tty: true
     ports:
