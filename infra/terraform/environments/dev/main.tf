@@ -370,10 +370,6 @@ module "service" {
         name     = "mark-expired-permits",
         commands = ["permits:mark-expired-permits"],
       },
-      {
-        name     = "cancel-unsubmitted-bilateral",
-        commands = ["permits:cancel-unsubmitted-bilateral"],
-      },
     ]
   }
 }
