@@ -132,4 +132,7 @@ module "ecs_service" {
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
   subnet_ids            = var.services[each.key].subnet_ids
+
+  wait_for_steady_state = true
+  wait_until_stable     = true
 }

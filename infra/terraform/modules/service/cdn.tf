@@ -76,7 +76,7 @@ module "cloudfront" {
   # `PriceClass_100` is most cost efficient for VOL and covers the main region of the VOL user-base (UK).
   price_class = "PriceClass_100"
 
-  wait_for_deployment = false
+  wait_for_deployment = true
 
   # When you enable additional metrics for a distribution, CloudFront sends up to 8 metrics to CloudWatch in the US East (N. Virginia) Region.
   # This rate is charged only once per month, per metric (up to 8 metrics per distribution).

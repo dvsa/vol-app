@@ -20,6 +20,10 @@ on:
         description: "API image tag"
         type: string
         required: true
+      cli-image-tag:
+        description: "CLI image tag"
+        type: string
+        required: true
       selfserve-image-tag:
         description: "Selfserve image tag"
         type: string
@@ -54,6 +58,10 @@ on:
         type: string
         required: false
       api-image-tag:
+        type: string
+        required: true
+      cli-image-tag:
+        description: "CLI image tag"
         type: string
         required: true
       selfserve-image-tag:
@@ -137,6 +145,7 @@ jobs:
         id: plan
         env:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
+          TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
@@ -237,6 +246,7 @@ jobs:
         if: ${{ inputs.apply }}
         env:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
+          TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
