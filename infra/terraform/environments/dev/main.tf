@@ -249,7 +249,130 @@ module "service" {
       {
         name     = "process-queue",
         commands = ["queue:process-queue"],
-        memory   = 2048,
+      },
+      {
+        name     = "ch-vs-olcs-diffs",
+        commands = ["batch:ch-vs-olcs-diffs"],
+      },
+      {
+        name     = "clean-up-variations",
+        commands = ["batch:clean-up-variations"],
+      },
+      {
+        name     = "cns",
+        commands = ["batch:cns"],
+      },
+      {
+        name     = "create-psv-licence-surrender-task",
+        commands = ["batch:create-psv-licence-surrender-task"],
+      },
+      {
+        name     = "psv-operator-list-export",
+        commands = ["batch:data-gov-uk-export -v --report-name=psv-operator-list --path=/tmp/"],
+      },
+      {
+        name     = "international-goods-export",
+        commands = ["batch:data-gov-uk-export -v --report-name=international-goods --path=/tmp/"],
+      },
+      {
+        name     = "data-retention-populate",
+        commands = ["batch:data-retention --populate"],
+      },
+      {
+        name     = "data-retention-precheck",
+        commands = ["batch:data-retention --precheck"],
+      }, 
+      {
+        name     = "data-retention-delete",
+        commands = ["batch:data-retention --delete"],
+      },
+      {
+        name     = "data-retention-postcheck",
+        commands = ["batch:data-retention --postcheck"],
+      },
+      {
+        name     = "database-maintenance",
+        commands = ["batch:database-maintenance"],
+      },
+      {
+        name     = "digital-continuation-reminders",
+        commands = ["batch:digital-continuation-reminders"],
+      },
+      {
+        name     = "duplicate-vehicle-warning",
+        commands = ["batch:duplicate-vehicle-warning"],
+      },
+      {
+        name     = "enqueue-ch-compare"
+        commands = ["batch:enqueue-ch-compare"],
+      },
+      {
+        name     = "expire-bus-registration",
+        commands = ["batch:expire-bus-registration"],
+      },
+      {
+        name     = "flag-urgent-tasks",
+        commands = ["batch:flag-urgent-tasks"],
+      },
+      {
+        name     = "import-users-from-csv",
+        commands = ["batch:import-users-from-csv"],
+      },
+      {
+        name     = "inspection-request-email",
+        commands = ["batch:inspection-request-email"],
+      },
+      {
+        name     = "interim-end-date-enforcement",
+        commands = ["batch:interim-end-date-enforcement"],
+      },
+      {
+        name     = "last-tm-letter",
+        commands = ["batch:last-tm-letter"],
+      },
+      {
+        name     = "licence-status-rules",
+        commands = ["batch:licence-status-rules"],
+      },
+      {
+        name     = "process-cl",
+        commands = ["batch:process-cl"],
+      },
+      {
+        name     = "process-inbox",
+        commands = ["batch:process-inbox"],
+      },
+      {
+        name     = "process-ntu",
+        commands = ["batch:process-ntu"],
+      },
+      {
+        name     = "remove-read-audit",
+        commands = ["batch:remove-read-audit"],
+      }, 
+      {
+        name     = "resolve-payments",
+        commands = ["batch:resolve-payments"],
+      },
+      {
+        name     = "system-parameter",
+        commands = ["batch:system-parameter"],
+      },
+      {
+        name     = "cancel-unsubmitted-bilateral",
+        commands = ["permits:cancel-unsubmitted-bilateral"],
+      },
+      {
+        name     = "close-expired-windows",
+        commands = ["permits:close-expired-windows"],
+      },
+      {
+        name     = "mark-expired-permits",
+        commands = ["permits:mark-expired-permits"],
+      },
+      {
+        name     = "cancel-unsubmitted-bilateral",
+        commands = ["permits:cancel-unsubmitted-bilateral"],
       },
     ]
   }
