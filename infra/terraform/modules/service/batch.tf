@@ -59,6 +59,7 @@ locals {
       ],
 
       executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+      jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
       logConfiguration = {
         logDriver = "awslogs"
@@ -110,6 +111,6 @@ module "batch" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/batch"
+  name              = "/aws/batch/${var.environment}"
   retention_in_days = 1
 }
