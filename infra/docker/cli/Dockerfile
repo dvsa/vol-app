@@ -34,7 +34,9 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions to the cache directory files.
   && chmod -R 664 /var/www/html/data/cache \
   # Add group (`www-data`) write permissions on the cache directories.
-  && find /var/www/html/data/cache -type d -exec chmod 775 {} \;
+  && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
+  # Ensure Laminas binary is executable for CLI jobs.
+  && chmod +x /var/www/html/vendor/bin/laminas
 
 USER www-data
 
