@@ -111,6 +111,6 @@ module "batch" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/batch/${var.environment}"
+  name              = "/aws/batch/vol-app-${var.environment}"
   retention_in_days = 1
 }
