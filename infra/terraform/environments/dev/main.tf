@@ -248,7 +248,7 @@ module "service" {
     jobs = [
       {
         name     = "process-queue",
-        commands = ["queue:process-queue"],
+        commands = ["queue:process-queue", "queue:process-queue -v"],
       },
       {
         name     = "ch-vs-olcs-diffs",
@@ -281,7 +281,7 @@ module "service" {
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention --precheck"],
-      }, 
+      },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention --delete"],
@@ -349,7 +349,7 @@ module "service" {
       {
         name     = "remove-read-audit",
         commands = ["batch:remove-read-audit"],
-      }, 
+      },
       {
         name     = "resolve-payments",
         commands = ["batch:resolve-payments"],
