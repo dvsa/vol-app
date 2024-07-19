@@ -149,7 +149,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
-        run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan
+        run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan | tail -c 64000 # Truncated to avoid the ~65535 byte limit on input variables.
 
       - name: Get plan changes
         if: ${{ !inputs.apply }}
