@@ -149,7 +149,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
-        run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan
+        run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
       - name: Get plan changes
         if: ${{ !inputs.apply }}
@@ -157,14 +157,24 @@ jobs:
         run: |
           echo "changes=$(terraform-bin show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
 
+      # The maximum input size is ~64KB.
+      # The maximum PR comment size is ~64KB.
+      # The plan can be larger than this, so we need to truncate it.
+      # Saving the plan to a file allows JavaScript to truncate this and avoid it being too large for the inputs and the PR comment.
+      - name: Save plan to file
+        if: ${{ !inputs.apply }}
+        run: terraform show -no-color tfplan > tfplan.txt
+
       - uses: actions/github-script@v7
         if: ${{ always() && !cancelled() && !failure() && ! inputs.apply && github.event_name == 'pull_request' }}
         env:
-          PLAN: "${{ steps.plan.outputs.stdout }}"
           CHANGES: "${{ steps.show.outputs.changes }}"
         with:
           retries: 3
           script: |
+            const fs = require('node:fs');
+            const plan = fs.readFileSync('${{ env.WORKING_DIR }}/tfplan.txt');
+
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -206,6 +216,7 @@ jobs:
             **Commit:** ${{ github.event.pull_request.head.sha }}
             \n
             **API version:** ${{ inputs.api-image-tag }}
+            **CLI version:** ${{ inputs.cli-image-tag }}
             **Selfserve version:** ${{ inputs.selfserve-image-tag }}
             **Internal version:** ${{ inputs.internal-image-tag }}
 
@@ -220,7 +231,7 @@ jobs:
             <details data-gh-workflow="${{ inputs.environment }}-environment-plan"><summary>Show full plan</summary>
 
             \`\`\`tf\n
-            ${process.env.PLAN}
+            ${plan.length > 65000 ? plan.slice(0, 65000) + '... (truncated, see full plan in the workflow run logs)' : plan}
             \`\`\`
 
             </details>`;

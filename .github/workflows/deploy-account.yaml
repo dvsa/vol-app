@@ -98,13 +98,21 @@ jobs:
       - name: Plan
         if: ${{ !inputs.apply }}
         id: plan
-        run: terraform plan -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }} && terraform show -no-color tfplan
+        run: terraform plan -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
       - name: Get plan changes
         if: ${{ !inputs.apply }}
         id: show
         run: |
           echo "changes=$(terraform-bin show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
+
+      # The maximum input size is ~64KB.
+      # The maximum PR comment size is ~64KB.
+      # The plan can be larger than this, so we need to truncate it.
+      # Saving the plan to a file allows JavaScript to truncate this and avoid it being too large for the inputs and the PR comment.
+      - name: Save plan to file
+        if: ${{ !inputs.apply }}
+        run: terraform show -no-color tfplan > tfplan.txt
 
       - uses: actions/github-script@v7
         if: ${{ always() && !cancelled() && !failure()  && !inputs.apply && github.event_name == 'pull_request' }}
@@ -114,6 +122,9 @@ jobs:
         with:
           retries: 3
           script: |
+            const fs = require('node:fs');
+            const plan = fs.readFileSync('${{ env.WORKING_DIR }}/tfplan.txt');
+
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -165,7 +176,7 @@ jobs:
             <details data-gh-workflow="${{ inputs.account }}-account-plan"><summary>Show full plan</summary>
 
             \`\`\`tf\n
-            ${process.env.PLAN}
+            ${plan.length > 65000 ? plan.slice(0, 65000) + '... (truncated, see full plan in the workflow run logs)' : plan}
             \`\`\`
 
             </details>`;
