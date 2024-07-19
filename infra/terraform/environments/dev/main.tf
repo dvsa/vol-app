@@ -247,10 +247,6 @@ module "service" {
 
     jobs = [
       {
-        name     = "process-queue",
-        commands = ["queue:process-queue"],
-      },
-      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
@@ -369,6 +365,30 @@ module "service" {
       {
         name     = "mark-expired-permits",
         commands = ["permits:mark-expired-permits"],
+      },
+      {
+        name     = "process-queue",
+        commands = ["queue:process-queue"],
+      },
+      {
+        name     = "process-company-profile",
+        commands = ["queue:process-company-profile"],
+      },
+      {
+        name     = "company-profile-dlq",
+        commands = ["queue:company-profile-dlq"],
+      },
+      {
+        name     = "process-insolvency",
+        commands = ["queue:process-insolvency"],
+      },
+      {
+        name     = "process-insolvency-dlq",
+        commands = ["queue:process-insolvency-dlq"],
+      },
+      {
+        name     = "transxchange-consumer",
+        commands = ["queue:transxchange-consumer"],
       },
     ]
   }
