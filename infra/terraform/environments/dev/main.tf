@@ -264,11 +264,11 @@ module "service" {
       },
       {
         name     = "psv-operator-list-export",
-        commands = ["batch:data-gov-uk-export -v --report-name=psv-operator-list --path=/tmp/"],
+        commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
       },
       {
         name     = "international-goods-export",
-        commands = ["batch:data-gov-uk-export -v --report-name=international-goods --path=/tmp/"],
+        commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
       },
       {
         name     = "data-retention-populate",
@@ -367,8 +367,40 @@ module "service" {
         commands = ["permits:mark-expired-permits"],
       },
       {
-        name     = "process-queue",
-        commands = ["queue:process-queue"],
+        name     = "process-queue-general",
+        commands = ["queue:process-queue", "--exclude que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate"],
+      },
+      {
+        name     = "process-queue-community-licences",
+        commands = ["queue:process-queue", "--type que_typ_create_com_lic"],
+      },
+      {
+        name     = "process-queue-disc-generation",
+        commands = ["queue:process-queue", "--type que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
+      },
+      {
+        name     = "process-queue-disc-print",
+        commands = ["queue:process-queue", "--type que_typ_disc_printing_print", "--queue-duration 840"],
+      },
+      {
+        name     = "process-queue-ecmt-accept",
+        commands = ["queue:process-queue", "--type que_typ_accept_ecmt_scoring"],
+      },
+      {
+        name     = "process-queue-irhp-allocate",
+        commands = ["queue:process-queue", "--type que_typ_run_ecmt_scoring"],
+      },
+      {
+        name     = "process-queue-permit-generation",
+        commands = ["queue:process-queue", "--type que_typ_permit_generate"],
+      },
+      {
+        name     = "process-queue-permit-print",
+        commands = ["queue:process-queue", "--type que_typ_permit_print", "--queue-duration 840"],
+      },
+      {
+        name     = "process-queue-print",
+        commands = ["queue:process-queue", "--type que_typ_print"],
       },
       {
         name     = "process-company-profile",
