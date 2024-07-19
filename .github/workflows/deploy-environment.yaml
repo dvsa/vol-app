@@ -157,6 +157,12 @@ jobs:
         run: |
           echo "changes=$(terraform-bin show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
 
+      - name: Character count length of changes output
+        if: ${{ !inputs.apply }}
+        run: |
+          echo ${{ steps.show.outputs.changes }} | wc -c
+          echo ${{ steps.plan.outputs.stdout }} | wc -c
+
       - uses: actions/github-script@v7
         if: ${{ always() && !cancelled() && !failure() && ! inputs.apply && github.event_name == 'pull_request' }}
         env:
