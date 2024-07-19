@@ -272,19 +272,19 @@ module "service" {
       },
       {
         name     = "data-retention-populate",
-        commands = ["batch:data-retention --populate"],
+        commands = ["batch:data-retention", "--populate"],
       },
       {
         name     = "data-retention-precheck",
-        commands = ["batch:data-retention --precheck"],
+        commands = ["batch:data-retention", "--precheck"],
       },
       {
         name     = "data-retention-delete",
-        commands = ["batch:data-retention --delete"],
+        commands = ["batch:data-retention", "--delete"],
       },
       {
         name     = "data-retention-postcheck",
-        commands = ["batch:data-retention --postcheck"],
+        commands = ["batch:data-retention", "--postcheck"],
       },
       {
         name     = "database-maintenance",
@@ -372,35 +372,35 @@ module "service" {
       },
       {
         name     = "process-queue-community-licences",
-        commands = ["queue:process-queue", "--type que_typ_create_com_lic"],
+        commands = ["queue:process-queue", "--type", "que_typ_create_com_lic"],
       },
       {
         name     = "process-queue-disc-generation",
-        commands = ["queue:process-queue", "--type que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
+        commands = ["queue:process-queue", "--type", "que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
       },
       {
         name     = "process-queue-disc-print",
-        commands = ["queue:process-queue", "--type que_typ_disc_printing_print", "--queue-duration 840"],
+        commands = ["queue:process-queue", "--type", "que_typ_disc_printing_print", "--queue-duration 840"],
       },
       {
         name     = "process-queue-ecmt-accept",
-        commands = ["queue:process-queue", "--type que_typ_accept_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_accept_ecmt_scoring"],
       },
       {
         name     = "process-queue-irhp-allocate",
-        commands = ["queue:process-queue", "--type que_typ_run_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
       },
       {
         name     = "process-queue-permit-generation",
-        commands = ["queue:process-queue", "--type que_typ_permit_generate"],
+        commands = ["queue:process-queue", "--type", "que_typ_permit_generate"],
       },
       {
         name     = "process-queue-permit-print",
-        commands = ["queue:process-queue", "--type que_typ_permit_print", "--queue-duration 840"],
+        commands = ["queue:process-queue", "--type", "que_typ_permit_print", "--queue-duration 840"],
       },
       {
         name     = "process-queue-print",
-        commands = ["queue:process-queue", "--type que_typ_print"],
+        commands = ["queue:process-queue", "--type", "que_typ_print"],
       },
       {
         name     = "process-company-profile",
