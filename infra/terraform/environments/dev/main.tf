@@ -248,7 +248,7 @@ module "service" {
     jobs = [
       {
         name     = "process-queue",
-        commands = ["queue:process-queue", "queue:process-queue -v"],
+        commands = ["queue:process-queue"],
       },
       {
         name     = "ch-vs-olcs-diffs",
