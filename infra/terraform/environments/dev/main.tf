@@ -247,9 +247,180 @@ module "service" {
 
     jobs = [
       {
-        name     = "process-queue",
-        commands = ["queue:process-queue"],
-        memory   = 2048,
+        name     = "ch-vs-olcs-diffs",
+        commands = ["batch:ch-vs-olcs-diffs"],
+      },
+      {
+        name     = "clean-up-variations",
+        commands = ["batch:clean-up-variations"],
+      },
+      {
+        name     = "cns",
+        commands = ["batch:cns"],
+      },
+      {
+        name     = "create-psv-licence-surrender-task",
+        commands = ["batch:create-psv-licence-surrender-task"],
+      },
+      {
+        name     = "psv-operator-list-export",
+        commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
+      },
+      {
+        name     = "international-goods-export",
+        commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
+      },
+      {
+        name     = "data-retention-populate",
+        commands = ["batch:data-retention --populate"],
+      },
+      {
+        name     = "data-retention-precheck",
+        commands = ["batch:data-retention --precheck"],
+      },
+      {
+        name     = "data-retention-delete",
+        commands = ["batch:data-retention --delete"],
+      },
+      {
+        name     = "data-retention-postcheck",
+        commands = ["batch:data-retention --postcheck"],
+      },
+      {
+        name     = "database-maintenance",
+        commands = ["batch:database-maintenance"],
+      },
+      {
+        name     = "digital-continuation-reminders",
+        commands = ["batch:digital-continuation-reminders"],
+      },
+      {
+        name     = "duplicate-vehicle-warning",
+        commands = ["batch:duplicate-vehicle-warning"],
+      },
+      {
+        name     = "enqueue-ch-compare"
+        commands = ["batch:enqueue-ch-compare"],
+      },
+      {
+        name     = "expire-bus-registration",
+        commands = ["batch:expire-bus-registration"],
+      },
+      {
+        name     = "flag-urgent-tasks",
+        commands = ["batch:flag-urgent-tasks"],
+      },
+      {
+        name     = "import-users-from-csv",
+        commands = ["batch:import-users-from-csv"],
+      },
+      {
+        name     = "inspection-request-email",
+        commands = ["batch:inspection-request-email"],
+      },
+      {
+        name     = "interim-end-date-enforcement",
+        commands = ["batch:interim-end-date-enforcement"],
+      },
+      {
+        name     = "last-tm-letter",
+        commands = ["batch:last-tm-letter"],
+      },
+      {
+        name     = "licence-status-rules",
+        commands = ["batch:licence-status-rules"],
+      },
+      {
+        name     = "process-cl",
+        commands = ["batch:process-cl"],
+      },
+      {
+        name     = "process-inbox",
+        commands = ["batch:process-inbox"],
+      },
+      {
+        name     = "process-ntu",
+        commands = ["batch:process-ntu"],
+      },
+      {
+        name     = "remove-read-audit",
+        commands = ["batch:remove-read-audit"],
+      },
+      {
+        name     = "resolve-payments",
+        commands = ["batch:resolve-payments"],
+      },
+      {
+        name     = "system-parameter",
+        commands = ["batch:system-parameter"],
+      },
+      {
+        name     = "cancel-unsubmitted-bilateral",
+        commands = ["permits:cancel-unsubmitted-bilateral"],
+      },
+      {
+        name     = "close-expired-windows",
+        commands = ["permits:close-expired-windows"],
+      },
+      {
+        name     = "mark-expired-permits",
+        commands = ["permits:mark-expired-permits"],
+      },
+      {
+        name     = "process-queue-general",
+        commands = ["queue:process-queue", "--exclude que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate"],
+      },
+      {
+        name     = "process-queue-community-licences",
+        commands = ["queue:process-queue", "--type que_typ_create_com_lic"],
+      },
+      {
+        name     = "process-queue-disc-generation",
+        commands = ["queue:process-queue", "--type que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
+      },
+      {
+        name     = "process-queue-disc-print",
+        commands = ["queue:process-queue", "--type que_typ_disc_printing_print", "--queue-duration 840"],
+      },
+      {
+        name     = "process-queue-ecmt-accept",
+        commands = ["queue:process-queue", "--type que_typ_accept_ecmt_scoring"],
+      },
+      {
+        name     = "process-queue-irhp-allocate",
+        commands = ["queue:process-queue", "--type que_typ_run_ecmt_scoring"],
+      },
+      {
+        name     = "process-queue-permit-generation",
+        commands = ["queue:process-queue", "--type que_typ_permit_generate"],
+      },
+      {
+        name     = "process-queue-permit-print",
+        commands = ["queue:process-queue", "--type que_typ_permit_print", "--queue-duration 840"],
+      },
+      {
+        name     = "process-queue-print",
+        commands = ["queue:process-queue", "--type que_typ_print"],
+      },
+      {
+        name     = "process-company-profile",
+        commands = ["queue:process-company-profile"],
+      },
+      {
+        name     = "company-profile-dlq",
+        commands = ["queue:company-profile-dlq"],
+      },
+      {
+        name     = "process-insolvency",
+        commands = ["queue:process-insolvency"],
+      },
+      {
+        name     = "process-insolvency-dlq",
+        commands = ["queue:process-insolvency-dlq"],
+      },
+      {
+        name     = "transxchange-consumer",
+        commands = ["queue:transxchange-consumer"],
       },
     ]
   }
