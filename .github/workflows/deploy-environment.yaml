@@ -169,7 +169,7 @@ jobs:
           retries: 3
           script: |
             const fs = require('node:fs');
-            const plan = fs.readFileSync('${{ github.workspace }}/tfplan.txt');
+            const plan = fs.readFileSync('${{ env.WORKING_DIR }}/tfplan.txt');
 
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
