@@ -1,8 +1,0 @@
-{
-	"dest" :   "assets/vendor/custom-modernizr.js",
-	"files" : {
-		"src": [
-			  "assets/_js/**/*.js"
-		]
-	}
-}
