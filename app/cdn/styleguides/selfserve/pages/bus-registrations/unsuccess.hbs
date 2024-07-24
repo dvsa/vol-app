@@ -1,0 +1,69 @@
+---
+title: Upload status
+layout: base.hbs
+user: bus operator
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+
+    <form>
+
+      <div class="article">
+
+        <h3>Unsuccessful</h3>
+        
+        <div class="validation-summary">
+          <p>The following files weren't uploaded because they contained errors:</p>
+          <p><b>transXchange-routes-barnsley-573.ZIP</b></p>
+          <ul>
+            <li>The bus registration number wasn't found</li>
+            <li>The effective date must be in the future</li>
+          </ul>
+          <p><b>transXchange-routes-barnsley-20.ZIP</b></p>
+          <ul>
+            <li>The .ZIP file doesn't contain an XML document</li>
+          </ul>
+        </div><!-- .validation-summary -->
+
+        <a href="register-change.html#tryAgain" class="action--primary large">Try again</a>
+        
+        <hr /><hr />
+
+        <h3>Successful</h3>
+        
+        <p>The following files were uploaded successfully and don't need uploading again:</p>
+          <ul>
+            <li><b>transXchange-routes-barnsley-252.ZIP</b></li>
+          </ul>
+        </p>
+        <p>Local authorities will be told about the successful uploads.</p>
+        <p>You must <a href="fees.html">pay your fees</a> before we can consider any applications.</p>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar">
+      <div class="support">
+        <h3>Support</h3>
+        <p>0113 254 3200</p>
+        <p><a href="operatorlicensing@otc.gov.uk">ebsr@vosa.gov.uk</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Fake Functionality -->
+
+<script type="text/javascript">
+  OLCS.fileUploader({
+    selector: "#EBSRUploader",
+    isMultiple: true
+  });
+</script>

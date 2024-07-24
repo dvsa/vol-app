@@ -1,0 +1,47 @@
+---
+layout: base.hbs
+title: <a href="">Tobias Funke</a> / Case 24
+breadcrumb: TM case
+subtitle: <span class="status green">Open</span>
+status: Open
+horizontalNavItems:
+  - label: Case details
+    link:  index.html
+  - label: Opposition
+    link:  
+  - label: Submissions
+    link:  
+  - label: Hearings & appeals
+    link:  
+  - label: Docs & attachments
+    link:  
+  - label: Processing
+    link: 
+recordActions:
+  - title: Quick actions
+    actions:
+      - Create submission
+      - Generate statement
+
+---
+
+<div class="four-fifths--left">
+  <div class="content">
+  {{> body }}  
+  </div>
+</div>
+
+<div class="sidebar--right">
+
+  <div class="small-module">
+    <h4 class="title">TM details</h4>
+    <p class="small-module__details">
+      <a href="">Tobias Funke</a>, 23/4/58<br />
+      32 Eleanor Harris Road,<br />
+      SW14 8TN
+    </p>
+  </div>
+
+  {{> _record-actions }}
+  
+</div>

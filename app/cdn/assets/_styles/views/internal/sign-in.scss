@@ -1,0 +1,51 @@
+/**
+ * Sign In
+ */
+
+.sign-in {
+
+  background: $grey-4;
+
+  legend {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  form {
+    box-shadow: 0 1px 5px $grey-3;
+    background: $white;
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px 32px 0 30px;
+    float: none;
+    overflow: auto;
+  }
+
+  [type="text"],
+  [type="password"] {
+    width: 100%;
+    padding: 0.5em 3%;
+  }
+
+  label {
+    float: left;
+    width: 50%;
+    margin-right: 0;
+  }
+
+  .hint {
+    @extend %h6;
+    float: left;
+    padding-top: 0;
+    margin-bottom: 10px;
+    width: 50%;
+    clear: none;
+    text-align: right;
+    margin: 0;
+  }
+
+  .validation-summary {
+    margin-top: 0;
+  }
+
+}

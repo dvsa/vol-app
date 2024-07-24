@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-GB" class="no-js not-ie8">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{asset}}styles/internal.css" media="all" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{{asset}}js/internal.js"></script>
+  </head>
+
+  <body class="internal js-enabled">
+
+    <div class="version-header">
+      <p class="environment">Environment: <span class="environment-marker">UAT</span></p>
+      <p class="version">Version: <span>3.0</span></p>
+    </div>
+
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+          <h2 class="global-header__title"><a href="/styleguides/internal/">OLCS</a></h2>
+
+          <div class="search">
+            <div class="search__wrapper">
+              <div class="search__select">
+                <select>
+                  <option value="licence">Licences</option>
+                  <option value="applications">Applications</option>
+                  <option value="cases">Cases</option>
+                  <option value="cases">Bus regs</option>
+                  <option value="cases">Addresses</option>
+                  <option value="cases">Vehicles</option>
+                </select>
+              </div>
+              <input class="search__input" type="text" placeholder="Search">
+              <input class="search__button" type="submit" onclick="window.location = 'http://localhost:7001/styleguides/internal/search/applications.html';return false;">
+            </div>
+            <a href="/styleguides/internal/search/advanced-search.html" class="search__advanced">Advanced</a>
+          </div>
+
+          <ul class="admin">
+            <li class="admin__title">Admin
+              <div class="admin__menu">
+                <span class="admin__arrow"></span>
+                <ul class="admin__submenu">
+                  <li class="admin__item"><a href="">Scanning</a></li>
+                  <li class="admin__item"><a href="">Printing</a></li>
+                  <li class="admin__item"><a href="/styleguides/internal/admin/publications/">Publications</a></li>
+                  <li class="admin__item"><a href="">Continuations</a></li>
+                  <li class="admin__item"><a href="">Reports</a></li>
+                </ul>
+                <ul class="admin__submenu">
+                  <li class="admin__item"><a href="/styleguides/internal/admin/user-management/">User management</a></li>
+                  <li class="admin__item"><a href="">Financial standing rates</a></li>
+                  <li class="admin__item"><a href="">Public holidays</a></li>
+                  <li class="admin__item"><a href="">System messages</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+      </div>
+    </div><!-- .global-header -->
+
+    <div class="page-header">
+      <div class="page-header__wrapper">
+
+          <div class="user-header">
+            <ol class="breadcrumbs">
+              <li class="breadcrumbs__item"><a href="/">Home</a></li>
+              <li class="breadcrumbs__item current">{{breadcrumb}}</li>
+            </ol>
+            <ul class="user-menu">
+              <li class="user-menu__item">Sam Quayle:</li>
+              <li class="user-menu__item"><a href="/styleguides/internal/my-account/index.html">My account</a></li>
+              <li class="user-menu__item"><a href="">Sign out</a></li>
+            </ul>
+          </div>
+
+          <h1>{{{title}}}</h1>
+
+          {{#if subtitle}}
+            <h3 class="page-header__subtitle">{{{subtitle}}}</h3>
+          {{/if}}
+
+      </div>
+    </div><!-- .page-header-->
+
+    <div class="page-wrapper">
+      {{#if horizontalNavItems}}
+        {{> _horizontal-navigation}}
+      {{/if}}
+      <div id="main" role="main">
+        {{> body}}
+      </div><!-- #main -->
+    </div><!-- .page-wrapper-->
+
+  </body>
+</html>

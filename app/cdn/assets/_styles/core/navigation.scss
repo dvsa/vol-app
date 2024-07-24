@@ -1,0 +1,22 @@
+/**
+ * Navigation
+ */
+
+%navigation {
+  list-style: none;
+  width: 100%;
+  overflow: auto;
+  .current {
+    color: $black;
+  }
+}
+
+%navigation__item {
+  float: left;
+  margin-bottom: 0;
+}
+
+%navigation__link {
+  display: block;
+  position: relative;
+}

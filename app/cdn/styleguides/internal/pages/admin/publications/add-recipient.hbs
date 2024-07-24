@@ -1,0 +1,149 @@
+---
+layout: publications.hbs
+asset: '../../../../'
+subSectionTitle: Recipients
+filterList:
+  - header: App status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>1029</strong> Recipients
+    headers:
+      - label: Name
+        class: sortable descending
+      - label: Body
+        class: sortable
+      - label: Postcode
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">Daniel Fortmason</a></strong>
+      - St Albans District Council
+      - SW18 1BL
+      - <input type="checkbox">
+    rows: 20
+    actions:
+      - label: Add recipient
+        class: primary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+verticalNavItems:
+  - label: Pending
+    link: index.html
+  - label: Published
+    link: published.html
+  - label: Recipients
+    link: recipients.html
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Recipient type
+          type: radios
+          values:      
+            - Subscriber
+            - Statutory objector
+          class:
+        - label: Body
+          type: text
+          values:
+          class: long
+        - label: First name
+          type: text
+          class: long
+        - label: Last name
+          type: text
+          class: long
+    - legend: Address
+      fields:
+        - label: Address
+          type: address
+        - label: Phone number
+          type: text
+          class: medium        
+        - label: Email address
+          type: text
+          class: long
+        - label: Traffic areas
+          type: multi select
+          class: long
+          values:
+            - Scottish
+            - North Eastern
+            - North Western
+            - Welsh
+            - West Midlands
+            - Eastern
+            - Western
+            - South Eastern
+            - Nothern Ireland
+        - label: Send via
+          type: radios
+          values:      
+            - Post
+            - Email
+        - label: Subscription details
+          type: radios
+          values:      
+            - A&D
+            - N&P
+        - label:
+          type: checkboxes
+          values:      
+            - Send police copy
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+<div class="overlay  js-hidden"></div>
+<div class="modal__wrapper js-hidden">
+  <div class="modal">
+    <div class="modal__header"> 
+      <h2 class="modal__title">Add new recipient</h2>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      {{#each form }}{{> _forms }}{{/each }}
+    </div>
+  </div>
+</div>
+
+
+<div class="sidebar--left">
+  <h4 class="title">Publications</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- .four-fifths-right -->
+
+
+
+
+
+

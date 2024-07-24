@@ -1,0 +1,72 @@
+.info-box {
+
+    padding: 1rem;
+    margin-bottom: 1rem;
+
+    
+    &--large-padding {
+        padding: 1.5rem;
+    }
+
+    &--grey {
+        background-color: $grey-3;
+    }
+
+    &--pink {
+        background: $pink;
+        color: white;
+
+        a {
+            color: white;
+        }
+    }
+
+    &--blue {
+        background-color: $govuk-blue;
+        color: white;
+    }
+
+    &__heading {
+        font-size: font-size(5);
+
+        &--icon {
+            min-height: 34px;
+            padding-left: 65px;
+        }
+    }
+
+    &__text {
+        @extend %h4;
+        margin-bottom: 1em;
+    }
+
+    &__links {
+        list-style: none;
+    }
+
+    dl:last-child {
+        margin-bottom: 0;
+        
+        dd:last-of-type {
+            padding-bottom: 0;
+        }
+        
+    }
+
+    &__icon {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 3px;
+
+        &-wrapper {
+            padding-top: 5px;
+            position: relative;
+            padding-left: 32px;
+        }
+    }
+
+}
+.selfservice-icon-important{
+    float:left;
+}

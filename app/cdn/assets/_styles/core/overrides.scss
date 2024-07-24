@@ -1,0 +1,138 @@
+// Override dd and dt rules from base.scss and read-only.scss
+dt.app-check-your-answers__question,
+dd.app-check-your-answers__answer,
+dd.app-check-your-answers__change,
+dt.govuk-summary-list__key,
+dd.govuk-summary-list__value,
+dd.govuk-summary-list__actions {
+  float: none;
+}
+
+dd.app-check-your-answers__answer,
+dd.app-check-your-answers__change,
+dd.govuk-summary-list__value,
+dd.govuk-summary-list__actions {
+  font-weight: normal;
+}
+
+form#CheckAnswers,
+form#Fees,
+form#AcceptAndPayForm {
+  margin: 0;
+
+  fieldset {
+    margin: 0;
+  }
+
+  button[type="submit"].govuk-button,
+  input[type="submit"].govuk-button {
+    @extend .govuk-button;
+    text-decoration: none;
+
+    &--secondary {
+      background: govuk-colour('grey-3');
+      color: govuk-colour('black');
+      box-shadow: 0 2px 0 govuk-colour('grey-2');
+    }
+  }
+}
+
+div.table__wrapper + form#Fees {
+    clear: both;
+    padding-top: 40px;
+}
+
+form#surrender-start, form#surrender-information-changed {
+  button[type="submit"].govuk-button--start {
+    @extend .govuk-button;
+    @extend .govuk-button--start;
+    text-decoration: none;
+  }
+}
+
+fieldset[data-group=fields\[permitsRequired\]] {
+  input {
+    width: 215px;
+  }
+
+  p.no-more-available { 
+    color: $govuk-secondary-text-colour;
+
+    &::first-line {
+      color: $govuk-text-colour;
+    }
+  }
+}
+
+form#Qa fieldset.date {
+    margin-top: -15px;
+}
+
+.radio-button__fieldset--horizontal .govuk-radios,
+.radio-button__fieldset--vertical .govuk-radios {
+  margin-bottom: 15px;
+}
+
+.radio-button__fieldset--horizontal .govuk-radios__conditional {
+  margin-left: 0;
+}
+
+form#surrender-current-discs {
+  fieldset {
+    margin-bottom: 0;
+  }
+  .field {
+    margin-bottom: 15px;
+  }
+  .govuk-checkboxes__conditional {
+    margin-bottom: 15px;
+  }
+  textarea {
+    margin-bottom: 0;
+  }
+}
+
+.govuk-grid-column-full .govuk-heading-xl {
+  max-width: none;
+}
+
+.govuk-warning-text__icon {
+  box-sizing: content-box;
+}
+
+div#global-cookie-message {
+    @media(min-width: 40.0625em) {
+        .govuk-button {
+            margin-bottom: 0px;
+        }
+    }
+
+    @media(min-width: 48.0625em) {
+        .gem-c-cookie-banner__button .govuk-button {
+            width: 90%;
+        }
+    }
+    
+    @media(max-width: 48.0525em) {
+        .gem-c-cookie-banner__button .govuk-button {
+            margin-bottom: 20px;
+        }
+    }
+
+    .govuk-button {
+        background-color: #00703c;
+
+        &[type="submit"] {
+            padding-top: 9px;
+            padding-bottom: 6px;
+            border: 2px solid transparent;
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+
+    .gem-c-button--inline {
+        margin-bottom: 5px;
+        width: 100%;
+    }
+}

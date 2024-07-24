@@ -1,0 +1,37 @@
+---
+title: Continue your licence
+subtitle: OB123456
+layout: base.hbs
+user: operator
+---
+
+<div class="row">
+
+  <div class="three-quarters">
+    <form action="finances.html">
+      <div class="field">
+        <fieldset class="radio-button__fieldset">
+          <legend class="">Are your licence details up to date?</legend>
+          <p class="form-hint">If you've recently submitted an application to change this licence, you should choose yes.</p>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="licence" id="licence[Y]" value="Y" data-show-element="#licence-yes-content">
+          <label class ="radio-button__label" for="licence[Y]">Yes</label>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="licence" id="licence[N]" value="N" data-show-element="#licence-no-content">
+          <label class="radio-button__label" for="licence[N]">No</label>
+        </div>
+          <div class="radio-button__hidden-content help__text" id="licence-no-content">
+            <p>You need to <a href="#">update your licence</a>.</p>
+          </div>
+      </fieldset>
+      </div>
+      <div class="actions-container" data-group="form-actions">
+        <button type="submit" name="form-actions[saveAndContinue]" class="action--primary large" id="form-actions[saveAndContinue]" value="">Continue</button>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+

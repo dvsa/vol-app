@@ -1,0 +1,44 @@
+---
+title: Notices
+overview: true
+breadcrumbs:
+  - link: index.html
+    label: Back to index
+
+---
+
+<div class="row">
+  <div class="full-width">
+    <div class="notice-container">
+      <div class="notice--danger">
+        <p role="alert">You have done something wrong, try submitting again</p>
+      </div>
+      <div class="notice--success">
+        <p role="alert">You did something successfully </p>
+      </div>
+      <div class="notice--info">
+        <p role="alert">This is just for your information</p>
+      </div>
+    </div>
+    <a href="" class="back-link">Back</a>
+    <div class="page-header">
+      <div class="page-header__wrapper">
+        <h1>Notices</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-thirds">
+    <!-- Notices -->
+    <div class="article">
+      <p>Notices provide extra feedback to the user when they have performed an action. They're'y useful when the user has effected something they can't see on the page. </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  OLCS.ready(function() {
+    OLCS.eventEmitter.emit("render");
+  });
+</script>

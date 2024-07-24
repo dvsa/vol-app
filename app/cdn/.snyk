@@ -1,0 +1,27 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:jquery:20150627':
+    - jquery:
+        reason: in progress elsewhere
+        expires: '2019-01-13T12:51:44.587Z'
+  'npm:lodash:20180130':
+    - customizr > modernizr > lodash:
+        reason: None given
+        expires: '2019-01-13T12:51:44.588Z'
+  'npm:chownr:20180731':
+    - cacache > chownr:
+        reason: no patch
+        expires: '2019-01-26T10:11:30.354Z'
+    - npm > tar > chownr:
+        reason: 'no patch '
+        expires: '2019-01-26T10:11:30.355Z'
+    - node-pre-gyp > tar > chownr:
+        reason: None given
+        expires: '2019-01-26T10:11:30.355Z'
+  SNYK-JS-TAR-174125:
+    - node-sass > node-gyp > tar:
+        reason: None given
+        expires: '2019-05-26T11:00:26.128Z'
+patch: {}

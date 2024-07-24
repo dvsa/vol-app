@@ -1,0 +1,96 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Licence details
+subSectionTitle: Overview
+verticalNavItems:
+  - label: Overview
+    link:  index.html
+  - label: Type of licence
+    link:  
+  - label: Business details
+    link:  business-details.html
+  - label: Addresses
+    link:
+  - label: People
+    link:
+  - label: Operating centres & authorisation
+    link: operating-centres.html
+  - label: Transport managers
+    link:
+  - label: Vehicles
+    link:
+  - label: Safety
+    link:
+  - label: Convictions & penalties
+    link:
+  - label: Delarations
+    link:
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups: 
+    - group:
+      - name: Operator name
+        value: <a href="">Don Tarmacadam Limited</a>
+      - name: No. of licences
+        value: 4
+    - group: 
+      - name: Licence number
+        value: OB1265270
+      - name: Licence start date
+        value: 16 Aug 2012
+      - name: Licence type
+        value: R
+    - group:
+      - name: Continuation date
+        value: 31 July 2017
+      - name: Licence status
+        value: Valid
+      - name: Next review date
+        value: 12 May 2018 
+      - name: Current review complaints
+        value: None
+    - group: 
+      - name: No. of operating centres
+        value: 1
+      - name: Total vehicle authorisation
+        value: 4
+      - name: Vehicles in possession
+        value: 2    
+      - name: Trailer authorisation
+        value: 2
+    - group: 
+      - name: Open cases
+        value: 3 <a href="">View cases</a>
+
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Licence details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Overview</h3>
+  </div>
+  {{#each read-only }}{{> _read-only }}{{/each }}
+  <form>
+    <fieldset>
+      <label>Lead Traffic Commissioner</label>
+      <select>
+        <option value="">Not set</option>
+        <option value="">North East England</option>
+        <option value="">North West England</option>
+      </select>
+    </fieldset>
+      <div class="actions-container">
+        <input class="action--primary large" type="submit" value="Save">
+        <input class="action--tertiary large" type="submit" value="Cancel">
+      </div>
+  </form>
+</div>

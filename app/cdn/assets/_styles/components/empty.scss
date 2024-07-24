@@ -1,0 +1,46 @@
+/**
+ * Empty
+ *
+ * Styling for empty tables
+ */
+
+.empty {
+  display: block;
+  clear: left;
+  max-width: 600px;
+  fieldset & {
+    margin-bottom: 0;
+  }
+  &__wrapper {
+    border-bottom: 1px solid $grey-2;
+    overflow: auto;
+    clear: both;
+    width: 100%;
+    max-width: 600px;
+    padding-bottom: $gutter;
+    &:not(:last-child) {
+      margin-bottom: $gutter;
+    }
+  }
+  &__title {
+    padding: 0;
+  }
+  + .actions-container {
+    margin-top: $gutter-half;
+  }
+}
+
+/**
+ * Selfserve only styles
+ */
+
+@if $app == 'selfserve' {
+  .empty {
+    .action--tertiary {
+      clear: both;
+      display: block;
+      margin: 22px 0 -5px;
+      padding: 0;
+    }
+  }
+}

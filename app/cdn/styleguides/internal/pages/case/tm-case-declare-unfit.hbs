@@ -1,0 +1,90 @@
+---
+layout: tm-case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+subSectionTitle: Decisions
+read-only:
+  - title: Declare unfit
+    editable: true
+    type: fields
+    groups: 
+      - group:
+        - name: MSI
+          value: Yes
+        - name: Date of decision
+          value: 12/11/14
+        - name: Date of notification (to TM)
+          value: 12/11/14
+      - group: 
+        - name: Unfitness start date
+          value: 12/11/14
+        - name: Unfitness end date
+          value: 12/11/14
+      - group:
+        - name: Reason for unfitness
+          value: Lorem ipsum sit dolor amet, sit amet dolor ipsum, darem olr sit amet
+          class: full-width
+      - group:
+        - name: Rehabilitation measure
+          value: Lorem ipsum sit dolor amet, sit amet dolor ipsum, darem olr sit amet
+          class: full-width
+verticalNavItems:
+  - label: Decisions
+    link:  
+  - label: History
+    link:  
+  - label: Tasks
+    link:
+    filterList:
+    - header: Team
+      type: dropdown
+      filters:
+        - All
+    - header: Owner
+      type: dropdown
+      filters:
+        - All
+    - header: Category
+      type: dropdown
+      filters:
+        - All
+    - header: All
+      type: dropdown
+      filters:
+        - All
+    - header: Date
+      type: dropdown
+      filters:
+        - Today
+        - This week
+        - This month
+        - All dates
+    - header: Status
+      type: dropdown
+      filters:
+        - All
+        - Open
+        - Closed
+    - header: 
+      type: checkboxes
+      filters:
+        - Urgent only
+  - label: Notes
+    link: notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Decisions</h3>
+  </div>
+  {{#each read-only}}
+    {{#is @index 0 }} 
+      {{> _read-only }}
+    {{/is }} 
+  {{/each}}
+</div>

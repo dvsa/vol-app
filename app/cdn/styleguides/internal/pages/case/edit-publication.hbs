@@ -1,0 +1,99 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+read-only:
+  - title: Details
+    editable: false
+    type: fields
+    groups: 
+    - group: 
+      - name: Publication No.
+        value: 12365262
+      - name: Status
+        value: Pending
+    - group:
+      - name: Publication date
+        value: 12/3/12
+      - name: Type/area
+        value: Lorem ipsum
+    - group: 
+      - name: Section
+        value: Lorem ipsum
+      - name: Traffic area
+        value: North East England
+      - name: Date of infringement
+        value: 16 Aug 2012
+      - name: Date of check
+        value: 16 Sep 2012
+form: 
+  - fieldsets:
+    - legend: Text
+      fields:
+        - label:
+          type: textarea
+        - label:
+          type: textarea
+        - label:
+          type: textarea
+    actions:
+    - label: Save
+      class: primary large
+    - label: Cancel
+      class: secondary large
+
+table:
+  - title: <strong>64</strong> Publications
+    headers:
+      - label: Publication No.
+        class: sortable descending
+      - label: Type
+        class: sortable
+      - label: Created
+        class: sortable descending
+      - label: Published
+        class: sortable descending
+      - label: Section
+        class: sortable
+      - label: Text
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <a href="">2152</a><span class="status green">Status</span>
+      - Lorem ipsum
+      - 12/1/14
+      - 23/3/14
+      - Lorem ipsum
+      - Lorem ipsum sit dolor amet
+      - <input type="checkbox">
+    rows: 4
+    actions:
+    - label: Edit
+      class: secondary disabled
+    - label: Delete
+      class: secondary disabled
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header"> 
+        <h2 class="modal__title">Edit publication</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each read-only}}
+          {{#is @index 0 }} 
+            {{> _read-only }}
+          {{/is }} 
+        {{/each}}
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+
+
+

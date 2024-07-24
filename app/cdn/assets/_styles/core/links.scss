@@ -1,0 +1,50 @@
+/**
+ * Links
+ */
+
+a {
+  color: $link-colour;
+  &:active,
+  &:hover {
+    color: $link-active-colour;
+    outline: 0;
+  }
+  @if $app == 'selfserve' {
+    &:focus {
+      background-color: $focus-colour;
+      outline: 3px solid $focus-colour;
+    }
+  }
+}
+
+.disabled,
+.disabled a {
+  text-decoration: none;
+  color: $grey-1;
+}
+
+.download {
+  font-weight: 600;
+  padding: 5px 0;
+  display: inline-block;
+  cursor: pointer;
+  &:before {
+    @include svg('selfserve-document');
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5em;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+  &.print-form {
+    margin-bottom: 1.5em;
+  }
+}
+
+@if $app == 'internal' {
+  table a:visited {
+    color: #6439A7;
+  }
+}

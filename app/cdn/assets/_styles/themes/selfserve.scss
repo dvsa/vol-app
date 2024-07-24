@@ -1,0 +1,97 @@
+// OLCS - Selfserve application SCSS
+// @version 1.0
+// @author sam.quayle@valtech.co.uk, Valtech Ltd
+// @author edmund.reed@valtech.co.uk, Valtech Ltd
+
+$app: selfserve;
+$govuk-compatibility-govukfrontendtoolkit: true;
+// Vendor
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/device-pixels';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/measurements';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/css3';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/colours';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/grid_layout';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/typography';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/design-patterns/buttons';
+@import '../../../node_modules/govuk-frontend/govuk/all';
+
+@import '../vendor/chosen';
+
+// Patterns
+@import '../patterns/check_answers';
+
+// Core
+@import '../core/icon-sprite';
+@import '../core/tools';
+@import '../core/form-controls';
+@import '../core/form-elements';
+@import '../core/fonts';
+@import '../core/config';
+@import '../core/base';
+@import '../core/helpers';
+@import '../core/links';
+@import '../core/lists';
+@import '../core/typography';
+@import '../core/layout';
+@import '../core/forms';
+@import '../core/navigation';
+@import '../core/tables';
+@import '../core/buttons';
+@import '../core/radio-buttons';
+
+// Components
+@import '../components/add-multiple';
+@import '../components/back-link';
+@import '../components/version-header';
+@import '../components/article';
+@import '../components/global-header';
+@import '../components/search';
+@import '../components/user-header';
+@import '../components/proposition-nav';
+@import '../components/page-header';
+@import '../components/phase';
+@import '../components/global-footer';
+@import '../components/list-nav';
+@import '../components/horizontal-nav';
+@import '../components/vertical-nav';
+@import '../components/pagination';
+@import '../components/result-settings';
+@import '../components/filters';
+@import '../components/tabs';
+@import '../components/status';
+@import '../components/highlight-box';
+@import '../components/sidebar';
+@import '../components/info-box';
+@import '../components/confirmation';
+@import '../components/verify';
+@import '../components/empty';
+@import '../components/guidance';
+@import '../components/modal';
+@import '../components/read-only';
+@import '../components/notice';
+@import '../components/tooltip';
+@import '../components/review';
+@import '../components/preloader';
+@import '../components/cookie-banner';
+@import '../components/inline-search';
+@import '../components/system-messages';
+@import '../components/more-actions';
+@import '../components/address';
+@import '../components/tm-check_answers';
+@import '../components/tm-declaration';
+@import '../components/hmcts-banner';
+@import '../components/single-active-permits';
+@import '../components/cookie-settings';
+
+// Views
+@import '../views/selfserve/overview';
+@import '../views/selfserve/search';
+@import '../views/selfserve/submit-application';
+
+// Overrides
+@import '../core/overrides';
+
+// GDS Approved Custom Styles
+@import '../core/approved-custom';
+
+/*# sourceMappingURL=selfserve.css.map */

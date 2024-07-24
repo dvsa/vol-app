@@ -1,0 +1,204 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Case details
+subSectionTitle: ERRU penalties
+
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups: 
+    - group: 
+      - name: VRM
+        value: LL08 URE
+    - group:
+      - name: Infringement ID
+        value: 124253
+      - name: Notification number
+        value: 01828
+    - group: 
+      - name: Category
+        value: Lore ipsum
+      - name: Type
+        value: Lorem ipsum
+      - name: Date of infringement
+        value: 16 Aug 2012
+      - name: Date of check
+        value: 16 Sep 2012
+    - group: 
+      - name: Transport undertaking name
+        value: Polish Transport Authority
+        class: full-width
+      - name: Member state
+        value: Poland
+        class: full-width
+      - name: Originating authority
+        value: Polish Transport Authority
+        class: full-width
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Conditions satisfactory?
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Notes
+          type: textarea
+          values: 
+            - Please enter an explaniation of why the conditions were unsatisfactory
+    - legend: Register service
+      fields:
+        - label: Application copied to LA /PTE
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: LA/PTE support short notice
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Application signed
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Variation details
+          type: read only
+          values: 
+            - Lorem ipsum
+        - label: Correspondence address
+          type: select
+          values: 
+            - 24 Eleanor Court Road, Oswestry
+        - label: Completed
+          type: date
+    actions:
+      - label: Save
+        class: primary large
+      - label: Request a new route map
+        class: secondary large
+      - label: Cancel
+        class: secondary large
+table:
+  - title: <strong>Imposed penalties</strong><br /><span>For this infringment, the originating state has imposed the following penalties:</span>
+    headers:
+      - label: Final decision date
+        class: sortable descending
+      - label: Penalty type
+        class: sortable
+      - label: Start date
+        class: sortable
+      - label: End date
+        class: sortable
+      - label: Excused?
+        class: sortable
+    columns:
+      - 12 May 2014
+      - Lorem ipsum
+      - 12 April 2014
+      - 12 April 2015
+      - Yes
+    rows: 2
+  - title: <strong>Requested penalties</strong><br /><span>The originating state has requested the following penalties be applied:</span>
+    headers:
+      - label: Penalty type
+        class: sortable descending
+      - label: Duration
+        class: sortable
+    columns:
+      - Lorem ipsum sit dolor amet
+      - Duration
+    rows: 2
+  - title: <b>Applied penalties</b>
+    headers:
+      - label: Penalty ID
+        class: sortable descending
+      - label: Penalty type
+        class: sortable
+      - label: Start date
+        class: sortable descending
+      - label: End date
+        class: sortable
+      - label: Imposed
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <a href="">127262</a>
+      - Lorem ipsum
+      - 12 Aug 2013
+      - 15 Aug 2013
+      - Yes
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+verticalNavItems:
+  - label: Overview
+    link: index.html
+  - label: Convictions
+    link:  
+  - label: Prohibitions
+    link:  
+  - label: ERRU penalties
+    link:
+  - label: Statements
+    link:
+  - label: Complaints
+    link:
+  - label: Conditions & undertakings
+    link:
+  - label: Impoundings
+    link:
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Case details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <h3>ERRU penalties</h3>
+
+
+  {{#each read-only}}
+    {{#is @index 0 }} 
+      {{> _read-only }}
+    {{/is }} 
+  {{/each}}
+
+  {{#each read-only}}
+    {{#is @index 1 }} 
+      {{> _read-only }}
+    {{/is }} 
+  {{/each}}
+
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+  {{#each table}}
+    {{#is @index 1 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+  {{#each table}}
+    {{#is @index 2 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+
+</div>

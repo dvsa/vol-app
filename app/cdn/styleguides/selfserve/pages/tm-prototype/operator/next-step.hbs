@@ -1,0 +1,38 @@
+---
+title: Next steps
+subtitle: OB12345/12
+user: operator
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <div class="article">
+    <p>Katy Hasley should now:</p>
+    <ul>
+      <li>Print and sign the declaration form</li>
+      <li>Get the declaration form signed by an owner or Director</li>
+      <li>Return the form, with both signatures, to the <a href="">Central Licensing Office</a></li>
+    </ul>
+
+    <p>We'll let you know when we recieve it and if there are any problems.</p>
+    </div>
+  </div><!-- .two-thirds -->
+
+</div><!-- .row -->
+
+<script>
+  $(document).on('ready',function() {
+    $('.js-verify, .js-print-sign').hide();
+
+    $('[name="declarations"]').on('change',function() {
+      if($(this).val() === 'verify') {
+        $('.js-verify').show();
+        $('.js-print-sign').hide();
+      } else {
+        $('.js-verify').hide();
+        $('.js-print-sign').show();
+      }
+    });
+  });
+</script>

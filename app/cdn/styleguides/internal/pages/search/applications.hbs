@@ -1,0 +1,66 @@
+---
+layout_script: false
+asset: '../../../../'
+layout: search-results.hbs
+sectionTitle: Applications
+filterList:
+  - header: App status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>24</strong> Application results
+    headers:
+      - label: Licence
+        class: sortable descending
+      - label: Operator name
+        class: sortable
+      - label: Application
+        class: sortable
+      - label: Received
+        class: sortable
+      - label: Vehicle auth.
+        class: sortable
+      - label: Trailer auth.
+        class: sortable
+    columns:
+      - <strong><a href="">OM1111040</a></strong> R Valid
+      - Don Tarmacadam
+      - <a href="">1234562</a> New
+      - 12/03/12
+      - 13
+      - 0
+    rows: 20
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Filter by:</h4>
+  {{> _filters }}
+</div><!-- end .one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- end .four-fifths-right -->
+
+
+
+
+
+

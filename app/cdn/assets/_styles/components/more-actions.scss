@@ -1,0 +1,96 @@
+/*
+ * More actions
+ * styles a select element to look like a button
+ */
+
+.more-actions {
+
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  z-index: 1;
+
+  &:focus {
+    outline: 3px solid $outline;
+  }
+
+  &__button {
+    @extend .action--secondary;
+    &:after {
+      @include svg('dropdown-down');
+      content: '';
+      margin-left: 0.4em;
+    }
+  }
+
+  &__list {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 5px;
+    background: $white;
+    padding: 5px 0;
+    box-shadow: 0 1px 5px $grey-2;
+    z-index: 3;
+    // addresses issue olcs-13945 - whitespace wrapping issue
+    @-moz-document url-prefix() {
+        min-width: 200px;
+    }
+  }
+
+  &__item {
+    color: $black;
+    margin: 0;
+    padding: 6px 10px;
+    border: 0;
+    width: 100%;
+    font-size: 1em;
+    cursor: pointer;
+    background: none;
+    text-align: left;
+    text-decoration: none;
+    box-shadow: none;
+    white-space: nowrap;
+    &:hover {
+      color: $link-colour;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &:hover {
+    .more-actions__list {
+      display: block;
+      .js-enabled & {
+        display: none;
+      }
+    }
+  }
+
+}
+
+/*
+ * Record Actions
+ */
+
+@if $app == 'internal' {
+
+  .record-actions {
+    display: block;
+    margin-bottom: $gutter-two-thirds;
+    &__group {
+      list-style: none;
+      margin: 0.5em 0 1.1em;
+    }
+    &__item {
+      margin-bottom: 0.5em;
+      text-align: center;
+    }
+    a {
+      display: block;
+      padding: 6px 12px 5px;
+    }
+  }
+
+}

@@ -1,0 +1,187 @@
+---
+title: Safety and complience
+user: operator
+subtitle: Step 10 of 12
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Home
+  - link: icence-overview.html.html
+    label: Application overview
+---
+
+<div class="row">
+  
+  <div class="two-thirds">
+    
+      <form>
+      
+      <fieldset data-group="license">
+        
+        <div class="field ">
+          <label for="licence[safetyInsVehicles]">What's the maximum time between safety inspections on your vehicles?</label>
+          <select name="licence[safetyInsVehicles]" id="licence[safetyInsVehicles]">
+            <option value="">Please Select</option>
+            <option value="1" selected="selected">1 Week</option>
+            <option value="2">2 Weeks</option>
+            <option value="3">3 Weeks</option>
+            <option value="4">4 Weeks</option>
+            <option value="5">5 Weeks</option>
+            <option value="6">6 Weeks</option>
+            <option value="7">7 Weeks</option>
+            <option value="8">8 Weeks</option>
+            <option value="9">9 Weeks</option>
+            <option value="10">10 Weeks</option>
+            <option value="11">11 Weeks</option>
+            <option value="12">12 Weeks</option>
+            <option value="13">13 Weeks</option>
+          </select>
+        </div>
+        
+        <div class="field ">
+          <label for="licence[safetyInsVehicles]">What's the maximum time between safety inspections on your trailers?</label>
+          <select name="licence[safetyInsVehicles]" id="licence[safetyInsVehicles]">
+            <option value="">Please Select</option>
+            <option value="1" selected="selected">1 Week</option>
+            <option value="2">2 Weeks</option>
+            <option value="3">3 Weeks</option>
+            <option value="4">4 Weeks</option>
+            <option value="5">5 Weeks</option>
+            <option value="6">6 Weeks</option>
+            <option value="7">7 Weeks</option>
+            <option value="8">8 Weeks</option>
+            <option value="9">9 Weeks</option>
+            <option value="10">10 Weeks</option>
+            <option value="11">11 Weeks</option>
+            <option value="12">12 Weeks</option>
+            <option value="13">13 Weeks</option>
+          </select>
+        </div>
+        
+        <fieldset class="checkbox inline">
+          <legend>Are some of your vehicles or trailers inspected more often than this?</legend>
+          <label class="inline">
+            <input type="radio" name="licence[safetyInsVaries]" value="Y">Yes
+          </label>
+          <label class="inline">
+            <input type="radio" name="licence[safetyInsVaries]" value="N" checked="checked">No
+          </label> 
+          <div class="hint">This can sometimes be the case with older vehicles</div>
+        </fieldset>
+        
+        <fieldset class="checkbox">
+          <legend>Who analyses your tachograph data?</legend>
+          <label>
+            <input type="radio" name="licence[tachographIns]" value="tach_internal">An owner or employee of the business
+          </label>
+          <label>
+            <input type="radio" name="licence[tachographIns]" value="tach_external" checked="checked">An external contractor
+          </label>
+          <label>
+            <input type="radio" name="licence[tachographIns]" value="tach_na">Not applicable
+          </label>
+        </fieldset>
+        
+        <div class="field">
+          <label for="licence[tachographInsName]">
+            The company or full name of the external contractor who analyses the tachograph records <span class="js-hidden">(if applicable)</span>
+          </label>
+          <input type="text" name="licence[tachographInsName]" class="medium" id="licence[tachographInsName]" value="">
+        </div>
+      
+      </fieldset>
+        
+      <fieldset data-group="table">
+        <legend>Safety inspectors</legend>
+        <p class="hint">The safety inspector is the person responsible for vehicle examination, diagnosis and reporting. They are not required to carry out repair or servicing work.</p>
+        <div class="field ">
+          <div class="empty__wrapper table__empty">
+            <h3 class="empty__title"></h3>
+            <div class="empty">
+              <p>You haven't added any safety inspectors yet.</p>
+              <div class="actions-container">
+                <button id="add" class="action--primary" name="table[action]" type="submit" value="Add">Add safety inspector</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      
+      <fieldset data-group="additional-documents">
+        
+        <div class="field ">
+          <h3>Additional information (optional)</h3>
+            <p>You can upload more details about your vehicle safety and maintenance arrangements below. You do not need to provide your maintenance contract(s). See <a href="#" target="_blank" rel="external">the safe operator’s guide</a> for more information.</p>
+            <details class="help">
+              <summary class="help__summary" role="button" aria-expanded="false"> Examples of additional information</summary>
+              <div class="article help__text">
+                <ul>
+                  <li>Compliance reports</li>
+                  <li>Risk assessments</li>
+                  <li>Maintenance schedule(s)</li>
+                  <li>Safety inspection records</li>
+                  <li>What systems you have in place for reporting defects</li>
+                  <li>What facilities you have for undertaking safety inspections (internal only)</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+          
+          <fieldset class="file-uploader" id="files">
+            <div class="field ">
+              <ul class="attach-action__list">
+                <li class="attach-action">
+                  <label class="attach-action__label" tabindex="0">
+                    Attach file(s) <input type="file" class="js-visually-hidden attach-action__input"  multiple="multiple">
+                  </label>
+                  <p class="attach-action__hint">PDF, DOC, JPG, PNG or GIF</p>
+                </li>
+              </ul>
+            </div>
+            <ul class="js-upload-list"></ul>
+
+      </fieldset>
+      
+      <div class="field confirm">
+        <label tabindex="0">
+          <input type="hidden">
+          <input type="checkbox">I've made arrangements to keep my vehicles in a fit and serviceable condition at all times
+        </label>
+      </div>
+      
+      <fieldset class="actions-container" data-group="form-actions">
+        <button type="submit" class="action--primary large">
+          Continue
+        </button>
+        <button type="submit" class="action--secondary large">
+          Save and return
+        </button>
+        <button type="submit" class="action--tertiary large">
+          Cancel
+        </button>
+      </fieldset>
+      
+    </form>
+        
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB12524/525</dd>
+        <dt>Progress</dt>
+        <dd>4 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </div>
+  </div>
+
+</div><!-- main wrapper -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+
+  });
+</script>

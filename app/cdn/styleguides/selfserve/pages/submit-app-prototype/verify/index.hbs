@@ -1,0 +1,95 @@
+---
+layout: base.hbs
+overview: true
+user: operator
+title: Apply for a new licence
+subtitle: OB12524/1
+back-link: index.html
+breadcrumbs:
+  - link: home.html
+    label: Home
+overview-items:
+  - name: 1. Type of licence
+    status: <span class="status green">Complete</span>
+
+  - name: 2. Business type
+    status: <span class="status green">Complete</span>
+
+  - name: 3. Business details
+    status: <span class="status green">Complete</span>
+
+  - name: 4. Addresses
+    status: <span class="status green">Complete</span>
+
+  - name: 5. Directors
+    status: <span class="status green">Complete</span>
+
+  - name: 6. Operating centres and authorisation
+    status: <span class="status green">Complete</span>
+
+  - name: 7. Financial evidence
+    status: <span class="status green">Complete</span>
+
+  - name: 8. Transport managers
+    status: <span class="status green">Complete</span>
+
+  - name: 9. Vehicles
+    status: <span class="status green">Complete</span>
+
+  - name: 10. Safety and compliance
+    status: <span class="status green">Complete</span>
+
+  - name: 11. Financial history
+    status: <span class="status green">Complete</span>
+
+  - name: 12. Licence history
+    status: <span class="status green">Complete</span>
+
+  - name: 13. Convictions and penalties
+    status: <span class="status green">Complete</span>
+
+  - name: 14. Declarations
+    status: <span class="status grey">Incomplete</span>
+    url: declarations.html
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+
+    {{> _page-header}}
+
+    <ul class="overview-navigation">
+
+    {{#each overview-items}}
+      <li class="overview-item not-started">
+        <h3><a href="{{url}}" class="overview-item__link">{{ name }}</a></h3>
+        {{{ status }}}
+      </li>
+    {{/each}}
+
+    </ul><!-- .overview-navigation -->
+
+  </div><!-- two-thirds -->
+
+  <div class="one-third">
+    <aside class="sidebar" role="complementary">
+      <div class="sidebar__panel">
+        <h4 class="sidebar__panel__title">Submit application</h4>
+        <p>You can't submit until you've completed all of the sections</p>
+        <p>Your fee is<br><b>£250.50</b></p>
+        <a href="" class="action--primary large disabled">Submit and pay</a>
+      </div>
+      <ul class="sidebar__actions">
+        <li><a href="/application/1/cancel/" class="js-modal-ajax">Cancel application</a></li>
+      </ul>
+      <dl class="meta">
+        <dt>Progress</dt>
+        <dd>13 of 14 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </aside>
+  </div><!-- one-thirds -->
+
+</div>

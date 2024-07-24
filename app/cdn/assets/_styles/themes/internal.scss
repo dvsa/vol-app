@@ -1,0 +1,84 @@
+// OLCS - Internal application SCSS
+// @version 1.0
+// @author sam.quayle@valtech.co.uk, Valtech Ltd
+// @author edmund.reed@valtech.co.uk, Valtech Ltd
+
+$app: internal;
+$govuk-compatibility-govukfrontendtoolkit: true;
+// Vendor
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/device-pixels';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/measurements';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/css3';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/colours';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/grid_layout';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/typography';
+@import '../../../node_modules/govuk-frontend/govuk/components/radios/radios';
+@import '../../../node_modules/govuk-frontend/govuk/all';
+
+@import '../vendor/chosen';
+@import '../vendor/pace';
+@import '../vendor/tinymce';
+
+// Core
+@import '../core/fonts';
+@import '../core/icon-sprite';
+@import '../core/config';
+@import '../core/tools';
+@import '../core/base';
+@import '../core/helpers';
+@import '../core/links';
+@import '../core/lists';
+@import '../core/typography';
+@import '../core/layout';
+@import '../core/forms';
+@import '../core/navigation';
+@import '../core/tables';
+@import '../core/buttons';
+@import '../core/radio-buttons';
+
+// Components
+@import '../components/version-header';
+@import '../components/internal-footer';
+@import '../components/article';
+@import '../components/global-header';
+@import '../components/search';
+@import '../components/admin-menu';
+@import '../components/user-header';
+@import '../components/page-header';
+@import '../components/breadcrumb';
+@import '../components/application-nav';
+@import '../components/horizontal-nav';
+@import '../components/vertical-nav';
+@import '../components/pagination';
+@import '../components/result-settings';
+@import '../components/filters';
+@import '../components/status';
+@import '../components/highlight-box';
+@import '../components/comment';
+@import '../components/empty';
+@import '../components/guidance';
+@import '../components/list-nav';
+@import '../components/split-screen';
+@import '../components/modal';
+@import '../components/read-only';
+@import '../components/sidebar';
+@import '../components/notice';
+@import '../components/tooltip';
+@import '../components/review';
+@import '../components/preloader';
+@import '../components/void';
+@import '../components/verify';
+@import '../components/system-messages';
+@import '../components/more-actions';
+@import '../components/chosen';
+@import "../components/checkbox";
+@import '../components/summary-background';
+@import '../components/single-active-permits';
+
+@import '../core/internal-overrides';
+
+// Views
+@import '../views/internal/sign-in';
+@import '../views/internal/submission';
+
+/*# sourceMappingURL=internal.css.map */

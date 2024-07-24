@@ -1,0 +1,79 @@
+---
+layout: user-management.hbs
+asset: '../../../../'
+subSectionTitle: Users
+table:
+  - title: <strong>24</strong> Users
+    headers:
+      - label: Username
+        class: sortable descending
+      - label: Name
+        class: sortable descending
+      - label: Email address
+        class: sortable
+      - label: Type
+        class: sortable
+      - label: Role
+        class: sortable
+      - label: Last login
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">rubenloftus</a></strong>
+      - Ruben Loftus-Cheek
+      - ruben.loftus-cheek@gmail.com
+      - Operator
+      - Admin
+      - 12:04 12 May 2015
+      - <input type="checkbox">
+    rows: 20
+    actions:
+    - label: New user
+      class: primary
+      link: new-internal-user.html
+    - label: Edit
+      class: secondary disabled
+    - label: Disable
+      class: secondary disabled
+verticalNavItems:
+  - label: Users
+    link:
+    filterList:
+    - header: Search
+      type: search
+      placeholder: Enter keywords
+    - header: Type
+      type: dropdown
+      filters:
+        - All
+    - header: Role
+      type: dropdown
+      filters:
+        - All
+  - label: Teams
+    link: published.html
+  - label: Printers
+    link: recipients.html
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">User management</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div><!-- .four-fifths-right -->
+
+
+
+
+
+

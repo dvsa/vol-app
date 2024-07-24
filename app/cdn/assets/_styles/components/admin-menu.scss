@@ -1,0 +1,92 @@
+/**
+ * Admin Menu
+ *
+ * Used for Internal application logged in users
+ */
+
+.admin {
+
+  $admin-panel-bg : #080808;
+
+  @if $app == 'internal' {
+
+    list-style: none;
+    position: absolute;
+    right: $gutter;
+
+    &__arrow {
+      @include svg('internal-admin-menu-arrow');
+      display: block;
+      position: absolute;
+      right: 30px;
+      top: -6px;
+    }
+
+    &__menu {
+      border-radius: 3px;
+      box-shadow: 0 1px 5px $grey-3;
+      display: none;
+      top: 35px;
+      right: 0;
+      background: $white;
+      border: 1px solid $grey-3;
+      z-index: 3;
+      width: 420px;
+      position: absolute;
+      padding: 10px 0;
+      cursor: default;
+      .admin:hover & {
+        display: block;
+        .js-enabled & {
+          display: none;
+        }
+      }
+    }
+
+    &__submenu {
+      float: left;
+      width: 50%;
+    }
+
+    &__title {
+      border-radius: 3px;
+      position: relative;
+      overflow: visible;
+      padding: 6px 25px 4px 0.75em;
+      border: 1px solid darken($grey-1, 20%);
+      &:hover {
+        border: 1px solid darken($grey-1, 10%);
+        cursor: pointer;
+      }
+      &.active {
+        border: 1px solid $admin-panel-bg;
+        background-color: $admin-panel-bg;
+      }
+      &:after {
+        @include svg('dropdown-down');
+        content: '';
+        right: 8px;
+        top: 12px;
+        position: absolute;
+      }
+    }
+
+    &__item {
+      width: 100%;
+      list-style: none;
+      font-size: font-size(4);
+      a {
+        display: block;
+        font-weight: 500;
+        color: $link-colour;
+        padding: 8px 20px;
+        &:hover {
+          text-decoration: none;
+          background: $grey-4;
+        }
+      }
+    }
+
+  } // @if $app
+
+} // .admin

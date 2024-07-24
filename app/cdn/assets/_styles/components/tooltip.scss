@@ -1,0 +1,53 @@
+/**
+ * Tooltip
+ */
+
+.tooltip-grandparent {
+  cursor: pointer;
+  &:hover .tooltip {
+    display: block;
+  }
+}
+
+.tooltip-parent {
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  &:hover .tooltip {
+    display: block;
+  }
+}
+
+.tooltip {
+  border-radius: 2px;
+  display: none;
+  position: absolute;
+  padding: 0.75em;
+  width: 200px;
+  top: -14px;
+  transform: translateY(-100%);
+  left: -38px;
+  opacity: 0.9;
+  line-height: 1.2;
+  text-transform: none;
+  font-weight: 400;
+  white-space: normal;
+  color: $white;
+  background: $black;
+  font-size: font-size(2);
+  &:hover {
+    cursor: default;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-top: 10px solid $black;
+    border-right: 9px solid transparent;
+    left: 35px;
+    bottom: -9px;
+  }
+}

@@ -1,0 +1,102 @@
+---
+title: Home
+asset: '../../'
+---
+
+<div class="content">
+
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters }}
+  </div>
+
+  <div class="table-col">
+    <div class="table__header">
+      <h3> 6 Tasks</h3>
+      <div class="actions-container">
+        <button id="re-assign task" class="action--secondary js-require--multiple" name="action" type="submit" value="Re-assign Task" disabled="disabled">Re-assign</button>
+        <button id="close task" class="action--secondary js-require--multiple" name="action" type="submit" value="Close Task" disabled="disabled">Close task</button>
+      </div>
+    </div>
+    <div class="table__wrapper">
+      <div class="table-preloader__overlay"></div>
+      <div class="table-preloader__icon"></div>
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" width=""><a href="">Link</a></th>
+            <th class="sortable" width=""><a href="">Category</a></th>
+            <th class="sortable" width=""><a href="">Sub category</a></th>
+            <th class="sortable" width=""><a href="">Description</a></th>
+            <th class="sortable" width=""><a href="">Date</a></th>
+            <th class="sortable" width=""><a href="">Owner</a></th>
+            <th class="sortable" width=""><a href="">Name</a></th>
+            <th class="" width="20px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="/transport-manager/3/">3</a></td>
+            <td>Transport Manager</td>
+            <td>General Task</td>
+            <td><a href="/task/edit/9/" class="js-modal-ajax">A test task for TM 3</a></td>
+            <td>15/12/2014</td>
+            <td>Development (Unassigned)</td>
+            <td>Jones</td>
+            <td><input type="checkbox" name="id[]" value="9"></td>
+          </tr>
+          <tr>
+            <td><a href="/licence/110/bus/1/details/">PD2737280/1</a></td>
+            <td>Bus Registration</td>
+            <td>General Task</td>
+            <td><a href="/task/edit/10/" class="js-modal-ajax">A tewrwedwedwed</a></td>
+            <td>15/12/2014</td>
+            <td>Development (Unassigned)</td>
+            <td>Leeds city council</td>
+            <td><input type="checkbox" name="id[]" value="10"></td>
+          </tr>
+          <tr>
+            <td><a href="/application/1/">OB1234567</a></td>
+            <td>Application</td>
+            <td>CPC or Exemption</td>
+            <td><a href="/task/edit/1/" class="js-modal-ajax">A test task</a></td>
+            <td>14/08/2014</td>
+            <td>Development (Unassigned)</td>
+            <td>John Smith Haulage Ltd.</td><td><input type="checkbox" name="id[]" value="1"></td>
+          </tr>
+          <tr>
+            <td><a href="/operator/1/business-details/">1</a></td>
+            <td>IRFO</td>
+            <td>IRFO Assisted Digital</td>
+            <td><a href="/task/edit/3/" class="js-modal-ajax">An organisation task</a></td>
+            <td>01/05/2014</td>
+            <td>Development (Unassigned)</td>
+            <td>John Smith Haulage Ltd.</td>
+            <td><input type="checkbox" name="id[]" value="3"></td>
+          </tr>
+          <tr>
+            <td><a href="/licence/110/">PD2737280</a></td>
+            <td>Licensing</td>
+            <td>Continuations and Renewals</td>
+            <td><a href="/task/edit/2/" class="js-modal-ajax">Another test task</a></td>
+            <td>11/02/2013</td>
+            <td>Development (Unassigned)</td>
+            <td>Leeds city council</td>
+            <td><input type="checkbox" name="id[]" value="2"></td>
+          </tr>
+          <tr>
+            <td><a href="/licence/63/">PD1234589</a></td>
+            <td>Licensing</td>
+            <td>Fee Request</td>
+            <td><a href="/task/edit/8/" class="js-modal-ajax">Single licence</a></td>
+            <td>27/09/2012</td>
+            <td>Development (Unassigned)</td>
+            <td>Leeds bus service ltd.</td>
+            <td><input type="checkbox" name="id[]" value="8"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>  
+  </div>
+  
+</div><!-- content -->

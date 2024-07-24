@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-GB" class="no-js not-ie8">
+<!--<![endif]-->
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Choose a thing</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/styles/selfserve.css" media="all" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/js/selfserve.js"></script>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body class="selfserve js-enabled ">
+
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+        <a href="/styleguides/selfserve/" title="Go to the OLCS Selfserve styleguide homepage" class="global-header__logo">
+          <img src="/images/bitmap/gov.uk_logotype_crown.png" alt="GOV.UK logo">GOV.UK
+        </a>
+      </div>
+    </div>
+
+    <div class="page-wrapper">
+      
+      <div class="user-header">
+        
+        <div class="phase">
+          <span class="phase__tag">alpha</span>
+          <span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span>
+        </div>
+        
+      </div><!-- .user-header -->
+
+      <div id="main" role="main" class="styleguide">
+        
+        <div class="page-header">
+          <div class="page-header__wrapper">
+            <h1>Choose a thing</h1>
+          </div>
+        </div>
+        
+        <div class="row">
+          <ul class="full-width key">
+            <li class="key--bullet thing--styleguide"><span>Styleguide</span></li>
+            <li class="key--bullet thing--local"><span>Local</span></li>
+            <li class="key--bullet thing--dev"><span>Dev Env</span></li>
+            <li class="key--bullet thing--demo"><span>Demo Env</span></li>
+          </ul>
+        </div>
+        
+        <div class="row thing-row">
+        
+          <div class="one-half">
+            <a href="styleguides/selfserve" class="thing--styleguide">
+              Selfserve Styleguides
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="styleguides/internal" class="thing--styleguide">
+              Internal Styleguides
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://olcs-selfserve.olcs.gov.uk/" class="thing--local tooltip-parent">
+              Selfserve Local
+              <span class="tooltip">Have you got all required VMs running?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://olcs-internal.olcs.gov.uk/" class="thing--local tooltip-parent">
+              Internal Local
+              <span class="tooltip">Have you got all required VMs running?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://selfserve.dev-auth.olcs.mgt.mtpdvsa/" class="thing--dev tooltip-parent" target="blank">
+              Selfserve Dev
+              <span class="tooltip">Are you connected to the VPN?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://internal.dev-auth.olcs.mgt.mtpdvsa/" class="thing--dev tooltip-parent" target="blank">
+              Internal Dev
+              <span class="tooltip">Are you connected to the VPN?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://selfserve.demo-auth.olcs.mgt.mtpdvsa/" class="thing--demo tooltip-parent" target="blank">
+              Selfserve Demo
+              <span class="tooltip">Are you connected to the VPN?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="http://internal.demo-auth.olcs.mgt.mtpdvsa/" class="thing--demo tooltip-parent" target="blank">
+              Internal Demo
+              <span class="tooltip">Are you connected to the VPN?</span>
+             </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="unit-testing/" class="tooltip-parent thing--test">
+              Unit Testing
+              <span class="tooltip">Have you ran 'grunt test' to generate the coverage files?</span>
+            </a>
+          </div>
+        
+          <div class="one-half">
+            <a href="https://wiki.i-env.net/display/olcs/Frontend+development+guidelines" class="thing--docs tooltip-parent" target="blank">
+              Documentation
+              <span class="tooltip">Are you connected to the VPN?</span>
+            </a>
+          </div>
+
+        </div><!-- .row -->
+
+      </div><!-- #main -->
+      
+    </div><!-- .page-wrapper -->
+
+    <div class="global-footer">
+      <div class="global-footer__wrapper">
+        <ul class="global-footer__links">
+          <li class="global-footer__link"><a href="">Terms and conditions</a></li>
+          <li class="global-footer__link"><a href="privacy-policy.html">Privacy policy</a></li>
+          <li class="global-footer__link"><a href="">Feedback</a></li>
+          <li class="global-footer__link"><a href="">Cymraeg</a></li>
+          <li class="global-footer__link">Built by <a href="https://www.gov.uk/government/organisations/driver-and-vehicle-standards-agency" rel="external">Driver and Vehicle Standards Agency</a></li>
+        </ul>
+        <div class="global-footer__copyright">
+          <a href="">&copy; Crown copyright</a>
+        </div>
+      </div>
+    </div><!-- .global-footer -->
+    
+    <style>
+      .thing-row {
+        font-size: 1.25em;
+      }
+      .thing-row a {
+        display: block;
+        border: 1px solid rgba(0,0,0,0.2);
+        padding: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        text-align: center;
+      }
+      .thing-row a:hover {
+        color: white;
+        border-color: transparent;
+        text-decoration: none;
+      }
+      .tooltip {
+        left: 1em;
+        top: -15px;
+        text-align: left;
+      }
+      a[class*="thing--"]:before {
+        content: "";
+        height: calc(100% + 2px);
+        width: 8px;
+        position: absolute;
+        top: -1px;
+        left: -1px;
+        color: inherit;
+        background: currentColor;
+      }
+      a[class*="thing--"]:hover:before {
+        background: none;
+      }
+      
+      .thing--styleguide        { color      : #f47738; }
+      a.thing--styleguide:hover { background : #f47738; }
+      
+      .thing--local             { color      : #d53880; }
+      a.thing--local:hover      { background : #d53880; }
+      
+      .thing--dev               { color      : #005ea5; }
+      a.thing--dev:hover        { background : #005ea5; }
+      
+      .thing--demo              { color      : #85994b; }
+      a.thing--demo:hover       { background : #85994b; }
+      
+      .thing--test              { color      : #00823B; }
+      a.thing--test:hover       { background : #00823B; }
+      
+      .thing--docs              { color      : #4C2C92; }
+      a.thing--docs:hover       { background : #4C2C92; }
+      
+      .key li {
+        list-style: none;
+        display: inline-block;
+        margin-right: 1em;
+        margin-bottom: 2em;
+      }
+      .key--bullet:before {
+        content: "";
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        color: inherit;
+        display: inline-block;
+        margin-right: 0.25em;
+        background: currentColor;
+      }
+      .key--bullet span {
+        color: #0b0c0c;
+      }
+    </style>
+
+  </body>
+</html>

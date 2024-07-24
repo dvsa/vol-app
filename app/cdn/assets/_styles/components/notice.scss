@@ -1,0 +1,154 @@
+/**
+ * Notices
+ */
+
+@if $app == 'selfserve' {
+
+  %notice {
+    width: 100%;
+    padding: 15px 15px 13px;
+    color: $white;
+    position: relative;
+    line-height: 1;
+    &:before {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 15px;
+      width: 25px;
+      margin-top: -1px;
+    }
+  }
+
+  // Block
+  .notice {
+
+    // Elements
+    // @todo update to BEM syntax
+    &-container {
+      margin-bottom: 1em;
+    }
+
+    &__close {
+      float: right;
+      color: $white;
+      font-size: font-size(4);
+      &:hover {
+        color: $white;
+      }
+    }
+
+    // Modifiers
+    &--info {
+      @extend %notice;
+      background: $light-blue-25;
+      color: $black;
+      a {
+        color: $link-colour;
+      }
+    }
+    &--success {
+      @extend %notice;
+      background: $turquoise;
+      padding-left: 40px;
+      &:before {
+        @include svg('selfserve-tick');
+        content: '';
+      }
+    }
+    &--danger {
+      @extend %notice;
+      background: $mellow-red;
+      padding-left: 40px;
+      &:before {
+        @include svg('selfserve-cross');
+        content: '';
+      }
+    }
+
+  }
+
+}
+
+@mixin notice($color) {
+  $background : desaturate(lighten($color, 50%), 10%);
+  $border     : desaturate(lighten($color, 30%), 10%);
+
+  @extend %notice;
+
+  background: $background;
+  border: 1px solid $border;
+  color: $color;
+}
+
+@if $app == 'internal' {
+  $notice--success : #3C763D;
+  $notice--warning : #8A6D3B;
+  $notice--info    : #31708F;
+  $notice--danger  : #A94442;
+
+  %notice {
+    border-radius: 2px;
+    overflow: auto;
+    padding: 7px 15px 6px;
+    margin-bottom: 0.25em;
+    p {
+      @extend %paragraph--small;
+      margin: 0;
+      padding: 0;
+    }
+    a {
+      float: right;
+    }
+  }
+
+  .notice-container {
+    overflow: auto;
+    position: fixed;
+    top: 14px;
+    left: 0;
+    width: 95%;
+    margin: 0 2.5%;
+    z-index: 2;
+    @media (min-width:640px) {
+      left: 50%;
+      width: 100%;
+      margin-left: -250px;
+      margin-right: 0;
+      max-width: 500px;
+    }
+    .modal & {
+      position: relative;
+      max-width: none;
+      left: 0;
+      width: 100%;
+      margin: -10px 0 30px;
+    }
+    .sidebar--right & {
+      margin: 0 0 1em;
+      position: relative;
+      left: 0;
+      top: 0;
+      z-index: 0;
+      a {
+        float: left;
+      }
+    }
+  }
+
+  .notice {
+    &--success {
+      @include notice($notice--success);
+    }
+    &--warning {
+      @include notice($notice--warning);
+    }
+    &--info {
+      @include notice($notice--info);
+    }
+    &--danger {
+      @include notice($notice--danger);
+    }
+  }
+}

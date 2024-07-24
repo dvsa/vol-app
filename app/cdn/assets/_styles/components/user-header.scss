@@ -1,0 +1,40 @@
+/**
+ * User Header
+ */
+
+.user-menu {
+  float: right;
+  &__item {
+    display: inline;
+    & + & {
+      margin-left: 0.5em;
+    }
+  }
+}
+
+.user-header {
+
+  display: inline-block;
+  width: 100%;
+  padding: 0.8em 0;
+
+  /**
+   * Selfserve only styles
+   */
+
+  @if $app == 'selfserve' {
+    @extend %paragraph--small;
+    border-bottom: 1px solid $grey-2;
+    border-top: 10px solid $govuk-blue;
+    margin-bottom: 0.5em;
+  }
+
+  /**
+   * Internal only styles
+   */
+
+  @if $app == 'internal' {
+    padding: 10px 0;
+  }
+
+}// .user-header

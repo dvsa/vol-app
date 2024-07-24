@@ -1,0 +1,126 @@
+/**
+ * Config
+ *
+ * Global configuration for OLCS styles, overriding any vendor set
+ * values
+ *
+ * [1] - Asset Path
+ * [2] - Colours
+ * [3] - layout
+ * [4] - Typography
+ * [5] - Responsive Breakpoints
+ * [6] - Selfserve only config
+ * [7] - Internal only config
+ */
+
+/**
+ * [1] - Asset Path
+ * The path to any assets used by the styles
+ */
+
+$asset-path         : '../images';
+
+/**
+ * [2] - Colours
+ * Override/define OLCS specific colours
+ */
+
+$primary-colour     : $department-for-transport;
+$dark-text          : #454a4c;
+$warning-background : #FEF7F7;
+$summary-border     : #CDD7DC;
+$summary-background : #E6EFF5;
+$outline            : #FFBF47;
+$application-submit-background: #28A197;
+
+/**
+ * [3] - Layout
+ * Config for OLCS layout/skeleton
+ */
+
+$base-width         : 1010px;
+$gutter-2x          : ($gutter * 2);
+
+// Used by GDS toolkit
+$site-width         : $base-width;
+
+/**
+ * [4] - Typography
+ * Declare the font sizes to be used throughout the app
+ */
+
+$is-print: false !default;
+
+$font--primary : "nta", Arial, sans-serif;
+// scss-lint:disable NameFormat
+$nta-light-tabular: $NTA-Light-Tabular;
+// scss-lint:enable NameFormat
+$core-sizes: (
+  'size-1' : 12,
+  'size-2' : 14,
+  'size-3' : 15,
+  'size-4' : 16,
+  'size-5' : 19,
+  'size-6' : 24,
+  'size-7' : 28,
+  'size-8' : 36,
+  'size-9' : 48,
+);
+
+// Custom function to return font size
+@function font-size($size, $print: false) {
+  $size: map-get($core-sizes, 'size-#{$size}');
+  @if $print {
+    @return unquote(#{$size}) + 'pt';
+  } @else {
+    @return unquote(#{$size}) + 'px';
+  }
+}
+
+/**
+ * [5] - Responsive Breakpoints
+ * Define the responsive breakpoints to be used by the grid system
+ */
+
+$breakpoints: (
+  'break-1' : 460px,
+  'break-2' : 580px,
+  'break-3' : 640px,
+  'break-4' : 780px,
+  'break-5' : 880px,
+  'break-6' : 960px,
+  'break-7' : 1200px
+);
+
+// Custom function to return breakpoint value
+@function breakpoint($breakpoint) {
+  @return map-get($breakpoints, $breakpoint);
+}
+
+// Set the default width for column stacking
+$mobile-column-stack: breakpoint('break-4');
+
+/**
+ * [6] - Internal theme
+ * Configuration for the Internal theme only
+ */
+
+@if $app == 'internal' {
+  $col-gutter : 1.25%;
+  $black  : #222;
+  $grey-1 : #71767C;
+  $grey-2 : #CCC;
+  $grey-3 : #DDD;
+  $core-sizes: map-merge($core-sizes, (
+    'size-5' : 18
+  ));
+}
+
+/**
+ * [6] - Internal theme
+ * Configuration for the Selfserve theme only
+ */
+
+@if $app == 'selfserve' {
+  $col-gutter : 2.5%;
+}

@@ -1,0 +1,56 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Notes
+layout: application.hbs
+actions:
+  - label: Create note
+    class: primary
+  - label: Edit
+    class: secondary disabled
+  - label: Delete
+    class: secondary disabled
+table:
+  title: <strong>15</strong> Notes
+  headers:
+    - label: Type 
+      class: sortable
+    - label: Note
+      class: sortable
+    - label: Author
+      class: sortable
+    - label: Created
+      class: sortable descending
+    - label: <input name="row" type="checkbox">
+      class: not-sortable
+  columns:
+    - Licence
+    - Lorem ipsum sit dolor amet peso dosa limi
+    - Gillian Fox
+    - 12/3/13
+    - <input name="row" type="checkbox">
+  rows: 15
+verticalNavItems:
+  - label: Decisions
+    link:  decisions.html
+  - label: History
+    link:  history.html
+  - label: Tasks
+    link:  tasks.html
+  - label: Notes
+    link: notes.html
+    filterList:
+      - header: Type
+        type: dropdown
+        filters:
+          - Licence
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{> _table}}
+</div>

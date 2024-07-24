@@ -1,0 +1,82 @@
+// Global Header
+//
+// The global GOV.UK standard header to contain the GOV.UK logo,
+// page title and relevant navigation links
+
+.global-header {
+
+  background: $black;
+  color: $white;
+  padding: 8px 0;
+
+  &__wrapper {
+    @extend %page-wrapper;
+    @extend %contain-floats;
+  }
+
+  // Selfserve only styles
+  @if $app == 'selfserve' {
+    &__title {
+      float: left;
+      clear: none;
+      margin: 5px 0 0 180px;
+      @media (max-width: $mobile-column-stack) {
+        margin: 5px 0 0;
+        clear: both;
+      }
+    }
+    &__logo {
+      float: left;
+      padding-top: 6px;
+      color: $white;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 1;
+      text-decoration: none;
+      @media (max-width: $mobile-column-stack) {
+        padding-top: 10px;
+        margin-left: 0;
+      }
+      img {
+        margin-top: -3px;
+        height: 31px;
+        padding-right: 6px;
+        float: left;
+      }
+      &:hover {
+        text-decoration: none;
+        border-bottom: 1px solid $white;
+        margin-bottom: -1px;
+        color: $white;
+      }
+    }
+  }
+
+  // Internal only styles
+  @if $app == 'internal' {
+    background: #111;
+    position: relative;
+    overflow: visible;
+    padding: 7px 0;
+    &__wrapper {
+      @media(max-width: $mobile-column-stack) {
+        padding-bottom: 1em;
+      }
+    }
+    &__title {
+      float: left;
+      font-weight: bold;
+      margin-right: $gutter-half;
+      margin-bottom: 0;
+      font-size: 25px;
+    }
+    a {
+      color: $white;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+} // .global-header

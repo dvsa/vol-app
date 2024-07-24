@@ -1,0 +1,142 @@
+---
+layout: application.hbs
+asset: '../../../../'
+sectionTitle: Application details
+subSectionTitle: Overview
+form:
+  - title: Overview
+    fieldsets:
+    - legend: Details
+      fields:
+        - label: Set lead TC
+          type: select
+          values:
+            - Kevin Rooney
+        - label: App recieved
+          type: date
+        - label: Target completion date
+          type: date
+    - legend: Tracking
+      class: tracking
+      fields:
+        - label: Type of licence
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+        - label: Business type
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+        - label: Business details
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+        - label: Addresses
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+        - label: People
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+        - label: Operating centres & authorisation
+          type: select
+          values:
+            - Please select
+            - Accepted
+            - Not accepted
+            - Not applicable
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Operator name
+        value: <a href="">Don Tarmacadam Limited</a>
+      - name: Trading names
+        value: Don Tarmacadam Limited
+      - name: Previous operator name
+        value: Don Tarmacadam Limited
+      - name: Previous licence No.
+        value: Don Tarmacadam Limited
+      - name: No. of licences
+        value: 4
+      - name: Current applications
+        value: 4
+    - group:
+      - name: Application created
+        value: 31 July 2017
+      - name: Out of opposition
+        value: 31 July 2017
+      - name: No. of oppositions
+        value: 4
+      - name: Out of representation
+        value: 31 July 2017
+      - name: Change of enitity
+        value: No <a href="">Add details</a>
+      - name: Interim status
+        value: Not requested <a href="">Add interim</a>
+    - group:
+      - name: Licence status
+        value: Valid
+      - name: Outsanding fees
+        value: No
+      - name: Licence start date
+        value: 31 July 2017
+      - name: Continuation date
+        value: 31 July 2017
+    - group:
+      - name: No. of vehicles
+        value: 51
+      - name: Total vehicle auth.
+        value: 51
+      - name: Authorised operating centres
+        value: 12 May 2018
+      - name: Total trailer auth. / No. of Issued Discs
+        value: 12 / 12
+      - name: No. of community licences
+        value: 4
+    - group:
+      - name: Open cases
+        value: 13
+      - name: Current review complaints
+        value: 4
+      - name: Received mail electronically
+        value: Yes
+      - name: Registered for self service
+        value: Yes
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Application details</h4>
+  {{> _application-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Overview</h3>
+  </div>
+  {{#each read-only }}{{> _read-only }}{{/each }}
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

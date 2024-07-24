@@ -1,0 +1,79 @@
+---
+layout: publications.hbs
+asset: '../../../../'
+subSectionTitle: Pending
+filterList:
+  - header: App status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>24</strong> Pending publications
+    headers:
+      - label: Publication No.
+        class: sortable descending
+      - label: Traffic area
+        class: sortable
+      - label: Document type
+        class: sortable
+      - label: Publish date
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">617</a></strong><span class="status green">New</span>
+      - North East of England
+      - A&D
+      - 24/09/2014
+      - <input type="checkbox">
+    rows: 20
+    actions:
+    - label: Generate 
+      class: primary
+    - label: Edit
+      class: secondary disabled
+    - label: Publish
+      class: secondary disabled
+verticalNavItems:
+  - label: Pending
+    link: 
+    filterList:
+    - header: Traffic area
+      type: dropdown
+      filters:
+        - All
+    - header: Document type
+      type: dropdown
+      filters:
+        - All
+  - label: Published
+    link: published.html
+  - label: Recipients
+    link: recipients.html
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Publications</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- .four-fifths-right -->

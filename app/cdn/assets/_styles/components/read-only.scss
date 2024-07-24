@@ -1,0 +1,102 @@
+/**
+ * Read Only
+ */
+
+.read-only {
+
+  @extend %contain-floats;
+  display: block;
+  width: 100%;
+  margin-bottom: 1em;
+
+  dd {
+    word-wrap: break-word;
+  }
+
+  .modal & {
+    width: 95%;
+    margin: 0;
+  }
+  
+  &__header {
+    border-bottom: 1px solid $grey-3;
+    margin-bottom: $gutter-half;
+    float: left;
+    width: 100%;
+    padding-bottom: 8px;
+  }
+
+  @if $app == 'internal' {
+    &__header {
+      margin-bottom: $gutter-half;
+    }
+    &__title {
+      margin-top: 8px;
+    }
+    dt {
+      color: $grey-1;
+    }
+    dd {
+      font-weight: 300;
+    }
+  }
+
+}
+
+.text-area {
+  width: 100%;
+  max-width: 800px;
+  p {
+    @extend %paragraph--small;
+  }
+}
+
+/*
+ * Fake definition list
+ */
+
+.definition-list {
+  float: left;
+  border-bottom: 1px solid $grey-3;
+  margin: 0;
+  margin-bottom: 12px;
+  padding-bottom: 3px;
+  width: 100%;
+  page-break-inside: avoid;
+  &:last-child {
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  &__item {
+    overflow: hidden;
+    list-style: none;
+  }
+  @if $app == 'internal' {
+    &__item {
+      width: 50%;
+      float: left;
+      // OLCS-14906 - hack to fix layout issues
+      &.readonly {
+        width: 100%;
+      }
+    }
+  }
+}
+
+dl {
+  @extend %clearfix;
+}
+
+dt,
+dd {
+  float: left;
+  overflow: auto;
+  margin: 0;
+  padding: 0 2.5% 10px 0;
+  width: 47.5%;
+}
+
+dd {
+  font-weight: 600;
+}

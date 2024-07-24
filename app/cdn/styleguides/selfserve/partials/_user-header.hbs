@@ -1,0 +1,19 @@
+<div class="user-header">
+  <div class="phase">
+    <span class="phase__tag">Beta</span>
+    <span class="phase__message"><a href="#">What did you think of this service?</a> (takes 30 seconds)</span>
+  </div>
+  <ul class="user-menu">
+    {{#if user}}
+      {{#is user "operator"}}
+        <li class="user-menu__item">Katy Hasley, <b>Operator Licensing Ltd.</b></li>
+      {{/is}}
+      {{#is user "bus operator"}}
+        <li class="user-menu__item">Ruben Loftus-Cheek, <b>Operator Licensing Ltd.</b></li>
+      {{/is}}
+      {{#is user "tm"}}
+        <li class="user-menu__item">Dave Willis, <b>Big Trucks Limited.</b></li>
+      {{/is}}
+    {{/if}}
+  </ul>
+</div>

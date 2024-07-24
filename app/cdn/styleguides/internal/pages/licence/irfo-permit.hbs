@@ -1,0 +1,139 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Docs & attachments
+filterList:
+  - header: Category
+    type: dropdown
+    filters:
+      - All
+  - header: Sub-category
+    type: dropdown
+    filters:
+      - All
+  - header: Format
+    type: dropdown
+    filters:
+      - All
+  - header:
+    type: checkboxes
+    filters:
+      - Digital only
+table:
+  - title: <strong>10</strong> Docs and attachments
+    headers:
+      - label: Description
+        class: sortable descending
+      - label: Category
+        class: sortable
+      - label: Sub-category
+        class: sortable
+      - label: Format
+        class: sortable
+      - label: Date
+        class: sortable
+      - label: SLA
+        class: not-sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href=""><b>December-accounts.PDF</b></a>
+      - Bus registration
+      - Sub category (digital)
+      - PDF
+      - 13/3/13 14:02
+      - <a href="">Not set</a>
+      - <input type="checkbox">
+    rows: 10
+    actions:
+      - label: Generate
+        class: primary
+      - label: Upload
+        class: secondary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+
+---
+
+ <div class="overlay"></div>
+  <div class="modal__wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        <h1 class="modal__title">SLA</h1>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        <form action="">
+        <fieldset>
+          <fieldset class>
+            <legend>Decision date</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+          </fieldset>
+          <fieldset class>
+            <legend>Target date</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+          </fieldset>
+          <fieldset class>
+            <legend>Actual date</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+          </fieldset>
+        </fieldset>
+          <div class="actions-container">
+            <a href="" class="action--primary large">Save</a>
+            <a href="" class="action--secondary large">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters}}
+  </div>
+
+  <div class="table-col">
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+  </div>
+
+
+
+
