@@ -41,7 +41,7 @@ jobs:
       should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/selfserve') || null }}
       should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/internal') || null }}
       # Assets
-      should-build-assets: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/cdn') || null }}
+      should-build-assets: ${{ steps.changed-asset-files.outputs.any_changed == 'true' || null }}
       # Docker
       should-build-docker: ${{ steps.changed-docker-files.outputs.any_changed == 'true' || null }}
       should-build-api-docker: ${{ contains(steps.changed-docker-files.outputs.all_changed_files, 'infra/docker/api') || null }}
@@ -67,7 +67,16 @@ jobs:
         with:
           dir_names: true
           files: |
-            app/**
+            app/api/**
+            app/selfserve/**
+            app/internal/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v44
+        id: changed-asset-files
+        with:
+          dir_names: true
+          files: |
+            app/cdn/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-docker-files
