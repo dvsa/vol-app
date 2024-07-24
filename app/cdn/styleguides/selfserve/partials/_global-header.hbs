@@ -1,0 +1,72 @@
+<header role="banner" class="global-header">
+  <div class="global-header__wrapper">
+
+    <a href="{{assets}}styleguides/selfserve/" title="Go to the OLCS Selfserve styleguide homepage" class="global-header__logo">
+      <img src="{{assets}}images/bitmap/gov.uk_logotype_crown.png" alt="GOV.UK logo">GOV.UK
+    </a>
+
+    <div class="proposition">
+      {{#if service}}
+        {{#is service "find-lorry-and-bus-operators"}}<h2 class="proposition__title">Find lorry and bus operators</h2>{{/is }}
+        {{#is service "find-bus-registrations"}}<h2 class="proposition__title">Find bus registrations</h2>{{/is }}
+        {{#is service "check-vehicle-operator-licensing-publications"}}<h2 class="proposition__title">Check vehicle operator licensing publications</h2>{{/is }}
+        {{else}}
+        <h2 class="proposition__title">Vehicle Operator Licensing</h2>
+      {{/if }}
+
+      {{#if user}}
+      <a class="proposition__toggle" href="#">Menu</a>
+      <ul class="proposition-nav">
+        {{#is user "operator"}}
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/home.html">Home</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/authentication/manage-users/manage-users.html">Manage users</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/authentication/update-details/my-account.html">Your account</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="#">Sign out</a>
+          </li>
+        {{/is }}
+        {{#is user "bus operator"}}
+          <li class="proposition-nav__item"><a href="{{assets}}styleguides/selfserve/home.html">Home</a></li>
+          <li class="proposition-nav__item"><a href="{{assets}}styleguides/selfserve/bus-registrations/services.html">Bus registrations</a></li>
+          <li class="proposition-nav__item"><a href="{{assets}}styleguides/selfserve/authentication/update-details/my-account.html">My account</a></li>
+          <li class="proposition-nav__item">
+            <a href="#">Sign out</a>
+          </li>
+        {{/is }}
+        {{#is user "tm"}}
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/tm-home.html">Home</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/authentication/update-details/my-account.html">Your account</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="#">Sign out</a>
+          </li>
+        {{/is }}
+        {{#is user "local authority"}}
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/home.html">Home</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/authentication/manage-users/manage-users.html">Manage users</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="{{assets}}styleguides/selfserve/authentication/update-details/my-account.html">Your account</a>
+          </li>
+          <li class="proposition-nav__item">
+            <a href="#">Sign out</a>
+          </li>
+        {{/is }}
+      </ul>
+      {{/if }}
+    </div>
+
+  </div>
+</header>

@@ -1,0 +1,154 @@
+/// Layout
+///
+/// Styles to provide the foundation skeleton and grid system for the
+/// app. Uses vendor/govuk_frontend_toolkit to generate grid related styles.
+
+// The document/application wrapper which contains the entire app
+%page-wrapper,
+.page-wrapper {
+  @extend %site-width-container;
+}
+
+.row {
+  @extend %grid-row;
+}
+
+#main {
+  min-height: 450px;
+  width: 100%;
+  padding-bottom: ($gutter * 2);
+  &:focus {
+    outline: 0;
+  }
+}
+
+// Re-define the GDS grid-column mixin
+@mixin grid-column($width, $full-width: $mobile-column-stack, $float: left, $mobile-first: false) {
+
+  @if $mobile-first {
+    @media (min-width: $full-width) {
+      float: $float;
+      width: percentage($width);
+    }
+  } @else {
+    float: $float;
+    width: percentage($width);
+    @media (max-width: $full-width) {
+      float: none;
+      width: 100%;
+      clear: both;
+    }
+  }
+
+  padding: 0 $gutter-half;
+  box-sizing: border-box;
+
+}
+
+// Create individual columns
+
+.one-quarter {
+  @include grid-column(1 / 4);
+}
+
+.one-third {
+  @include grid-column(1 / 3);
+}
+
+.one-half {
+  @include grid-column(1 / 2);
+}
+
+.three-eigths {
+  @include grid-column(3 / 8);
+}
+
+.five-eigths {
+  @include grid-column(5 / 8);
+}
+
+.two-thirds {
+  @include grid-column(2 / 3);
+}
+
+.three-quarters {
+  @include grid-column(3 / 4);
+}
+
+.full-width {
+  @include grid-column(1 / 1);
+}
+
+// Create layout for table columns
+
+.table-row,
+%table-row {
+  display: table;
+  width: 100%;
+}
+
+.table-col,
+%table-col {
+  display: table-cell;
+  vertical-align: top;
+}
+
+@mixin table-column($width, $side: left, $padding: $gutter) {
+  @extend %table-col;
+  width: $width;
+  @if $side == 'left' {
+    padding-right: $padding;
+  } @else if $side == 'right' {
+    padding-left: $padding;
+  }
+}
+
+// Selfserve only styles
+@if $app == 'selfserve' {}
+
+// Internal only styles
+@if $app == 'internal' {
+
+  %page-wrapper,
+  .page-wrapper {
+    max-width: calc(100% - (#{$gutter} * 2));
+  }
+
+  #main {
+    display: table;
+    position: relative;
+    margin: $gutter-half 0 $gutter;
+  }
+
+  .content,
+  .full-width {
+    @extend %table-row;
+  }
+
+  .content__header {
+    margin-bottom: $gutter-half;
+  }
+
+  .sidebar--left {
+    @include table-column(200px);
+    .title {
+      margin-bottom: 0;
+    }
+  }
+
+  .sidebar--right {
+    @include table-column(250px, right);
+    @media(max-width: breakpoint('break-7')) {
+      width: 100%;
+      padding-left: 0;
+    }
+  }
+
+  .table-col,
+  .sidebar--right {
+    @media(max-width: breakpoint('break-7')) {
+      display: block;
+    }
+  }
+
+}

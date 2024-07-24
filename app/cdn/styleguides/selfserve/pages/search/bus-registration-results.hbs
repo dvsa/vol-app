@@ -1,0 +1,86 @@
+---
+title: Search results
+header-text: <p>We’ve found <b>18</b> bus registrations that match your search</p>
+layout: base.hbs
+service: find-bus-registrations
+table:
+  - headers:
+      - label: Registration No.
+        class: sortable descending
+      - label: Operator
+        class: sortable
+      - label: Starts
+        class: sortable
+      - label: Finishes
+        class: sortable
+      - label: Service No.
+        class: sortable
+    columns:
+      - <strong><a href="bus-service-detail.html">PC1057277/232</a></strong><span class="status green">Registered</span>
+      - First West Yorkshire Limited
+      - Leeds
+      - Doncaster
+      - 576,570
+    rows: 20
+---
+
+<div class="row">
+
+  <div class="one-quarter">
+    <h3>Edit search</h3>
+    <form class="filters form__filter">
+      <fieldset>
+        <div class="field">
+          <label for="search">Keywords</label>
+          <input id="search" name="search" type="search" class="extra-long">
+          <p class="hint">Can include operator name, licence number, bus registration number, service number, start point or finish point</p>
+        </div>
+        <div class="field">
+          <label>Traffic area</label>
+          <select name="">
+            <option value="">Please select</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Registration status</label>
+          <select name="">
+            <option value="">Please select</option>
+          </select>
+        </div>
+        <input type="submit" class="action--primary" value="Update results">
+      </fieldset>
+    </form>
+  </div><!-- three-eights -->
+
+  <div class="three-quarters">
+    <!-- Registered bus services -->
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+    <div class="table__footer">
+      <div class="results-settings">
+        <p>Show:</p>
+        <ul class="results-settings__list">
+          <li class="results-settings__item current">10</li>
+          <li class="results-settings__item"><a href="">25</a></li>
+          <li class="results-settings__item"><a href="">50</a></li>
+        </ul><!-- .results-settings__list -->
+        <p>results per page</p>
+      </div><!-- .results-settings -->
+      <ul class="pagination right-aligned" role="menu">
+        <li class="pagination__item"><a href="" rel="previous">Previous</a></li>
+        <li class="pagination__item"><a href="">1</a></li>
+        <li class="pagination__item"><a href="">2</a></li>
+        <li class="pagination__item current">3</li>
+        <li class="pagination__item"><a href="">4</a></li>
+        <li class="pagination__item"><a href="">5</a></li>
+        <li class="pagination__item">...</li>
+        <li class="pagination__item"><a href="">14</a></li>
+        <li class="pagination__item"><a href="" rel="next">Next</a></li>
+      </ul><!-- .pagination.right-aligned -->
+    </div><!-- .table__footer -->
+  </div><!-- .five-eights -->
+
+</div>

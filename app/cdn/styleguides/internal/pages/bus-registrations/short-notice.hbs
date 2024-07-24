@@ -1,0 +1,32 @@
+---
+layout: bus-registrations.hbs
+asset: '../../../../'
+sectionTitle: Short notice
+subSectionTitle: Service no. & type
+form:
+  - title: Short notice
+    fieldsets:
+    - legend:
+      fields:
+        - label: Bank holiday change
+          type: radios inline
+          values:
+            - No
+            - Yes
+        - label: Unforeseen circumstances
+          type: radios inline
+          values:
+            - No
+            - Yes
+        - label:
+          type: textarea
+          values:
+            - Please provide details here
+---
+
+<div class="four-fifths">
+  <div class="content__header">
+    <h3 class="title">Short notice</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

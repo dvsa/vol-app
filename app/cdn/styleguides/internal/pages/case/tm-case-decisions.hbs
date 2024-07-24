@@ -1,0 +1,88 @@
+---
+layout: tm-case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+subSectionTitle: Decisions
+table:
+  - title: <strong>4</strong> Decisions
+    headers:
+      - label: Decision
+        class: sortable descending
+      - label: Reason
+        class: sortable descending
+      - label: Date
+        class: sortable
+      - label: Made by
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - Suspend licence
+      - Lorem ipsum sit dolor amet
+      - 15:27 04/06/13
+      - Gillian Fogal
+      - <input type="checkbox">
+    rows: 4
+    actions:
+    - label: Repute not lost
+      class: secondary
+verticalNavItems:
+  - label: Decisions
+    link:  
+  - label: History
+    link:  
+  - label: Tasks
+    link:
+    filterList:
+    - header: Team
+      type: dropdown
+      filters:
+        - All
+    - header: Owner
+      type: dropdown
+      filters:
+        - All
+    - header: Category
+      type: dropdown
+      filters:
+        - All
+    - header: All
+      type: dropdown
+      filters:
+        - All
+    - header: Date
+      type: dropdown
+      filters:
+        - Today
+        - This week
+        - This month
+        - All dates
+    - header: Status
+      type: dropdown
+      filters:
+        - All
+        - Open
+        - Closed
+    - header: 
+      type: checkboxes
+      filters:
+        - Urgent only
+  - label: Notes
+    link: notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="empty__wrapper">
+    <h4 class="empty__title">Decisions</h4>
+    <div class="empty">
+      <p>This are currently no decisions against this case</p>
+      <a class="action--primary" href="">Repute not lost</a>
+      <a class="action--primary" href="">Declare unfit</a>
+    </div><!-- empty -->
+  </div><!-- empty__wrapper -->
+</div>

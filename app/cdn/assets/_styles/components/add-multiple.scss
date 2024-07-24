@@ -1,0 +1,33 @@
+.add-multiple {
+  counter-reset: label-count;
+
+  fieldset[data-group]:only-of-type {
+    .field h2::after {
+      content: "";
+    }
+
+    .remove-link {
+      display: none;
+    }
+  }
+
+  fieldset[data-group] {
+    .field h2 {
+      counter-increment: label-count;
+
+      &::after {
+        content: " " counter(label-count);
+      }
+    }
+  }
+
+  .field.remove-link {
+    width: auto;
+    float: right;
+  }
+
+  .field:not(.inline) {
+    clear: left;
+  }
+
+}

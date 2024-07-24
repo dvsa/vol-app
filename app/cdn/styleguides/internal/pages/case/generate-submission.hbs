@@ -1,0 +1,88 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Submissions
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Submission type
+          type: select
+          values:      
+            - CLO(PSV)
+            - TM Only
+          class:
+    - legend: Sections
+      fields:
+        - label:
+          type: checkboxes two-col
+          values:      
+          - Case details
+          - Most serious incident
+          - Persons
+          - Operating centres
+          - Operating centre history
+          - Conditions and undertakings
+          - Intelligence unit check
+          - Interim 
+          - Advertisement
+          - Linked licences & application numbers
+          - All Auths
+          - Lead TC area
+          - Current submissions
+          - Authorisation requested applied for
+          - Transport managers
+          - Continuous and effective control
+          - Fitness & repute
+          - Previous history
+          - Bus registration application details
+          - Transport authority comments
+          - Total bus registrations
+          - Local licence history
+          - Linked MLH history
+          - Registration details
+          - Maintenance / Tachographs / Drivers hours
+          - Prohibition history
+          - Conviction / FPN / Offence history
+          - Annual test history
+          - Penalties
+          - Other isssues / misc
+          - TE reports
+          - Site plans
+          - Planning permission
+          - Applicants comments
+          - Visibility/ access egress size
+          - Case complaints
+          - Environmental complaints
+          - Representations
+          - Objections
+          - Previous history
+          - Financial information
+          - Maps
+          - Waive fee / Late fee
+          - Surrender
+          - Annex
+    actions:
+      - label: Generate
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header"> 
+        <h2 class="modal__title">Generate submission</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+
+
+

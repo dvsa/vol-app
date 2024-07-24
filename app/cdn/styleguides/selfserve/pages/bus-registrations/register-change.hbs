@@ -1,0 +1,78 @@
+---
+title: Register, change or cancel bus services
+layout: base.hbs
+user: bus operator
+breadcrumbs:
+  - link: services.html
+    label: Back
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+
+    <form>
+
+      <div class="article">
+        <p>You can apply to register, change or cancel bus services online through the electronic bus service registration (EBSR) service.</p>
+        <p>If you haven't done this before you'll need to email <a href="">ebsr@vosa.gov.uk</a> or call 0113 254 3200.</p>
+        <p>You can also register, change or cancel bus services using the <a href="https://www.gov.uk/government/collections/local-bus-service-registration-forms">paper forms</a>.</p>
+        <hr />
+        <h3>Before you upload</h3>
+        <ul>
+          <li>Make sure the XML document follows the <a href="https://www.gov.uk/government/collections/xml-standards-public-transport" target="blank">TransXchange</a> standard</li>
+          <li>Compress the XML document and any supporting files such as maps, timetables and letters of support into a single .ZIP file</li>
+        </ul>
+      </div>
+
+      <fieldset class="file-uploader" id="EBSRUploader">
+        <ul class="js-upload-list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Upload .ZIP file (s)
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+          </li>
+        </ul>
+      </fieldset><!-- .file-uploader -->
+
+      <div class="actions-container">
+        <a href="loading.html" id="submit" class="action--primary large">Submit</a>
+        <a href="services.html" class="action--tertiary list large">Back to bus services</a>
+      </div>
+
+    </form>
+
+  </div><!-- .three-quarters -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <div class="support">
+        <h3>Support</h3>
+        <p>0113 254 3200</p>
+        <p><a href="operatorlicensing@otc.gov.uk">ebsr@vosa.gov.uk</a></p>
+      </div>
+    </div>
+  </div><!-- .one-quarter -->
+
+</div>
+
+<!-- Fake Functionality -->
+
+<style>
+  .file__remove {
+    display: none;
+  }
+</style>
+
+<script type="text/javascript">
+
+  if(window.location.hash) {
+    $('#submit').click(function(e) {
+      window.location.replace('success.html');
+      return false;
+      e.preventDefault();
+    })
+  }
+
+</script>

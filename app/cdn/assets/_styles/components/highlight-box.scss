@@ -1,0 +1,18 @@
+/**
+ * Highlight Box
+ *
+ * This is visually similar to the comment component, at some point
+ * they should become combined into one module. 'highlighx-box'
+ * is a more abstract name than 'comment' so recommend to rename
+ * that file from 'comment' to 'highlight-box'
+ */
+
+.highlight-box {
+  background: $grey-4;
+  margin-bottom: 1.5em;
+  padding: 1em 0 0.5em 1em;
+  border-left: 3px solid $grey-3;
+  .field.inline {
+    margin-bottom: 1em;
+  }
+}
