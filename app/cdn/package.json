@@ -22,7 +22,7 @@
     "grunt-contrib-uglify": "^5.2.2",
     "grunt-sass": "^3.1.0",
     "grunt-svg-sprite": "^2.0.2",
-    "jquery": "1.12.4",
+    "jquery": "^3.7.1",
     "matchdep": "^2.0.0",
     "pace-progress": "^1.0.2",
     "sass": "^1.77.7",

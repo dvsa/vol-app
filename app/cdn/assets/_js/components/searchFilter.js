@@ -22,7 +22,7 @@ var OLCS = OLCS || {};
       class   : 'toggled',
       mobile  : '780px'
     }, custom);
-      
+
     var parent  = $(options.parent);
     var title   = parent.find(options.title);
     var content = parent.find(options.content);
@@ -32,17 +32,17 @@ var OLCS = OLCS || {};
       parent.removeClass(options.class);
       title.attr({
         'aria-expanded' : 'false',
-        'aria-controls' : content.attr('id')
+        'aria-controls' : content.attr('id') || ''
       });
       content.attr({
         'aria-hidden' : 'true',
-        'aria-labelledby' : title.attr('id')
+        'aria-labelledby' : title.attr('id') || ''
       });
     }
 
     function expand() {
       parent.addClass(options.class);
-      title.attr('aria-expanded', 'true');      
+      title.attr('aria-expanded', 'true');
       content.show().attr('aria-hidden','false');
       title.one('click', collapse);
     }
@@ -53,7 +53,7 @@ var OLCS = OLCS || {};
       content.hide().attr('aria-hidden', 'true');
       title.one('click', expand);
     }
-    
+
     function revert() {
       parent.removeClass(options.class);
       title.removeAttr('aria-expanded aria-controls');
@@ -67,7 +67,7 @@ var OLCS = OLCS || {};
         setup();
         title.one('click', expand);
       }
-    }).load();
+    });
 
   };
 
