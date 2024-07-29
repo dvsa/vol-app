@@ -47,8 +47,6 @@ var sass = require('sass');
                 'assets/_js/' + theme + '/*.js',
                 'assets/_js/init/common.js',
                 'assets/_js/init/' + theme + '.js',
-                'node_modules/govuk-frontend/govuk/all.js',
-
             ];
             if (theme === 'internal') {
                 files.push(
@@ -233,6 +231,14 @@ var sass = require('sass');
                         src: ['**/*.{woff2,woff,eot}'],
                         dest: 'public/assets/fonts/'
                     }]
+                },
+                govukJs: {
+                    files: [{
+                        expand: true,
+                        cwd: 'node_modules/govuk-frontend/dist/govuk/',
+                        src: ['govuk-frontend.min.js'],
+                        dest: 'public/js/'
+                    }]
                 }
             },
 
@@ -274,15 +280,15 @@ var sass = require('sass');
                     options: {
                         mode: {
                             css: { // Activate the «css» mode
-                                "dest": "../../../public/styles",
-                                "sprite": "../images/svg/icon-sprite.svg",
-                                "bust": true,
-                                "prefix": ".",
-                                "dimensions": true,
-                                "layout": "vertical",
-                                "render": {
-                                  "scss": {
-                                      "dest": path.resolve() + "/assets/_styles/core/icon-sprite.scss"
+                                'dest': '../../../public/styles',
+                                'sprite': '../images/svg/icon-sprite.svg',
+                                'bust': true,
+                                'prefix': '.',
+                                'dimensions': true,
+                                'layout': 'vertical',
+                                'render': {
+                                  'scss': {
+                                      'dest': path.resolve() + '/assets/_styles/core/icon-sprite.scss'
                                   }
                               },
                             }
@@ -351,7 +357,14 @@ var sass = require('sass');
                     },
                     watchTask: true,
                     server: {
-                        baseDir: './public'
+                        baseDir: './public',
+                        middleware: function (req, res, next) {
+                            res.setHeader('Access-Control-Allow-Origin', '*');
+                            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+                            res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+                            res.setHeader('Access-Control-Allow-Credentials', true);
+                            next();
+                        }
                     }
                 }
             },
@@ -507,7 +520,8 @@ var sass = require('sass');
                 'sass:' + environment,
                 'postcss',
                 'uglify:' + environment,
-                'copyfonts'
+                'copyfonts',
+                'copy:govukJs'
             ];
         };
 

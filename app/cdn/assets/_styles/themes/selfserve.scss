@@ -6,7 +6,7 @@
 $app: selfserve;
 
 // Vendor
-@import '../../../node_modules/govuk-frontend/govuk/all';
+@import '../../../node_modules/govuk-frontend/dist/govuk/all';
 
 //govuk frontend toolkit legacy compatibility (main toolkit removed)
 @import '../core/legacy';

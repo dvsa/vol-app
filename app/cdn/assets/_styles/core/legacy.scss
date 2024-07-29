@@ -43,8 +43,8 @@ $light-blue-50: #96c6e2;
 $light-blue-25: #d5e8f3;
 
 // New Transport Light
-$NTA-Light: $govuk-font-family-nta;
-$NTA-Light-Tabular: $govuk-font-family-nta-tabular;
+$NTA-Light: $govuk-font-family;
+$NTA-Light-Tabular: $govuk-font-family;
 
 @mixin media($size: false, $max-width: false, $min-width: false, $ignore-for-ie: false) {
     @if $size == desktop {
