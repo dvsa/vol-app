@@ -1,5 +1,5 @@
 <?php
-    $this->doctype();
+    echo $this->doctype().PHP_EOL;
 
     // OLCS-26896 - make sure X-UA-Compatible value is not escaped on the internal login screen
     $this->headMeta()->setAutoEscape(false);
