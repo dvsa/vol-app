@@ -39,7 +39,7 @@ echo $this->doctype(); ?>
   <head>
     <?php echo $this->partial('partials/head', ['title' => $title]); ?>
   </head>
-  <body class="internal" id="<?php echo $this->pageId(); ?>">
+  <body class="internal govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
@@ -104,6 +104,10 @@ echo $this->doctype(); ?>
 
     </div><!-- .page-wrapper-->
   <?php echo $this->partial('partials/body-end'); ?>
+    <script type="module">
+      import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+      initAll()
+    </script>
   </body>
 
 </html>

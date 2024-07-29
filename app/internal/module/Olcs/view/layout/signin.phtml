@@ -8,7 +8,7 @@
   <head>
     <?php echo $this->partial('partials/head', ['title' => $this->pageTitle()]); ?>
   </head>
-  <body class="internal sign-in" id="<?php echo $this->pageId(); ?>">
+  <body class="internal sign-in govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
@@ -31,5 +31,9 @@
     </div><!-- .page-wrapper-->
 
   <?php echo $this->partial('partials/body-end'); ?>
+    <script type="module">
+      import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+      initAll()
+    </script>
   </body>
 </html>
