@@ -48,7 +48,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
   } ?>
 </head>
 
-<body class="govuk-template__body app-body-class selfserve" id="<?php echo $this->pageId(); ?>">
+<body class="govuk-template__body app-body-class selfserve govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
   <?php
       $userId = $currentUser->getUniqueId();
       if (!empty($userId)) {
@@ -324,6 +324,10 @@ $isLoggedIn = $currentUser->isLoggedIn();
   </script>
   <script>
       var cookieConfig = <?php echo $this->cookieManager();?>;
+  </script>
+  <script type="module">
+    import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    initAll()
   </script>
 </body>
 </html>
