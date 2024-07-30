@@ -71,7 +71,7 @@ locals {
       }
     })
 
-    attempt_duration_seconds = 60
+    attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
   } }
 }
