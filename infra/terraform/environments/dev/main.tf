@@ -404,7 +404,7 @@ module "service" {
       {
         name     = "process-queue-disc-print",
         commands = ["queue:process-queue", "--type", "que_typ_disc_printing_print", "--queue-duration", "840"],
-        timeout  = 60,
+        timeout  = 850,
       },
       {
         name     = "process-queue-ecmt-accept",
@@ -424,7 +424,7 @@ module "service" {
       {
         name     = "process-queue-permit-print",
         commands = ["queue:process-queue", "--type", "que_typ_permit_print", "--queue-duration", "840"],
-        timeout  = 60,
+        timeout  = 850,
       },
       {
         name     = "process-queue-print",
@@ -434,22 +434,27 @@ module "service" {
       {
         name     = "process-company-profile",
         commands = ["queue:process-company-profile"],
+        timeout  = 150,
       },
       {
         name     = "company-profile-dlq",
         commands = ["queue:company-profile-dlq"],
+        timeout  = 900,
       },
       {
         name     = "process-insolvency",
         commands = ["queue:process-insolvency"],
+        timeout  = 900,
       },
       {
         name     = "process-insolvency-dlq",
         commands = ["queue:process-insolvency-dlq"],
+        timeout  = 900,
       },
       {
         name     = "transxchange-consumer",
         commands = ["queue:transxchange-consumer"],
+        timeout  = 60,
       },
     ]
   }
