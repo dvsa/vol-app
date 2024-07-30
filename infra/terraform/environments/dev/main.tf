@@ -389,17 +389,17 @@ module "service" {
       {
         name     = "process-queue-general",
         commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-community-licences",
         commands = ["queue:process-queue", "--type", "que_typ_create_com_lic"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-disc-generation",
         commands = ["queue:process-queue", "--type", "que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-disc-print",
@@ -409,17 +409,17 @@ module "service" {
       {
         name     = "process-queue-ecmt-accept",
         commands = ["queue:process-queue", "--type", "que_typ_accept_ecmt_scoring"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-irhp-allocate",
         commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-permit-generation",
         commands = ["queue:process-queue", "--type", "que_typ_permit_generate"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-queue-permit-print",
@@ -429,7 +429,7 @@ module "service" {
       {
         name     = "process-queue-print",
         commands = ["queue:process-queue", "--type", "que_typ_print"],
-        timeout  = 60,
+        timeout  = 90,
       },
       {
         name     = "process-company-profile",
@@ -454,7 +454,7 @@ module "service" {
       {
         name     = "transxchange-consumer",
         commands = ["queue:transxchange-consumer"],
-        timeout  = 60,
+        timeout  = 90,
       },
     ]
   }
