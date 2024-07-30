@@ -90,7 +90,6 @@ var sass = require('sass');
          * - postcss
          * - copy
          * - clean
-         * - assemble
          * - browserSync
          * - uglify
          * - jshint
@@ -298,46 +297,6 @@ var sass = require('sass');
             },
 
             /**
-             * Assemble
-             * https://github.com/assemble/grunt-assemble
-             */
-            assemble: {
-                options: {
-                    helpers: ['handlebars-helper-repeat']
-                },
-                internal: {
-                    options: {
-                        assets: '../../',
-                        layout: 'base.hbs',
-                        layoutdir: 'styleguides/internal/layouts/',
-                        partials: [
-                            'styleguides/partials/*.hbs',
-                            'styleguides/internal/partials/*.hbs'
-                        ]
-                    },
-                    cwd: 'styleguides/internal/pages',
-                    dest: 'public/styleguides/internal',
-                    expand: true,
-                    src: '**/*.hbs'
-                },
-                selfserve: {
-                    options: {
-                        assets: '../../',
-                        layout: 'base.hbs',
-                        layoutdir: 'styleguides/selfserve/layouts/',
-                        partials: [
-                            'styleguides/partials/*.hbs',
-                            'styleguides/selfserve/partials/*.hbs'
-                        ]
-                    },
-                    cwd: 'styleguides/selfserve/pages',
-                    dest: 'public/styleguides/selfserve',
-                    expand: true,
-                    src: '**/*.hbs'
-                }
-            },
-
-            /**
              * Browser Sync
              * https://github.com/BrowserSync/grunt-browser-sync
              */
@@ -457,10 +416,6 @@ var sass = require('sass');
                     files: ['assets/_styles/**/*.scss'],
                     tasks: ['sass:dev', 'postcss']
                 },
-                hbs: {
-                    files: ['styleguides/**/*.hbs'],
-                    tasks: ['assemble']
-                },
                 scripts: {
                     files: ['assets/_js/**/*.js'],
                     tasks: ['jshint:static','uglify:dev']
@@ -495,12 +450,19 @@ var sass = require('sass');
 
         }); // initConfig
 
-        /**
-         * Load all NPM tasks automatically using 'matchdep'
-         */
-        require('matchdep').filterAll([
-            'grunt-*', '!grunt-cli', 'assemble', '@lodder/grunt-postcss'
-        ]).forEach(grunt.loadNpmTasks);
+        grunt.loadNpmTasks("grunt-contrib-clean");
+        grunt.loadNpmTasks("grunt-contrib-copy");
+        grunt.loadNpmTasks("grunt-contrib-uglify");
+        grunt.loadNpmTasks("grunt-browser-sync");
+        grunt.loadNpmTasks("grunt-sass");
+        grunt.loadNpmTasks("grunt-svg-sprite");
+        grunt.loadNpmTasks("grunt-babel");
+        grunt.loadNpmTasks("grunt-contrib-jshint");
+        grunt.loadNpmTasks("grunt-contrib-watch");
+        grunt.loadNpmTasks("grunt-gh-pages");
+        grunt.loadNpmTasks("grunt-notify");
+        grunt.loadNpmTasks("grunt-scss-lint");
+        grunt.loadNpmTasks('@lodder/grunt-postcss');
 
         /**
          * Register Grunt Tasks
