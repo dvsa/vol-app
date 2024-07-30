@@ -1,0 +1,228 @@
+---
+title: Form elements
+subtitle: Styleguide
+breadcrumbs:
+  - link: index.html
+    label: Back to index
+---
+
+<div class="row">
+  <div class="two-thirds">
+    <form>
+
+      <div class="validation-summary">
+        <h3>There was a problem submitting the form</h3>
+        <p>Please try the following:</p>
+        <ol class="validation-summary__list">
+          <li class="validation-summary__item"><a href="#error1">Enter a town or city</a></li>
+          <li class="validation-summary__item"><a href="#error2">Enter a date of birth</a></li>
+          <li class="validation-summary__item"><a href="#error3">Enter a biography</a></li>
+        </ol>
+      </div>
+
+      <fieldset class="address js-postcode-search">
+
+        <legend>Establishment address</legend>
+
+        <p class="hint">This is where you usually keep your operator licence records.</p>
+
+        <!-- Postcode Search -->
+        <fieldset>
+          <legend>Postcode search</legend>
+          <div class="field inline">
+            <input type="text" class="short js-input" value="">
+            <input type="text" name="address[searchPostcode][postcode]" class="short js-input" data-container-class="inline" id="address[searchPostcode][postcode]" value="" pattern="\d*">
+          </div>
+          <div class="field inline">
+            <button type="submit" class="action--primary js-find" value="search">
+              Find address
+            </button>
+          </div>
+          <div class="field js-visible">
+            <p class="hint hint--small">
+              <a href="#">Enter the address yourself</a>
+            </p>
+          </div>
+        </fieldset>
+
+        <!-- Address Lines -->
+        <div class="field compound">
+          <label for="">Address lines</label>
+          <input type="text" name="" class="long" value="Solway Business Centre">
+        </div>
+        <div class="field compound">
+          <label class="visually-hidden" for="">Address line 2</label>
+          <input type="text" name="" class="long" value="Kingstown">
+        </div>
+        <div class="field compound">
+          <label class="visually-hidden" for="">Address line 3</label>
+          <input type="text" name="" class="long" value="">
+        </div>
+        <div class="field ">
+          <label class="visually-hidden" for="">Address line 4</label>
+          <input type="text" name="" class="long" value="">
+        </div>
+        <div class="field ">
+          <label for="">Town/City</label>
+          <input type="text" class="long" value="Carlisle">
+        </div>
+        <div class="field">
+          <label aria-label="Choose country" for="correspondence_address[countryCode]">Country</label>
+          <select name="correspondence_address[countryCode]" id="correspondence_address[countryCode]">
+            <option value="">Please Select</option>
+            <option value="AF">Afghanistan</option>
+            <option value="AX">Åland Islands</option>
+            <option value="AL">Albania</option>
+            <option value="DZ">Algeria</option>
+            <option value="AS">American Samoa</option>
+            <option value="AD">Andorra</option>
+            <option value="AO">Angola</option>
+            <option value="AI">Anguilla</option>
+            <option value="AQ">Antarctica</option>
+            <option value="AG">Antigua And Barbuda</option>
+            <option value="AR">Argentina</option>
+            <option value="AM">Armenia</option>
+            <option value="AW">Aruba</option>
+            <option value="AU">Australia</option>
+            <option value="AT">Austria</option>
+            <option value="AZ">Azerbaijan</option>
+            <option value="BS">Bahamas</option>
+            <option value="BH">Bahrain</option>
+          </select>
+        </div>
+
+        <div class="field ">
+          <label for="">Postcode</label>
+          <input type="text" name="" value="CA6 4BY">
+        </div>
+        <div class="field">
+          <label for="first-name">First name (if applicable)</label>
+            <input id="first-name" name="name" class="long">
+            <p class="hint">This is your first christian name</p>
+        </div>
+        <div class="field">
+          <label for="last-name">Last name</label>
+            <input id="last-name" name="name" type="text" class="long" />
+        </div>
+
+      </fieldset><!-- Establishment Address -->
+
+      <filedset>
+        <legend>Personal information</legend>
+        <div class="field">
+          <label for="title">Title</label>
+          <select id="title" name="title">
+            <option value="Please select">Mr.</option>
+            <option value="Please select">Mrs.</option>
+            <option value="Please select">Miss.</option>
+            <option value="Please select">Dr.</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="first-name">First name (if applicable)</label>
+          <input id="first-name" name="name" class="long">
+          <p class="hint">This is your first christian name</p>
+        </div>
+      </fieldset><!-- Personal Information -->
+
+      <fieldset id="about-you">
+
+        <legend>About you</legend>
+
+        <!-- Date of Birth-->
+        <fieldset>
+          <legend>Date of birth</legend>
+          <div class="field inline-text">
+            <label>Day</label>
+            <input type="text" maxlength="2" pattern="\d*">
+          </div>
+          <div class="field inline-text">
+            <label>Month</label>
+            <input type="text" maxlength="2" pattern="\d*">
+          </div>
+          <div class="field inline-text">
+            <label>Year</label>
+            <input type="text" maxlength="4" pattern="\d*">
+          </div>
+          <p class="hint">For example 12, 6, 2014</p>
+        </fieldset>
+
+        <fieldset>
+          <legend class="legend">Gender</legend>
+          <div class="field inline">
+            <label  class="form-control form-control--radio"><input type="radio" name="gender" value="male">Male</label>
+          </div>
+          <div class="field inline">
+            <label  class="form-control form-control--radio"><input type="radio" name="gender" value="female">Female</label>
+          </div>
+        </fieldset>
+
+      </fieldset><!-- About You -->
+
+      <fieldset>
+        <legend>More About you</legend>
+        <fieldset>
+          <legend>I am interested in</legend>
+          <div class="checkbox">
+            <label for="jobs"><input type="checkbox" id="jobs">Job offers</label>
+          </div>
+          <div class="checkbox">
+            <label for="networking"><input type="checkbox" id="networking">Networking</label>
+          </div>
+          <div class="checkbox">
+            <label for="business"><input type="checkbox" id="business">Business opportunities</label>
+          </div>
+        </fieldset>
+      </fieldset><!-- More About You -->
+
+      <fieldset id="additional-information">
+        <legend>Additional information</legend>
+        <p class="hint">Please provide additional information relating to any prior insolvency proceedings. You may also upload evidence such as legal documents.</p>
+        <div class="field">
+          <label for="additional-info" class="visually-hidden">Additional information</label>
+          <textarea id="additional-info" class="extra-long" placeholder="Enter text here"></textarea>
+        </div>
+      </fieldset><!-- Additional Information -->
+
+      <fieldset class="file-uploader" id="FileUploader2">
+        <legend>File upload</legend>
+        <p class="hint">An example of a mutliple file uploader with a file already uploaded</p>
+        <ul class="attach-action__list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Attach file
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+            <p class="attach-action__hint">20MB maximum file size. PDF, DOC, JPG, PNG or GIF</p>
+          </li>
+        </ul>
+        <ul class="js-upload-list" data-group="details[certificate][list]">
+          <li class="file">
+            <a href="#">avatar.jpg</a> <span>8.2KB</span><input type="submit" class="file__remove" value="Remove">
+          </li>
+          <li class="file">
+            <a href="#">adobe.pdf</a> <span>3.2MB</span><input type="submit" class="file__remove" value="Remove">
+          </li>
+          <li class="file">
+            <a href="#">SE01E12.mp4</a> <span>1.2GB</span><input type="submit" class="file__remove" value="Remove">
+          </li>
+        </ul>
+      </fieldset><!-- File Upload -->
+
+      <fieldset>
+        <div class="field confirm">
+          <label class="">
+            <input type="checkbox" name="" id="" placeholder="" value="Y">
+            By ticking this checkbox you are confirming that there are suitable arrangements in place to keep the vehicles in a fit and serviceable condition at all times
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="actions-container">
+        <input class="action--primary large" type="submit" value="Save and continue">
+        <a class="action--tertiary large list" href="/">Do something else</a>
+      </div>
+
+    </form>
+  </div><!-- .two-thirds -->
+</div><!-- .row -->

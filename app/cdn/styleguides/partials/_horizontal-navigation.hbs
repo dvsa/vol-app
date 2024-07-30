@@ -1,0 +1,11 @@
+<ul class="horizontal-navigation" role="tablist">
+  {{#each horizontalNavItems }}
+    {{#ifeq label compare=../sectionTitle }}
+      <li class="horizontal-navigation__item current">{{ label }}</li>
+    {{else}}
+      <li class="horizontal-navigation__item">
+        <a href="{{ link }}">{{ label }}</a>
+      </li>
+    {{/ifeq}}
+  {{/each}}
+</ul>

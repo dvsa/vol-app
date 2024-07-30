@@ -1,0 +1,38 @@
+---
+title: Print, sign and return
+subtitle: OB12345/12
+user: operator
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <div class="article">
+    <p>You now need to:</p>
+    <ul>
+      <li><a href="">Print the declaration form</a></li>
+      <li>Get an owner or Director to sign it</li>
+      <li>Return the form to the <a href="">Cenrral Licensing Office</a></li>
+    </ul>
+
+    <p>We'll let you know when we recieve it and if there are any problems.</p>
+    </div>
+  </div><!-- .two-thirds -->
+
+</div><!-- .row -->
+
+<script>
+  $(document).on('ready',function() {
+    $('.js-verify, .js-print-sign').hide();
+
+    $('[name="declarations"]').on('change',function() {
+      if($(this).val() === 'verify') {
+        $('.js-verify').show();
+        $('.js-print-sign').hide();
+      } else {
+        $('.js-verify').hide();
+        $('.js-print-sign').show();
+      }
+    });
+  });
+</script>

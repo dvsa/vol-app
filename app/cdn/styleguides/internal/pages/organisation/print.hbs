@@ -1,0 +1,93 @@
+---
+layout: organisation.hbs
+asset: '../../../../'
+sectionTitle: IRFO
+subSectionTitle: GV permits
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: GV permits
+    link:  people.html
+  - label: PSV authorisation
+    link:  index.html
+table:
+  - title: <strong>10</strong> GV permits
+    headers:
+      - label: Permit ID
+        class: sortable descending
+      - label: Inforce date
+        class: sortable
+      - label: Type
+        class: sortable
+      - label:
+        class: non-sortable
+    columns:
+      - <a href=""><b>1231</b><span class="status green">Approved</span></a>
+      - 10/03/2015
+      - ECMT 100% (Jan to Mar)
+      - <a href="">Edit</a>
+    rows: 10
+    actions:
+      - label: Add permit
+        class: primary
+form:
+  - fieldsets:
+    - legend: Serial numbers
+      fields:
+        - label: Start number
+          type: text
+          class: short
+        - label: End number
+          type: text
+          class: short
+    actions:
+      - label: Print
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+<div class="overlay"></div>
+<div class="modal__wrapper">
+  <div class="modal">
+    <div class="modal__header">
+      <h1 class="modal__title">Print copies</h1>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <div class="validation__container">
+        <p>There aren't enough permits in stock for this country.</p>
+        <p>To generate more GV permits go to <a href="">IRFO stock control</a>.</p>
+        <hr />
+      </div>
+<!--       <div class="article">
+        <p>You are about to print the following copies of GV permit 12 (Russia):</p>
+        <ul>
+          <li>15242</li>
+          <li>15243</li>
+          <li>15244</li>
+          <li>15245</li>
+          <li>15246</li>
+        </ul>
+      </div> -->
+      <div class="actions-container">
+
+        <a href="" class="action--secondary large">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar--left">
+  <h4 class="title">IRFO</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div>

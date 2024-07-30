@@ -1,0 +1,17 @@
+.form-element {
+
+  &__question {
+    @extend %h3;
+    max-width: 25em;
+    padding: 0;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  &__label {
+    @extend %h4;
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+
+}

@@ -272,7 +272,7 @@ jobs:
 
   terraform-env-dev:
     name: Environment (dev)
-    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'succecss') }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success') }}
     concurrency:
       group: terraform-environment-dev
     needs:

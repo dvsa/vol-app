@@ -1,0 +1,48 @@
+---
+title: My account
+user: operator
+bodyClass: my-account
+form:
+  - fieldsets:
+    - legend: My details
+      fields:
+        - label: Username
+          type: text
+          class: long
+          name: username
+        - label:  First name
+          type: text
+          class: long
+          name: firstname
+        - label:  Last name
+          type: text
+          class: long
+          name: lastname
+        - label:  Email address
+          type: text
+          class: long
+          name: email
+        - label:  Confirm new email address
+          type: text
+          class: long
+          name: confirm-new
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    {{#each form }}{{> _forms}}{{/each }}
+    <div class="actions-container">
+      <a href="#" class="action--primary large js-save-changes">Save</a>
+      <a href="change-your-password.html" class="action--secondary large">Change your password</a>
+      <a href="#" class="action--tertiary large">Cancel</a>
+    </div>
+  </div><!-- .two-thirds -->
+  
+  <div class="one-third">
+    {{> _support}}
+  </div>
+
+</div>
+
+<script type="text/javascript" src="/js/authentication-prototype.js"></script>

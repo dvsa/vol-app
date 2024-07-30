@@ -1,0 +1,125 @@
+---
+title: Add operating center
+layout: base.hbs
+user: operator
+breadcrumbs:
+  - link: operating-centres.html
+    label: Back to operating centres
+---
+
+<div class="row">
+
+  <div class="three-quarters">
+    <form>
+      <fieldset class="address js-postcode-search" data-group="correspondence_address">
+        <legend>Address</legend>
+        <fieldset data-group="address[searchPostcode]">
+          <legend>Postcode search</legend>
+          <div class="field inline">
+            <input type="text" name="address[searchPostcode][postcode]" class="short js-input" data-container-class="inline" id="address[searchPostcode][postcode]" value="">
+          </div>
+          <div class="field inline">
+            <button type="submit" name="address[searchPostcode][search]" class="action--primary large js-find" value="search">Find address</button>
+          </div>
+          <div class="field js-visible">
+            <p class="hint--small"><a href="#">Enter address manually</a></p>
+          </div>
+        </fieldset>
+      </fieldset>
+
+      <fieldset>
+        <legend>Vehicles and trailers</legend>
+        <p>How many vehicles and trailers will you keep at this operating centre? You can keep extra vehicles of you want to leave room to expand.</p>
+        <div class="field ">
+          <label>Number of vehicles</label>
+          <input type="text">
+        </div>
+        <div class="field ">
+          <label>Number of trailers</label>
+          <input type="text">
+        </div>
+      </fieldset>
+      <fieldset>
+          <legend>Adverts</legend>
+          <p>You’ll need to advertise the application in a local newspaper and send a copy to us.<br />See our guidelines on <a href="">how to advertise your application</a>.</p><hr />
+          <fieldset class="js-advertised">
+            <legend class="legend">How would you like to send your advert?</legend>
+            <div class="field checkbox inline">
+              <label><input type="radio" name="send" value="upload">Upload</label>
+            </div>
+            <div class="field checkbox inline">
+              <label><input type="radio" name="send" value="post">Send in the post</label>
+            </div>
+          </fieldset>
+        </fieldset>
+        <fieldset class="js-upload-form">
+          <div class="field">
+            <label for="">Newpaper name</label>
+            <input type="text" class="long">
+          </div>
+          <fieldset>
+            <legend>Date of advert</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+            <p class="hint--small">E.g. 12, 6, 2014</p>
+          </fieldset>
+          <fieldset class="file-uploader" id="FileUploader2">
+            <legend>Upload your advert</legend>
+            <ul class="attach-action__list">
+              <li class="attach-action">
+                <label class="attach-action__label">
+                  Attach file
+                  <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+                </label>
+                <p class="attach-action__hint">PDF, DOC, JPG, PNG or GIF</p>
+              </li>
+            </ul><!-- attach-actions -->
+          </fieldset><!-- .file-uploader -->
+        </fieldset>
+        <fieldset class="js-post">
+          <div class="article">
+            <p>If you’d rather post a copy, send it as soon as possible after publication to:<p/>
+            <p>
+            Office of the Traffic Commissioner<br />
+            The Central Licensing Office<br />
+            Hillcrest House<br />
+            Leeds, LS9 6NF</p>
+            <p>Make sure you include your application reference: <b>OB1523424/133</b>.
+            </p>
+          </div>
+        </fieldset>
+        <div class="actions-container">
+          <a href="/styleguides/selfserve/application-overview.html" class="action--primary large">Save</a>
+          <a href="" class="action--tertiary large">Cancel</a>
+        </div>
+      </form>
+    </div><!-- .two-thirds -->
+
+  </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-upload-form, .js-not-advertised, .js-post').hide();
+    $(document).on('change', 'input[name="send"]', function(e) {
+      e.preventDefault();
+      if ($(this).val() === 'upload') {
+        $('.js-upload-form').show();
+        $('.js-post').hide();
+      } else {
+        $('.js-post').show();
+        $('.js-upload-form').hide()
+      }
+    });
+  });
+</script>
+

@@ -1,0 +1,134 @@
+---
+layout: bus-registrations.hbs
+asset: '../../../../'
+sectionTitle: Service details
+subSectionTitle: Service no. & type
+verticalNavItems:
+  - label: Service no. & type
+    link:  /styleguides/internal/bus-registrations/
+  - label: Stops, manouevers & subsidies
+    link:  /styleguides/internal/bus-registrations/stops-manouevers-&-subsidies.html
+  - label: TA's and authorities
+    link:  /styleguides/internal/bus-registrations/tas-&-authorities.html
+  - label: Quality schemes
+    link:  /styleguides/internal/bus-registrations/quality-schemes.html
+form: 
+  - title: Service details 1
+    fieldsets:
+    - legend: Timetable route
+      fields:
+        - label: Timetable acceptable?
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Map supplied?
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Route description
+          type: textarea
+          values: 
+            - Please enter a description of the route here
+  - title: Service details 1
+    fieldsets:
+    - legend:
+      fields:
+        - label: Conditions satisfactory?
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Notes
+          type: textarea
+          values: 
+            - Please enter an explaniation of why the conditions were unsatisfactory
+    - legend: Register service
+      fields:
+        - label: Application copied to LA /PTE
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: LA/PTE support short notice
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Application signed
+          type: radios inline
+          values: 
+            - Yes
+            - No
+        - label: Variation details
+          type: read only
+          values: 
+            - Lorem ipsum
+        - label: Correspondence address
+          type: select
+          values: 
+            - 24 Eleanor Court Road, Oswestry
+        - label: Completed
+          type: date
+    actions:
+      - label: Save
+        class: primary large
+      - label: Request a new route map
+        class: secondary large
+      - label: Cancel
+        class: secondary large
+table:
+  - title: <strong>Conditions</strong>
+    headers:
+      - label: No.
+        class: sortable descending
+      - label: Details
+        class: sortable
+      - label: Added via
+        class: sortable
+      - label: Fufilled
+        class: sortable
+      - label: Status
+        class: sortable
+      - label: Attached to
+        class: sortable
+      - label: S4
+        class: sortable    
+      - label: OC addresss
+        class: sortable
+    columns:
+      - 11
+      - Can’t start a lorry before 7:30
+      - Case
+      - Yes
+      - Draft
+      - Licence
+      - ToDo
+      - 102 Woodthorpe Drive, Shrewsbury
+    rows: 3
+
+---
+
+
+<div class="four-fifths">
+  <div class="content__header">
+    <h3 class="title">Register service</h3>
+  </div>
+  {{#each form}}
+    {{#is @index 0 }} 
+      {{> _forms }}
+    {{/is }} 
+  {{/each}}
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+  {{#each form}}
+    {{#is @index 1 }} 
+      {{> _forms }}
+    {{/is }} 
+  {{/each}}
+
+</div>

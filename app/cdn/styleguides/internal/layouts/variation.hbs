@@ -1,0 +1,101 @@
+---
+layout: base.hbs
+title: OB1262526 / 1
+breadcrumb: Application
+subtitle: Don Tarmacadam Ltd. <span class="status red">Under consideration</span>
+status: Suspended
+horizontalNavItems:
+  - label: Application details
+    link:  index.html
+  - label: Cases
+    link:  cases.html
+  - label: Environmental
+    link:  environmental.html
+  - label: Docs & attachments
+    link:  docs&attachments.html
+  - label: Processing
+    link:  tasks.html
+  - label: Fees
+    link:  fees.html
+appNavItems:
+  - label: Overview
+    link:
+
+  - label: Type of licence
+    link:
+    status: edited
+
+  - label: Business type
+    link:
+    status: complete
+
+  - label: Business details
+    link:
+    status: incomplete
+
+  - label: Addresses
+    link:
+    status: disabled
+
+  - label: People
+    link:
+
+  - label: Operating centres and authorisation
+    link:
+
+  - label: Financial evidence
+    link:
+
+  - label: Transport managers
+    link:
+
+  - label: Vehicles
+    link:
+
+  - label: Community licences
+    link:
+
+  - label: Safety and compliance
+    link:
+
+  - label: Conditions and undertakings
+    link:
+
+  - label: Financial history
+    link:
+
+  - label: License history
+    link:
+
+  - label: Conviction and penalties
+    link:
+
+  - label: Review and declarations
+    link: declarations.html
+ 
+recordActions:
+  - title: Quick actions
+    actions:
+      - Generate publication
+      - Add recommendation
+      - Create case
+---
+
+<div class="sidebar--left">
+  <div class="content">
+  {{> body }}  
+  </div>
+</div>
+
+<div class="sidebar--right">
+  <div class="record-actions">
+    {{#each recordActions }}
+      <h5 class="title">{{ this.title }}</h5> 
+      <ul class="record-actions__group">
+        {{#each this.actions }} 
+          <li class="record-actions__item actions--secondary"><a href="">{{ this }}</a></li>
+        {{/each }}
+      </ul>
+    {{/each }}
+  </div>
+</div>

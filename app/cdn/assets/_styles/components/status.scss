@@ -1,0 +1,33 @@
+/**
+ * Status
+ */
+
+.status {
+  @extend %paragraph--tiny;
+  display: inline-block;
+  border: 1px solid;
+  vertical-align: middle;
+  margin: 0 6px;
+  padding: 2px 3px 1px;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-align: left;
+  &.red {
+    color: $red;
+  }
+  &.orange {
+    color: $orange;
+  }
+  &.green {
+    color: $primary-colour;
+  }
+  &.grey {
+    color: $grey-1;
+  }
+  .definition-list & {
+    margin: 0;
+  }
+}

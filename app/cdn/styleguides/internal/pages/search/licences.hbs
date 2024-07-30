@@ -1,0 +1,65 @@
+---
+layout_script: false
+asset: '../../../../'
+layout: search-results.hbs
+sectionTitle: Licences
+filterList:
+  - header: Licence status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>24</strong> Licence results
+    headers:
+      - label: Licence
+        class: sortable descending
+      - label: Operator name
+        class: sortable
+      - label: Vehicle auth.
+        class: sortable
+      - label: Trailer auth.
+        class: sortable
+    columns:
+      - <strong><a href="">OM1111040R</a></strong><span class="status green">Valid</span>
+      - <a href="">Don Tarmacadam</a>
+      - 13
+      - 0
+    rows: 20
+    actions:
+      - label: New organisation
+        class: primary
+      - label: Edit
+        class: secondary disabled
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Filter by:</h4>
+  {{> _filters }}
+</div><!-- end .one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div><!-- end .four-fifths-right -->
+
+
+
+
+
+
