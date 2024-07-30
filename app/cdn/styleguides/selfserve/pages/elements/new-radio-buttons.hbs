@@ -1,0 +1,203 @@
+---
+title: Radio Buttons
+breadcrumbs:
+  - link: index.html
+    label: Back to index
+---
+
+<div class="row">
+
+  <div class="three-quarters">
+
+    <div class="field">
+      <h3>Yes / No</h3>
+      <p class="form-hint">Only yes / no radio buttons are displayed inline. All others are stacked. </p>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">Does anyone you've named already have an operator's licence in any traffic area?</legend>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q1" id="q1[Y]" value="Y" >
+          <label class ="radio-button__label" for="q1[Y]">Yes</label>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q1" id="q1[N]" value="N">
+          <label class="radio-button__label" for="q1[N]">No</label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="field">
+      <h3>Disabled</h3>
+      
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">Does anyone you've named already have an operator's licence in any traffic area?</legend>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button " name="q2" id="q2[Y]" value="Y" disabled>
+          <label class ="radio-button__label" for="q2[Y]">Yes</label>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button " name="q2" id="q2[N]" value="N" disabled checked>
+          <label class="radio-button__label" for="q2[N]">No</label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="field">
+      <h3>Yes / No with conditional content</h3>
+      <p class="form-hint">Yes no conditional content should be displayed below the radio buttons.</p>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">Does anyone you've named already have an operator's licence in any traffic area?</legend>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q3" id="q3[Y]" value="Y" data-show-element="#q3-yes-content">
+          <label class ="radio-button__label" for="q3[Y]">Yes</label>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q3" id="q3[N]" value="N" data-show-element="#q3-no-content">
+          <label class="radio-button__label" for="q3[N]">No</label>
+        </div>
+          <div class="radio-button__hidden-content help__text" id="q3-yes-content">
+            <p>Yes content</p>
+          </div>
+          <div class="radio-button__hidden-content help__text" id="q3-no-content">
+            <p>No content</p>
+          </div>
+      </fieldset>
+    </div>
+
+    <div class="field">
+      <h3>Stacked</h3>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">How would you like to send your advert?</legend>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q4" id="q4[upload]" value="Y">
+          <label class ="radio-button__label" for="q4[upload]">Upload files</label>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q4" id="q4[send]" value="Y">
+          <label class ="radio-button__label" for="q4[send]">Send in the post</label>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q4" id="q4[later]" value="Y">
+          <label class ="radio-button__label" for="q4[later]">Upload later</label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="field">
+      <h3>Stacked with conditional content</h3>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">How do you want to be contacted?</legend>
+        <p class="form-hint">These work without javascript</p>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q5" id="q5[upload]" value="Y"  data-show-element="#q5-upload-content">
+          <label class ="radio-button__label" for="q5[upload]">Email</label>
+          <div class="radio-button__hidden-content help__text" id="q5-upload-content">
+            <label for="email">Email address</label>
+            <input type="text" name="email"  id="email">
+          </div>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q5" id="q5[send]" value="Y" data-show-element="#q5-phone-content">
+          <label class ="radio-button__label" for="q5[send]">Phone</label>
+          <div class="radio-button__hidden-content help__text" id="q5-phone-content">
+            <label for="phone">Phone number</label>
+            <input type="text" name="phone"  id="phone">
+          </div>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q5" id="q5[later]" value="Y">
+          <label class ="radio-button__label" for="q5[later]">Text message</label>
+          <div class="radio-button__hidden-content help__text" id="q5-mobile-content" data-show-element="#q5-mobile-content">
+            <label for="mobile">Mobile phone number</label>
+            <input type="text" name="mobile" id="mobile">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="field">
+      <h3>Label with sub-text</h3>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-label"><strong>How would you like to sign the declaration</strong></legend>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q6" id="q6[upload]" value="Y">
+          <label class ="radio-button__label radio-button__label--multi-line" for="q6[upload]">
+            <strong>Sign online using GOV.UK Verify</strong>
+            <br>To use GOV.UK Verify you must be a UK resident with a valid passport
+          </label>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q6" id="q6[send]" value="Y">
+          <label class ="radio-button__label radio-button__label--multi-line" for="q6[send]">
+            <strong>Print, sign and return</strong>
+            <br>You'll need to return the signed declaration to the <a href="#">Central Licensing Office</a>
+          </label>
+          
+        </div>
+      </fieldset>
+    </div>
+
+
+    <div class="field">
+      <h3>Stacked with conditional content - error</h3>
+      <fieldset class="radio-button__fieldset">
+        <legend class="form-element__label form-label">How do you want to be contacted?</legend>
+        <p class="form-hint">These work without javascript</p>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q7" id="q7[upload]" value="Y"  data-show-element="#q7-upload-content"  checked="checked">
+          <label class ="radio-button__label" for="q7[upload]">Email</label>
+          <div class="help__text radio-button__hidden-content radio-button__hidden-content--error" id="q7-upload-content">
+            <label for="email" class="label--error">Email address</label>
+            <input type="text" class="input--error" name="email"  id="email">
+          </div>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q7" id="q7[send]" value="Y" data-show-element="#q7-phone-content">
+          <label class ="radio-button__label" for="q7[send]">Phone</label>
+          <div class="radio-button__hidden-content help__text" id="q7-phone-content">
+            <label for="phone">Phone number</label>
+            <input type="text" name="phone"  id="phone">
+          </div>
+        </div>
+        <div class="radio-button__container">
+          <input type="radio" class="radio-button" name="q7" id="q7[later]" value="Y">
+          <label class ="radio-button__label" for="q7[later]">Text message</label>
+          <div class="radio-button__hidden-content help__text" id="q7-mobile-content" data-show-element="#q7-mobile-content">
+            <label for="mobile">Mobile phone number</label>
+            <input type="text" name="mobile" id="mobile">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+
+    <div class="field">
+      <h3>Yes / No with conditional content</h3>
+      <p class="form-hint">Yes no conditional content should be displayed below the radio buttons.</p>
+      <fieldset class="radio-button__fieldset">
+        <legend class="">Do you have any other finances?</legend>
+        <p>This can incude any factoring/discount facilities or credit cards</p>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q8" id="q8[Y]" value="Y" data-show-element="#q8-yes-content">
+          <label class ="radio-button__label" for="q8[Y]">Yes</label>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+          <input type="radio" class="radio-button" name="q8" id="q8[N]" value="N" data-show-element="#q8-no-content">
+          <label class="radio-button__label" for="q8[N]">No</label>
+        </div>
+          <div class="radio-button__hidden-content help__text" id="q8-yes-content">
+            <p>Yes content</p>
+          </div>
+          <div class="radio-button__hidden-content help__text" id="q8-no-content">
+            <p>No content</p>
+          </div>
+      </fieldset>
+    </div>
+
+
+  </div>
+
+
+
+</div>
+ 
+

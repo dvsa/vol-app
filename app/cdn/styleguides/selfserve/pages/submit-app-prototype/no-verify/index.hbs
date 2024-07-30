@@ -1,0 +1,139 @@
+---
+layout: base.hbs
+user: operator
+title: Application overview
+subtitle: Application OB6153563/9
+breadcrumbs:
+  - link: home.html
+    label: Home
+overview-items:
+  - name: 1. Type of licence
+    status: Complete
+    edit-link: Edit licence type
+  - name: 2. Business details
+    status: Complete
+    edit-link: Edit business details
+    open: true
+  - name: 3. Addresses
+    status: Complete
+    edit-link: Edit addresses
+  - name: 4. People
+    status: Complete
+    edit-link: Edit directors
+  - name: 5. Operating centres and authorisation
+    status: Complete
+    edit-link: Edit operating centres
+  - name: 6. Financial evidence
+    status: Complete
+    edit-link: Edit financial evidence
+  - name: 7. Transport managers
+    status: Complete
+    edit-link: Edit transport managers
+  - name: 8. Vehicles
+    status: Complete
+    edit-link: Edit vehicles
+  - name: 9. Safety information
+    status: Complete
+    edit-link: Edit safety information
+  - name: 10. Financial history
+    status: Complete
+    edit-link: Edit financial history
+  - name: 11. Licence history
+    status: Complete
+    edit-link: Edit licence history
+  - name: 12. Convictions and penalties
+    status: Complete
+    edit-link: Edit convictions and penalties
+  - name: 13. Declaration
+    status: Not started
+    edit-link: Sign the declaration
+---
+
+<div class="row">
+
+  <div class="two-thirds border">
+    <ul class="overview-navigation">
+
+    {{#each overview-items }}
+
+      {{#is status "Complete"}}
+      <li class="overview-item">
+        <a href="/styleguides/selfserve/operating-centres.html" class="overview-item__link">
+          <h4>{{ name }}</h4>
+          <span class="status green">{{ status }}</span>
+          <p>{{ edit-link }}</p>
+        </a>
+      </li>
+      {{/is}}
+
+      {{#is status "Incomplete"}}
+      <li class="overview-item">
+        <a href="/styleguides/selfserve/operating-centres.html" class="overview-item__link">
+          <h4>{{ name }}</h4>
+          <span class="status orange">{{ status }}</span>
+          <p>{{ edit-link }}</p>
+        </a>
+      </li>
+      {{/is}}
+
+      {{#is status "Not started" }}
+      <li class="overview-item not-started">
+        <a href="declarations.html" class="overview-item__link">
+          <h4>{{ name }}</h4>
+          <span class="status {{#is status "Not started" }}grey{{/is}}">{{ status }}</span>
+          <p>{{ edit-link }}</p>
+        </a>
+      </li>
+      {{/is}}
+
+     {{#is status "Disabled" }}
+      <li class="overview-item disabled">
+        <div class="overview-item__link">
+          <h4>{{ name }}</h4>
+          <span>Please complete the other sections first</span>
+        </div>
+      </li>
+      {{/is}}
+
+    {{/each }}
+
+    </ul><!-- .overview-navigation -->
+
+    <p>Application fee</p>
+    <h2>£257.00</h2>
+    <hr />
+    <a href="" class="action--primary large disabled">Submit &amp; pay</a>
+  </div><!-- .two-thirds -->
+
+
+  <div class="one-third">
+    
+    <div class="sidebar">
+
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB6153563/9</dd>
+        <dt>Created</dt>
+        <dd>14 September 2015</dd>
+        <dt>Progress</dt>
+        <dd>12 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Incomplete</dd>
+      </dl><!-- .meta -->
+  
+      <div class="links">
+        <h3>Applying for a new licence</h3>
+        <ul class="links-list">
+          <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
+          <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
+          <li class="links-list__item"><a href="">Financial information</a></li>
+          <li class="links-list__item"><a href="">A guide to operator fees</a></li>
+          <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+        </ul>
+      </div><!-- .links -->
+      
+    </div>
+
+  </div>
+
+</div>

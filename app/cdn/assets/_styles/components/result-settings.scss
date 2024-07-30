@@ -1,0 +1,18 @@
+/**
+ * Result Settings
+ */
+
+.results-settings {
+  float: left;
+  &__list {
+    list-style: none;
+    float: left;
+  }
+  p,
+  &__item {
+    @extend %paragraph--small;
+    float: left;
+    margin-right: 0.5em;
+    clear: none;
+  }
+}

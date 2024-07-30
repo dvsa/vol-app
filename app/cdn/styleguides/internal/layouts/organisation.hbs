@@ -1,0 +1,35 @@
+---
+layout: base.hbs
+title: Don Tarmacadam Ltd.
+breadcrumb: Operator
+subtitle: MLH
+horizontalNavItems:
+  - label: Profile
+    link:  index.html
+  - label: IRFO
+    link:  cases.html
+  - label: Processing
+    link:  bus-registrations.html
+  - label: Fees
+    link:  opposition.html
+  - label: Docs & attachments
+    link:  environmental.html
+recordActions:
+  - title: Quick actions
+    actions:
+      - New application
+  - title: Decisions
+    actions:
+      - Disqualify
+      - Merge operator
+---
+
+<div class="four-fifths--left">
+  <div class="content">
+    {{> body }}
+  </div>
+</div>
+
+<div class="sidebar--right">
+  {{> _record-actions }}
+</div>

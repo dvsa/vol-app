@@ -1,0 +1,137 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Actions
+layout: licence.hbs
+actions:
+  - label: New task
+    class: primary
+  - label: Edit
+    class: secondary disabled
+  - label: Close
+    class: secondary disabled
+  - label: Reassign
+    class: secondary disabled
+table:
+  - title: <strong>64</strong> Actions
+    headers:
+      - label: Action
+        class: sortable descending
+      - label: Info
+        class: sortable descending
+      - label: Date
+        class: sortable
+      - label: By
+        class: sortable
+    columns:
+      - <a href="">Operating centre change</a>
+      - 15 Pasture Road, Leeds
+      - 13:01 12/03/13
+      - Gillian Fogal
+    rows: 4
+verticalNavItems:
+  - label: Decisions
+    link:  decisions.html
+  - label: Actions
+    link:  actions.html
+  - label: Tasks
+    link:  tasks.html
+  - label: Notes
+    link:  notes.html
+---
+
+<div class="overlay"></div>
+  <div class="modal__wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        <h1 class="modal__title">Action</h1>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        <form action="">
+          <fieldset>
+            <div class="field">
+              <label for="">Version</label>
+              <select name="" id="">
+                <option value="">4</option>
+                <option value="">3</option>
+                <option value="">2</option>
+                <option value="">1</option>
+              </select>
+            </div>
+          </fieldset>
+        </form>
+        <hr />
+        <div class="read-only">
+          <ul class="definition-list">
+            <li class="definition-list__item full-width">
+              <dt>Details</dt>
+              <dd>Operating centre update</dd>
+            </li>
+          </ul>
+          <ul class="definition-list">
+            <li class="definition-list__item full-width">
+              <dt>Info</dt>
+              <dd>10 Pasture Grove, Leeds</dd>
+            </li>
+          </ul><!-- .definition-list -->
+          <ul class="definition-list">
+            <li class="definition-list__item full-width">
+              <dt>Date</dt>
+              <dd>13:01, 30/3/16</dd>
+            </li>
+          </ul><!-- .definition-list -->
+          <ul class="definition-list">
+            <li class="definition-list__item full-width">
+              <dt>By</dt>
+              <dd>Gillian Fogal</dd>
+            </li>
+          </ul><!-- .definition-list -->
+        </div>
+        <hr />
+        <div class="table__wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>New value</th>
+                <th>Old value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vehicles</td>
+                <td>12</td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>Trailer</td>
+                <td>12</td>
+                <td>10</td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- end .table__wrapper -->
+
+         <div class="actions-container">
+          <a href="" class="action--primary large">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div>
+
+
+

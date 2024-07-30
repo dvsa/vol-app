@@ -1,0 +1,80 @@
+---
+layout_script: false
+asset: '../../../../'
+layout: search-results.hbs
+sectionTitle: Bus registrations
+filterList:
+  - header: Registration status
+    type: dropdown
+    filters:
+      - All
+      - Live
+      - Registred
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+actions:
+  - label: New registration
+    class: primary
+  - label: Print
+    class: secondary
+  - label: Edit
+    class: secondary disabled
+table:
+  - title: <strong>24</strong> Bus registration results
+    headers:
+      - label: Reg no.
+        class: sortable descending
+      - label: Operator name
+        class: sortable
+      - label: Var no.
+        class: sortable
+      - label: Service no.
+        class: sortable
+      - label: Reg/Cancelled date
+        class: sortable
+      - label: Starting point
+        class: sortable
+      - label: Finishing point
+        class: sortable
+      - label: 
+        class: --
+    columns:
+      - <strong><a href="">42587</a></strong>
+      - Don Tarmacadam
+      - 2
+      - 576, 59, 58
+      - 12/3/10
+      - Admiral Duncan, Baschurch
+      - Bus Station, Shrewsbury
+      - <input name="row" type="radio">
+    rows: 20
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Filter by:</h4>
+  {{> _filters }}
+</div><!-- end .one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- end .four-fifths-right -->
+
+
+
+
+
+

@@ -1,0 +1,118 @@
+---
+title: Home
+asset: '../../../'
+subtitle:  
+filterList:
+  - header: Team
+    type: dropdown
+    filters:
+      - Licensing team 1
+  - header: Owner
+    type: dropdown
+    filters:
+      - Terry Fox
+  - header: Category
+    type: dropdown
+    filters:
+      - Application
+  - header: Sub category
+    type: dropdown
+    filters:
+      - Goods app
+  - header: Date
+    type: dropdown
+    filters:
+      - Today
+      - This week
+      - This month
+      - All dates
+  - header: Status
+    type: dropdown
+    filters:
+      - All
+      - Open
+      - Closed
+  - header: 
+    type: checkboxes
+    filters:
+      - Urgent only
+---
+
+<div class="content">
+
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters }}
+  </div>
+
+  <div class="four-fifths--right">
+    
+    <div class="table__wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Name.</th>
+            <th>Email</th>
+            <th>DOB</th>
+            <th><input name="row" type="checkbox"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="">Daniel Walters</a><span class="status orange">Incomplete</span></td>
+            <td>daniel.walters@gmail.com</td>
+            <td>08/06/71</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+          <tr>
+            <td><a href="">Stephani Gwillam</a><span class="status orange">Awaiting approval</span></td>
+            <td>stephan.gwillam@gmail.com</td>
+            <td>12/04/72</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+          <tr>
+            <td><a href="">Joseph Balder</a><span class="status green">Approved</span></td>
+            <td>joseph.balder@gmail.com</td>
+            <td>30/11/75</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- end .table__wrapper -->
+
+    <div class="table__wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable"><a href="">Name</a></th>
+            <th class="sortable"><a href="">Email</a></th>
+            <th class="not-sortable">DOB</th>
+            <th><input name="row" type="checkbox"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="">Daniel Walters</a><span class="status orange">Incomplete</span></td>
+            <td>daniel.walters@gmail.com</td>
+            <td>08/06/71</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+          <tr>
+            <td><a href="">Stephani Gwillam</a><span class="status orange">Awaiting approval</span></td>
+            <td>stephan.gwillam@gmail.com</td>
+            <td>12/04/72</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+          <tr>
+            <td><a href="">Joseph Balder</a><span class="status green">Approved</span></td>
+            <td>joseph.balder@gmail.com</td>
+            <td>30/11/75</td>
+            <td><input name="row" type="checkbox"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div><!-- end .table__wrapper -->
+    
+  </div>
+
+</div>

@@ -1,0 +1,174 @@
+// New (2017) GDS style radio/checkboxes
+//
+// @author edmund.reed@valtech.co.uk
+// @link https://git.io/vDNUW
+
+// set base form-control size
+$form-control-size: 34px !default;
+$radio-button-select-size: 18px; //should be an even number to avoid pixel rounding issues
+$advanced-top-size: 5px; //extra padding for advanced form control
+
+.form-control {
+
+  &__container {
+    &.field {
+      margin-bottom: 15px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    @extend %clearfix;
+  } 
+
+  // cache the parent selector so it can be reused without duplicating
+  $component: &;
+
+  @extend %h4;
+
+  position: relative;
+  float: left;
+  clear: both;
+  cursor: pointer;
+
+  &:before, &:after {
+    content: '';
+  }
+
+  &:before {
+    @include js-enabled(){
+      display: inline-block;
+      vertical-align: middle;
+      border: 2px solid;
+      background: transparent;
+      width: $form-control-size;
+      height: $form-control-size;
+      margin-right: $gutter-one-third;
+    }
+  }
+
+  &:after {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+  }
+
+  input {
+    @include js-enabled(){
+      position: absolute;
+      cursor: pointer;
+      width: $form-control-size;
+      height: $form-control-size;
+      top: 0;
+      left: 0;
+      margin: 0;
+      opacity: 0;
+    }
+  }
+
+  &.selected {
+    &:after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &.disabled {
+    &:after {
+      opacity: 0.5;
+    }
+    &, &:before, input {
+      cursor: not-allowed;
+    }
+  }
+
+  &.focused {
+    &:before {
+      box-shadow: 0 0 0 ($form-control-size * 0.12) $focus-colour;
+    }
+  }
+
+  &--radio {
+    &:before {
+      @include js-enabled(){
+        border-radius: 50%;
+      }
+    }
+    &:after {
+      @include js-enabled(){
+        position: absolute;
+        top: ($form-control-size - $radio-button-select-size) / 2 ;
+        left:($form-control-size - $radio-button-select-size) / 2 ;
+        height: 0;
+        width: 0;
+        border: $radio-button-select-size/2 solid $black;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &--checkbox {
+    &:after {
+      @include js-enabled(){
+        border: solid;
+        border-color: $black;
+        border-width: 0 0 ($form-control-size * 0.15) ($form-control-size * 0.15);
+        background: transparent;
+        width: ($form-control-size * 0.65);
+        height: ($form-control-size * 0.3);
+        position: absolute;
+        top: ($form-control-size * 0.3);
+        left: ($form-control-size * 0.2);
+        transform: rotate(-45deg);
+      }
+    }
+  }
+  
+  &--confirm {
+    display: block;
+    float: none;
+  }
+
+  &--advanced {
+    @extend #{$component}--confirm;
+    @include js-enabled(){
+      padding-left: ($form-control-size + $gutter-half);
+    }
+    &:before {
+      position: absolute;
+      top: $advanced-top-size;
+      left: 0;
+    }
+    &#{$component}--checkbox {
+      &:after {
+        top: 15px;
+        left: 6px;
+      }
+    }
+    &#{$component}--radio {
+      &:after {
+        top: ( ($form-control-size - $radio-button-select-size) / 2) + $advanced-top-size ;
+      }
+    }
+    strong {
+      display: block;
+    }
+  }
+
+  &--inline {
+    float: none;
+    display: inline-block;
+    margin-top: 0;
+    & + & {
+      margin-left: $gutter-one-third;
+    }
+  }
+
+  // vertical rhythem
+  &:not(#{&}--inline) {
+    & + & {
+      margin-top: $gutter-one-third;
+    }
+  }
+
+}

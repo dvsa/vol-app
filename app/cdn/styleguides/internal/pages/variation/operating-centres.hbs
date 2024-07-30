@@ -1,0 +1,45 @@
+---
+layout: application.hbs
+asset: '../../../../'
+sectionTitle: Application details
+subSectionTitle: Operating centres and authorisation
+form: 
+  - title: Overview
+    fieldsets:
+    - legend:
+      fields:
+        - label: App recieved
+          type: date
+        - label: Target completion date
+          type: date
+        - label: 
+          type: checkboxes
+          values:
+            - Override completion date
+            - Change of entity
+        - label: Lorem ipsum
+          type: select
+          values:
+            - Accepted
+            - Not accepted
+            - N/A
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+      - label: Back to home
+        class: tertiary large
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Application details</h4>
+  {{> _application-navigation}}
+</div>
+
+<div class="table-col">
+  <h3>Overview</h3>
+  {{#each form}}
+    {{> _forms}}
+  {{/each }}
+</div>

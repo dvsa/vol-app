@@ -1,0 +1,111 @@
+
+
+.surrenderChecks {
+  padding-top: 20px;
+  .surrenderChecks__checkbox {
+    &:checked {
+      position: absolute;
+      left: -9999px;
+
+      + label {
+        position: relative;
+        padding-left: 1.95em;
+        cursor: pointer;
+
+        &:before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1.25em;
+          height: 1.25em;
+          border: 2px solid govuk-colour("grey-2");
+          background: govuk-colour("white");
+          border-radius: 4px;
+        }
+
+        &:after {
+          content: '\2713\0020';
+          position: absolute;
+          top: .15em;
+          left: .11em;
+          font-size: 1.3em;
+          line-height: 0.8;
+          color: govuk-colour("green");
+          transition: all .2s;
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      &:focus + label:before {
+        border: 2px dotted govuk-colour("blue");
+      }
+    }
+
+    &:disabled {
+      + label {
+        color: govuk-colour("grey-2");
+      }
+
+      &:not(:checked) + label:before {
+        box-shadow: none;
+        border-color: govuk-colour("white");
+        background-color: govuk-colour("white");
+      }
+
+      &:checked + label {
+        &:before {
+          box-shadow: none;
+          border-color: govuk-colour("white");
+          background-color: govuk-colour("white");
+        }
+
+        &:after {
+          color: govuk-colour("green");
+        }
+      }
+    }
+
+    &:not(:checked) {
+      position: absolute;
+      left: -9999px;
+
+      + label {
+        position: relative;
+        padding-left: 1.95em;
+        cursor: pointer;
+
+        &:before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 1.25em;
+          height: 1.25em;
+          border: 2px solid govuk-colour("grey-3");
+          background: govuk-colour("white");
+          border-radius: 4px;
+
+        }
+
+        &:after {
+          content: '\2713\0020';
+          position: absolute;
+          top: .1em;
+          left: .11em;
+          font-size: 1.3em;
+          line-height: 0.8;
+          color: govuk-colour("green");
+          transition: all .2s;
+          opacity: 0;
+          transform: scale(0);
+        }
+      }
+
+      &:focus + label:before {
+        border: 2px dotted govuk-colour("blue");
+      }
+    }
+  }
+}

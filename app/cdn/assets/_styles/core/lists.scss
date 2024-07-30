@@ -1,0 +1,25 @@
+/**
+ * Lists
+ */
+
+.list--reset,
+%list--reset {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.list--bullet,
+%list--bullet {
+  margin-left: 20px;
+  list-style: disc;
+  margin-bottom: $gutter-one-third;
+}
+
+.list--compound,
+%list--compound {
+  @extend %list--reset;
+  li + li {
+    margin-top: $gutter-one-third;
+  }
+}

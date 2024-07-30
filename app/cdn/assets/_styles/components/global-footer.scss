@@ -1,0 +1,82 @@
+/**
+ * Global Footer
+ *
+ * The global GOV.UK standard footer for all pages to contain the
+ * GOV.UK crest logo as well as relevant navigation links
+ */
+
+.global-footer {
+
+  border-top: 1px solid $grey-2;
+  background: $grey-3;
+  color: $dark-text;
+
+  a {
+    color: $dark-text;
+    &:hover {
+      color: $text-colour;
+    }
+  }
+
+  &__wrapper {
+    @extend %page-wrapper;
+    padding-top: $gutter;
+    padding-bottom: $gutter;
+    box-sizing: border-box;
+  }
+
+  &__support {
+    margin-bottom: $gutter;
+  }
+
+  &__links,
+  &__copyright {
+    display: table-cell;
+    vertical-align: bottom;
+    width: 95%;
+    @media (max-width: $mobile-column-stack) {
+      width: 100%;
+      display: block;
+      text-align: center;
+    }
+  }
+
+  &__links {
+    @extend %list--reset;
+  }
+
+  &__link {
+    display: inline-block;
+    margin-right: $gutter-half;
+    @media (max-width: $mobile-column-stack) {
+      margin-bottom: $gutter;
+      margin-right: 0;
+      display: block;
+    }
+    // 'Built by...' link
+    &:last-child {
+      display: block;
+    }
+  }
+
+  &__copyright {
+    height: 150px;
+    text-align: right;
+    background: url('#{$asset-path}/bitmap/footer-crest.png') no-repeat 50% 0;
+    @include device-pixel-ratio($ratio: 2) {
+      background: url('#{$asset-path}/bitmap/footer-crest-2x.png') no-repeat 50% 0;
+      background-size: 125px 102px;
+    }
+    a {
+      padding-top: 130px;
+      white-space: nowrap;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+      &:focus {
+        background-color: transparent;
+      }
+    }
+  }
+
+}// .global-footer

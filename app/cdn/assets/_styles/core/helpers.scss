@@ -1,0 +1,61 @@
+/**
+ * Helpers
+ *
+ * Typically single-property classes which can be applied to
+ * elements to provide them with extra functionality
+ */
+
+// scss-lint:disable ImportantRule
+
+.disable-scroll {
+  overflow: hidden;
+}
+
+%visually-hidden,
+.visually-hidden {
+  position: absolute;
+  left: -9999em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.right-aligned {
+  float: right;
+}
+
+.inline {
+  float: left;
+  margin-right: 0.5em;
+}
+
+.centered {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.mobile-hidden {
+  @media (max-width: $mobile-column-stack) {
+    display: none;
+  }
+}
+
+.js-visible {
+  display: none;
+}
+
+.js-enabled {
+  .js-visually-hidden {
+    @extend %visually-hidden;
+  }
+  .js-hidden {
+    display: none;
+  }
+  .js-visible {
+    display: block;
+  }
+}
+
+// scss-lint:enable ImportantRule

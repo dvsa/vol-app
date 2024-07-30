@@ -1,0 +1,129 @@
+---
+title: Licence history
+user: operator
+subtitle: Step 10 of 13
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Back to overview
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <div class="article">
+      <p>These questions apply to everyone who’s named in your application, including you and your:</p>
+      <ul>
+        <li>directors</li>
+        <li>partners</li>
+        <li>Transport Managers</li>
+      </ul>
+      <hr />
+      <form action="">
+        <fieldset>
+          <fieldset>
+            <legend>Does anyone you’ve named already have a Vehicle Operator’s Licence?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Has anyone you’ve named ever had or applied for a goods or PSV licence?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Has anyone you’ve named ever been disqualified from having a Vehicle Operator’s Licence?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <h3>The EU</h3>
+          <fieldset>
+            <legend>Has anyone you’ve named ever had a goods or PSV licence application turned down in the EU?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Has anyone you’ve named ever had a goods or PSV licence revoked, suspended or curtailed in the EU?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <h3>Public inquiries</h3>
+          <fieldset>
+            <legend>Has anyone you’ve named ever taken part in a public inquiry held by a Traffic Commissioner?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+          <h3>Assets and shares</h3>
+          <fieldset>
+            <legend>In the past year, has anyone you’ve named bought assets or shares in a company that holds or has held a Vehicle Operator's Licence?</legend>
+            <div class="field inline checkbox">
+              <label><input type="radio">Yes</label>
+            </div>
+            <div class="field inline checkbox">
+              <label><input type="radio">No</label>
+            </div>
+          </fieldset>
+        </fieldset>
+        <div class="actions-container">
+          <a href="" class="action--primary large">Save and continue</a>
+          <a href="" class="action--tertiary list large">Save and return to overview</a>
+        </div>
+      </form>
+    </div><!-- .article -->
+  </div><!-- .two-thirds -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB12524/525</dd>
+        <dt>Progress</dt>
+        <dd>7 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </div>
+  </div>
+
+</div><!-- .row -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-upload, .js-post').hide();
+    $(document).on('change', 'input[name="evidence"]', function(e) {
+      e.preventDefault();
+      if ($(this).val() === 'upload') {
+        $('.js-upload').show();
+        $('.js-post').hide();
+      } else {
+        $('.js-post').show();
+        $('.js-upload').hide()
+      }
+    });
+
+  });
+</script>

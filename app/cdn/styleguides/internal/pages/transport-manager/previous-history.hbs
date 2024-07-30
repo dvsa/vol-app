@@ -1,0 +1,90 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Previous history
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+table:
+  - title: <strong>Convictions & penalties</strong>
+    headers:
+      - label: Offence
+        class: sortable
+      - label: Date of conviction
+        class: sortable
+      - label: Name of court
+        class: sortable
+      - label: Penalty
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">SP50 Speeding </a>
+      - 12 May 2012
+      - Shrewsbury Crown Court
+      - 3 Point
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+        link: add-licence.html
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+  - title: <strong>Previous licence history</strong>
+    headers:
+      - label: Licence no.
+        class: sortable
+      - label: Licence holder name
+        class: sortable
+      - label: Licence holder address
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">OB142563</a>
+      - Mary Jones
+      - 14 Leafield Court, Shrewsbury
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+        link: add-licence.html
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Previous history</h3>
+  </div>
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+    {{#is @index 1 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+</div>

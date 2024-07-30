@@ -1,0 +1,57 @@
+---
+layout: organisation.hbs
+asset: '../../../../'
+sectionTitle: Licence details
+subSectionTitle: Users
+verticalNavItems:
+  - label: Business details
+    link:  index.html
+  - label: People
+    link:  people.html
+  - label: Licences & applications
+    link:  index.html
+  - label: Users
+    link:  users.html
+table:
+  - title: <strong>24</strong> Users
+    headers:
+      - label: Username
+        class: sortable descending
+      - label: Name
+        class: sortable descending
+      - label: Email address
+        class: sortable
+      - label: Permission
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <b><a href="">rubenloftus</a></b>
+      - Ruben Loftus-Cheek
+      - ruben.loftus-cheek@gmail.com
+      - Admin
+      - <input type="checkbox">
+    rows: 20
+    actions:
+    - label: New user
+      class: primary
+      link: new-internal-user.html
+    - label: Edit
+      class: secondary disabled
+    - label: Remove
+      class: secondary disabled
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Operator profile</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div>

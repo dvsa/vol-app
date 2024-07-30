@@ -1,0 +1,46 @@
+---
+title: Modal window
+---
+
+<div class="row">
+  <div class="two-thirds">
+    <div class="article">
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga itaque dolore vero nostrum, inventore praesentium totam tenetur id! Perspiciatis quae voluptatum veniam, libero pariatur dolores totam tempore ex dicta cum.</p>
+    </div>
+  </div>
+</div>
+
+<div class="overlay"></div>
+
+<div class="modal__wrapper">
+  <div class="modal">
+    <div class="modal__header">
+      <h1 class="modal__title">Add subsidiary company</h1>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <div class="notice-container">
+        <div class="notice--success">
+          <p>Subsidiary company added successfully</p>
+        </div>
+      </div>
+      <form action="">
+        <fieldset>
+          <div class="field">
+            <label for="">Company name</label>
+            <input type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="">Company number</label>
+            <input type="text" class="long">
+          </div>
+        </fieldset>
+        <fieldset class="actions-container">
+          <input type="submit" class="action--primary large" value="Save">
+          <input type="submit" class="action--primary large" value="Save and add another">
+          <input type="submit" class="action--secondary large" value="Cancel">
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div><!-- .modal__wrapper -->

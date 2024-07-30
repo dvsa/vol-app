@@ -1,0 +1,72 @@
+// Page Header
+.page-header {
+
+  // Selfserve only styles
+  @if $app == 'selfserve' or $app == 'print' {
+
+    position: relative;
+    @media (max-width: $mobile-column-stack){
+      margin-bottom: $gutter-half;
+    }
+
+    &__wrapper {
+      margin: $gutter 0;
+    }
+
+    h1 {
+      max-width: 650px;
+    }
+
+    &__subtitle {
+      color: $grey-1;
+      font-weight: 400;
+      margin-bottom: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__text {
+      margin: 30px 0 0;
+      max-width: 600px;
+      width: 100%;
+      @media (max-width: $mobile-column-stack){
+        margin-top: 15px;
+      }
+    }
+
+  }// selfserve
+
+  /**
+  * Internal only styles
+  */
+
+  @if $app == 'internal' {
+    width: 100%;
+    border-bottom: 1px solid $grey-3;
+    background: $grey-4;
+    overflow: hidden;
+    padding-bottom: 10px;
+    &__wrapper {
+      @extend %page-wrapper;
+    }
+    &__subtitle {
+      @include font-size(15px, 15px, 11pt);
+      color: $grey-1;
+      font-weight: 400;
+      display: inline-block;
+      @media(max-width: $mobile-column-stack) {
+        display: block;
+        margin: 5px 0 0;
+      }
+      .status {
+        vertical-align: top;
+        display: inline-block;
+      }
+    }
+    h1 {
+      display: inline-block;
+      margin-bottom: 0;
+    }
+  }// internal
+
+}// .page-header

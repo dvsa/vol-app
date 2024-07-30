@@ -1,0 +1,35 @@
+---
+title: Task
+asset: '../../'
+subtitle:
+form: 
+  - fieldsets:
+    - name: Edit task
+      fields:
+        - label: Category
+          type: select
+          options:  
+          
+            - Applications
+          class:
+        - label: Sub-category
+          type: select
+          options: 
+            - Goods app
+          class: 
+        - label: Description
+          type: textarea
+          options: 
+            - Goods app
+          class: long
+        - label: Description
+          type: date
+          options: 
+            - Goods app
+          class: long
+
+---
+
+<div class="table-col">
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

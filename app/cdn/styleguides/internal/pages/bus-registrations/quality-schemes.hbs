@@ -1,0 +1,57 @@
+---
+layout: bus-registrations.hbs
+asset: '../../../../'
+sectionTitle: Service details
+subSectionTitle: Quality schemes
+verticalNavItems:
+  - label: Service no. & type
+    link:  /styleguides/internal/bus-registrations/
+  - label: Stops, manouevers & subsidies
+    link:  /styleguides/internal/bus-registrations/stops-manouevers-&-subsidies.html
+  - label: TA's and authorities
+    link:  /styleguides/internal/bus-registrations/tas-&-authorities.html
+  - label: Quality schemes
+    link:  /styleguides/internal/bus-registrations/quality-schemes.html
+form: 
+  - title: Quality schemes
+    fieldsets:
+    - legend:
+      fields:
+        - label: Operate on part of a Quality Partnership Scheme current or future?
+          type: radios inline
+          values: 
+            - No
+            - Yes
+        - label: Local transport authority or lead authority for Quality Partnership Scheme
+          type: textarea
+          class: long
+        - label: Will Quality Partnership Scheme facilities to be used?
+          type: radios inline
+          values: 
+            - No
+            - Yes
+        - label: Operate on part of a Quality Contract Scheme current or future.
+          type: radios inline
+          values: 
+            - No
+            - Yes
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Service details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Quality schemes</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

@@ -1,0 +1,97 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Tasks
+layout: licence.hbs
+table:
+  - title: <strong>10</strong> Tasks
+    headers:
+      - label: Category
+        class: sortable descending
+      - label: Sub category
+        class: sortable
+      - label: Description
+        class: sortable
+      - label: Date
+        class: sortable
+      - label: Owner
+        class: sortable
+      - label: <input name="row" type="checkbox">
+        class: non-sortable
+    columns:
+      - Application
+      - Address change assisted digital
+      - <a href="">Address change</a>
+      - 12/3/13
+      - Gillian Fox
+      - <input name="row" type="checkbox">
+    rows: 10
+    actions:
+    - label: New task
+      class: primary
+    - label: Edit
+      class: secondary disabled
+    - label: Close
+      class: secondary disabled
+    - label: Reassign
+      class: secondary disabled
+verticalNavItems:
+  - label: Decisions
+    link:
+  - label: History
+    link:
+  - label: Tasks
+    link:
+    filterList:
+    - header: Team
+      type: dropdown
+      filters:
+        - All
+    - header: Owner
+      type: dropdown
+      filters:
+        - All
+    - header: Category
+      type: dropdown
+      filters:
+        - All
+    - header: All
+      type: dropdown
+      filters:
+        - All
+    - header: Date
+      type: dropdown
+      filters:
+        - Today
+        - This week
+        - This month
+        - All dates
+    - header: Status
+      type: dropdown
+      filters:
+        - All
+        - Open
+        - Closed
+    - header:
+      type: checkboxes
+      filters:
+        - Urgent only
+  - label: Notes
+    link: notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div>
+
+
+

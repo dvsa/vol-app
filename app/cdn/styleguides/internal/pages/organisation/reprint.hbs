@@ -1,0 +1,98 @@
+---
+layout: organisation.hbs
+asset: '../../../../'
+sectionTitle: IRFO
+subSectionTitle: GV permits
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: GV permits
+    link:  people.html
+  - label: PSV authorisation
+    link:  index.html
+table:
+  - title: <strong>10</strong> GV permits
+    headers:
+      - label: Permit ID
+        class: sortable descending
+      - label: Inforce date
+        class: sortable
+      - label: Type
+        class: sortable
+      - label:
+        class: non-sortable
+    columns:
+      - <a href=""><b>1231</b><span class="status green">Approved</span></a>
+      - 10/03/2015
+      - ECMT 100% (Jan to Mar)
+      - <a href="">Edit</a>
+    rows: 10
+    actions:
+      - label: Add permit
+        class: primary
+
+
+---
+
+<div class="overlay"></div>
+<div class="modal__wrapper">
+  <div class="modal">
+    <div class="modal__header">
+      <h1 class="modal__title">Reprint copies</h1>
+      <a href="" class="modal__close">Close</a>
+    </div>
+    <div class="modal__content">
+      <form action="">
+        <fieldset>
+          <fieldset class="checkboxes">
+            <legend class="legend">Which serial numbers failed to print?</legend>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="All">All</label>
+            </div>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="15242">15242</label>
+            </div>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="15243">15243</label>
+            </div>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="15244">15244</label>
+            </div>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="15245">15245</label>
+            </div>
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="15246">15246</label>
+            </div>
+          </fieldset>
+          <div class="article">
+            <p>The serial numbers you have selected will be and void the following copies of GV permit 12 (Russia) will be printed:</p>
+            <ul>
+              <li>15247</li>
+              <li>15248</li>
+              <li>15249</li>
+            </ul>
+          </div>
+        </fieldset>
+
+        <div class="actions-container">
+          <a href="" class="action--primary large">Print</a>
+          <div class="action--secondary large">Cancel</div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="sidebar--left">
+  <h4 class="title">IRFO</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }}
+      {{> _table }}
+    {{/is }}
+  {{/each}}
+</div>

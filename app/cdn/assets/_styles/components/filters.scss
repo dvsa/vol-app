@@ -1,0 +1,64 @@
+/**
+ * Filters
+ */
+
+.filters {
+  padding-top: 0.5em;
+  background: $white;
+  font-weight: 400;
+  @if $app == 'internal' {
+    margin: 0.5em 0 -7px;
+  }
+  .field {
+    background: none;
+    &:not(:last-child) {
+      margin-bottom: $gutter-half;
+    }
+  }
+  .inline-text {
+    input {
+      width: 4em;
+      margin-right: 0;
+      font-size: font-size(4);
+    }
+  }
+  label {
+    margin-bottom: 5px;
+  }
+  select {
+    // offset outline
+    width: calc(100% - 2px);
+    margin-left: 1px;
+  }
+  .hint {
+    @extend %paragraph--small;
+    width: 100%;
+  }
+  .vertical-navigation &,
+  .app-navigation & {
+    border-top: 3px solid $primary-colour;
+    padding-top: 0.75em;
+    form {
+      margin: 0;
+    }
+  }
+}
+
+.search-filter {
+  @media (max-width: breakpoint('break-4')) {
+    h3 {
+      cursor: pointer;
+      &:before {
+        content: '►';
+        font-size: 0.9em;
+        margin-right: 0.25em;
+      }
+    }
+    &.toggled h3:before {
+      content: '▼';
+    }
+  }
+  &:not(.toggled) {
+    margin-bottom: $gutter;
+  }
+}

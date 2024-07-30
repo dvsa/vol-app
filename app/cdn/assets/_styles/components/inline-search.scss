@@ -1,0 +1,27 @@
+/**
+ * Inline Search
+ */
+
+.inline-search {
+  @media (max-width: $mobile-column-stack) {
+    position: relative;
+    float: left;
+    margin-top: 20px;
+  }
+  .field {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: top;
+  }
+  &__submit {
+    @extend .action--primary;
+    vertical-align: bottom;
+    margin-left: 5px;
+  }
+  &__clear {
+    @extend %paragraph--small;
+    display: block;
+    color: $link-colour;
+    margin-bottom: -30px;
+  }
+}

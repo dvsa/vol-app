@@ -1,0 +1,55 @@
+---
+layout: my-account.hbs
+asset: '../../../../'
+subSectionTitle: My details
+form:
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Username
+          type: text
+          class: medium
+        - label: First name
+          type: text
+          class: medium
+        - label: Last name
+          type: text
+          class: medium
+        - label: Date of birth
+          type: date
+    - legend: Contact
+      fields:
+        - label: Email address
+          type: text
+          class: long
+        - label: Confirm email address
+          type: text
+          class: long
+        - label: Phone
+          type: text
+          class: medium
+        - label: Fax
+          type: text
+          class: medium
+    - legend: Office address
+      fields:
+        - label: Email
+          type: full-address
+    actions:
+      - label: Save
+        class: primary
+      - label: Cancel
+        class: secondary
+---
+
+<div class="sidebar--left">
+  <h4 class="title">My account</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">My details</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+</div>

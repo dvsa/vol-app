@@ -1,0 +1,93 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Submissions
+table:
+  - title: <strong>History</strong>
+    headers:
+      - label: Licence
+        class: sortable descending
+      - label: Operator
+        class: sortable
+      - label: Specified
+        class: sortable
+      - label: Removed
+        class: sortable
+      - label: Disc no.
+        class: sortable
+    columns:
+      - OB122883
+      - Don Tarmacadam Ltd
+      - 12/3/13
+      - 12/3/14
+      - 6252627
+    rows: 5
+form:
+  - title: Business details
+    fieldsets:
+    - legend: Vehicle details
+      fields:
+        - label: Registration mark
+          type: text
+          class: medium
+        - label: Plated weight (kg)
+          type: text
+          class: short
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups:
+    - group:
+      - name: Disc no.
+        value: 027253
+    - group:
+      - name: Received
+        value: 08 Aug 2011
+        class: full-width
+      - name: Specified
+        value: 12 Aug 2011
+        class: full-width
+      - name: Ceased
+        value: 12 Aug 2011
+        class: full-width
+actions:
+  - label: Save
+    class: primary large
+  - label: Cancel
+    class: secondary large
+
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header">
+        <h2 class="modal__title">Edit vehicle</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}
+          {{> _forms }}
+        {{/each }}
+        {{#each read-only}}
+          {{#is @index 0 }}
+            {{> _read-only }}
+          {{/is }}
+        {{/each}}
+        {{#each table}}
+          {{#is @index 0 }}
+            {{> _table }}
+          {{/is }}
+        {{/each}}
+        <div class="actions-container">
+        {{> _actions }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+

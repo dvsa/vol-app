@@ -1,0 +1,489 @@
+/**
+ * Tables
+ */
+
+// Create an actionable header bar with right-side actions-container
+%header-with-actions {
+  float: left;
+  width: 100%;
+  padding-bottom: 8px;
+  position: relative;
+  @if $app == 'internal' {
+    h3,
+    h4 {
+      float: left;
+      display: block;
+      margin: 0;
+    }
+  }
+  .actions-container {
+    display: block;
+    @if $app == 'selfserve' {
+      margin-bottom: 10px;
+      .action--tertiary {
+        @extend %h4;
+        float: left;
+        clear: both;
+        padding-top: 0;
+        padding-bottom: 0;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .action-secondary-top
+      {
+        margin-top:10px;
+      }
+    }
+    @if $app == 'internal' {
+      float: right;
+      margin: -7px -5px -2px 0;
+    }
+  }
+  select {
+    margin: 3px 3px 0 0;
+  }
+}
+
+.table {
+  &--2-column {
+    td, th {
+      width: 50%;
+    }
+  }
+
+  &--3-column {
+    td, th {
+      &:first-child {
+        width: 50%;
+      }
+      width: 25%;
+    }
+  }
+  .field {
+    margin-bottom: 0;
+  }
+}
+
+.table__wrapper {
+  display: block;
+  width: 100%;
+  position: relative;
+  float: left;
+  font-family: $nta-light-tabular;
+  + .table__header,
+  + .table__form {
+    margin-top: 2em;
+  }
+  td,
+  th {
+    vertical-align: middle;
+  }
+  // prevent tables from causing entire page to stretch
+  .field > & {
+    @extend %page-wrapper !optional;
+    overflow-x: auto;
+  }
+}
+
+.table__header {
+  @extend %header-with-actions !optional;
+  span {
+    @extend %paragraph;
+    font-weight: 400;
+    color: $grey-1;
+  }
+  p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    float: left;
+  }
+  .actions-container .action--tertiary {
+    // ensure correct specificity without using !important
+    &:not(:first-child) {
+      margin-top: 0;
+    }
+    &:hover,
+    &:focus {
+      color: $link-active-colour;
+    }
+  }
+}
+
+.table__footer {
+  width: 100%;
+  clear: right;
+  overflow: auto;
+  padding-top: $gutter-half;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-bottom: 1px solid $grey-2;
+  margin-bottom: 1em;
+  .summary &,
+  &:last-child {
+    margin-bottom: 0;
+  }
+  [type="checkbox"],
+  [type="radio"] {
+    margin: 0.25em auto 0;
+    text-align: center;
+    display: block;
+    cursor: pointer;
+  }
+  [type="submit"] {
+    white-space: normal;
+    text-align: left;
+    @extend %h5;
+  }
+  [type="submit"]:focus {
+    border: 0;
+    background: $yellow;
+  }
+  a:focus {
+    outline: none;
+  }
+}
+
+
+tr {
+  &.hover {
+    background: $grey-3;
+    cursor: pointer;
+  }
+  &.current {
+    background: $light-blue-25;
+  }
+  &.disabled {
+    cursor: default;
+    [type="submit"] {
+      cursor: default;
+      color: $grey-1;
+    }
+    [disabled="disabled"] {
+      text-decoration: none;
+    }
+    a {
+      text-decoration: underline;
+    }
+    [type="submit"]:hover,
+    a:hover {
+      cursor: pointer;
+      color: $black;
+    }
+  }
+}
+
+th,
+td {
+  @extend %paragraph--small;
+  padding: 0.7em 10px 0.7em 0;
+  text-align: left;
+  vertical-align: top;
+  > label {
+    margin: 0;
+  }
+}
+
+th {
+  font-weight: 600;
+  border-top: 1px solid $grey-2;
+  &[scope="row"] {
+    font-weight: 400;
+    padding-right: 2em;
+  }
+  &.right-aligned {
+    float: none;
+  }
+  &.invalid {
+    color: $error-colour;
+  }
+}
+
+td {
+  overflow: visible;
+  border-top: 1px solid $grey-2;
+  ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+  p,
+  li {
+    @extend %paragraph--small;
+  }
+  .right-aligned {
+    margin-left: 0.5em;
+  }
+
+}
+
+
+
+.td--right-aligned {
+    text-align: right;
+    padding-left: 0.5em;
+
+}
+
+
+tfoot {
+  tr {
+    border-top: 1px solid $grey-2;
+    border-bottom: 0;
+  }
+  th,
+  td {
+    border: 0;
+    overflow: hidden;
+    font-weight: 600;
+  }
+  th {
+    background: none;
+  }
+}
+
+.right {
+  text-align: right;
+  a,
+  [type="submit"] {
+    margin-left: 12px;
+  }
+  [type="checkbox"],
+  [type="radio"] {
+    float: right;
+    margin: 3px 0 7px 7px;
+  }
+}
+
+.new {
+  color: $primary-colour;
+  margin-right: 5px;
+}
+
+.table-search__input {
+  width: 200px;
+  height: 14px;
+  margin-top: -7px;
+}
+
+.sortable {
+
+  a {
+    padding-right: 1em;
+    color: $black;
+    text-decoration: none;
+    position: relative;
+    &:after {
+      @if $app != 'print' {
+        @include svg('dropdown-down');
+        content: '';
+        position: absolute;
+        display: inline-block;
+        right: 0;
+        top: 7px;
+      }
+    }
+  }
+  a:active {
+    color: $grey-1;
+  }
+}
+
+// This hack is to break any long safety inspector names onto
+// two lines as per OLCS-11334
+#lva-safety {
+  td {
+    max-width: 250px;
+    > [type="submit"] {
+      word-break: break-word;
+      text-align: left;
+      max-width: 100%;
+    }
+  }
+}
+
+// Prevent accidental text-highligting when trying to select
+// multiple rows
+.table--no-select {
+  tr {
+    // 'user-select' is a non-standard feature but works in all browsers
+    // scss-lint:disable VendorPrefix
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    // scss-lint:enable VendorPrefix
+    user-select: none;
+  }
+}
+
+// Mobile tables
+@media (max-width: breakpoint('break-1')) {
+  .table__wrapper {
+    table {
+      border-bottom: none;
+    }
+    thead {
+      display: none;
+    }
+    tfoot {
+      tr {
+        margin-top: $gutter-half;
+      }
+    }
+    tr {
+      display: block;
+      border: 1px solid $grey-2;
+      position: relative;
+      padding-top: 0.4em;
+      padding-bottom: 0.4em;
+      &:not(:first-child) {
+        margin-top: $gutter-half;
+      }
+    }
+    td {
+      display: block;
+      border: none;
+      padding-left: $gutter-half;
+      padding-right: $gutter-half;
+      padding-top: 0.2em;
+      padding-bottom: 0.2em;
+      &[data-heading] {
+        &:before {
+          content: attr(data-heading);
+          font-weight: bold;
+          margin-right: $gutter-one-third;
+          display: inline-block;
+          vertical-align: top;
+          width: 30%;
+        }
+        [type="checkbox"] {
+          position: absolute;
+          top: 0.5em;
+          right: 0.65em;
+        }
+        a,
+        input[type="submit"] {
+          width: calc(100% - 30% - #{$gutter-one-third});
+        }
+      }
+      &:empty {
+        display: none;
+      }
+    }
+    .right-aligned {
+      float: none;
+      margin-left: 0;
+    }
+  }
+}
+
+// Selfserve theme
+// ---------------
+
+@if $app == 'selfserve' {
+
+  .director-change {
+    fieldset{
+      div {
+          &.table__empty{
+            border-left: 5px solid #bfc1c3;
+            padding-left:1em;
+            margin-top:1em;
+        }
+      }
+
+    }
+  }
+
+  td {
+    span.nowrap {
+      white-space: nowrap;
+    }
+  }
+}
+
+// Internal theme
+// ---------------
+
+@if $app == 'internal' {
+
+  .table__wrapper {
+    border-radius: 3px;
+    margin-bottom: 0.5em;
+  }
+
+  table {
+    border: 1px solid $grey-3;
+  }
+
+  tfoot {
+    background: $grey-4;
+  }
+
+  tr {
+    &.urgent {
+      border-left: 5px solid $mellow-red;
+    }
+    &.hover,
+    &.checked {
+      background: $grey-4;
+    }
+  }
+
+  th,
+  td {
+    padding: 0.5em 0.75em;
+  }
+
+  th {
+    background: $grey-4;
+    border: 1px solid $grey-3;
+    a {
+      display: block;
+    }
+  }
+
+  td {
+    border-top: 1px solid $grey-3;
+    border-right: 1px dotted $grey-3;
+  }
+
+  .sortable {
+    padding: 0.5em 0.75em;
+    background: $grey-4;
+    a {
+      padding: 0 1.25em 0 0;
+    }
+    &:hover,
+    &.ascending,
+    &.descening {
+      background-color: $grey-4;
+    }
+  }
+
+  .not-sortable {
+    padding: 0.5em 0.75em;
+  }
+
+  // add to column title to prevent heading wrapping
+  .no-wrap {
+      white-space: nowrap;
+  }
+
+}
+
+.checklist-table {
+  tr:first-child {
+    th, td {
+      border-top: none;
+    }
+  }
+  td {
+    font-size: font-size(5);
+  }
+  thead {
+    border-bottom: 1px solid $grey-2;
+  }
+}

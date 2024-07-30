@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en-GB" class="not-ie8">
+<!--<![endif]-->
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{assets}}styles/selfserve.css" media="all" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{{assets}}js/selfserve.js"></script>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn /trunk/html5.js"></script>
+    <![endif]-->
+
+    
+  </head>
+
+  <body class="selfserve {{bodyClass}}">
+    <script>
+      document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+    </script>
+    {{#if cookie-banner}}
+      <div class="cookie-banner">
+        <div class="cookie-banner__wrapper">
+          <p>Vehicle Operator Licensing uses cookies. <a href="#">Find out more</a></p>
+        </div>
+      </div>
+    {{/if}}
+
+    {{> _global-header}}
+
+    {{#if system-messages}}
+      <div class="system-messages">
+        <ul class="system-messages__wrapper">
+          <li class="system-message__item">The system will be down tomorrow between 10:00am and 11:00am for general maintenance.<a href="">Close</a></li>
+        </ul>
+      </div>
+    {{/if}}
+
+    <div class="page-wrapper">
+
+      {{> _user-header}}
+
+      <div id="main" role="main" class="styleguide">
+        {{#isnt overview true}}
+          {{> _page-header}}
+        {{/isnt}}
+        {{> body}}
+      </div>
+
+    </div><!-- .page-wrapper -->
+
+    {{> _global-footer}}
+
+  </body>
+</html>

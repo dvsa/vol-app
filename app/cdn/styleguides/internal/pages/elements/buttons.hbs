@@ -1,0 +1,165 @@
+---
+title: Home
+asset: '../../../'
+subtitle:
+filterList:
+  - header: Team
+    type: dropdown
+    filters:
+      - Licensing team 1
+  - header: Owner
+    type: dropdown
+    filters:
+      - Terry Fox
+  - header: Category
+    type: dropdown
+    filters:
+      - Application
+  - header: Sub category
+    type: dropdown
+    filters:
+      - Goods app
+  - header: Date
+    type: dropdown
+    filters:
+      - Today
+      - This week
+      - This month
+      - All dates
+  - header: Status
+    type: dropdown
+    filters:
+      - All
+      - Open
+      - Closed
+  - header:
+    type: checkboxes
+    filters:
+      - Urgent only
+actions:
+  - label: Edit
+    class: secondary disabled
+  - label: Close
+    class: secondary disabled
+  - label: Reassign
+    class: secondary disabled
+table:
+  title: <strong>89</strong> Tasks
+  headers:
+    - label: Link
+      class: sortable
+    - label: Category
+      class: sortable descending
+    - label: Sub category
+      class: sortable
+    - label: Description
+      class: sortable
+    - label: Date
+      class: sortable
+    - label: Owner
+      class: sortable
+    - label: Name
+      class: sortable
+    - label: <input name="row" type="checkbox">
+      class: non-sortable
+  columns:
+    - <strong><a href="licence/">OB0016152</a></strong> (MLH)
+    - Application
+    - Address change assisted digital
+    - <a href="">Address change</a>
+    - 12/3/13
+    - Gillian Fox
+    - Don Tarmacadam
+    - <input name="row" type="checkbox">
+  rows: 4
+---
+
+
+<div class="content">
+      
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters }}
+  </div>
+
+  <div class="table-col">
+
+    <h3>Primary Buttons</h3>
+
+    <div class="actions-container">
+      
+      <button class="action--primary" value="Edit" type="submit">Button</button>
+      <input class="action--primary" value="Input" type="submit">
+      <a href="" class="action--primary">Anchor</a>
+      <button class="action--primary disabled" value="Edit" type="submit" disabled="disabled">Disabled</button>
+      
+    </div>
+      
+    <hr />
+      
+    <h3>Secondary Buttons</h3>
+    
+    <div class="actions-container">
+      
+      <button class="action--secondary" value="Edit" type="submit">Button</button>
+      <input class="action--secondary" value="Input" type="submit">
+      <a href="" class="action--secondary">Anchor</a>
+      <button class="action--secondary" value="Edit" type="submit" disabled="disabled">Disabled</button>
+      
+    </div>
+      
+    <hr />
+    
+    <h3>Delete Buttons</h3>
+    
+    <div class="actions-container">
+      
+      <button class="action--delete" value="Edit" type="submit">Button</button>
+      <input class="action--delete" value="Input" type="submit">
+      <a href="" class="action--delete">Anchor</a>
+      <button class="action--delete disabled" value="Edit" type="submit" disabled="disabled">Disabled</button>
+      
+    </div>
+    
+    <hr />
+    
+    <h3>Tertiary Buttons</h3>
+    
+    <div class="actions-container">
+      
+      <button class="action--tertiary" value="Edit" type="submit">Button</button>
+      <input class="action--tertiary" value="Input" type="submit">
+      <a href="" class="action--tertiary">Anchor</a>
+      <button class="action--tertiary" value="Edit" type="submit">Disabled</button>
+      
+    </div>
+    
+    <hr />
+    
+    <h3>Large Buttons</h3>
+    
+    <div class="actions-container">
+
+      <button class="action--primary large" value="Edit" type="submit">Generate</button>
+      <button class="action--secondary large" value="Edit" type="submit">Generate</button>
+      <button class="action--delete large" value="Edit" type="submit">Generate</button>
+      <button class="action--tertiary large" value="Edit" type="submit">Generate</button>
+      
+      <br /><br />
+      
+      <button class="action--primary large" value="Edit" type="submit" disabled="disabled">Generate</button>
+      <button class="action--secondary large" value="Edit" type="submit" disabled="disabled">Generate</button>
+      <button class="action--delete large" value="Edit" type="submit" disabled="disabled">Generate</button>
+      <button class="action--tertiary large" value="Edit" type="submit" disabled="disabled">Generate</button>
+      
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+

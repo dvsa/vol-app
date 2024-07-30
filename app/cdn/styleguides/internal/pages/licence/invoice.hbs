@@ -1,0 +1,77 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Processing
+read-only:
+  - title:
+    editable: false
+    type: fields
+    groups: 
+      - group:
+        - name: Invoice No.
+          value: 5141426
+          class: full-width
+        - name: Amount
+          value: £256.00
+          class: full-width
+        - name: Description
+          value: GV/SI Variation Fee for application 1234
+          class: full-width
+        - name: Invoice sent
+          value: 12 May 2014
+          class: full-width
+        - name: Status
+          value: Waiver recommended
+          class: full-width
+      - group: 
+        - name: Receipt No.
+          value: N/A
+          class: full-width
+        - name: Amount paid
+          value: N/A
+          class: full-width
+        - name: Payment recieved
+          value: N/A
+          class: full-width
+        - name: Payment method
+          value: N/A
+          class: full-width
+        - name: Paid by
+          value: N/A
+          class: full-width
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Waive fee?
+          type: select
+          values: 
+            - Yes - Traffic area discression
+        - label: Please provide additional information
+          type: text
+          class: extra-long
+    actions:
+      - label: Recommend waiver
+        class: primary large
+      - label: Cancel
+        class: secondary large
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header"> 
+        <h2 class="modal__title">Invoice #152424</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each read-only }}{{> _read-only }}{{/each }}
+        {{#each form }}{{> _forms }}{{/each }}
+      </div>
+    </div>
+  </div>
+
+
+
+

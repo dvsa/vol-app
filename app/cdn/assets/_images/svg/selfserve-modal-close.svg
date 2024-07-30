@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="23px" height="22px" viewBox="0 0 23 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.0.3 (7891) - http://www.bohemiancoding.com/sketch -->
+    <title>selfserve-modal-close</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-2" sketch:type="MSArtboardGroup" transform="translate(-223.000000, -367.000000)" fill="#7D7E86">
+            <g id="selfserve-modal-close" sketch:type="MSLayerGroup" transform="translate(210.000000, 367.000000)">
+                <path d="M35.5309484,19.2303952 L32.8404722,21.9208714 L24.5,13.5803992 L16.1595278,21.9208714 L13.4690516,19.2303952 L21.7780143,10.9214326 L13.6261865,2.76960479 L13.6261865,2.76960479 L16.3166627,0.0791286017 L24.5,8.26246594 L24.5,8.26246594 L32.6833373,0.0791286017 L35.3738135,2.76960479 L27.2219857,10.9214326 L35.5309484,19.2303952 Z" id="Rectangle-7" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

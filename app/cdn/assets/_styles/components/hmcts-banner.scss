@@ -1,0 +1,84 @@
+.hmcts-banner {
+  border: 5px solid #005ea5;
+  color: #005ea5;
+  font-size: 0;
+  margin-bottom: 30px;
+  padding: 10px;
+}
+
+.hmcts-banner__icon {
+  fill: currentColor;
+  float: left;
+  margin-right: 10px;
+}
+
+.hmcts-banner__message {
+  font-family: "nta", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #0b0c0c;
+  display: block;
+  overflow: hidden;
+}
+
+@media print {
+  .hmcts-banner__message {
+    font-family: sans-serif;
+  }
+}
+
+@media (min-width: 40.0625em) {
+  .hmcts-banner__message {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.31579;
+  }
+}
+
+@media print {
+  .hmcts-banner__message {
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+
+.hmcts-banner__message h2 {
+  margin-bottom: 10px;
+}
+
+.hmcts-banner__message h2:last-child {
+  margin-bottom: 0;
+}
+
+.hmcts-banner__message p:last-child {
+  margin-bottom: 0;
+}
+
+.hmcts-banner__assistive {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  -webkit-clip-path: inset(50%) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.hmcts-banner--success {
+  border-color: #006435;
+  color: #006435;
+}
+
+.hmcts-banner--warning {
+  border-color: #b10e1e;
+  color: #b10e1e;
+}
+

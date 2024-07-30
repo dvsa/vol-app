@@ -1,0 +1,31 @@
+<form>  
+  {{#if title}}
+    <div class="table__header">
+      <h3>{{{title}}}</h3>
+      {{> _actions}}
+    </div>
+  {{else}}
+  {{/if}}
+  <div class="table__wrapper">
+    <table>
+      <thead>
+        <tr>
+          {{#each headers}}
+            {{#contains this.class "not-sortable"}}      
+              <th>{{{this.label}}}</th>
+            {{else}}
+              <th class="{{this.class}}"><a href="#">{{{this.label}}}</a></th>
+            {{/contains}}
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#repeat rows}}
+          <tr>
+            {{#each columns}}<td>{{{this}}}</td>{{/each}}
+          </tr>
+        {{/repeat}}
+      </tbody>
+    </table>
+  </div>
+</form>

@@ -1,0 +1,99 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Responsibilities
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+table:
+  - title: <strong>Applications</strong>
+    headers:
+      - label: Manager type
+        class: sortable
+      - label: No. of operating centres
+        class: sortable
+      - label: Application ID.
+        class: sortable
+      - label: Operator name
+        class: sortable
+      - label: Hours per week
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href=""><b>Internal</b></a>
+      - 2
+      - <a href="">1625272</a>
+      - Operator Licensing Ltd.
+      - 12
+      - <input type="checkbox">
+    rows: 2
+    actions:
+      - label: Add
+        class: primary
+        link: add-application.html
+      - label: Edit
+        class: secondary
+      - label: Print
+        class: secondary
+      - label: Remove
+        class: secondary
+  - title: <strong>Licences</strong>
+    headers:
+      - label: Manager type
+        class: sortable
+      - label: No. of operating centres
+        class: sortable
+      - label: Licence No.
+        class: sortable
+      - label: Operator name
+        class: sortable
+      - label: Hours per week
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <b><a href="">Internal</a></b>
+      - 2
+      - <a href="">OB1242325</a>
+      - Operator Licensing Ltd.
+      - 5
+      - <input type="checkbox">
+    rows: 10
+    actions:
+      - label: Edit
+        class: secondary
+      - label: Remove
+        class: secondary
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Responsibilities</h3>
+  </div>
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }}
+    {{#is @index 1 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+  {{#each form }}{{> _forms }}{{/each }}
+
+</div>

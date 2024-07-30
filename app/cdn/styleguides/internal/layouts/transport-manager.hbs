@@ -1,0 +1,37 @@
+---
+layout: base.hbs
+title: Dave Watson
+breadcrumb: Transport manager
+subtitle:
+status:
+horizontalNavItems:
+  - label: TM details
+    link:  index.html
+  - label: Docs & attachments
+    link:  bus-registrations.html
+  - label: Processing
+    link:  opposition.html
+recordActions:
+  - title: Quick actions
+    actions:
+      - Create case
+      - Merge record
+      - Delete
+---
+
+<div class="four-fifths--left">
+  <div class="content">
+  {{> body }}  
+  </div>
+</div>
+
+<div class="sidebar--right">
+
+  {{> _record-actions }}
+
+  <div class="latest-note">
+    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
+    <a class="latest-note__link">View all 13 notes</a>
+  </div>
+  
+</div>

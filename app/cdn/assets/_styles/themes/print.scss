@@ -1,0 +1,236 @@
+/// OLCS - Print application SCSS
+///
+/// Styles for printable documents, including the applications,
+/// declaration form and payment receipts
+///
+/// @author sam.quayle@valtech.co.uk, Valtech Ltd
+/// @author edmund.reed@valtech.co.uk, Valtech Ltd
+
+$app: print;
+$govuk-compatibility-govukfrontendtoolkit:true;
+
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/colours';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/measurements';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/shims';
+@import '../../../node_modules/govuk_frontend_toolkit/stylesheets/typography';
+@import '../../../node_modules/govuk-frontend/govuk/all';
+
+@import '../core/config';
+@import '../core/tools';
+@import '../core/typography';
+@import '../core/buttons';
+@import '../core/tables';
+
+@import '../components/review';
+@import '../components/page-header';
+@import '../components/read-only';
+
+/**
+ * General Styles/Reset
+ */
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+// Prevent large images from shrinking the printed page in Firefox
+img {
+  max-width: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: $white;
+  margin: 0 auto;
+  max-width: 860px;
+  padding: 0 20px;
+  font-size: 16px;
+  line-height: 1.4;
+  padding-bottom: 50px;
+}
+
+h3 {
+  margin: 0;
+}
+
+p {
+  &:first-child {
+    margin-top: 0;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  &.bullet {
+    list-style: disc;
+    margin: 10px;
+    padding: 10px;
+  }
+}
+.list--bullet {
+  margin-left: 20px;
+  list-style: disc;
+}
+
+hr {
+  float: left;
+  margin: 15px 0;
+  border: 0;
+  height: 1px;
+  width: 100%;
+  background: $grey-3;
+}
+
+table {
+  width: 100%;
+  text-align: left;
+  border-spacing: 0;
+}
+
+thead:after,
+tfoot:before {
+  content: '';
+  display: block;
+  height: 0.75em;
+  color: transparent;
+}
+
+/**
+ * Custom styling
+ */
+
+.read-only {
+  @extend %contain-floats;
+  & + & {
+    margin-top: 1em;
+  }
+}
+
+[type="text"] {
+  display: block;
+  padding: 10px;
+  width: 100%;
+}
+
+@media print {
+  .hide-print {
+    display: none;
+  }
+}
+
+/**
+ * Signature Box
+ */
+.signature-box {
+
+  margin: 30px 0;
+  padding: 30px;
+  background: $grey-3;
+  -webkit-print-color-adjust: exact;
+
+  &__column {
+    width: 45%;
+    margin: 0 5% 0 0;
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__input {
+    width: 100%;
+    border: 2px solid $black;
+    margin-bottom: 20px;
+    &.signature {
+      height: 100px;
+    }
+    &.date {
+      width: 200px;
+    }
+  }
+
+  &__digital-signature {
+    .signature-box {
+      &__label {
+        width: 45%;
+        display: inline-block;
+        margin: 0 5% 20px 0;
+      }
+      &__value {
+        width: 45%;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+}
+
+/**
+ * Printable Styles
+ */
+.printable {
+
+  padding-top: 60px;
+
+  @media print {
+    padding-top: 20px;
+  }
+
+  &__header {
+    padding: 60px 0;
+    clear: both;
+    @media print {
+      padding: 40px 0;
+    }
+  }
+
+  &__sub-header {
+    padding: 30px 0;
+    clear: both;
+    @media print {
+      padding: 20px 0;
+    }
+  }
+
+  &__address {
+    float: left;
+  }
+
+  &__section {
+    clear: both;
+  }
+
+  &__meta {
+    float: right;
+    width: 40%;
+    dl {
+      border-top: 0;
+      margin-top: 0;
+    }
+    dt,
+    dd {
+      display: block;
+      width: 100%;
+      padding: 0;
+    }
+    dd {
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    &--right {
+      text-align: right;
+    }
+  }
+
+  h4 {
+    margin: 20px 0 5px;
+  }
+
+}

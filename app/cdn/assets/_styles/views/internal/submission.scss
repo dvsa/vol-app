@@ -1,0 +1,40 @@
+/**
+ * Submission
+ */
+.submission .empty__wrapper {
+  margin-bottom: $gutter-half;
+}
+
+.attach-comment {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 20px;
+  form,
+  fieldset,
+  .attach-action__list {
+    margin-bottom: 0;
+  }
+  .attach-action__hint {
+    display: none;
+  }
+  .js-upload-list {
+    clear: both;
+    margin-bottom: 15px;
+  }
+}
+
+.submission-section__header {
+  padding-bottom: $gutter-one-third;
+  margin-bottom: $gutter-half;
+  border-bottom: 1px solid $grey-3;
+}
+
+.attach-comment__button {
+  display: inline-block;
+  position: absolute;
+  left: 140px;
+  top: 0;
+  text-align: center;
+  white-space: nowrap;
+}

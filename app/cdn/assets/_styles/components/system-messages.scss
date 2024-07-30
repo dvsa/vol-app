@@ -1,0 +1,17 @@
+/**
+ * System messages
+ */
+
+.system-messages {
+  width: 100%;
+  background: $light-blue-25;
+  overflow: auto;
+  padding: 10px 0 8px;
+  &__wrapper {
+    @extend %page-wrapper;
+    list-style: none;
+  }
+  p {
+    @extend %paragraph--small;
+  }
+}

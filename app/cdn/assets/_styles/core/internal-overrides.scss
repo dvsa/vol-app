@@ -1,0 +1,88 @@
+.govuk-radios {
+
+  &__item {
+    padding: 0;
+    min-height: auto;
+    margin-bottom: 0;
+
+    .govuk-label {
+      font-size: 18px;
+    }
+  }
+
+  &__input {
+    opacity: 1;
+    margin-right: 0.5em;
+    position: relative;
+    width: auto;
+    height: auto;
+  }
+
+  &__label {
+    padding: 0;
+  }
+
+  &__conditional{
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+dt.govuk-summary-list__key,
+dd.govuk-summary-list__value,
+dd.govuk-summary-list__actions {
+  float: none;
+}
+
+dd.govuk-summary-list__value,
+dd.govuk-summary-list__actions {
+  font-weight: normal;
+}
+
+dt.govuk-summary-list__key--weight-normal {
+  font-weight: normal;
+}
+
+.govuk-radios__input + .govuk-radios__label::before,
+.govuk-radios__input + .govuk-radios__label::after,
+.govuk-radios__input:checked + .govuk-radios__label::after {
+  display: none;
+}
+
+// Fix for table width when table is included in internal form field Divs.
+div.field>div.table__wrapper {
+  max-width: 100%;
+}
+
+// Styles for Admin Template preview pane
+pre.wordwrap {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+#previewClose {
+  float: right;
+}
+
+.previewContent {
+  margin: 10px;
+}
+
+.previewControls {
+  padding-bottom: 15px;
+}
+
+.previewPane {
+  padding: 10px;
+  all: revert;
+}
+
+form#irhpApplication fieldset legend {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+}

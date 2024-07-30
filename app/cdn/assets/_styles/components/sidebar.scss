@@ -1,0 +1,113 @@
+// Sidebar
+
+.sidebar {
+
+  margin-top: $gutter-two-thirds;
+
+  &--plain {
+    label {
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+  }
+
+  &__panel {
+    @extend %contain-floats;
+    padding: $gutter-two-thirds;
+    background: $grey-3;
+    margin-bottom: $gutter-two-thirds;
+    &__title {
+      margin-bottom: $gutter-one-third;
+    }
+    label,
+    p {
+      margin-bottom: $gutter-half;
+    }
+    .field {
+      margin-bottom: 0;
+    }
+  }
+
+  &__actions {
+    list-style: none;
+    li {
+      @extend %h4;
+      font-weight: 600;
+    }
+  }
+
+}
+
+// Selfserve only styles
+@if $app == 'selfserve' {
+
+  .meta {
+    @extend %h5;
+    margin: 1em 0 0 0;
+    dt,
+    dd {
+      border: 0;
+      display: block;
+      width: 100%;
+      padding: 0;
+      overflow-y: hidden;
+    }
+    dd {
+      padding-bottom: 1em;
+
+      &:last-child {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  .links {
+    padding: 1em 0 2em;
+  }
+
+  .support {
+    p {
+      @extend %paragraph--small;
+    }
+  }
+
+  .links-list {
+    margin-top: 1.25em;
+    list-style: none;
+    &__item {
+      margin-bottom: 0.5em;
+    }
+  }
+
+}// selfserve
+
+
+// Internal only styles
+@if $app == 'internal' {
+
+  .small-module {
+    margin-bottom: 20px;
+  }
+
+  .latest-note {
+    &__details {
+      border-radius: 3px;
+      padding: 0.5em 0.75em 0.4em;
+      background: $yellow-25;
+      border: 1px solid $yellow-50;
+    }
+    &__priority {
+      border-radius: 3px;
+      padding: 0.5em 0.75em 0.4em;
+      background: $red-25;
+      border: 1px solid $red-50;
+    }
+    &__link {
+      @extend %paragraph--tiny;
+      text-align: right;
+      display: block;
+      margin-top: 1em;
+    }
+  }
+
+}// internal

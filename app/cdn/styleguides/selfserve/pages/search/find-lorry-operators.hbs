@@ -1,0 +1,79 @@
+---
+title: Find lorry and bus operators
+service: find-lorry-and-bus-operators
+---
+
+<div class="row">
+  <div class="two-thirds">
+    <form action="">
+        <fieldset>
+          <legend class="legend">Search by:</legend>
+          <div class="field checkbox">
+            <label><input type="radio" name="search-by" value="address" checked>Address</label>
+          </div>
+          <div class="field checkbox">
+            <label><input type="radio" name="search-by" value="business">Business name</label>
+          </div>
+          <div class="field checkbox">
+            <label><input type="radio" name="search-by" value="licence">Licence number</label>
+          </div>
+          <div class="field checkbox">
+            <label><input type="radio" name="search-by" value="person">Person's name</label>
+          </div>
+        </fieldset>
+        <div class="field">
+        	<label for="search-box" class="js-hidden">Enter keywords</label>
+        	<label for="search-box" class="js-visible address" aria-hidden="true">Enter a town, city or postcode</label>
+        	<label for="search-box" class="js-visible business" aria-hidden="true">Enter a business or trading name</label>
+        	<label for="search-box" class="js-visible licence" aria-hidden="true">Enter an Operator Licence number</label>
+        	<label for="search-box" class="js-visible person" aria-hidden="true">Enter the name of someone on an Operator's Licence</label>
+			<input id="search-box" type="text" class="long">
+        </div>
+        <div class="actions-container">
+        	<a href="operator-results.html" class="action--primary large">Search</a>
+        </div>
+    </form>
+  </div>
+</div>
+
+<script>
+	$(document).on('ready', function() {
+
+		$('.js-enabled .js-hidden').attr('aria-hidden','true');
+
+		function toggleLabels() {
+			var current = $('.js-enabled input[name="search-by"]:checked').val();
+			$('label.js-visible').hide().attr('aria-hidden','true');
+			$('.js-visible.'+current).show().attr('aria-hidden','false');
+		}
+
+		toggleLabels();
+
+		$(document).on('change', '.js-enabled input[name="search-by"]', function() {
+		    toggleLabels();
+		});
+
+		/*** Prototype only ***/
+
+		$(document).on('click', '.action--primary', function(e) {
+			e.preventDefault();
+			switch($('input[name="search-by"]:checked').val()) {
+				case 'business':
+					window.location = 'operator-results.html';
+					break;
+				case 'licence':
+					window.location = 'operator-results.html';
+					break;
+				case 'address':
+					window.location = 'address-results.html';
+					break;
+				case 'person':
+					window.location = 'people-results.html';
+					break;
+			}
+		});
+
+		/*** Prototype only ***/
+
+	});
+</script>

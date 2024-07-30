@@ -1,0 +1,25 @@
+/**
+ * Confirmation
+ */
+
+.confirmation {
+  color: $white;
+  background: $turquoise;
+  margin: 1em 0 2em 0;
+  padding: 2em 1em 1em;
+  text-align: center;
+  h2 {
+    padding: 0;
+    margin: 0;
+  }
+  p {
+    @extend %paragraph;
+    margin: .25em 0 1em 0;
+  }
+  strong {
+    font-size: font-size(6);
+  }
+  a {
+    color: $white;
+  }
+}

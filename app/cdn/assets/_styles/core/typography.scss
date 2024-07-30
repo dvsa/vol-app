@@ -1,0 +1,264 @@
+/**
+ * Typography
+ */
+
+/**
+ * Adaptive Font Mixin
+ */
+
+@mixin font-size($font-size, $small-font-size: null, $print-font-size: null) {
+  @if $is-print and $print-font-size {
+    font-size: $print-font-size;
+  } @else {
+    font-size: $font-size;
+  }
+  @if $small-font-size {
+    @media (max-width: $mobile-column-stack) {
+      font-size: $small-font-size;
+    }
+  }
+}
+
+/**
+ * Size Patterns
+ *
+ * Responsive, reusable font-size patterns for headings and
+ * paragraph text copy only
+ */
+
+%h1,
+.h1 {
+  @include font-size(
+    font-size(9), font-size(8), font-size(5, true)
+  );
+}
+
+%h2,
+.h2 {
+  @include font-size(
+    font-size(8), font-size(6), font-size(5, true)
+  );
+}
+
+%h3,
+.h3 {
+  @include font-size(
+    font-size(6), font-size(5), font-size(4, true)
+  );
+}
+
+%h4,
+.h4 {
+  @include font-size(
+    font-size(5), font-size(4), font-size(2, true)
+  );
+}
+
+%h5,
+.h5 {
+  @include font-size(
+    font-size(4), font-size(2), font-size(1, true)
+  );
+}
+
+%h6,
+.h6 {
+  @include font-size(
+    font-size(2), font-size(1), font-size(1, true)
+  );
+}
+
+/**
+ * Paragraphs
+ */
+
+%paragraph--large {
+  @extend %h3;
+}
+
+%paragraph {
+  @extend %h4;
+}
+
+%paragraph--small {
+  @extend %h5;
+}
+
+%paragraph--tiny {
+  @extend %h6;
+}
+
+h1 {
+  @extend %h1;
+  line-height: 1.04167;
+  max-width: 650px;
+}
+
+h2 {
+  @extend %h2;
+}
+
+h3 {
+  @extend %h3;
+}
+
+h4 {
+  @extend %h4;
+}
+
+h5 {
+  @extend %h5;
+}
+
+.heading-large {
+  margin-top: 1.85em;
+  margin-bottom: 1.25em;
+}
+
+.heading-medium {
+  font-size: 1em;
+  line-height: 1.2em;
+}
+
+p {
+  @extend %paragraph;
+  font-weight: 400;
+  margin-bottom: .5em;
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+small {
+  font-size: 80%;
+}
+
+.divider {
+  border-top: 1px solid $grey-2;
+  padding: 1.5em 0 10px;
+}
+
+.seperator {
+  height: 0;
+  display: block;
+  border-top: 1px solid $grey-2;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+/**
+ * Vertical Rhythm
+ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol {
+  margin-top: 0;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  &.compound {
+    margin: 8px 0;
+  }
+}
+
+/**
+ * Tabular Numbers
+ */
+.tabular-numbers {
+  font-family: $nta-light-tabular;
+}
+
+/**
+ * Legal/Important Text
+ */
+.important {
+  margin: 0 0 $gutter;
+}
+
+/**
+ * Selfserve Theme
+ */
+
+@if $app == 'selfserve' {
+
+  .important {
+    padding-left: 42px;
+    position: relative;
+    &:after {
+      @include svg('selfserve-important');
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+  .exclamation {
+    padding-left: 48px;
+    min-height: 34px;
+    position: relative;
+    &:after {
+      @include svg('selfserve-exclamation');
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+
+}
+
+/**
+ * Internal Theme
+ */
+
+@if $app == 'internal' {
+
+  .title {
+    border-bottom: 1px solid $grey-2;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  p,
+  th,
+  td {
+    font-size: font-size(3);
+  }
+
+  h1 {
+    @include font-size(
+      font-size(6), font-size(5), font-size(4, true)
+    );
+    display: inline;
+    padding-right: 0.25em;
+  }
+
+  h2 {
+    font-size: font-size(5);
+  }
+
+  h3 {
+    font-size: font-size(5);
+  }
+
+  h3,
+  h4 {
+    margin-bottom: 0.4em;
+  }
+
+}
+
+.no-margin {
+  margin: 0;
+}
+

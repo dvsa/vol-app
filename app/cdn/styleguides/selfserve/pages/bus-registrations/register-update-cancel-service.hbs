@@ -1,0 +1,67 @@
+---
+title: Register, vary or cancel a service
+layout: base.hbs
+user: bus operator
+breadcrumbs:
+  - link: home.html
+    label: Back
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+
+    <form>
+
+      <div class="article">
+        <p>Apply to register, vary or cancel bus services online by uploading XML documents.</p>
+        <h3>Before you upload</h3>
+        <ul>
+          <li>Make sure the XML document follows the <a href="">TransXchange</a> standard</li>
+          <li>Compress the XML document and any supporting files such as maps, timetables and letters of support into a single .ZIP file</li>
+        </ul>
+        <!--
+        <h4>Multiple files</h4>
+        <p>You can upload multiple files by compressing individual .ZIP files into a master .ZIP file.</p>
+        <hr />
+        -->
+      </div>
+
+      <fieldset class="file-uploader" id="EBSRUploader">
+        <ul class="attach-action__list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Upload .ZIP file (s)
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+          </li>
+        </ul>
+      </fieldset><!-- .file-uploader -->
+
+      <div class="actions-container">
+        <a href="success.html" class="action--primary large">Submit</a>
+        <a href="" class="action--tertiary list large">Back to bus registrations</a>
+      </div>
+
+    </form>
+
+  </div><!-- .three-quarters -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <div class="support">
+        <h3>Support</h3>
+        <p>0113 254 3200</p>
+        <p><a href="operatorlicensing@otc.gov.uk">ebsr@vosa.gov.uk</a></p>
+      </div>
+    </div>
+  </div><!-- .one-quarter -->
+
+</div>
+
+<script type="text/javascript">
+  OLCS.fileUploader({
+    selector: "#EBSRUploader",
+    isMultiple: true
+  });
+</script>
