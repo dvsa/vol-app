@@ -1,0 +1,91 @@
+/**
+ * Proposition Navigation
+ */
+
+.proposition {
+  float: left;
+  overflow: auto;
+  margin-left: 180px;
+  @media (max-width: breakpoint('break-5')) {
+    margin-left: 45px;
+  }
+  &__title {
+    float: left;
+    display: block;
+    margin: 3px 0 2px;
+    font-size: font-size(6);
+    font-weight: bold;
+    @media (max-width: breakpoint('break-4')) {
+      font-size: font-size(5);
+    }
+  }
+  &__toggle {
+    display: none;
+    float: right;
+    color: $white;
+    text-decoration: none;
+    margin-top: 5px;
+    @media (max-width: breakpoint('break-4')) {
+      display: block;
+    }
+    &:hover {
+      color: $white;
+      text-decoration: underline;
+    }
+    &:focus {
+      color: $white;
+    }
+    &::after {
+      display: inline-block;
+      font-size: 8px;
+      height: 8px;
+      padding-left: 5px;
+      vertical-align: middle;
+      content: ' \25BC';
+    }
+  }
+}
+
+.proposition-nav {
+  list-style: none;
+  clear: left;
+  @media (max-width: breakpoint('break-4')) {
+    display: block;
+  }
+  &__item {
+    float: left;
+    font-weight: 600;
+    margin: 0 1em 4px 0;
+  }
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: breakpoint('break-4')) {
+  .proposition {
+    width: 100%;
+    margin: 0.5em 0 0.25em;
+  }
+  .proposition-nav {
+    display: none;
+    padding-top: 10px;
+  }
+  .proposition-nav__item {
+    width: 100%;
+    margin: 0;
+  }
+  .proposition-nav__item a {
+    display: block;
+    padding: 10px 0;
+    width: 100%;
+    border-top: 1px solid $black;
+  }
+  .proposition-nav__item a:focus {
+    outline: none;
+  }
+}

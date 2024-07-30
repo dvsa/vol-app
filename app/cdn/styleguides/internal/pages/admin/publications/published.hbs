@@ -1,0 +1,82 @@
+---
+layout: publications.hbs
+asset: '../../../../'
+subSectionTitle: Published
+filterList:
+  - header: App status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>1029</strong> Published publications
+    headers:
+      - label: Publication No.
+        class: sortable descending
+      - label: Traffic area
+        class: sortable
+      - label: Document type
+        class: sortable
+      - label: Close date
+        class: sortable
+      - label: Details
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">617</a></strong><span class="status green">New</span>
+      - North East of England
+      - A&D
+      - 24/09/2014
+      - Lorem ipsum site dolor ametm, bacar met amet diser on...
+      - <input type="checkbox">
+    rows: 20
+verticalNavItems:
+  - label: Pending
+    link: index.html
+  - label: Published
+    link:
+    filterList:
+    - header: Traffic area
+      type: dropdown
+      filters:
+        - All
+    - header: Document type
+      type: dropdown
+      filters:
+        - All
+  - label: Recipients
+    link: recipients.html
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Publications</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- .four-fifths-right -->
+
+
+
+
+
+

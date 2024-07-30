@@ -1,0 +1,350 @@
+<form class="{{ class }}" accept-charset="UTF-8" action="{{ action }}" method="POST">
+
+  <input type="hidden" name="utf8" value="✓">
+
+  {{#each fieldsets }}
+
+    {{#if title}}<h2 class="divider">{{title}}</h2>{{/if}}
+
+    <fieldset class="{{ class }}">
+
+      <legend>{{ legend }}</legend>
+
+      {{#each fields }}
+
+        {{#is type "read only" }}
+          <div class="field read-only">
+            <p>{{ label }}
+            {{#each values }}<br />
+            <b>{{ this }}</b>
+            </p>
+            {{/each }}
+          </div>
+        {{/is}}
+
+        {{#is type "read only two-col" }}
+          <div class="field two-col read-only">
+            <p>{{ label }}
+            {{#each values }}<br />
+            <b>{{ this }}</b>
+            </p>
+            {{/each }}
+          </div>
+        {{/is}}
+
+        {{#is type "read only three-col" }}
+          <div class="field three-col read-only">
+            <p>{{ label }}
+            {{#each values }}<br />
+            <b>{{ this }}</b>
+            </p>
+            {{/each }}
+          </div>
+        {{/is}}
+
+        {{#is type "select" }}
+          <div class="field {{ label }}">
+            <label>{{ label }}</label>
+            <select id="{{ this }}" name="{{ this }}">
+              {{#each values }}
+              <option value="{{ this }}">{{ this }}</option>
+              {{/each }}
+            </select>
+          </div>
+        {{/is }}
+
+        {{#is type "multi select" }}
+          <div class="field">
+            <label>{{ label }}</label>
+            <select multiple class="chosen-select-medium" data-placeholder="{{ placeholder }}">
+              {{#each values }}
+              <option value="{{ this }}">{{ this }}</option>
+              {{/each }}
+            </select>
+          </div>
+        {{/is }}
+
+        {{#is type "text" }}
+          <div class="field">
+            <label for="{{ name }}">{{ label }}</label>
+            <input id="{{ name }}" type="text" class="{{ class }}" name="{{ name }}" placeholder="{{#each values }}{{ this }}{{/each }}">
+            {{#if hint}}<p class="hint">{{{hint}}}</hint>{{/if}}
+          </div>
+        {{/is }}
+
+        {{#is type "textarea" }}
+          <div class="field">
+            <label>{{ label }}</label>
+            <textarea class="extra-long" placeholder="{{#each values }}{{ this }}{{/each }}"></textarea>
+          </div>
+        {{/is }}
+
+        {{#is type "date" }}
+          <fieldset class="date">
+            <legend>{{ label }}</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "date-time" }}
+          <fieldset class="date">
+            <legend>{{ label }}</legend>
+            <div class="field inline-text">
+              <label>Day</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Month</label>
+              <input type="text" maxlength="2">
+            </div>
+            <div class="field inline-text">
+              <label>Year</label>
+              <input type="text" maxlength="4">
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="field">
+              <select name="">
+                <option value="">00:00</option>
+              </select>
+              :
+              <select name="">
+                <option value="">00:00</option>
+              </select>
+            </div>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "hours-per-week" }}
+          <fieldset>
+            <legend>{{ label }}</legend>
+            <div class="field inline-text">
+              <label>Mon</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Tue</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Wed</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Thu</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Fri</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Sat</label>
+              <input type="text" class="" placeholder="">
+            </div>
+            <div class="field inline-text">
+              <label>Sun</label>
+              <input type="text" class="" placeholder="">
+            </div>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "radios inline" }}
+          <fieldset>
+            <legend class="legend">{{ label }}</legend>
+            {{#each values }}
+            <div class="field inline">
+              <label><input type="radio" name="group" val="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "radios inline selfserve" }}
+          <fieldset class="checkbox">
+            <legend class="legend">{{ label }}</legend>
+            {{#each values }}
+            <div class="field inline">
+              <label><input type="radio" name="group" val="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "radios selfserve" }}
+          <fieldset class="checkbox">
+            <legend class="legend">{{ label }}</legend>
+            {{#each values }}
+            <div class="field">
+              <label><input type="radio" name="group" val="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "radios" }}
+          <fieldset class="{{ type }}">
+            <legend class="legend">{{ label }}</legend>
+            {{#if hint}}<p class="hint">{{hint}}</p>{{/if}}
+            {{#each values }}
+            <div class="field--list">
+              <label><input type="radio" name="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "checkboxes" }}
+          <fieldset class="{{ type }}">
+            <legend class="legend">{{ label }}</legend>
+            {{#each values }}
+            <div class="field--list">
+              <label for=""><input type="checkbox" id="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "checkboxes two-col" }}
+          <fieldset class="{{ type }}">
+            <legend class="legend">{{ label }}</legend>
+            {{#each values }}
+            <div class="field--two-col">
+              <label for=""><input type="checkbox" id="{{ this }}">{{ this }}</label>
+            </div>
+            {{/each }}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "multiple" }}
+          <fieldset class="multiple">
+            <legend>{{ label }}</legend>
+            <div class="field">
+              <label for="" class="visually-hidden"></label>
+              <input id="" name="" type="text" class="{{ class }}">
+            </div>
+            <a class="" href="" >Add another</a>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "address" }}
+          <fieldset class="lookup">
+            <legend>Postcode</legend>
+            <div class="field inline">
+              <label for="postcode-search" class="visually-hidden">Postcode search</label>
+              <input id="postcode-search" name="postcode" type="text" class="short">
+            </div>
+            <div class="field inline">
+              <input class="action--primary large" type="submit" value="Find address">
+            </div>
+            <p class="hint"><a href="">Enter address manually</a></p>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "full-address" }}
+          <div class="field">
+            <label for="street-line-one" class="visually-hidden">Street</label>
+            <input id="street-line-one" name="address" type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="street-line-two" class="visually-hidden">Street line 2</label>
+              <input id="street-line-two" name="address" type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="street-line-three" class="visually-hidden">Street line 3</label>
+              <input id="street-line-three" name="address" type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="street-line-four" class="visually-hidden">Street line 4</label>
+              <input id="street-line-four" name="address" type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="street-line-four">Town/city</label>
+              <input id="street-line-four" name="address" type="text" class="long">
+          </div>
+          <div class="field">
+            <label for="postcode">Postcode</label>
+            <input id="postcode" name="postcode" type="text" class="short">
+          </div>
+        {{/is }}
+
+        {{#is type "inline-search" }}
+          <fieldset class="inline-search">
+            <legend>{{ label }}</legend>
+            <div class="field inline">
+              <label for="{{ label }}" class="visually-hidden">{{ label }}</label>
+              <input id="{{ label }}" name="{{ label }}" type="text" class="medium">
+            </div>
+            <div class="field inline">
+              <input class="action--secondary large" type="submit" value="{{#each values }}{{ this }}{{/each}}">
+            </div>
+            {{#if hint}}<p class="hint">{{ hint }}</p>{{/if}}
+          </fieldset>
+        {{/is }}
+
+        {{#is type "file-upload" }}
+          <fieldset class="file-upload">
+            <p class="hint">{{ label }}</p>
+            <div class="field">
+              <input type="file" multiple="">
+            </div>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "file-uploader" }}
+          <fieldset class="file-uploader" id="FileUploader2">
+            <legend>{{ label }}</legend>
+            {{#if hint}}<p class="hint">{{ hint }}</p>{{/if}}
+            <ul class="attach-action__list">
+              <li class="attach-action">
+                <label class="attach-action__label">
+                  Attach file
+                  <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+                </label>
+                <p class="attach-action__hint">20MB maximum file size. PDF, DOC, JPG, PNG or GIF</p>
+              </li>
+            </ul><!-- attach-actions -->
+            <ul class="uploaded-file__list">
+            </ul><!-- uploaded-files -->
+            <ul class="attached-file__list">
+            </ul><!-- attached-file__list -->
+          </fieldset><!-- .file-uploader -->
+        {{/is }}
+        
+        {{#is type "html" }}
+          <fieldset class="{{ type }}">
+            <p>{{ label }}</p>
+          </fieldset>
+        {{/is }}
+
+        {{#is type "empty-table" }}
+          <div class="empty__wrapper">
+            <h3 class="empty__title">{{ legend }}</h3>
+            <div class="empty">
+              <p>{{ label }}</p>
+              <a class="action--primary" href="">{{ action }}</a>
+            </div><!-- empty -->
+          </div><!-- .empty__wrapper -->
+        {{/is }}
+
+      {{/each }}
+
+    </fieldset>
+
+  {{/each }}
+
+  {{#if actions}}{{> _actions}}{{/if}}
+
+</form>
+

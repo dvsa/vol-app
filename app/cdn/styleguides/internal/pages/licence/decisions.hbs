@@ -1,0 +1,62 @@
+---
+sectionTitle: Processing
+asset: '../../../../'
+subSectionTitle: Decisions
+layout: licence.hbs
+actions:
+  - label: New task
+    class: primary
+  - label: Edit
+    class: secondary disabled
+  - label: Close
+    class: secondary disabled
+  - label: Reassign
+    class: secondary disabled
+table:
+  - title: <strong>4</strong> Decisions
+    headers:
+      - label: Decision
+        class: sortable descending
+      - label: Reason
+        class: sortable descending
+      - label: Date
+        class: sortable
+      - label: Made by
+        class: sortable
+    columns:
+      - Suspend licence
+      - Lorem ipsum sit dolor amet
+      - 15:27 04/06/13
+      - Gillian Fogal
+    rows: 4
+    actions:
+    - label: Surrender
+      class: secondary
+    - label: Curtail
+      class: secondary
+verticalNavItems:
+  - label: Decisions
+    link:  decisions.html
+  - label: History
+    link:  history.html
+  - label: Tasks
+    link:  tasks.html
+  - label: Notes
+    link:  notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div>
+
+
+

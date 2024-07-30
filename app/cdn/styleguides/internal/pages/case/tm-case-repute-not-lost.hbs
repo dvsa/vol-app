@@ -1,0 +1,81 @@
+---
+layout: tm-case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+subSectionTitle: Decisions
+read-only:
+  - title: Repute not lost
+    editable: true
+    type: fields
+    groups: 
+      - group:
+        - name: MSI
+          value: Yes
+        - name: Date of decision
+          value: 12/11/14
+        - name: Date of notification (to TM)
+          value: 12/11/14
+      - group: 
+        - name: Reason why loss of good repute is disproportionate response
+          value: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+          class: full-width
+verticalNavItems:
+  - label: Decisions
+    link:  
+  - label: History
+    link:  
+  - label: Tasks
+    link:
+    filterList:
+    - header: Team
+      type: dropdown
+      filters:
+        - All
+    - header: Owner
+      type: dropdown
+      filters:
+        - All
+    - header: Category
+      type: dropdown
+      filters:
+        - All
+    - header: All
+      type: dropdown
+      filters:
+        - All
+    - header: Date
+      type: dropdown
+      filters:
+        - Today
+        - This week
+        - This month
+        - All dates
+    - header: Status
+      type: dropdown
+      filters:
+        - All
+        - Open
+        - Closed
+    - header: 
+      type: checkboxes
+      filters:
+        - Urgent only
+  - label: Notes
+    link: notes.html
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Processing</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Decisions</h3>
+  </div>
+  {{#each read-only}}
+    {{#is @index 0 }} 
+      {{> _read-only }}
+    {{/is }} 
+  {{/each}}
+</div>

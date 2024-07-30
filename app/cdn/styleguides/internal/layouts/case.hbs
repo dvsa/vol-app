@@ -1,0 +1,68 @@
+---
+layout: base.hbs
+title: <a href="">OB1625270</a> / Case 24
+breadcrumb: Case
+subtitle: <span class="status green">Open</span>
+status: Open
+horizontalNavItems:
+  - label: Case details
+    link:  index.html
+  - label: Opposition
+    link:  
+  - label: Submissions
+    link:  
+  - label: Hearings & appeals
+    link:  
+  - label: Docs & attachments
+    link:  
+  - label: Processing
+    link: 
+recordActions:
+  - title: Quick actions
+    actions:
+      - Create submission
+      - Generate statement
+  - title: Decisions
+    actions:
+      - Suspend
+      - Curtail
+      - Revoke
+
+---
+
+<div class="four-fifths--left">
+  <div class="content">
+    {{> body }}  
+  </div>
+</div>
+
+<div class="sidebar--right">
+
+  <div class="small-module">
+    <h4 class="title">Operator details</h4>
+    <p class="small-module__details">
+      <a href="">Don Tarmacadam Ltd</a><br />
+      Limited Company<br />
+      North East England
+    </p>
+  </div>
+
+  <div class="small-module">
+    <h4 class="title">Licence details</h4>
+    <p class="small-module__details">
+      <a href="">OB1625270</a><br />
+      Standard National<br />
+      Valid</p>
+  </div>
+
+  <div class="notice-container">
+    <p class="notice--warning">
+      <b>Stay granted pending appeal:</b><br />
+      UT 07-08-2013
+    </p>
+  </div>
+
+  {{> _record-actions }}
+  
+</div>
+

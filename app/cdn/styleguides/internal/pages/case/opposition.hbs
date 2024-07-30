@@ -1,0 +1,53 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Opposition
+table:
+  - title: <strong>12</strong> Oppositions
+    headers:
+      - label: Type
+        class: sortable descending
+      - label: Received
+        class: sortable descending
+      - label: Name
+        class: sortable
+      - label: Grounds
+        class: sortable
+      - label: Link
+        class: sortable
+      - label: View
+        class: sortable
+      - label: Valid
+        class: sortable
+      - label: In time
+        class: sortable
+      - label: PI
+        class: sortable
+      - label: Widthdrawn
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">Representation</a> (Copied)
+      - 12/3/12
+      - Dave Howard
+      - Lorem ipsum, sit amet
+      - <a href="">ScannedDoc.PDF</a>
+      - <a href="">ScannedDoc.PDF</a>
+      - Y
+      - Y
+      - Y
+      - Y
+      - <input type="checkbox">
+    row: 12
+
+
+---
+
+<div class="four-fifths">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div>

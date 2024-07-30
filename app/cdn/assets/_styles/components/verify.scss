@@ -1,0 +1,33 @@
+/**
+ * Verify
+ */
+
+$verify-colour: #255AAA;
+
+.verify {
+  background: $verify-colour;
+  padding: 25px;
+  overflow: auto;
+  margin-bottom: 40px;
+  color: $white;
+  p,
+  a {
+    color: $white;
+  }
+  p {
+    width: 100%;
+  }
+  h3 {
+    margin-bottom: .5em;
+  }
+}
+
+.action--verify {
+  @extend %h4;
+  background: $white;
+  color: $verify-colour;
+  padding: 10px 20px;
+  margin-right: 20px;
+  font-weight: 700;
+  border-bottom: 2px solid darken($verify-colour, 20%);
+}

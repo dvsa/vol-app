@@ -1,0 +1,152 @@
+---
+title: Financial history
+user: operator
+subtitle: Step 11 of 13
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Back to overview
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <div class="article">
+      <p>These questions apply to everyone who’s named in your application, including you and your:</p>
+      <ul>
+        <li>directors</li>
+        <li>partners</li>
+        <li>Transport Managers</li>
+      </ul>
+    </div>
+    <hr />
+    <form action="">
+      <fieldset>
+        <fieldset>
+          <legend>Has anyone you’ve named ever been declared bankrupt or had their estate seized?</legend>
+          <div class="field inline checkbox">
+            <label><input type="radio">Yes</label>
+          </div>
+          <div class="field inline checkbox">
+            <label><input type="radio">No</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Has anyone you’ve named ever been involved with a business that has gone or is going into liquidation, owing money?</legend>
+          <div class="field inline checkbox">
+            <label><input type="radio">Yes</label>
+          </div>
+          <div class="field inline checkbox">
+            <label><input type="radio">No</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Has anyone you’ve named ever been involved with a business that has gone or is going into receivership?</legend>
+          <div class="field inline checkbox">
+            <label><input type="radio">Yes</label>
+          </div>
+          <div class="field inline checkbox">
+            <label><input type="radio">No</label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Has anyone you’ve named ever been involved with a business that has gone or is going into administration?</legend>
+          <div class="field inline checkbox">
+            <label><input type="radio">Yes</label>
+          </div>
+          <div class="field inline checkbox">
+            <label><input type="radio">No</label>
+          </div>
+        </fieldset>
+       </fieldset>
+
+       <div class="article">
+        <h3>Insolvency</h3>
+        <p>Use the box below to tell us about any insolvency proceedings you’ve been involved in.</p>
+        <details class="help">
+          <summary class="help__summary"> What do you need to tell us about?</summary>
+          <div class="help__text">
+            <p>Let us know:</p>
+            <ul>
+              <li>how the insolvency came about</li>
+              <li>when it happened</li>
+              <li>who was involved</li>
+              <li>which courts were involved</li>
+              <li>which operator’s licences were affected, if any</li>
+              <li>any other information you think’s relevant </li>
+            </ul>
+            <p>You should also upload your:</p>
+            <ul>
+              <li>certificate of discharge from bankruptcy</li>
+              <li>liquidator’s report</li>
+              <li>receiver’s report</li>
+              <li>administrator’s report</li>
+              <li>disqualification orders</li>
+            </ul>
+          </div>
+        </details>
+        <hr />
+      </div>
+
+      <div class="field">
+        <label for="additional-info" class="visually-hidden">Additional information</label>
+        <textarea id="additional-info" class="extra-long js-financial-history" placeholder="Enter text here"></textarea>
+      </div>
+
+      <fieldset class="file-uploader">
+        <ul class="attach-action__list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Attach files
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+            <p class="attach-action__hint">20MB maximum file size. PDF, DOC, JPG, PNG or GIF</p>
+          </li>
+        </ul><!-- attach-actions -->
+      </fieldset><!-- .file-uploader -->
+
+      <div class="field confirm">
+        <label class="">
+          <input type="checkbox" name="" id="" placeholder="" value="Y">
+          I’ll tell the Traffic Commissioner straight away if anyone’s involved in an insolvency between applying for this licence and a decision being made
+        </label>
+      </div>
+
+      <div class="actions-container">
+        <a href="" class="action--primary large">Save and continue</a>
+        <a href="" class="action--tertiary list large">Save and return to overview</a>
+      </div>
+    </form>
+  </div><!-- .two-thirds -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Application reference</dt>
+        <dd>OB12524/525</dd>
+        <dt>Progress</dt>
+        <dd>7 of 13 sections complete</dd>
+        <dt>Status</dt>
+        <dd>Not submitted</dd>
+      </dl>
+    </div>
+  </div>
+
+</div><!-- .row -->
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.js-upload, .js-post').hide();
+    $(document).on('change', 'input[name="evidence"]', function(e) {
+      e.preventDefault();
+      if ($(this).val() === 'upload') {
+        $('.js-upload').show();
+        $('.js-post').hide();
+      } else {
+        $('.js-post').show();
+        $('.js-upload').hide()
+      }
+    });
+  });
+</script>
+

@@ -1,0 +1,20 @@
+.internal-footer {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding:  1rem;
+}
+
+@if $app == 'internal' {
+  body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100%;
+  }
+  
+  .page-wrapper {
+    width: 100%;
+  }
+}
