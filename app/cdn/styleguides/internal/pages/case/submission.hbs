@@ -1,0 +1,286 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Submissions
+read-only:
+  - title: Case details
+    editable: false
+    type: fields
+    groups:
+      - group:
+        - name: Operator name
+          value: Don Tarmacadam Limited (MLH)
+        - name: Enitity
+          value: Limited company
+        - name: Business type
+          value: Rice importer
+        - name: ECMS
+          value: 1634536
+      - group:
+        - name: Licence number
+          value: OB1265270
+        - name: Licence start date
+          value: 16 Aug 2012
+        - name: Licence type
+          value: R
+        - name: Service standard date
+          value: 31 July 2017
+        - name: Licence status
+          value: Valid
+      - group:
+        - name: Total vehicle authorisation
+          value: 4
+        - name: Vehicles in possession
+          value: 2
+        - name: Trailer authorisation
+          value: 2
+        - name: Trailers in possession
+          value: 0
+  - title: Penalties
+    editable: false
+    type: textarea
+
+---
+  <div class="submission">
+
+    <!-- MAIN HEADER -->
+
+    <div class="content__header">
+      <h3 class="title">Submission No. 4</h3>
+      <div class="actions-container">
+        <a class="action--secondary" href="">Edit submission</a>
+        <a class="action--secondary" href="">Return to list</a>
+      </div><!-- actions-container -->
+    </div><!-- content__header -->
+
+
+    <!-- READ ONLY GROUP -->
+
+    <div class="read-only">
+      <div class="read-only__header">
+        <h4 class="read-only__title">Case details</h4>
+      </div><!-- read-only__header -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Operator name</dt>
+          <dd>Don Tarmacadam Limited (MLH)</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Enitity</dt>
+          <dd>Limited company</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Business type</dt>
+          <dd>Rice importer</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>ECMS</dt>
+          <dd>1634536</dd>
+        </li>
+      </ul><!-- .definition-list -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Licence number</dt>
+          <dd>OB1265270</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence start date</dt>
+          <dd>16 Aug 2012</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence type</dt>
+          <dd>R</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Service standard date</dt>
+          <dd>31 July 2017</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence status</dt>
+          <dd>Valid</dd>
+        </li>
+      </ul><!-- .definition-list -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Total vehicle authorisation</dt>
+          <dd>4</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Vehicles in possession</dt>
+          <dd>2</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Trailer authorisation</dt>
+          <dd>2</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Trailers in possession</dt>
+          <dd>0</dd>
+        </li>
+      </ul><!-- .definition-list -->
+
+      <fieldset class="file-uploader" id="FileUploader1">
+        <a class="action--secondary" href="add-comment.html">Add comment</a>
+        <ul class="attach-action__list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Attach file
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+          </li>
+        </ul><!-- attach-actions -->
+        <ul class="uploaded-file__list">
+        </ul><!-- uploaded-files -->
+        <ul class="attached-file__list">
+        </ul><!-- attached-file__list -->
+        <input class="inline-upload js-hidden" type="submit" value="Upload">
+      </fieldset><!-- .file-uploader -->
+
+    </div><!-- read-only -->
+
+
+    <!-- A CRUD TABLE WITH A COMMENT -->
+
+    <form>
+      <div class="table__header">
+        <h4>Operating centres</h4>
+        <div class="actions-container">
+          <input class="action--secondary" type="submit" value="Remove">
+          <input class="action--secondary" type="submit" value="Update">
+        </div><!-- actions-container -->
+      </div><!-- table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Operating centre address</th>
+              <th>Vehicles</th>
+              <th>Trailers</th>
+              <th>Permission</th>
+              <th>Advertised</th>
+              <th><input type="checkbox"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unit 5, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 4, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 3, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 2, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+
+      <div class="comment">
+        <a class="comment__edit" href="" >Edit</a>
+        <h1>H1 Title</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <h2>H2 Title</h2>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <h3>H2 Title</h3>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <ul>
+        <li>Excepteur sint</li>
+        <li>occaecat cupidatat</li>
+        <li>non proident</li>
+        </ul>
+        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        <ol>
+        <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+        <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+        </ol>
+      </div><!-- .comment -->
+    </form>
+
+    <div class="read-only text-area">
+      <div class="read-only__header">
+        <h3>Convictions</h3>
+      </div>
+      <fieldset class="file-uploader" id="FileUploader2">
+        <a class="action--secondary" href="add-comment.html">Add comment</a>
+        <ul class="attach-action__list">
+          <li class="attach-action">
+            <label class="attach-action__label">
+              Attach file
+              <input class="attach-action__input js-visually-hidden" type="file" name="fileUpload[]">
+            </label>
+          </li>
+        </ul><!-- attach-actions -->
+        <ul class="uploaded-file__list">
+        </ul><!-- uploaded-files -->
+        <ul class="attached-file__list">
+        </ul><!-- attached-file__list -->
+        <input class="inline-upload js-hidden" type="submit" value="Upload">
+      </fieldset><!-- .file-uploader -->
+    </div>
+
+    <!-- SUBMISSION ACTIONS -->
+
+    <h4>Submission actions</h4>
+    <ul class="submission-actions">
+      <li class="submission-item">
+        <h4>Recommedation: Revoke licence</h4>
+        <a class="submission-item__edit" href="">Edit</a>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum <i>quia dolor sit amet</i>, consectetur.</p>
+        <div class="submission-item__meta">
+          <p><b>From</b>Daniel Karribyson</p>
+          <p><b>To</b>Paul Rooney</p>
+          <p><b>Created</b>10:14 12/03/14</p>
+          <p><b>Status</b>10:14 12/03/14</p>
+        </div><!-- submission-item__meta -->
+      </li><!-- submission-item -->
+      <li class="submission-item">
+        <h4>Decision: Revoke licence</h4>
+        <a class="submission-item__edit" href="">Edit</a>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum <i>quia dolor sit amet</i>, consectetur.</p>
+        <div class="submission-item__meta">
+          <p><b>From</b>Daniel Karribyson</p>
+          <p><b>To</b>Paul Rooney</p>
+          <p><b>Created</b>10:14 12/03/14</p>
+          <p><b>Status</b>10:14 12/03/14</p>
+        </div><!-- .submission-item__meta -->
+      </li><!-- .submission-item -->
+    </ul><!-- .submission-action -->
+
+
+
+    <script type="text/javascript">
+    OLCS.fileUploader({
+      selector: "#FileUploader1",
+      isMultiple: false
+    });
+
+    OLCS.fileUploader({
+      selector: "#FileUploader2",
+      isMultiple: true
+    });
+    </script>
+
+  </div>

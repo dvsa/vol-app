@@ -1,0 +1,302 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Submissions
+read-only:
+  - title: Case details
+    editable: false
+    type: fields
+    groups:
+      - group:
+        - name: Operator name
+          value: Don Tarmacadam Limited (MLH)
+        - name: Enitity
+          value: Limited company
+        - name: Business type
+          value: Rice importer
+        - name: ECMS
+          value: 1634536
+      - group:
+        - name: Licence number
+          value: OB1265270
+        - name: Licence start date
+          value: 16 Aug 2012
+        - name: Licence type
+          value: R
+        - name: Service standard date
+          value: 31 July 2017
+        - name: Licence status
+          value: Valid
+      - group:
+        - name: Total vehicle authorisation
+          value: 4
+        - name: Vehicles in possession
+          value: 2
+        - name: Trailer authorisation
+          value: 2
+        - name: Trailers in possession
+          value: 0
+  - title: Penalties
+    editable: false
+    type: textarea
+
+---
+
+  <div class="overlay"></div>
+    <div class="modal__wrapper">
+      <div class="modal">
+        <div class="modal__header">
+          <h1 class="modal__title">Add comment</h1>
+          <a href="" class="modal__close">Close</a>
+        </div>
+        <div class="modal__content">
+          <form action="">
+            <fieldset>
+              <div class="field">
+                <label class="visually-hidden" for="">Comment</label>
+                <textarea type="text" class="extra-long tinymce"></textarea>
+              </div>
+            </fieldset>
+            <fieldset class="actions-container">
+              <input type="submit" class="action--primary large" value="Save">
+              <input type="submit" class="action--secondary large" value="Cancel">
+            </fieldset>
+          </form>
+        </div><!-- .modal__content -->
+      </div><!-- .modal -->
+    </div><!-- .modal__wrapper -->
+
+    <!-- MAIN HEADER -->
+
+    <div class="content__header">
+      <h3 class="title">Submission No. 4</h3>
+      <div class="actions-container">
+        <a class="action--secondary" href="">Edit submission</a>
+        <a class="action--secondary" href="">Return to list</a>
+      </div><!-- actions-container -->
+    </div><!-- content__header -->
+
+
+    <!-- READ ONLY GROUP -->
+
+    <div class="read-only">
+      <div class="read-only__header">
+        <h4 class="read-only__title">Case details</h4>
+      </div><!-- read-only__header -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Operator name</dt>
+          <dd>Don Tarmacadam Limited (MLH)</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Enitity</dt>
+          <dd>Limited company</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Business type</dt>
+          <dd>Rice importer</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>ECMS</dt>
+          <dd>1634536</dd>
+        </li>
+      </ul><!-- .definition-list -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Licence number</dt>
+          <dd>OB1265270</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence start date</dt>
+          <dd>16 Aug 2012</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence type</dt>
+          <dd>R</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Service standard date</dt>
+          <dd>31 July 2017</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Licence status</dt>
+          <dd>Valid</dd>
+        </li>
+      </ul><!-- .definition-list -->
+      <ul class="definition-list">
+        <li class="definition-list__item ">
+          <dt>Total vehicle authorisation</dt>
+          <dd>4</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Vehicles in possession</dt>
+          <dd>2</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Trailer authorisation</dt>
+          <dd>2</dd>
+        </li>
+        <li class="definition-list__item ">
+          <dt>Trailers in possession</dt>
+          <dd>0</dd>
+        </li>
+      </ul><!-- .definition-list -->
+
+      <fieldset id="caseDetailsFileUploader" class="file-uploader">
+        <input class="action--secondary" type="submit" value="Add comment">
+        <ul class="file-uploader__actions">
+          <li class="file-uploader__action">
+            <label class="file-uploader__label">
+              Attach file
+              <input class="js-visually-hidden" type="file" name="fileUpload2[]">
+            </label>
+            <p class="hint">20MB maximum file size. PDF, DOC, JPG, PNG or GIF</p>
+          </li>
+        </ul><!-- file-uploader__actions -->
+        <ul class="file-uploader__list" id="fileUploader1"></ul><!-- file-uploader__list -->
+        <input class="action--primary large js-hidden" type="submit" value="Upload">
+      </fieldset><!-- .file-uploader -->
+
+    </div><!-- read-only -->
+
+
+    <!-- A CRUD TABLE WITH A COMMENT -->
+
+    <form>
+      <div class="table__header">
+        <h4>Operating centres</h4>
+        <div class="actions-container">
+          <input class="action--secondary" type="submit" value="Remove">
+          <input class="action--secondary" type="submit" value="Update">
+        </div><!-- actions-container -->
+      </div><!-- table__header -->
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Operating centre address</th>
+              <th>Vehicles</th>
+              <th>Trailers</th>
+              <th>Permission</th>
+              <th>Advertised</th>
+              <th><input type="checkbox"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unit 5, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 4, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 3, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td>Unit 2, 12 Albert Street, Westpoint, Leeds</td>
+              <td>34</td>
+              <td>23</td>
+              <td>Y</td>
+              <td>N</td>
+              <td><input type="checkbox"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+
+      <div class="comment">
+        <a class="comment__edit" href="" >Edit</a>
+        <b>Voluptatem accusantium</b>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        <b>Nemo enim ipsam voluptatem</b>
+        <p>quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum <i>quia dolor sit amet</i>, consectetur.</p>
+        <ul>
+          <li>Sed quia non numquam eius modi tempora</li>
+          <li>Incidunt ut labore et dolore magnam</li>
+          <li>Aliquam quaerat voluptatem</li>
+        </ul>
+      </div><!-- .comment -->
+    </form>
+
+    <!-- SUBMISSION ACTIONS -->
+
+    <h4>Submission actions</h4>
+    <ul class="submission-actions">
+      <li class="submission-item">
+        <h4>Recommedation: Revoke licence</h4>
+        <a class="submission-item__edit" href="">Edit</a>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum <i>quia dolor sit amet</i>, consectetur.</p>
+        <div class="submission-item__meta">
+          <p><b>From</b>Daniel Karribyson</p>
+          <p><b>To</b>Paul Rooney</p>
+          <p><b>Created</b>10:14 12/03/14</p>
+          <p><b>Status</b>10:14 12/03/14</p>
+        </div><!-- submission-item__meta -->
+      </li><!-- submission-item -->
+      <li class="submission-item">
+        <h4>Decision: Revoke licence</h4>
+        <a class="submission-item__edit" href="">Edit</a>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum <i>quia dolor sit amet</i>, consectetur.</p>
+        <div class="submission-item__meta">
+          <p><b>From</b>Daniel Karribyson</p>
+          <p><b>To</b>Paul Rooney</p>
+          <p><b>Created</b>10:14 12/03/14</p>
+          <p><b>Status</b>10:14 12/03/14</p>
+        </div><!-- .submission-item__meta -->
+      </li><!-- .submission-item -->
+    </ul><!-- .submission-action -->
+
+    <script type="text/javascript" src="/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript">
+       OLCS.ready(function() {
+        "use strict";
+
+        $(".tinymce").tinymce({
+          menubar : false,
+          document_base_url: "/tinymce/",
+          browser_spellcheck : true,
+          statusbar : false,
+          spellchecker_languages : "+English=en",
+          height : 260,
+          content_css : "/tinymce/skins/lightgray/custom.css",
+          style_formats: [
+            {title: "Headers", items: [
+              {title: "Header 1", format: "h1"},
+              {title: "Header 2", format: "h2"},
+              {title: "Header 3", format: "h3"}
+            ]},
+            {title: "Inline", items: [
+              {title: "Bold", icon: "bold", format: "bold"},
+              {title: "Italic", icon: "italic", format: "italic"},
+              {title: "Underline", icon: "underline", format: "underline"},
+              {title: "Strikethrough", icon: "strikethrough", format: "strikethrough"}
+            ]}
+          ],
+          plugins: [
+            "lists charmap",
+            "searchreplace",
+            "contextmenu paste spellchecker"
+          ],
+          toolbar: "styleselect | bold italic | bullist numlist"
+        });
+
+      });
+    </script>
+
+
+

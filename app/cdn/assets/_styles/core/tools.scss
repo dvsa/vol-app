@@ -1,0 +1,38 @@
+// Tools
+//
+// Utility helpers to speed up and improve development, typically
+// in the form of placeholders and mixins.
+
+// background: theme($internal: white, $selfserve: black);
+// background: theme(white, black);
+@function theme($internal, $selfserve) {
+  @if $app == 'internal' {
+    @return $internal;
+  } @else if $app == 'selfserve' {
+    @return $selfserve;
+  }
+}
+
+
+@mixin svg($src) {
+  // scss-lint:disable PlaceholderInExtend
+  @extend .#{$src};
+  @extend %svg-common;
+  display: inline-block;
+}
+
+@mixin js-enabled(){
+  @at-root{
+    .js-enabled #{&}{
+      @content;
+    }
+  }
+}
+
+%clearfix{
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}

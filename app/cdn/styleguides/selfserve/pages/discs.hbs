@@ -1,0 +1,98 @@
+---
+title: Discs
+user: operator
+layout: base.hbs
+breadcrumbs:
+  - link: home.html
+    label: Back to fees
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <form>
+
+      <div class="table__header">
+        <h3>3 Discs (1 valid)</h3>
+        <div class="actions-container">
+          <a href="" class="action--primary">Request new discs</a>
+          <div class="more-actions">
+            <div class="more-actions__button">More actions</div>
+            <div class="more-actions__list">
+              <input type="submit" class="more-actions__item" value="Remove">
+              <button class="more-actions__item">Replace</button>
+              <input type="submit" class="more-actions__item js-show-removed" value="Show ceased">
+            </div>
+          </div>
+        </div>
+      </div><!-- .table__header -->
+
+      <div class="table__wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Disc number</th>
+              <th>Issue date</th>
+              <th>Ceased date</th>
+              <th>Replacement</th>
+              <td class="right"><input type="checkbox"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b><a href="">1625252</a></b><span class="status green">Valid</span></td>
+              <td>12 May 2014</td>
+              <td>12 May 2019</td>
+              <td>No</td>
+              <td class="right"><a href="">Remove</a><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td><b><a href="">1625252</a></b><span class="status orange">Pending</span></td>
+              <td>12 May 2014</td>
+              <td>12 May 2019</td>
+              <td>No</td>
+              <td class="right"><a href="">Remove</a><input type="checkbox"></td>
+            </tr>
+            <tr>
+              <td><b><a href="">1625252</a></b><span class="status orange">Pending</span></td>
+              <td>12 May 2014</td>
+              <td>12 May 2019</td>
+              <td>No</td>
+              <td class="right"><a href="">Remove</a><input type="checkbox"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- .table__wrapper -->
+
+    </form>
+
+    <div class="actions-container">
+      <div class="action--primary large">Back to overview</div>
+    </div>
+    
+  </div><!-- .two-thirds -->
+
+  <div class="one-third">
+    <div class="sidebar">
+      <dl class="meta">
+        <dt>Licence number</dt>
+        <dd>OB12524/525</dd>
+        <dt>Status</dt>
+        <dd>Valid</dd>
+        <dt>Renewal date</dt>
+        <dd>16 March 2011</dd>
+        <dt>Start date</dt>
+        <dd>16 March 2016</dd>
+      </dl>
+    </div>
+  </div>
+
+</div><!-- .row -->
+
+<script type="text/javascript">
+  OLCS.toggleElement({
+    triggerSelector: '.more-actions',
+    targetSelector: '.more-actions__list'
+  });
+</script>
+

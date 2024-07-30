@@ -1,0 +1,89 @@
+---
+title: Declaration
+subtitle: Dave Willis
+user: tm
+back-link: index.html
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+    <p>You need to sign the declaration before your application can be considered.<br />
+    <a href="">Check your answers</a> before you sign the declaration.</strong></p>
+    <div class="article steps">
+      <p>I agree to the following:</p>
+      <ul>
+        <li>The laws relating to the driving and operation of vehicles used under this licence are observed;</li>
+        <li>The rules on drivers’ hours and tachographs are observed, proper records are kept and that these are made available on request;</li>
+        <li>Vehicles and trailers are not overloaded;</li>
+        <li>Vehicles operate within speed limits;</li>
+        <li>Vehicles and trailers, including hired vehicles and trailers, are kept in a fit and serviceable condition;</li>
+        <li>Drivers report promptly any defects or symptoms of defects that could prevent the safe operation of vehicles and/or trailers, and that any defects are recorded in writing;</li>
+        <li>Records are kept (for 15 months) of all driver reports which record defects, all safety inspections, routine maintenance and repairs to vehicles, and that these are made available on request;</li>
+        <li>In respect of each operating centre specified, that the number of vehicles and the number of trailers kept there will not exceed the maximum numbers authorised at each operating centre (which will be noted on the licence);</li>
+        <li>An unauthorised operating centre is not used in any traffic area;</li>
+        <li>Furthermore, I will notify the traffic commissioner of any convictions against myself, or the company, business partner(s), the company directors, nominated transport manager(s) named in this application, or employees or agents of the applicant for this licence and, if the licence is issued, convictions against the licence holder or employees or agents of the licence holder;</li>
+        <li>I will ensure that the traffic commissioner is notified within 28 days of any other changes, for example a change to the proposed maintenance arrangements; a change in the financial status of the licence holder (e.g. if placed in liquidation or receivership), or a change to Limited Company status or partnership, that might affect the licence, if issued.</li>
+      </ul>
+    </div>
+    <form class="article">
+      <fieldset>
+        <legend>How would you like to sign the declaration?</legend>
+        <fieldset>
+          <div class="field checkbox has-advanced-labels">
+            <label>
+              <input type="radio" name="declarations" value="verify">
+              <strong>Sign online using GOV.UK Verify</strong>
+              To use GOV.UK Verify you must be a UK resident with a valid passport.
+            </label>
+          </div>
+          <div class="field checkbox has-advanced-labels">
+            <label>
+              <input type="radio" name="declarations" value="post">
+              <strong>Print, sign and return</strong>
+              You'll need to print your details, sign them with a Director of Big Trucks Limited and return them to the Central Licensing Office
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="js-verify">
+          <div class="field confirm checkbox">
+            <label class="">
+              <input type="checkbox">
+               I declare that the statements in this application are true and the supporting evidence is correct and understand that it’s an offence to make a false declaration. I agree to Vehicle Operator Licensing using my name, address and date of birth provided by GOV.UK Verify.
+            </label>
+          </div>
+          <div class="actions-container">
+            <a href="submitted.html" class="action--primary large" rel="external">Continue</a>
+          </div>
+        </div><!-- .js-verify -->
+
+        <div class="js-print-sign">
+          <div class="actions-container">
+            <a href="submitted-no-verify.html" class="action--primary large">Continue</a>
+          </div>
+        </div><!-- .js-print-sign -->
+      </fieldset>
+    </form>
+  </div><!-- .two-thirds -->
+
+</div><!-- .row -->
+
+<script>
+  $(document).on('ready',function() {
+    $('.js-verify, .js-print-sign').hide();
+
+    $('[name="declarations"]').on('change',function() {
+      if($(this).val() === 'verify') {
+        $('.js-verify').show();
+        $('.js-print-sign').hide();
+      } else {
+        $('.js-verify').hide();
+        $('.js-print-sign').show();
+      }
+    });
+  });
+</script>
+
+
+

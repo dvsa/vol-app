@@ -1,0 +1,76 @@
+---
+layout: bus-registrations.hbs
+asset: '../../../../'
+sectionTitle: Service details
+subSectionTitle: Service no. & type
+verticalNavItems:
+  - label: Service no. & type
+    link:  /styleguides/internal/bus-registrations/
+  - label: Stops, manouevers & subsidies
+    link:  /styleguides/internal/bus-registrations/stops-manouevers-&-subsidies.html
+  - label: TA's and authorities
+    link:  /styleguides/internal/bus-registrations/tas-&-authorities.html
+  - label: Quality schemes
+    link:  /styleguides/internal/bus-registrations/quality-schemes.html
+form: 
+  - title: Service details 1
+    fieldsets:
+    - legend:
+      fields:
+        - label: Service number
+          type: text
+          class: short
+        - label: Other service numbers
+          type: multiple
+          class: short
+        - label: Start point
+          type: text
+          class: medium
+        - label: End point
+          type: text
+          class: medium
+        - label: Via
+          type: text
+          class: medium
+        - label: Service type (multiple)
+          type: multi select
+          values: 
+            - Excursion or tour
+            - Normal stopping
+            - Limited stops
+            - Other service
+            - Hail and ride
+            - Flexible
+            - School or work
+            - Rural service
+        - label: Other N&P details
+          type: textarea
+          class: medium
+        - label: Date received
+          type: date
+        - label: Effective date
+          type: date
+        - label: End date
+          type: date
+        - label: 
+          type: checkboxes
+          values: 
+            - Scottish rules
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Service details</h4>
+  {{> _vertical-navigation}}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Service no. and type</h3>
+  </div>
+  {{#each form}}{{> _forms}}{{/each}}
+</div>

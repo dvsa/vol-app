@@ -1,0 +1,6 @@
+.heading-box-grey {
+  @extend .govuk-inset-text;
+
+  background: govuk-colour("light-grey");
+  border-color: govuk-colour("mid-grey");
+}

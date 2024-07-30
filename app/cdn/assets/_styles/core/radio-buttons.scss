@@ -1,0 +1,280 @@
+$radio-button-size: 34px;
+$radio-button-select-size: 18px;
+
+%input-base {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  margin: 0;
+  z-index: 10;
+  width: $radio-button-size;
+  height: $radio-button-size;
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}
+
+%label-base {
+  display: block;
+  margin-bottom: $gutter-half;
+  padding-left: $radio-button-size + $gutter-one-third;
+  position: relative;
+  line-height: $radio-button-size;
+  margin-right: $gutter;
+  cursor: pointer;
+
+  &:before, &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: 0;
+  }
+
+  &:before {
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    background: transparent;
+    width: $radio-button-size;
+    height: $radio-button-size;
+  }
+}
+
+%disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+
+  &:before, &:after {
+    cursor: not-allowed;
+  }
+}
+
+
+input[type='radio']{
+  &.radio-button{
+    @if $app == 'selfserve' {
+      @extend %input-base;
+    }
+  }
+}
+
+.radio-button {
+  &__container {
+    position: relative;
+
+    &--inline {
+      display: inline-block;
+    }
+  }
+
+  &__label {
+
+    &--multi-line {
+      line-height: inherit;
+    }
+
+    display: inline-block;
+    @if $app == 'selfserve' {
+      @extend %label-base;
+    }
+
+    &:before {
+      border-radius: 50%;
+      border: 2px solid black;
+    }
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
+    + .radio-button__label {
+      @extend %disabled;
+    }
+  }
+
+  &:focus{
+    + .radio-button__label:before {
+      box-shadow: 0 0 0 ($radio-button-size * 0.12) $focus-colour;
+    }
+  }
+
+  &:checked {
+    + .radio-button__label:after {
+      top: ($radio-button-size - $radio-button-select-size) / 2 ;
+      left:($radio-button-size - $radio-button-select-size) / 2 ;
+      height: 0;
+      width: 0;
+      border: $radio-button-select-size/2 solid $black;
+      border-radius: 50%;
+    }
+
+    & ~ .radio-button__hidden-content {
+      display: block;
+      visibility: visible;
+    }
+  }
+
+  &--inline {
+    display: inline;
+  }
+
+  &__hidden-content {
+    margin-bottom: $gutter;
+
+    &--error {
+      border-color: $error-colour;
+
+      &.help__text {
+        border-color: $error-colour;
+      }
+    }
+  }
+}
+
+
+
+//CHeckboxes
+
+input[type='checkbox']{
+  &.checkbox{
+    @if $app == 'selfserve' {
+      @extend %input-base;
+    }
+  }
+}
+
+.checkbox {
+  &__container {
+    position: relative;
+
+    &--inline {
+      display: inline-block;
+    }
+  }
+
+  &__label {
+
+    &--multi-line {
+      line-height: inherit;
+    }
+    
+    display: inline-block;
+    @if $app == 'selfserve' {
+      @extend %label-base;
+    }
+
+    &:before {
+      border: 2px solid $black;
+    }
+
+    &--error {
+      color: $error-colour;
+      font-weight: 700;
+
+      &:before {
+        border: 4px solid $error-colour;
+      }
+    }
+  }
+
+
+  &[disabled] {
+    + .checkbox__label {
+      @extend %disabled;
+    }
+  }
+
+  &:focus{
+    + .checkbox__label:before {
+      box-shadow: 0 0 0 ($radio-button-size * 0.12) $focus-colour;
+    }
+  }
+
+  &__hidden-content {
+    display: block;
+    margin-bottom: $gutter ;
+  }
+
+  ~ .checkbox__hidden-content {
+    display: none;
+    visibility: hidden;
+
+  }
+
+  &:checked {
+    + .checkbox__label:after {
+      border: solid;
+      border-color: $black;
+      border-width: 0 0 ($radio-button-size * 0.15) ($radio-button-size * 0.15);
+      background: transparent;
+      width: ($radio-button-size * 0.65);
+      height: ($radio-button-size * 0.3);
+      position: absolute;
+      top: ($radio-button-size * 0.3);
+      left: ($radio-button-size * 0.2);
+      transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+    }
+
+    + .checkbox__label--error{
+      color: $black;
+      font-weight: normal;
+      
+      &:after, &:before {
+        border-color: $black;
+      }
+    }
+
+    & ~ .checkbox__hidden-content {
+      display: block;
+      visibility: visible;
+      margin-bottom: $gutter;
+
+    }
+  }
+
+  &--inline {
+    display: inline;
+  }
+
+  
+}
+
+
+
+.label {
+  &--error {
+    color: $error-colour;
+  }
+}
+
+.input {
+  &--error {
+    border: 2px solid $error-colour;
+  }
+}
+
+
+.error {
+  &__wrapper {
+    border-left: 5px solid $error-colour;
+    padding-left: 15px;
+    &.help__text {
+      border-left: 5px solid $error-colour;
+    }
+  }
+
+  &__text {
+    color: $error-colour;
+    font-weight: bold;
+  }
+
+  &__label {
+    border-color: $error-colour;
+  }
+
+  &__input {
+    border: 3px solid $error-colour;
+  }
+}

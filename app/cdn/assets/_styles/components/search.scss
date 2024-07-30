@@ -1,0 +1,132 @@
+/**
+ * Search
+ */
+
+.search {
+
+  @media (max-width: breakpoint('break-3')) {
+    width: 100%;
+  }
+
+  &__wrapper {
+    float: left;
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+    @media (max-width: breakpoint('break-3')) {
+      width: 100%;
+    }
+  }
+
+  &__select {
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    float: left;
+    border-right: 1px solid rgba($black, 0.1);
+    background-color: $grey-4;
+    position: relative;
+    &::after {
+      @include svg('dropdown-down');
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      margin-top: -3.8px;
+      margin-right: 4px;
+      pointer-events: none;
+      background-color: $grey-4;
+    }
+    &:focus {
+      outline: none;
+    }
+    select {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      border: 0;
+      margin: 0;
+      cursor: pointer;
+      padding: 0 12px;
+      color: $grey-1;
+      display: inline-block;
+      height: 32px;
+      line-height: 32px;
+      min-width: 150px;
+      font-family: $font--primary;
+      // hack for IE8
+      // scss-lint:disable DuplicateProperty
+      padding: 7px 12px\9;
+      height: auto\9;
+      &:focus {
+        outline: 0;
+      }
+    }
+  }
+
+  &__input {
+    float: left;
+    background: $white;
+    padding: 0 12px;
+    color: $black;
+    width: 220px;
+    border: 0;
+    height: 32px;
+    font-family: $font--primary;
+    // hack for IE8
+    // scss-lint:disable DuplicateProperty
+    padding: 8px 12px 7px\9;
+    height: auto\9;
+    // scss-lint:enable DuplicateProperty
+    &::placeholder {
+      color: $grey-1;
+      opacity: 1;
+    }
+  }
+
+  &__input:focus {
+    outline: none;
+  }
+
+  &__button,
+  [type="submit"] {
+    @include svg('internal-search');
+    background-color: $primary-colour;
+    float: left;
+    width: 2.5rem;
+    height: 32px;
+    border-radius: 0 3px 3px 0;
+    border: 0;
+    text-indent: -9999px;
+    // hack for IE8
+    // scss-lint:disable DuplicateProperty
+    text-indent: 0\9;
+    width: 36px\9;
+    // scss-lint:enable DuplicateProperty
+    &:focus {
+      outline: 0;
+    }
+    // temp hardcoded hack until internal search input is replaced
+    // with a button tag
+    @if $app == 'internal' {
+      background: $primary-colour url('../images/svg/internal-search.svg') no-repeat;
+      background-size: 15px;
+      background-position: center;
+    }
+  }
+
+  &__advanced {
+    color: $white;
+    float: left;
+    margin-left: 1em;
+    margin-top: 0.5em;
+    @media(max-width: breakpoint('break-3')) {
+      display: none;
+    }
+  }
+
+  form {
+    margin: 0;
+  }
+
+}// .search

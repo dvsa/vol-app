@@ -1,0 +1,28 @@
+---
+layout: sign-in.hbs
+asset: '../../'
+system-messages: true
+---
+
+<form action="tasks.html">
+  <fieldset>
+    <legend>Sign in</legend>
+    <!-- 
+    <div class="validation-summary">
+      <h3>There was a problem signing in</h3>
+      <p>Please check your username and password</p>
+    </div>
+    -->
+    <div class="field">
+      <label for="">Username</label>
+      <input type="text">
+    </div>
+    <div class="field">
+      <label for="">Password</label>
+      <p class="hint"><a href="forgotten-password.html">Forgot password?</a></p>
+      <input type="password">
+    </div>
+    <button type="submit" class="action--primary large">Sign in</button>
+  </fieldset>
+  <input type="hidden" id="security" />
+</form>

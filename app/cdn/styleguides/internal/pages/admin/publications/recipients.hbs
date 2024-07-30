@@ -1,0 +1,74 @@
+---
+layout: publications.hbs
+asset: '../../../../'
+subSectionTitle: Recipients
+filterList:
+  - header: App status
+    type: checkboxes
+    filters:
+      - New
+      - Valid
+      - Invalid
+  - header: Traffic area
+    type: dropdown
+    filters:
+      - West of England
+      - North east of England
+      - North west of England
+      - West Midlands and Wales
+      - East of England
+      - London and the south east
+      - Scotland
+table:
+  - title: <strong>1029</strong> Recipients
+    headers:
+      - label: Name
+        class: sortable descending
+      - label: Body
+        class: sortable
+      - label: Postcode
+        class: sortable
+      - label: <input type="checkbox">
+        class: not-sortable
+    columns:
+      - <strong><a href="">Daniel Fortmason</a></strong>
+      - St Albans District Council
+      - SW18 1BL
+      - <input type="checkbox">
+    rows: 20
+    actions:
+      - label: Add recipient
+        class: primary
+      - label: Edit
+        class: secondary disabled
+      - label: Delete
+        class: secondary disabled
+verticalNavItems:
+  - label: Pending
+    link: index.html
+  - label: Published
+    link: published.html
+  - label: Recipients
+    link: recipients.html
+
+---
+
+
+<div class="sidebar--left">
+  <h4 class="title">Publications</h4>
+  {{> _vertical-navigation }}
+</div><!-- one-fifth-left -->
+
+<div class="four-fifths--right">
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+</div><!-- .four-fifths-right -->
+
+
+
+
+
+

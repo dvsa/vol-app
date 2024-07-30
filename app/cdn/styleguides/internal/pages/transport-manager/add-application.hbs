@@ -1,0 +1,45 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Responsibilities
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Application ID
+          type: text
+          class: medium
+    actions:
+      - label: Continue
+        class: primary large
+        link: add-application-2.html
+      - label: Cancel
+        class: secondary large
+        link: responsibilities.html
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Add application</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+
+</div>

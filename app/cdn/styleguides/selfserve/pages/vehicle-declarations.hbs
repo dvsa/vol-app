@@ -1,0 +1,263 @@
+---
+title: Vehicle declarations
+subtitle: Step 10 of 15
+layout: base.hbs
+user: operator
+breadcrumbs:
+  - link: home.html
+    label: Back
+---
+
+<div class="row">
+  <div class="three-quarters">
+    <form>
+      <fieldset>
+        <fieldset class="checkbox">
+          <legend class="legend">How many passenger seats do your vehicles have?</legend>
+          <div class="field">
+            <label><input type="radio" name="seats" val="js-less-than-eight">Less than eight</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="seats" val="js-more-than-eight">Eight or more</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="seats" val="js-less-than-eight">Both</label>
+          </div>
+        </fieldset>
+      </fieldset>
+
+      <fieldset class="js-more-than-eight">
+        <legend>Eight of more seats</legend>
+        <div class="field confirm">
+          <label>
+          <input type="checkbox">
+          I won’t operate vehicles with fewer than eight passenger seats under this licence without written permission from the Traffic Commissioner
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="js-less-than-eight">
+        <legend>Small vehicles</legend>
+        <fieldset class="checkbox">
+          <div class="article">
+            <p>Are you planning to operate small vehicles as part of a large bus business?</p>
+            <p>This is laid out in:</p>
+              <ul>
+                <li>section 79A of the <a href="">Public Passenger Vehicles Act</a></li>
+                <li>section 265 of the <a href="">Transport Act 2000</a></li>
+              </ul>
+          </div>
+          <div class="field inline">
+            <label><input type="radio" name="sv" val="js-less-than-eight--yes">Yes</label>
+          </div>
+          <div class="field inline">
+            <label><input type="radio" name="sv" val="js-less-than-eight--no">No</label>
+          </div>
+        </fieldset>
+        <fieldset class="js-less-than-eight--yes">
+          <div class="field">
+            <label for="">Give details of how you will comply with the 'small part of the business' requirements</label>
+            <textarea class="long"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="js-less-than-eight--no">
+          <div class="field">
+            <label>Scottish operators and English and Welsh operators not claiming the exemption under 79A of the Public Passenger Vehicles Act 1981</label>
+            <div class=" terms--box">
+              <h4>Condition 1</h4>
+              <p>The passengers
+              must have been brought together for the purposes of making the journey by the driver or owner of the vehicle or
+              by some other intermediary who is paid for. In addition each journey must have been advertised to the public, so
+              as to create a genuine opportunity for members of the public to be carried on the particular journey in
+              question, i.e. the journey is not an exclusive hiring for an individual or group, notwithstanding that separate
+              fares are paid. Advertisement at a place of worship, a place of work, a club or other voluntary association for
+              the information of people present at those places, or in periodicals circulated wholly or mainly among such
+              persons, does not count as advertisement to the general public. Finally, in the event that there are multiple
+              destinations, there should be differentiation of fares for the journey based on distance or time.
+              </p>
+              <h4>Condition 2</h4>
+              <p>
+                The making of the agreement for the payment of separate fares must have been initiated by the driver or owner of
+                the vehicle, or by some other intermediary who is paid for doing so – not by the passengers themselves, or any
+                other party. In addition, as in condition 1, each journey must be advertised to the public beforehand as being
+                open to passengers to be carried at separate fares.
+              </p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Small vehicles undertakings</label>
+            <div class=" terms--box">
+              <p>(a) The operator will advise the traffic commissioner of the make, model and registration number of vehicles used under that licence, and will advise of any changes.</p>
+              <p>
+                  (b) In respect of any vehicle with eight or less passengers seats used under the licence, the operator will provide
+                  an audit trail to the traffic commissioner or any enforcement body on request, that demonstrates compliance with PSV
+                  requirements. This includes paperwork as to how in respect of any service separate fares were paid and one of the
+                  two conditions set out in Question 1 were met. Note this undertaking does not apply when the vehicle is being used
+                  under the provisions of Section 79A.
+              </p>
+              <p>
+                  (c) Each small vehicle to be used under the licence will have a V5C registration certificate, and the operator must
+                  possess and produce, when asked to do so, a document confirming this.
+              </p>
+              <p>
+                  (d) Each small vehicle will receive a full safety inspection (maximum every 10 weeks) in premises suitable for the
+                  vehicle to ensure that its roadworthiness is maintained. Records of all inspections must be kept in accordance with
+                  the Guide to Maintaining Roadworthiness.
+              </p>
+              <p>(e) At no time will the small vehicle carry more than eight passengers.</p>
+              <p>
+                  (f) The operator will at all times comply with the legislation in respect of the charging of separate fares and
+                  retain 12 months’ evidence of this compliance for each journey.
+              </p>
+              <p>
+                  (g) Drivers of small vehicles will carry with them documentary evidence that separate fares have been charged for
+                  the current journey.
+              </p>
+              <p>
+                  (h) The operator will not use a vehicle that does not meet the ECWVTA standards, British construction and use
+                  requirements or the Road Vehicles Approval Regulations 2009 (as amended).
+              </p>
+              <p>(i) The operator or driver will not break the alcohol laws.</p>
+            </div>
+          </div>
+          <hr />
+        </fieldset>
+      </div>
+
+      <fieldset class="js-limousines">
+        <legend>Limousines and novelty vehicles</legend>
+        <fieldset class="checkbox">
+          <legend>Will the vehicles you’re applying for be used as limousines or novelty vehicles?</legend>
+          <div class="field inline">
+            <label><input type="radio" name="limos" val="js-limousines--yes">Yes</label>
+          </div>
+          <div class="field inline">
+            <label><input type="radio" name="limos" val="js-limousines--no">No</label>
+          </div>
+        </fieldset>
+        <div class="field js-limousines--no">
+         <div class="field confirm">
+          <label>
+            <input type="checkbox">
+           I won’t operate limousines and novelty vehicles under this licence
+          </label>
+        </div>
+      </fieldset>
+
+
+    </form>
+    <div class="actions-container">
+      <a href="" class="action--primary large">Save and continue</a>
+      <a href="" class="action--tertiary list large">Save and return to overview</a>
+    </div>
+  </div><!-- .three-quarters -->
+  <div class="one-quarter">
+    <div class="sidebar">
+
+      <dl class="meta">
+        <dt>Licence number</dt>
+        <dd>OB12524/525</dd>
+        <dt>Status</dt>
+        <dd>Valid</dd>
+        <dt>Renewal date</dt>
+        <dd>16 March 2011</dd>
+        <dt>Start date</dt>
+        <dd>16 March 2016</dd>
+      </dl>
+
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+  (function() {
+
+    var hiddenElements = [
+      {
+        'selector':'js-less-than-eight',
+        'show': [
+          '.js-less-than-eight',
+          '.js-limousines'
+        ],
+        'hide': [
+          '.js-more-than-eight'
+        ]
+      },
+      {
+        'selector':'js-less-than-eight--yes',
+        'show': [
+          '.js-less-than-eight--yes',
+        ],
+        'hide': [
+          '.js-less-than-eight--no',
+        ]
+      },
+      {
+        'selector':'js-less-than-eight--no',
+        'show': [
+          '.js-less-than-eight--no',
+        ],
+        'hide': [
+          '.js-less-than-eight--yes',
+        ]
+      },
+      {
+        'selector':'js-limousines--no',
+        'show': [
+          '.js-limousines--no'
+        ]
+      },
+      {
+        'selector':'js-limousines--yes',
+        'hide': [
+          '.js-limousines--no'
+        ]
+      },
+      {
+        'selector':'js-more-than-eight',
+        'show': [
+          '.js-more-than-eight',
+          '.js-limousines'
+        ],
+        'hide': [
+          '.js-less-than-eight'
+        ]
+      },
+    ];
+
+    $.each(hiddenElements, function(index, value) {
+
+      var selector = 'input[val="'+hiddenElements[index].selector+'"]';
+
+      if ('hide' in hiddenElements[index]) {
+        for (i = 0; i < hiddenElements[index].hide.length; i++) {
+          $(hiddenElements[index].hide[i]).hide();
+        }
+        $(document).on('click',selector, function() {
+          for (i = 0; i < hiddenElements[index].hide.length; i++) {
+            $(hiddenElements[index].hide[i]).hide();
+          }
+        });
+      }
+
+      if ('show' in hiddenElements[index]) {
+        for (i = 0; i < hiddenElements[index].show.length; i++) {
+          $(hiddenElements[index].show[i]).hide();
+        }
+        $(document).on('click',selector, function() {
+          for (i = 0; i < hiddenElements[index].show.length; i++) {
+            $(hiddenElements[index].show[i]).show();
+          }
+        });
+      }
+
+    });
+
+
+  })();
+
+</script>
