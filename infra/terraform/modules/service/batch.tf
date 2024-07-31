@@ -74,6 +74,10 @@ locals {
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
   } }
+
+  schedules = { for job in var.batch.jobs : job.name => {
+    schedule_expression = job.schedule
+  }
 }
 
 module "batch" {
@@ -108,6 +112,29 @@ module "batch" {
   }
 
   job_definitions = local.jobs
+}
+
+module "eventbridge" {
+  source  = "terraform-aws-modules/eventbridge/aws"
+  version = "3.7.1"
+
+  create_bus = false
+
+  rules = {
+    batch_job = {
+      description         = "Trigger batch job",
+      schedule_expression = local.schedules
+    }
+  }
+
+  targets = {
+    batch_job = [
+      {
+        job_name       = module.batch.job_definitions.name
+        job_definition = module.batch.job_definitions.arn
+      }
+    ]
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {

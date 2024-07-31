@@ -254,6 +254,7 @@ module "service" {
         name     = "clean-up-variations",
         commands = ["batch:clean-up-variations"],
         timeout  = 43200,
+        schedule = "cron(00 02 * * ? *)",
       },
       {
         name     = "cns",
