@@ -25,17 +25,17 @@ class ApplicationOverviewSection extends LvaOverviewSection
         switch ($status) {
             case 1:
                 $mode = 'edit';
-                $statusText = 'INCOMPLETE';
+                $statusText = 'Incomplete';
                 $statusColour = 'orange';
                 break;
             case 2:
                 $mode = 'edit';
-                $statusText = 'COMPLETE';
+                $statusText = 'Complete';
                 $statusColour = 'green';
                 break;
             default:
                 $mode = 'add';
-                $statusText = 'NOT STARTED';
+                $statusText = 'Not started';
                 $statusColour = 'grey';
                 break;
         }

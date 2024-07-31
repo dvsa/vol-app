@@ -27,7 +27,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('INCOMPLETE', $viewModel->getVariable('status'));
+        $this->assertEquals('Incomplete', $viewModel->getVariable('status'));
         $this->assertTrue($viewModel->getVariable('enabled'));
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
@@ -50,7 +50,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('COMPLETE', $viewModel->getVariable('status'));
+        $this->assertEquals('Complete', $viewModel->getVariable('status'));
         $this->assertTrue($viewModel->getVariable('enabled'));
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
@@ -73,7 +73,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('grey', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('NOT STARTED', $viewModel->getVariable('status'));
+        $this->assertEquals('Not Started', $viewModel->getVariable('status'));
         $this->assertFalse($viewModel->getVariable('enabled'));
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
