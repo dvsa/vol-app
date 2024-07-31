@@ -77,7 +77,7 @@ locals {
 
   schedules = { for job in var.batch.jobs : job.name => {
     schedule_expression = job.schedule
-  }
+  } }
 }
 
 module "batch" {
