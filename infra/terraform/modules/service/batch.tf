@@ -116,14 +116,12 @@ module "eventbridge" {
   create_bus  = false
   create_role = true
 
-  schedules = {
-    jobs = {
-    description         = "vol-app-schedule"
-    schedule_expression = "cron(00 02 * * ? *)"
+  schedules = { for job in var.batch.jobs : job.name => {
+    description         = "Schedule for ${job.name}"
+    schedule_expression = job.schedule
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-    input               = jsonencode({ "jobName" : "vol-app-dev-cns", "jobQueue" : "vol-app-dev-default", "jobDefinition" : "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"})
-    }
-  }
+    input               = jsonencode({ "jobName" : "${job.name}", "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:eu-west-1:054614622558:job-definition/${job.name}"})
+  } }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
