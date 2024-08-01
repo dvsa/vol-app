@@ -76,7 +76,7 @@ locals {
   } }
 
   scheduled_jobs = [ for job in var.batch.jobs : job.schedule != "" ]
-  schedules = { for job in scheduled_jobs : job.name => {
+  schedules = { for job in scheduled_jobs : {
     description         = "Schedule for ${job.name}"
     schedule_expression = job.schedule
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
