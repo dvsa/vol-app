@@ -116,18 +116,11 @@ module "eventbridge" {
   create_bus  = false
   create_role = false
 
-  schedule {
-    name     = "my-batch-job-schedule"
-    schedule_expression = "rate(1 hour)"
-
-    target {
-      arn        = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-      # role_arn   = aws_iam_role.batch_job_role.arn
-      input      = jsonencode({
-        jobName       = "vol-app-dev-cns"
-        jobQueue      = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-        jobDefinition = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"
-      })
+  schedules = { 
+      description         = "vol-app-schedule"
+      schedule_expression = "cron(00 02 * * ? *)"
+      arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
+      input               = jsonencode({ "jobName" : "vol-app-dev-cns", "jobQueue" : "vol-app-dev-default", "jobDefinition" : "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"})
     }
   }
 }
