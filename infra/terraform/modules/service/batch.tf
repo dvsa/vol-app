@@ -116,11 +116,13 @@ module "eventbridge" {
   create_bus  = false
   create_role = false
 
-  schedules = { 
+  schedules = {
+    jobs = {
     description         = "vol-app-schedule"
     schedule_expression = "cron(00 02 * * ? *)"
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
     input               = jsonencode({ "jobName" : "vol-app-dev-cns", "jobQueue" : "vol-app-dev-default", "jobDefinition" : "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"})
+    }
   }
 }
 
