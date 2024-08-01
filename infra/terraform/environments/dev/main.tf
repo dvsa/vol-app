@@ -260,11 +260,13 @@ module "service" {
         name     = "cns",
         commands = ["batch:cns"],
         timeout  = 43200,
+        schedule = "cron(00 02 * * ? *)",
       },
       {
         name     = "create-psv-licence-surrender-task",
         commands = ["batch:create-psv-licence-surrender-task"],
         timeout  = 43200,
+        schedule = "cron(00 02 * * ? *)",
       },
       {
         name     = "psv-operator-list-export",

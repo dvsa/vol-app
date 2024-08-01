@@ -74,10 +74,6 @@ locals {
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
   } }
-
-  schedules = { for job in var.batch.jobs : job.name => {
-    schedule_expression = job.schedule
-  } }
 }
 
 module "batch" {
@@ -115,23 +111,35 @@ module "batch" {
 }
 
 module "eventbridge" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "3.7.1"
+  source = "terraform-aws-modules/eventbridge/aws"
 
-  create_bus = false
+  create_bus  = false
+  create_role = false
 
   rules = {
-    batch_job = {
-      description         = "Trigger batch job",
-      schedule_expression = local.schedules
+    for job in var.batch.jobs : job if job.schedule != null : "${job.name}_rule" => {
+      description        = "Trigger batch job ${job.name}"
+      schedule_expression = job.schedule
     }
   }
 
   targets = {
-    batch_job = [
+    for job in var.batch.jobs : job if job.schedule != null : "${job.name}_target" => [
       {
-        job_name       = module.batch.job_definitions.name
-        job_definition = module.batch.job_definitions.arn
+        # name      = job.name
+        # arn       = aws_batch_job_queue.my_job_queue.arn
+        # batch_target = {
+        #   job_definition  = aws_batch_job_definition.my_job_definition.arn
+        #   job_name        = job.name
+        #   job_queue       = aws_batch_job_queue.my_job_queue.arn
+        # }
+        name      = "clean-up-variations"
+        arn       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+        batch_target = {
+          job_definition  = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-clean-up-variations"
+          job_name        = "vol-app-dev-clean-up-variations"
+          job_queue       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+        }
       }
     ]
   }
