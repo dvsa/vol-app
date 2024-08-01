@@ -58,7 +58,7 @@ variable "batch" {
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
-      schedule = optional(string, "cron(00 02 * * ? 2099)")
+      schedule = string
     }))
   })
 }
