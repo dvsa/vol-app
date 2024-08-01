@@ -133,9 +133,9 @@ module "cloudfront" {
       origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
       response_headers_policy_name = "Managed-SecurityHeadersPolicy"
 
-      lambda_function_association = {
+      function_association = {
         viewer-request = {
-          lambda_arn   = aws_cloudfront_function.rewrite_uri.arn
+          function_arn = aws_cloudfront_function.rewrite_uri.arn
           include_body = true
         }
       }
@@ -156,10 +156,11 @@ module "cloudfront" {
 resource "aws_cloudfront_function" "rewrite_uri" {
   name    = "${var.environment}-legacy-assets-rewrite-uri"
   runtime = "cloudfront-js-2.0"
+  publish = true
   code    = <<EOF
 function handler(event) {
   var request = event.request;
-  request.uri = request.uri.replace(/^\/static\/public\/assets\//, "/");
+  request.uri = request.uri.replace(/^\/static\/public\//, "/");
   return request;
 }
 EOF
