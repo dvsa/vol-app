@@ -132,13 +132,37 @@ module "cloudfront" {
       cache_policy_name            = "Managed-CachingOptimized"
       origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
       response_headers_policy_name = "Managed-SecurityHeadersPolicy"
-    },
+
+      lambda_function_association = {
+        viewer-request = {
+          lambda_arn   = aws_cloudfront_function.rewrite_uri.arn
+          include_body = true
+        }
+      }
+    }
   ]
 
   viewer_certificate = {
     acm_certificate_arn = module.acm.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
+}
+
+// The assets are hardcoding in `/static/public/assets/` in the path.
+// We need to rewrite the URI to remove it as the new assets doesn't follow the unnecessary directory structure.
+// New asset path: `/images/favicon.ico` vs old asset path: `/static/public/assets/images/favicon.ico`.
+// This function will provide support for both while EC2 and ECS are running in parallel.
+// This can be removed once we remove EC2 infrastructure and the assets no longer have the path prefix.
+resource "aws_cloudfront_function" "rewrite_uri" {
+  name    = "${var.environment}-legacy-assets-rewrite-uri"
+  runtime = "cloudfront-js-2.0"
+  code    = <<EOF
+function handler(event) {
+  var request = event.request;
+  request.uri = request.uri.replace(/^\/static\/public\/assets\//, "/");
+  return request;
+}
+EOF
 }
 
 data "aws_canonical_user_id" "current" {}
