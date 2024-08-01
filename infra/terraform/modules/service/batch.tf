@@ -110,6 +110,25 @@ module "batch" {
   job_definitions = local.jobs
 }
 
+module "eventbridge" {
+  source = "terraform-aws-modules/eventbridge/aws"
+
+  create_bus  = false
+  create_role = false
+
+schedules = { for job in var.batch.jobs : job.name => {
+      description         = "vol-app-${var.environment}-${job.name}-schedule"
+      schedule_expression = job.schedule
+      arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
+      input               = jsonencode({ 
+                                      jobName = job.name 
+                                      jobQueue = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+                                      jobDefinition = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"
+                                      })
+    }
+  }
+}  
+
 resource "aws_cloudwatch_log_group" "this" {
   name              = "/aws/batch/vol-app-${var.environment}"
   retention_in_days = 1
