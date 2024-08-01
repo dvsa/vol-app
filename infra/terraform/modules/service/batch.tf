@@ -75,13 +75,12 @@ locals {
     retry_strategy           = local.default_retry_policy
   } }
 
-  scheduled_jobs = [ for job in var.batch.jobs : job.schedule != "" ]
-  schedules = { for job in scheduled_jobs : job.name => dynamic(schedule_config for schedule_config in [ {
+  schedules = { for job in var.batch.jobs : job.name => {
     description         = "Schedule for ${job.name}"
     schedule_expression = job.schedule
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
     input               = jsonencode({ "jobName" : "${job.name}", "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:eu-west-1:054614622558:job-definition/${job.name}"})
-  }  ]  )  }
+  } }
 }
 
 module "batch" {
