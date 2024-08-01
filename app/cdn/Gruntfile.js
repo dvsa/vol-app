@@ -218,7 +218,7 @@ var sass = require('sass');
                         dest: 'public/images/'
                     }, {
                         expand: true,
-                        cwd: 'node_modules/govuk-frontend/govuk/assets/images/',
+                        cwd: 'node_modules/govuk-frontend/dist/govuk/assets/images/',
                         src: ['**/*.{png,jpg,gif,svg,ico}'],
                         dest: 'public/assets/images/'
                     }]
@@ -226,7 +226,7 @@ var sass = require('sass');
                 fonts:{
                     files: [{
                         expand: true,
-                        cwd: 'node_modules/govuk-frontend/govuk/assets/fonts/',
+                        cwd: 'node_modules/govuk-frontend/dist/govuk/assets/fonts/',
                         src: ['**/*.{woff2,woff,eot}'],
                         dest: 'public/assets/fonts/'
                     }]
