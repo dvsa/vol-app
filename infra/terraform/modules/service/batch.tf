@@ -116,29 +116,19 @@ module "eventbridge" {
   create_bus  = false
   create_role = false
 
-  rules = { for job in var.batch.jobs : job.name => {
-    description        = "Trigger batch job ${job.name}"
-    schedule_expression = job.schedule
-    }
-  }
+  schedule {
+    name     = "my-batch-job-schedule"
+    schedule_expression = "rate(1 hour)"
 
-  targets = { for job in var.batch.jobs : job.name => [
-    {
-      # name      = job.name
-      # arn       = aws_batch_job_queue.my_job_queue.arn
-      # batch_target = {
-      #   job_definition  = aws_batch_job_definition.my_job_definition.arn
-      #   job_name        = job.name
-      #   job_queue       = aws_batch_job_queue.my_job_queue.arn
-      # }
-      name      = "clean-up-variations"
-      arn       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-      batch_target = {
-        job_definition  = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-clean-up-variations"
-        job_name        = "vol-app-dev-clean-up-variations"
-        job_queue       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-      }
-    }]
+    target {
+      arn        = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+      # role_arn   = aws_iam_role.batch_job_role.arn
+      input      = jsonencode({
+        jobName       = "vol-app-dev-cns"
+        jobQueue      = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+        jobDefinition = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-cns:2"
+      })
+    }
   }
 }
 
