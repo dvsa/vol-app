@@ -116,32 +116,29 @@ module "eventbridge" {
   create_bus  = false
   create_role = false
 
-  rules = {
-    for job in var.batch.jobs : job if job.schedule != null : job.name => {
-      description        = "Trigger batch job ${job.name}"
-      schedule_expression = job.schedule
+  rules = { for job in var.batch.jobs : job if job.schedule != null : job.name => {
+    description        = "Trigger batch job ${job.name}"
+    schedule_expression = job.schedule
     }
   }
 
-  targets = {
-    for job in var.batch.jobs : job if job.schedule != null : job.name => [
-      {
-        # name      = job.name
-        # arn       = aws_batch_job_queue.my_job_queue.arn
-        # batch_target = {
-        #   job_definition  = aws_batch_job_definition.my_job_definition.arn
-        #   job_name        = job.name
-        #   job_queue       = aws_batch_job_queue.my_job_queue.arn
-        # }
-        name      = "clean-up-variations"
-        arn       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-        batch_target = {
-          job_definition  = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-clean-up-variations"
-          job_name        = "vol-app-dev-clean-up-variations"
-          job_queue       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
-        }
+  targets = { for job in var.batch.jobs : job if job.schedule != null : job.name => [
+    {
+      # name      = job.name
+      # arn       = aws_batch_job_queue.my_job_queue.arn
+      # batch_target = {
+      #   job_definition  = aws_batch_job_definition.my_job_definition.arn
+      #   job_name        = job.name
+      #   job_queue       = aws_batch_job_queue.my_job_queue.arn
+      # }
+      name      = "clean-up-variations"
+      arn       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
+      batch_target = {
+        job_definition  = "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-clean-up-variations"
+        job_name        = "vol-app-dev-clean-up-variations"
+        job_queue       = "arn:aws:batch:eu-west-1:054614622558:job-queue/vol-app-dev-default"
       }
-    ]
+    }]
   }
 }
 
