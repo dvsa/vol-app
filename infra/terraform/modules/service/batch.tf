@@ -116,13 +116,13 @@ module "eventbridge" {
   create_bus  = false
   create_role = false
 
-  rules = { for job in var.batch.jobs : job if job.schedule != null : job.name => {
+  rules = { for job in var.batch.jobs : job.name => {
     description        = "Trigger batch job ${job.name}"
     schedule_expression = job.schedule
     }
   }
 
-  targets = { for job in var.batch.jobs : job if job.schedule != null : job.name => [
+  targets = { for job in var.batch.jobs : job.name => [
     {
       # name      = job.name
       # arn       = aws_batch_job_queue.my_job_queue.arn
