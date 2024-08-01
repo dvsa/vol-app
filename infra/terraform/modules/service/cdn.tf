@@ -148,9 +148,9 @@ module "cloudfront" {
   }
 }
 
-// The assets are hardcoding in `/static/public/assets/` in the path.
+// The assets are hardcoding in `/static/public/` in the path.
 // We need to rewrite the URI to remove it as the new assets doesn't follow the unnecessary directory structure.
-// New asset path: `/images/favicon.ico` vs old asset path: `/static/public/assets/images/favicon.ico`.
+// New asset path: `/assets/images/favicon.ico` vs old asset path: `/static/public/assets/images/favicon.ico`.
 // This function will provide support for both while EC2 and ECS are running in parallel.
 // This can be removed once we remove EC2 infrastructure and the assets no longer have the path prefix.
 resource "aws_cloudfront_function" "rewrite_uri" {
