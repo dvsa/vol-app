@@ -114,7 +114,7 @@ module "eventbridge" {
   source = "terraform-aws-modules/eventbridge/aws"
 
   create_bus  = false
-  create_role = false
+  create_role = true
 
   schedules = {
     jobs = {
