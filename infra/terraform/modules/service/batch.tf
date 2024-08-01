@@ -75,7 +75,8 @@ locals {
     retry_strategy           = local.default_retry_policy
   } }
 
-  schedules = { for job in var.batch.jobs : if job.schedule != "" then job.name => {
+  scheduled_jobs = [ for job in var.batch.jobs : job.schedule != "" ]
+  schedules = { for job in scheduled_jobs : job.name => {
     description         = "Schedule for ${job.name}"
     schedule_expression = job.schedule
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
