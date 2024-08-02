@@ -104,6 +104,12 @@ module "batch" {
       name     = "vol-app-${var.environment}-default"
       state    = "ENABLED"
       priority = 1
+
+      # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
+      # If the PR is merged, we can remove this.
+      tags = {
+        JobQueue = "vol-app-${var.environment}-default"
+      }
     }
   }
 
