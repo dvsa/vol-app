@@ -65,7 +65,16 @@ locals {
         "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET-DLQ",
         "arn:aws:sqs:eu-west-1:054614622558:DEVAPPDEV-OLCS-PRI-CHGET"
       ]
-    }
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:PutObject",
+      ]
+      resources = [
+        "arn:aws:s3:::devapp-olcs-pri-olcs-autotest-s3/*",
+      ]
+    },
   ]
 }
 
