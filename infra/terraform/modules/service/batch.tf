@@ -80,7 +80,7 @@ locals {
     description         = "Schedule for ${job.name}"
     schedule_expression = job.schedule
     arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-    input               = jsonencode({ "jobName" : "${job.name}", "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:${var.region}:${var.aws_account_number}:job-definition/${job.name}" })
+    input               = jsonencode({ "jobName" : job.name, "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:${var.region}:${var.aws_account_number}:job-definition/${job.name}" })
   } }
 }
 
@@ -119,7 +119,8 @@ module "batch" {
 }
 
 module "eventbridge" {
-  source = "terraform-aws-modules/eventbridge/aws"
+  source  = "terraform-aws-modules/eventbridge/aws"
+  version = "~> 3.7.1"
 
   create_bus  = false
   create_role = true
