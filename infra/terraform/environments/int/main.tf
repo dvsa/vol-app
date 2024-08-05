@@ -138,7 +138,7 @@ data "aws_vpc" "this" {
 module "service" {
   source = "../../modules/service"
 
-  environment = "qa"
+  environment = "int"
 
   domain_name    = "qa.olcs.dev-dvsacloud.uk"
   assets_version = var.assets_version
