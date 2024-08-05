@@ -100,7 +100,7 @@ module "ecs_service" {
         [
           {
             name  = "ENVIRONMENT_NAME"
-            value = var.environment
+            value = var.legacy_environment
           },
           {
             name  = "APP_VERSION"

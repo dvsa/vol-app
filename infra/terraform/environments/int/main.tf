@@ -140,6 +140,8 @@ module "service" {
 
   environment = "int"
 
+  legacy_environment = "QA"
+
   domain_name    = "qa.olcs.dev-dvsacloud.uk"
   assets_version = var.assets_version
 
