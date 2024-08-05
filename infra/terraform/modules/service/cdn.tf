@@ -131,7 +131,7 @@ module "cloudfront" {
 
       cache_policy_name            = "Managed-CachingOptimized"
       origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
-      response_headers_policy_name = "Managed-SecurityHeadersPolicy"
+      response_headers_policy_name = "Managed-CORS-with-preflight-and-SecurityHeadersPolicy"
 
       function_association = {
         viewer-request = {
