@@ -190,7 +190,7 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
           ]
         },
       ]
@@ -230,7 +230,7 @@ module "service" {
             "ssm:GetParametersByPath"
           ]
           resources = [
-            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+            "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/qa/*"
           ]
         },
       ]
