@@ -129,8 +129,8 @@ data "aws_vpc" "this" {
 module "service" {
   source = "../../modules/service"
 
-  environment = "dev"
-  region      = "eu-west-1"
+  environment        = "dev"
+  region             = "eu-west-1"
   aws_account_number = "054614622558"
 
   domain_name    = "dev.olcs.dev-dvsacloud.uk"
