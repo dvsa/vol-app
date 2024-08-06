@@ -77,10 +77,10 @@ locals {
 
   schedules = {
     for job in var.batch.jobs : job.name => {
-      description         = "Schedule for ${job.name}"
+      description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-      input               = jsonencode({ "jobName" : job.name, "jobQueue" : module.batch.job_queues.default.arn, "jobDefinition" : module.batch.job_definitions[job.name].arn })
+      input               = jsonencode({ "jobName" : module.batch.job_definitions[job.name].name, "jobQueue" : module.batch.job_queues.default.arn, "jobDefinition" : module.batch.job_definitions[job.name].arn })
     }
     if job.schedule != ""
   }
