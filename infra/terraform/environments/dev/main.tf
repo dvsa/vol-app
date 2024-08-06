@@ -377,13 +377,13 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = "cron(45 01 * ? *)",
+        schedule = "cron(45 01 * * ? *)",
       },
       {
         name     = "process-ntu",
         commands = ["batch:process-ntu"],
         timeout  = 43200,
-        schedule = "cron(45 01 * ? *)",
+        schedule = "cron(0 18 ? * 1-5 *)",
       },
       {
         name     = "remove-read-audit",
