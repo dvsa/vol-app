@@ -74,6 +74,16 @@ locals {
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
   } }
+
+  schedules = {
+    for job in var.batch.jobs : job.name => {
+      description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
+      schedule_expression = job.schedule
+      arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
+      input               = jsonencode({ "JobName" : module.batch.job_definitions[job.name].name, "JobQueue" : module.batch.job_queues.default.arn, "JobDefinition" : module.batch.job_definitions[job.name].arn })
+    }
+    if job.schedule != ""
+  }
 }
 
 module "batch" {
@@ -104,10 +114,26 @@ module "batch" {
       name     = "vol-app-${var.environment}-default"
       state    = "ENABLED"
       priority = 1
+
+      # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
+      # If the PR is merged, we can remove this.
+      tags = {
+        JobQueue = "vol-app-${var.environment}-default"
+      }
     }
   }
 
   job_definitions = local.jobs
+}
+
+module "eventbridge" {
+  source  = "terraform-aws-modules/eventbridge/aws"
+  version = "~> 3.7"
+
+  create_bus  = false
+  create_role = true
+
+  schedules = local.schedules
 }
 
 resource "aws_cloudwatch_log_group" "this" {

@@ -3,6 +3,11 @@ variable "environment" {
   description = "The environment to deploy to"
 }
 
+variable "legacy_environment" {
+  type        = string
+  description = "The legacy environment to deploy use"
+}
+
 variable "domain_name" {
   type        = string
   description = "The domain name for the environment"
@@ -58,6 +63,7 @@ variable "batch" {
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
+      schedule = optional(string, "")
     }))
   })
 }

@@ -64,6 +64,10 @@ module "route53_records" {
   acm_certificate_domain_validation_options = module.acm.acm_certificate_domain_validation_options
 }
 
+locals {
+  oac_id = "s3_oac_${var.environment}"
+}
+
 module "cloudfront" {
   source  = "terraform-aws-modules/cloudfront/aws"
   version = "~> 3.4"
@@ -84,8 +88,8 @@ module "cloudfront" {
 
   create_origin_access_control = true
   origin_access_control = {
-    s3_oac = {
-      description      = "CloudFront access to S3"
+    (local.oac_id) = {
+      description      = "CloudFront ${var.environment} access to S3"
       origin_type      = "s3"
       signing_behavior = "always"
       signing_protocol = "sigv4"
@@ -98,15 +102,15 @@ module "cloudfront" {
   }
 
   origin = {
-    s3_oac = {
+    (local.oac_id) = {
       domain_name           = data.aws_s3_bucket.assets.bucket_regional_domain_name
-      origin_access_control = "s3_oac"
+      origin_access_control = local.oac_id
       origin_path           = "/${trimprefix(var.assets_version, "/")}"
     }
   }
 
   default_cache_behavior = {
-    target_origin_id       = "s3_oac"
+    target_origin_id       = local.oac_id
     viewer_protocol_policy = "allow-all"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
@@ -121,7 +125,7 @@ module "cloudfront" {
   ordered_cache_behavior = [
     {
       path_pattern           = "/*"
-      target_origin_id       = "s3_oac"
+      target_origin_id       = local.oac_id
       viewer_protocol_policy = "redirect-to-https"
 
       allowed_methods = ["GET", "HEAD", "OPTIONS"]
@@ -131,14 +135,39 @@ module "cloudfront" {
 
       cache_policy_name            = "Managed-CachingOptimized"
       origin_request_policy_name   = "Managed-UserAgentRefererHeaders"
-      response_headers_policy_name = "Managed-SecurityHeadersPolicy"
-    },
+      response_headers_policy_name = "Managed-CORS-with-preflight-and-SecurityHeadersPolicy"
+
+      function_association = {
+        viewer-request = {
+          function_arn = aws_cloudfront_function.rewrite_uri.arn
+          include_body = true
+        }
+      }
+    }
   ]
 
   viewer_certificate = {
     acm_certificate_arn = module.acm.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
+}
+
+// The assets are hardcoding in `/static/public/` in the path.
+// We need to rewrite the URI to remove it as the new assets doesn't follow the unnecessary directory structure.
+// New asset path: `/assets/images/favicon.ico` vs old asset path: `/static/public/assets/images/favicon.ico`.
+// This function will provide support for both while EC2 and ECS are running in parallel.
+// This can be removed once we remove EC2 infrastructure and the assets no longer have the path prefix.
+resource "aws_cloudfront_function" "rewrite_uri" {
+  name    = "${var.environment}-legacy-assets-rewrite-uri"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = <<EOF
+function handler(event) {
+  var request = event.request;
+  request.uri = request.uri.replace(/^\/static\/public\//, "/");
+  return request;
+}
+EOF
 }
 
 data "aws_canonical_user_id" "current" {}
