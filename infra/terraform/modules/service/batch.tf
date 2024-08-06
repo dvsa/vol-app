@@ -1,3 +1,6 @@
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 locals {
   default_retry_policy = {
     attempts = 1
@@ -75,13 +78,15 @@ locals {
     retry_strategy           = local.default_retry_policy
   } }
 
-  scheduled_jobs = [for job in var.batch.jobs : job if job.schedule != ""]
-  schedules = { for job in local.scheduled_jobs : job.name => {
-    description         = "Schedule for ${job.name}"
-    schedule_expression = job.schedule
-    arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-    input               = jsonencode({ "jobName" : job.name, "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:${var.region}:${var.aws_account_number}:job-definition/${job.name}" })
-  } }
+  schedules = {
+    for job in var.batch.jobs : job.name => {
+      description         = "Schedule for ${job.name}"
+      schedule_expression = job.schedule
+      arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
+      input               = jsonencode({ "jobName" : job.name, "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:job-definition/${job.name}" })
+    }
+    if job.schedule != ""
+  }
 }
 
 module "batch" {
@@ -120,7 +125,7 @@ module "batch" {
 
 module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7.1"
+  version = "~> 3.7"
 
   create_bus  = false
   create_role = true

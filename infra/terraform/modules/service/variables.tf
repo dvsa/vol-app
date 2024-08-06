@@ -18,16 +18,6 @@ variable "vpc_id" {
   description = "The VPC ID"
 }
 
-variable "region" {
-  type        = string
-  description = "The region to deploy to"
-}
-
-variable "aws_account_number" {
-  type        = string
-  description = "The VPC ID"
-}
-
 variable "services" {
   type = map(object({
     version    = string
