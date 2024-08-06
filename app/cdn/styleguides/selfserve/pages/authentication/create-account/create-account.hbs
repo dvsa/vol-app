@@ -1,0 +1,97 @@
+---
+title: Create an account
+bodyClass: create-account
+breadcrumbs:
+  - link: index.html
+    label: I already have an account
+---
+
+<div class="row">
+
+  <div class="two-thirds">
+  
+    <form class="js-create-account-form" accept-charset="UTF-8" action="email.php" method="POST" novalidate="novalidate">
+      <fieldset class="">
+        <legend>Your details</legend>
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" type="text" class="long" name="username" placeholder="">
+          <p class="hint"></p>
+        </div>
+        <div class="field">
+          <label for="firstname">First name</label>
+          <input id="firstname" type="text" class="long" name="firstname" placeholder="">
+        </div>
+        <div class="field">
+          <label for="lastname">Last name</label>
+          <input id="lastname" type="text" class="long" name="lastname" placeholder="">
+          <p class="hint"></p>
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" type="text" class="long" name="email" placeholder="">
+          <p class="hint"></p>
+        </div>
+        <div class="field">
+          <label for="">Re-enter email address</label>
+          <input id="" type="text" class="long" name="" placeholder="">
+        </div>
+      </fieldset>
+      <fieldset class="">
+        <legend>Business details</legend>
+        <fieldset class="checkbox">
+          <legend class="legend">Do you already hold a Vehicle Operator Licence?</legend>
+          <div class="field inline">
+            <label><input type="radio" name="licence-holder" value="Yes">Yes</label>
+          </div>
+          <div class="field inline">
+            <label><input type="radio" class="js-no-existing-licence" name="licence-holder" value="No">No</label>
+          </div>
+        </fieldset>
+        <div class="field js-organisation-name">
+          <label for="company">Company name</label>
+          <input id="company" type="text" class="long" name="company" placeholder="">
+        </div>
+        <div class="field js-licence-no">
+          <label for="company">Licence number</label>
+          <input id="company" type="text" class="long" name="company" placeholder="">
+        </div>
+        <fieldset class="checkbox js-organisation-name">
+          <legend class="legend">Business type?</legend>
+          <div class="field">
+            <label><input type="radio" name="business-type">Limited Company</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="business-type">Sole Trader</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="business-type">Partnership</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="business-type">Limited Liability Partnership</label>
+          </div>
+          <div class="field">
+            <label><input type="radio" name="business-type">Other (e.g.public authority,, charit, trust, university)</label>
+          </div>
+        </fieldset>
+        <div class="field confirm">
+          <label class="">
+            <input type="checkbox" name="" id="" placeholder="" value="Y">
+            I agree to the <a href="">terms and conditions</a>
+          </label>
+        </div>
+      </fieldset>
+    </form>
+    <div class="actions-container">
+      <a href="account-created.html" class="action--primary large js-create-account-btn">Create account</a>
+      <a href="account-created-existing.html" class="action--primary large js-create-account-btn-existing">Create account</a>
+    </div>
+  </div><!-- .two-thirds -->
+  
+  <div class="one-third">
+    {{> _support}}
+  </div>
+
+</div>
+
+<script type="text/javascript" src="/js/authentication-prototype.js"></script>

@@ -1,0 +1,10 @@
+<div class="record-actions">
+  {{#each recordActions}}
+    <h4 class="title">{{this.title}}</h5> 
+    <ul class="record-actions__group">
+      {{#each this.actions}} 
+        <li class="record-actions__item"><a href="#" class="action--secondary">{{this}}</a></li>
+      {{/each}}
+    </ul>
+  {{/each}}
+</div>

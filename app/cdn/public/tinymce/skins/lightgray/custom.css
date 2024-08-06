@@ -1,0 +1,15 @@
+#tinymce {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.mce-tinymce.mce-container.mce-panel {
+  border: 4px solid red !important;
+}
+
+.mce-panel {
+  border: 1px solid red !important;
+  background: #EEE;
+  background: linear-gradient(#FCFCFC, #EEE);
+}
+/*# sourceMappingURL=../../../styles/custom.css.map */

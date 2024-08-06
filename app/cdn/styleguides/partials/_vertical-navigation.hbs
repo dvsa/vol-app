@@ -1,0 +1,14 @@
+<ol class="app-navigation" role="menu">
+  {{#each verticalNavItems}}
+    {{#ifeq label compare=../subSectionTitle}}
+      <li class="app-navigation__item current">
+        {{label}}
+        {{#if filterList}}{{> _filters}}{{/if}}
+      </li>
+    {{else}}
+      <li class="app-navigation__item">
+        <a href="{{link}}">{{label}}</a>
+      </li>
+    {{/ifeq}}
+  {{/each}}
+</ol>

@@ -1,0 +1,167 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Fees
+filterList:
+  - header: Status
+    type: dropdown
+    filters:
+      - All
+
+table:
+  - title: <strong>4</strong> Fees
+    headers:
+      - label: Fee no.
+        class: sortable descending
+      - label: Description
+        class: sortable descending
+      - label: Created
+        class: sortable
+      - label: Latest payment ref.
+        class: sortable
+      - label: Fee amount
+        class: sortable
+      - label: Outstanding
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - <a href="">23423</a><span class="status orange">Outstanding</span>
+      - GV/SI Variation Fee for application 1234
+      - £256.00
+      - 12 May 2013
+      - 23232444
+      - 13 May 2013
+      - <input type="checkbox">
+    rows: 4
+    actions:
+      - label: Pay
+        class: primary
+      - label: Edit
+        class: secondary
+---
+
+  <div class="overlay"></div>
+  <div class="modal__wrapper">
+    <div class="modal">
+      <div class="modal__header">
+        <h1 class="modal__title">Fee</h1>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        <div class="read-only">
+          <ul class="definition-list">
+            <li class="definition-list__item">
+              <dt>Fee No.</dt>
+              <dd>123245</dd>
+            </li>
+            <li class="definition-list__item">
+              <dt>Description</dt>
+              <dd>Application fee</dd>
+            </li>
+            <li class="definition-list__item">
+              <dt>Fee amount</dt>
+              <dd>£250.00</dd>
+            </li>
+            <li class="definition-list__item">
+              <dt>Outstanding</dt>
+              <dd>£200</dd>
+            </li>
+            <li class="definition-list__item">
+              <dt>Created</dt>
+              <dd>25/11/13</dd>
+            </li>
+            <li class="definition-list__item">
+              <dt>Status</dt>
+              <dd><span class="status red">Outstanding</span></dd>
+            </li>
+          </ul><!-- .definition-list -->
+        </div>
+
+        <div class="table__header">
+          <h3>Payments</h3>
+        </div><!-- .table__header -->
+        <div class="table__wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Payment No.</th>
+                <th>Date</th>
+                <th>Method</th>
+                <th>Processed by</th>
+                <th>Allocated</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b><a href="">764256</a></b></td>
+                <td>25/12/14</td>
+                <td>Cheque</td>
+                <td>John Spellman</td>
+                <td>100.00</td>
+              </tr>
+              <tr>
+                <td><b><a href="">764256</a></b></td>
+                <td>25/12/14</td>
+                <td>Refund</td>
+                <td>John Spellman</td>
+                <td>-100.00</td>
+              </tr>
+              <tr>
+                <td><b><a href="">764256</a></b></td>
+                <td>25/12/14</td>
+                <td>Cheque</td>
+                <td>John Spellman</td>
+                <td>50.00</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total</td>
+                <td>50.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div><!-- .table__wrapper -->
+
+        <form>
+          <fieldset>
+            <legend class="legend">Waive remainder?</legend>
+            <div class="field inline">
+              <label><input type="radio" name="group" val="">Yes</label>
+            </div>
+            <div class="field inline">
+              <label><input type="radio" name="group" val="">No</label>
+            </div>
+          </fieldset>
+        </form>
+
+        <hr /><hr />
+
+        <div class="actions-container">
+          <a href="" class="action--primary">Save</a>
+          <a href="" class="action--secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar--left">
+    <h4 class="title">Filter by:</h4>
+    {{> _filters}}
+  </div>
+
+  <div class="table-col">
+    {{#each table}}
+      {{#is @index 0 }}
+        {{> _table }}
+      {{/is }}
+    {{/each}}
+  </div>
+
+
+
+

@@ -12,6 +12,7 @@ services:
           - api.local.olcs.dev-dvsacloud.uk
           - ssweb.local.olcs.dev-dvsacloud.uk
           - iuweb.local.olcs.dev-dvsacloud.uk
+          - cdn.local.olcs.dev-dvsacloud.uk
 
   api:
     build:
@@ -28,6 +29,19 @@ services:
       PHP_IDE_CONFIG: "serverName=vol.local.api"
       VIRTUAL_HOST: api.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
+
+  cli:
+    build:
+      context: infra/docker/cli
+      target: development
+    tty: true
+    volumes:
+      - ./app/api:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN}
+      PHP_IDE_CONFIG: "serverName=vol.local.api"
 
   selfserve:
     build:
@@ -61,6 +75,18 @@ services:
       VIRTUAL_HOST: iuweb.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8080
 
+  cdn:
+    image: node:20
+    volumes:
+      - ./app/cdn:/var/www/html
+    working_dir: /var/www/html
+    command: bash -c "npm install && npm start"
+    expose:
+      - 7001
+    environment:
+      VIRTUAL_HOST: cdn.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 7001
+
   redis:
     image: redis:7
     expose:
@@ -69,7 +95,6 @@ services:
   db:
     image: mysql:8.0
     command: --log_bin_trust_function_creators=1 --sql_mode=NO_ENGINE_SUBSTITUTION
-    restart: always
     volumes:
       - db-data:/var/lib/mysql
     ports:

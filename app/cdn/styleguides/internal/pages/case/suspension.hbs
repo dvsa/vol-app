@@ -1,0 +1,59 @@
+---
+layout: case.hbs
+asset: '../../../../'
+sectionTitle: Processing
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: Suspend from
+          type: date
+        - label:
+          type: checkboxes
+          values:
+            - Indefinite?
+        - label: Suspend to (if applicable)
+          type: date
+table:
+  - title: <strong>Vehicles to be suspended</strong>
+    headers:
+      - label: VRM
+        class: sortable descending
+      - label: Plated weight (kg)
+        class: sortable
+      - label: <input type="checkbox">
+        class: non-sortable
+    columns:
+      - LL08 URE
+      - 500
+      - <input type="checkbox">
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+    rows: 5
+
+---
+
+  <div class="overlay  js-hidden"></div>
+  <div class="modal__wrapper js-hidden">
+    <div class="modal">
+      <div class="modal__header"> 
+        <h2 class="modal__title">Suspension</h2>
+        <a href="" class="modal__close">Close</a>
+      </div>
+      <div class="modal__content">
+        {{#each form }}{{> _forms }}{{/each }}
+        {{#each table}}
+          {{#is @index 0 }} 
+            {{> _table }}
+          {{/is }} 
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+
+
+

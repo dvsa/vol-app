@@ -80,8 +80,8 @@ module "ecs_service" {
 
   container_definitions = {
     (each.key) = {
-      cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu / 2)
-      memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory / 4)
+      cpu       = try(var.services[each.key].task_cpu_limit, var.services[each.key].cpu)
+      memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
       port_mappings = [
@@ -100,7 +100,7 @@ module "ecs_service" {
         [
           {
             name  = "ENVIRONMENT_NAME"
-            value = var.environment
+            value = var.legacy_environment
           },
           {
             name  = "APP_VERSION"
@@ -132,4 +132,7 @@ module "ecs_service" {
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
   subnet_ids            = var.services[each.key].subnet_ids
+
+  wait_for_steady_state = true
+  wait_until_stable     = true
 }

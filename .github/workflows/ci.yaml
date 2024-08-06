@@ -7,6 +7,28 @@ permissions:
   contents: read
 
 jobs:
+  security-app:
+    name: Security
+    uses: ./.github/workflows/security-app.yaml
+    permissions:
+      contents: read
+      security-events: write
+    secrets: inherit
+
+  security-docker:
+    name: Security
+    uses: ./.github/workflows/security-docker.yaml
+    permissions:
+      contents: read
+      security-events: write
+
+  security-terraform:
+    name: Security
+    uses: ./.github/workflows/security-terraform.yaml
+    permissions:
+      contents: read
+      security-events: write
+
   orchestrator:
     name: Orchestrator
     runs-on: ubuntu-latest
@@ -14,18 +36,18 @@ jobs:
       # Docs
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # App
-      should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-app: ${{ steps.changed-app-files.outputs.any_changed == 'true' || steps.changed-docker-files.outputs.any_changed == 'true' || null }}
+      should-build-api: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/api') || null }}
+      should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/selfserve') || null }}
+      should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_changed_files, 'app/internal') || null }}
       # Assets
-      should-build-assets: ${{ steps.changed-assets-files.outputs.any_changed == 'true' || null }}
+      should-build-assets: ${{ steps.changed-asset-files.outputs.any_changed == 'true' || null }}
       # Docker
-      should-build-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-cli-docker-files.outputs.any_changed == 'true' || null }}
-      should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-cli-docker: ${{ steps.changed-cli-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-docker: ${{ steps.changed-docker-files.outputs.any_changed == 'true' || null }}
+      should-build-api-docker: ${{ contains(steps.changed-docker-files.outputs.all_changed_files, 'infra/docker/api') || null }}
+      should-build-cli-docker: ${{ contains(steps.changed-docker-files.outputs.all_changed_files, 'infra/docker/cli') || null }}
+      should-build-selfserve-docker: ${{ contains(steps.changed-docker-files.outputs.all_changed_files, 'infra/docker/selfserve') || null }}
+      should-build-internal-docker: ${{ contains(steps.changed-docker-files.outputs.all_changed_files, 'infra/docker/internal') || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
       should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
@@ -41,55 +63,32 @@ jobs:
         with:
           fetch-depth: 0
       - uses: tj-actions/changed-files@v44
-        id: changed-api-files
+        id: changed-app-files
         with:
+          dir_names: true
           files: |
             app/api/**
-          # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
-        id: changed-selfserve-files
-        with:
-          files: |
             app/selfserve/**
+            app/internal/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
-        id: changed-internal-files
+        id: changed-asset-files
         with:
-          files: |
-            app/internal/**
-      - uses: tj-actions/changed-files@v44
-        id: changed-assets-files
-        with:
+          dir_names: true
           files: |
             app/cdn/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
-        id: changed-api-docker-files
+        id: changed-docker-files
         with:
+          dir_names: true
           files: |
-            infra/docker/api/**
-          # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
-        id: changed-cli-docker-files
-        with:
-          files: |
-            infra/docker/cli/**
-          # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
-        id: changed-selfserve-docker-files
-        with:
-          files: |
-            infra/docker/selfserve/**
-          # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
-        id: changed-internal-docker-files
-        with:
-          files: |
-            infra/docker/internal/**
+            infra/docker/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v44
         id: changed-accounts-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/accounts/**
             infra/terraform/modules/**
@@ -99,6 +98,7 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-environments-terraform-files
         with:
+          dir_names: true
           files: |
             infra/terraform/environments/{dev,int,prep,prod}/**
             infra/terraform/modules/**
@@ -136,6 +136,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
+      cli: ${{ steps.cli-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
@@ -148,6 +149,10 @@ jobs:
         uses: ./.github/actions/get-app-version
         with:
           project-path: app/api infra/docker/api
+      - id: cli-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api infra/docker/cli
       - id: selfserve-version
         uses: ./.github/actions/get-app-version
         with:
@@ -314,6 +319,7 @@ jobs:
     with:
       environment: ${{ matrix.environment }}
       api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
@@ -322,32 +328,3 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
-
-  security-app:
-    name: Security App
-    needs:
-      - orchestrator
-    strategy:
-      matrix:
-        project:
-          - api
-          - selfserve
-          - internal
-        exclude:
-          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
-          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
-    uses: ./.github/workflows/security-app.yaml
-    with:
-      project: ${{ matrix.project }}
-    permissions:
-      contents: read
-      security-events: write
-    secrets: inherit
-
-  security-terraform:
-    name: Security Terraform
-    uses: ./.github/workflows/security-terraform.yaml
-    permissions:
-      contents: read
-      security-events: write

@@ -1,0 +1,36 @@
+<div class="page-header">
+
+  {{#if back-link}}
+    <a href="{{back-link}}" class="back-link" title="Back to previous page">Back</a>
+  {{/if}}
+
+  {{#if page-actions }}
+    <div class="row">
+      <div class="page-header__wrapper two-thirds">
+        {{#if subtitle}}
+          <h3 class="page-header__subtitle">{{subtitle}}</h3>
+        {{/if}}
+        <h1>{{title}}</h1>
+        {{#if header-text}}
+          <div class="page-header__text">{{{header-text}}}</div>
+        {{/if}}
+      </div>
+      <ul class="page-header__actions one-third">
+        {{#each page-actions}}
+          <li><a href="#" class="page-header__action">{{this}}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+  {{else}}
+    <div class="page-header__wrapper">
+      {{#if subtitle}}
+        <h3 class="page-header__subtitle">{{subtitle}}</h3>
+      {{/if}}
+      <h1>{{title}}</h1>
+      {{#if header-text}}
+        <div class="page-header__text">{{{header-text}}}</div>
+      {{/if}}
+    </div>
+  {{/if}}
+
+</div>

@@ -3,6 +3,11 @@ variable "environment" {
   description = "The environment to deploy to"
 }
 
+variable "legacy_environment" {
+  type        = string
+  description = "The legacy environment to deploy use"
+}
+
 variable "domain_name" {
   type        = string
   description = "The domain name for the environment"
@@ -39,4 +44,25 @@ variable "services" {
   }))
   description = "The services to deploy"
   default     = {}
+}
+
+variable "batch" {
+  description = "Configuration for the batch process"
+  type = object({
+    version    = string
+    repository = string
+    subnet_ids = list(string)
+    task_iam_role_statements = list(object({
+      effect    = string
+      actions   = list(string)
+      resources = list(string)
+    }))
+    jobs = list(object({
+      name     = string
+      commands = list(string)
+      cpu      = optional(number, 1)
+      memory   = optional(number, 2048)
+      timeout  = optional(number, 300)
+    }))
+  })
 }

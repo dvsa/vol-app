@@ -1,0 +1,62 @@
+/**
+ * Vertical Navigation
+ */
+
+@if $app == 'internal' {
+
+  .vertical-navigation {
+
+    @extend %navigation;
+    overflow: hidden;
+    padding-bottom: 2px;
+    margin-bottom: 2em;
+    font-size: font-size(4);
+
+    &__title {
+      margin-bottom: 10px;
+    }
+
+    &__item {
+      width: 100%;
+      float: left;
+    }
+
+    a {
+      @extend %navigation__link;
+      padding: 11px 20px 10px 0;
+      border-bottom: 1px solid $grey-3;
+      text-decoration: none;
+    }
+
+    &.overflow {
+      overflow: visible;
+    }
+    
+    .current,
+    .disabled {
+      @extend %navigation__link;
+      a {
+        border-bottom: 0;
+        padding-top: 0;
+        &:hover {
+          background: none;
+        }
+      }
+    }
+
+    .current {
+      border-bottom: 3px solid $primary-colour;
+      padding-top: 11px;
+      padding-bottom: 0.5em;
+      margin-bottom: -1px;
+      overflow: visible;
+    }
+
+    .disabled {
+      color: $grey-1;
+      border-bottom: 1px solid $grey-3;
+    }
+
+  } // .vertical-navigation
+
+} // @if $app

@@ -1,0 +1,49 @@
+---
+layout: licence.hbs
+asset: '../../../../'
+sectionTitle: Licence details
+subSectionTitle: Business details
+form: 
+  - title: Business details
+    fieldsets:
+    - legend:
+      fields:
+        - label: Business type
+          type: select
+          options:      
+            - Limited company
+          class:
+        - label: Registered company number
+          type: text
+          options: 
+            - Goods app
+          class:
+        - label: Company name
+          type: text
+          options: 
+            - Goods app
+          class:
+        - label: Trading names (optional)
+          type: text
+          options: 
+            - Goods app
+          class:
+    actions:
+      - label: Save
+        class: primary large
+      - label: Cancel
+        class: secondary large
+      - label: Back to home
+        class: tertiary large
+---
+
+<div class="sidebar--left">
+  <h4 class="title">Licence details</h4>
+  {{> _application-navigation}}
+</div>
+
+<div class="table-col">
+  {{#each form }}
+    {{> _forms}}
+  {{/each}}
+</div>

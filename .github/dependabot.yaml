@@ -31,24 +31,42 @@ updates:
 
   - package-ecosystem: "terraform"
     directories:
-      # Accounts
-      - "/infra/terraform/accounts/nonprod"
-      - "/infra/terraform/accounts/prod"
-      # Misc
-      - "/infra/terraform/accounts/_init"
       # Environments
       - "/infra/terraform/environments/dev"
       - "/infra/terraform/environments/int"
       - "/infra/terraform/environments/prep"
       - "/infra/terraform/environments/prod"
+    schedule:
+      interval: "weekly"
+    groups:
+      env-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "terraform"
+    directories:
+      # Accounts
+      - "/infra/terraform/accounts/nonprod"
+      - "/infra/terraform/accounts/prod"
+      # Misc
+      - "/infra/terraform/accounts/_init"
+    schedule:
+      interval: "weekly"
+    groups:
+      account-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "terraform"
+    directories:
       # Modules
       - "/infra/terraform/modules/account"
       - "/infra/terraform/modules/github"
       - "/infra/terraform/modules/remote-state"
       - "/infra/terraform/modules/service"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     groups:
-      dependencies:
+      module-dependencies:
         patterns:
           - "*"

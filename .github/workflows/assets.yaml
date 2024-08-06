@@ -16,31 +16,25 @@ on:
 
 jobs:
   build:
-    name: ${{ inputs.push && 'Deploy' || 'Build' }}
+    name: Build${{ inputs.push && ' and Push' || '' }}
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: app/cdn
     env:
-      REMOTE_REPOSITORY: "dvsa/olcs-static"
       ASSET_BUCKET: "vol-app-assets"
       AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.push && '' || '_READONLY'))] || (inputs.push && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
       AWS_REGION: ${{ vars.TF_AWS_REGION }}
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
-          path: app/cdn
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
+          sparse-checkout: app/cdn
+          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 20
           cache: "npm"
           cache-dependency-path: app/cdn/package.json
 

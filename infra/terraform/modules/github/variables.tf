@@ -1,3 +1,9 @@
+variable "oidc_role_prefix" {
+  type        = string
+  description = "The prefix to use for the OIDC roles."
+  default     = null
+}
+
 variable "oidc_subjects" {
   type        = list(string)
   description = "The list of GitHub subjects to allow in the OIDC role."

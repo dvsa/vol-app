@@ -1,0 +1,76 @@
+---
+layout: transport-manager.hbs
+asset: '../../../../'
+sectionTitle: TM details
+subSectionTitle: Details
+verticalNavItems:
+  - label: Details
+    link:  index.html
+  - label: Responsibilities
+    link: responsibilities.html  
+  - label: Other employment
+    link: other-employment.html
+  - label: Previous history
+    link: previous-history.html
+  - label: Competence
+    link: competence.html
+form: 
+  - fieldsets:
+    - legend:
+      fields:
+        - label: First name
+          type: text
+          class: long 
+        - label: Last name
+          type: text
+          class: long 
+        - label: Email address
+          type: text
+          class: extra-long
+        - label: Date of birth
+          type: date
+        - label:  Place of birth
+          type: text
+          class: long 
+        - label:  Manager type
+          type: radios
+          values:
+            - Internal
+            - External
+            - Both 
+  - fieldsets:
+    - legend: Home address
+      fields:
+        - label: Title
+          type: full-address
+  - fieldsets:
+    - legend: Work address
+      fields:
+        - label: Title
+          type: full-address
+
+---
+
+<div class="sidebar--left">
+  <h4 class="title">TM details</h4>
+  {{> _vertical-navigation }}
+</div>
+
+<div class="table-col">
+  <div class="content__header">
+    <h3 class="title">Details</h3>
+  </div>
+  {{#each form }}{{> _forms }}{{/each }}
+  {{#each table}}
+    {{#is @index 0 }} 
+      {{> _table }}
+    {{/is }} 
+  {{/each}}
+
+
+  <div class="actions-container">
+    <a class="action--primary large" href="">Save</a>
+    <a class="action--secondary large" href="">Cancel</a>
+  </div>
+
+</div>

@@ -33,6 +33,7 @@ No resources.
 | <a name="input_oidc_readonly_subjects"></a> [oidc\_readonly\_subjects](#input\_oidc\_readonly\_subjects) | The list of GitHub subjects to allow in the OIDC readonly role. | `list(string)` | `[]` | no |
 | <a name="input_oidc_role_permissions_boundary_arn"></a> [oidc\_role\_permissions\_boundary\_arn](#input\_oidc\_role\_permissions\_boundary\_arn) | The ARN of the permissions boundary to use for the role. | `string` | `null` | no |
 | <a name="input_oidc_role_policies"></a> [oidc\_role\_policies](#input\_oidc\_role\_policies) | The map of policies to attach to the OIDC role. | `map(string)` | `{}` | no |
+| <a name="input_oidc_role_prefix"></a> [oidc\_role\_prefix](#input\_oidc\_role\_prefix) | The prefix to use for the OIDC roles. | `string` | `null` | no |
 | <a name="input_oidc_subjects"></a> [oidc\_subjects](#input\_oidc\_subjects) | The list of GitHub subjects to allow in the OIDC role. | `list(string)` | `[]` | no |
 
 ## Outputs
