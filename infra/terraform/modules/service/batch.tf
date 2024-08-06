@@ -83,7 +83,7 @@ locals {
       description         = "Schedule for ${job.name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-      input               = jsonencode({ "jobName" : job.name, "jobQueue" : "vol-app-${var.environment}-default", "jobDefinition" : "arn:aws:batch:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:job-definition/${job.name}" })
+      input               = jsonencode({ "jobName" : job.name, "jobQueue" : module.batch.job_queues.default.arn, "jobDefinition" : module.batch.job_definitions[job.name].arn })
     }
     if job.schedule != ""
   }
