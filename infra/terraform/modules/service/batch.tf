@@ -1,6 +1,3 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
 locals {
   default_retry_policy = {
     attempts = 1
