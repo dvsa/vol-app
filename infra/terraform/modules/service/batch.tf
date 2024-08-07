@@ -141,7 +141,10 @@ module "eventbridge" {
       actions = [
         "batch:SubmitJob"
       ]
-      resources = [for job in module.batch.job_definitions : job.arn]
+      resources = [
+        for job in module.batch.job_definitions : job.arn,
+        module.batch.job_queues.default.arn
+      ]
     }
   }
 
