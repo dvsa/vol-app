@@ -253,14 +253,16 @@ module "service" {
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
     task_iam_role_statements = local.task_iam_role_statements
-    eventbridge_batch_role_policy_statement = {
-      effect = "Allow"
-      actions = [
-        "batch:SubmitJob"
-      ]
-      resources = [
-        "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-*"
-      ]
+    eventbridge_iam_policy_statements = {
+      batch = {
+        effect = "Allow"
+        actions = [
+          "batch:SubmitJob"
+        ]
+        resources = [
+          "arn:aws:batch:eu-west-1:054614622558:job-definition/vol-app-dev-*"
+        ]
+      }
     }
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
