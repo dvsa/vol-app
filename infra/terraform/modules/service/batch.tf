@@ -130,7 +130,7 @@ module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
   version = "~> 3.7"
 
-  create_bus  = false
+  create_bus = false
 
   create_role              = true
   role_name                = "vol-app-${var.environment}-batch-scheduler"
