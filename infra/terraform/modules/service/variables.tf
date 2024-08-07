@@ -57,11 +57,6 @@ variable "batch" {
       actions   = list(string)
       resources = list(string)
     }))
-    eventbridge_iam_policy_statements = map(object({
-      effect    = string
-      actions   = list(string)
-      resources = list(string)
-    }))
     jobs = list(object({
       name     = string
       commands = list(string)
