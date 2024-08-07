@@ -130,8 +130,20 @@ module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
   version = "~> 3.7"
 
-  create_bus  = false
-  create_role = true
+  create_bus = false
+
+  create_role              = true
+  role_name                = "vol-app-${var.environment}-batch-scheduler"
+  attach_policy_statements = true
+  policy_statements = {
+    batch = {
+      effect = "Allow"
+      actions = [
+        "batch:SubmitJob"
+      ]
+      resources = [for job in module.batch.job_definitions : job.arn]
+    }
+  }
 
   schedules = local.schedules
 }
