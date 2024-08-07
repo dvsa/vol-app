@@ -131,7 +131,11 @@ module "eventbridge" {
   version = "~> 3.7"
 
   create_bus  = false
-  create_role = true
+
+  create_role              = true
+  role_name                = "vol-app-${var.environment}-batch-scheduler"
+  attach_policy_statements = true
+  policy_statements        = var.batch.eventbridge_batch_role_policy_statement
 
   schedules = local.schedules
 }
