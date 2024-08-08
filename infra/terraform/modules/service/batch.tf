@@ -108,7 +108,7 @@ module "batch" {
 
       compute_resources = {
         type               = "FARGATE"
-        max_vcpus          = 4
+        max_vcpus          = 16
         security_group_ids = var.services["api"]["security_group_ids"]
         subnets            = var.batch.subnet_ids
       }
