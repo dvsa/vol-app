@@ -73,7 +73,6 @@ locals {
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
-    scheduling_priority      = 1
   } }
 
   schedules = {
@@ -86,6 +85,7 @@ locals {
         "JobQueue" : module.batch.job_queues.default.arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
+        "schedulingPriorityOverride" : 1
       })
     }
     if job.schedule != ""
