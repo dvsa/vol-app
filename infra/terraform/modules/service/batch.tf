@@ -85,7 +85,7 @@ locals {
         "JobQueue" : module.batch.job_queues.default.arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
-        "schedulingPriorityOverride" : 1
+        "SchedulingPriorityOverride" : 1
       })
     }
     if job.schedule != ""
