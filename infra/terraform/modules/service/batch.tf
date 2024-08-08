@@ -73,6 +73,7 @@ locals {
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
+    scheduling_priority      = 1
   } }
 
   schedules = {
@@ -80,7 +81,12 @@ locals {
       description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-      input               = jsonencode({ "JobName" : module.batch.job_definitions[job.name].name, "JobQueue" : module.batch.job_queues.default.arn, "JobDefinition" : module.batch.job_definitions[job.name].arn })
+      input               = jsonencode({ 
+        "JobName" : module.batch.job_definitions[job.name].name,
+        "JobQueue" : module.batch.job_queues.default.arn,
+        "JobDefinition" : module.batch.job_definitions[job.name].arn,
+        "ShareIdentifier" : "volapp",
+      })
     }
     if job.schedule != ""
   }
@@ -111,10 +117,9 @@ module "batch" {
 
   job_queues = {
     default = {
-      name                     = "vol-app-${var.environment}-default"
-      state                    = "ENABLED"
-      priority                 = 1
-      create_scheduling_policy = false
+      name     = "vol-app-${var.environment}-default"
+      state    = "ENABLED"
+      priority = 1
 
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
