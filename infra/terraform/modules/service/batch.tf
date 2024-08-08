@@ -111,9 +111,10 @@ module "batch" {
 
   job_queues = {
     default = {
-      name     = "vol-app-${var.environment}-default"
-      state    = "ENABLED"
-      priority = 1
+      name                     = "vol-app-${var.environment}-default"
+      state                    = "ENABLED"
+      priority                 = 1
+      create_scheduling_policy = false
 
       # This doesn't offer much value as a tag, but it's here to avoid: https://github.com/hashicorp/terraform-provider-aws/pull/38636.
       # If the PR is merged, we can remove this.
