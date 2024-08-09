@@ -51,6 +51,11 @@ RUN apk add --no-cache linux-headers $PHPIZE_DEPS \
   && docker-php-ext-enable xdebug \
   && apk del linux-headers $PHPIZE_DEPS
 
+RUN apk update && \
+  apk add --no-cache openldap-dev \
+  && docker-php-ext-install ldap \
+  && docker-php-ext-enable ldap
+
 RUN \
   # Disable OPCache in development.
   echo "opcache.enable=0" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \

@@ -7,13 +7,19 @@
     "@commitlint/cli": "^19.0.3",
     "@commitlint/config-conventional": "^19.0.3",
     "@tsconfig/recommended": "^1.0.3",
-    "chalk": "^5.3.0",
+    "@types/debug": "^4.1.12",
+    "debug": "^4.3.6",
     "husky": "^9.0.10",
     "lint-staged": "^15.2.2",
     "prettier": "~3.3.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.5.2"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "refresh": "ts-node packages/local-refresh/index.ts"
   }
 }
