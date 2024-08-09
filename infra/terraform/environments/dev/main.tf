@@ -271,7 +271,7 @@ module "service" {
         name     = "cns",
         commands = ["batch:cns"],
         timeout  = 43200,
-        schedule = "cron(30 18 ? * 7 *)",
+        schedule = "cron(30 18 ? * 1 *)",
       },
       {
         name     = "create-psv-licence-surrender-task",
@@ -283,13 +283,13 @@ module "service" {
         name     = "psv-operator-list-export",
         commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
         timeout  = 43200,
-        schedule = "cron(00 02 ? * 7 *)",
+        schedule = "cron(00 02 ? * 1 *)",
       },
       {
         name     = "international-goods-export",
         commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
         timeout  = 43200,
-        schedule = "cron(00 02 ? * 7 *)",
+        schedule = "cron(00 02 ? * 1 *)",
       },
       {
         name     = "data-retention-populate",
@@ -321,7 +321,7 @@ module "service" {
         name     = "duplicate-vehicle-warning",
         commands = ["batch:duplicate-vehicle-warning"],
         timeout  = 43200,
-        schedule = "cron(0 18 ? * 1-5 *)",
+        schedule = "cron(30 21 ? * 2-6 *)",
       },
       {
         name     = "enqueue-ch-compare",
@@ -333,7 +333,7 @@ module "service" {
         name     = "expire-bus-registration",
         commands = ["batch:expire-bus-registration"],
         timeout  = 43200,
-        schedule = "cron(0 21 ? * 3 *)",
+        schedule = "cron(05 0 * * ? *)",
       },
       {
         name     = "flag-urgent-tasks",
@@ -383,13 +383,13 @@ module "service" {
         name     = "process-ntu",
         commands = ["batch:process-ntu"],
         timeout  = 43200,
-        schedule = "cron(0 18 ? * 1-5 *)",
+        schedule = "cron(0 18 ? * 2-6 *)",
       },
       {
         name     = "remove-read-audit",
         commands = ["batch:remove-read-audit"],
         timeout  = 43200,
-        schedule = "cron(0 22 ? * 7 *)",
+        schedule = "cron(0 22 ? * 1 *)",
       },
       {
         name     = "resolve-payments",
