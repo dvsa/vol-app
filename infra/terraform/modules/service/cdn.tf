@@ -13,10 +13,6 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
-data "aws_s3_bucket" "assets" {
-  bucket = "vol-app-assets"
-}
-
 data "aws_route53_zone" "public" {
   name = var.domain_name
 }
@@ -212,21 +208,4 @@ module "records" {
       }
     },
   ]
-}
-
-data "aws_iam_policy_document" "s3_policy" {
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["${data.aws_s3_bucket.assets.arn}/*"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = data.aws_s3_bucket.assets.id
-  policy = data.aws_iam_policy_document.s3_policy.json
 }
