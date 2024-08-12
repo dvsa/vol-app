@@ -13,6 +13,10 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
+data "aws_s3_bucket" "assets" {
+  bucket = "vol-app-assets"
+}
+
 data "aws_route53_zone" "public" {
   name = var.domain_name
 }
