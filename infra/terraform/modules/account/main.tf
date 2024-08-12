@@ -20,6 +20,6 @@ data "aws_iam_policy_document" "s3_policy" {
 }
 
 resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = module.assets[0].s3_bucket_arn
+  bucket = module.assets[0].s3_bucket_id
   policy = data.aws_iam_policy_document.s3_policy.json
 }
