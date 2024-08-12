@@ -4481,16 +4481,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v7.7.0",
+            "version": "v7.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "9ba51c95aec7f779cc232f3bdf0f6d8da9650a34"
+                "reference": "f6f087cfa2df65e42c7d339b4922653af5e30263"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/9ba51c95aec7f779cc232f3bdf0f6d8da9650a34",
-                "reference": "9ba51c95aec7f779cc232f3bdf0f6d8da9650a34",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/f6f087cfa2df65e42c7d339b4922653af5e30263",
+                "reference": "f6f087cfa2df65e42c7d339b4922653af5e30263",
                 "shasum": ""
             },
             "require": {
@@ -4551,9 +4551,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v7.7.0"
+                "source": "https://github.com/dvsa/olcs-common/tree/v7.7.1"
             },
-            "time": "2024-08-08T09:18:06+00:00"
+            "time": "2024-08-12T15:45:03+00:00"
         },
         {
             "name": "olcs/olcs-logging",
