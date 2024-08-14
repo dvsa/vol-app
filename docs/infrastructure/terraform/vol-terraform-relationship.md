@@ -4,9 +4,9 @@ sidebar_position: 20
 
 # Repositories
 
-The VOL infrastructure is divided into two repositories: `vol-app` and `vol-terraform`.
+The VOL infrastructure is divided into two repositories: [`vol-app`](https://github.com/dvsa/vol-app) and [`vol-terraform`](https://github.com/dvsa/vol-terraform).
 
-The rationale for this split is explained in RFC-005. At a high level, this approach was the only identified feasible option for implementing the migration the VOL application to ECS and establishing CI/CD workflows.
+The rationale for this split is explained in [RFC-005](../../rfc/rfc-005-add-terraform-to-mono-repository.md). At a high level, this approach was the only identified feasible option for implementing the migration the VOL application to ECS and establishing CI/CD workflows.
 
 :::danger
 
