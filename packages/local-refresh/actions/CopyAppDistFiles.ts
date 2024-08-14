@@ -7,10 +7,8 @@ import createDebug from "debug";
 
 const debug = createDebug("refresh:actions:CopyAppDistFiles");
 
-// const phpAppDirectoryNames = ["api", "selfserve", "internal"];
-const phpAppDirectoryNames = ["backend", "selfserve", "internal"];
-// const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../app/${dir}`));
-const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../../olcs-${dir}-github`));
+const phpAppDirectoryNames = ["api", "selfserve", "internal"];
+const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../app/${dir}`));
 
 export default class ResetDatabase implements ActionInterface {
   filesToCopy: string[] = [];
