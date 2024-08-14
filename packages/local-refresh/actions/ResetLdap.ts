@@ -21,7 +21,7 @@ export default class ResetLdap implements ActionInterface {
   async execute(): Promise<void> {
     debug(chalk.greenBright(`Deleting existing users`));
 
-    const searchLdap = `ldapsearch -D "cn=admin,dc=example,dc=org" -H ldap://localhost:1389 -w adminpassword -LLL -s one -b "ou=users,dc=example,dc=org" "(cn=*)" dn`;
+    const searchLdap = `ldapsearch -D "cn=admin,dc=vol,dc=dvsa" -H ldap://localhost:1389 -w admin -LLL -s one -b "ou=users,dc=vol,dc=dvsa" "(cn=*)" dn`;
     const search = shell.exec(
       `docker compose exec -T openldap /bin/bash -c '${searchLdap}' | awk '/^dn: / {print $2}'`,
       {
@@ -33,7 +33,7 @@ export default class ResetLdap implements ActionInterface {
 
     const deleteLdif = allExistingUsers.map((dn) => `dn: ${dn}\nchangetype: delete`).join("\n\n");
 
-    const ldifDeletions = dedent`ldapmodify -D "cn=admin,dc=example,dc=org" -H ldap://localhost:1389 -w adminpassword -c <<!
+    const ldifDeletions = dedent`ldapmodify -D "cn=admin,dc=vol,dc=dvsa" -H ldap://localhost:1389 -w admin -c <<!
                                 ${deleteLdif}
                                 !`;
 
@@ -58,7 +58,7 @@ export default class ResetLdap implements ActionInterface {
 
     const ldif = allUsers
       .map(
-        (user) => dedent`dn: cn=${user},ou=users,dc=example,dc=org
+        (user) => dedent`dn: cn=${user},ou=users,dc=vol,dc=dvsa
       changetype: add
       objectClass: inetOrgPerson
       cn: ${user}
@@ -69,7 +69,7 @@ export default class ResetLdap implements ActionInterface {
 
     debug(chalk.greenBright(`Adding new users`));
 
-    const ldifModify = dedent`ldapmodify -D "cn=admin,dc=example,dc=org" -H ldap://localhost:1389 -w adminpassword -c <<!
+    const ldifModify = dedent`ldapmodify -D "cn=admin,dc=vol,dc=dvsa" -H ldap://localhost:1389 -w admin -c <<!
                               ${ldif}
                               !`;
 

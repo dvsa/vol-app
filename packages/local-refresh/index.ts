@@ -52,10 +52,6 @@ program.description("Reset the VOL local environment.").action(async () => {
 
 program.parse(process.argv);
 
-if (!process.argv.slice(1).length) {
-  program.outputHelp();
-}
-
 process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
