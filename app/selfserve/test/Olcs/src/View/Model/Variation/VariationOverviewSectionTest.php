@@ -35,7 +35,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('REQUIRES ATTENTION', $viewModel->getVariable('status'));
+        $this->assertEquals('Requires attention', $viewModel->getVariable('status'));
 
         // variation sections should NOT be visibly numbered
         $this->assertNull($viewModel->getVariable('sectionNumber')); // OLCS-7016;
@@ -56,7 +56,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
-        $this->assertEquals('UPDATED', $viewModel->getVariable('status'));
+        $this->assertEquals('Updated', $viewModel->getVariable('status'));
 
         $this->assertNull($viewModel->getVariable('sectionNumber'));
     }

@@ -27,11 +27,11 @@ class VariationOverviewSection extends LvaOverviewSection
 
         switch ($sectionDetails['status']) {
             case 1:
-                $statusText = 'REQUIRES ATTENTION';
+                $statusText = 'Requires attention';
                 $statusColour = 'orange';
                 break;
             case 2:
-                $statusText = 'UPDATED';
+                $statusText = 'Updated';
                 $statusColour = 'green';
                 break;
             default:
