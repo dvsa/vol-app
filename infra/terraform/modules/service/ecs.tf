@@ -20,7 +20,10 @@ resource "aws_lb_target_group" "this" {
 }
 
 resource "aws_lb_listener_rule" "this" {
-  for_each = var.services
+  for_each = {
+    for service, config in var.services : service => config
+    if config.listener_rule_enable
+  }
 
   listener_arn = each.value.lb_listener_arn
   priority     = each.value.listener_rule_priority
