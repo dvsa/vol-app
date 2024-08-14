@@ -6,9 +6,9 @@ sidebar_position: 3
 
 :::warning
 
-Draft. Some parts of this diagram _may_ be incorrect.
-
 This is a _simplified_ architecture diagram of the Vehicle Operator Licence (VOL) application.
+
+It is intended to give a high-level overview of the system and its components.
 
 :::
 

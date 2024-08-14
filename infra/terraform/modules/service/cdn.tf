@@ -213,26 +213,3 @@ module "records" {
     },
   ]
 }
-
-data "aws_iam_policy_document" "s3_policy" {
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["${data.aws_s3_bucket.assets.arn}/*"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["cloudfront.amazonaws.com"]
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceArn"
-      values   = [module.cloudfront.cloudfront_distribution_arn]
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = data.aws_s3_bucket.assets.id
-  policy = data.aws_iam_policy_document.s3_policy.json
-}

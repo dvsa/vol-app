@@ -80,7 +80,13 @@ locals {
       description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-      input               = jsonencode({ "JobName" : module.batch.job_definitions[job.name].name, "JobQueue" : module.batch.job_queues.default.arn, "JobDefinition" : module.batch.job_definitions[job.name].arn })
+      input = jsonencode({
+        "JobName" : module.batch.job_definitions[job.name].name,
+        "JobQueue" : module.batch.job_queues.default.arn,
+        "JobDefinition" : module.batch.job_definitions[job.name].arn,
+        "ShareIdentifier" : "volapp",
+        "SchedulingPriorityOverride" : 1
+      })
     }
     if job.schedule != ""
   }
@@ -102,7 +108,7 @@ module "batch" {
 
       compute_resources = {
         type               = "FARGATE"
-        max_vcpus          = 4
+        max_vcpus          = 16
         security_group_ids = var.services["api"]["security_group_ids"]
         subnets            = var.batch.subnet_ids
       }
@@ -130,8 +136,23 @@ module "eventbridge" {
   source  = "terraform-aws-modules/eventbridge/aws"
   version = "~> 3.7"
 
-  create_bus  = false
-  create_role = true
+  create_bus = false
+
+  create_role              = true
+  role_name                = "vol-app-${var.environment}-batch-scheduler"
+  attach_policy_statements = true
+  policy_statements = {
+    batch = {
+      effect = "Allow"
+      actions = [
+        "batch:SubmitJob"
+      ]
+      resources = concat(
+        [for job in module.batch.job_definitions : job.arn],
+        [for job in module.batch.job_queues : job.arn]
+      )
+    }
+  }
 
   schedules = local.schedules
 }

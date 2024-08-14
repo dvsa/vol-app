@@ -51,7 +51,6 @@ Various tools run on CI to ensure the quality of the codebase:
 #### Security
 
 -   [Trivy](https://github.com/aquasecurity/trivy)
--   [Checkov](https://github.com/bridgecrewio/checkov)
 
 ### ![](./assets/languages/terraform.svg) Terraform
 
@@ -67,13 +66,17 @@ Various tools run on CI to ensure the quality of the codebase:
 
 #### Security
 
--   [Snyk](https://snyk.io/)
 -   [Trivy](https://github.com/aquasecurity/trivy)
--   [Checkov](https://github.com/bridgecrewio/checkov)
 
 ## Continuous Deployment (CD)
 
 The CD workflow is triggered by a successful merge to the default branch (`main`). The workflow is responsible for building and deploying the application through to the production environment.
+
+:::tip
+
+To view the current version of the application in each environment, refer to the [deployments](https://github.com/dvsa/vol-app/deployments) page.
+
+:::
 
 **Workflow**: [.github/workflows/cd.yaml](https://github.com/dvsa/vol-app/blob/main/.github/workflows/cd.yaml).
 
@@ -118,3 +121,20 @@ graph LR
     classDef success fill:#C5E1A5,color:#000,stroke:#388e3c
     classDef negative fill:#f7d3d3,color:#000,stroke:#c62828
 ```
+
+### Environments
+
+The VOL application has four environments: Development, Integration, Pre-production, and Production. Each environment has a specific purpose and stability level.
+
+:::warning
+
+The stability is only as good as the test coverage that assures it. For example, integration tests are only as good as the E2E tests that assure that it's working.
+
+:::
+
+| Environment    | Abbr. | Purpose                                                        | Stability | Test coverage provided by     |
+| -------------- | ----- | -------------------------------------------------------------- | --------- | ----------------------------- |
+| Development    | DEV   | Used by the team to test their changes.                        | Unstable  | Continuous Integration (CI)   |
+| Integration    | INT   | A stable environment assured by the E2E tests.                 | Stable    | End-to-End (E2E) tests        |
+| Pre-production | PREP  | Used to test the application in a production-like environment. | Stable    | Release tests                 |
+| Production     | PROD  | The live environment.                                          | Stable    | User Acceptance Testing (UAT) |
