@@ -10,7 +10,7 @@ const config: Config = {
   tagline: "VOL documentation",
   favicon: "img/favicon.ico",
   url: "https://dvsa.github.io",
-  baseUrl: "/",
+  baseUrl: "/vol-app/",
   organizationName: "dvsa",
   projectName: "vol-app",
   trailingSlash: false,
