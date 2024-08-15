@@ -18,6 +18,8 @@ enum DatabaseRefreshEnum {
 }
 
 export default class ResetDatabase implements ActionInterface {
+  bucketName = "devapp-olcs-pri-olcs-deploy-s3";
+
   etlDirectory: string | undefined;
   refreshType: DatabaseRefreshEnum = DatabaseRefreshEnum.NONE;
 
@@ -129,7 +131,7 @@ export default class ResetDatabase implements ActionInterface {
 
     // Fetch file from S3.
     const latestAnonDatasetCmd = shell.exec(
-      `aws s3 ls s3://devapp-olcs-pri-olcs-deploy-s3/anondata/olcs-db-localdev-anon-prod --recursive 2>/dev/null | sort | tail -n 1 | awk '{print $4}'`,
+      `aws s3 ls s3://${this.bucketName}/anondata/olcs-db-localdev-anon-prod --recursive 2>/dev/null | sort | tail -n 1 | awk '{print $4}'`,
       {
         silent: !debug.enabled,
       },
@@ -146,7 +148,7 @@ export default class ResetDatabase implements ActionInterface {
 
     if (
       shell.exec(
-        `aws s3 cp s3://devapp-olcs-pri-olcs-deploy-s3/${latestAnonDataset} ${this.etlDirectory}/olcs-db-localdev-anon-prod.sql.gz`,
+        `aws s3 cp s3://${this.bucketName}/${latestAnonDataset} ${this.etlDirectory}/olcs-db-localdev-anon-prod.sql.gz`,
       ).code !== 0
     ) {
       console.error(chalk.red("Error: Could not fetch the latest anonymised dataset from S3"));
