@@ -1,4 +1,4 @@
-/app/api/ @dvsa/VOL\ (App) @ilindsay @fibble
-/app/selfserve/ @dvsa/VOL\ (App) @ilindsay @fibble
-/app/internal/ @dvsa/VOL\ (App) @ilindsay @fibble
-/app/cdn/ @dvsa/VOL\ (App) @gabrielg2020 @jerotire
+/app/api/ "@dvsa/VOL (App)" @ilindsay @fibble
+/app/selfserve/ "@dvsa/VOL (App)" @ilindsay @fibble
+/app/internal/ "@dvsa/VOL (App)" @ilindsay @fibble
+/app/cdn/ "@dvsa/VOL (App)" @gabrielg2020 @jerotire
