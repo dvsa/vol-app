@@ -1,0 +1,25 @@
+<h4 class="title"><?php echo $this->translate('variation-details-nav'); ?></h4>
+<ul class="app-navigation" role="menu">
+    <?php foreach ($sections as $reference => $details) : ?>
+        <?php $current = ($details['route'] === $currentRoute); ?>
+        <li class="app-navigation__item <?php echo $details['class']; ?> <?php echo $current ? 'current' : ''; ?>">
+            <?php if (!$current) : ?>
+            <a class="govuk-link--no-visited-state" href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
+                <?php endif; ?>
+                <?php
+                    $sectionName = $reference;
+                    if (isset($details['alias'])) {
+                        $sectionName = $details['alias'];
+                    }
+
+                    echo $this->translate('section.name.' . $sectionName);
+                ?>
+                <?php if (!$current) : ?>
+            </a>
+        <?php endif; ?>
+            <?php if ($current && isset($filterForm)): ?>
+                <?php echo $this->form($filterForm); ?>
+            <?php endif;?>
+        </li>
+    <?php endforeach; ?>
+</ul><!-- end .progress -->

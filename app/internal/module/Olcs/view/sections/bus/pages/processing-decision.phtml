@@ -1,0 +1,93 @@
+<?php
+$header = $this->navigation('navigation')->findOneBy('active', true)->getLabel();
+
+$busReg = $this->placeholder('details')->getValue();
+
+if (!empty($busReg['decision'])) {
+    echo $this->render(
+        'partials/read-only/main',
+        [
+            'header' => $header,
+            'multiItems' => [
+                [
+                    ['label' => 'Decision', 'value' => $busReg['decision']['decision'], 'class' => 'full-width']
+                ],
+                [
+                    ['label' => 'Reason', 'value' => $busReg['decision']['reason'], 'class' => 'full-width']
+                ],
+            ]
+        ]
+    );
+} else {
+    if ($busReg['canCancelByAdmin']) {
+        echo $this->render(
+            'partials/read-only/empty',
+            [
+                'header' => $header,
+                'helpText' => 'This bus registration is of status <strong>Registered</strong>',
+                'multiUrl' => [
+                    [
+                        'url' => $this->url(null, ['action' => 'cancel'], [], true),
+                        'label' => 'Admin cancel',
+                        'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+                    ]
+                ]
+            ]
+        );
+    } elseif ($busReg['canWithdraw'] || $busReg['canRefuse'] || $busReg['isGrantable']) {
+
+        $multiUrl = [];
+
+        if ($busReg['canWithdraw']) {
+            $multiUrl[] = [
+                'url' => $this->url(null, ['action' => 'withdraw'], [], true),
+                'label' => 'Withdraw',
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+            ];
+        }
+        if ($busReg['canRefuse']) {
+            $multiUrl[] = [
+                'url' => $this->url(null, ['action' => 'refuse'], [], true),
+                'label' => 'Refuse',
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+            ];
+        }
+
+        if ($busReg['isGrantable']) {
+            $multiUrl[] = [
+                'url' => $this->url(null, ['action' => 'grant'], [], true),
+                'label' => 'Grant',
+                'class' => 'govuk-button' . ($busReg['status']['id'] == 'breg_s_var' ? ' js-modal-ajax' : '')
+            ];
+        }
+
+        if ($busReg['canRefuseByShortNotice']) {
+            $multiUrl[] = [
+                'url' => $this->url(null, ['action' => 'refuse-by-short-notice'], [], true),
+                'label' => 'Refuse by SN',
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+            ];
+        }
+
+        echo $this->render(
+            'partials/read-only/empty',
+            [
+                'header' => $header,
+                'helpText' => 'There are no decisions for this bus registration',
+                'multiUrl' => $multiUrl
+            ]
+        );
+    }
+
+    if ($busReg['shortNoticeRefused'] == 'Y') {
+        echo $this->render(
+            'partials/read-only/main',
+            [
+                'header' => 'Short notice refused',
+                'items' => [
+                    ['label' => 'Reason', 'value' => $busReg['reasonSnRefused'], 'class' => 'full-width']
+                ]
+            ]
+        );
+    }
+}

@@ -1,0 +1,13 @@
+<?php
+
+if (!isset($table)) {
+    $table = $this->placeholder('table')->getValue();
+}
+
+if (!empty($table)) {
+    if (!empty($readonly)) {
+        $table->setDisabled(true);
+    }
+
+    echo $table;
+}

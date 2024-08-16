@@ -1,0 +1,17 @@
+<p class="notice--warning">
+    <strong>
+        <?php
+        if (!$this->hideName) {
+            echo $this->escapeHtml($person['forename'] .' '. $person['familyName']) .'<br>';
+        }
+        echo $this->translate('4/50 limit exceeded');
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo (int) $this->associatedOrganisationCount;
+    echo ' '. $this->translate('operators');
+    echo ' / '. (int) $this->associatedTotalAuthVehicles;
+    echo ' '. $this->translate('vehicles');
+    ?>
+</p>

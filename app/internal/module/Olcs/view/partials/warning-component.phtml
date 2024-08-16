@@ -1,0 +1,13 @@
+<div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive"><?php echo $this->escapeHtml($this->translate('govuk.warning.component.title')); ?></span>
+        <?php
+            if ($this->disableHtmlEscape) {
+                echo $this->translate($this->translationKey);
+            } else {
+                echo $this->escapeHtml($this->translate($this->translationKey));
+            }
+        ?>
+    </strong>
+</div>

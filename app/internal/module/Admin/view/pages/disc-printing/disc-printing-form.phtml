@@ -1,0 +1,13 @@
+<script>
+  var discPrintingUrl = "<?php
+    echo $this->url('admin-dashboard/admin-disc-printing', ['action' => 'index'], [], [], false); ?>";
+  var discPrefixesUrl  = "<?php
+    echo $this->url('admin-dashboard/admin-disc-printing', ['action' => 'disc-prefixes-list'], [], [], false); ?>";
+  var discNumberingUrl = "<?php
+    echo $this->url('admin-dashboard/admin-disc-printing', ['action' => 'disc-numbering'], [], [], false); ?>";
+  var confirmDiscPrintingUrl = "<?php
+    echo $this->url('admin-dashboard/admin-disc-printing', ['action' => 'confirm-disc-printing'], [], [], false); ?>";
+</script>
+<?php
+    echo $this->formErrors($form);
+    echo $this->form($form);

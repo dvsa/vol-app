@@ -1,0 +1,22 @@
+<p class="notice--warning">
+    <?php use Olcs\Module;
+
+    if (!$this->hideCaseLink): ?>
+    <?php
+        echo $this->link(
+            $this->url('case_hearing_appeal', ['case' => $this->caseId]),
+            $this->translate('Case') .' '. (int) $this->caseId
+        );
+    ?>
+    <br>
+    <?php endif; ?>
+    <strong>
+        <?php
+        echo $this->translate('Appeal in progress')
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo $this->appealDate->format(Module::$dateFormat);
+    ?>
+</p>

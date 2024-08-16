@@ -1,0 +1,34 @@
+<p class="notice--warning">
+    <?php use Olcs\Module;
+
+    if (!$this->hideCaseLink): ?>
+    <?php
+        echo $this->link(
+            $this->url('case_hearing_appeal', ['case' => $this->caseId]),
+            $this->translate('Case') . ' ' . (int) $this->caseId
+        );
+    ?>
+    <br>
+    <?php endif; ?>
+    <strong>
+    <?php
+    echo $this->translate('Stay') . ' ';
+    echo ($this->stay['outcome']) ?
+        $this->translate(strtolower($this->stay['outcome']['description']) .' pending appeal') :
+        $this->translate('in progress');
+    ?>
+    </strong>
+    <br>
+    <?php
+    $date = $this->stay['requestDate'];
+    if (empty($date)) {
+        echo $this->translate('no-date-set');
+    } else {
+        echo ($this->stay['stayType']['id'] == 'stay_t_ut') ?  ' UT ' : ' TC/TR ';
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($this->stay['requestDate']);
+        }
+        echo $date->format(Module::$dateFormat);
+    }
+    ?>
+</p>

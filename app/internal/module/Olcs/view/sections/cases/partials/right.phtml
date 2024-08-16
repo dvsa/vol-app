@@ -1,0 +1,99 @@
+<?php
+
+$case = $this->placeholder('case')->getValue();
+$note = $this->placeholder('note')->getValue();
+
+$transportManager = $this->placeholder('transportManager')->getValue();
+
+if (isset($case['licence']) && !empty($case['licence'])): ?>
+<?php if ($case['licence']['organisation']): ?>
+<div class="small-module">
+  <h4 class="title">Operator details</h4>
+  <p class="small-module__details">
+     <?php
+        echo $this->link(
+            $this->url('operator/business-details', ['organisation' => $case['licence']['organisation']['id']], [], true),
+            $case['licence']['organisation']['name']
+        );
+    ?>
+    <br>
+    <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
+      <?php
+      // value checked as errors with minimal applications as trafficArea not set
+      echo isset($case['licence']['trafficArea']['name']) ?
+          $this->translate($case['licence']['trafficArea']['name']) : '';
+      ?><br>
+  </p>
+</div><!-- end .small-details -->
+<?php endif; ?>
+
+<div class="small-module">
+  <h4 class="title">Licence details</h4>
+    <p class="small-module__details">
+      <?php echo $this->link(
+          $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false),
+          $case['licence']['licNo']
+      );
+      ?>
+      <br>
+      <?php if (isset($case['licence']['licenceType']['id'])) : ?>
+        <?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/>
+      <?php endif; ?>
+      <?php if (isset($case['licence']['status']['id'])) : ?>
+        <?php echo $this->translate($case['licence']['status']['id']); ?>
+        <?php endif; ?>
+    </p>
+</div><!-- end .small-details -->
+<?php endif; ?>
+
+<?php
+if ($transportManager) :
+?>
+<div class="small-module">
+    <h4 class="title">Transport manager details</h4>
+
+    <p class="small-module__details">
+
+    <?php if (isset($transportManager['homeCd']['person'])): ?>
+        <p>
+            <strong>
+            <?php
+            echo $this->link(
+                $this->url('transport-manager/details', ['transportManager' => $transportManager['id']], [], true),
+                $transportManager['homeCd']['person']['forename'] . ' ' . $transportManager['homeCd']['person']['familyName']
+            );
+            ?>
+            </strong>
+        </p>
+        <p><?php echo $this->date(strtotime($transportManager['homeCd']['person']['birthDate'])); ?></p>
+
+    <?php endif; ?>
+
+    <?php if (isset($transportManager['homeCd']['address'])): ?>
+        <p><?php echo $this->addressFormat($transportManager['homeCd']['address']); ?></p>
+    <?php endif; ?>
+    <p>
+        <?php echo $this->status($transportManager['tmStatus']) ?>
+    </p>
+</div>
+<?php endif; ?>
+
+<?php
+echo $this->showMarkers(
+    [
+        \Olcs\Service\Marker\CaseAppealMarker::class,
+        \Olcs\Service\Marker\CaseStayMarker::class,
+        \Olcs\Service\Marker\DisqualificationMarker::class,
+    ]
+);
+?>
+
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)): ?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo $this->escapeHtml(substr($note, 0, 100)); ?></div>
+            <a
+                class="latest-note__link"
+                href="<?php echo $this->url('case_processing_notes', ['case' => $case['id']]); ?>"
+            >View all notes</a>
+    </div>
+<?php endif; ?>

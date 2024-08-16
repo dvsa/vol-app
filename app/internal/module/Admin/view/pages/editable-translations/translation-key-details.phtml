@@ -1,0 +1,21 @@
+<?php
+$details = $this->placeholder('details')->getValue();
+$translationsTable = $this->placeholder('translationsTable')->getValue();
+
+ ?>
+<div class="govuk-details">
+    <p><strong>Database ID:</strong> <?php echo $details['id'] ?></p>
+    <p><strong>Content ID:</strong> <?php echo $this->escapeHtml($details['translationKey']) ?></p>
+    <p><strong>Description:</strong> <?php echo $this->escapeHtml($details['description']) ?></p>
+</div>
+<div class="govuk-details">
+    <?php echo $translationsTable ?>
+</div>
+<div class="govuk-details">
+    <a class="govuk-button govuk-button--secondary"
+       id="filter"
+       role="button"
+       draggable="false"
+       href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'index']); ?>"
+    >New search</a>
+</div>

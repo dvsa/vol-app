@@ -1,0 +1,22 @@
+<h4 class="title"><?php echo $this->placeholder('resultsTableTitle')->getValue() ?></h4>
+<div class="card">
+    <form id="translationSearchForm">
+        <input type="hidden" id="jsonBaseUrl" value="<?php echo $this->placeholder('jsonBaseUrl')->getValue() ?>">
+        <input type="text" id="translationSearch" class="search__input" style="width: 450px;" placeholder="Search (type then pause for autocomplete)" autocomplete="off">
+        <input type="submit" id="searchBtn" name="submit" class="search__button" value="">
+    </form>
+
+</div>
+<div class="govuk-details">
+    <?php
+    if (!isset($table)) {
+        $table = $this->placeholder('table')->getValue();
+    }
+    echo $table;
+
+    ?>
+</div>
+<div id="keyAutocomplete" class="translationKeyACResults">
+    <strong>Autocomplete results</strong><br>(Enter to search, Esc to close, Click a result to load directly)
+    <div id="keySearchResults"></div>
+</div>

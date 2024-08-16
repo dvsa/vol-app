@@ -1,0 +1,26 @@
+<?php
+{
+    if (!isset($pageTitle)) {
+        $pageTitle = $this->getPlaceholder('pageTitle')->asString();
+    }
+
+    if (!isset($contentTitle)) {
+        $contentTitle = $this->getPlaceholder('contentTitle')->asString();
+    }
+
+    $title = $contentTitle ?: $pageTitle;
+}
+?>
+<div class="js-response">
+    <div class="js-title"><?php echo $this->translate($title); ?></div>
+    <div class="js-body" id="<?php echo $this->pageId(); ?>">
+        <?php echo $this->flashMessengerAll(); ?>
+        <div class="js-content">
+            <?php echo $this->content; ?>
+        </div>
+
+        <div class="js-script">
+            <?php echo $this->inlineScript() ?>
+        </div>
+    </div>
+</div>

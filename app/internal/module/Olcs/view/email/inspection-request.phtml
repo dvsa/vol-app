@@ -1,0 +1,96 @@
+<?php // NOTE: TRAILING WHITESPACE IN THIS FILE IS INTENTIONAL/IMPORTANT ?>
+Result_Type=
+When replying to this sender, append to the subject line with:
+'S' (if Inspection is Satisfactory)
+'U' (if Inspection is Unsatisfactory)
+
+INSPECTION DETAILS for request ID <?php echo $inspectionRequestId ?>...
+Requested By:                   <?php echo $currentUserName ?>        (E-Mail - <?php echo $currentUserEmail ?>) 
+Date Requested:                 <?php echo $inspectionRequestDateRequested ?> 
+<?php if (!empty($inspectionRequestNotes)): ?>
+Caseworker Notes...
+<?php echo $inspectionRequestNotes;?> 
+<?php endif; ?>
+
+Date Required:                  <?php echo $inspectionRequestDueDate ?> 
+Op Centre:                      <?php echo $ocAddress['addressLine1'] ?> 
+                                <?php echo $ocAddress['town'] ?> 
+                                <?php echo $ocAddress['postcode'] ?> 
+Request Type:                   <?php echo $inspectionRequestType ?> 
+Licence No:                     <?php echo $licenceNumber ?> 
+Licence Type:                   <?php echo $licenceType ?> 
+Authorised Vehicles:            <?php echo $totAuthVehicles ?> 
+Authorised Trailers:            <?php echo $totAuthTrailers ?> 
+
+#Centres on:                    <?php echo $numberOfOperatingCentres ?> 
+Licence
+Expiry Date:                    <?php echo $expiryDate ?> 
+Operator ID:                    <?php echo $operatorId ?> 
+Operator Name                   <?php echo $operatorName ?> 
+Operator Email Address          <?php echo $operatorEmail ?> 
+Address:                        <?php echo $operatorAddress['addressLine1'] ?> 
+                                <?php echo $operatorAddress['town'] ?> 
+                                <?php echo $operatorAddress['postcode'] ?> 
+
+Contact Phone No(s)...
+<?php foreach ($contactPhoneNumbers as $contactPhone):
+    echo sprintf("%s (%s)\n", $contactPhone['phoneNumber'], $contactPhone['phoneContactType']['description']);
+endforeach; ?>
+
+Trading Name(s)...
+<?php
+if(!empty($tradingNames)):
+    echo implode("\n", $tradingNames)."\n";
+else:
+    echo "        No Trading Names specified.\n";
+endif;
+?>
+
+<?php if(!empty($transportManagers)): ?>
+Transport Manager(s)...
+<?php echo implode("\n", $transportManagers)."\n\n"; ?>
+<?php endif; ?>
+Maintenance...
+Maintained:                     <?php echo $workshopIsExternal ? 'Contracted Out' : 'In-House' ?> 
+Inspection Periods...
+Vehicles:                       <?php echo $safetyInspectionVehicles ?> 
+Trailers:                       <?php echo $safetyInspectionTrailers ?> 
+
+Workshops/Garage Address(es)...
+<?php if (!empty($inspectionProvider)): ?>
+Address:                        <?php echo $inspectionProvider['address']['addressLine1'] ?> 
+                                <?php echo $inspectionProvider['address']['town'] ?> 
+                                <?php echo $inspectionProvider['address']['postcode'] ?> 
+<?php endif; ?>
+
+Partners/Directors...
+<?php
+foreach ($people as $person):
+    echo sprintf("%s %s\n", $person['forename'], $person['familyName']);
+endforeach;
+?>
+
+Associated Licences...
+<?php
+if(!empty($otherLicences)):
+    echo implode("\n", $otherLicences),"\n";
+else:
+    echo "        This Operator has no other associated licences.\n";
+endif;
+?>
+
+<?php if (!empty($applicationOperatingCentres)): ?>
+Application Details...
+<?php foreach ($applicationOperatingCentres as $aoc) : ?>
+<?php
+echo sprintf(
+	"%s, %s...\n",
+	$aoc['operatingCentre']['address']['addressLine1'],
+	$aoc['operatingCentre']['address']['town']
+);?>
+#Vehicles                       <?php echo $aoc['noOfVehiclesRequired'] ?> 
+#Trailers                       <?php echo $aoc['noOfTrailersRequired'] ?> 
+Action                          <?php echo $aoc['action']."\n";
+endforeach;
+endif;
+?>

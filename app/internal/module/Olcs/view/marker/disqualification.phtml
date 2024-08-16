@@ -1,0 +1,21 @@
+<p class="notice--<?php echo $this->active ? 'danger' : 'warning' ?>">
+    <strong>
+        <?php
+        echo $this->translate('Operator disqualified')
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo $this->startDateTime->format(Olcs\Module::$dateFormat);
+    if (!empty($this->endDateTime)) {
+        echo ' to '. $this->endDateTime->format(Olcs\Module::$dateFormat);
+    }
+    ?>
+    <br>
+    <?php
+        echo $this->linkModal(
+            $this->url('operator/disqualify', ['organisation' => $this->organisationId]),
+            'Edit disqualification'
+        );
+    ?>
+</p>

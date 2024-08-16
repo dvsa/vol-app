@@ -1,0 +1,39 @@
+<?php
+    echo $this->doctype().PHP_EOL;
+
+    // OLCS-26896 - make sure X-UA-Compatible value is not escaped on the internal login screen
+    $this->headMeta()->setAutoEscape(false);
+?>
+<html lang="en">
+  <head>
+    <?php echo $this->partial('partials/head', ['title' => $this->pageTitle()]); ?>
+  </head>
+  <body class="internal sign-in govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
+    <?php echo $this->version(); ?>
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+          <h2 class="global-header__title"><?php echo $this->translate('internal.login.olcs-header'); ?></h2>
+      </div><!-- global-header__wrapper -->
+    </div>
+    <?php
+    //  system info messages
+    if (! $this->currentUser()->isLoggedIn()) :
+      echo $this->systemInfoMessages(true);
+    endif;
+    ?>
+
+    <div class="page-wrapper">
+      <div id="main" role="main">
+        <?php echo $this->content; ?>
+      </div><!-- End: main -->
+    </div><!-- .page-wrapper-->
+
+  <?php echo $this->partial('partials/body-end'); ?>
+    <script type="module">
+      import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+      initAll()
+    </script>
+  </body>
+</html>
