@@ -1,0 +1,56 @@
+<?php
+
+use Permits\Controller\Config\DataSource\LicencesAvailable;
+use Permits\View\Helper\IrhpApplicationSection;
+
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', IrhpApplicationSection::ROUTE_ADD_LICENCE); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.page.max-permitted-reached.title')); ?>
+        </h1>
+        <?php echo $this->translate('permits.page.max-permitted-reached.body.top'); ?>
+        <ul class="govuk-list govuk-list--bullet">
+            <?php
+
+            $eligibleLicences = $this->data[LicencesAvailable::DATA_KEY]['eligibleLicences'];
+
+            if (count($eligibleLicences) > 1) {
+                ?><li><?php 
+
+                $addLicenceUrl = $this->url(
+                    IrhpApplicationSection::ROUTE_ADD_LICENCE,
+                    [],
+                    [],
+                    true
+                );
+
+                echo sprintf(
+                    $this->translate('permits.page.max-permitted-reached.bullets.use-other-licence'),
+                    $addLicenceUrl
+                );
+
+                ?></li><?php
+            }
+
+            ?>
+            <li><?php 
+
+            echo sprintf(
+                $this->translate('permits.page.max-permitted-reached.bullets.different-permit-type'),
+                $this->url(IrhpApplicationSection::ROUTE_TYPE)
+            );
+
+            ?></li>
+        </ul>
+        <?php
+
+        echo sprintf(
+            $this->translate('permits.page.max-permitted-reached.body.bottom'),
+            $this->url(IrhpApplicationSection::ROUTE_PERMITS)
+        );
+
+        ?>
+    </div>
+</div>

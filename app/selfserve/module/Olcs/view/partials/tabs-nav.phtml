@@ -1,0 +1,23 @@
+<div class="govuk-tabs">
+  <ul class="govuk-tabs__list">
+  <?php foreach ($this->container as $page): ?>
+    <?php if ($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
+      <li class="govuk-tabs__list-item<?php echo $page->isActive(true) ? ' govuk-tabs__list-item--selected' : '';?>">
+        <a href="<?php echo $page->getHref(); ?>" class="govuk-tabs__tab">
+        <?php echo $this->escapeHtml($this->translate($page->getLabel())); ?>
+        <?php echo $page->get('count') ? '('.$page->get('count').')' : '';?>
+        </a>
+        <?php if ($page->id == "dashboard-messaging" && $page->get('unreadMessageCount') > 0): ?>
+          <div class="notification-count">
+            <span class="notification-count__number">
+            <?php
+            echo $page->get('unreadMessageCount');
+            ?>
+            </span>
+          </div>
+        <?php endif; ?>
+      </li>
+    <?php endif; ?>
+  <?php endforeach; ?>
+  </ul>
+</div>

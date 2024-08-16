@@ -1,0 +1,27 @@
+<div id="main" role="main">
+  
+    <div class="page-header">
+        <div class="page-header__wrapper">
+            <h1><?php echo $this->translate('500-title') ?></h1>
+        </div>
+    </div><!-- page-header-->
+
+    <div class="row">
+      <div class="two-thirds">
+          <div class="article">
+              <?php echo $this->translate('markup-500-text'); ?>
+              <hr>
+              <p><?php echo $this->link($this->url('index'), 'back-to-home'); ?></p>
+          </div>
+      </div>
+    </div>
+    
+</div>
+
+<?php
+$this->inlineScript()->appendScript('
+    dataLayer.push({
+        \'error\' : \'index\',
+        \'correlationId\' : \''. $this->correlationId .'\',
+    });
+');

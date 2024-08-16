@@ -1,0 +1,77 @@
+<div class="govuk-width-container">
+    <div class="js-body">
+        <?php echo $this->partial('partials/page-header-simple', [
+            'pageTitle' => $this->translate($this->title),
+            'pageSubTitle' => $this->licence['licNo'],
+            'panel' => $this->panel,
+            'backUrl' => ['url' => $this->backLink],
+        ]); ?>
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <?php if (isset($this->searchForm)) { ?>
+                    <?php echo $this->formErrors($this->searchForm); ?>
+                    <?php echo $this->form($this->searchForm); ?>
+                    <p><?php echo $this->link($this->clearUrl, 'Clear search'); ?></p>
+                    <div class="govuk-phase-banner govuk-!-margin-bottom-8 govuk-!-margin-top-0"></div>
+                <?php } ?>
+
+                <div class="govuk-table">
+                    <div class="govuk-clearfix">
+                        <?php echo $this->currentVehiclesTable; ?>
+                    </div>
+                </div>
+
+                <?php if (isset($this->ocrsForm)) { ?>
+                <div id="share-vehicle-details" class="govuk-!-margin-bottom-4">
+                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.form.orcs.checkbox.heading'); ?></h3>
+                    <?php echo $this->form($this->ocrsForm); ?>
+                </div>
+                <?php } ?>
+
+                <div id="export" class="govuk-!-margin-bottom-4">
+                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h3>
+                    <p class="govuk-body"><?php echo $this->translate('licence.vehicle.list.section.export.description'); ?></p>
+                    <ul class="govuk-list">
+                        <li>
+                            <a id="action--export-current-and-removed-csv"
+                               title="<?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.title'); ?>"
+                               href="<?php echo $this->exportCurrentAndRemovedCsvAction; ?>"
+                               class="govuk-link">
+                                <?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.label'); ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <?php if ($this->showRemovedVehicles ?? false) {?>
+                    <a id="<?php echo $this->showRemovedVehiclesExpanded ? 'action--hide-removed-vehicles' : 'action--show-removed-vehicles'; ?>"
+                       href="<?php echo $this->toggleRemovedAction; ?>"
+                       role="button"
+                       draggable="false"
+                       class="govuk-button govuk-button--secondary"
+                       data-module="govuk-button"
+                       aria-controls="removed-table"
+                       aria-expanded="<?php echo $this->showRemovedVehiclesExpanded ? 'true' : 'false'; ?>"
+                       title="<?php echo $this->translate($this->toggleRemovedVehiclesActionTitle); ?>">
+                        <?php echo $this->translate($this->toggleRemovedVehiclesActionLabel); ?>
+                    </a>
+
+                    <?php if ($this->showRemovedVehiclesExpanded) { ?>
+                        <div id="<?= \Olcs\Controller\Licence\Vehicle\ListVehicleController::REMOVE_TABLE_WRAPPER_ID ?>" class="govuk-!-margin-bottom-4">
+                            <div class="govuk-table">
+                                <div class="govuk-clearfix">
+                                    <h3 class="govuk-heading-m"><?php echo $this->removedVehicleTableTitle; ?></h3>
+                                    <?php echo $this->removedVehiclesTable; ?>
+                                </div>
+                            </div>
+                            <p><?php echo $this->translate('licence.vehicle.list.section.removed.action.see-export.prefix'); ?> <a href="#export" class="govuk-link" title="<?php echo $this->translate('licence.vehicle.list.section.removed.action.see-export.title'); ?>"><?php echo $this->translate('licence.vehicle.list.section.removed.action.see-export.label'); ?></a></p>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+
+                <?php echo $this->partial(new \Olcs\View\Model\Licence\Vehicle\ChooseADifferentOptionViewModel()); ?>
+            </div>
+        </div>
+    </div>
+</div>

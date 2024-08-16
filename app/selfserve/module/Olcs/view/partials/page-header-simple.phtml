@@ -1,0 +1,50 @@
+<div class="page-header">
+
+    <?php echo $this->flashMessengerAll(); ?>
+
+    <?php
+    if ($this->backUrl === true) {
+        echo $this->linkBack();
+
+    } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
+        echo $this->linkBack($this->backUrl);
+    }
+    ?>
+
+    <div class="page-header__wrapper">
+        <?php if (!empty($this->pageSubTitle)) : ?>
+            <span class="page-header__subtitle page-header__h3"><?php
+                echo (
+                    $this->pageSubTitleEscape === false
+                    ? $this->pageSubTitle
+                    : $this->escapeHtml($this->pageSubTitle)
+                )
+            ?></span>
+        <?php endif; ?>
+
+        <h1 class="js-title"><?php
+            echo (
+                $this->pageTitleEscape === false
+                ? $this->pageTitle
+                : $this->escapeHtml($this->pageTitle)
+            );
+        ?>
+        <?php if (!empty($this->hintText)) : ?>
+            <span class="govuk-hint">
+               <?php  echo($this->hintText); ?>
+            </span>
+         <?php endif; ?>
+        </h1>
+        <?php if (!empty($this->pageHeaderText)) : ?>
+            <div class="page-header__text">
+                <p><?php
+                    echo (
+                        $this->pageHeaderTextEscape === false
+                        ? $this->pageHeaderText
+                        : $this->escapeHtml($this->pageHeaderText)
+                    )
+                ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div><!-- page-header-->

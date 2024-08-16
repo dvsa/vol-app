@@ -1,0 +1,23 @@
+<div id="main" role="main">
+
+    <div class="page-header">
+        <div class="page-header__wrapper">
+            <h1><?php echo $this->translate('404-title') ?></h1>
+        </div>
+    </div><!-- page-header-->
+
+    <div class="row ">
+        <div class="full-width">
+            <h2><?php echo $this->message ?></h2>
+
+            <?php if (!empty($correlationId)): ?>
+                <p>Correlation id <em><?php echo $this->escapeHtml($correlationId); ?></em>.</p>
+            <?php endif ?>
+
+            <?php echo $this->partial('partials/error/notfound'); ?>
+
+            <?php echo $this->partial('partials/error/exception'); ?>
+
+        </div><!-- end .full-width -->
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="govuk-grid-row">
+
+    <?php echo $this->flashMessengerAll();?>
+    <div class="govuk-!-width-two-thirds">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($title),
+                'pageSubTitle' => $licNo,
+                'backUrl' => [
+                    'url' => $backLink,
+                ],
+            ]
+        );
+        ?>
+        <?php
+        if ($sections) {
+            echo $this->partialLoop(
+                'partials/check-answer-section',
+                $sections
+            );
+        }
+        ?>
+        <?php echo $this->form($form); ?>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('pay-fees.success.title'),
+        'backUrl' => [
+            'url' => $this->url('fees'),
+            'label' => $this->translate('pay-fees.back-to-home'),
+        ],
+    ]
+);
+?>
+
+<div class="row">
+  
+  <div class="three-quarters">
+  
+    <?php echo $this->partial(
+      'partials/fees/payment-details',
+      compact('operatorName', 'fees', 'payment')
+    );?>
+  
+    <hr>
+  
+    <?php if (isset($table)): ?>
+      <?php echo $table; ?>
+    <?php endif; ?>
+  
+    <hr>
+  
+    <?php echo $this->translate('markup-pay-fees-success-notice'. ($hasContinuation ? '-continuation' : '')); ?>
+  
+    <hr>
+  
+    <div class="govuk-button-group">
+      <?php
+        echo $this->link($this->url('fees'), 'pay-fees.back-to-home', 'govuk-button');
+        echo $this->linkNewWindow(
+            $this->url('fees/receipt', ['action' => 'print'], [], true),
+            'pay-fees.success.print-receipt',
+            'govuk-button govuk-button--secondary'
+        );
+      ?>
+    </div>
+  
+  </div>
+
+</div>

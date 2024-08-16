@@ -1,0 +1,39 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->pageTitle(),
+    ]
+);
+?>
+
+<div class="row">
+  
+  <div class="two-thirds">
+    
+    <div class="article">
+      <p><?php echo $this->translate('user-registration.page.check-details.text'); ?></p>
+      <p>
+        <b><?php echo $this->organisationName; ?><br /><?php echo $this->address($this->address, null, '<br />'); ?></b>
+      </p>
+    </div>
+    
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php
+        echo $this->formErrors($form);
+        echo $this->form($form);
+    ?>
+  
+    <div>
+      <h3><?php echo $this->translate('user-registration.page.check-details.address-incorrect.header'); ?></h3>
+      <p><?php echo $this->translate('user-registration.page.check-details.address-incorrect.text'); ?></p>
+      <p><?php echo $this->translate('markup-support-helpline');?></p>
+    </div>
+  
+    <div class="govuk-button-group">
+      <?php echo $this->link($this->url('index'), 'back-to-home'); ?>
+    </div>
+    
+  </div>
+
+</div>

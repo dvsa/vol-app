@@ -1,0 +1,11 @@
+<!-- TODO: should we have a backlink in this page? -->
+<?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.page.irhp-window-closed.title')); ?>
+        </h1>
+        <?php echo $this->translate('markup-irhp-permits-exhausted'); ?>
+        <p class="govuk-body"><?php echo $this->link($this->url('permits'), 'permits.link.return.to.dashboard'); ?></p>
+    </div>
+</div>

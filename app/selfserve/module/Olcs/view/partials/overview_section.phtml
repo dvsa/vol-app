@@ -1,0 +1,25 @@
+<li class="overview__list-item <?php echo ($enabled ? '' : 'disabled'); ?>">
+  <?php if ($enabled) : ?>
+  <a
+   class="overview__link overview__link--large"
+   href="<?php echo $this->url($route, $routeParams ?? array($identifierIndex => $identifier)); ?>"
+   <?php if (isset($anchorRef)): ?>
+   id="overview-item__<?php echo $anchorRef; ?>"
+   <?php endif; ?>
+  ><span>
+  <?php else : ?>
+    <div class="overview__item">
+  <?php endif; ?>
+  <?php
+    echo $this->translate($name);
+  ?>
+  </span>
+  <?php if ($enabled) : ?>
+    <?php if (isset($status) && $status !== ''): ?>
+      <strong class="govuk-tag govuk-tag--<?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></strong>
+    <?php endif; ?>
+  <?php else : ?>
+    <strong class="govuk-tag govuk-tag--grey"><?php echo $this->translate('selfserve-app-overview-status-cant-start'); ?></strong>
+  <?php endif; ?>
+  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
+</li>

@@ -1,0 +1,71 @@
+<div class="govuk-width-container">
+    <div class="js-body">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($this->title),
+                'pageSubTitle' => $this->licNo,
+                'panel' => $this->panel,
+                'backUrl' => [
+                    'url' => $this->backLink,
+                ],
+            ]
+        );
+        ?>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <?php if (isset($this->form)) {
+                    $this->form->prepare();
+                    echo $this->formErrors($this->form);
+                }
+                if (isset($this->searchForm)) {
+                    $this->searchForm->prepare();
+                    echo $this->formErrors($this->searchForm);
+                }
+                ?>
+                <?php if (!empty($this->content)): ?>
+                    <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
+                <?php endif; ?>
+                <?php if ($this->vrmList): ?>
+                    <p class="govuk-body-l govuk-!-margin-top-3"><?php echo $this->translate($this->vrmListInfoText); ?></p>
+                    <ul role="list" class="govuk-list govuk-list--bullet govuk-body-l two-column">
+                        <?php
+                        $count = 0;
+                        ?>
+                        <?php foreach ($this->vrmList as $vrm): ?>
+                            <?php $count++; ?>
+                            <li>
+                                <span aria-label="<?php echo $this->translateReplace('licence.vehicle.remove.confirm.selected-vehicles.list.item.aria',
+                                    [$count, $vrm]); ?>"><?php echo $vrm; ?></span></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="govuk-clearfix"></div>
+                <?php endif; ?>
+                <?php if (isset($this->searchForm)): ?>
+                    <?php
+                    echo $this->form($this->searchForm);
+                    ?>
+                    <p><?php echo $this->link($this->clearUrl, 'Clear search'); ?></p>
+                    <div class="govuk-phase-banner govuk-!-margin-bottom-8 govuk-!-margin-top-0"></div>
+                <?php endif; ?>
+                <?php if ($this->note): ?>
+                    <div class="govuk-inset-text">
+                        <?php echo $this->translate($this->note); ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (isset($this->form)): ?>
+                    <?php
+                        echo $this->form($this->form);
+                    ?>
+                <?php endif; ?>
+
+                <?php if (isset($this->table)): ?>
+                    <?php echo $this->table; ?>
+                <?php endif; ?>
+
+                <?php echo $this->partial(new \Olcs\View\Model\Licence\Vehicle\ChooseADifferentOptionViewModel()); ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<?php
+$count = 0;
+if(!empty($this->results)) {
+    $count = $this->results->getTotal();
+    $results = $this->results;
+}
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('search.result.title.' . $this->index),
+        'pageHeaderText' =>
+            '<p>' . $this->translateReplace('search.result.subtitle.' . $this->index, [$count]) . '</p>' .
+            (
+                $this->index === 'publication'
+                ? '<p>' . $this->translate('search.result.subtitle.publication.download') .'</p>'
+                : ''
+            ),
+        'pageHeaderTextEscape' => false,
+        'backUrl' => [
+            'url' => $this->url($this->backRoute),
+        ],
+    ]
+);
+?>
+
+<div class="row">
+    <div class="one-third sidebar--plain search-filter">
+
+        <h3 id="filterTitle"><?php echo $this->translate('search.form.title') ?></h3>
+
+        <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
+
+    </div>
+
+    <div class="two-thirds">
+
+        <?php
+        if ($this->noResultsMessage) {
+            echo $this->translate($this->noResultsMessage);
+        } else {
+            // OLCS-13312 - publication has a different view for the results so renders its own title in
+            // Common/view/table/layouts/traffic-commissioner-publication-selfserve.phtml
+            echo $results;
+        }
+        ?>
+
+    </div>
+</div><!-- row -->

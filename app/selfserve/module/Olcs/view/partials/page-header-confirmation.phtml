@@ -1,0 +1,23 @@
+<div class="page-header">
+
+<?php echo $this->flashMessengerAll(); ?>
+
+<?php
+if ($this->backUrl === true) {
+    echo $this->linkBack();
+} elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
+    echo $this->linkBack($this->backUrl);
+}
+?>
+
+<?php if ($this->pageSubTitle !== '') : ?>
+    <h3 class="page-header__subtitle page-header__text"><?php
+        echo (
+            $this->pageSubTitleEscape === false
+            ? $this->pageSubTitle
+            : $this->escapeHtml($this->pageSubTitle)
+        )
+    ?></h3>
+<?php endif; ?>
+
+</div>

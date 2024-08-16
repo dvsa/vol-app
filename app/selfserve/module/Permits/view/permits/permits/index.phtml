@@ -1,0 +1,45 @@
+<?php
+
+use Permits\View\Helper\IrhpApplicationSection;
+?>
+
+<div class="page-header__wrapper">
+    <h1 class="js-title"><?php echo $this->escapeHtml($this->translate('dashboard.permits.title')); ?></h1>
+</div>
+<div class="row">
+    <div class="dashboard two-thirds">
+        <?php
+        /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+        $menu = $this->navigation($this->navigation('navigation')
+            ->getContainer()
+            ->findBy('id', 'dashboard-licences-applications'))
+            ->menu();
+
+        echo $menu->setMinDepth(0)
+            ->setMaxDepth(0)
+            ->setPartial('partials/tabs-nav');
+        ?>
+
+        <?php echo $this->flashMessengerAll(); ?>
+
+        <?php if ($isEligible): ?>
+            <?php if ($issuedNo != 0 || $applicationsNo != 0) : ?>
+                    <?php if ($issuedNo > 0): ?>
+                        <?php echo $issuedTable; ?>
+                        <p>&nbsp;</p>
+                    <?php endif; ?>
+                    <?php if ($applicationsNo > 0): ?>
+                        <?php echo $applicationsTable; ?>
+                    <?php endif; ?>
+            <?php else: ?>
+                <p><?php echo $this->escapeHtml($this->translate('dashboard.permits.empty')); ?></p>
+            <?php endif; ?>
+            <a href="<?php echo $this->url(IrhpApplicationSection::ROUTE_TYPE, [], [], true); ?>" role="button" draggable="false" class="govuk-button govuk-!-margin-top-8">
+                <?php echo $this->translate('permits.application.overview.button'); ?>
+            </a>
+        <?php else : ?>
+            <p class="govuk-inset-text"><?php echo $this->escapeHtml($this->translate('permits.application.ineligible')); ?></p>
+        <?php endif; ?>
+    </div>
+    <?php echo $this->translate('markup-ecmt-permit-dashboard-right-column'); ?>
+</div>
