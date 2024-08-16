@@ -1,0 +1,46 @@
+<?php
+echo $this->render(
+    '/partials/page-header-simple.phtml',
+    [
+        'pageTitle' => $this->translate('dashboard.fees.title'),
+    ]
+);
+?>
+
+<div class="row">
+    
+  <div class="dashboard two-thirds">
+
+    <?php echo $this->flashMessengerAll(); ?>
+  
+    <?php
+  
+      /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+      $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+    
+      echo $menu->setMinDepth(0)->setMaxDepth(0)
+          ->setPartial('partials/tabs-nav');
+        
+    ?>
+  
+    <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+    ?>
+      <div class="govuk-inset-text">
+          <p><?php echo $this->translate($message); ?></p>
+      </div>
+    <?php
+      endforeach;
+    } ?>
+  
+    <?php if (isset($table)): ?>
+      <?php echo $table; ?>
+    <?php endif; ?>
+    
+  </div>
+  
+  <?php echo $this->partial('partials/dashboard-right-column'); ?>
+
+</div>

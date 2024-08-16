@@ -1,0 +1,204 @@
+<div class="row">
+
+  <div class="two-thirds">
+      <?php
+      echo $this->partial(
+          'partials/page-header-simple',
+          [
+              'pageTitle' => $this->translate('lva-summary-title'),
+              'pageSubTitle' => $this->licence . ' / ' . $this->application,
+          ]
+      );
+      ?>
+      <?php if ($justPaid): ?>
+      <p>
+          <?php
+          echo $this->translate(
+              ($outstandingFee) ?
+              'lva-summary-application-submitted-fee-outstanding' :
+              'lva-summary-application-submitted'
+          );
+          ?>
+      </p>
+      <div class="confirmation">
+          <p><?php echo $this->translate('lva-summary-reference-number'); ?></p>
+          <h2><?php echo $this->escapeHtml($licence . '/' . $application); ?></h2>
+          <?php if ($paymentRef): ?>
+              <p>
+                  <?php
+                    echo $this->linkNewWindow(
+                        $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]),
+                        'pay-fees.success.view-receipt'
+                    );
+                  ?>
+              </p>
+          <?php endif; ?>
+      </div>
+      <?php endif; ?>
+      <div class="article">
+        <?php if (empty($actions) || $hideContent): ?>
+            <h2><?php echo $this->translate('what-happens-next'); ?></h2>
+            <p><?php echo $this->translate('application-summary-complete-what-next-text'); ?></p>
+        <?php else: ?>
+            <h2><?php echo $this->translate('what-do-i-need-to-do-next'); ?></h2>
+        <?php endif; ?>
+      </div>
+      <div class="article">
+
+          <?php if (array_key_exists('PRINT_SIGN_RETURN', $actions) && !$hideContent): ?>
+              <div class="incomplete-section">
+                  <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
+                  <p><?php echo $this->translate('print-sign-return-declaration-form-text' . ($isNi ? '-ni' : '')); ?></p>
+                  <p>
+                      <?php
+                          echo $this->linkNewWindow(
+                              $this->url('lva-' . $lva . '/declaration', [], [], true),
+                              'print-declaration-form',
+                              'download'
+                          );
+                      ?>
+                  </p>
+              </div>
+          <?php endif; ?>
+
+          <div class="incomplete-section">
+              <h3><?php echo $this->translate('supply-supporting-evidence'); ?></h3>
+              <p><?php echo $this->translate('supply-supporting-evidence-text-hint'); ?></p>
+              <?php if (!empty($actions['SUPPLY_SUPPORTING_EVIDENCE'])): ?>
+                  <p><?php echo $this->translate('supply-supporting-evidence-text-1'); ?></p>
+                  <ul>
+                      <?php
+                      foreach ($actions['SUPPLY_SUPPORTING_EVIDENCE'] as $evidence) {
+                          ?>
+                          <li><?php echo $this->translate($evidence); ?></li>
+                          <?php
+                      }
+                      ?>
+                  </ul>
+              <?php endif; ?>
+              <div>
+                  <a class="govuk-button govuk-button--secondary" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
+              </div>
+              <div>
+                <p class="govuk-body"><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
+              </div>
+          </div>
+
+          <?php if (array_key_exists('APPROVE_TM', $actions) && !$hideContent): ?>
+              <div class="incomplete-section">
+                  <h3><?php echo $this->translate('approve-tm.title'); ?></h3>
+                  <div class="table__wrapper">
+                      <table class="govuk-table">
+                          <thead class="govuk-table__head">
+                              <tr class="govuk-table__row">
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.name.title')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('Status')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.dob.title')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.actions.title')); ?></th>
+                              </tr>
+                          </thead>
+                          <tbody class="govuk-table__body">
+                          <?php
+                          foreach ($transportManagers as $transportManager) {
+
+                              $tmPerson = $transportManager['transportManager']['homeCd']['person'];
+                              $tmName = sprintf('%s %s', $tmPerson['forename'], $tmPerson['familyName']);
+                              $tmStatus = $transportManager['tmApplicationStatus'];
+                              $tmLink = $this->url(
+                                  'lva-' . $lva . '/transport_manager_details',
+                                  ['action' => null, 'child_id' => $transportManager['id']],
+                                  [],
+                                  true
+                              );
+
+                              ?>
+                              <tr class="govuk-table__row">
+                                  <td class="govuk-table__cell">
+                                      <?php echo $this->escapeHtml($tmName); ?>
+                                  </td>
+                                  <td class="govuk-table__cell">
+                                      <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
+                                  </td>
+                                  <td class="govuk-table__cell"><?php echo $this->escapeHtml(date(strtotime($tmPerson['birthDate']))); ?></td>
+                                  <td class="govuk-table__cell">
+                                      <?php echo $this->link($tmLink, 'approve-tm.table.action.view-details'); ?>
+                                  </td>
+                              </tr>
+                              <?php
+                          }
+                          ?>
+                          </tbody>
+                      </table>
+                  </div><!-- .table__wrapper -->
+              </div>
+          <?php endif; ?>
+
+          <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                  <span class="govuk-warning-text__assistive">Warning</span>
+                  <?php echo $this->translate($this->importantText); ?>
+              </strong>
+          </div>
+      </div><!-- .article -->
+
+      <div class="govuk-button-group">
+          <a class="govuk-button" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a>
+      </div>
+
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar" role="complementary">
+
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+
+          <ul class="govuk-list">
+          <li>
+          <?php
+              echo $this->linkNewWindow($this->url('lva-' . $lva . '/review', [], [], true), 'view-full-application');
+          ?>
+          </li>
+            <?php if (isset($canCancel) && $canCancel): ?>
+            <li>
+                <?php
+                    echo $this->linkModal($this->url('lva-application/cancel', [], [], true), 'application.cancel');
+                ?>
+            </li>
+            <?php endif; ?>
+            <?php if (isset($canWithdraw) && $canWithdraw): ?>
+            <li>
+              <?php
+                  echo $this->linkModal($this->url('lva-' . $lva . '/withdraw', [], [], true), 'withdraw-application');
+              ?>
+            </li>
+            <?php endif; ?>
+            <?php if (isset($paymentRef) && $paymentRef): ?>
+              <li>
+                  <?php
+                    echo $this->linkNewWindow(
+                        $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]),
+                        'pay-fees.success.print-receipt'
+                    );
+                  ?>
+              </li>
+            <?php endif; ?>
+          </ul>
+
+      </div>
+
+      <div class="info-box info-box--blue">
+        <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+        <dl class="meta">
+          <dt><?php echo $this->translate('submitted-date.title'); ?></dt>
+          <dd><?php echo date('d F Y', strtotime($submittedDate)); ?></dd>
+          <dt><?php echo $this->translate('completion-date.title'); ?></dt>
+          <dd><?php echo date('d F Y', strtotime($completionDate)); ?></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+</div>

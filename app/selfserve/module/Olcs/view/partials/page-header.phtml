@@ -1,0 +1,87 @@
+<div class="page-header">
+
+  <?php echo $this->flashMessengerAll(); ?>
+
+  <?php
+  if ($this->backUrl === true) {
+      echo $this->linkBack();
+
+  } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
+      echo $this->linkBack($this->backUrl);
+  }
+  ?>
+
+  <div class="row">
+    <div class="page-header__wrapper two-thirds">
+
+      <?php if (!empty($this->pageSubTitleUrl)) : ?>
+          <h3 class="page-header__subtitle">
+              <?php echo $this->link($this->pageSubTitleUrl['url'], $this->pageSubTitleUrl['label']); ?>
+          </h3>
+      <?php endif; ?>
+
+      <?php if (isset($this->pageSubTitle) && $this->pageSubTitle != '') : ?>
+          <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($this->pageSubTitle); ?></h3>
+      <?php endif; ?>
+
+      <h1><?php
+          $pageTitle = $this->translate($this->pageTitle);
+          echo ($this->pageTitleEscape === false ? $pageTitle : $this->escapeHtml($pageTitle));
+      ?></h1>
+
+      <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>
+        <div class="page-header__text">
+            <p><?php
+                echo (
+                    $this->pageHeaderTextEscape !== false
+                    ? $this->escapeHtml($this->pageHeaderText)
+                    : $this->pageHeaderText
+                );
+            ?></p>
+        </div>
+      <?php } ?>
+
+      <?php if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) { ?>
+        <p>
+          <b>
+            <?php echo $this->link($this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']), $this->pageHeaderUrl['text']); ?>
+          </b>
+        </p>
+      <?php } ?>
+
+    </div>
+
+    <?php if (!empty($this->actionsElms)) { ?>
+        <ul class="page-header__actions one-third">
+            <?php
+            /** @var \Laminas\Form\ElementInterface|string $element */
+            foreach ($this->actionsElms as $element) :
+                if (empty($element)) {
+                    continue;
+                }
+
+                if (!$element instanceof \Laminas\Form\ElementInterface) {
+                    echo '<li>' . $element . '</li>';
+
+                    continue;
+                }
+
+                //  laminas element
+                $tmpElm = clone $element;
+                $tmpElm->setAttribute('class', 'page-header__action');
+                ?>
+                <li><?php echo $this->formElement($tmpElm); ?></li>
+                <?php
+            endforeach; ?>
+        </ul>
+    <?php } ?>
+
+  </div><!-- row -->
+
+</div><!-- .page-header -->
+
+<?php
+if (isset($this->tabs)) {
+    echo $this->partial('partials/tabs');
+}
+?>

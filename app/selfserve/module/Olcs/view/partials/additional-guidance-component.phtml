@@ -1,0 +1,12 @@
+<?php
+if (!is_array($this->additionalGuidance)) {
+    printf('<p class="govuk-body">%s</p>', $this->escapeHtml($this->translate($this->additionalGuidance)));
+} else {
+    if (isset($this->additionalGuidance['disableHtmlEscape']) && ($this->additionalGuidance['disableHtmlEscape'] === true)) {
+        echo $this->translate($this->additionalGuidance['value']);
+    } else {
+        foreach ($this->additionalGuidance as $key => $line) {
+            printf('<p class="govuk-body">%s</p>', $this->escapeHtml($this->translate($line)));
+        }
+    }
+}

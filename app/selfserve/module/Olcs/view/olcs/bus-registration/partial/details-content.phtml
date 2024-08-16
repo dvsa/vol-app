@@ -1,0 +1,159 @@
+<?php
+    /** @var \Common\View\Helper\CurrentUser $curUser */
+    $curUser = $this->currentUser();
+
+    $serviceNos = $this->registrationDetails['serviceNo'];
+    if (!empty($this->registrationDetails['otherServices'])) {
+        foreach ($this->registrationDetails['otherServices'] as $item) {
+            $serviceNos .= ', ' . $item['serviceNo'];
+        }
+    }
+
+    $busServiceTypes = [];
+    if (!empty($this->registrationDetails['busServiceTypes'])) {
+        foreach ($this->registrationDetails['busServiceTypes'] as $key => $item) {
+            $busServiceTypes[] = [
+                'label' => ($key == 0 ? 'Service type' : ''),
+                'value' => $item['description'],
+            ];
+        }
+    } else {
+        $busServiceTypes[] = [
+            'label' => 'Service type',
+            'value' => ''
+        ];
+    }
+
+    $localAuthoritiesList = [];
+    if (!empty($this->registrationDetails['localAuthoritys'])) {
+        foreach ($this->registrationDetails['localAuthoritys'] as $key => $item) {
+            $localAuthoritiesList[] = [
+                'label' => ($key == 0 ? 'Local authorities covered by route' : ''),
+                'value' => $item['description'],
+            ];
+        }
+    } else {
+        $localAuthoritiesList[] = [
+            'label' => 'Local authorities covered by route',
+            'value' => ''
+        ];
+    }
+
+    $trafficAreasList = [];
+    if (!empty($this->registrationDetails['trafficAreas'])) {
+        foreach ($this->registrationDetails['trafficAreas'] as $key => $item) {
+            $trafficAreasList[] = [
+                'label' => ($key == 0 ? 'TAOs covered by route' : ''),
+                'value' => $item['name'],
+            ];
+        }
+    } else {
+        $trafficAreasList[] = [
+            'label' => 'TAOs covered by route',
+            'value' => ''
+        ];
+    }
+
+    $licence = $this->registrationDetails['licence'];
+
+    echo $this->render('partials/read-only/main',
+        [
+            'multiItems' => [
+                0 => [
+                    ['label' => 'Registration number', 'value' => $this->registrationDetails['regNo']],
+                    ['label' => 'Licence Number', 'value' => $licence['licNo']],
+                    [
+                        'label' => 'Operator name',
+                        'value' => ($curUser->isLocalAuthority() === false ? null : $licence['organisation']['name']),
+                        'hideIfEmpty' => true,
+                    ],
+                ],
+                1 => [
+                    ['label' => 'Variation number', 'value' => $this->registrationDetails['variationNo']]
+                ],
+                2 => [
+                    ['label' => 'Status', 'value' => $this->registrationDetails['status']['description']]
+                ],
+                3 => [
+                    ['label' => 'Service number.', 'value' => $serviceNos]
+                ],
+                4 => $busServiceTypes,
+                5 => [
+                    ['label' => 'Start point', 'value' => $this->registrationDetails['startPoint']],
+                    ['label' => 'Finish point', 'value' => $this->registrationDetails['finishPoint']],
+                    ['label' => 'Via', 'value' => $this->registrationDetails['via']]
+                ],
+                6 => [
+                    [
+                        'label' => 'Date received',
+                        'date' => $this->registrationDetails['receivedDate'],
+                    ],
+                    [
+                        'label' => 'Effective date',
+                        'date' => $this->registrationDetails['effectiveDate'],
+                    ],
+                    [
+                        'label' => 'End date',
+                        'date' => $this->registrationDetails['endDate'],
+                    ],
+                ],
+                7 => [
+                    [
+                        'label' => 'supported-by-subsidies',
+                        'type' => 'yesno',
+                        'value' => $this->registrationDetails['subsidised']['description']
+                    ]
+                ],
+                8 => $localAuthoritiesList,
+                9 => $trafficAreasList,
+                10 => [
+                    [
+                        'label' => 'N&P reference',
+                        'value' => (
+                            isset($this->registrationDetails['npPublicationNo'])
+                            ? $this->registrationDetails['npPublicationNo']
+                            : null
+                        ),
+                        'hideIfEmpty' => true,
+                    ],
+                ],
+            ]
+        ]
+    );
+    ?>
+        <?php echo $this->variationHistoryTable; ?>
+
+        <?php
+        if (!empty($documents)): ?>
+            <h3><?php echo $this->translate('Documents'); ?></h3>
+            <div class="files">
+                <?php
+
+                foreach ($documents as $document):
+                    ?>
+                    <?php
+                        $url = $this->url(
+                            'getfile',
+                            [
+                                'identifier' => $document['id']
+                            ]
+                        );
+                    ?>
+                    <div class="field file-upload">
+                        <p class="govuk-!-font-weight-bold">
+                                <?php
+                                    if (!empty($document['description'])) {
+                                        $linkText = $document['description'];
+                                    } elseif (!empty($document['filename'])) {
+                                        $linkText = basename($document['filename']);
+                                    } else {
+                                        $linkText = 'documents.unknown-file-description';
+                                    }
+
+                                    echo $this->link($url, $linkText);
+                                ?>
+                        </p>
+                    </div>
+                <?php endforeach?>
+            </div>
+        <?php endif?>

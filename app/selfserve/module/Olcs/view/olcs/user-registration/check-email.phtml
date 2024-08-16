@@ -1,0 +1,34 @@
+<?php
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageHeaderText' =>
+            '<div class="govuk-inset-text"><p>' .
+                $this->translateReplace(
+                    'user-registration.page.check-email.guidance', [$this->emailAddress]
+                ) .
+            '</p></div>',
+        'pageHeaderTextEscape' => false,
+    ]
+);
+?>
+
+<div class="row">
+
+  <div class="two-thirds">
+    <div class="article">
+      <p>
+          <?php echo $this->translateReplace(
+                'user-registration.page.check-email.content',
+                [
+                    $this->url('auth/login/GET')
+                ]
+            ); ?>
+      </p>
+      <?php echo $this->translate('markup-problems-signing-in');?>
+    </div>
+  </div>
+
+</div>

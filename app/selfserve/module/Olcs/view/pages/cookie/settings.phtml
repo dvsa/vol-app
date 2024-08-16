@@ -1,0 +1,109 @@
+<?php
+
+if ($success) {
+
+?>
+
+<section class="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite" role="region">
+  <h2 class="gem-c-notice__title"><?php echo $this->translate('cookie-settings-saved-heading'); ?></h2>
+  <p><?php echo $this->translate('cookie-settings-saved-content'); ?></p>
+</section>
+
+<?php
+
+}
+
+?>
+
+<div class="gem-c-title govuk-!-margin-top-8 govuk-!-margin-bottom-8">
+  <h1 class="gem-c-title__text ">
+    <?php echo $this->translate('cookie-settings-heading'); ?>
+  </h1>
+</div>
+
+<div class="gem-c-govspeak govuk-govspeak " data-module="govspeak">
+  <?php echo $this->translate('markup-cookie-settings-intro'); ?>
+</div>
+<h2 class="gem-c-heading gem-c-heading--padding"><?php echo $this->translate('cookie-settings-cookie-settings-heading'); ?></h2>
+<div class="cookie-settings__form-wrapper">
+  <?php echo $this->translate('markup-cookie-settings-cookie-settings'); ?>
+  <form data-module="cookie-settings" method="POST" id="olcs-cookie-settings" name="olcs-cookie-settings">
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="hint-aed44408">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <h3 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-measure-website-use-heading'); ?></h3>
+        </legend>
+
+        <div id="hint-aed44408" class="gem-c-hint govuk-hint govuk-!-margin-bottom-3">
+          <?php echo $this->translate('markup-cookie-settings-measure-website-use'); ?>
+        </div>
+        <div class="govuk-radios govuk-radios--inline">
+          <div class="gem-c-radio govuk-radios__item">
+          <input type="radio" name="analytics" id="radio-fc9e63d9-0" value="true" class="govuk-radios__input"<?php if ($preferences['analytics']) { ?> checked="checked"<?php } ?>>
+
+            <label for="radio-fc9e63d9-0" class="gem-c-label govuk-label govuk-radios__label">
+              <span><?php echo $this->translate('cookie-settings-on'); ?></span>
+            </label>
+          </div>
+          <div class="gem-c-radio govuk-radios__item">
+            <input type="radio" name="analytics" id="radio-fc9e63d9-1" value="false" class="govuk-radios__input"<?php if (!$preferences['analytics']) { ?> checked="checked"<?php } ?>>
+
+            <label for="radio-fc9e63d9-1" class="gem-c-label govuk-label govuk-radios__label">
+              <span><?php echo $this->translate('cookie-settings-off'); ?></span>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <!-- Cookies that remember your settings -->
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="hint-2a73cd62">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h3 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-remember-your-settings-heading'); ?></h3>
+        </legend>
+
+        <div id="hint-2a73cd62" class="gem-c-hint govuk-hint govuk-!-margin-bottom-3">
+          <?php echo $this->translate('markup-cookie-settings-remember-your-settings'); ?>
+        </div>
+        <div class="govuk-radios govuk-radios--inline">
+          <div class="gem-c-radio govuk-radios__item">
+            <input type="radio" name="settings" id="radio-110c727c-0" value="true" class="govuk-radios__input"<?php if ($preferences['settings']) { ?> checked="checked"<?php } ?>>
+
+            <label for="radio-110c727c-0" class="gem-c-label govuk-label govuk-radios__label">
+              <span><?php echo $this->translate('cookie-settings-on'); ?></span>
+            </label>
+          </div>
+          <div class="gem-c-radio govuk-radios__item">
+            <input type="radio" name="settings" id="radio-110c727c-1" value="false" class="govuk-radios__input"<?php if (!$preferences['settings']) { ?> checked="checked"<?php } ?>>
+
+            <label for="radio-110c727c-1" class="gem-c-label govuk-label govuk-radios__label">
+              <span><?php echo $this->translate('cookie-settings-off'); ?></span>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <!-- Site security cookies -->
+    <div class="gem-c-govspeak govuk-govspeak " data-module="govspeak">
+      <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-security-heading'); ?> </h3>
+      <?php echo $this->translate('markup-cookie-settings-security-cookies'); ?>
+    </div>
+    <!-- Strictly necessary cookies -->
+    <div class="gem-c-govspeak govuk-govspeak govuk-!-margin-top-7  " data-module="govspeak">
+    <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-strictly-necessary-heading'); ?></h3>
+      <?php echo $this->translate('markup-cookie-settings-strictly-necessary'); ?>
+    </div>
+    <button class="gem-c-button govuk-button" type="submit"><?php echo $this->translate('cookie-settings-save-changes'); ?></button>
+    <input type="hidden" name="security" value="<?php echo $security; ?>">
+  </form>
+</div>
+
+<div class="cookie-settings__gov-services">
+  <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-third-party-heading'); ?></h3>
+  <?php echo $this->translate('markup-cookie-settings-third-party'); ?>
+</div>
+
+  <div class="cookie-settings__gov-services">
+  <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-government-heading'); ?></h3>
+  <?php echo $this->translate('markup-cookie-settings-government'); ?>
+</div>
