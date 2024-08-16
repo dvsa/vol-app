@@ -1,0 +1,14 @@
+<?php foreach ($subSections as $subSection) {
+    
+    if (isset($subSection['title'])) { ?>
+        <h3><?php echo $this->translate($subSection['title']); ?></h3>
+        <hr>
+    <?php } if (isset($subSection['mainItems'])) {
+        foreach ($subSection['mainItems'] as $mainItem) {
+            echo $this->render('partials/read-only/main', $mainItem);
+        }
+    } else {
+        echo $this->render('partials/read-only/main', $subSection['config']);
+    }
+        
+}

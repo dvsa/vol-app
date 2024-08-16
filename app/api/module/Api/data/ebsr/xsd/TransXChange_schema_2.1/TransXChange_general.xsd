@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "V2.1  2005 09 05 
+            Change to ref NaPT journey & stop 2.1 (Make Landmark and street optional)  
+       2005 09 27 
+             Add TransXChangeNptgLocalitiesStructure and  AnnotatedNptgLocalityRefStructure to support TXC  publisher enhancement 
+
+	    2009.02.04 Correction to Coding of key ref constraint for   AnyOperatorIdKeyRef 
+   to reference @id
+-->
+<!-- (c) Crown Copyright 2000-2005   -->
+<xsd:schema xmlns="http://www.transxchange.org.uk/" xmlns:txc="http://www.transxchange.org.uk/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.transxchange.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1" id="TransXChangeGeneral">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Contributor>Roger Slevin [Roger Slevin dft .gsi gov.uk]</Contributor>
+				<Contributor>Paul Robinson [Paul Robinson carlbro  ]</Contributor>
+				<Contributor>Richard Mejia [Richard Mejia carlbro  ]</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created as W3C .xsd schema by CGEY as 1.1 XML schema,  Ross Dixon, Kieran Holmes mailto:ross.dixon@cgey.com</Creator>
+				<Date>
+					<Created>2001-05-20</Created>
+				</Date>
+				<Date>
+					<Modified>2003-09-11</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-02-01</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-03-08</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-07-01</Modified>
+				</Date>
+				<Date>
+					<Modified>2005-09-05</Modified>
+				</Date>
+				<Date>
+					<Modified>2005-09-27</Modified>
+				</Date>
+				<Description>
+					<p>The TransXChange is a UK nationwide system for exchanging bus schedules. It is used both for the electronic registration of bus routes with the Vehicle Operating Services Agency  (VOSA), and for the exchange of bus routes with other systems such as journey planners and real-time tracking systems.</p>
+					<p>There are two closely related but distinct TransXChange XML schemas:</p>
+					<ul>
+						<li>A <b>Registration</b> schema for registering a bus timetable. This includes mandatory elements.</li>
+						<li>A <b>General</b> schema for exchanging bus timetable data between systems of all sorts.</li>
+					</ul>
+					<p>This document is the general schema.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.transxchange.org.uk/schema/2.1}TransXChange_general.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+					<Requires>http://www.transxchange.org.uk/schema/2.1/TransXChange_common.xsd</Requires>
+				</Relation>
+				<Relation>
+					<HasPart>http://www.transxchange.org.uk/schema/2.1/TransXChange_common.xsd</HasPart>
+				</Relation>
+				<Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2004</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Originally developed as Version 1.0 in 2000 from Transmodel and ATCO -CIF, By Ross Dixon and Kieran Holmes of CGEY.</li>
+						<li>Revised as Version 1.1, 2001 by Ross Dixon</li>
+						<li>Revised as Version 1.2, 2002 by Ross Dixon</li>
+					</ul>
+				</Source>
+				<Status>Version 2.1</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport,
+Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways), Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>TransXChange General Schema, an XML format for exchanging bus timetables.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+	</xsd:annotation>
+	<xsd:include schemaLocation="TransXChange_common.xsd"/>
+	<!-- ======================================================================= -->
+	<!-- TransXChange Root -->
+	<xsd:element name="TransXChange">
+		<xsd:annotation>
+			<xsd:documentation>General purpose schema for exchanging one or more bus schedules, or parts thereof.
+@xml:lang
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber,
+@FileName,
+@SchemaVersion,
+@MappingSystem,
+@LocationSystem,
+@RegistrationDocument</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ServicedOrganisations" type="ServicedOrganisationsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of Serviced Organisations and their working and non-working days.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="NptgLocalities" type="TransXChangeNptgLocalitiesStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Names of Nptg Localities used in Local stop definitions. Allows an optional  local copy of name data for localities taken from the NPTG. Locality names can be included in a TransXChange document to support the Publishing of stop names that include the locality name eg "Barset, High Street".  Locality names of externally referenced NaPTAN stops should be included in the AnnotatedStopPointRef instead. </xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="StopPoints" type="TransXChangeStopPointsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Local Stop definitions for Stops used in services. Normally Stops will be defined simply by referencing their NaPTAN AtcoCode in a StopPointRef. Stops can also be defined locally here.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="StopAreas" type="StopAreasStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Local StopArea definitions. Normally StopAreas will be defined as part of their NaPTAN Definition. Areas can be defined locally here.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="RouteSections" type="RouteSectionsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of the Route Sections, i.e. collections of  of route links, making up all or part of a Route. These are used in Route definitions.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Routes" type="RoutesStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of transport Routes.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="JourneyPatternSections" type="JourneyPatternSectionsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of journey pattern sections.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Operators" type="OperatorsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of operators.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Services" type="ServicesStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of services.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="VehicleJourneys" type="VehicleJourneysStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Definitions of vehicle journeys, used in one or more services.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Registrations" type="RegistrationsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Registration details.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="SupportingDocuments" type="SupportingDocumentsStructure" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Additional documents describing the service.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attributeGroup ref="DocumentModificationDetailsGroup"/>
+			<xsd:attributeGroup ref="DocumentMetadataGroup"/>
+			<xsd:attribute name="LocationSystem" type="LocationSystemEnumeration" use="optional">
+				<xsd:annotation>
+					<xsd:documentation>Data system to use for location coordinate references within the document. This is fixed to be Grid for registration documents.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="RegistrationDocument" type="RegistrationDocumentType" use="optional" default="false"/>
+		</xsd:complexType>
+		<xsd:key name="AnyStopPointKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C1</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:StopPoints/txc:StopPoint/txc:AtcoCode|.//txc:StopPoints/txc:AnnotatedStopPointRef/txc:StopPointRef"/>
+			<xsd:field xpath="."/>
+		</xsd:key>
+		<xsd:keyref name="AnyStopPointKeyRef" refer="AnyStopPointKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C1</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:StopPointRef|.//txc:VariableStopPointRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="StopPointPrivateKey">
+			<xsd:selector xpath=".//txc:StopPoints/txc:StopPoint"/>
+			<xsd:field xpath="txc:PrivateCode"/>
+		</xsd:unique>
+		<xsd:key name="StopAreaKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C2</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:StopAreas/txc:StopArea"/>
+			<xsd:field xpath="txc:StopAreaCode"/>
+		</xsd:key>
+		<xsd:keyref name="StopAreaKeyRef" refer="StopAreaKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C2</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:StopAreaRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="StopAreaPrivateKey">
+			<xsd:selector xpath=".//txc:StopAreas/txc:StopArea"/>
+			<xsd:field xpath="txc:PrivateCode"/>
+		</xsd:unique>
+		<xsd:key name="ServicedOrganisationKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C3</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:ServicedOrganisations/txc:ServicedOrganisation"/>
+			<xsd:field xpath="txc:OrganisationCode"/>
+		</xsd:key>
+		<xsd:keyref name="ServicedOrganisationKeyRef" refer="ServicedOrganisationKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C3</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:ServicedOrganisationRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:keyref name="ParentServicedOrganisationKeyRef" refer="ServicedOrganisationKey">
+			<xsd:selector xpath=".//txc:ServicedOrganisations/txc:ServicedOrganisation"/>
+			<xsd:field xpath="txc:ParentServicedOrganisationRef"/>
+		</xsd:keyref>
+		<xsd:key name="ServiceKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C4</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Services/txc:Service"/>
+			<xsd:field xpath="txc:ServiceCode"/>
+		</xsd:key>
+		<xsd:keyref name="ServiceKeyRef" refer="ServiceKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C4</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:ServiceRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="AnyVehicleJourneyKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C5</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:VehicleJourneys/txc:VehicleJourney|.//txc:VehicleJourneys/txc:FlexibleVehicleJourney"/>
+			<xsd:field xpath="txc:VehicleJourneyCode"/>
+		</xsd:unique>
+		<xsd:keyref name="AnyVehicleJourneyKeyRef" refer="AnyVehicleJourneyKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C5</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:VehicleJourneyRef|.//txc:InboundVehicleJourneyRef|.//txc:OutboundVehicleJourneyRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="VehicleJourneyPrivateKey">
+			<xsd:selector xpath=".//txc:VehicleJourneys/txc:VehicleJourney"/>
+			<xsd:field xpath="txc:PrivateCode"/>
+		</xsd:unique>
+		<xsd:unique name="GarageKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C6</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Operators/txc:LicensedOperator/txc:Garages/txc:Garage|.//txc:Operators/txc:Operator/txc:Garages/txc:Garage"/>
+			<xsd:field xpath="txc:GarageCode"/>
+		</xsd:unique>
+		<xsd:keyref name="GarageKeyRef" refer="GarageKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule C6</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:GarageRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="RouteKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I1</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Routes/txc:Route"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="RouteKeyRef" refer="RouteKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I1</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:RouteRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="RoutePrivateKey">
+			<xsd:selector xpath=".//txc:Routes/txc:Route"/>
+			<xsd:field xpath="txc:PrivateCode"/>
+		</xsd:unique>
+		<xsd:unique name="AnyJourneyPatternKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I2</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Service/txc:StandardService/txc:JourneyPattern|.//txc:Service/txc:FlexibleService/txc:FlexibleJourneyPattern"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="AnyJourneyPatternKeyRef" refer="AnyJourneyPatternKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I2</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternRef|.//txc:FlexibleJourneyPatternRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="AnyJourneyPatternPrivateKey">
+			<xsd:selector xpath=".//txc:Service/txc:StandardService/txc:JourneyPattern|.//txc:Service/txc:FlexibleService/txc:FlexibleJourneyPattern"/>
+			<xsd:field xpath="txc:PrivateCode"/>
+		</xsd:unique>
+		<xsd:unique name="LineKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I5</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Lines/txc:Line"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="LineKeyRef" refer="LineKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I5</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:LineRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="RouteSectionKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I6</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:RouteSections/txc:RouteSection"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="RouteSectionKeyRef" refer="RouteSectionKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I6</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:RouteSectionRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="JourneyPatternSectionKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I7</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternSections/txc:JourneyPatternSection"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="JourneyPatternSectionKeyRef" refer="JourneyPatternSectionKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I7</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternSectionRefs"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="RouteLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I8</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:RouteSection/txc:RouteLink"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="RouteLinkKeyRef" refer="RouteLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I8</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:RouteLinkRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="JourneyPatternTimingLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I9</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternTimingLink"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="JourneyPatternTimingLinkKeyRef" refer="JourneyPatternTimingLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I9</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternTimingLinkRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="VehicleJourneyTimingLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I10</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:VehicleJourneyTimingLink"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="VehicleJourneyTimingLinkKeyRef" refer="VehicleJourneyTimingLinkKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I10</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:VehicleJourneyTimingLinkRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="JourneyPatternTimingLinkStopUsageKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I11</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:JourneyPatternTimingLink/txc:From|.//txc:JourneyPatternTimingLink/txc:To"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="JourneyPatternTimingLinkStopUsageKeyRef" refer="JourneyPatternTimingLinkStopUsageKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I11</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:Inbound/txc:StopUsageRef|.//txc:Outbound/txc:StopUsageRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="VehicleJourneyTimingLinkStopUsageKey">
+			<xsd:annotation>
+				<xsd:documentation>Internal Integrity Rule I12</xsd:documentation>
+			</xsd:annotation>
+			<xsd:selector xpath=".//txc:VehicleJourneyTimingLink/txc:From|.//txc:VehicleJourneyTimingLink/txc:To"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:unique name="JourneyPatternInterchangeKey">
+			<xsd:selector xpath=".//txc:Service/txc:JourneyPatternInterchange"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:keyref name="JourneyPatternInterchangeKeyRef" refer="JourneyPatternInterchangeKey">
+			<xsd:selector xpath=".//txc:JourneyPatternInterchangeRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:unique name="VehicleJourneyInterchangeKey">
+			<xsd:selector xpath=".//VehicleJourneyInterchange"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:unique name="AnyOperatorIdKey">
+			<xsd:selector xpath=".//txc:Operators/txc:Operator|.//txc:Operators/txc:LicensedOperator"/>
+			<xsd:field xpath="@id"/>
+		</xsd:unique>
+		<xsd:unique name="AnyOperatorCodeKey">
+			<xsd:selector xpath=".//txc:Operators/txc:Operator|.//txc:Operators/txc:LicensedOperator"/>
+			<xsd:field xpath="txc:OperatorCode"/>
+		</xsd:unique>
+		<xsd:keyref name="AnyOperatorIdKeyRef" refer="AnyOperatorIdKey">
+			<xsd:selector xpath=".//txc:OperatorIdRef"/>
+			<xsd:field xpath="."/>
+		</xsd:keyref>
+		<xsd:keyref name="RegisteredOperatorIdKeyRef" refer="AnyOperatorIdKey">
+			<xsd:selector xpath=".//txc:RegisteredOperatorRef"/>
+			<xsd:field xpath="."/>
+			<!-- This constraint is for general only -->
+		</xsd:keyref>
+	</xsd:element>
+</xsd:schema>

@@ -1,0 +1,52 @@
+<p>We have already notified you that your ECMT permit application <?php echo $this->escapeHtml($this->applicationRef); ?> was successful.</p>
+
+<h3>Application status: Successful</h3>
+<p>You were allocated the full number of permits you applied for.
+<ul>
+    <li>Number of permits required: <?php echo $this->escapeHtml($this->permitsRequired); ?></li>
+    <li>Number of permits granted: <?php echo $this->escapeHtml($this->permitsGranted); ?></li>
+</ul>
+</p>
+
+<p>
+    The EU is close to agreeing a new law meaning UK operators will be able to carry out road haulage to EU member
+    states until 31 December 2019. The new rules are set to be approved by the EU Parliament and Council in March and
+    once agreed will allow you to make most journeys without a permit:
+<ul>
+    <li>You will be able to travel to any EU Member State (empty or laden) and return (empty or laden).</li>
+    <li>You will be allowed to undertake a limited amount of 'cross-trade' and 'cabotage' work on a transitional
+        basis – two such journeys per week for four months, reducing to one journey per week for the next three
+        months.
+    </li>
+    <li>The proposed EU law will however not allow permit-free access to non-EU countries. You will require an ECMT
+        permit to transit EU Member States to a 3rd countries such as Switzerland or Turkey.
+    </li>
+</ul>
+
+We expect that ECMT permits will only be needed for:
+<ul>
+    <li>Operators wishing to undertake more than one cross-trade load as part of their journey. ECMT permits
+        authorise up to 3 cross-trade loads.
+    </li>
+    <li>Operators who travel to non-EU Member States, through EU Member States – so for instance to Switzerland or
+        Ukraine.
+    </li>
+</ul>
+
+ECMT permits do not allow cabotage.
+</p>
+
+<h3>Next steps</h3>
+
+<p>
+    You need to decide whether you still want your permit(s). If you do, you now need to pay the Permit Issuing total
+    fee of £<?php echo $this->escapeHtml($this->issueFeeTotal); ?>
+    (£<?php echo $this->escapeHtml($this->issueFeeAmount); ?> per permit) before receiving your paper based permit and
+    corresponding logbook. These will be posted by first class recorded delivery.
+</p>
+<p>
+    You have until 23:59 on 21 March to pay for your allocated permits. If you do not pay the Permit Issuing fee in this
+    time, the permits granted to your business will be automatically cancelled.
+</p>
+
+<a href="<?php echo $this->awaitingFeeUrl; //replaced based on the env, so can't escape ?>">Pay for your permits</a>

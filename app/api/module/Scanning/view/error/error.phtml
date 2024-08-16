@@ -1,0 +1,17 @@
+<?php
+
+$response = array(
+    'message' => $this->message
+);
+
+if (isset($this->display_exceptions) && $this->display_exceptions) {
+    if(isset($this->exception) && $this->exception instanceof Exception) {
+        $response['exception'] = array(
+            'Exception' => $this->exception,
+            'Message' => $this->exception->getMessage(),
+            //'Trace' => $this->exception->getTraceAsString()
+        );
+    }
+}
+
+echo json_encode($response);

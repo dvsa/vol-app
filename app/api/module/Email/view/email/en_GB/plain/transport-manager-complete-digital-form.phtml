@@ -1,0 +1,17 @@
+Hello,
+
+<?php echo $this->organisation ?> has named you as a Transport Manager on Vehicle Operator Licence <?php echo $this->reference ?>.
+
+Before we can consider their application, you’ll need to submit your details to us.
+
+To do that sign in online at <?php echo $this->signInLink ?> with your username (<?php echo $this->username ?>) and password.
+
+Having problems?
+
+<?php
+$url = ($this->isNi) ?
+    'http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994' :
+    'https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1';
+?>
+
+For advice see the Transport Manager help guide at <?php echo $url ?> or email us at notifications@vehicle-operator-licensing.service.gov.uk.

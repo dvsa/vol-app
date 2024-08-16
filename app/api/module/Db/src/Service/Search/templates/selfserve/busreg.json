@@ -1,0 +1,107 @@
+{
+   "query": {
+      "bool": {
+         "filter": [
+            {
+               "bool": {
+                  "must_not": [
+                     {
+                        "terms": {
+                           "lic_status": [
+                              "lsts_not_submitted",
+                              "lsts_unlicenced",
+                              "lsts_withdrawn",
+                              "lsts_surrendered",
+                              "lsts_cancelled"
+                           ]
+                        }
+                     },
+                     {
+                        "exists": {
+                           "field": "is_deleted"
+                        }
+                     },
+                     {
+                        "terms": {
+                           "status": [
+                              "breg_s_surr"
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         ],
+         "should": [
+            {
+               "multi_match": {
+                  "query": "%SEARCH_TERM%",
+                  "fuzziness": 1,
+                  "fields": [
+                     "start_point",
+                     "finish_point"
+                  ]
+               }
+            },
+            {
+               "fuzzy": {
+                  "org_name": {
+                     "value": "%SEARCH_TERM%",
+                     "fuzziness": 2
+                  }
+               }
+            },
+            {
+               "match_phrase": {
+                  "org_name": {
+                     "query": "%SEARCH_TERM%",
+                     "slop": 2
+                  }
+               }
+            },
+            {
+               "match": {
+                  "lic_no": "%SEARCH_TERM%"
+               }
+            },
+            {
+               "match": {
+                  "reg_no": {
+                     "query": "%SEARCH_TERM%",
+                     "boost": 1.5
+                  }
+               }
+            },
+            {
+               "match": {
+                  "service_no_analysed": "%SEARCH_TERM%"
+               }
+            },
+            {
+               "match_phrase": {
+                  "service_no_analysed": {
+                     "query": "%SEARCH_TERM%",
+                     "boost": 2
+                  }
+               }
+            },
+            {
+               "match": {
+                  "org_name": "%SEARCH_TERM%"
+               }
+            },
+            {
+               "match": {
+                  "start_point": "%SEARCH_TERM%"
+               }
+            },
+            {
+               "match": {
+                  "finish_point": "%SEARCH_TERM%"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 5
+}

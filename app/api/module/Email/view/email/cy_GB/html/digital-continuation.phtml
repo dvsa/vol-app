@@ -1,0 +1,32 @@
+<p>
+    Your Vehicle Operator Licence <strong><?php echo $this->escapeHtml($this->licNo) ?></strong> is due to expire
+    on <strong><?php echo $this->escapeHtml($this->continuationDate)  ?></strong>
+</p>
+
+<p>
+    If you don't continue with your licence it will automatically end after the expiry date.
+</p>
+
+<p>
+    <strong>To continue your licence online you'll need to:</strong>
+</p>
+
+<ul>
+    <?php if ($this->isPsv && $this->isSpecialRestricted): ?>
+        <li>review your current licence and ensure that it is up to date</li>
+        <li>pay a fee of &pound;<?php echo number_format((float)$this->feeAmount, 2) ?> by debit or credit card</li>
+    <?php elseif ($this->isPsv) : ?>
+        <li>review your current licence and ensure that it is up to date</li>
+        <li>update your financial evidence (you'll need to know your average balance over the last three months, and details of other available finances)</li>
+    <?php else: ?>
+        <li>review your current licence and ensure that it is up to date</li>
+        <li>update your financial evidence (you'll need to know your average balance over the last three months, and details of other available finances)</li>
+        <li>pay a fee of &pound;<?php echo number_format((float)$this->feeAmount, 2) ?> by debit or credit card</li>
+    <?php endif; ?>
+</ul>
+
+<p>It is an offence to operate your vehicles without an operator's licence.</p>
+
+<p>
+    <a href="<?php echo $this->escapeHtml($this->continueLicenceUrl); ?>">Continue your licence</a>
+</p>

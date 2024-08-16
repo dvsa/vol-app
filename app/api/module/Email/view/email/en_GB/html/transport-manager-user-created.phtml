@@ -1,0 +1,14 @@
+<p>Hello,</p>
+
+<p><?php echo $this->escapeHtml($this->organisation); ?> has named you as a Transport Manager on Vehicle Operator 
+Licence application <?php echo $this->escapeHtml($this->reference); ?>.</p>
+
+<p>Before we can consider the application, you’ll need to submit your details to us through our online service.</p>
+
+<p>Your username is: <strong><?php echo $this->escapeHtml($this->loginId); ?></strong></p>
+
+<p>You’ll receive a second email with a temporary password in the next two hours. If it doesn’t arrive email <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a>.</p>
+
+<p>
+    <a href="<?php echo $this->escapeHtml($this->url); ?>">Sign in</a>
+</p>

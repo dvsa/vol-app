@@ -1,0 +1,48 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en" class="review">
+    
+    <?php echo $this->partial('partials/review-header', ['pageTitle' => $this->translate('review-page-title')]); ?>
+    
+    <body>
+        
+        <div class="review-header">
+            <p><?php echo $this->translate($reviewTitle); ?></p>
+            <h1><?php echo $subTitle; ?></h1>
+            <a class="hide-print" href="javascript:window.print()">Print this page</a>
+        </div>
+        
+        <?php $count = 0; foreach ($sections as $section): $count++; ?>
+            <div class="review-section">
+                <h2>
+                    <?php
+                        $hideCount = $section['hide-count'] ?? $settings['hide-count'] ?? false;
+                        if (!$hideCount) {
+                            echo $count . '. ';
+                        }
+                        if (!empty($section['header'])) {
+                            echo $this->translate($section['header']);
+                        }
+                    ?>
+                </h2>
+                <?php
+                    if (isset($section['config']['subSections'])) {
+                        echo $this->render('partials/read-only/subSections', $section['config']);
+                    } else {
+                        if (isset($section['config']['mainItems'])) {
+                            foreach ($section['config']['mainItems'] as $mainItem) {
+                                echo $this->render('partials/read-only/main', $mainItem);
+                            }
+                        } else {
+                            echo $this->render('partials/read-only/main', $section['config']);
+                        }
+                    }
+                ?>
+            </div>
+        <?php endforeach; ?>
+        
+        <p><a class="hide-print" href="javascript:window.print()">Print this page</a></p>
+        
+    </body>
+    
+</html>

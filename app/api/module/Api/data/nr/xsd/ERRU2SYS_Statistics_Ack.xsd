@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/erru/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/erru/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="./ERRU_Statistics_Types.xsd"/>
+	<xs:element name="ERRU2SYS_Statistics_Ack">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:attribute name="statusCode" use="required">
+							<xs:simpleType>
+								<xs:union memberTypes="globalStatusCodeBaseType globalOKStatusCodeType globalNotOKStatusCodeType"/>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="statusMessage" type="globalStatusMessage255Type" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

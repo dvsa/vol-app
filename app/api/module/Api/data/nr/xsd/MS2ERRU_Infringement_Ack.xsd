@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/erru/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/erru/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="./ERRU_Infringement_Types.xsd"/>
+	<xs:element name="MS2ERRU_Infringement_Ack">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body" type="inAcknowledgementBodyType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

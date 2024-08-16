@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.1" id="ComplianceEpisode"
+    targetNamespace="dvsa-msi-compliance-penalties-response" version="1.0"
+    xmlns="dvsa-msi-compliance-penalties-response">
+    <xs:element name="CompliancePenalties">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="BusinessCaseGUIID" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>This is the Notification Number from TB_COMPLIANCE_SERIOUS_INFRINGEMENT</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="CompetantAuthority">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="Transport Regulation Unit"/>
+                            <xs:enumeration value="Traffic Commissioner"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="TransportUndertakingName" type="xs:string"/>
+                <xs:element name="Penalties">
+                    <xs:complexType>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="Penalty">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element minOccurs="1" name="Authority">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                  <xs:enumeration value="Transport Regulation Unit"/>
+                                                  <xs:enumeration value="Traffic Commissioner"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element minOccurs="1" name="PenaltyType"
+                                            type="xs:string">
+                                            <xs:annotation>
+                                                <xs:documentation>Is this an enumeration?</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element name="Imposed">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                  <xs:enumeration value="Yes"/>
+                                                  <xs:enumeration value="No"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="ReasonNotImposed"
+                                            type="xs:string">
+                                            <xs:annotation>
+                                                <xs:documentation>Optional?</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="StartDate"
+                                            type="xs:dateTimeStamp">
+                                            <xs:annotation>
+                                                <xs:documentation>Will be created from the SQL DATETIME values in the following format YYYY-MM-DD HH:MM:SS</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="EndDate"
+                                            type="xs:dateTimeStamp">
+                                            <xs:annotation>
+                                                <xs:documentation>Optional?
+Will be created from the SQL DATETIME values in the following format YYYY-MM-DD HH:MM:SS</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="StartDateSpecified"
+                                            type="xs:boolean">
+                                            <xs:annotation>
+                                                <xs:documentation>Optional?</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                        <xs:element minOccurs="0" name="EndDateSpecified"
+                                            type="xs:boolean">
+                                            <xs:annotation>
+                                                <xs:documentation>Optional?</xs:documentation>
+                                            </xs:annotation>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="MemberName" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>What is this? 
+
+Assumption that this is a string</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

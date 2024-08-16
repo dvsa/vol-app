@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+	<Folder FolderName="Example XML Files" ExtStr="xml;cml;math;rdf;smil;svg;wml">
+		<Folder FolderName="examples-registration">
+			<File FilePath="examples\cancellation\cancellation.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\eye\eye.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\eye\eye_cymraeg.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\eye\eye_no_stopseq.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\flexible\flexible.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\footnotes\footnotes.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\hailandride\hailandride.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\interchange\interchange.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\large\large.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear_change.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear_holidaysonly.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear_sunday.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\mergefrequency\mergefrequency.xml" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="examples-general">
+			<File FilePath="examples\circular\circular.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\circular\circular_reordered.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\cloverleaf\cloverleaf.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\delta\delta.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\express\express.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\express\express_stopalloc.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\express\expressLcl.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\grouping\grouping.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\interchange\interchange_multi.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear_change_jp.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\linear\linear_change_vj.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\lollipop\lollipop.xml" HomeFolder="Yes"/>
+			<File FilePath="examples\operators\operators.xml" HomeFolder="Yes"/>
+		</Folder>
+	</Folder>
+	<Folder FolderName="HTML Files" ExtStr="html;htm;xhtml;asp">
+		<Folder FolderName="cancellation">
+			<File FilePath="examples\cancellation\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="circular">
+			<File FilePath="examples\circular\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="cloverleaf">
+			<File FilePath="examples\cancellation\index.htm"/>
+		</Folder>
+		<Folder FolderName="delta">
+			<File FilePath="examples\delta\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="express">
+			<File FilePath="examples\express\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="eye">
+			<File FilePath="examples\cancellation\index.htm"/>
+		</Folder>
+		<Folder FolderName="flexible">
+			<File FilePath="examples\flexible\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="footnotes">
+			<File FilePath="examples\footnotes\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="grouping">
+			<File FilePath="examples\grouping\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="hailAndRide">
+			<File FilePath="examples\hailAndRide\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="interchange">
+			<File FilePath="examples\interchange\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="large">
+			<File FilePath="examples\large\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="linear">
+			<File FilePath="examples\linear\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="lollipop">
+			<File FilePath="examples\lollipop\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="mergefrequency">
+			<File FilePath="examples\mergefrequency\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<Folder FolderName="operators">
+			<File FilePath="examples\operators\index.htm" HomeFolder="Yes"/>
+		</Folder>
+		<File FilePath="examples\index.htm" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="top level schemas">
+		<File FilePath="readme.txt" HomeFolder="Yes"/>
+		<File FilePath="TransXChange_general.xsd" HomeFolder="Yes"/>
+		<File FilePath="TransXChange_general_delta.xsd" HomeFolder="Yes"/>
+		<File FilePath="TransXChange_registration.xsd" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="napt">
+		<File FilePath="napt\NaPT_all.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_dates-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_dayTypes-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_location-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_modes-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_operator_support-v2-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_pointOfInterest-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_stop-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_stopAccessibility-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_stopArea-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_tariffZone-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_utility_rights-v2-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_utility_types-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_utility_units-v2-4.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_utility_xml-v2-1.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt\NaPT_versioningAttributes-v2-2.xsd" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="napt_netex">
+		<File FilePath="napt_netex\NaPT_netex_accessibility-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_entity_support-v2.5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_equipment-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_equipmentVehiclePassenger-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_facility_support-v2.5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_facility_version-v2.5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_localService-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="napt_netex\NaPT_netex_travelRights_types-v2.5.xsd" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="txc">
+		<File FilePath="txc\TXC_accessibilityBooking-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_all.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_authorities-v2-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_common-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_connectingVehicleJourney-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_deadRun-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_flexibleJourneyPattern-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_frequency-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_garage-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journey_support-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journeyPattern-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journeyPattern_support-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journeyPatternInterchange-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journeyPatternSection-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_journeyPatternTimingLink-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_operatingDay-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_operational-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_operator-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_passingTimes-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_registration-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_route-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_service-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_service_journeyGrouping-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_service_parts-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_serviceCalendar-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_servicedOrganisation-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_utility_times-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_utility_types-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_validity-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_vehicleJourney-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_vehicleJourney_support-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_vehicleJourneyInterchange-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="txc\TXC_vehicleType-v2-5.xsd" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="nptg">
+		<File FilePath="nptg\NPTG_administrative-v2.5.xsd" HomeFolder="Yes"/>
+		<File FilePath="nptg\NPTG_administrative_support-v2-4.xsd" HomeFolder="Yes"/>
+		<File FilePath="nptg\NPTG_locality-v2-5.xsd" HomeFolder="Yes"/>
+		<File FilePath="nptg\NPTG_locality_support-v2-4.xsd" HomeFolder="Yes"/>
+	</Folder>
+	<Folder FolderName="apd">
+		<File FilePath="apd\AddressTypes-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\BS7666-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\CitizenIdentificationTypes-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\CommonSimpleTypes-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\ContactTypes-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\PersonalDetailsTypes-v1-3.xsd" HomeFolder="Yes"/>
+		<File FilePath="apd\PersonDescriptiveTypes-v1-0.xsd" HomeFolder="Yes"/>
+	</Folder>
+</Project>

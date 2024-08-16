@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "V2.1  2005 09 05 
+
+            Change to ref NaPT journey & stop 2.1 (Make Landmark and street optional) -->
+<!-- (c) Crown Copyright 2000-2005   -->
+<xsd:schema xmlns="http://www.transxchange.org.uk/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:gms="http://www.govtalk.gov.uk/core" targetNamespace="http://www.transxchange.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1" id="TransXChangeTypes">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created for TXC 2.0 Tom White, Kizoom mailto:schemer@kizoom.com</Creator>
+				<Date>
+					<Created>2004-02-01</Created>
+				</Date>
+				<Date>
+					<Modified>2004-03-08</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-07-01</Modified>
+				</Date>
+				<Date>
+					<Modified>2005-09-05</Modified>
+				</Date>
+				<Date>
+					<Modified>2009-06-16</Modified>
+					<!-- Add CheshireEast  CheshireWestAndCheshire to circulated authorities. 
+							Cheshire is. now deprecated
+						 Add Bedford and  CentralBedfordshire to circulated authorities. Bedfordshire is now deprecated
+-->
+				</Date>
+				<Date>
+					<Modified>2009-07-08</Modified>
+					<!-- Correction: Add  CheshireWestAndChester to circulated authorities.  CheshireWestAndCheshire is.   deprecated and wil be driopped shortly
+						 
+-->
+				</Date>
+				<Description>Common data type declarations for TransXChange, an XML schema for exchanging bus schedules.</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.transxchange.org.uk/schema/2.1}TransXChange_types.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+					<Requires>http://www.transxchange.org.uk/schema/2.1/napt/NaPT_stop-v2-1.xsd</Requires>
+					<Requires>http://www.w3.org/2001/xml.xsd</Requires>
+				</Relation>
+				<Rights>Unclassified
+
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+				</Rights>
+				<Source>Factored out from 2.0 draft schema</Source>
+				<Status>Version 2.0 Draft for approval</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+
+Public transport, Bus services, Coach services, Bus stops and stations
+
+Rail transport, Infrastructure (railways),  Train services,
+
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>Common Data Types for TransXChange, an XML format for registering timetables.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+	</xsd:annotation>
+	<xsd:include schemaLocation="napt/NaPT_stop-v2-1.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/core" schemaLocation="apd/CommonSimpleTypes-v1-3.xsd">
+		<xsd:annotation>
+			<xsd:documentation source="http://www.govtalk.gov.uk/schemasstandards/agreedschema_schema.asp?schemaid=204">A set of Address and personal details schema, including BS7666 version 1.3</xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<!-- ====Identifiers====================================================== -->
+	<xsd:annotation>
+		<xsd:documentation>As a general principle, a 'code' is a well-known public identifier; whereas an ID is typically a private identifier with a shorter lifespan and scope, often just a document instance.</xsd:documentation>
+	</xsd:annotation>
+	<xsd:simpleType name="TanPrefixEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Two character Traffic Prefix Area</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="PB">
+				<xsd:annotation>
+					<xsd:documentation>North Eastern Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PC">
+				<xsd:annotation>
+					<xsd:documentation>North Western Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PD">
+				<xsd:annotation>
+					<xsd:documentation>West Midlands Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PF">
+				<xsd:annotation>
+					<xsd:documentation>Eastern Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PG">
+				<xsd:annotation>
+					<xsd:documentation>Welsh Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PH">
+				<xsd:annotation>
+					<xsd:documentation>Western Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PK">
+				<xsd:annotation>
+					<xsd:documentation>South Eastern and Metropolitan Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="PM">
+				<xsd:annotation>
+					<xsd:documentation>Scottish Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OperatorLicenceEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Licence type of the operator.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="standardNational"/>
+			<xsd:enumeration value="standardInternational"/>
+			<xsd:enumeration value="restricted"/>
+			<xsd:enumeration value="specialRestricted"/>
+			<xsd:enumeration value="communityBusPermit"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="GarageCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for an operator's bus garage (or depot).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="DutyCrewCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for a bus crew.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TicketMachineJourneyCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for used by the ticket machine system to refer to a journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="TicketMachineServiceCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for used by the ticket machine system to refer to a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="FareStageNumberType">
+		<xsd:annotation>
+			<xsd:documentation>A fare stage number.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:nonNegativeInteger">
+			<xsd:maxInclusive value="999"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="VehicleTypeCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for a vehicle type.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="8"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NoteCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for a note.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="5"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ======Classifierss==============================================================-->
+	<xsd:simpleType name="WeekInMonthEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Ordinal of the week within its calendar month (i.e. whether the week is the 1st, 2nd, 3rd, 4th, 5th or last within the calendar month).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="first"/>
+			<xsd:enumeration value="second"/>
+			<xsd:enumeration value="third"/>
+			<xsd:enumeration value="fourth"/>
+			<xsd:enumeration value="fifth"/>
+			<xsd:enumeration value="last"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TimeDemandEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Classifications of a vehicle journey's "time demand" which affects running/waiting times.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="earlyMorning"/>
+			<xsd:enumeration value="peakMorning"/>
+			<xsd:enumeration value="offPeak"/>
+			<xsd:enumeration value="peakAfternoon"/>
+			<xsd:enumeration value="evening"/>
+			<xsd:enumeration value="lateEvening"/>
+			<xsd:enumeration value="saturdayMorning"/>
+			<xsd:enumeration value="saturdayDaytime"/>
+			<xsd:enumeration value="saturdayEvening"/>
+			<xsd:enumeration value="sunday"/>
+			<xsd:enumeration value="bankHoliday"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="SubsidyLevelEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Levels of subsidy.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="partial"/>
+			<xsd:enumeration value="full"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RegistrationApplicationEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Type of registration application.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="new"/>
+			<xsd:enumeration value="chargeableChange"/>
+			<xsd:enumeration value="nonChargeableChange"/>
+			<xsd:enumeration value="cancel"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RegistrationVariationNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Variation number for the registration.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:integer">
+			<xsd:maxInclusive value="9999"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AuthorityNameEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Names of authorities.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="Aberdeen"/>
+			<xsd:enumeration value="Aberdeenshire"/>
+			<xsd:enumeration value="Angus"/>
+			<xsd:enumeration value="ArgyllAndBute"/>
+			<xsd:enumeration value="BathAndNorthEastSomerset"/>
+			<xsd:enumeration value="Bedfordshire"/>
+			<xsd:enumeration value="Bedford"/>
+			<xsd:enumeration value="CentralBedfordshire"/>
+			<xsd:enumeration value="Berkshire"/>
+			<xsd:enumeration value="BlackburnWithDarwen"/>
+			<xsd:enumeration value="Blackpool"/>
+			<xsd:enumeration value="BlaenauGwent"/>
+			<xsd:enumeration value="Bournemouth"/>
+			<xsd:enumeration value="BracknellForest"/>
+			<xsd:enumeration value="Bridgend"/>
+			<xsd:enumeration value="BrightonAndHove"/>
+			<xsd:enumeration value="Bristol"/>
+			<xsd:enumeration value="Buckinghamshire"/>
+			<xsd:enumeration value="Caerphilly"/>
+			<xsd:enumeration value="Cambridgeshire"/>
+			<xsd:enumeration value="Cardiff"/>
+			<xsd:enumeration value="Carmarthenshire"/>
+			<xsd:enumeration value="CentroWestMidlands"/>
+			<xsd:enumeration value="Ceredigion"/>
+			<xsd:enumeration value="ChannelIslands"/>
+			<xsd:enumeration value="Cheshire"/>
+			<xsd:enumeration value="CheshireEast"/>
+			<xsd:enumeration value="CheshireWestAndChester"/>
+			<xsd:enumeration value="CheshireWestAndCheshire"/>
+			<xsd:enumeration value="Clackmannanshire"/>
+			<xsd:enumeration value="ComhairleNanEileanSiar"/>
+			<xsd:enumeration value="Conwy"/>
+			<xsd:enumeration value="CornwallAndScillies"/>
+			<xsd:enumeration value="Cumbria"/>
+			<xsd:enumeration value="Darlington"/>
+			<xsd:enumeration value="Denbighshire"/>
+			<xsd:enumeration value="Derby"/>
+			<xsd:enumeration value="Derbyshire"/>
+			<xsd:enumeration value="Devon"/>
+			<xsd:enumeration value="Dorset"/>
+			<xsd:enumeration value="DumfriesAndGalloway"/>
+			<xsd:enumeration value="Dundee"/>
+			<xsd:enumeration value="Durham"/>
+			<xsd:enumeration value="EastAyrshire"/>
+			<xsd:enumeration value="EastDunbartonshire"/>
+			<xsd:enumeration value="EastLothian"/>
+			<xsd:enumeration value="EastRenfrewshire"/>
+			<xsd:enumeration value="EastRidingOfYorkshire"/>
+			<xsd:enumeration value="EastSussex"/>
+			<xsd:enumeration value="Edinburgh"/>
+			<xsd:enumeration value="Essex"/>
+			<xsd:enumeration value="Falkirk"/>
+			<xsd:enumeration value="Fife"/>
+			<xsd:enumeration value="Flintshire"/>
+			<xsd:enumeration value="Glasgow"/>
+			<xsd:enumeration value="Gloucestershire"/>
+			<xsd:enumeration value="GMPTE"/>
+			<xsd:enumeration value="Gwynedd"/>
+			<xsd:enumeration value="Halton"/>
+			<xsd:enumeration value="Hampshire"/>
+			<xsd:enumeration value="Hartlepool"/>
+			<xsd:enumeration value="Havering"/>
+			<xsd:enumeration value="Herefordshire"/>
+			<xsd:enumeration value="Hertfordshire"/>
+			<xsd:enumeration value="Highland"/>
+			<xsd:enumeration value="Inverclyde"/>
+			<xsd:enumeration value="IsleOfAnglesey"/>
+			<xsd:enumeration value="IsleOfMan"/>
+			<xsd:enumeration value="IsleOfWight"/>
+			<xsd:enumeration value="Kent"/>
+			<xsd:enumeration value="KingstonUponHull"/>
+			<xsd:enumeration value="Lancashire"/>
+			<xsd:enumeration value="Leicester"/>
+			<xsd:enumeration value="Leicestershire"/>
+			<xsd:enumeration value="Lincolnshire"/>
+			<xsd:enumeration value="London"/>
+			<xsd:enumeration value="Luton"/>
+			<xsd:enumeration value="Medway"/>
+			<xsd:enumeration value="Merseytravel"/>
+			<xsd:enumeration value="MerthyrTydfil"/>
+			<xsd:enumeration value="Metro"/>
+			<xsd:enumeration value="Middlesbrough"/>
+			<xsd:enumeration value="Midlothian"/>
+			<xsd:enumeration value="MiltonKeynes"/>
+			<xsd:enumeration value="Monmouthshire"/>
+			<xsd:enumeration value="Moray"/>
+			<xsd:enumeration value="NeathPortTalbot"/>
+			<xsd:enumeration value="Newport"/>
+			<xsd:enumeration value="NexusTynesde"/>
+			<xsd:enumeration value="Norfolk"/>
+			<xsd:enumeration value="NorthAyrshire"/>
+			<xsd:enumeration value="NorthEastLincolnshire"/>
+			<xsd:enumeration value="NorthLanarkshire"/>
+			<xsd:enumeration value="NorthLincolnshire"/>
+			<xsd:enumeration value="NorthernIreland"/>
+			<xsd:enumeration value="NorthSomerset"/>
+			<xsd:enumeration value="NorthYorkshire"/>
+			<xsd:enumeration value="Northamptonshire"/>
+			<xsd:enumeration value="Northumberland"/>
+			<xsd:enumeration value="Nottingham"/>
+			<xsd:enumeration value="Nottinghamshire"/>
+			<xsd:enumeration value="OrkneyIslands"/>
+			<xsd:enumeration value="Oxfordshire"/>
+			<xsd:enumeration value="Pembrokeshire"/>
+			<xsd:enumeration value="PerthAndKinross"/>
+			<xsd:enumeration value="Peterborough"/>
+			<xsd:enumeration value="Plymouth"/>
+			<xsd:enumeration value="Poole"/>
+			<xsd:enumeration value="Portsmouth"/>
+			<xsd:enumeration value="Powys"/>
+			<xsd:enumeration value="Reading"/>
+			<xsd:enumeration value="RedcarAndCleveland"/>
+			<xsd:enumeration value="Renfrewshire"/>
+			<xsd:enumeration value="RhonddaCynonTaff"/>
+			<xsd:enumeration value="Rutland"/>
+			<xsd:enumeration value="ScottishBorders"/>
+			<xsd:enumeration value="ShetlandIslands"/>
+			<xsd:enumeration value="Shropshire"/>
+			<xsd:enumeration value="Slough"/>
+			<xsd:enumeration value="Somerset"/>
+			<xsd:enumeration value="SouthAyrshire"/>
+			<xsd:enumeration value="SouthGloucestershire"/>
+			<xsd:enumeration value="SouthLanarkshire"/>
+			<xsd:enumeration value="SouthYorkshirePTE"/>
+			<xsd:enumeration value="Southampton"/>
+			<xsd:enumeration value="SouthendOnSea"/>
+			<xsd:enumeration value="Staffordshire"/>
+			<xsd:enumeration value="Stirling"/>
+			<xsd:enumeration value="StocktonOnTees"/>
+			<xsd:enumeration value="StokeOnTrent"/>
+			<xsd:enumeration value="StrathclydePTE"/>
+			<xsd:enumeration value="Suffolk"/>
+			<xsd:enumeration value="Surrey"/>
+			<xsd:enumeration value="Swansea"/>
+			<xsd:enumeration value="Swindon"/>
+			<xsd:enumeration value="TelfordAndWrekin"/>
+			<xsd:enumeration value="Thurrock"/>
+			<xsd:enumeration value="Torbay"/>
+			<xsd:enumeration value="Torfaen"/>
+			<xsd:enumeration value="Translink"/>
+			<xsd:enumeration value="ValeOfGlamorgan"/>
+			<xsd:enumeration value="Warrington"/>
+			<xsd:enumeration value="Warwickshire"/>
+			<xsd:enumeration value="WestBerkshire"/>
+			<xsd:enumeration value="WestDunbartonshire"/>
+			<xsd:enumeration value="WestLothian"/>
+			<xsd:enumeration value="WestSussex"/>
+			<xsd:enumeration value="Wiltshire"/>
+			<xsd:enumeration value="WindsorAndMaidenhead"/>
+			<xsd:enumeration value="Wokingham"/>
+			<xsd:enumeration value="Worcestershire"/>
+			<xsd:enumeration value="Wrexham"/>
+			<xsd:enumeration value="York"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TrafficAreaNameEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Names of Traffic Areas.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="Eastern"/>
+			<xsd:enumeration value="NorthEastern"/>
+			<xsd:enumeration value="NorthWestern"/>
+			<xsd:enumeration value="SouthEastMetropolitan"/>
+			<xsd:enumeration value="Scottish"/>
+			<xsd:enumeration value="Welsh"/>
+			<xsd:enumeration value="WestMidlands"/>
+			<xsd:enumeration value="Western"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OperatorPartialLicenceNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Partial Licence Number of the operator.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[0-9]{7}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OperatorLicenceNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Full Licence Number of the operator,</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[a-zA-Z]{2,3}[0-9]{7}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceVehicleDirectionEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Directions on service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="inbound"/>
+			<xsd:enumeration value="outbound"/>
+			<xsd:enumeration value="inboundAndOutbound"/>
+			<xsd:enumeration value="circular"/>
+			<xsd:enumeration value="clockwise"/>
+			<xsd:enumeration value="antiClockwise"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="JourneyPatternVehicleDirectionEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Directions on journey pattern</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="inherit">
+				<xsd:annotation>
+					<xsd:documentation>Value is inherited from parent</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="inbound"/>
+			<xsd:enumeration value="outbound"/>
+			<xsd:enumeration value="inboundAndOutbound"/>
+			<xsd:enumeration value="circular"/>
+			<xsd:enumeration value="clockwise"/>
+			<xsd:enumeration value="antiClockwise"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="JourneyPatternLinkDirectionEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Directions on journey pattern link</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="inherit">
+				<xsd:annotation>
+					<xsd:documentation>Value is inherited from parent</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="inbound"/>
+			<xsd:enumeration value="outbound"/>
+			<xsd:enumeration value="clockwise"/>
+			<xsd:enumeration value="antiClockwise"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RegistrationDocumentType">
+		<xsd:annotation>
+			<xsd:documentation>Indicates whether a TransXChange document is for a registration. Note that this is not a restriction of xsd:boolean in order to work around a bug in JAXB (JWSDP 1.3).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="true"/>
+			<xsd:enumeration value="false"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ImageDocumentType">
+		<xsd:annotation>
+			<xsd:documentation>Types of image </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<!-- Complex Type Definitions -->
+	<xsd:complexType name="VosaRegistrationNumberStructure">
+		<xsd:annotation>
+			<xsd:documentation>Veheicle  (TAN) registration number. The registration number is broken down into the three discrete constituent semantic elements it encodes, allowing for better referential integrity. The elements can be concatenated to produce the full number. For example, given the TanCode "PB", the LicenceNumber "0000815", and the RegistrationNumber "123", the full TAN registration number would be "PB0000815/123".</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TanCode" type="TanPrefixEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Two character Traffic Area prefix.
+
+PB - North Eastern Traffic Area.
+
+PC - North Western Traffic Area.
+
+PD - West Midlands Traffic Area.
+
+PF - Eastern Traffic Area.
+
+PG - Welsh Traffic Area.
+
+PH - Western Traffic Area.
+
+PK - South Eastern and Metropolitan Traffic Area.
+
+PM - Scottish Traffic Area.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LicenceNumber" type="OperatorPartialLicenceNumberType">
+				<xsd:annotation>
+					<xsd:documentation>Seven character licence number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RegistrationNumber">
+				<xsd:annotation>
+					<xsd:documentation>Unique identifier of registration for licence holder. 1-4 alphanumeric characters.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="4"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Group Definitions -->
+	<xsd:attributeGroup name="DocumentMetadataGroup">
+		<xsd:annotation>
+			<xsd:documentation>Grouping for document metadata.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:attribute name="SchemaVersion" type="xsd:NMTOKEN" use="required" fixed="2.1">
+			<xsd:annotation>
+				<xsd:documentation>The version of the schema that the TransXChange instance document was written against. This attribute conforms with e-GIF guidance.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="MappingSystem" type="MappingSystemEnumeration" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Identifies the default map reference system of Map element IDs (e.g. OSODRs or TOIDs) of any mapping layer references used.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:attributeGroup>
+</xsd:schema>

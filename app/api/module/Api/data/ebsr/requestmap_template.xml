@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TransXChangePublisherTransport xsi:schemaLocation="http://www.transxchange.org.uk/publisher http://naptan.dft.gov.uk/transxchange/publisher/schema/3.1.2/TransXChangePublisherService.xsd" xmlns="http://www.transxchange.org.uk/publisher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <PublishDocumentRequest>
+        <InputOperands>
+            <DocumentPath></DocumentPath>
+            <DocumentName></DocumentName>
+        </InputOperands>
+        <OutputOperands>
+            <OutputPath></OutputPath>
+        </OutputOperands>
+        <ProcessingOptions>
+            <ValidateXml>false</ValidateXml>
+            <IncludeDiagnostics>false</IncludeDiagnostics>
+            <StopData>localOnly</StopData>
+            <MapData>webService</MapData>
+        </ProcessingOptions>
+        <OutputOptions>
+            <Sections>
+                <Particulars>none</Particulars>
+                <EmbeddedParticulars>false</EmbeddedParticulars>
+                <Timetable>none</Timetable>
+                <RouteTrack>full</RouteTrack>
+                <Diagnostics>none</Diagnostics>
+            </Sections>
+        </OutputOptions>
+        <Filters>
+            <TimingPointTypes>PTP</TimingPointTypes>
+            <MergeFrequencyJourneys>true</MergeFrequencyJourneys>
+        </Filters>
+        <RouteTrackMapOptions>
+            <RouteScale></RouteScale><!-- small/large-->
+            <RouteGrouping>byDirection</RouteGrouping>
+            <RouteTiling>A4</RouteTiling>
+            <StopListOrder>map</StopListOrder>
+        </RouteTrackMapOptions>
+        <Rendering>
+            <OutputFormat>pdf</OutputFormat>
+            <Background>official</Background>
+            <Rubric>official</Rubric>
+        </Rendering>
+    </PublishDocumentRequest>
+</TransXChangePublisherTransport>

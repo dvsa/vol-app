@@ -1,0 +1,19 @@
+<?php if ($this->hasBusData) { ?>
+    <p>Thank you for your EBSR application received on <?php echo $this->escapeHtml($this->submissionDate); ?> for the
+        following local bus service - <?php echo $this->escapeHtml($this->registrationNumber); ?> - between
+        <?php echo $this->escapeHtml($this->origin); ?> and <?php echo $this->escapeHtml($this->destination); ?> with 
+        service number <?php echo $this->escapeHtml($this->lineName); ?> to come into effect on
+        <?php echo $this->escapeHtml($this->startDate); ?>.</p>
+<?php } else { ?>
+    <p>Thank you for your EBSR application received on <?php echo $this->escapeHtml($this->submissionDate); ?>.</p>
+<?php } ?>
+
+<p>Unfortunately your application has failed our initial checks on the integrity of the data.
+    Therefore we have NOT copied it to the local authorities listed in your TransXChange XML
+    file.</p>
+
+<p>We have tried to pin point the problems and give you some clues about where to find the
+    errors. However it is not possible for us to itemise all possible errors, and solutions,
+    so we recommend that you look again at your data file to ensure that it complies with the
+    relevant registration data schema. We suggest that you start by looking at the following
+    errors:</p>

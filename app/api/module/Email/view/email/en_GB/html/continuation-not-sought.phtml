@@ -1,0 +1,13 @@
+<p>
+  The following licences with fees due between <?php echo $this->escapeHtml($this->startDate); ?>
+  and <?php echo $this->escapeHtml($this->endDate) ?> have been set to CNS:
+</p>
+
+<table>
+  <?php foreach ($this->licences as $licence): ?>
+    <tr>
+      <td width="125"><?php echo $this->escapeHtml($licence['licNo']); ?></td>
+      <td><?php echo $this->escapeHtml($licence['taName']); ?></td>
+    </tr>
+  <?php endforeach; ?>
+</table>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <title>GOV.UK</title>
+
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+
+            html, body, 
+            button, input, 
+            table, td, th {
+                font-family: Arial, sans-serif;
+            }
+
+            .main {
+                max-width: 600px;
+            }
+
+            .header {
+                background: black;
+                padding: 10px;
+                font-weight: bold;
+            }
+
+            .logo img,
+            .crown {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .logo img {
+                width: 35px;
+                height: 31px;
+                margin-top: -1px;
+                margin-right: 5px;
+            }
+
+            .crown {
+                font-size: 30px;
+                color: white;
+                text-decoration: none;
+            }
+
+            .action--primary {
+                display: inline-block;
+                background-color: #00823b;
+                text-decoration: none;
+                color: #fff;
+                border-color: #004f24;
+                vertical-align: middle;
+                padding: 0.5em 0.75em;
+                border-bottom: 2px solid;
+                line-height: 1.4;
+                cursor: pointer;
+            }
+        </style>
+
+    </head>
+
+    <body class="email-template">
+
+        <div class="header" style="background: black; padding: 10px; font-weight: bold;">
+
+            <div class="logo">
+                <font face="arial, sans-serif">
+                    <div 
+                         class="crown" 
+                         style="display: inline-block; 
+                                vertical-align: middle; 
+                                font-size: 30px; 
+                                color: white; 
+                                text-decoration: none;">
+                        GOV&#8203;.&#8203;UK
+                    </div>
+                </font>
+            </div>
+
+        </div>
+
+        <div class="main" style="max-width: 600px">
+
+            <font face="arial, sans-serif">
+
+                <br />
+
+                <h1 class="form-title heading-large">Trwyddedu Gweithredu Cerbydau</h1>
+
+                <?php echo $this->content ?>
+
+            </font>
+
+        </div><!-- main -->
+
+        <br />
+
+        <div class="footer">
+            <p><b>Trwyddedu Gweithredu Cerbydau</b></p>
+        </div>
+
+    </body>
+
+</html>

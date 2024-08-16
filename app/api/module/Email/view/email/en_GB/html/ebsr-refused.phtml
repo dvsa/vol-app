@@ -1,0 +1,12 @@
+<p>Thank you for your EBSR application received on <?php echo $this->escapeHtml($this->submissionDate); ?> for the
+    following local bus service - <?php echo $this->escapeHtml($this->registrationNumber); ?> - between
+    <?php echo $this->escapeHtml($this->origin); ?> and <?php echo $this->escapeHtml($this->destination); ?> with 
+    service number <?php echo $this->escapeHtml($this->lineName); ?> to come into effect on 
+    <?php echo $this->escapeHtml($this->startDate); ?>.</p>
+
+<p>Your application has been refused. Therefore you cannot start, change or cancel your service as applied for.
+    If you do, you could face disciplinary action by the Traffic Commissioner.
+    If you are in any doubt, please ring your usual caseworker or e-mail: <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a></p>
+
+<p>We have copied this e-mail to the following local authorities: 
+    <?php echo $this->escapeHtml($this->localAuthoritys); ?>.</p>

@@ -1,0 +1,22 @@
+<p>Hello,</p>
+<p>
+<?php echo $this->escapeHtml($this->organisation); ?> has named you as a Transport Manager on Vehicle Operator
+Licence <?php echo $this->escapeHtml($this->reference); ?>.
+</p>
+<p>
+    They have reviewed your application and need you to amend or check your details. You will need to sign the declaration again once you have reviewed or amended your application.
+</p>
+<p>
+    To review the application <a href="<?php echo $this->escapeHtml($this->signInLink); ?>">sign in online</a> with your username
+    (<?php echo $this->escapeHtml($this->username); ?>) and password.
+</p>
+<p>
+    <b>Having problems?</b><br>
+<?php
+$url = ($this->isNi) ?
+    'http://www.doeni.gov.uk/index/information/foi/recent-releases/publications-details.htm?docid=9994' :
+    'https://www.gov.uk/government/publications/application-to-add-a-transport-manager-to-a-licence-tm1';
+?>
+For advice see the <a href="<?php echo $this->escapeHtml($url); ?>">Transport Manager help guide</a> or
+<a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">email us</a>.
+</p>

@@ -1,0 +1,84 @@
+{
+   "query": {
+      "bool": {
+         "must": {
+            "bool": {
+               "should": [
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fuzziness": 2,
+                        "prefix_length": 1,
+                        "fields": [
+                           "lic_no",
+                           "org_name",
+                           "licence_trading_names"
+                        ]
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "type": "phrase",
+                        "slop": 2,
+                        "fields": [
+                           "org_name",
+                           "licence_trading_names"
+                        ]
+                     }
+                  },
+                  {
+                     "match": {
+                        "lic_no": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "org_name": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "licence_trading_names": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "fabs_reference": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "company_or_llp_no": "%SEARCH_TERM%"
+                     }
+                  }
+               ]
+            }
+         },
+         "must_not": [
+            {
+               "bool": {
+                  "filter": [
+                     {
+                        "terms": {
+                           "lic_status": [
+                              "lsts_consideration",
+                              "lsts_granted",
+                              "lsts_refused",
+                              "lsts_ntu"
+                           ]
+                        }
+                     },
+                     {
+                        "exists": {
+                           "field": "is_deleted"
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 4
+}

@@ -1,0 +1,66 @@
+{
+   "query": {
+      "bool": {
+         "must": {
+            "bool": {
+               "should": [
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fuzziness": 2,
+                        "prefix_length": 1,
+                        "fields": [
+                           "text_all"
+                        ]
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "type": "phrase",
+                        "query": "%SEARCH_TERM%",
+                        "slop": 2,
+                        "fields": [
+                           "org_name",
+                           "text_all"
+                        ]
+                     }
+                  },
+                  {
+                     "match": {
+                        "lic_no": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "pub_no": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "text_all": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "text1": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "org_name": "%SEARCH_TERM%"
+                     }
+                  }
+               ]
+            }
+         },
+         "must_not": [
+            {
+               "exists": {
+                  "field": "is_deleted"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 10
+}

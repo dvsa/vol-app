@@ -1,0 +1,24 @@
+<?php
+/** @global \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage[] $messages */
+/** @global \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $conversation */
+/** @global bool $enhanced */
+?><!DOCTYPE html>
+<html lang="en">
+<?php echo $this->partial('partials/review-header', ['pageTitle' => 'Conversation Archive']); ?>
+<body>
+<div class="printable">
+  <div class="printable__header">
+    <h1><?php echo $this->escapeHtml($conversation->getSubject()); ?></h1>
+    <a class="hide-print" href="javascript:window.print()">Print this page</a>
+  </div>
+
+  <caption class="govuk-table__caption govuk-table__caption--m">
+    <?php echo count($messages) . ' ' . $this->translate('Messages'); ?>
+  </caption>
+
+  <?php foreach ($messages as $message): ?>
+    <?php echo $this->partial('partials/read-only/printable-message', ['message' => $message, 'enhanced' => $enhanced]); ?>
+  <?php endforeach; ?>
+</div>
+</body>
+</html>

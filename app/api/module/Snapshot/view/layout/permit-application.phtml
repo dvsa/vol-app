@@ -1,0 +1,35 @@
+<?php $title = sprintf($this->translate('permits.snapshot.title'), $permitType); ?>
+<!DOCTYPE html>
+<html lang="en">
+    <?php echo $this->partial('partials/review-header', ['pageTitle' => $title]); ?>
+    <body>
+        <div class="printable">
+            <?php
+                echo $this->partial(
+                        'partials/read-only/printable-header-permits',
+                        [
+                            'title' => $title,
+                            'operator' => $operator,
+                            'ref' => $ref,
+                        ]
+                );
+                echo $this->partial(
+                        'partials/read-only/' . $questionAnswerPartialName,
+                        [
+                            'data' => $questionAnswerData
+                        ]
+                );
+                echo $this->partial(
+                        'partials/read-only/printable-declaration-bullets',
+                        [
+                            'title' => $guidanceDeclaration['title'],
+                            'bullets' => $guidanceDeclaration['bullets'],
+                            'declaration' => $guidanceDeclaration['declaration']
+                        ]
+                );
+                echo $this->translate('markup-generic-signature-box');
+                echo $this->translate('markup-generic-return-address');
+            ?>
+        </div>
+    </body>
+</html>

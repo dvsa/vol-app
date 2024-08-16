@@ -1,0 +1,29 @@
+<strong><?php
+
+if ($periodNameKey) {
+    echo($this->escapeHtml($this->translate($periodNameKey)));
+} else {
+    $translated = sprintf(
+        $this->translate('permits.check-your-answers.no-of-permits.year'),
+        $validityYear
+    );
+
+    echo($this->escapeHtml($translated));
+}
+
+?></strong><?php
+
+foreach ($emissionsCategories as $emissionsCategory) {
+
+    if ($emissionsCategory['count'] > 0) {
+        $translatedKey = $this->translate($emissionsCategory['key']);
+
+        $line = sprintf(
+            $this->translate('qanda.common.no-of-permits.emissions-category.line'),
+            $emissionsCategory['count'],
+            $translatedKey
+        );
+
+        echo('<br>' . $this->escapeHtml($line));
+    }
+}

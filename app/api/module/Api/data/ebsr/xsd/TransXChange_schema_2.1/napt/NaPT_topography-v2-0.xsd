@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by Nick js knowles (Kizoom Ltd.) --> 
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0" id="NaPT_topography">
+    <xsd:include schemaLocation="NaPT_common-v2-0.xsd"/>
+    <xsd:annotation>
+        <xsd:appinfo xmlns:gms="http://www.govtalk.gov.uk/CM/gms">
+            <Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+                <Aggregation>main schema</Aggregation>
+                <Audience>e-service developers</Audience>
+                <Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+                <Coverage>United Kingdom</Coverage>
+                <Creator>Created for TXC 2.0 Nick Knowles, Kizoom mailto:schemer@kizoom.com</Creator>
+                <Date>
+                    <Created>2004-02-01</Created>
+                </Date>
+                <Date>
+                    <Modified>2004-09-16</Modified>
+                </Date>
+                                                <Date>
+                                                    <Modified>2005-06-06</Modified>
+                </Date>
+                <Description>Common topographical  types for National Public Transport XML schemas.</Description>
+                <Format>
+                    <MediaType>text/xml</MediaType>
+                    <Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+                    <Description>XML schema, W3C Recommendation 2001</Description>
+                </Format>
+                <Identifier>{http://www.naptan.org.uk/schema/2.0/napt}NaPT_topography-v2-0.xsd</Identifier>
+                <Language>[ISO 639-2/B] ENG</Language>
+                <Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+                <Relation>
+                    <Requires>http://www.w3.org/2001/xml.xsd</Requires>
+                                       <Requires>http://www.naptan.org.uk/schema/2.0/napt/NaPT_common-v2-0.xsd</Requires>
+                </Relation>
+                <Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+                </Rights>
+                <Source>Factored out from 2.0 draft NPTG schema</Source>
+                           <Status>Version 2.0 Release</Status>
+                <Subject>
+                    <Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways),  Train services,
+Roads and road transport</Category>
+                    <Project>Transport Direct</Project>
+                </Subject>
+                <Title>Common types for National Public Transport Gazetteer XML schemas.</Title>
+                <Type>Standard</Type>
+            </Metadata>
+        </xsd:appinfo>
+        <xsd:documentation>Header: Type definitions for NPTG topographical entities.</xsd:documentation>
+    </xsd:annotation>
+    <!-- =====NPTG Identifiers================================================================== -->
+    <xsd:simpleType name="RegionCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique Identifier of Region.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="RegionShortCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Short code for region e.g. S (Scotland) SE (South East).</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:maxLength value="2"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="AtcoAreaCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique ATCO Identifier of ATCO Administrative Area.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:pattern value="[0-9]{3}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="AdministrativeAreaCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique Identifier of NPTG Administrative Area.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:pattern value="[0-9]{3}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="CallCentreCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique Identifier of Call Centre.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="NptgDistrictCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique Identifier of NptgDistrict.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="NptgLocalityCodeType">
+        <xsd:annotation>
+            <xsd:documentation>The National Public Transport Gazetteer coding for a locality identifier. ab999999, where a is E or N, b is 0 or S, 9 is numeric</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:pattern value="[EN][0S][0-9]{6}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="PlusbusZoneCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Unique Identifier of Plusbus Zone.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <!-- =====NPTGClassifiers================================================================== -->
+    <xsd:simpleType name="RegionShortCodeEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>Allowed values for NPTG region short codes</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="W"/>
+            <xsd:enumeration value="NE"/>
+            <xsd:enumeration value="SW"/>
+            <xsd:enumeration value="SE"/>
+            <xsd:enumeration value="S"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="NptgSourceLocalityTypeEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>Allowed values for source classification of  NPTG Localities.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="U">
+                <xsd:annotation>
+                    <xsd:documentation>Urban Area in OS data.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="US">
+                <xsd:annotation>
+                    <xsd:documentation>Urban sub-area in OS data..</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Pa">
+                <xsd:annotation>
+                    <xsd:documentation>Parish – not Wales.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Co">
+                <xsd:annotation>
+                    <xsd:documentation>Community – Wales only.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Lo">
+                <xsd:annotation>
+                    <xsd:documentation>Other Locality in OS data..</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="DWD">
+                <xsd:annotation>
+                    <xsd:documentation>Scottish District Ward – Scotland only.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="LOC">
+                <xsd:annotation>
+                    <xsd:documentation>Scottish Locality – Scotland only.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="PAR">
+                <xsd:annotation>
+                    <xsd:documentation>Scottish Parish – Scotland only.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="RED">
+                <xsd:annotation>
+                    <xsd:documentation>Scottish Registered Electoral District – Scotland only.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="ISL">
+                <xsd:annotation>
+                    <xsd:documentation>Island</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="Add">
+                <xsd:annotation>
+                    <xsd:documentation>Added </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="NptgLocalityClassificationEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>Allowed values for classifying NPTG Localities.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="city">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a city.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="suburb">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is an urban sub-area.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="town">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a town.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="village">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a village.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="hamlet">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a hamlet.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="urbanCentre">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a City Centre or Town Centre zone of another town or city locality</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="placeOfInterest">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is a place of interest whose name is distinct from another locality.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="other">
+                <xsd:annotation>
+                    <xsd:documentation>Locality is none of the other types.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="unrecorded">
+                <xsd:annotation>
+                    <xsd:documentation>Locality type is not yet specified..</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="CountryEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>Allowed countries. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="England"/>
+            <xsd:enumeration value="NorthernIreland"/>
+            <xsd:enumeration value="Scotland"/>
+            <xsd:enumeration value="Wales"/>
+            <xsd:enumeration value="UK"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <!-- =====NPTG References======================================================== -->
+    <xsd:complexType name="NptgLocalityRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer locality. The reference is by National Gazetteer Code.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="NptgLocalityCodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="NptgLocalityVersionedRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer locality. The reference is by National Gazetteer Code.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="NptgLocalityCodeType">
+                <xsd:attributeGroup ref="ModificationDetailsGroup"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="NptgLocalityRefsStructure">
+        <xsd:annotation>
+            <xsd:documentation>A collection of one or more references to NPTG localities.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="NptgLocalityRef" type="NptgLocalityVersionedRefStructure" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Reference to the identifier of a stop locality.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="AdministrativeAreaRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer administrative area. The reference is by National Gazetteer Code.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="AdministrativeAreaCodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="AdministrativeAreaVersionedRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer administrative area. The reference is by National Gazetteer Code.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="AdministrativeAreaCodeType">
+                <xsd:attributeGroup ref="ModificationDetailsGroup"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="AdministrativeAreaRefsStructure">
+        <xsd:annotation>
+            <xsd:documentation>A collection of one or more references to NPTG administrative areas.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="AdministrativeAreaRef" type="AdministrativeAreaVersionedRefStructure" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Reference to the identifier of an administrative area.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="RegionRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer Region. The reference is by National Gazetteer Region Code.  </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="RegionCodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="RegionVersionedRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a National Gazetteer Region. The reference is by National Gazetteer Region Code.  </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="RegionCodeType">
+                <xsd:attributeGroup ref="ModificationDetailsGroup"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="RegionRefsStructure">
+        <xsd:annotation>
+            <xsd:documentation>A collection of one or more references to NPTG regions.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="RegionRef" type="RegionVersionedRefStructure" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Reference to the identifier of an Region.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="PlusbusZoneRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a Plusbus Zone. The reference is by PlusbusZone Code.  </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="PlusbusZoneCodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="PlusbusZoneVersionedRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A reference to a Plusbus Zone. The reference is by PlusbusZone Code.  </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="PlusbusZoneCodeType">
+                <xsd:attributeGroup ref="ModificationDetailsGroup"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="PlusbusZoneRefsStructure">
+        <xsd:annotation>
+            <xsd:documentation>A collection of one or more references to Plusbus Zones</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="PlusbusZoneRef" type="PlusbusZoneVersionedRefStructure" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Reference to the identifier of an Plusbus Zone.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <!-- ======================================================================= -->
+    <xsd:simpleType name="UkLanguageEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>UK Natural Languages.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="EN">
+                <xsd:annotation>
+                    <xsd:documentation>English.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="CY">
+                <xsd:annotation>
+                    <xsd:documentation>Welsh.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="GA">
+                <xsd:annotation>
+                    <xsd:documentation>Irish.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="GD">
+                <xsd:annotation>
+                    <xsd:documentation>Scots Gaelic.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

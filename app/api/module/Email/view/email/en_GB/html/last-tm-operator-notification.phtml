@@ -1,0 +1,27 @@
+<p>Dear operator,</p>
+<p>
+    Important documentation relating to your Operator’s Licence <?php echo $this->escapeHtml($this->licNo); ?> has been
+    sent by recorded delivery post to your correspondence address. This is following the removal of your last TM, please ensure
+    you respond within the stated deadline.
+</p>
+<p>
+    PLEASE NOTE. A failure to respond to this letter will result in your licence being revoked. The
+    revocation of the licence would render unlawful the operation of vehicles for which an operator’s licence is
+    required.
+</p>
+<?php if (!$this->registeredToSelfserve) : ?>
+    <p>You can update your operator’s licence on-line, for example you can:
+    <ul>
+        <li>add or remove a transport manager</li>
+        <li>add more vehicles to your licence</li>
+        <li>increase the vehicle limit on your licence</li>
+        <li>change your licence type</li>
+    </ul>
+    To register for the on-line service, please use the following link:
+    <p>
+        <a href="https://www.vehicle-operator-licensing.service.gov.uk/auth/login/">https://www.vehicle-operator-licensing.service.gov.uk/auth/login/</a>
+    <p>
+        The on-line service is straightforward and easy to use. It reduces the time required to progress most changes to
+        licences. Changes to vehicles are effective immediately.
+    </p>
+<?php endif; ?>

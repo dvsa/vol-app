@@ -1,0 +1,21 @@
+Isod gallwch weld derbyneb gydnabyddiaeth negyddol gan ERRU.
+
+Mae hyn yn galw am nodi'r derbynnydd cywir ac anfon ymlaen at y blwch post priodol.
+
+Os yn PF, yna nodwch y rheswm am gydnabyddiaeth negyddol, cywiro ac ail-gyflwyno MSI trwy borth gwe'r INR.
+
+ID achos busnes: <?php echo $this->notificationNumber; ?>
+Wedi'i anfon am: <?php echo $this->sentAt; ?>
+Oddi wrth MS: <?php echo $this->memberState; ?>
+Awdurdod Gwreiddiol: <?php echo $this->originatingAuthority; ?>
+Dyddiad/amser cydnabod: <?php echo $this->notificationDateTime; ?>
+
+Nesgeseuon gwall:
+
+<?php 
+foreach ($this->errorMessages as $message) { 
+    echo '*' . $message. "\n"; 
+} 
+?>
+
+(Gweler y ffeil gysylltiedig: <?php echo $this->filename; ?>)

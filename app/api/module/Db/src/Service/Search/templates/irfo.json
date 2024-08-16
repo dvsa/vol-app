@@ -1,0 +1,57 @@
+{
+   "query": {
+      "bool": {
+         "must": {
+            "bool": {
+               "should": [
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fuzziness": 2,
+                        "fields": [
+                           "org_name"
+                        ]
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "type": "phrase",
+                        "query": "%SEARCH_TERM%",
+                        "slop": 2,
+                        "fields": [
+                           "org_name"
+                        ]
+                     }
+                  },
+                  {
+                     "match": {
+                        "org_id": "%SEARCH_TERM%"
+                     }
+                  },
+                 {
+                     "wildcard": {
+                        "org_name_wildcard": {
+                        "value":"%SEARCH_TERM%",
+                        "boost":4
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "org_name": "%SEARCH_TERM%"
+                     }
+                  }
+               ]
+            }
+         },
+         "must_not": [
+            {
+               "exists": {
+                  "field": "is_deleted"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 2
+}

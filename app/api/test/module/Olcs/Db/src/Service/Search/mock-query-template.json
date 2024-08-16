@@ -1,0 +1,17 @@
+{
+  "query": {
+    "bool": {
+      "must": {
+        "bool": {
+          "should": [
+            {
+              "match": {
+                "field_1": "%SEARCH_TERM%"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

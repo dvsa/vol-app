@@ -1,0 +1,60 @@
+<?php /** @global \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $message */ ?>
+<?php /** @global bool $enhanced */ ?>
+<div class="govuk-!-margin-bottom-6">
+  <div class="govuk-summary-card">
+    <div class="govuk-summary-card__title-wrapper">
+      <h2 class="govuk-summary-card__title">
+        <?php
+        if ($message->getCreatedBy()->getContactDetails() !== null && $message->getCreatedBy()->getContactDetails()->getPerson()) {
+          if (!$enhanced && $message->getCreatedBy()->getTeam() !== null){
+            $sender = $message->getCreatedBy()->getContactDetails()->getPerson()->getForename();
+          } else {
+            $sender = $message->getCreatedBy()->getContactDetails()->getPerson()->getFullName();
+          }
+        } else {
+          $sender = $message->getCreatedBy()->getLoginId();
+        }
+        echo $sender;
+        ?>
+      </h2>
+      <h2 class="govuk-summary-card__title govuk-summary-card__date">
+        <?php echo $message->getCreatedOn(true)->format('l j F Y \a\t H:ia'); ?>
+      </h2>
+    </div>
+    <div class="govuk-summary-card__content">
+      <p class="govuk-body">
+        <?php echo nl2br($message->getMessagingContent()->getText()); ?>
+        <?php if ($message->getCreatedBy()->getTeam() !== null): ?>
+          <p class="govuk-caption-m">
+            <?php echo $sender; ?>
+            <br/>
+            Caseworker Team
+          </p>
+        <?php endif; ?>
+        <?php if ($enhanced): ?>
+          <hr/>
+          <?php foreach ($message->getUserMessageReads() as $messageRead): /** @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingUserMessageRead $messageRead */ ?>
+            <p>
+              <em>
+                <?php
+                if ($messageRead->getUser()->getContactDetails() && $messageRead->getUser()->getContactDetails()->getPerson()) {
+                  $readBy = $messageRead->getUser()->getContactDetails()->getPerson()->getFullName();
+                } elseif ($messageRead->getUser()->getContactDetails() && $messageRead->getUser()->getContactDetails()->getEmailAddress()) {
+                  $readBy = $messageRead->getUser()->getContactDetails()->getEmailAddress();
+                } else {
+                  $readBy = $messageRead->getUser()->getLoginId();
+                }
+
+                echo sprintf(
+                  'Read by %s on %s',
+                  $readBy,
+                  $messageRead->getCreatedOn(true)->format('l j F Y \a\t H:ia')
+                ); ?>
+              </em>
+            </p>
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </p>
+    </div>
+  </div>
+</div>
