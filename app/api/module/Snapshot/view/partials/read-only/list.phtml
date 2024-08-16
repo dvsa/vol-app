@@ -1,0 +1,7 @@
+<?php if (isset($items) && !empty($items)) { ?>
+    <ul class="definition-list">
+        <?php foreach ($items as $item): ?>
+            <?php echo $this->render('partials/read-only/list-item', ['item' => $item]); ?>
+        <?php endforeach; ?>
+    </ul>
+<?php }

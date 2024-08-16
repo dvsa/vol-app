@@ -1,0 +1,357 @@
+<?php
+
+use Dvsa\Contracts\Auth\OAuthClientInterface;
+use Dvsa\Authentication\Cognito\Client as CognitoClient;
+use Dvsa\Authentication\Ldap\Client as LdapClient;
+
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ */
+
+$doctrine_connection_params = [
+  'host' => 'db',
+  'port' => '3306',
+  'user' => 'mysql',
+  'password' => 'olcs',
+  'dbname' => 'olcs_be',
+];
+
+return [
+  'config_parameters' => [
+    'providers' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+  ],
+  'address' => [
+    'client' => [
+      'baseuri' => 'http://address.reg.olcs.dev-dvsacloud.uk/'
+    ]
+  ],
+  'elastic_search' => [
+    'host' => 'searchv6.reg.olcs.dev-dvsacloud.uk',
+  ],
+  'doctrine' => [
+    'connection' => [
+      'orm_default' => [
+        'params' => $doctrine_connection_params,
+      ],
+      'export' => [
+        'params' => $doctrine_connection_params +
+          [
+            'driverOptions' => [
+              PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
+              PDO::CURSOR_FWDONLY => true,
+            ],
+          ],
+      ],
+    ],
+  ],
+  'companies_house_credentials' => [
+    'userId' => 'XMLGatewayTestUserID',
+    'password' => 'XMLGatewayTestPassword',
+  ],
+  'companies_house_connection' => [
+    'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+  ],
+  'document_share' => [
+    'client' => [
+      'webdav_baseuri' => 'http://webdav.qa.olcs.dev-dvsacloud.uk:8080/documents/',
+      'password' => ''
+    ],
+  ],
+  'asset_path' => 'http://localhost:7001',
+  'companies_house' => [
+    'http' => [
+      'curloptions' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    ],
+    'auth' => [
+      // Companies House API key (register one at https://developer.companieshouse.gov.uk/]
+      'username' => '',
+    ],
+    'client' => [
+      'baseuri' => "https://api.companieshouse.gov.uk/",
+    ],
+  ],
+  'message_queue' => [
+    'CompanyProfile_URL' => "",
+    'CompanyProfileDlq_URL' => "",
+    'ProcessInsolvency_URL' => "",
+    'ProcessInsolvencyDlq_URL' => "",
+    'TransXChangeConsumer_URL' => "http://host.docker.internal:4566/000000000000/txc-local-output",
+  ],
+  'company_house_dlq' => [
+    'notification_email_address' => ""
+  ],
+  'cpms_api' => [
+    'rest_client' => [
+      'options' => [
+        'domain' => "api.accept.dev.cpms.dvsacloud.uk", // QA
+      ],
+    ],
+  ],
+  'cpms_credentials' => [
+    'client_id' => "OLCS",
+    'client_secret' => "CMPS CLIENTID",
+    'client_id_ni' => "CMPS CLIENTID",
+    'client_secret_ni' => "CPMS SECRET",
+  ],
+  'email' => [
+    'send_all_mail_to' => '',
+    'from_name' => 'OLCS do not reply',
+    'from_email' => 'mail.olcs.dev@dev-dvsacloud.uk',
+    'selfserve_uri' => 'https://olcs-selfserve',
+    'internal_uri' => 'https://olcs-internal',
+  ],
+  'awsOptions'=>[
+    'region' => 'eu-west-1',
+    'version' => 'latest',
+    'useEnvCredentials' => true,
+    's3' => [
+      'use_path_style_endpoint' => true,
+    ],
+    's3Options' => [
+      'roleArn' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      'roleSessionName' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    ],
+  ],
+  'mail' => [
+    'type' => '\Laminas\Mail\Transport\Smtp',
+    'options' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([
+      'name' => 'mailhog',
+      'host' => 'mailhog',
+      'port' => 1025,
+      'connection_config' => [
+        'username' => 'null',
+        'password' => 'null',
+        'port' => 1025,
+      ],
+    ]),
+  ],
+  'mailboxes' => [
+    'inspection_request' => [
+      'host' => 'outlook.office365.com',
+      'user' => 'olcsemail',
+      'password' => '',
+      'port' => '993',
+      'ssl' => '1',
+    ],
+  ],
+  'ebsr' => [
+    'transexchange_publisher' => [
+      'uri' => 'http://localhost:8080/txc/publisherService',
+      'new_uri' => '',
+      'options' => [
+          'proxy_host' => '',
+      ],
+      'consumer_proxy' => '',
+      'oauth2' => [
+          'client_id' => '',
+          'client_secret' => '',
+          'token_url' => '',
+          'scope' => '',
+          'proxy' => '',
+      ],
+    ],
+    // the input bucket for TransXChange, where the xml is placed
+    'input_s3_bucket' => 'txc-local-input',
+    // The output bucket for TransXChange. This bucket will container the resulting PDFs.
+    'output_s3_bucket' => 'txc-local-output',
+    // The cross account role that VOL will assume to access the output bucket and output SQS queue.
+    'txc_consumer_role_arn' => 'arn:aws:iam::000000000000:role/txc-local-consumer-role',
+  ],
+  'nr' => [
+    // @to-do currently waiting on the actual nr address
+    'inr_service' => [
+      'uri' => 'http://testServiceAddress',
+      'options' => [
+        'curloptions' => [
+          CURLOPT_CAINFO => 'atoscert.pem',
+          CURLOPT_SSLKEY => 'client_key.pem',
+        ]
+      ]
+    ],
+    'repute_url' => [
+      'uri' => null,
+    ],
+  ],
+  'print' => [
+    'server' => 'print.localdev:631'
+  ],
+  // If this value is populated then printing will use this service,
+  // if it is not populated or missing then the Libreoffice converter will be used
+  'convert_to_pdf' => [
+    'uri' => 'http://renderer.qa.olcs.dev-dvsacloud.uk:8080/convert-document',
+  ],
+  'log' => [
+    'Logger' => [
+      'writers' => [
+        'full' => [
+          'options' => [
+            'stream' => 'php://stdout',
+            'filters' => [
+              'priority' => [
+                'name' => 'priority',
+                'options' => [
+                  'priority' => \Laminas\Log\Logger::DEBUG
+                ]
+              ],
+            ],
+          ],
+        ],
+      ],
+    ],
+  ],
+  'nysiis' => [
+    'soap' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    'rest' => [
+      'uri' => 'http://localhost:8080/nysiis-1.0/nysiis/convert',
+      'options' => [
+        'timeout' => 5
+      ]
+    ]
+  ],
+  'gds_verify' => [
+    'federation_metadata_url' => 'https://compliance-tool-reference.ida.digital.cabinet-office.gov.uk/SAML2/metadata/sp',
+    'msa_metadata_url' => __DIR__ . '/../../module/GdsVerify/data/compliance-tool/msa-certs/metadata.xml',
+    'cache' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+    'entity_identifier' => 'http://olcs-selfserve.olcs.gov.uk',
+    'signature_key' => __DIR__ . '/../../module/GdsVerify/data/compliance-tool/signing.key',
+    'encryption_keys' => [
+      __DIR__ . '/../../module/GdsVerify/data/compliance-tool/enc.key',
+    ],
+  ],
+  'olcs-doctrine' => [
+    'encryption_key' => null
+  ],
+  'cache-encryption' => [
+    'adapter' => 'openssl',
+    'options' => [
+      'algo' => 'aes',
+      'mode' => 'gcm',
+    ],
+    'secrets' => [
+      'node' => 'api-cache-encryption-key',
+      'shared' => 'shared-cache-encryption-key',
+    ],
+  ],
+
+  'caches' => [
+    'default-cache' => [
+      'options' => [
+        'server' => [
+          'host' => 'redis',
+        ],
+      ],
+    ],
+  ],
+  'dvla_search' => [
+    'base_uri' => '',
+    'api_key' => '',
+    'proxy' => "",
+  ],
+  /*
+  |--------------------------------------------------------------------------
+  | Authentication Identity Provider
+  |--------------------------------------------------------------------------
+  |
+  | Select an identity provider client that will be used to connect to an
+  | identity provider that implement the `OAuthClientInterface`.
+  |
+  | This config file is loaded after the module configuration, so overwriting
+  | the service manager alias in a global config file will overwrite the
+  | modules own config allowing this file to set the identity provider.
+  |
+  | Example adapters:
+  |   - Dvsa\Authentication\Cognito\Client as CognitoClient
+  |   - Dvsa\Authentication\Ldap\Client as LdapClient
+  |
+  */
+  'service_manager' => [
+    'aliases' => [
+      OAuthClientInterface::class => LdapClient::class,
+    ],
+  ],
+  'auth' => [
+    'default_adapter' => 'ldap',
+    'adapters' => [
+      'cognito' => [
+        'adapter' => \Dvsa\Olcs\Auth\Adapter\CognitoAdapter::class,
+        'clientId' => '',
+        'clientSecret' => '',
+        'poolId' => '',
+        'region' => 'eu-west-1',
+        'http' => [
+          'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+        ],
+      ],
+      /*
+      |--------------------------------------------------------------------------
+      | LDAP Local Credentials
+      |--------------------------------------------------------------------------
+      |
+      | The login credentials that match the OpenLDAP container bundled as
+      | part of https://github.com/dvsa/vol-docker-compose.
+      |
+      | These are default LOCAL values, do not alter unless defaults have changed.
+      |
+      */
+      'ldap' => [
+        'adapter' => \Dvsa\Olcs\Auth\Adapter\LdapAdapter::class,
+        'host' => 'openldap',
+        'port' => 1389,
+        'admin_dn' => 'cn=admin,dc=vol,dc=dvsa',
+        'admin_password' => 'admin',
+        'rdn' => 'cn',
+        'object_class' => ['inetOrgPerson'],
+        'base_dn' => 'ou=users,dc=vol,dc=dvsa',
+        'encryption' => 'none',
+        'secret' => 'SUPER_SECRET',
+      ],
+    ],
+  ],
+  'acquired_rights' => [
+    'client' => [
+      'base_uri' => 'http://127.0.0.1:3000',
+      'headers' => [
+        'x-api-key' => ''
+      ],
+    ],
+  ],
+  'govuk_account' => [
+    'redirectUri' => 'https://ssweb.dev.olcs.dev-dvsacloud.uk/govuk-id/loggedin',
+    'discovery_endpoint' => 'https://oidc.integration.account.gov.uk/.well-known/openid-configuration',
+    'client_id' => '',
+    'keys' => [
+      'algorithm' => 'RS256',
+      'private_key' => '',
+      'public_key' => '',
+      'identity_assurance_public_key' => (array)json_decode('{"kty":"EC","use":"sig","crv":"P-256","x":"NPGA7cyIKtH1nz2CJIH14s9_CtC93NwdCQcEi-ADvxg=","y":"2cTdmHAmZjighly34lXcxEw50cbKFV7FTOdZKhOG7ps=","alg":"ES256"}'),
+    ],
+    'redirect_uri' => [
+      'logged_in' => 'https://olcs-selfserve/govuk-id/loggedin',
+      'logged_out' => 'https://olcs-selfserve/govuk-id/loggedout',
+    ],
+    'expected_core_identity_issuer' => 'https://identity.integration.account.gov.uk/',
+    'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+  ],
+  'top-report-link' => [
+    'targetUrl' => 'https://operator-reports-api.develop.edh.dvsacloud.uk/redirect',
+    'apiKey' => '',
+    'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+  ],
+  'openam' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+  'dvsa_address_service' => [
+        'client' => [ // Guzzle client options; see https://docs.guzzlephp.org/en/stable/quickstart.html
+            'base_uri' => '', //param
+            'headers' => [], // additional or override default client headers
+        ],
+        'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
+            'client_id' => '', //param
+            'client_secret' => '', // secret
+            'token_url' => '', //param
+            'scope' => '', //param
+        ],
+    ],
+];

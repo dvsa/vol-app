@@ -1,0 +1,76 @@
+{
+   "query": {
+      "bool": {
+         "must": {
+            "bool": {
+               "should": [
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fuzziness": 1,
+                        "fields": [
+                           "paon_desc",
+                           "saon_desc",
+                           "street",
+                           "locality",
+                           "town"
+                        ]
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "type": "phrase",
+                        "slop": 2,
+                        "fields": [
+                           "full_address"
+                        ]
+                     }
+                  },
+                  {
+                     "wildcard": {
+                        "postcode": {
+                           "value": "%SEARCH_TERM%*"
+                        }
+                     }
+                  },
+                  {
+                     "prefix": {
+                        "postcode": {
+                           "value": "%SEARCH_TERM%"
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "app_id": {
+                           "query": "%SEARCH_TERM%"
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "postcode": {
+                           "query": "%SEARCH_TERM%"
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "lic_no": "%SEARCH_TERM%"
+                     }
+                  }
+               ]
+            }
+         },
+         "must_not": [
+            {
+               "exists": {
+                  "field": "is_deleted"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 8
+}

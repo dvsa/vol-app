@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/erru/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/erru/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="./ERRU_Global_Types.xsd"/>
+	<xs:complexType name="statisticsCountType">
+		<xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="statisticsInfringementAggregateDataType">
+		<xs:complexContent>
+			<xs:extension base="statisticsBaseDataType">
+				<xs:attribute name="ackStatusCode" type="statisticsAcknowledgementStatusCodeType" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="statisticsInfringementNotificationDataType">
+		<xs:complexContent>
+			<xs:extension base="statisticsINStatusDataType">
+				<xs:attribute name="inStatusCode" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="INFailed"/>
+							<xs:enumeration value="Open"/>
+							<xs:enumeration value="IRFailed"/>
+							<xs:enumeration value="Closed"/>
+							<xs:enumeration value="Other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="statisticsBaseDataType">
+		<xs:attribute name="from" type="globalMemberStateCodeType" use="required"/>
+		<xs:attribute name="to" type="globalMemberStateCodeType" use="required"/>
+		<xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="minInterval" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="maxInterval" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="avgInterval" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="statisticsINStatusDataType">
+		<xs:attribute name="from" type="globalMemberStateCodeType" use="required"/>
+		<xs:attribute name="to" type="globalMemberStateCodeType" use="required"/>
+		<xs:attribute name="count" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="minInterval" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="maxInterval" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="avgInterval" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:simpleType name="statisticsAcknowledgementStatusCodeType">
+		<xs:union memberTypes="globalStatusCodeBaseType globalOKStatusCodeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="statisticsConsolidatedERRUStatusCodeType">
+		<xs:union memberTypes="globalStatusCodeBaseType globalOKStatusCodeType globalAllOKStatusCodeType"/>
+	</xs:simpleType>
+	<xs:simpleType name="statisticsConsolidatedMSStatusCodeType">
+		<xs:union memberTypes="globalStatusCodeBaseType globalSearchResultStatusCodeType"/>
+	</xs:simpleType>
+</xs:schema>

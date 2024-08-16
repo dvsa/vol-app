@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 sp2 U (http://www.altova.com) by Nick js knowles (Kizoom Ltd.) -->
+ <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0" id="NaPT_types">
+    <xsd:annotation>
+        <xsd:appinfo xmlns:gms="http://www.govtalk.gov.uk/CM/gms">
+            <Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+                <Aggregation>main schema</Aggregation>
+                <Audience>e-service developers</Audience>
+                <Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+                <Coverage>United Kingdom</Coverage>
+                <Creator>Created for TXC 2.0 Tom White, Kizoom mailto:schemer@kizoom.com</Creator>
+                <Date>
+                    <Created>2004-02-01</Created>
+                </Date>
+                <Date>
+                    <Modified>2004-11-04</Modified>
+                </Date>
+                <Date>
+                    <Modified>2004-07-07</Modified>
+                </Date>
+                                                <Date>
+                                                    <Modified>2005-06-06</Modified>
+                </Date>
+                <Description>Common types for National Public Transport XML schemas.</Description>
+                <Format>
+                    <MediaType>text/xml</MediaType>
+                    <Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+                    <Description>XML schema, W3C Recommendation 2001</Description>
+                </Format>
+                <Identifier>{http://www.naptan.org.uk/schema/2.0/napt/}NaPT_types-v2-0.xsd</Identifier>
+                <Language>[ISO 639-2/B] ENG</Language>
+                <Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+                <Relation>
+                    <Requires>http://www.w3.org/2001/xml.xsd</Requires>
+                    <Requires>../apd/CommonSimpleTypes-v1-3.xsd</Requires>
+                </Relation>
+                <Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+                </Rights>
+                <Source>Factored out from 2.0 draft TransXChange and NapTAN schemas</Source>
+                               <Status>Version 2.0 Release</Status>
+                <Subject>
+                    <Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways),  Train services,
+Roads and road transport</Category>
+                    <Project>Transport Direct</Project>
+                </Subject>
+                <Title>Common types for National Public Transport XML schemas.</Title>
+                <Type>Standard</Type>
+            </Metadata>
+        </xsd:appinfo>
+        <xsd:documentation>NaPT Common type definitions</xsd:documentation>
+    </xsd:annotation>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    <xsd:import namespace="http://www.govtalk.gov.uk/core" schemaLocation="../apd/CommonSimpleTypes-v1-3.xsd">
+        <xsd:annotation>
+            <xsd:documentation source="http://www.govtalk.gov.uk/schemasstandards/agreedschema_schema.asp?schemaid=204">A set of Address and personal details schema, including BS7666 version 1.3</xsd:documentation>
+        </xsd:annotation>
+    </xsd:import>
+    <!--====Basic Types =======================================================================-->
+    <xsd:simpleType name="EmptyType">
+        <xsd:annotation>
+            <xsd:documentation>A type with no allowed content, used when simply the presence of an element is significant.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value=""/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="PopulatedStringType">
+        <xsd:annotation>
+            <xsd:documentation>A restriction of W3C XML Schema's string that requires at least one character of text. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="NaturalLanguageStringStructure">
+        <xsd:annotation>
+            <xsd:documentation>@lang. ISO language code (default is en)
+A string containing a phrase in a natural language.  </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="PopulatedStringType">
+                <xsd:attribute ref="xml:lang"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:simpleType name="PopulatedPlaceNameType">
+        <xsd:annotation>
+            <xsd:documentation>A name that requires at least one character of text and forbids certain reserved characters. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="PopulatedStringType">
+            <xsd:maxLength value="48"/>
+            <xsd:pattern value="[^,\[\]\{\}\?$£%\^=@#;:]+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:complexType name="NaturalLanguagePlaceNameStructure">
+        <xsd:annotation>
+            <xsd:documentation>@lang. ISO language code (default is en)
+A string containing a phrase in a natural language name that requires at least one character of text and forbids certain reserved characters. </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="PopulatedPlaceNameType">
+                <xsd:attribute ref="xml:lang"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:simpleType name="EmailAddressType">
+        <xsd:annotation>
+            <xsd:documentation>An email address, using GovTalk constructs.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="core:EmailAddressType"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="PrivateCodeType">
+        <xsd:annotation>
+            <xsd:documentation>An identifying code that is an internal, private identifier for interoperating with other (legacy) systems.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:complexType name="TelephoneContactStructure">
+        <xsd:annotation>
+            <xsd:documentation>A telephone number, using GovTalk constructs.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="TelNationalNumber" type="core:TelephoneNumberType">
+                <xsd:annotation>
+                    <xsd:documentation>Full telephone number including STD prefix</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TelExtensionNumber" type="core:TelephoneExtensionType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Any additional extension number.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="TelCountryCode" type="core:TelCountryCodeType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Two character country prefix, e.g. 44 for UK.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="FullPersonNameStructure">
+        <xsd:annotation>
+            <xsd:documentation>Person Name required in full..</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Position" type="NaturalLanguageStringStructure">
+                <xsd:annotation>
+                    <xsd:documentation>Position of responsibility of the person, job title. @lang.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Title" type="PopulatedStringType">
+                <xsd:annotation>
+                    <xsd:documentation>Title (i.e. Mr, Mrs, Miss, Ms, Rev, Rt.Hon etc).</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Forename" type="PopulatedStringType">
+                <xsd:annotation>
+                    <xsd:documentation>Forename of the person</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="Surname" type="PopulatedStringType">
+                <xsd:annotation>
+                    <xsd:documentation>Surname of the person.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="IdType">
+        <xsd:annotation>
+            <xsd:documentation>Id type for document references</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="IpAddressType">
+        <xsd:annotation>
+            <xsd:documentation>Internet protocol address of form 000.000.000.000</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+</xsd:schema>

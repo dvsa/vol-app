@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ERRU2MS_Infringement_Req xmlns="https://webgate.ec.testa.eu/erru/1.0">
+    <Header version="1.0" testId="12345" technicalId="bb902bba-d840-4e90-bf8c-ae6d9178cc59" workflowId="20776dc3-5fe7-42d5-b554-09ad12fa25c4" sentAt="2014-02-20T16:22:09Z" from="PL">
+        <To>
+            <MemberState code="UK" />
+        </To>
+    </Header>
+    <Body businessCaseId="0ffefb6b-6344-4a60-9a53-4381c32f98d9" originatingAuthority="Driver &amp; Vehicle Agency" notificationDateTime="2014-02-20T16:20:12Z">
+        <TransportUndertaking name="TEST USER (SELF SERVICE)(12345)" communityLicenceNumber="UKGB/OB1234567/00000" vehicleRegNumber="aBc123">
+            <SeriousInfringement dateOfInfringement="2014-02-20" category="MSI" infringementType="101" dateOfCheck="2014-02-20">
+                <PenaltyImposed finalDecisionDate="2014-02-20" penaltyTypeImposed="101" startDate="2014-03-14" endDate="2014-09-17" isExecuted="Yes" />
+                <PenaltyImposed finalDecisionDate="2014-06-25" penaltyTypeImposed="102" isExecuted="No" />
+                <PenaltyRequested penaltyTypeRequested="301" duration="12" />
+                <PenaltyRequested penaltyTypeRequested="302" duration="30" />
+            </SeriousInfringement>
+            <SeriousInfringement dateOfInfringement="2014-03-21" category="MSI" infringementType="201" dateOfCheck="2014-03-21">
+                <PenaltyImposed finalDecisionDate="2014-03-21" penaltyTypeImposed="202" startDate="2014-04-15" endDate="2014-10-18" isExecuted="No" />
+                <PenaltyImposed finalDecisionDate="2014-07-26" penaltyTypeImposed="203" isExecuted="Yes" />
+                <PenaltyRequested penaltyTypeRequested="305" duration="18" />
+                <PenaltyRequested penaltyTypeRequested="306" duration="24" />
+            </SeriousInfringement>
+        </TransportUndertaking>
+    </Body>
+</ERRU2MS_Infringement_Req>

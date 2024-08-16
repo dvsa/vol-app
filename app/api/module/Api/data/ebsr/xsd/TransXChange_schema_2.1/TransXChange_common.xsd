@@ -1,0 +1,2909 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "V2.1  2005 09 05 
+             Change to ref NaPT journey & stop 2.1 (Make Landmark and street optional) 
+        2005 09 27 
+             Add TransXChangeNptgLocalitiesStructure and  AnnotatedNptgLocalityRefStructure to support TXC  publisher enhancement -->
+<!-- (c) Crown Copyright 2000-2005   -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns="http://www.transxchange.org.uk/" targetNamespace="http://www.transxchange.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.1" id="TransXChangeCommon">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created for TXC 2.0 Tom White, Kizoom mailto:schemer@kizoom.com</Creator>
+				<Date>
+					<Created>2004-02-01</Created>
+				</Date>
+				<Date>
+					<Modified>2004-03-08</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-07-01</Modified>
+				</Date>
+				<Date>
+					<Modified>2004-08-23</Modified>
+				</Date>
+				<Date>
+					<Modified>2005-09-05</Modified>
+				</Date>
+				<Date>
+					<Modified>2008-10-16</Modified>
+						<!-- Correct the comment on wait times on stop usage-->
+				</Date>
+				<Description> Common element declarations for TransXChange, an XML schema for exchanging bus schedules.</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.transxchange.org.uk/schema/2.1}TransXChange_common.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+					<Requires>http://www.transxchange.org.uk/schema/2.0/TransXChange_types.xsd</Requires>
+					<Requires>http://www.w3.org/2001/xml.xsd</Requires>
+					<Requires>apd/AddressTypes-v1-3.xsd</Requires>
+				</Relation>
+				<Relation>
+					<HasPart>http://www.transxchange.org.uk/schema/2.1/TransXChange_types.xsd</HasPart>
+					<isPartOf>http://www.transxchange.org.uk/schema/2.1/TransXChange_general.xsd</isPartOf>
+					<isPartOf>http://www.transxchange.org.uk/schema/2.1/TransXChange_registration.xsd</isPartOf>
+				</Relation>
+				<Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+				</Rights>
+				<Source>Factored out from 2.0 draft schema</Source>
+				<Status>Version 2.1  </Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways), Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>Common Elements for TransXChange, an XML format for exchanging bus timetables.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+	</xsd:annotation>
+	<xsd:include schemaLocation="TransXChange_types.xsd"/>
+	<xsd:include schemaLocation="napt/NaPT_journey-v2-1.xsd"/>
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" schemaLocation="apd/AddressTypes-v1-3.xsd">
+		<xsd:annotation>
+			<xsd:documentation source="http://www.govtalk.gov.uk/schemasstandards/agreedschema_schema.asp?schemaid=204">A set of Address and personal details schema, including BS7666 version 1.3</xsd:documentation>
+		</xsd:annotation>
+	</xsd:import>
+	<!-- ======================================================================= -->
+	<!-- Serviced Organisations -->
+	<xsd:complexType name="ServicedOrganisationsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more serviced organisations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServicedOrganisation" type="ServicedOrganisationStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>An organisation referenced by a bus schedule, for which specific working days and holidays may be defined.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServicedOrganisationStructure">
+		<xsd:annotation>
+			<xsd:documentation>An organisation referenced by a bus schedule and for which specific working days and holidays may be defined. A serviced organisation can have child serviced organisations. A child serviced organisation overrides the working days and holidays of its parent. An example parent would be all the schools in a Local Education Authority; this would define the default term days (working days) and holidays for the schools in the area. It might have child schools, in order for individual schools to override the default term days and holidays.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OrganisationCode" type="ServicedOrganisationCodeType">
+				<xsd:annotation>
+					<xsd:documentation>Identifying code for the serviced organisation. In the case of LEAs and Schools, this should be the Department of Education Number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Name" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The name of the organisation. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WorkingDays" type="DatePatternStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of days when the serviced organisation is open. Working days should not overlap with any holidays; if they do, the latter will be used in preference.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Holidays" type="DatePatternStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of days when the serviced organisation is closed. Working days should not overlap with any holidays; if they do, the latter will be used in preference.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ParentServicedOrganisationRef" type="ServicedOrganisationRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Another ServicedOrganisation that is parent to this organisation. The WorkingDays and Holidays of the referenced Organisation will be inherited, except where explicitly overridden by the child Organisation. Cyclic references are not allowed. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:complexType name="ServicedOrganisationRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>A reference to a ServicedOrganisation. The reference is by ServicedOrganisationCode.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="ServicedOrganisationCodeType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="ServicedOrganisationRefsStructure">
+		<xsd:annotation>
+			<xsd:documentation>References to serviced organisations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServicedOrganisationRef" type="ServicedOrganisationRefStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Reference to a serviced organisation.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!--Nptg Localities-->
+	<xsd:complexType name="TransXChangeNptgLocalitiesStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of annotated NPTG localities.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AnnotatedNptgLocalityRef" type="AnnotatedNptgLocalityRefStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A NPTG locality  reference annotated by its names.  TransXChange document to support the Publishing of stop names that include the locality name eg "Barset, High Street".   </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AnnotatedNptgLocalityRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Data type for an annotated reference to a locality that is defined elsewhere using a StopPointStructure. The annotation is the stop's common name.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="NptgLocalityRef" type="NptgLocalityRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Unique identifier of the locality.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LocalityName" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Name of NPTG Locality in which one ore more locally defined stop in this document lies. To be used when publishing stop names.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LocalityQualifier" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Any qualifier of NPTG Locality in which stop lies.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Stop Points -->
+	<xsd:complexType name="TransXChangeStopPointsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of stops or annotated stop refs.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StopPoint" type="StopPointStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A NaPTAN stop definition.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber,
+@Status.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AnnotatedStopPointRef" type="AnnotatedStopPointRefStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A NaPTAN stop reference annotated by common name.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Route Sections -->
+	<xsd:complexType name="RouteSectionsStructure">
+		<xsd:annotation>
+			<xsd:documentation>Geospatial representation of route sections for mapping and instructional purposes.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RouteSection" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A reusable section of route comprising one or more route links, ordered in sequence of traversal.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RouteLink" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A piece of the network topology connection two stops.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="From" type="StopPointWrappedRefStructure">
+										<xsd:annotation>
+											<xsd:documentation>The stop at which the link begins.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="To" type="StopPointWrappedRefStructure">
+										<xsd:annotation>
+											<xsd:documentation>The stop at which the link ends.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Distance" type="DistanceType" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Distance in metres along track of the link.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Direction" type="LinkDirectionEnumeration" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Direction of the route running over the link. Enumerated value.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Track" type="TrackStructure" minOccurs="0" maxOccurs="unbounded">
+										<xsd:annotation>
+											<xsd:documentation>A track describes a piece of the path of a route link that can be projected onto the geospatial model. The choice of how route links are divided into tracks is left to TransXChange implementors. For example, a major road junction might represent the end of one track and the beginning of the next.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:attribute name="id" type="IdType" use="optional">
+									<xsd:annotation>
+										<xsd:documentation>Identifies the link for use by reference.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:attribute>
+								<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="id" type="IdType" use="optional"/>
+					<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TrackStructure">
+		<xsd:annotation>
+			<xsd:documentation>A track describes a piece of the path of a route link that can be projected onto the geospatial model. The choice of how route links are divided into tracks is left to TransXChange implementors. For example, a major road junction might represent the end of one track and the beginning of the next.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Mapping" type="LineStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Set of geospatial points which describe the track. Must include the beginning and end of the track.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MapSystemReference" type="MapSystemReferenceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A mapping system reference (e.g. TOID, OSODR, NavTech, MDV) value which the requesting client has asked for.
+@MappingSystem</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Instructions" type="TrackInstructionsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Information to describe a track textually in a step by step fashion.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Route -->
+	<xsd:complexType name="RoutesStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more routes.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Route" type="RouteStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A path over the transport network topology that a bus takes to deliver a service.  An ordered collection of links connecting NaPTAN stops; the links are grouped into sections.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RouteStructure">
+		<xsd:annotation>
+			<xsd:documentation>Path through the physical road network which is composed of an ordered collection of track segments. The order of segments should represent the order in which they are traversed in the physical route.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PrivateCode" type="PrivateCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A private code that uniquely identifies the route. May be used for interoperating with other information systems.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Short description of the Route. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RouteSectionRef" type="IdType" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>An ordered collection of RouteSections that make up the Route. The order is the sequence of traversal.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ReversingManoeuvres" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Present if reversing manoeuvres needed along route.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Unique Identifier of Route. Note that the first 4 characters of the identifier should be identical to the OperatorCode, the remaining 6 digits represent a Route identifier which is unique to the Operator.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:complexType name="RouteRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a route</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- JourneyPatternSection -->
+	<xsd:complexType name="JourneyPatternSectionsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more journey pattern sections.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JourneyPatternSection" type="JourneyPatternSectionStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Reusable collection of timing links making up part of a JourneyPattern. Within each section, links are in order of traversal.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternSectionRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a journey pattern section.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternSectionStructure">
+		<xsd:annotation>
+			<xsd:documentation>Ordered collection of timing links making up part of a JourneyPattern.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JourneyPatternTimingLink" type="JourneyPatternTimingLinkStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A timed link between two stops making up the smallest step in a journey pattern.
+@id</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Operator -->
+	<xsd:complexType name="OperatorsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more operators.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence maxOccurs="unbounded">
+			<xsd:element name="Operator" type="OperatorStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A transport operator.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LicensedOperator" type="LicensedOperatorStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A transport operator that includes licensing details that are mandatory for service registration.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="OperatorContactGroup">
+		<xsd:annotation>
+			<xsd:documentation>Contact details for Operator.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="EnquiryTelephoneNumber" type="TelephoneContactStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Public Enquiry telephone number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ContactTelephoneNumber" type="TelephoneContactStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Contact telephone number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorAddresses" type="OperatorAddressesStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>One or more contact addresses for the operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EmailAddress" type="EmailAddressType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The email address of the operator. It is up to the operator whether an individual's address, or a generic company e-mail address is used.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="OperatorStructure">
+		<xsd:annotation>
+			<xsd:documentation>A transport operator.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="NationalOperatorCode" type="NationalOperatorCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Unique national identifier of operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorCode" type="OperatorCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorShortName" type="OperatorShortNameType">
+				<xsd:annotation>
+					<xsd:documentation>Short text name for operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorNameOnLicence" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Full name of the operator (i.e. as appears on licence). @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TradingName" type="OperatorTradingNameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Name under which operator trades. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LicenceNumber" type="OperatorLicenceNumberType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Operator's licence number.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LicenceClassification" type="OperatorLicenceEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Type of operator licence. Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:group ref="OperatorContactGroup"/>
+			<xsd:element name="Garages" type="GaragesStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Bus garages that operator runs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Unique identifier of Operator used for referring to this operator from within a single TransXChange document.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:group name="LicensedOperatorContactGroup">
+		<xsd:annotation>
+			<xsd:documentation>Contact details for a Licensed Operator. Has Mandatory elements.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="EnquiryTelephoneNumber" type="TelephoneContactStructure">
+				<xsd:annotation>
+					<xsd:documentation>Enquiry telephone number of operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ContactTelephoneNumber" type="TelephoneContactStructure">
+				<xsd:annotation>
+					<xsd:documentation>Contact telephone number of operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorAddresses" type="OperatorAddressesStructure">
+				<xsd:annotation>
+					<xsd:documentation>One or more contact addresses for the operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EmailAddress" type="EmailAddressType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The email address of the operator. It is up to the operator whether an individual's address, or a generic company e-mail address is used.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="LicensedOperatorStructure">
+		<xsd:annotation>
+			<xsd:documentation>A transport operator that includes licensing details that are mandatory for service registration.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:restriction base="OperatorStructure">
+				<xsd:sequence>
+					<xsd:element name="NationalOperatorCode" type="NationalOperatorCodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Unique national identifier of operator.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OperatorCode" type="OperatorCodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Identifier of operator.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OperatorShortName" type="OperatorShortNameType">
+						<xsd:annotation>
+							<xsd:documentation>Short text name for operator.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OperatorNameOnLicence" type="NaturalLanguageStringStructure">
+						<xsd:annotation>
+							<xsd:documentation>Full name of operator (i.e. as appears on licence). Required for Registration Schema, but not General Schema. @lang.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TradingName" type="OperatorTradingNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Name under which operator trades. </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LicenceNumber" type="OperatorLicenceNumberType">
+						<xsd:annotation>
+							<xsd:documentation>Operator's licence number.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LicenceClassification" type="OperatorLicenceEnumeration">
+						<xsd:annotation>
+							<xsd:documentation>Type of operator licence. Enumerated value.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:group ref="LicensedOperatorContactGroup"/>
+					<xsd:element name="Garages" type="GaragesStructure" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Bus garages that operator runs.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="OperatorRoleStructure">
+		<xsd:annotation>
+			<xsd:documentation>An operator and a role.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence maxOccurs="unbounded">
+			<xsd:element name="OperatorRef" type="OperatorRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference to an operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Role" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Role that associated operator performs</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OperatorAddressesStructure">
+		<xsd:annotation>
+			<xsd:documentation>Collection of addresses for the operator (as a minimum this must include the correspondence address).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="CorrespondenceAddress" type="apd:UKPostalAddressStructure">
+				<xsd:annotation>
+					<xsd:documentation>Address to be used for correspondence (NB. this is NOT the enquiry address for public usage).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MiscellaneousAddress" type="apd:UKPostalAddressStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Other Postal Addresses (NB. this is NOT the correspondence address).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="OperatorShortNameType">
+		<xsd:annotation>
+			<xsd:documentation>Concise form of the operator name.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OperatorTradingNameType">
+		<xsd:annotation>
+			<xsd:documentation>Trading name of the operator (i.e. the operator's name known to passengers).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="GaragesStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more garages.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Garage" type="GarageStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A bus garage that is referenced by vehicle journeys.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GarageStructure">
+		<xsd:annotation>
+			<xsd:documentation>Details of an operator's bus garage (or depot).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="GarageCode" type="GarageCodeType">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of garage.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GarageName" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Name of garage. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ContactNumber" type="TelephoneContactStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Contact telephone number at garage for operational queries.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Address" type="apd:UKPostalAddressStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Postal address of Garage.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Location" type="LocationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Location of Garage.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="GarageRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>A reference to a Garage.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="GarageCodeType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Service -->
+	<xsd:simpleType name="ServiceCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for a particular service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="IdType"/>
+	</xsd:simpleType>
+	<xsd:complexType name="AnnotatedServiceRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>A reference to service with a short description</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServiceRef" type="ServiceRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Text description of referenced service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServicesStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of services.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Service" type="ServiceStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A bus service.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification and description of the bus service. This does not identify the individual bus journeys (defined as part of VehicleJourney)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServiceCode" type="ServiceCodeType">
+				<xsd:annotation>
+					<xsd:documentation>Code that uniquely identifies the Service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PrivateCode" type="PrivateCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A private code that uniquely identifies the service. May be used for interoperating with other information systems.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Lines">
+				<xsd:annotation>
+					<xsd:documentation>The lines that make up the service.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Line" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A Line by which all or part of the service is known.
+@id.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="LineName" type="NaturalLanguageStringStructure">
+										<xsd:annotation>
+											<xsd:documentation>Public identifier of the service. E.g. "N73".</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:attribute name="id" type="IdType" use="optional"/>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OperatingPeriod" type="HalfOpenDateRangeStructure">
+				<xsd:annotation>
+					<xsd:documentation>Inclusive period within which Service runs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatingProfile" type="OperatingProfileStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of normal and special days defining the operational profile of the service. Default is Monday to friday, every day of the year. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceClassification" type="ServiceClassificationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Nature of Service, categorisation for statutory purpose.  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TicketMachineServiceCode" type="TicketMachineServiceCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The identifier used by the ticket machine system to refer to the service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RegisteredOperatorRef" type="OperatorRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Registered Operator of Service - i.e. with responsibility for the service. For registrations this must refer to a licensed operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AssociatedOperators" type="OperatorRoleStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Operator associated with the Service who is NOT the Registered Operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:group ref="ServiceInfoGroup"/>
+			<xsd:group ref="ServiceDescriptionGroup"/>
+			<xsd:group ref="ServiceComponentGroup"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:complexType name="LineRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Line</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:group name="ServiceComponentGroup">
+		<xsd:annotation>
+			<xsd:documentation>Journey properties of a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StandardService" type="StandardServiceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A bus service other than a flexibly routed one. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FlexibleService" type="FlexibleServiceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A service with variable pick-up points and no fixed operational schedule that is registered as a flexible service. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Direction" type="ServiceVehicleDirectionEnumeration" default="outbound" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Direction of service. Provides default that can be overridden by JourneyPatterns. Defaults to outbound..  Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JourneyPatternInterchange" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Description of Interchanges used to connect two or more journey patterns of a service.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.   </xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="JourneyPatternInterchangeStructure">
+							<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="ServiceInfoGroup">
+		<xsd:annotation>
+			<xsd:documentation>Info properties of a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServiceHasMirror" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether the Service is part of a pair (i.e. is comprised of an inbound and an outbound journey). Default is false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StopRequirements" type="StopRequirementsStructure">
+				<xsd:annotation>
+					<xsd:documentation>Whether registering the route requires new stops.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Mode" type="VehicleModesEnumeration" default="bus" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Transport Mode of service. Default is Bus.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PublicUse" type="xsd:boolean" default="true" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether the service is open to the general public, or restricted to specific groups ('closed door').</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceAvailability" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>When service runs. If not specified, assume Daytime.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:choice>
+							<xsd:choice>
+								<xsd:element name="Daytime" type="EmptyType">
+									<xsd:annotation>
+										<xsd:documentation>Service is a daytime service.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="Peak" type="EmptyType">
+									<xsd:annotation>
+										<xsd:documentation>Service runs only in peak hours.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="OffPeak" type="EmptyType">
+									<xsd:annotation>
+										<xsd:documentation>Service runs only in off-peak hours.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:choice>
+							<xsd:element name="Night" type="EmptyType">
+								<xsd:annotation>
+									<xsd:documentation>Service is a night service.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:choice>
+						<xsd:element name="TwentyFourHour" type="EmptyType">
+							<xsd:annotation>
+								<xsd:documentation>Service runs as a 24 hour service.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Express" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether the service is an express route Default is false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="ServiceDescriptionGroup">
+		<xsd:annotation>
+			<xsd:documentation>Text properties of a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation> Description of the service. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Note" type="NoteStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Descriptive note about the service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SchematicMap" type="ImageDocumentType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>File name of document containing a schematic map of the route. Must be a .png. .gif or .jpeg format document.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ToBeMarketedWith" type="ToBeMarketedWithStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Information about other services with which the registered service will be jointly marketed. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="StandardServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification and description of the bus service. This does not identify the individual bus journeys (defined as part of VehicleJourney)</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Origin" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Public name of place where the Service Starts. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Destination" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Public name of place where the Service Ends. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Vias" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Public names of main points on route.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Via" type="NaturalLanguageStringStructure" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Public name of place where the Service goes via @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="UseAllStopPoints" type="xsd:boolean" default="true" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether Service to be registered will use all stops along its Route.  Default is true.    </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JourneyPattern" type="JourneyPatternStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of journeys making up the service.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="FlexibleServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification and description of a flexible bus service. </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FlexibleJourneyPattern" type="FlexibleJourneyPatternStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of journeys making up the service.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceClassificationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification of the type of service for statutory purposes.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:sequence>
+				<xsd:annotation>
+					<xsd:documentation>Usage</xsd:documentation>
+				</xsd:annotation>
+				<xsd:element name="NormalStopping" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service where all stops on a route are used.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="LimitedStops" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service where only certain pre-defined stops on a route are used.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="HailAndRide" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service that stops anywhere on designated parts of the route if flagged down by passengers where it is safe to do so. Journey pattern must have a HailAndRideSection</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Flexible" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service running in accordance with the rules for a flexible service, with designated pickup and set down zones or points. Must be specified if FlexibleService element used.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="ExcursionOrTour" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service where all passengers go to the same destination and return to their departure point.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="MaxDepartures" type="xsd:integer">
+								<xsd:annotation>
+									<xsd:documentation>Maximum number of vehicle departures within one day associated with an excursion type service.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:choice>
+				<xsd:annotation>
+					<xsd:documentation>Audience</xsd:documentation>
+				</xsd:annotation>
+				<xsd:element name="SchoolOrWorks" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service dedicated to a school or works. Normally not available to the public; public access is specified by the PublicUse element..</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="RuralService" type="EmptyType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>A service primarily aimed at serving rural communities (i.e. at locations with populations less than 25,000 people).</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="OtherService" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Services that do not fit any of the defined categories; should only be used sparingly.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Description" type="NaturalLanguageStringStructure">
+							<xsd:annotation>
+								<xsd:documentation>Description of Service which cannot be classified by the options given as sub-elements of ServiceClassification. @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="StopRequirementsStructure">
+		<xsd:annotation>
+			<xsd:documentation>Whether the service requires any new stops.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="NoNewStopsRequired">
+				<xsd:annotation>
+					<xsd:documentation>No new stops are required for the service.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="NewStops">
+				<xsd:annotation>
+					<xsd:documentation>One or more new stops are required for the service. Individual stops required are described in the individual StopRequired sub-elements.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence maxOccurs="unbounded">
+						<xsd:element name="StopPointRef" type="StopPointRefStructure">
+							<xsd:annotation>
+								<xsd:documentation>Reference to definition of new stop. May be defined locally, or in NaPTAN database.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Note" type="NaturalLanguageStringStructure" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Further description of a new stop required as part of a service. @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Journey Pattern and Vehicle Journey common types -->
+	<xsd:group name="CommonJourneyGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties common to both journey patterns and vehicle journeys. Default values specified on a journey pattern apply to all vehicle journeys based on that journey pattern unless overridden on individual vehicle journeys.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PrivateCode" type="PrivateCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A private code that uniquely identifies the journey. May be used for interoperating with other (legacy) systems.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DestinationDisplay" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Journey destination, as displayed on vehicle. If omitted, the Destination of the Service is used. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OperatorRef" type="OperatorRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The Operator for the journey. Normally this is not required since it is the same as for the Service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Direction" type="JourneyPatternVehicleDirectionEnumeration" default="inherit" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Direction of journey. Default is 'inherit', i.e. if not explicitly specified, value is inherited from parent Service or JourneyPattern.  Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Operational" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Data elements of use for operational running.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Block" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data elements used to associate journey with a block (running board).</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Description" type="NaturalLanguageStringStructure">
+										<xsd:annotation>
+											<xsd:documentation>Description of the block (running board) of the journey. @lang</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="BlockNumber" type="xsd:NMTOKEN" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Reference number for the Block or Running Board.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Note" type="NaturalLanguageStringStructure" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Additional explanation of use of block for operations staff.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+						<xsd:element name="VehicleType" type="VehicleTypeStructure" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The type of vehicle running the service.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="TicketMachine" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Data elements used to associate the journey with ticket machine settings.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="TicketMachineServiceCode" type="TicketMachineJourneyCodeType" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>The identifier used by the ticket machine system to refer to the service. Overrides any service level value</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="JourneyCode" type="TicketMachineJourneyCodeType" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>The identifier used by the ticket machine system to refer to the journey.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="Direction" type="VehicleDirectionEnumeration" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>The direction used by the ticket machine system.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OperatingProfile" type="OperatingProfileStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Pattern of normal and special days defining the operational profile of the journey.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TimeDemand" type="TimeDemandEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Classification of the route as to when peak demand occurs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LayoverPoint" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Points at which the service lays over. Any points defined on JourneyPattern apply to all dependent VehicleJourneys.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="LayoverPointStructure"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GarageRef" type="GarageRefStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Garage or garages from which the Service operates.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Textual description of  the journey pattern.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="AbstractServicePatternStructure">
+		<xsd:annotation>
+			<xsd:documentation>Common type for a journey pattern and a vehicle journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="CommonJourneyGroup"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:complexType name="VehicleTypeStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification of type of vehicle for journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="VehicleTypeCode" type="VehicleTypeCodeType">
+				<xsd:annotation>
+					<xsd:documentation>VehicleType classification code.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>VehicleType short description. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Vehicle Journey -->
+	<xsd:group name="VehicleJourneyGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties common to both flexible and standard vehicle journeys.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="VehicleJourneyCode" type="VehicleJourneyCodeType">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of the vehicle journey. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceRef" type="ServiceRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>The Service that the VehicleJourney contributes to. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LineRef" type="LineRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>The Line for which the VehicleJourney operates.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="JourneyPatternRef" type="JourneyPatternRefStructure">
+					<xsd:annotation>
+						<xsd:documentation>The JourneyPattern which the  VehicleJourney runs.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="VehicleJourneyRef" type="VehicleJourneyRefStructure">
+					<xsd:annotation>
+						<xsd:documentation>Reuse the VehicleJourneyTimingLink elements of the referenced VehicleJourney; this can give a dramatic reduction in file sizes. The JourneyPattern will be that of the referenced journey.  All the links of the referenced journey are used, in the same order.  Cyclic references are not allowed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="StartDeadRun" type="DeadRunStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Positioning journey to place vehicle at beginning of vehicle journey. An ordered collection of positioning links. @id.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EndDeadRun" type="DeadRunStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Positioning journey to place vehicle at end of vehicle journey. @id.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VehicleJourneyInterchange" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Information about an interchange where the vehicle journey connects with  another vehicle journey.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="VehicleJourneyInterchangeStructure">
+							<xsd:attribute name="id" type="IdType" use="optional"/>
+							<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Note" type="NoteStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Any additional notes on the VehicleJourney.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="StandardVehicleJourneyGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties specific to a standard vehicle journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DepartureTime" type="xsd:time">
+				<xsd:annotation>
+					<xsd:documentation>Time of departure from origin stop of the Vehicle Journey.   </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Frequency" type="FrequentServiceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Frequency details for a frequent service, that is one that runs as a shuttle rather than to a set timetable.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VehicleJourneyTimingLink" type="VehicleJourneyTimingLinkStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Timing links making up the vehicle journey. Ordered in sequence of physical traversal. For each link there should be a corresponding JourneyPatternTimingLink.
+@id</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="FlexibleVehicleJourneyGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties specific to a flexible vehicle journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FlexibleServiceTimes" type="FlexibleServiceTimesStructure">
+				<xsd:annotation>
+					<xsd:documentation>Timebands during which the flexible service runs during a day.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="VehicleJourneysStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more vehicle journeys.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence maxOccurs="unbounded">
+			<xsd:element name="VehicleJourney" type="VehicleJourneyStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A specific scheduled journey by an individual vehicle making up a standard part of a service.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber
+@Status,
+@SequenceNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FlexibleVehicleJourney" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A specific scheduled journey by an individual vehicle making up a flexible part of a service.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber
+@Status,
+@SequenceNumber.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="FlexibleVehicleJourneyStructure"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AbstractVehicleJourneyStructure">
+		<xsd:annotation>
+			<xsd:documentation>Defines the structure that is common between VehicleJourneyStructure and FlexibleVehicleJourneyStructure.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractServicePatternStructure">
+				<xsd:sequence>
+					<xsd:group ref="VehicleJourneyGroup"/>
+				</xsd:sequence>
+				<xsd:attribute name="SequenceNumber" type="xsd:positiveInteger" use="optional"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="VehicleJourneyStructure">
+		<xsd:annotation>
+			<xsd:documentation>Specific journey of a vehicle following a JourneyPattern where the VehicleJourney includes all or some of the Stops identified by the associated JourneyPattern. The order of VehicleJourneyTimingLink elements in the VehicleJourney element should represent the order in which they appear in the physical VehicleJourney.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractVehicleJourneyStructure">
+				<xsd:sequence>
+					<xsd:group ref="StandardVehicleJourneyGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="VehicleJourneyRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Vehicle Journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="VehicleJourneyCodeType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="FlexibleVehicleJourneyStructure">
+		<xsd:annotation>
+			<xsd:documentation>Specific journey of a vehicle following a flexible route.
+@id,
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractVehicleJourneyStructure">
+				<xsd:group ref="FlexibleVehicleJourneyGroup"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FlexibleServiceTimesStructure">
+		<xsd:annotation>
+			<xsd:documentation>Flexible service times.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="AllDayService" type="EmptyType">
+				<xsd:annotation>
+					<xsd:documentation>The service operates all day.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServicePeriod" type="ClosedTimeRangeStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Time band in which service runs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="BookingArrangementStructure">
+		<xsd:annotation>
+			<xsd:documentation>Arrangements for booking the service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Description" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Description of how to book the service. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Phone" type="TelephoneContactStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Phone number for bookings.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Email" type="EmailAddressType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Email address for bookings, if available</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Address" type="apd:UKPostalAddressStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Postal address for bookings, if available.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="WebAddress" type="xsd:anyURI" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Web URL for online booking.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="AllBookingsTaken" type="xsd:boolean" default="true" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether all bookings are taken. Default true.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Registration -->
+	<xsd:complexType name="RegistrationsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more service registrations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Registration" type="RegistrationStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A registration of a service.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber,
+@Status.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="RegistrationSubmissionGroup">
+		<xsd:annotation>
+			<xsd:documentation>Submission information about the registration.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SubmissionDate" type="xsd:date">
+				<xsd:annotation>
+					<xsd:documentation>Date of Registration submission.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VosaRegistrationNumber" type="VosaRegistrationNumberStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference number for registration (allocated by Vehicle and Operator Services Agency (VOSA).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ApplicationClassification" type="RegistrationApplicationEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Whether the registration should be considered to be new, a chargeable modification of an existing registration, a non-chargeable modification of an existing registration, or a cancellation of a registration. Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VariationNumber" type="RegistrationVariationNumberType">
+				<xsd:annotation>
+					<xsd:documentation>Variation number of the Registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SubmissionAuthor" type="FullPersonNameStructure">
+				<xsd:annotation>
+					<xsd:documentation>Signatory of the submission - i.e. upon whose authority the submission is made.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TrafficAreas" type="TrafficAreasStructure">
+				<xsd:annotation>
+					<xsd:documentation>Collection of Traffic Areas with full or partial responsibility for the registration of the submission.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CirculatedAuthorities" type="CirculatedAuthoritiesStructure">
+				<xsd:annotation>
+					<xsd:documentation>Collection of Authorities circulated with submitted record.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="RegistrationInfoGroup">
+		<xsd:annotation>
+			<xsd:documentation>Information about the registration.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SubsidyDetails" type="SubsidyDetailsStructure">
+				<xsd:annotation>
+					<xsd:documentation>Information about any subsidy provided for the route.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ContractedService" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>If service is contracted, information about contract.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:choice>
+							<xsd:element name="NotContracted" type="EmptyType">
+								<xsd:annotation>
+									<xsd:documentation>Service is not contracted.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:sequence>
+								<xsd:choice>
+									<xsd:element name="WhollyContracted" type="EmptyType">
+										<xsd:annotation>
+											<xsd:documentation>Service is wholly contracted.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="PartContracted" type="EmptyType">
+										<xsd:annotation>
+											<xsd:documentation>Service is contracted in part.</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:choice>
+								<xsd:element name="ContractingAuthority" type="AuthorityRefStructure" maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation>Authority/SPT or authorities awarding contract.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:choice>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="QualityPartnership" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Details of any statutory Quality Partnership relating to registration. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SupportingDocuments" type="SupportingDocumentsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Any additional documents that support the registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="RegistrationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Registration of a service with a regulator for authorisation to provide a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ServiceRef" type="ServiceRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>The Service for which this Registration is being made.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:group ref="RegistrationSubmissionGroup"/>
+			<xsd:group ref="RegistrationInfoGroup"/>
+			<xsd:element name="ShortNoticeRegistration" type="ShortNoticeRegistrationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Additional information to support a short notice registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="ModificationDetailsGroup"/>
+	</xsd:complexType>
+	<xsd:complexType name="TrafficAreaStructure">
+		<xsd:annotation>
+			<xsd:documentation>Traffic Area.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TrafficAreaName" type="TrafficAreaNameEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Name of Individual Traffic Area. Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TrafficAreasStructure">
+		<xsd:annotation>
+			<xsd:documentation>Collection of traffic areas.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TrafficArea" type="TrafficAreaStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Traffic Area responsible for a registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AuthorityRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Authority.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AuthorityName" type="AuthorityNameEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Name of an Authority.  Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CirculatedAuthoritiesStructure">
+		<xsd:annotation>
+			<xsd:documentation>Collection of authorities.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="CirculatedAuthority" type="AuthorityRefStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Authority who is circulated with the record of registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SubsidyDetailsStructure">
+		<xsd:annotation>
+			<xsd:documentation>Whether a service is subsidised, the classification of subsidy and the subsidising authorities.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="NoSubsidy" type="EmptyType">
+				<xsd:annotation>
+					<xsd:documentation>The service is not subsidised.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Subsidy">
+				<xsd:annotation>
+					<xsd:documentation>Information about the subsidy.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="SubsidyType" type="SubsidyLevelEnumeration">
+							<xsd:annotation>
+								<xsd:documentation>Classification of level of subsidy relating to service. Enumerated value.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="SubsidisingAuthority" type="NaturalLanguageStringStructure" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>Name of the authority subsidising the service. @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="PublicAvailabilityStructure">
+		<xsd:annotation>
+			<xsd:documentation>Whether the service is to be available to the public. Applies only to short notice registrations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="AvailableToPublic">
+				<xsd:annotation>
+					<xsd:documentation>The service is to be available to the general public.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="NotAvailableToPublic">
+				<xsd:annotation>
+					<xsd:documentation>The service is NOT to be available to the general public.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="NonAvailabilityDescription" type="NaturalLanguageStringStructure">
+							<xsd:annotation>
+								<xsd:documentation>Explanation of why the service is not available to the public. Should include a description of the purpose/aim of the service, for example, it is a schools and works service. @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="ChangeImpactStructure">
+		<xsd:annotation>
+			<xsd:documentation>Whether a change to a service does or does not exceed the allowed limit, and is thus considered to be major/minor change. Applies only to short notice registrations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="ChangeExceedsLimit">
+				<xsd:annotation>
+					<xsd:documentation>The change exceeds the official limit.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType/>
+			</xsd:element>
+			<xsd:element name="ChangeDoesNotExceedLimit">
+				<xsd:annotation>
+					<xsd:documentation>The change does not exceed the limit.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="MinorChangeDescription" type="NaturalLanguageStringStructure">
+							<xsd:annotation>
+								<xsd:documentation>Explanation or description of the change. @lang.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="ChangeToConnectAlteredServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>A change to an altered connected service justifies the ShortNoticeRegistration.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AlteredServiceRequiringConnection" type="AnnotatedServiceRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference to a service description of the service requiring a connection, or an alteration to its connection, that gave rise to this ShortNoticeRegistration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ReplaceDiscontinuedServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>The ShortNoticeRegistration is a replacement for a discontinued service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DiscontinuedServiceOperator" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Name of Operator of the discontinued service whose discontinuation justifies the ShortNoticeRegistration. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DiscontinuedService" type="AnnotatedServiceRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Code of the discontinued service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LocalHolidayChangeStructure">
+		<xsd:annotation>
+			<xsd:documentation>The ShortNoticeRegistration caters for a local holiday and involves a change of no more than 14 days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="LocalHolidayNote" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Description of local holiday justifying the short notice registration submission. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SpecialOccasionStructure">
+		<xsd:annotation>
+			<xsd:documentation>The ShortNoticeRegistration is to accommodate a special occasion.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SpecialOccasionName" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Name of the special occasion associated with ShortNoticeRegistration submission. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RegulationOrderComplianceStructure">
+		<xsd:annotation>
+			<xsd:documentation>The ShortNoticeRegistration results from a requirement to comply either with traffic regulation conditions, or a road traffic order made by a local authority.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TrafficOrderNote" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Description of the road traffic order justifying short notice registration submission. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ChangeRequestedByExternalAuthorityStructure">
+		<xsd:annotation>
+			<xsd:documentation>The change has been requested by an external authority such as the Police. Applies only to short notice registrations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ChangeRequestDescription" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Explanation or other corroboration of why the change is required. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ExceptionalRequirementStructure">
+		<xsd:annotation>
+			<xsd:documentation>Whether the change results from an exceptional requirement.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ChangeRequestDescription" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Explanation or corroboration of why the change is required. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="ChangeImpactGroup">
+		<xsd:annotation>
+			<xsd:documentation>Nature of Change.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PublicAvailability" type="PublicAvailabilityStructure">
+				<xsd:annotation>
+					<xsd:documentation>Information about the public availability of the service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ChangeImpact" type="ChangeImpactStructure">
+				<xsd:annotation>
+					<xsd:documentation>Change impact assessment. The limit applies only to short notice registrations.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="ChangeJustificationGroup">
+		<xsd:annotation>
+			<xsd:documentation>Justifications for change.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="BankHolidayChange" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The ShortNoticeRegistration is to address a bank holiday requirement.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ChangeToConnectAlteredService" type="ChangeToConnectAlteredServiceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to accommodate a change in a connecting service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ReplaceDiscontinuedService" type="ReplaceDiscontinuedServiceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The registration is to replace another service that has been discontinued.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LocalHolidayChange" type="LocalHolidayChangeStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to accommodate a local holiday.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SpecialOccasion" type="SpecialOccasionStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to allow for a special occasion.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RegulationOrderCompliance" type="RegulationOrderComplianceStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to comply with a traffic order note.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ChangeRequestedByExternalAuthority" type="ChangeRequestedByExternalAuthorityStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to comply with a request from an external authority such as the Police.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ExceptionalRequirement" type="ExceptionalRequirementStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The change is to accommodate an exceptional requirement.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MiscellaneousJustification" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Reasons justifying short notice registration submission where no predefined ShortNoticeRegistration reasons are applicable. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="ShortNoticeRegistrationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Registration is made within less than the statutory period of notice.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="ChangeImpactGroup"/>
+			<xsd:group ref="ChangeJustificationGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Supporting Document -->
+	<xsd:complexType name="SupportingDocumentsStructure">
+		<xsd:annotation>
+			<xsd:documentation>A collection of one or more supporting documents.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SupportingDocument" type="SupportingDocumentStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>A document supporting the registration.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SupportingDocumentStructure">
+		<xsd:annotation>
+			<xsd:documentation>A document submitted as part of a Service Registration. Note that where such documentation is not available but is expected, then a supporting document should be supplied which lists the outstanding supporting documentation to be supplied</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DocumentUri" type="xsd:anyURI">
+				<xsd:annotation>
+					<xsd:documentation>URI to locate a supporting document submitted with Registration. Generally to be provided as a filename only (to provide relative access to supporting documents supplied with a registration submission)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Timing/Positioning Link -->
+	<xsd:complexType name="AbstractTimingLinkStructure">
+		<xsd:annotation>
+			<xsd:documentation>Abstract TimingLink definition.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="CommonTimingLinkGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+	</xsd:complexType>
+	<xsd:group name="CommonTimingLinkGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties of a timing link that are common to journey pattern and vehicle journey timing links. Default values specified on a journey pattern timing link apply to all vehicle journey timing links based on that journey pattern  timing link, unless overridden on individual vehicle journey  timing links.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="HailAndRide" type="xsd:boolean" default="0" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Whether TimingLink operates as Hail and Ride.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Express" type="xsd:boolean" default="false" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Whether TimingLink operates as an express section. Default is false.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="StoppingArrangements" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Description of facilities/requirements for stopping associated with components of a service. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DutyCrewCode" type="DutyCrewCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Bus crew identifier (i.e. dutyboard) for the timing link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="TimingLinkRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Timing Link.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="DeadRunStructure">
+		<xsd:annotation>
+			<xsd:documentation>Dead Run definition.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PositioningLink" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Positioning journey step to place vehicle at beginning or end of vehicle journey. @id.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="PositioningLinkStructure">
+							<xsd:attribute name="id" type="IdType" use="optional"/>
+						</xsd:extension>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ShortWorking" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Used to truncate the start or end of a vehicle journey part way through the journey pattern. The vehicle journey inherits all JourneyPatternTimingLinks starting from the one referenced by StartDeadRun/ShortWorking/JourneyPatternTimingLinkRef (or the first one if not defined) and ending at the one referenced by EndDeadRun/ShortWorking/JourneyPatternTimingLinkRef (or the last one if not defined).</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="JourneyPatternTimingLinkRef" type="TimingLinkRefStructure">
+							<xsd:annotation>
+								<xsd:documentation>Identifier of a timing link at which the Journey begins or ends.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="PositioningLinkUsageStructure">
+		<xsd:annotation>
+			<xsd:documentation>End of a positioning link.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="StopPointRef" type="StopPointRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference to the NaPTAN stop at the one end of the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GarageRef" type="GarageRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference to a garage at one end of the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LayoverPointRef" type="LayoverPointRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Reference to a layover point at one end of the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Location" type="LocationStructure">
+				<xsd:annotation>
+					<xsd:documentation>An arbitrary location at one end of the positioning link</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="PositioningLinkStructure">
+		<xsd:annotation>
+			<xsd:documentation>A link used to position a vehicle before beginning a vehicle journey, or after completing a vehicle journey. </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RunTime" type="DurationType">
+				<xsd:annotation>
+					<xsd:documentation>Time to traverse the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="From" type="PositioningLinkUsageStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The start of the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="To" type="PositioningLinkUsageStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The end of the positioning link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Track" type="TrackStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Track followed by bus. For AVL system use.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Journey Pattern -->
+	<xsd:complexType name="StopUsageRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Stop Usage.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="VariableStopAllocationsStructure">
+		<xsd:annotation>
+			<xsd:documentation>Defines variable allocation of bays to a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="VariableStopAllocation" type="VariableStopAllocationStructure" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Allocation to a specific bay for a given date. Time is given by the vehicle Journey Time. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DefaultStopAllocation" type="StopPointRefsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Default bayor pool of bays to use if no other allocation applies. Normally a NaPTAN stop of type BCS. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="VariableStopAllocationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Defines variable allocation of bays to a service. Some bus stations vary the assignment of services to individual bays on different days or times.  For such services, a BCQ stop type should be used for the timetable stop reference. A stop allocation structure describes how the BCQ stop is assigned individual stops at a particular time for a service. If more than one stop allocation is valid, the first one found will be used. </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DateRange" type="HalfOpenDateRangeStructure">
+				<xsd:annotation>
+					<xsd:documentation>Date range for stop allocation. If no end date is specified, allocation is until start of next range. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VariableStopPointRef" type="StopPointRefStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Bay or Bays to which service is allocated for the specified date (and time of the service). Normally a NaPTAN stop of type BCS.  If more than one stop point, then Bus may be allocated to any of the bay.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AbstractTimingLinkStopUsageStructure">
+		<xsd:annotation>
+			<xsd:documentation>Stop usage details for each end of a TimingLink.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="JourneyStopUsageGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternStopUsageStructure">
+		<xsd:annotation>
+			<xsd:documentation>The attributes of one end of a JourneyPatternTimingLink.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractTimingLinkStopUsageStructure">
+				<xsd:sequence>
+					<xsd:group ref="JourneyPatternStopUsageGroup"/>
+				</xsd:sequence>
+				<xsd:attribute name="SequenceNumber" type="xsd:nonNegativeInteger" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>A number used to control the presentation ordering of stops in a timetable.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="JourneyStopUsageGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties of a stop usage that are common to journey pattern and vehicle journey stop usages. Default values specified on a journey pattern stop usage apply to all vehicle journey stop usages based on that journey pattern stop usage, unless overridden on individual vehicle journey stop usages.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="WaitTime" type="DurationType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Time to wait at the referenced Stop; overrides any corresponding JourneyPattern WaitTime for the Stop Usage. NB the WAIT incoming and  times of the incoming FROM  and outgoing TO stop usages are added together to create the total wait time at stop</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Activity" type="VehicleAtStopActivityEnumeration" default="pickUpAndSetDown" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Activity undertaken by vehicle at Stop Point. Enumerated value. On a journey pattern defaults to pick up and set down. On a Vehicle journey defaults to same value as journey pattern.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DynamicDestinationDisplay" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Journey destination applicable to vehicle at referenced Stop. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="VariableStopAllocations" type="VariableStopAllocationsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>For bus stations where allocation of variable may vary over time, the schedule of allocations of the general stop reference (i.e. a NaPTAN stop of type BCQ),  to specific bays (i.e. individual bays of type BCS) for a given date.  Time of applicability is determined by the passing time at stop.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="JourneyPatternStopUsageGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties of a stop usages that are specific to journey patterns. These apply to all vehicle journeys based on the JourneyPattern.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="StopPointRef" type="StopPointRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>NaPTAN stop to which link end connects.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TimingStatus" type="TimingStatusEnumeration" default="TIP" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Status of the registration of the bus stop as a timing point.  Enumerated value. Default is Time Info Point (TIP).</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FareStageNumber" type="FareStageNumberType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The fare stage number for the referenced stop. If fare stage information is available it should be provided for all stops in a journey pattern.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FareStage" type="xsd:boolean" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether a fare stage is encountered while traversing the end of the timing link. (While this can also be computed from the FareStageNumbers at each end of a timing link, this element provides a way of precomputing the value.)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="JourneyPatternTimingLinkGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties of a timing link that are specific to journey pattern timing links. Values specified on a journey pattern timing link apply to all vehicle journey timing links based on that journey pattern  timing link.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="From" type="JourneyPatternStopUsageStructure">
+				<xsd:annotation>
+					<xsd:documentation>Stop usage for start of link.
+@id,
+@SequenceNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="To" type="JourneyPatternStopUsageStructure">
+				<xsd:annotation>
+					<xsd:documentation>Stop usage for end of link.
+@id,
+@SequenceNumber.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RouteLinkRef" type="RouteRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>RouteLink that this timing link projects onto. Should be specified for a TAN Registration of other complete specification of a service. May be omitted when exchanging partial data, for example the JourneyPattern for a known route.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Direction" type="JourneyPatternLinkDirectionEnumeration" default="inherit" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Direction of TimingLink. 'Inherit' means use value from service  Enumerated value. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RunTime" type="DurationType">
+				<xsd:annotation>
+					<xsd:documentation>Time taken to traverse a TimingLink.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Distance" type="DistanceType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Distance covered by TimingLink in metres.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="JourneyPatternTimingLinkStructure">
+		<xsd:annotation>
+			<xsd:documentation>A link between two Stop Points making up a step within a JourneyPattern.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractTimingLinkStructure">
+				<xsd:sequence>
+					<xsd:group ref="JourneyPatternTimingLinkGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="StandardJourneyPatternGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties specific to Standard Journey Patterns.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RouteRef" type="RouteRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of the route associated with this journey pattern.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="JourneyPatternSectionRefs" type="JourneyPatternSectionRefStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Sections making the journey pattern, in order of traversal.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="AbstractJourneyPatternStructure">
+		<xsd:annotation>
+			<xsd:documentation>Defines the structure that is common between JourneyPatternStructure and FlexibleJourneyPatternStructure.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractServicePatternStructure">
+				<xsd:attribute name="id" type="IdType" use="optional">
+					<xsd:annotation>
+						<xsd:documentation>Identifier for Journey Pattern</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternStructure">
+		<xsd:annotation>
+			<xsd:documentation>A JourneyPattern is an ordered collection of JourneyPatternTimingLink elements and represents the pattern of working for vehicles of the service. Note that the order of JourneyPatternTimingLink elements in the JourneyPattern element must follow the order in which they appear in the Route. It should also be noted that VehicleJourneys following a JourneyPattern must run over the exact route, but need not stop at all Stops identified within the JourneyPattern, thus the JourneyPattern provides the 'set' of Stops of which all or some may be served by the related VehicleJourneys.
+@id.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractJourneyPatternStructure">
+				<xsd:sequence>
+					<xsd:annotation>
+						<xsd:documentation>Patterns.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:group ref="StandardJourneyPatternGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FlexibleJourneyPatternStopUsageStructure">
+		<xsd:annotation>
+			<xsd:documentation>The properties of a Flexible JourneyPattern stop usage</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Activity" type="VehicleAtStopActivityEnumeration" default="pickUpAndSetDown" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Activity undertaken by vehicle at Stop Point. Enumerated value. On a journey pattern defaults to pick up and set down. On a Vehicle journey defaults to same value as journey pattern.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StopPointRef" type="StopPointRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>NaPTAN stop to which link end connects.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+		<xsd:attribute name="SequenceNumber" type="xsd:nonNegativeInteger" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>A number used to control the presentation ordering of stops in a timetable.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:group name="FlexibleJourneyPatternGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties specific to flexible journey patterns.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FlexibleZones" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Geographical zone within which the flexible service operates.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FlexibleStopUsage" type="FlexibleJourneyPatternStopUsageStructure" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A flexible service zone that the service covers.  The referenced stop point must be a NaPTAN flexible stop point (BCT- FLX).      </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="FixedStopPoints" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The collection of fixed stops that the flexible service serves.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="FixedStopUsage" type="JourneyPatternStopUsageStructure" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A fixed stop that the service serves. The referenced stop point must be a bus stop type other than  flexible stop point.     </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="BookingArrangements" type="BookingArrangementStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Instructions for booking the service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="FlexibleJourneyPatternStructure">
+		<xsd:annotation>
+			<xsd:documentation>A flexible journey pattern describes the stops and zones served by a flexible service.
+@id.
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractJourneyPatternStructure">
+				<xsd:sequence>
+					<xsd:group ref="FlexibleJourneyPatternGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Journey Pattern.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Journey Pattern Interchange -->
+	<xsd:group name="CommonInterchangeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Common properties of Interchanges. Default values specified on a journey pattern interchange apply to all vehicle journey interchanges based on that journey pattern interchange, unless overridden on individual vehicle journey interchanges.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="MinInterchangeTime" type="DurationType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Minimum time to allow to change services at the interchange. Assume normal walking speed. Default is zero.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MaxInterchangeTime" type="DurationType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Maximum time available to change services at the interchange.  A duration: for guaranteed connections this may be a upper limit.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TransferMode" type="AllModesEnumeration" default="walk" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Method of transport available/assumed at Interchange.   Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ValidityPeriod" type="HalfOpenDateRangeStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Period of Interchange validity.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StoppingArrangements" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Description of facilities/requirements for stopping associated with components of a service. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="InterchangeActivity" type="InterchangeActivityEnumeration" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Activity taking place between incoming and outgoing Journeys at an Interchange. Enumerated value. Default is Change.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:group ref="InterchangePropertyGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="InterchangePropertyGroup">
+		<xsd:annotation>
+			<xsd:documentation>Additional Interchange properties.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="CrossBorder" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether service crosses a border at Interchange Default false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="GuaranteedConnection" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether Interchange is a guaranteed connection. Default false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ChangeLineNumber" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Whether Service changes line number at Interchange. Default false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="JourneyPatternInterchangeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Interchange properties specific to journey pattern interchanges.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Inbound" type="JourneyPatternUsageRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>First JourneyPattern (i.e. incoming) of an Interchange.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Outbound" type="JourneyPatternUsageRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Second JourneyPattern (i.e. outgoing) of an Interchange.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="JourneyPatternInterchangeStructure">
+		<xsd:annotation>
+			<xsd:documentation>Interchange between Journey Patterns.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="CommonInterchangeGroup"/>
+			<xsd:group ref="JourneyPatternInterchangeGroup"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternInterchangeRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Journey Pattern Interchange.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="JourneyPatternUsageRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Journey Pattern and a stop within it.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JourneyPatternRef" type="JourneyPatternRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>JourneyPattern connecting at an Interchange.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StopUsageRef" type="StopUsageRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Stop usage of stop in journey pattern at which journey interchange connects.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Note -->
+	<xsd:complexType name="NoteStructure">
+		<xsd:annotation>
+			<xsd:documentation>Note normally rendered with a timetable, and associated with either a service or an individual VehicleJourney</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="NoteCode" type="NoteCodeType">
+				<xsd:annotation>
+					<xsd:documentation>Reference code for Note.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NoteText" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Descriptive text of Note. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- To Be Marketed With -->
+	<xsd:complexType name="ToBeMarketedWithStructure">
+		<xsd:annotation>
+			<xsd:documentation>Collection of services normally marketed with the service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="RelatedService" type="AnnotatedServiceRefStructure" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>Related Service description.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Vehicle Journey Components -->
+	<xsd:complexType name="VehicleJourneyStopUsageStructure">
+		<xsd:annotation>
+			<xsd:documentation>Properties governing the use of a stop by one end of a VehicleJourneyTimingLink.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractTimingLinkStopUsageStructure"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="VehicleJourneyTimingLinkGroup">
+		<xsd:annotation>
+			<xsd:documentation>Properties specific to vehicle journey timing links.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JourneyPatternTimingLinkRef" type="TimingLinkRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>The JourneyPatternTimingLink to which the VehicleJourneyTimingLink corresponds. The RunTime and WaitTimes are inherited from the associated JourneyPatternTimingLink.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RunTime" type="DurationType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Time to traverse a timing link along a specific VehicleJourney;  overrides any corresponding JourneyPattern RunTime.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="From" type="VehicleJourneyStopUsageStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Stop usage for start of link. If not specified, the values from the JourneyPatternTimingLink are inherited.
+@id</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="To" type="VehicleJourneyStopUsageStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Stop usage for end of link. If not specified, the values from the JourneyPatternTimingLink are inherited.
+@id</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="VehicleJourneyTimingLinkStructure">
+		<xsd:annotation>
+			<xsd:documentation>A timed link comprising one step of a vehicle journey between two stops. Can be projected on to a corresponding vehicleJourneyTimingLink.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="AbstractTimingLinkStructure">
+				<xsd:sequence>
+					<xsd:group ref="VehicleJourneyTimingLinkGroup"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Vehicle Journey Interchange -->
+	<xsd:group name="VehicleJourneyInterchangeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Interchange properties specific to vehicle journey interchanges.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="JourneyPatternInterchangeRef" type="JourneyPatternInterchangeRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>The JourneyPatternInterchange to which this VehicleJourneyInterchange corresponds.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="InboundVehicleJourneyRef" type="VehicleJourneyRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>First VehicleJourney (i.e. incoming) of an Interchange.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OutboundVehicleJourneyRef" type="VehicleJourneyRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Second VehicleJourney (i.e. outgoing) of an Interchange.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="VehicleJourneyInterchangeStructure">
+		<xsd:annotation>
+			<xsd:documentation>Interchange between Vehicle Journeys.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="CommonInterchangeGroup"/>
+			<xsd:group ref="VehicleJourneyInterchangeGroup"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Layover Point -->
+	<xsd:complexType name="LayoverPointRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>Reference to a Layover Point.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="IdType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="LayoverPointStructure">
+		<xsd:annotation>
+			<xsd:documentation>Point at which vehicle wait time is taken between the end of a completed journey and the start of the next journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="Duration" type="DurationType">
+				<xsd:annotation>
+					<xsd:documentation>Time duration of vehicle at Layover Point.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Name" type="NaturalLanguageStringStructure">
+				<xsd:annotation>
+					<xsd:documentation>Name of Layover Point. @lang.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Location" type="LocationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Spatial coordinates of layover point. @id.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="IdType"/>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Frequent Service -->
+	<xsd:complexType name="FrequentServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>Describes the characteristics of a Frequent Service, that is, a service where stops are served at a frequency of 10 minutes or less for the whole or part of the day.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="EndTime" type="xsd:time">
+				<xsd:annotation>
+					<xsd:documentation>The departure time of the last vehicle journey that forms this period of frequent service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="Interval" type="FrequencyStructure">
+					<xsd:annotation>
+						<xsd:documentation>Describes the frequency of a service.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="MinutesPastTheHour">
+					<xsd:annotation>
+						<xsd:documentation>Describes the minutes past each hour that a frequency-based service runs at.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Minutes" type="xsd:nonNegativeInteger" maxOccurs="60">
+								<xsd:annotation>
+									<xsd:documentation>The minutes past the hour.</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="FrequentService" type="xsd:boolean" default="false" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Formally classify the journey a Frequent Service; should run with a  frequency of less than 10 minutes. Default is false.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<!-- Operational Profiles -->
+	<xsd:complexType name="ServicedOrganisationOperationStructure">
+		<xsd:annotation>
+			<xsd:documentation>The operation or non-operation of the journey or service is determined by the pattern of working days and holidays of specified serviced organisations. ServicedOrganisationOperation overrides the OperatingProfile days given by Regular Days and Periodic elements. Note that where SpecialDaysOperation or BankHolidayOperation are defined, these override the definition within ServicedOrganisationOperation.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DaysOfOperation" type="ServicedOrganisationDaysStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Days when the journey or service will operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DaysOfNonOperation" type="ServicedOrganisationDaysStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Days when the journey or service will not operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServicedOrganisationDaysStructure">
+		<xsd:annotation>
+			<xsd:documentation>Working days and holidays for a collection of serviced organisations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="WorkingDays" type="ServicedOrganisationRefsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The working days for a collection of serviced organisations.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Holidays" type="ServicedOrganisationRefsStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The holidays for a collection of serviced organisations.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RegularOperationStructure">
+		<xsd:annotation>
+			<xsd:documentation>General classification of when the journey or service will normally operate.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="DaysOfWeek">
+				<xsd:annotation>
+					<xsd:documentation>Days on which the service regularly runs.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:group ref="DaysGroup"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="HolidaysOnly" type="EmptyType">
+				<xsd:annotation>
+					<xsd:documentation>Service does not run on a regularly day of week pattern, but only on specified public holidays. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="WeekOfMonthStructure">
+		<xsd:annotation>
+			<xsd:documentation>Description of week within a calendar month i.e. is the week the 1st, 2nd, 3rd, 4th, 5th or last week of the calendar month.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="WeekNumber" type="WeekInMonthEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Number of week on which service runs. Each week should be specified only once. Enumerated value.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="PeriodicStructure">
+		<xsd:annotation>
+			<xsd:documentation>Collection of weeks within a calendar month on which a service or journey operates (or does not operate); acts as a qualifier to Regular Days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="WeekOfMonth" type="WeekOfMonthStructure" maxOccurs="4">
+				<xsd:annotation>
+					<xsd:documentation>Up to four weeks within the month on which the service runs. Any weeks are combined with the day types.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="SpecialDaysOperationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification of the operation or non-operation of the service or journey in respect of special days. Note that the days specified override all other OperatingProfile Days and BankHoliday definitions for the service or journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DaysOfOperation" type="AnnotatedClosedDateRangeCollectionStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Special days when the service or journey will operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DaysOfNonOperation" type="AnnotatedClosedDateRangeCollectionStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Special days when the service or journey will not operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BankHolidayOperationStructure">
+		<xsd:annotation>
+			<xsd:documentation>Classification of the operation or non-operation of the service or journey in respect of Public or Bank Holidays. Note that where SpecialDaysOperation is defined, it overrides the days specified by BankHolidayOperation.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="DaysOfOperation" type="BankHolidaysStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Public or Bank Holidays when the service or journey will operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DaysOfNonOperation" type="BankHolidaysStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Public or Bank Holidays when the service or journey will not operate.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:group name="Normal">
+		<xsd:annotation>
+			<xsd:documentation>Pattern of days on which the service or journey operates as normal.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RegularDayType" type="RegularOperationStructure">
+				<xsd:annotation>
+					<xsd:documentation>Regular operational day types of the service or journey.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PeriodicDayType" type="PeriodicStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Service has a regular periodic pattern, for example the first week of the month. The period is combined with the Regular operational days, for example to specify that the service or journey operates on the first Wednesday of the month.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServicedOrganisationDayType" type="ServicedOrganisationOperationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Service day types as determined by the working days and holidays of serviced organisations.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="Special">
+		<xsd:annotation>
+			<xsd:documentation>Pattern of days when the service or journey operates differently to normal. Note that these days take precedence over normal days.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="SpecialDaysOperation" type="SpecialDaysOperationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Days when the service or journey will operate differently from normal.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="BankHolidayOperation" type="BankHolidayOperationStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>How the service or journey will operate on bank holidays.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="OperatingProfileStructure">
+		<xsd:annotation>
+			<xsd:documentation>Pattern of normal and special days defining the operating profile of the service or journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="Normal"/>
+			<xsd:group ref="Special"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

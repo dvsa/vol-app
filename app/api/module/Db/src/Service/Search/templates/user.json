@@ -1,0 +1,78 @@
+{
+   "query": {
+      "bool": {
+         "must": {
+            "bool": {
+               "should": [
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fuzziness": 2,
+                        "prefix_length": 1,
+                        "fields": [
+                           "entity",
+                           "full_name"
+                        ]
+                     }
+                  },
+                  {
+                     "multi_match": {
+                        "query": "%SEARCH_TERM%",
+                        "fields": [
+                           "forename",
+                           "family_name"
+                        ]
+                     }
+                  },
+                  {
+                     "match": {
+                        "lic_nos": {
+                           "query": "%SEARCH_TERM%",
+                           "boost": 2
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "email_address": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "full_name": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "match": {
+                        "entity": "%SEARCH_TERM%"
+                     }
+                  },
+                  {
+                     "term": {
+                        "login_id": {
+                           "value": "%SEARCH_TERM%",
+                           "boost": 3.75
+                        }
+                     }
+                  },
+                  {
+                     "match": {
+                        "login_id": {
+                           "query": "%SEARCH_TERM%"
+                        }
+                     }
+                  }
+               ]
+            }
+         },
+         "must_not": [
+            {
+               "exists": {
+                  "field": "is_deleted"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 1.7
+}

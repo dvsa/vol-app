@@ -1,0 +1,16 @@
+<?php
+
+if ($hasRestrictedCountries) {
+    echo($this->translate('Yes'));
+} else {
+    echo($this->translate('No'));
+}
+
+echo('<br>');
+
+$escapedCountryNames = [];
+foreach ($countryNames as $countryName) {
+    $escapedCountryNames[] = $this->escapeHtml($this->translate($countryName));
+}
+
+echo(implode(', ', $escapedCountryNames));

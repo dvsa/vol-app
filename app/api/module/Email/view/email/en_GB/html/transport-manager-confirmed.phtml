@@ -1,0 +1,10 @@
+<p>Hello,</p>
+
+<p>
+    <?php echo $this->escapeHtml($this->operatorName); ?> has approved the details you submitted for Vehicle Operator
+    Licence <?php echo $this->escapeHtml($this->licNo . '/' . $this->applicationId); ?>.
+</p>
+
+<p>
+    <a href="<?php echo $this->escapeHtml($this->tmaUrl); ?>">Sign into your account</a>
+</p>

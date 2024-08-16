@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  TransXChange Publisher Call API 
+
+2010.04.05 Updated for 2.4a  3.1.2
+		 Add StopLiustOrder parameter to route map options values timetable/map
+        Internal renames to types change to follow namign conventions
+(C)  -->
+<!-- (c) Kizoom 2006-2010   -->
+<xsd:schema xmlns="http://www.transxchange.org.uk/publisher" xmlns:tpi="http://www.transxchange.org.uk/publisher" xmlns:txc="http://www.transxchange.org.uk/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.transxchange.org.uk/publisher" elementFormDefault="qualified" attributeFormDefault="unqualified" version="3.1.2" id="TransXChangePublisherInputParameters">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Jeremy.Rayner@kizoom.com</Contributor>
+				<Contributor>Tom.White@kizoom.com</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created as W3C .xsd schema by JRR as 1.1 XML schema</Creator>
+				<Date>
+					<Created>2006-11-22</Created>
+				</Date>
+				<Description>
+					<p>The TransXChange is a UK nationwide system for exchanging bus schedules. It is used both for the electronic registration of bus routes with the Vehicle Operating Services Agency  (VOSA), and for the exchange of bus routes with other systems such as journey planners and real-time tracking systems.</p>
+					<p>This document is the schema for input parameters to the publisher system.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.transxchange.org.uk/publisher/schema/3.1.1}TransXChangePublisherService.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Kizoom Ltd. 109-123 Clifton Street, London. EC2A 4LD. UK</Publisher>
+				<Rights>Unclassified
+                               <Copyright>Kizoom 2006</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Originally developed as Version 2.1_3 by Kizoom Ltd in Nov 2006</li>
+					</ul>
+				</Source>
+				<Status>Version 3.1.1</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport,
+Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways), Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>TransXChange Publisher Service Transport Schema, an XML format for the parameters given when publishing TransXChange documents.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+	</xsd:annotation>
+	<!-- ======================================================================= -->
+	<xsd:element name="TransXChangePublisherTransport">
+		<xsd:annotation>
+			<xsd:documentation>Service transport for the TransXchange Publisher</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref="PublishDocumentRequest">
+					<xsd:annotation>
+						<xsd:documentation>Request to publish a document with the TransXChange publisher.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element ref="PublicationStatusRequest"/>
+				<xsd:element ref="PublisherResponse">
+					<xsd:annotation>
+						<xsd:documentation>Response from a TransXChange publisher Request.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<!-- ======================================================================= -->
+	<xsd:element name="PublishDocumentRequest" type="PublishDocumentRequestStructure">
+		<xsd:annotation>
+			<xsd:documentation>Request to publish a document with the TransXChange publisher.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="PublishDocumentRequestStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for Request to publish a document with the TransXChange publisher.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="InputOperands">
+				<xsd:annotation>
+					<xsd:documentation>TransXChange Document and any associated artefacts that are to be published</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="DocumentPath" type="xsd:anyURI">
+							<xsd:annotation>
+								<xsd:documentation>Path to TransXChange XML document and any associated files that are to be published.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="DocumentName" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Name of TransXChange XML document that is to be published.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OutputOperands" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Output from TransXChange publisher</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="OutputPath" type="xsd:anyURI">
+							<xsd:annotation>
+								<xsd:documentation>Output directory in which to place published output. There may be one or more files. If omitted, same as DocumentPath.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ProcessingOptions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Options controlling processing of operand data</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ValidateXml" type="xsd:boolean" default="true" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Whether to apply XML validation to the input.  If false must have been previously validated. Omitting validation saves processing time on large documents. Default is true.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="IncludeDiagnostics" type="xsd:boolean" default="true" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Whether to perform validation of business rules and output diagnostics.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="StopData" type="StopDataEnumeration" default="webService" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Source of stop coordinates.  Only used if RouteTrackMap specified.
+- webService: Values for stops not provided locally will be fetched from the NaPTAN web service, as configured. Note that any locally declared values will still be used in preference to the retrieved values. Default.
+- localOnly:  All values are supplied in input document. No attempt will be made to invoke web service.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="MapData" type="MapDataEnumeration" default="webService" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Source of map tiles. Only used if RouteTrackMap specified.
+- webService: Map tiles will be fetched from the map web service, as configured. 
+- none: No map tiles will be used as background.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="OutputOptions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Sections to be included in output.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:choice>
+						<xsd:element name="Auto" type="AutoEnumeration">
+							<xsd:annotation>
+								<xsd:documentation>Use predefined combinations of output.
+- Xvosa: Particulars-full, Embedded-full, Timetable-full
+-XvosaAll: (a) Particulars-full, Timetable-full, diagnostics:full
+                 (b) Matrix: full ,
+                 (c) Routetrack:full
+- full: Particulars-full, Timetable-full: routetrack:full
+- vosa: Particulars-full, Timetable-full: routetrack:full, with Vosa styling
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:sequence>
+							<xsd:element name="Sections">
+								<xsd:annotation>
+									<xsd:documentation>Sections to include in the output.</xsd:documentation>
+								</xsd:annotation>
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element name="Particulars" type="ParticularsEnumeration" default="auto">
+											<xsd:annotation>
+												<xsd:documentation>Options for including the particulars in output. (auto|none|basic|full)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="EmbeddedParticulars" type="xsd:boolean" default="true" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Whether to include any embedded image content in output of particulars. Default is true</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Timetable" type="TimetableEnumeration" default="auto">
+											<xsd:annotation>
+												<xsd:documentation>Options for including the timetable matrix in output (auto|none|basic|full|extra)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="RouteTrack" type="RouteTrackEnumeration" default="auto">
+											<xsd:annotation>
+												<xsd:documentation>Options for including the route track map in output. (auto|none|plain|basic|full)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Diagnostics" type="DiagnosticsEnumeration">
+											<xsd:annotation>
+												<xsd:documentation>Publish a diagnostic section.
+ (auto|none|basic|full)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:choice>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Filters" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Options controlling selection of content</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="TimingPointTypes" type="TimingPointTypeEnumeration" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Include timing points of this type in route map.
+- auto: select by type.  (Default).
+- all: PTPS and non PTPs
+- PTPs only</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="MergeFrequencyJourneys" type="xsd:boolean" default="true" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Whether to merge frequency-based journeys with the same end time into a single column group. Default is true.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="RouteTrackMapOptions" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Options controlling use of Route Track Map. Only used if RouteTrackMap specified.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="RouteScale" type="RouteScaleEnumeration" default="auto" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Scale to use when tiling map.
+- auto:  scale to size (Default).
+- small: 1:10,000. 
+- large: 1:50,000.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RouteGrouping" type="RouteGroupingEnumeration" default="byDirection" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Options for grouping route tracks on map. 
+- byDirection: show a separate map for each direction (Default).
+- allTogether: show one map with both directions,
+</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RouteTiling" type="RouteTilingEnumeration" default="A4" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>How to paginate:
+- A4: paginate as multiple A4 tiles  (Default)
+- none: output as single image</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="StopListOrder" type="RouteTrackStopListOrderEnumeration" default="timetable" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Order to shop stop list with maps
+- timetable: list in order as shown for matrix bed.
+- map : list in north south spatial order. (+TXC v2.4)</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="Rendering" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Rendering to use for output.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="OutputFormat" type="OutputFormatEnumeration" default="pdf" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Format in which to render output.
+- pdf: Output as pdf (Default).</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Background" type="BackgroundEnumeration" default="auto" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Backgound image to use as watermark.
+- auto: if section output is XVosa or XVosaAll, make vosa otherwise other (Default).
+- vosia: use vosa graphic for approved form.
+- official: use vosa graphic for work in process form.
+- other: use draft graphic.
+</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Rubric" type="RubricEnumeration" default="auto" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Whether to use Vosa Titles
+- auto: if section output is XVosa or XVosaAll, make vosa otherwise other. (Default)
+- vosa: Vosa titles 
+- other: Generic Titles
+</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<xsd:element name="PublicationStatusRequest" type="PublicationStatusRequestStructure">
+		<xsd:annotation>
+			<xsd:documentation>Status Request to TransXChange publisher to determine if a publication has completed.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="PublicationStatusRequestStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for Task Status Request to TransXChange publisher.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TaskId" type="xsd:NMTOKEN">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of task whose status is to be checked. </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<xsd:element name="PublisherResponse" type="PublisherResponseStructure">
+		<xsd:annotation>
+			<xsd:documentation>Response to a TransXChange publisher Request.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:element>
+	<xsd:complexType name="PublisherResponseStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for Response to a TransXChange publisher Request.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="BadRequest" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>Publication Request has been rejected for the reason given within this element.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Accepted" type="EmptyType">
+					<xsd:annotation>
+						<xsd:documentation>Publication Request has been succesfully submitted and will be processed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Incomplete" type="EmptyType">
+					<xsd:annotation>
+						<xsd:documentation>Processing of the Publish Document Request has not been completed.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Completed" type="CompletedStructure">
+					<xsd:annotation>
+						<xsd:documentation>Document has been succesfully processed and output file(s) created. If any diagnostic errors occured they are given within this element.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Failed" type="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>Publisher has finished processing the Publication Request, but failed to produce output. This represents a pathological case where an exception has occurred. The exception is detailed within this element.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="TaskId" type="xsd:NMTOKEN" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of task. Can be used subsequently to make a PublishStatusRequest.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!-- ======================================================================= -->
+	<xsd:complexType name="EmptyType">
+		<xsd:annotation>
+			<xsd:documentation>A type with no allowed content, used when simply the presence of an element is significant.</xsd:documentation>
+		</xsd:annotation>
+	</xsd:complexType>
+	<xsd:complexType name="CompletedStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for completion status </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OutputFiles" type="OutputFilesStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>List of files published. There are no output files if the service is just being used for validation or reporting diagnostic errors.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DiagnosticErrors" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Plain text representation of any diagnostic errors for the published document.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Warnings" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Plain text representation of any non fatal warnings for the published document.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OutputFilesStructure">
+		<xsd:annotation>
+			<xsd:documentation>Type for Output file names</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OutputFile" type="xsd:anyURI" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="StopDataEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Stop Data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="localOnly"/>
+			<xsd:enumeration value="webService"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MapDataEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Map Data</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="webService"/>
+			<xsd:enumeration value="none"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AutoEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Auto</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="full"/>
+			<xsd:enumeration value="timetableOnly"/>
+			<xsd:enumeration value="vosa"/>
+			<xsd:enumeration value="Xvosa"/>
+			<xsd:enumeration value="XvosaAll"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ParticularsEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Particulars</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="none"/>
+			<xsd:enumeration value="basic"/>
+			<xsd:enumeration value="full"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TimetableEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Matrix details</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="none"/>
+			<xsd:enumeration value="basic"/>
+			<xsd:enumeration value="full"/>
+			<xsd:enumeration value="extra"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteTrackEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for RouteTrack</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="none"/>
+			<xsd:enumeration value="basic"/>
+			<xsd:enumeration value="full"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteTrackStopListOrderEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Matrix details</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="timetable"/>
+			<xsd:enumeration value="map"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DiagnosticsEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Diagnostics</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="none"/>
+			<xsd:enumeration value="full"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TimingPointTypeEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values forTiming Point Types</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="all"/>
+			<xsd:enumeration value="PTP"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteScaleEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Route  Scale</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="small"/>
+			<xsd:enumeration value="large"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteGroupingEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Route Grouping</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="allTogether"/>
+			<xsd:enumeration value="byDirection"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RouteTilingEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Route Tiling</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="A4"/>
+			<xsd:enumeration value="none"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="OutputFormatEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Output Format</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="html"/>
+			<xsd:enumeration value="pdf"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BackgroundEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Background</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="official"/>
+			<xsd:enumeration value="Vosa"/>
+			<xsd:enumeration value="other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="RubricEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Rubric</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="auto"/>
+			<xsd:enumeration value="official"/>
+			<xsd:enumeration value="Vosa"/>
+			<xsd:enumeration value="other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>

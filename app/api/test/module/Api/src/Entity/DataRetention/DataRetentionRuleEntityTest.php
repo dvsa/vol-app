@@ -1,0 +1,21 @@
+<?php
+
+namespace Dvsa\OlcsTest\Api\Entity\DataRetention;
+
+use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
+use Dvsa\Olcs\Api\Entity\DataRetentionRule as Entity;
+
+/**
+ * DataRetentionRule Entity Unit Tests
+ *
+ * Initially auto-generated but won't be overridden
+ */
+class DataRetentionRuleEntityTest extends EntityTester
+{
+    /**
+     * Define the entity to test
+     *
+     * @var string
+     */
+    protected $entityClass = Entity::class;
+}

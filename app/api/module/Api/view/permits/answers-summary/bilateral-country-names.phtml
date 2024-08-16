@@ -1,0 +1,12 @@
+<?php
+
+$translatedEscapedCountryNames = [];
+foreach ($countryNames as $countryName) {
+    $translatedEscapedCountryNames[] = $this->escapeHtml(
+        $this->translate($countryName)
+    );
+}
+
+echo implode(', ', $translatedEscapedCountryNames);
+
+

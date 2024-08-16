@@ -1,0 +1,23 @@
+<li class="definition-list__item<?php echo isset($item['class']) ? ' ' . $item['class'] : ''; ?>">
+    <?php
+        if (isset($item['full-content'])) {
+            echo $item['full-content'];
+        } elseif(isset($item['list'])) {
+    ?>
+    <ul>
+        <?php foreach ($item['list'] as $item) { ?>
+            <li><?php echo $item; ?></li>
+        <?php } ?>
+    </ul>
+    <?php } else { ?>
+        <dt><?php echo $this->translate($item['label']); ?></dt>
+        <dd>
+            <?php if (isset($item['url']) && $item['url'] != ''): ?>
+            <a href="<?php echo $item['url']; ?>"><?php echo isset($item['noEscape']) ? $item['value'] : $this->escapeHtml($item['value']); ?></a>
+            <?php else: ?>
+            <?php echo isset($item['noEscape']) ? $item['value'] : $this->escapeHtml($item['value']); ?>
+            <?php endif; ?>
+            <?php echo !empty($item['suffix']) ? $item['suffix'] : '';?>
+        </dd>
+    <?php } ?>
+</li>

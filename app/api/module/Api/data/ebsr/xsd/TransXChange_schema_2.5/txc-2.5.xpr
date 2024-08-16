@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="13.2">
+    <meta>
+        <filters directoryPatterns="" filePatterns="" positiveFilePatterns="" showHiddenFiles="false"/>
+        <options/>
+    </meta>
+    <projectTree name="txc-2.5.xpr">
+        <folder name="examples">
+            <folder name="cancellation">
+                <file name="examples/cancellation/cancellation.xml"/>
+            </folder>
+            <folder name="circular">
+                <file name="examples/circular/circular.xml"/>
+                <file name="examples/circular/circular_reordered.xml"/>
+            </folder>
+            <folder name="cloverleaf">
+                <file name="examples/cloverleaf/cloverleaf.xml"/>
+            </folder>
+            <folder name="delta">
+                <file name="examples/delta/delta.xml"/>
+            </folder>
+            <folder name="express">
+                <file name="examples/express/express.xml"/>
+            </folder>
+            <folder name="eye">
+                <file name="examples/eye/eye.xml"/>
+            </folder>
+            <folder name="flexible">
+                <file name="examples/flexible/flexible.xml"/>
+            </folder>
+            <folder name="footnotes">
+                <file name="examples/footnotes/footnotes.xml"/>
+            </folder>
+            <folder name="hailandride">
+                <file name="examples/hailandride/hailandride.xml"/>
+            </folder>
+            <folder name="interchange">
+                <file name="examples/interchange/interchange.xml"/>
+            </folder>
+            <folder name="large">
+                <file name="examples/large/large.xml"/>
+            </folder>
+            <folder name="linear">
+                <file name="examples/linear/linear.xml"/>
+            </folder>
+            <folder name="lollipop">
+                <file name="examples/lollipop/lollipop.xml"/>
+            </folder>
+            <folder name="mergeFrequency">
+                <file name="examples/mergefrequency/mergefrequency.xml"/>
+            </folder>
+            <folder name="operators">
+                <file name="examples/operators/operators.xml"/>
+            </folder>
+        </folder>
+        <folder name="grouping"/>
+        <folder name="schema">
+            <folder name="napt">
+                <file name="napt/NaPT_all.xsd"/>
+                <file name="napt/NaPT_dates-v2-5.xsd"/>
+                <file name="napt/NaPT_dayTypes-v2-5.xsd"/>
+                <file name="napt/NaPT_location-v2-5.xsd"/>
+                <file name="napt/NaPT_modes-v2-5.xsd"/>
+                <file name="napt/NaPT_operator_support-v2-3.xsd"/>
+                <file name="napt/NaPT_pointOfInterest-v2-5.xsd"/>
+                <file name="napt/NaPT_stop-v2-5.xsd"/>
+                <file name="napt/NaPT_stopAccessibility-v2-5.xsd"/>
+                <file name="napt/NaPT_stopArea-v2-5.xsd"/>
+                <file name="napt/NaPT_tariffZone-v2-5.xsd"/>
+                <file name="napt/NaPT_utility_rights-v2-3.xsd"/>
+                <file name="napt/NaPT_utility_types-v2-5.xsd"/>
+                <file name="napt/NaPT_utility_units-v2-4.xsd"/>
+                <file name="napt/NaPT_utility_xml-v2-1.xsd"/>
+                <file name="napt/NaPT_versioningAttributes-v2-2.xsd"/>
+            </folder>
+            <folder name="napt_netex">
+                <file name="napt_netex/NaPT_netex_accessibility-v2-5.xsd"/>
+                <file name="napt_netex/NaPT_netex_entity_support-v2.5.xsd"/>
+                <file name="napt_netex/NaPT_netex_equipment-v2-5.xsd"/>
+                <file name="napt_netex/NaPT_netex_equipmentVehiclePassenger-v2-5.xsd"/>
+                <file name="napt_netex/NaPT_netex_facility_support-v2.5.xsd"/>
+                <file name="napt_netex/NaPT_netex_facility_version-v2.5.xsd"/>
+                <file name="napt_netex/NaPT_netex_localService-v2-5.xsd"/>
+                <file name="napt_netex/NaPT_netex_travelRights_types-v2.5.xsd"/>
+            </folder>
+            <folder name="nptg">
+                <file name="nptg/NPTG_administrative-v2.5.xsd"/>
+                <file name="nptg/NPTG_administrative_support-v2-4.xsd"/>
+                <file name="nptg/NPTG_locality-v2-5.xsd"/>
+                <file name="nptg/NPTG_locality_support-v2-4.xsd"/>
+            </folder>
+            <folder name="txc">
+                <file name="txc/TXC_accessibilityBooking-v2-5.xsd"/>
+                <file name="txc/TXC_all.xsd"/>
+                <file name="txc/TXC_authorities-v2-3.xsd"/>
+                <file name="txc/TXC_common-v2-5.xsd"/>
+                <file name="txc/TXC_connectingVehicleJourney-v2-5.xsd"/>
+                <file name="txc/TXC_deadRun-v2-5.xsd"/>
+                <file name="txc/TXC_flexibleJourneyPattern-v2-5.xsd"/>
+                <file name="txc/TXC_frequency-v2-5.xsd"/>
+                <file name="txc/TXC_garage-v2-5.xsd"/>
+                <file name="txc/TXC_journey_support-v2-5.xsd"/>
+                <file name="txc/TXC_journeyPattern-v2-5.xsd"/>
+                <file name="txc/TXC_journeyPattern_support-v2-3.xsd"/>
+                <file name="txc/TXC_journeyPatternInterchange-v2-3.xsd"/>
+                <file name="txc/TXC_journeyPatternSection-v2-5.xsd"/>
+                <file name="txc/TXC_journeyPatternTimingLink-v2-5.xsd"/>
+                <file name="txc/TXC_operatingDay-v2-5.xsd"/>
+                <file name="txc/TXC_operational-v2-5.xsd"/>
+                <file name="txc/TXC_operator-v2-5.xsd"/>
+                <file name="txc/TXC_passingTimes-v2-5.xsd"/>
+                <file name="txc/TXC_registration-v2-5.xsd"/>
+                <file name="txc/TXC_route-v2-5.xsd"/>
+                <file name="txc/TXC_service-v2-5.xsd"/>
+                <file name="txc/TXC_service_journeyGrouping-v2-5.xsd"/>
+                <file name="txc/TXC_service_parts-v2-5.xsd"/>
+                <file name="txc/TXC_serviceCalendar-v2-5.xsd"/>
+                <file name="txc/TXC_servicedOrganisation-v2-5.xsd"/>
+                <file name="txc/TXC_utility_times-v2-5.xsd"/>
+                <file name="txc/TXC_utility_types-v2-5.xsd"/>
+                <file name="txc/TXC_validity-v2-5.xsd"/>
+                <file name="txc/TXC_vehicleJourney-v2-5.xsd"/>
+                <file name="txc/TXC_vehicleJourney_support-v2-3.xsd"/>
+                <file name="txc/TXC_vehicleJourneyInterchange-v2-5.xsd"/>
+                <file name="txc/TXC_vehicleType-v2-5.xsd"/>
+            </folder>
+            <file name="TransXChange_general.xsd"/>
+            <file name="TransXChange_general_delta.xsd"/>
+            <file name="TransXChange_registration.xsd"/>
+        </folder>
+    </projectTree>
+</project>

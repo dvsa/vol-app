@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!-- Crown Copyright 2007
+The Purpose of this file is to overcome a technical limitation in Xerces (and possibly other)    widely used XML processors.
+   
+ Xerces has a limitation in that it only notices the first import for a given namespace that it encounters - all others are effectively ignored. Thus if one imports separate individual xsd files from the same namespace as separate import statements, only the elements in the first are found.  This applies on a per-schema basis,   i.e. when processing a complex dependency graph with multiple files referencing the same namespace, once the first import for a namespace has been loaded no further files are imported for that namespace during the whole JAXB run. 
+   
+   The practical effect of this limitation is that you should always import all of the types in a namespace, not just the ones that the current file requires. 
+   
+   This file provides a single declaration of all the ifopt data elements for use in such an import.
+
+ -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.naptan.org.uk/" xmlns:core="http://www.govtalk.gov.uk/core" targetNamespace="http://www.naptan.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.3" id="NaPT_all">
+	<!-- ===Global include of all APD namespace elements needed to work around XERCES limitation=====-->
+	<xsd:include schemaLocation="../nptg/NPTG_administrative_support-v2-4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_administrative-v2.4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_locality_support-v2-4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_locality-v2-4.xsd"/>
+	<xsd:include schemaLocation="NaPT_dates-v2-2.xsd"/>
+	<xsd:include schemaLocation="NaPT_dayTypes-v2-2.xsd"/>
+	<xsd:include schemaLocation="NaPT_location-v2-1.xsd"/>
+	<xsd:include schemaLocation="NaPT_modes-v2-2.xsd"/>
+	<xsd:include schemaLocation="NaPT_operator_support-v2-3.xsd"/>
+	<xsd:include schemaLocation="NaPT_stop-v2-4.xsd"/>
+	<xsd:include schemaLocation="NaPT_stopArea-v2-4.xsd"/>
+	<xsd:include schemaLocation="NaPT_utility_rights-v2-3.xsd"/>
+	<xsd:include schemaLocation="NaPT_utility_types-v2-1.xsd"/>
+	<xsd:include schemaLocation="NaPT_utility_units-v2-4.xsd"/>
+	<xsd:include schemaLocation="NaPT_utility_xml-v2-1.xsd"/>
+	<xsd:include schemaLocation="NaPT_versioningAttributes-v2-2.xsd"/>
+
+<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Revised for version 2.4 Kizoom Limited, by Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created for TXC 2.0 Tom White, Kizoom mailto:schemer@kizoom.com</Creator>
+				<Date>
+					<Created>2004-07-07</Created>
+				</Date>
+				<Date>
+					<Modified>2010-07-07</Modified>
+					<!-- Update with 2.4 files-->
+				</Date>
+				
+				<Description>List of packagae schemas for National Public Transport XML schemas. I </Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>http://www.naptan.org.uk/schema/2.4/napt/NaPT_all.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+ 
+	<Requires>http://www.naptan.org.uk/schema/2.4/nptg/NPTG_administrative_support-v2-4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/nptg/NPTG_administrative-v2.4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/nptg/NPTG_locality_support-v2-4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/nptg/NPTG_locality-v2-4.xsd</Requires>
+<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_dates-v2-2.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_dayTypes-v2-2.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_location-v2-1.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_modes-v2-2.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_operator_support-v2-3.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_stop-v2-4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_stopArea-v2-4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_utility_rights-v2-3.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_utility_types-v2-1.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_utility_units-v2-4.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_utility_xml-v2-1.xsd</Requires>
+	<Requires>http://www.naptan.org.uk/schema/2.4/napt/NaPT_versioningAttributes-v2-2.xsd</Requires>
+				</Relation>
+				<Rights>Unclassified
+
+                               <Copyright>Crown Copyright 2000-2010</Copyright>
+				</Rights>
+				<Source>Factored out from 2.0 draft schema</Source>
+				<Status>Version 2.4</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways),  Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>List of subpackages of National Public Transport XML schemas.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>NaPT_all    HEADER DOCUMENTATION</xsd:documentation>
+	</xsd:annotation>
+</xsd:schema>

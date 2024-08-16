@@ -1,0 +1,12 @@
+<table>
+    <tr>
+        <th>VRM</th>
+        <th>Licence No</th>
+    </tr>
+    <?php foreach ($this->removedVehicles as $vehicle): ?>
+        <tr>
+            <td><?php echo $vehicle['vrm']; ?></td>
+            <td><?php echo $vehicle['licNo']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>

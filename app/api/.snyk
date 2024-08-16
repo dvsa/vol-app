@@ -1,0 +1,20 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'snyk:lic:composer:simplesamlphp:saml2:LGPL-2.1':
+    - '*':
+        reason: None Given
+        expires:
+        created: 2024-02-28T13:46:06.971Z
+  'snyk:lic:composer:phprtflite:phprtflite:GPL-3.0':
+    - '*':
+        reason: None Given
+        expires:
+        created: 2024-02-28T13:46:27.880Z
+  'snyk:lic:composer:behat:transliterator:Artistic-1.0':
+    - '*':
+        reason: None Given
+        expires:
+        created: 2024-02-28T13:46:38.578Z
+patch: {}

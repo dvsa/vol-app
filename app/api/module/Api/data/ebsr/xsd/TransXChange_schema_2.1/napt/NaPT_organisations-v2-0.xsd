@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Nick js Knowles (Kizoom Ltd.) -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:core="http://www.govtalk.gov.uk/core" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0d" id="NaPT_organisations">
+    <xsd:annotation>
+        <xsd:appinfo xmlns:gms="http://www.govtalk.gov.uk/CM/gms">
+            <Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+                <Aggregation>main schema</Aggregation>
+                <Audience>e-service developers</Audience>
+                <Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+                <Coverage>United Kingdom</Coverage>
+                <Creator>Created for TXC 2.0 Tom White, Kizoom mailto:schemer@kizoom.com</Creator>
+                <Date>
+                    <Created>2004-07-07</Created>
+                </Date>
+                                                <Date>
+                                                    <Modified>2005-06-06</Modified>
+                </Date>
+                <Description>Common organisation  types for National Public Transport XML schemas. Includes Dates, Times, Date and Time ranges. Weekday day types and  public holiday day types.</Description>
+                <Format>
+                    <MediaType>text/xml</MediaType>
+                    <Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+                    <Description>XML schema, W3C Recommendation 2001</Description>
+                </Format>
+                <Identifier>http://www.naptan.org.uk/schema/2.0/napt/{NaPT_organisations-v2-0.xsd}</Identifier>
+                <Language>[ISO 639-2/B] ENG</Language>
+                <Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+                <Relation>
+                    <Requires>http://www.w3.org/2001/xml.xsd</Requires>
+                    <Requires>http://www.naptan.org.uk/schema/2.0/napt/NaPT_common-v2-0.xsd</Requires>
+                </Relation>
+                <Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+                </Rights>
+                <Source>Factored out from TXC 2.0 and JW 3.0 draft schemas</Source>
+                              <Status>Version 2.0 Release</Status>
+                <Subject>
+                    <Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways),  Train services,
+Roads and road transport</Category>
+                    <Project>Transport Direct</Project>
+                </Subject>
+                <Title>Common date and time types for National Public Transport XML schemas.</Title>
+                <Type>Standard</Type>
+            </Metadata>
+        </xsd:appinfo>
+        <xsd:documentation>NaPT Common Operator and Other Organisation types</xsd:documentation>
+    </xsd:annotation>
+    <xsd:include schemaLocation="NaPT_common-v2-0.xsd"/>
+    <!-- ===Dates======================================================================================= -->
+    <xsd:simpleType name="ServicedOrganisationCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Identifying code for a serviced organisation. In the case of LEAs and schools this should be the Department of Education Number.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="NationalOperatorCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Identifying code for the operator, conforming to a national scheme.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="OperatorCodeType">
+        <xsd:annotation>
+            <xsd:documentation>Identifying code for the operator.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:NMTOKEN"/>
+    </xsd:simpleType>
+    <xsd:complexType name="OperatorRefStructure">
+        <xsd:annotation>
+            <xsd:documentation>A direct reference to an Operator that is defined elsewhere   The reference is by Operator code.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="OperatorCodeType"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+    <xsd:complexType name="OperatorRefsStructure">
+        <xsd:annotation>
+            <xsd:documentation>A collection of one or more operator refs.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="OperatorRef" type="OperatorRefStructure" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Reference to an Operator.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>

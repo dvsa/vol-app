@@ -1,0 +1,20 @@
+Please find below a negative acknowledgement receipt from ERRU.
+
+This requires identifying the correct recipient and forwarding to the appropriate mailbox.
+
+If GB, then identify the reason for negative acknowledgement, correct and re-submit MSI via the INR web portal.
+
+Business case id: <?php echo $this->escapeHtml($this->notificationNumber); ?>
+Sent at: <?php echo $this->escapeHtml($this->sentAt); ?>
+From MS: <?php echo $this->escapeHtml($this->memberState); ?>
+Originating authority: <?php echo $this->escapeHtml($this->originatingAuthority); ?>
+Acknowledgement date/time: <?php echo $this->escapeHtml($this->notificationDateTime); ?>
+
+Error messages:
+
+<?php
+    foreach ($this->errorMessages as $message) {
+        echo '*' . $message . "\n";
+    }
+?>
+(See attached file: <?php echo $this->escapeHtml($this->filename); ?>)

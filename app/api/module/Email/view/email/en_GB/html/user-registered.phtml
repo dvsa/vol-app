@@ -1,0 +1,12 @@
+<p>Hello,</p>
+
+<p>Welcome to the Vehicle Operator Licensing service. Here’s a summary of your registration details:</p>
+
+<ul>
+    <li>company name: <?php echo $this->escapeHtml($this->orgName); ?></li>
+    <li>username: <?php echo $this->escapeHtml($this->loginId); ?></li>
+</ul>
+
+<p>
+    <a href="<?php echo $this->escapeHtml($this->url); ?>">Sign in</a>
+</p>

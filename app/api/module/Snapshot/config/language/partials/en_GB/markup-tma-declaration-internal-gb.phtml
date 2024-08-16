@@ -1,0 +1,21 @@
+<p><strong>By signing this form you are confirming your status as an internal transport manager, an external transport manager or both.</strong></p>
+<p>I confirm that:</p>
+<ul class="list--bullet">
+    <li>I shall effectively and continuously manage the transport activities of the licence holder/applicant; and</li>
+    <li>I have a genuine link to the licence holder/applicant.</li>
+</ul>
+
+<p>I understand that my responsibilities include:</p>
+<ul class="list--bullet">
+    <?php
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-drivers-administration'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-drivers-management'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-drivers-operations'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-vehicle-administration'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-vehicle-management'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-licence-administration'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-internal'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-external'));
+    echo $this->htmlPurifier($this->translate('tma-tm-declaration-warning'));
+    ?>
+</ul>

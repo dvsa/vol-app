@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!-- Crown Copyright 2007
+The Purpose of this file is to overcome a technical limitation in Xerces (and possibly other)    widely used XML processors.
+   
+ Xerces has a limitation in that it only notices the first import for a given namespace that it encounters - all others are effectively ignored. Thus if one imports separate individual xsd files from the same namespace as separate import statements, only the elements in the first are found.  This applies on a per-schema basis,   i.e. when processing a complex depedency graph with multiple files referencing the same namespace, once the first import for a namespace has been loaded no further files are imported for that namespace during the whole JAXB run. 
+   
+   The practical effect of this limitation is that you should always import all of the types in a namespace, not just the ones that the current file requires. 
+   
+   This file provides a single declaration of all the ifopt data elements for use in such an import.
+
+ -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:apd="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" xmlns="http://www.transxchange.org.uk/" xmlns:napt="http://www.naptan.org.uk/" xmlns:ns1="http://www.govtalk.gov.uk/people/PersonDescriptives" xmlns:ns2="http://www.govtalk.gov.uk/people/bs7666" xmlns:ns3="http://www.govtalk.gov.uk/core" targetNamespace="http://www.transxchange.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.4" id="TXC_all">
+	<!-- ====APd Namesopace chameeloned====== ======================== -->
+	<xsd:import namespace="http://www.govtalk.gov.uk/core" schemaLocation="../apd/CommonSimpleTypes-v1-3.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/bs7666" schemaLocation="../apd/BS7666-v1-3.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" schemaLocation="../apd/AddressTypes-v1-3.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/PersonDescriptives" schemaLocation="../apd/PersonDescriptiveTypes-v1-0.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" schemaLocation="../apd/ContactTypes-v1-3.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" schemaLocation="../apd/CitizenIdentificationTypes-v1-3.xsd"/>
+	<xsd:import namespace="http://www.govtalk.gov.uk/people/AddressAndPersonalDetails" schemaLocation="../apd/PersonalDetailsTypes-v1-3.xsd"/>
+	<!-- ====Napt Namesopace chameleoned Generic=========== ====== -->
+	<xsd:include schemaLocation="../napt/NaPT_utility_xml-v2-1.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_utility_types-v2-1.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_utility_units-v2-4.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_versioningAttributes-v2-2.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_operator_support-v2-3.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_utility_rights-v2-3.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_dates-v2-2.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_dayTypes-v2-2.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_location-v2-1.xsd"/>
+	<!-- ====Napt Namespace chameleoned=== =========== ====== -->
+	<xsd:include schemaLocation="../nptg/NPTG_administrative_support-v2-4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_administrative-v2.4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_locality_support-v2-4.xsd"/>
+	<xsd:include schemaLocation="../nptg/NPTG_locality-v2-4.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_modes-v2-2.xsd"/>
+	<!-- ====Napt Namespace chameleoned Stop========= ====== -->
+	<xsd:include schemaLocation="../napt/NaPT_stop-v2-4.xsd"/>
+	<xsd:include schemaLocation="../napt/NaPT_stopArea-v2-4.xsd"/>
+	<!-- ====TXC Namesopace  =========================== --> 
+	<xsd:include schemaLocation="TXC_authorities-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_common-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_connectingVehicleJourney-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_deadRun-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_flexibleJourneyPattern-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_frequency-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_garage-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journey_support-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journeyPattern_support-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journeyPatternInterchange-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journeyPatternSection-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journeyPatternTimingLink-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_journeyPattern-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_operatingDay-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_operational-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_operator-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_passingTimes-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_registration-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_route-v2-3.xsd"/>
+		<xsd:include schemaLocation="TXC_serviceCalendar-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_service_journeyGrouping-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_service_parts-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_servicedOrganisation-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_service-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_utility_times-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_utility_types-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_validity-v2-3.xsd"/>
+		<xsd:include schemaLocation="TXC_vehicleEquipment-v2-3.xsd"/>		
+	<xsd:include schemaLocation="TXC_vehicleJourney-v2-3.xsd"/>
+		<xsd:include schemaLocation="TXC_vehicleJourney_support-v2-3.xsd"/>
+	<xsd:include schemaLocation="TXC_vehicleJourneyInterchange-v2-3.xsd"/>
+</xsd:schema>

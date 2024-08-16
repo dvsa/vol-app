@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/erru/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/erru/1.0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="./ERRU_CheckGoodRepute_Types.xsd"/>
+	<xs:element name="MS2ERRU_CheckGoodRepute_Res">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="cgrResponseBodyType">
+								<xs:sequence>
+									<xs:element name="SearchedTransportManager">
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="cgrSearchedTransportManagerKeysType">
+													<xs:sequence>
+														<xs:element name="TransportManagerDetails" type="cgrTransportManagerDetailsType" minOccurs="0" maxOccurs="unbounded"/>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="responseDateTime" type="globalDateTimeType" use="required"/>
+								<xs:attribute name="statusCode" type="cgrConsolidatedMSStatusCodeType" use="required"/>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

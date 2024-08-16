@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "V2.4  2010 03 05  Created 
+               PTIC-044 Additional Change Management Support - Deltas 
+       (c) Crown Copyright 2000-2010   -->
+<xsd:schema xmlns="http://www.transxchange.org.uk/" xmlns:napt="http://www.naptan.org.uk/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.transxchange.org.uk/" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.5" id="TransXChangeGeneralDelta">
+	<xsd:annotation>
+		<xsd:appinfo>
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created as W3C .xsd schema by ersion 2.4 Kizoom Limited, by  Nicholas Knowles</Creator>
+				<Date>
+					<Created>2010-03-05</Created>
+				</Date>
+				<Date>
+					<Modified>2013-04-01</Modified>
+					<!-- V2.5 CREATED -->
+				</Date>
+				<Description>
+					<p>The TransXChange is a UK nationwide system for exchanging bus schedules. It is used both for the electronic registration of bus routes with the Vehicle Operating Services Agency  (VOSA), and for the exchange of bus routes with other systems such as journey planners and real-time tracking systems.</p>
+					<p>There are thre  closely related but distinct TransXChange XML schemas:</p>
+					<ul>
+						<li>A <strong>Registration</strong> schema for registering a bus timetable. This includes mandatory elements.</li>
+						<li>A <strong>General</strong> schema for exchanging bus timetable data between systems of all sorts.</li>
+						<li>A <strong>General Delta </strong> schema for exchanging just changes to bus timetable data between systems of all sorts.</li>
+					</ul>
+					<p>This document is the General Delta schema.</p>
+				</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.transxchange.org.uk/schema/2.5}TransXChange_general_delta.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+					<Requires>http://www.transxchange.org.uk/schema/2.5/TXC_common.xsd</Requires>
+				</Relation>
+				<Relation>
+					<HasPart>http://www.transxchange.org.uk/schema/2.5/TXC_common.xsd</HasPart>
+				</Relation>
+				<Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2013</Copyright>
+				</Rights>
+				<Source>
+					<ul>
+						<li>Originally developed as Version 2.4 in 2010 from transxchange_registration .</li>
+					</ul>
+				</Source>
+				<Status>Version 2.5</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport,
+Bus services, Coach services, Bus stops and stations,
+Rail transport, Infrastructure (railways), Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>TransXChange General  Delta Schema, an XML format for exchanging diffferences in  bus timetables.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>TransXChange_general_delta   HEADER DOCUMENTATION</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="TransXChange_general.xsd"/>
+	<!-- =====Xerxes workaround======================================== -->
+	<!-- ======================================================================= -->
+	<!-- TransXChange Root -->
+	<xsd:element name="TransXChangeDeltas">
+		<xsd:annotation>
+			<xsd:documentation>General purpose schema for exchanging one or more bus schedules, or parts thereof. Can be used to exchange just deltas - There are no cross checks for integroity 
+@xml:lang
+@CreationDateTime,
+@ModificationDateTime,
+@Modification,
+@RevisionNumber,
+@FileName,
+@SchemaVersion,
+@MappingSystem,
+@LocationSystem,
+@RegistrationDocument</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:group ref="TransXChangeGeneralGroup"/>
+				<xsd:element name="Objects" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Arbitray list of obejtcs</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element ref="VersionedObject" maxOccurs="unbounded"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:attributeGroup ref="DocumentModificationDetailsGroup"/>
+			<xsd:attributeGroup ref="DocumentMetadataGroup"/>
+			<xsd:attribute name="LocationSystem" type="LocationSystemEnumeration" use="optional">
+				<xsd:annotation>
+					<xsd:documentation>Data system to use for location coordinate references within the document. This is fixed to be Grid for registration documents.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+			<xsd:attribute name="RegistrationDocument" type="RegistrationDocumentType" use="optional" default="false"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

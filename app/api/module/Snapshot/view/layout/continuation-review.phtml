@@ -1,0 +1,51 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="en" class="review">
+    
+    <?php
+        echo $this->partial('partials/review-header', ['pageTitle' => $this->translate('Licence review')]);
+    ?>
+
+    <body>
+        
+        <div class="review-header">
+            <p><?php echo $this->escapeHtml($this->translate($subTitle)); ?></p>
+            <h1><?php echo $this->escapeHtml($this->translate($reviewTitle)); ?></h1>
+            <a class="hide-print" href="javascript:window.print()">Print this page</a>
+        </div>
+        <?php $count = 0; foreach ($sections as $section): $count++; ?>
+            <div class="review-section">
+                <h2>
+                    <?php
+                        if (!isset($settings['hide-count'])) {
+                            echo $count . '. ';
+                        }
+                        echo $this->escapeHtml($this->translate($section['header']));
+                    ?>
+                </h2>
+                <?php
+                    if (isset($section['config'])) {
+                        if (isset($section['config']['mainItems'])) {
+                            foreach ($section['config']['mainItems'] as $mainItem) {
+                                echo $this->render('partials/read-only/main', $mainItem);
+                            }
+                        } elseif (isset($section['config']['emptyTableMessage'])) { ?>
+                            <p><?php echo $section['config']['emptyTableMessage']; ?></p>
+                <?php
+                        } else {
+                            echo $this->partial('partials/review-continuation-section', ['data' => $section['config']]);
+                        }
+                        if (isset($section['summary'])) {
+                            echo $this->partial(
+                                'partials/review-continuation-section',
+                                ['data' => $section['summary'], 'header' => $section['summaryHeader']]
+                            );
+                        }
+                    }
+                ?>
+            </div>
+        <?php endforeach; ?>
+        
+    </body>
+    
+</html>

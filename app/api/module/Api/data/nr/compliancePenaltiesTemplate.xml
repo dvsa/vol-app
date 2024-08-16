@@ -1,0 +1,13 @@
+<MS2ERRU_Infringement_Res xmlns="https://webgate.ec.testa.eu/erru/1.0">
+    <Header technicalId="A3CCBDB1-6C8B-4741-847B-4C6B80AA8608" workflowId="FB4F5CE2-4D38-4AB8-8185-03947C939393" sentAt="2015-04-22T10:55:10+0100" from="UK">
+        <To>
+            <MemberState code="PL" />
+        </To>
+    </Header>
+    <Body businessCaseId="1" originatingAuthority="Polish Transport Authority" licensingAuthority="Traffic Commissioner" responseDateTime="2015-04-22T10:55:10+0100">
+        <TransportUndertaking name="Polish Transport Authority">
+            <PenaltyImposed authorityImposingPenalty="Traffic Commissioner" penaltyTypeImposed="101" isImposed="Yes" startDate="2014-06-01" endDate="2015-01-31" />
+            <PenaltyImposed authorityImposingPenalty="Traffic Commissioner" penaltyTypeImposed="306" isImposed="No" reasonNotImposed="Reason the penalty was not imposed" />
+        </TransportUndertaking>
+    </Body>
+</MS2ERRU_Infringement_Res>

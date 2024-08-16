@@ -1,0 +1,88 @@
+<?php if (count($conditionsUndertakings['licence']) > 0 || $isPsvRestricted) : ?>
+
+    <h2 class="heading-large"><?php echo $this->translate('continuations.conditions-undertakings.licence'); ?></h2>
+
+    <?php if ($isPsvRestricted ) : ?>
+        <?php echo $this->translate('markup-continuation-comment-psv-restricted'); ?>
+    <?php endif; ?>
+
+
+    <?php if (
+        isset($conditionsUndertakings['licence']['conditions'])
+        && count($conditionsUndertakings['licence']['conditions'])
+    ) : ?>
+
+        <h4><?php echo $this->translate('continuations.conditions-undertakings.conditions'); ?></h4>
+
+        <ul class="list--bullet">
+            <?php foreach($conditionsUndertakings['licence']['conditions'] as $cu) : ?>
+                <li><?php echo $this->escapeHtml($cu['notes']); ?></li>
+            <?php endforeach; ?>
+        </ul>
+
+    <?php endif; ?>
+
+    <?php if (
+        $isPsvRestricted ||
+        (
+            isset($conditionsUndertakings['licence']['undertakings'])
+            && count($conditionsUndertakings['licence']['undertakings'])
+        )
+    ) : ?>
+
+        <h4><?php echo $this->translate('continuations.conditions-undertakings.undertakings'); ?></h4>
+
+        <ul class="list--bullet">
+            <?php foreach($conditionsUndertakings['licence']['undertakings'] as $cu) : ?>
+                <li><?php echo $this->escapeHtml($cu['notes']); ?></li>
+            <?php endforeach; ?>
+            <?php if ($isPsvRestricted ) : ?>
+                <?php echo $this->translate('markup-continuation-undertaking-psv-restricted'); ?>
+            <?php endif; ?>
+        </ul>
+
+    <?php endif; ?>
+
+    <hr class="seperator"/>
+
+<?php endif; ?>
+
+
+<?php if (isset($conditionsUndertakings['operatingCentres']) && count($conditionsUndertakings['operatingCentres'])): ?>
+
+    <h2 class="heading-large"><?php echo $this->translate('Operating centres(s)'); ?></h2>
+
+    <?php foreach($conditionsUndertakings['operatingCentres'] as $oc) : ?>
+
+        <?php $index = (isset($oc['conditions']) ? 'conditions' : 'undertakings'); ?>
+        <h4>
+            <?php
+                $address = $oc[$index][0]['address'];
+                echo $this->escapeHtml(
+                    implode(' ', [$address['addressLine1'], $address['town'], $address['postcode']])
+                );
+            ?>
+        </h4>
+
+        <?php if (count($oc['conditions']) > 0) : ?>
+                <h5><?php echo $this->translate('continuations.conditions-undertakings.conditions'); ?></h5>
+                <ul class="list--bullet">
+                    <?php foreach($oc['conditions'] as $cu) : ?>
+                        <li><?php echo $this->escapeHtml($cu['notes']); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+
+        <?php endif; ?>
+
+        <?php if (count($oc['undertakings']) > 0) : ?>
+                <h5><?php echo $this->translate('continuations.conditions-undertakings.undertakings'); ?></h5>
+                <ul class="list--bullet">
+                    <?php foreach($oc['undertakings'] as $cu) : ?>
+                        <li><?php echo $this->escapeHtml($cu['notes']); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+
+<?php endif; ?>

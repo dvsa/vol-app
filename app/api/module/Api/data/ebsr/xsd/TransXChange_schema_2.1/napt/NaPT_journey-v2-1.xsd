@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- "V2.1  2005 09 05 
+            Change to ref NaPT stop 2.1 (Make Landmark and street optional)  
+            2005 09 23  [Bug Report AIM - MF]
+             Correct Schema ID -->       
+            
+<!-- (c) Crown Copyright 2000-2005   -->
+<xsd:schema xmlns:core="http://www.govtalk.gov.uk/core" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0" id="NaPT_journey">
+	<xsd:annotation>
+		<xsd:appinfo xmlns:gms="http://www.govtalk.gov.uk/CM/gms">
+			<Metadata xmlns="http://www.govtalk.gov.uk/CM/gms-xs">
+				<Aggregation>main schema</Aggregation>
+				<Audience>e-service developers</Audience>
+				<Contributor>Revised for version 2.0 Kizoom Limited, by Tom White, Nicholas Knowles. mailto:schemer@kizoom.com</Contributor>
+				<Coverage>United Kingdom</Coverage>
+				<Creator>Created for TXC 2.0 Nick Knowles, Kizoom mailto:schemer@kizoom.com</Creator>
+				<Date>
+					<Created>2004-07-07</Created>
+				</Date>
+				<Date>
+					<Modified>2005-06-06</Modified>
+				</Date>
+				<Date>
+					<Modified>2005-09-05</Modified>
+				</Date>
+				<Description>Common journey  types for National Public Transport XML schemas. Includes Dates, Times, Date and Time ranges. Weekday day types and  public holiday day types.</Description>
+				<Format>
+					<MediaType>text/xml</MediaType>
+					<Syntax>http://www.w3.org/2001/XMLSchema</Syntax>
+					<Description>XML schema, W3C Recommendation 2001</Description>
+				</Format>
+				<Identifier>{http://www.naptan.org.uk/schema/2.0/napt/}NaPT_journey-v2-1.xsd</Identifier>
+				<Language>[ISO 639-2/B] ENG</Language>
+				<Publisher>Department for Transport, Great Minster House, 76 Marsham Street, London SW1P 4DR</Publisher>
+				<Relation>
+					<Requires>http://www.w3.org/2001/xml.xsd</Requires>
+					<Requires>http://www.naptan.org.uk/schema/2.0/napt/NaPT_stop-v2-1.xsd</Requires>
+				</Relation>
+				<Rights>Unclassified
+                               <Copyright>Crown Copyright 2000-2005</Copyright>
+				</Rights>
+				<Source>Factored out from TXC 2.0 and JW 3.0 draft schemas</Source>
+				<Status>Version 2.1 Release</Status>
+				<Subject>
+					<Category>Arts, recreation and travel, Tourism, Travel (tourism), Transport,
+Public transport, Bus services, Coach services, Bus stops and stations
+Rail transport, Infrastructure (railways),  Train services,
+Roads and road transport</Category>
+					<Project>Transport Direct</Project>
+				</Subject>
+				<Title>Common journey types for National Public Transport XML schemas.</Title>
+				<Type>Standard</Type>
+			</Metadata>
+		</xsd:appinfo>
+		<xsd:documentation>NaPT Common Journey types</xsd:documentation>
+	</xsd:annotation>
+	<!-- ======================================================================= -->
+	<xsd:include schemaLocation="NaPT_stop-v2-1.xsd"/>
+	<!--=================Identifiers========================-->
+	<xsd:simpleType name="VehicleJourneyCodeType">
+		<xsd:annotation>
+			<xsd:documentation>Identifying code for a particular vehicle journey.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ServiceNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Type for service identifiers.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<!-- ======================================================================= -->
+	<xsd:simpleType name="SpeedEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Quantised speed levels supported by JourneyWeb.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="slower3"/>
+			<xsd:enumeration value="slower2"/>
+			<xsd:enumeration value="slower1"/>
+			<xsd:enumeration value="normal"/>
+			<xsd:enumeration value="faster1"/>
+			<xsd:enumeration value="faster2"/>
+			<xsd:enumeration value="faster3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!--====Directions===============================================================-->
+	<xsd:simpleType name="VehicleDirectionEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Direction of vehicle.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="inbound"/>
+			<xsd:enumeration value="outbound"/>
+			<xsd:enumeration value="inboundAndOutbound"/>
+			<xsd:enumeration value="circular"/>
+			<xsd:enumeration value="clockwise"/>
+			<xsd:enumeration value="antiClockwise"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LinkDirectionEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Direction of Link.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="inbound"/>
+			<xsd:enumeration value="outbound"/>
+			<xsd:enumeration value="clockwise"/>
+			<xsd:enumeration value="antiClockwise"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UnrestrictedDirectionType">
+		<xsd:annotation>
+			<xsd:documentation>Direction taken (for example, eastbound, inbound, anti-clockwise).</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<!--====Common service types============================================================= -->
+	<xsd:complexType name="ServiceRefStructure">
+		<xsd:annotation>
+			<xsd:documentation>A direct reference to a stop that is defined elsewhere using a StopPointStructure. The reference is by ATCO code.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="ServiceNumberType"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="OptionalServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>The elements that identify a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OperatorRef" type="OperatorRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code identifying transport operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceNumber" type="ServiceRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The customer facing service number. Define but leave blank where there isn't one e.g. most rail services.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Direction" type="UnrestrictedDirectionType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Direction of travel. Not well defined.!</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ServiceRequestStructure">
+		<xsd:annotation>
+			<xsd:documentation>The minimum required to identify a service in a request.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="OptionalServiceStructure"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:group name="UniqueServiceGroup">
+		<xsd:annotation>
+			<xsd:documentation>Elements to uniquely identify a service</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="OperatorRef" type="OperatorRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Unique code of operator.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ServiceNumber" type="ServiceRefStructure">
+				<xsd:annotation>
+					<xsd:documentation>Identifier of service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Direction" type="UnrestrictedDirectionType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Direction in which service runs.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:complexType name="UniqueServiceStructure">
+		<xsd:annotation>
+			<xsd:documentation>The minimum required to uniquely identify a service.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="OptionalServiceStructure"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!--====Arrival/Departure======================================================-->
+	<xsd:simpleType name="EventArriveDepartEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Arrival before or Departure after stop event constraint.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="all"/>
+			<xsd:enumeration value="arrive"/>
+			<xsd:enumeration value="depart"/>
+		</xsd:restriction>
+		<!--    <xsd:union memberTypes="ArriveDepartEnumeration "/>    -->
+	</xsd:simpleType>
+	<xsd:simpleType name="ArriveDepartEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Allowed values for Arrival before or Departure after journey planning constraint</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="arrive"/>
+			<xsd:enumeration value="depart"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<!-- ===Interchange====================================================================== -->
+	<xsd:simpleType name="InterchangeNodeTypeEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Determines the types of interchange nodes in terms of their transport mode.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="air"/>
+			<xsd:enumeration value="bus"/>
+			<xsd:enumeration value="coach"/>
+			<xsd:enumeration value="ferry"/>
+			<xsd:enumeration value="metro"/>
+			<xsd:enumeration value="rail"/>
+			<xsd:enumeration value="tram"/>
+			<xsd:enumeration value="underground"/>
+			<xsd:enumeration value="walk"/>
+			<xsd:enumeration value="car"/>
+			<xsd:enumeration value="taxi"/>
+			<xsd:enumeration value="cycle"/>
+			<xsd:enumeration value="drt"/>
+			<xsd:enumeration value="movingWalkway"/>
+			<xsd:enumeration value="through"/>
+			<xsd:enumeration value="concourse"/>
+		</xsd:restriction>
+		<!--    
+        <xsd:union memberTypes="AllModesEnumeration">
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:NMTOKEN">
+                    <xsd:enumeration value="concourse"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+             Union not used because of issue in MSM validator -->
+	</xsd:simpleType>
+	<xsd:simpleType name="ChangeOfLevelEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Kinds of vertical movement.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="up"/>
+			<xsd:enumeration value="down"/>
+			<xsd:enumeration value="noChange"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AccessibilityHazardEnumeration">
+		<xsd:annotation>
+			<xsd:documentation>Obstacles to accessibility.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="difficultSurface">
+				<xsd:annotation>
+					<xsd:documentation>For example, slippery surfaces or grids.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="escalator"/>
+			<xsd:enumeration value="lift"/>
+			<xsd:enumeration value="notIlluminated"/>
+			<xsd:enumeration value="ramp"/>
+			<xsd:enumeration value="stairs"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="InterchangePathStructure">
+		<xsd:annotation>
+			<xsd:documentation>Path through an Interchange</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:sequence maxOccurs="unbounded">
+				<xsd:element name="InterchangeNode" type="InterchangeNodeStructure">
+					<xsd:annotation>
+						<xsd:documentation>A point within an interchange. Either a point of access to transport, such as a bay, or an intermediate point between other nodes. </xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="InterchangeLink" type="InterchangeLinkStructure">
+					<xsd:annotation>
+						<xsd:documentation>A possible path between two interchange nodes.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:element name="InterchangeEndNode" type="InterchangeNodeStructure">
+				<xsd:annotation>
+					<xsd:documentation>The final node in the interchange path - should correspond to the LegDestination.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="InterchangeNodeStructure">
+		<xsd:annotation>
+			<xsd:documentation>@LocationRef
+A node in the interchange model. Each node has a type indicating its primary function (for example, a rail platform would have a type of "rail")</xsd:documentation>
+		</xsd:annotation>
+		<xsd:all>
+			<xsd:element name="InterchangeNodeType" type="InterchangeNodeTypeEnumeration">
+				<xsd:annotation>
+					<xsd:documentation>Determines the types of interchange nodes in terms of their transport mode.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Name or brief description of node. For example, "Waterloo Main Concourse".</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="StopPointRef" type="StopPointRefStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>If the node corresponds to a NaPTAN node then the NaPTAN ID should be included here.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:all>
+		<xsd:attribute name="LocationRef" type="xsd:IDREF" use="optional">
+			<xsd:annotation>
+				<xsd:documentation>Refers to a Location in the optional mapping information provided as part of the Interchange Leg. If mapping information is provided then this reference is required.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	<xsd:complexType name="InterchangeLinkStructure">
+		<xsd:annotation>
+			<xsd:documentation>A link in the interchange model. Links have a duration and optional accessibility hazards.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:all>
+			<xsd:element name="Duration" type="DayTimeDurationType">
+				<xsd:annotation>
+					<xsd:documentation>How long it takes to traverse the link, assuming the specified walk speed.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Description" type="xsd:string" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A description of the link.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Accessibility" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Information on any limits on accessibility on the link.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Hazard" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>@ChangeOfLevel whether the link goes up or down.
+The nature of the accessibility constraint. One of a fixed list of defined values.
+</xsd:documentation>
+							</xsd:annotation>
+							<xsd:complexType>
+								<xsd:simpleContent>
+									<xsd:extension base="AccessibilityHazardEnumeration">
+										<xsd:attribute name="ChangeOfLevel" type="ChangeOfLevelEnumeration" use="optional" default="noChange"/>
+									</xsd:extension>
+								</xsd:simpleContent>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:all>
+	</xsd:complexType>
+	<!--====Instructions===============================================================-->
+	<xsd:complexType name="TrackInstructionsStructure">
+		<xsd:sequence>
+			<xsd:element name="Summary" type="NaturalLanguageStringStructure" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Optional textual description of track.  </xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Feature" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>@LocationRef
+Represents a physical obstacle in the route e.g. a crossing. The first feature point should be the start point of the track eg (the leg board point). Each feature contains directions to the next feature.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:all>
+						<xsd:element name="LocationRef" type="IdType">
+							<xsd:annotation>
+								<xsd:documentation>Refers to a spatial map location for the feature. </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="FeatureType" type="FeatureTypeEnumeration">
+							<xsd:annotation>
+								<xsd:documentation>An enumeration of the different types of features.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RelativeBearing" type="RelativeBearingEnumeration">
+							<xsd:annotation>
+								<xsd:documentation>Which way you would turn from this feature point.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="AbsoluteBearing" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The compass bearing which you should take directly from this feature point.</xsd:documentation>
+							</xsd:annotation>
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:nonNegativeInteger">
+									<xsd:maxExclusive value="360"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="OnwardName" type="NaturalLanguageStringStructure" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The name of the road or path following this feature.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="RoadNumber" type="xsd:string" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>The number of the road following this feature e.g. A1.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Distance" type="DistanceType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Provides the distance to the next feature point, or to the leg alight point for the last feature point.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="Description" type="NaturalLanguageStringStructure" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Provides a description of the feature.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:all>
+					<xsd:attribute name="Id" type="IdType" use="optional">
+						<xsd:annotation>
+							<xsd:documentation>Refers to a geocode in the mapping information for the track segment.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:attribute>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--==== Stop  times element groups============================ -->
+	<xsd:group name="TimetabledTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups timetabled   arrival times at stop.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:sequence>
+				<xsd:element name="TimetabledArrivalTime" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>The time that the vehicle is timetabled to arrive.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:dateTime">
+								<xsd:attribute name="TimingInformationPoint" type="xsd:boolean" use="optional"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="TimetabledDepartureTime" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>The time that the vehicle is timetabled to depart.</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:simpleContent>
+							<xsd:extension base="xsd:dateTime">
+								<xsd:attribute name="TimingInformationPoint" type="xsd:boolean" use="optional"/>
+							</xsd:extension>
+						</xsd:simpleContent>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:element name="TimetabledTime" type="xsd:dateTime">
+				<xsd:annotation>
+					<xsd:documentation>Only to be used when arrival and departure time are the same.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:group name="RTArrivalTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups real-time arrival times at stop.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="RTEstimatedArrivalTime" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Estimated time of arrival of vehicle at stop.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RTRecordedArrivalTime" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Actual time of arrival of vehicle at stop.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:group name="RTDepartureTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups real-time departure times at stop.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="RTEstimatedDepartureTime" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Estimated time of departure of vehicle from stop.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="RTRecordedDepartureTime" type="xsd:dateTime" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Actual time of departure of vehicle from stop.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:group>
+	<xsd:group name="EventTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups arrival and departure times for an event at a stop.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="RTArrivalTimeGroup"/>
+			<xsd:choice>
+				<xsd:group ref="TimetabledTimeGroup"/>
+				<xsd:element name="Frequency" type="DayFrequencyStructure">
+					<xsd:annotation>
+						<xsd:documentation>The scheduled time gap between departures for a frequency-based service. Minimum and maximum time gaps can be specified as attributes.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:group ref="RTDepartureTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="OriginTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups real-time and scheduled departure times for an origin.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TimetabledDepartureTime" type="xsd:dateTime"/>
+			<xsd:group ref="RTDepartureTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="BoardTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups timetabled and real-time times at stop where the journey leg starts.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="RTArrivalTimeGroup"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="TimetabledArrivalTime" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The time that the vehicle is timetabled to arrive.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:simpleContent>
+								<xsd:extension base="xsd:dateTime">
+									<xsd:attribute name="TimingInformationPoint" type="xsd:boolean" use="optional"/>
+								</xsd:extension>
+							</xsd:simpleContent>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="TimetabledDepartureTime">
+						<xsd:annotation>
+							<xsd:documentation>The time that the vehicle is timetabled to depart.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:simpleContent>
+								<xsd:extension base="xsd:dateTime">
+									<xsd:attribute name="TimingInformationPoint" type="xsd:boolean" use="optional"/>
+								</xsd:extension>
+							</xsd:simpleContent>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:element name="TimetabledTime" type="xsd:dateTime">
+					<xsd:annotation>
+						<xsd:documentation>Only to be used when arrival and departure time are the same.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:group ref="RTDepartureTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="IntermediateTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups the vehicle at stop time elements.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="RTArrivalTimeGroup"/>
+			<xsd:group ref="TimetabledTimeGroup"/>
+			<xsd:group ref="RTDepartureTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="AlightTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups timetabled and real-time times at stop where the journey leg ends.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:group ref="RTArrivalTimeGroup"/>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="TimetabledArrivalTime" type="xsd:dateTime"/>
+					<xsd:element name="TimetabledDepartureTime" type="xsd:dateTime" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:element name="TimetabledTime" type="xsd:dateTime">
+					<xsd:annotation>
+						<xsd:documentation>Only to be used when arrival and departure time are the same.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:group ref="RTDepartureTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+	<xsd:group name="DestinationTimeGroup">
+		<xsd:annotation>
+			<xsd:documentation>Groups the arrival times at the destination.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="TimetabledArrivalTime" type="xsd:dateTime"/>
+			<xsd:group ref="RTArrivalTimeGroup"/>
+		</xsd:sequence>
+	</xsd:group>
+</xsd:schema>

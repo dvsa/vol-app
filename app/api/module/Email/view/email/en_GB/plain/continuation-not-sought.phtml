@@ -1,0 +1,7 @@
+The following licences with fees due between <?php echo $this->startDate ?> and <?php echo $this->endDate ?> have been set to CNS:
+
+<?php
+foreach ($this->licences as $licence){
+    echo $licence['licNo'] . ' ' . $licence['taName'] . "\n";
+}
+?>

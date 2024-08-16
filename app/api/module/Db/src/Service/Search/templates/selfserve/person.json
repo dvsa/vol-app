@@ -1,0 +1,143 @@
+{
+   "query": {
+      "bool": {
+         "filter": [
+            {
+               "bool": {
+                  "must_not": [
+                     {
+                        "terms": {
+                           "lic_status": [
+                              "lsts_not_submitted",
+                              "lsts_unlicenced",
+                              "lsts_withdrawn",
+                              "lsts_cancelled"
+                           ]
+                        }
+                     },
+                     {
+                        "terms": {
+                           "contact_type": [
+                              "ct_complainant"
+                           ]
+                        }
+                     },
+                     {
+                        "terms": {
+                           "tm_status_id": [
+                              "tm_s_rem"
+                           ]
+                        }
+                     },
+                     {
+                        "bool": {
+                           "must": [
+                              {
+                                 "terms": {
+                                    "found_as": [
+                                       "TM"
+                                    ]
+                                 }
+                              },
+                              {
+                                 "exists": {
+                                    "field": "date_removed"
+                                 }
+                              }
+                           ],
+                           "must_not": [
+                              {
+                                 "exists": {
+                                    "field": "application_id"
+                                 }
+                              }
+                           ]
+                        }
+                     },
+                     {
+                        "terms": {
+                           "contact_type": [
+                              "ct_obj"
+                           ]
+                        }
+                     },
+                     {
+                        "exists": {
+                           "field": "is_deleted"
+                        }
+                     },
+                     {
+                        "bool": {
+                           "must": [
+                              {
+                                 "terms": {
+                                    "found_as": [
+                                       "TM"
+                                    ]
+                                 }
+                              },
+                              {
+                                 "exists": {
+                                    "field": "application_id"
+                                 }
+                              }
+                           ],
+                           "must_not": [
+                              {
+                                 "terms": {
+                                    "app_status_id": [
+                                       "apsts_consideration",
+                                       "apsts_granted",
+                                       "apsts_curtailed"
+                                    ]
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         ],
+         "must": [
+            {
+               "exists": {
+                  "field": "lic_no"
+               }
+            }
+         ],
+         "should": [
+            {
+               "multi_match": {
+                  "query": "%SEARCH_TERM%",
+                  "fuzziness": 2,
+                  "prefix_length": 1,
+                  "fields": [
+                     "person_fullname"
+                  ]
+               }
+            },
+            {
+               "multi_match": {
+                  "query": "%SEARCH_TERM%",
+                  "boost": 2,
+                  "fields": [
+                     "person_fullname"
+                  ]
+               }
+            },
+            {
+               "match": {
+                  "lic_no": "%SEARCH_TERM%"
+               }
+            },
+            {
+               "match": {
+                  "tm_id": "%SEARCH_TERM%"
+               }
+            }
+         ]
+      }
+   },
+   "min_score": 7
+}

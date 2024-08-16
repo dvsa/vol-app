@@ -1,0 +1,20 @@
+<p>
+    Diolch am eich cais EBSR a ddaeth i law ar <?php echo $this->escapeHtml($this->submissionDate); ?> ar gyfer y
+    gwasanaeth bws lleol a ganlyn - <?php echo $this->escapeHtml($this->registrationNumber); ?> - rhwng
+    <?php echo $this->escapeHtml($this->origin); ?> a <?php echo $this->escapeHtml($this->destination); ?> â rhif
+    gwasanaeth <?php echo $this->escapeHtml($this->lineName); ?>.
+</p>
+
+<p>
+    Mae eich cais am rybudd byr dan rymoedd diamod y Comisiynwyr Traffig wedi ei wrthod, felly mae’n rhaid i chi roi’r
+    cyfnod rhybudd llawn cyn y medrwch ddechrau, newid neu ddileu eich gwasanaeth. Os na fyddwch yn gwneud hyn, fe
+    allwch wynebu achos o ddisgyblaeth gan y Comisiynydd Traffig.
+</p>
+
+<p>
+    Y dyddiad effeithiol diwygiedig fydd <?php echo $this->escapeHtml($this->startDate); ?>.<br />
+    Os oes gennych unrhyw amheuon, rhowch ganiad i’ch gweithiwr achos arferol neu e-bostiwch:
+    <a href="mailto:notifications@vehicle-operator-licensing.service.gov.uk">notifications@vehicle-operator-licensing.service.gov.uk</a><br />
+    Rydym wedi copïo’r e-bost hwn i’r awdurdodau lleol a ganlyn:
+    <?php echo $this->escapeHtml($this->localAuthoritys); ?>.
+</p>

@@ -1,0 +1,14 @@
+<?php
+
+$lines = [];
+foreach ($rows as $row) {
+    $line = sprintf(
+        $this->translate('permits.check-your-answers.no-of-permits'),
+        $row['permitsRequired'],
+        $row['year']
+    );
+
+    $lines[] = $this->escapeHtml($line);
+}
+
+echo implode('<br>', $lines);

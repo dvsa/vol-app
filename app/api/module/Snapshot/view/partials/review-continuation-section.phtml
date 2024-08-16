@@ -1,0 +1,30 @@
+<?php if(!empty($header)): ?>
+    <h4><?php echo $this->translate($header); ?></h4>
+<?php endif; ?>
+<?php
+if (!empty($data)) {
+    $additionalClass = 'table--2-column';
+    if (is_array($data) && is_array($data[0]) && count($data[0]) === 3) {
+        $additionalClass = 'table--3-column';
+    }
+    echo '<table class="' . $additionalClass . '">';
+    foreach ($data as $line) {
+        echo '<tr>';
+        foreach ($line as $cell) {
+            if (isset($cell['header']) && $cell['header']) {
+                $openTag = '<th>';
+                $closeTag = '</th>';
+            } else {
+                $openTag = '<td>';
+                $closeTag = '</td>';
+            }
+            $value = $this->translate($cell['value']);
+            if (!isset($cell['noEscape']) || $cell['noEscape'] === false) {
+                $value = $this->escapeHtml($value);
+            }
+            echo $openTag . $value . $closeTag;
+        }
+        echo '</tr>';
+    }
+    echo '</table>';
+}

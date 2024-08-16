@@ -1,0 +1,12 @@
+<p>Hello,</p>
+
+<p>
+    <?php echo $this->escapeHtml($this->tmFullName); ?> has submitted their details for application
+    <?php echo $this->escapeHtml($this->licNo . '/' . $this->applicationId); ?>.
+</p>
+<p>
+    To review them sign into your account.
+</p>
+<p>
+    <a href="<?php echo $this->escapeHtml($this->tmaUrl); ?>">Review application</a>
+</p>
