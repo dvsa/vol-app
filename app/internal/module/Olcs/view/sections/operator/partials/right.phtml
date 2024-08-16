@@ -1,0 +1,36 @@
+<?php echo $this->showMarkers();?>
+<div class="record-actions">
+    <?php
+    if (!(bool) $this->hideQuickActions && $this->isGranted(Common\RefData::PERMISSION_INTERNAL_EDIT)) {
+        ?>
+        <h4 class="title"><?php echo $this->translate('internal-operator-quick-actions'); ?></h4>
+        <ul class="record-actions__group">
+            <li class="record-actions__item">
+                <a class="govuk-button govuk-button--secondary<?php echo $this->disable ? ' disabled govuk-button--disabled' : ''; ?> js-modal-ajax"
+                   role="button" draggable="false" data-module="govuk-button"
+                   href="<?php echo $this->url('operator/new-application', [], [], true); ?>">
+                    <?php echo $this->translate('internal-operator-new-application'); ?>
+                </a>
+            </li>
+        </ul>
+    <?php
+    }
+    ?>
+</div>
+
+<?php
+if (!$this->disable):
+    /** @var \Common\View\Helper\Navigation\MenuRbac $nav */
+    $nav = $this->navigation('right-sidebar')
+        ->menuRbac(
+            $this->navigation()->findOneBy('id', 'operator-decisions')
+        )
+        ->setPartial('partials/record-actions__group');
+
+    if ($nav->getContainer()->hasPages(true)): ?>
+    <div class="record-actions">
+        <h4 class="title"><?php echo $this->translate('decisions'); ?></h4>
+        <?php echo $nav; ?>
+    </div>
+    <?php endif; ?>
+<?php endif; ?>

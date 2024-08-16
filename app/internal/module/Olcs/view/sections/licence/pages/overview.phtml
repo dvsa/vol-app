@@ -1,0 +1,130 @@
+<?php
+
+$key5Content = [
+    [
+        'label' => 'No. of vehicles',
+        'numeric' => $numberOfVehicles,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of operating centres',
+        'numeric' => $numberOfOperatingCentres,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of issued discs',
+        'numeric' => $numberOfIssuedDiscs,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
+        'numeric' => $numberOfCommunityLicences,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of bus registrations',
+        'numeric' => $numberOfBusRegistrations,
+        'hideIfEmpty' => false,
+    ],
+];
+
+if (isset($totalVehicleAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total vehicle authorisation',
+        'value' => $totalVehicleAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalHgvAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total Heavy goods vehicle authorisation',
+        'value' => $totalHgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalLgvAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total Light goods vehicle authorisation',
+        'value' => $totalLgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalTrailerAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total trailer authorisation',
+        'value' => $totalTrailerAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' => [
+            0 => [
+                [
+                    'label' => 'Operator name',
+                    'url' => $this->url('operator/business-details', ['organisation' => $operatorId]),
+                    'value' => $operatorName,
+                ],
+                ['label' => 'Trading name', 'value' => $tradingName],
+            ],
+            1 => [
+                ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
+            ],
+            2 => [
+                ['label' => 'No. of licences ', 'numeric' => $numberOfLicences],
+                [
+                    'label' => 'Current applications ',
+                    'value' => $currentApplications,
+                    'noEscape' => true
+                ]
+            ],
+            3 => [
+                ['label' => 'Licence number', 'value' => $licenceNumber],
+                [
+                    'label' => 'Licence start date',
+                    'date' => (string)$this->licenceStartDate,
+                    'dateFormat' => 'Y-m-d',
+                ],
+                ['label' => 'Licence type', 'value' => $this->translate($licenceType)],
+                ['label' => 'Licence status', 'value' => $this->status($licenceStatus), 'noEscape' => true],
+                ['label' => 'Grace period', 'value' => $licenceGracePeriods, 'noEscape' => true],
+                [
+                    'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
+                    'date' => $surrenderedDate,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            5 => $key5Content,
+            6 => [
+                [
+                    'label' => 'Open cases',
+                    'value' => $openCases, // not numeric, may be suffixed with ' (PI)'
+                ],
+                [
+                    'label' => 'Current review complaints',
+                    'numeric' => $currentReviewComplaints,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            7 => [
+                [
+                    'label' => 'Receives mail electronically',
+                    'value' => $receivesMailElectronically,
+                    'hideIfEmpty' => true
+                ],
+                [
+                    'label' => 'Registered for self service',
+                    'value' => $registeredForSelfService,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+        ],
+    ]
+);
+
+echo $this->partial('pages/form', ['form' => $form]);

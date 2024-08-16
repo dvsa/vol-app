@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+  backupGlobals="true"
+  colors="true"
+  executionOrder="random"
+  convertWarningsToExceptions="false"
+>
+  <php>
+    <ini name="date.timezone" value="UTC"/>
+    <ini name="memory_limit" value="4G" />
+  </php>
+  <testsuites>
+    <testsuite name="OLCS Internal Application">
+      <directory>./test</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
+  <listeners>
+    <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener"/>
+  </listeners>
+</phpunit>

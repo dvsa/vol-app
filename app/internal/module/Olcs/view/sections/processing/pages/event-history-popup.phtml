@@ -1,0 +1,16 @@
+<?php
+$form = $this->placeholder('form')->getValue();
+$data = $this->placeholder('readOnlyData')->getValue();
+
+echo $this->render('partials/read-only/main',
+    [
+        'items' => [
+            ['label' => 'Details', 'value' => $data['details'], 'class' => 'full-width'],
+            ['label' => 'Info', 'value' => $data['info'], 'class' => 'full-width'],
+            ['label' => 'Date', 'value' => $data['date'], 'class' => 'full-width'],
+            ['label' => 'By', 'value' => $data['by'], 'class' => 'full-width']
+        ]
+    ]
+);
+echo $this->formErrors($form);
+echo $this->form($form);

@@ -1,0 +1,44 @@
+<?php
+
+use Common\RefData;
+
+$case = $this->placeholder('case')->getValue();
+
+if (!$case['isErru']) {
+    $header = ['header' => 'ERRU penalties'];
+    echo $this->render('partials/read-only/main', $header);
+    echo' <div class="empty"><p>There are no ERRU penalties</p></div>';
+} else{
+    $header = ['header' => 'Msi response'];
+
+    if ($case['canSendMsiResponse']) {
+        $header['actions'] = [
+            0 => [
+                'url' => $this->url(null, ['action' => 'send'], [], true),
+                'label' => 'Send response',
+                'class' => 'govuk-button js-modal-ajax'
+            ]
+        ];
+    } else {
+        switch ($case['erruRequest']['msiType']['id']) {
+            case RefData::ERRU_RESPONSE_SENT:
+                $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
+                $header['header'] .= ' sent ' . $this->dateTime($erruResponseSent, 'jS F Y');
+                break;
+            case RefData::ERRU_RESPONSE_SENDING_FAILED:
+                $header['header'] .= ' sending failed';
+                break;
+            case RefData::ERRU_RESPONSE_QUEUED:
+                $header['header'] .= ' queued for sending to INR';
+                break;
+            default:
+                $header['header'] .= ' can\'t be sent until all serious infringements have a response';
+        }
+    }
+
+    echo $this->render('pages/table');
+    echo $this->render('partials/read-only/main', $header);
+
+    echo $this->render('pages/comments');
+}
+

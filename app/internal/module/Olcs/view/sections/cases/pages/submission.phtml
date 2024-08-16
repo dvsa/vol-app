@@ -1,0 +1,204 @@
+
+<div class="submission">
+<?php
+$case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+$selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
+$submissionConfig = $this->placeholder('submissionConfig')->getValue();
+
+$allSections = $this->placeholder('allSections')->getValue();
+$readonly = $this->placeholder('readonly')->getValue();
+$isInternalReadOnly = $this->placeholder('isInternalReadOnly')->getValue();
+
+$freetext = '';
+
+$selectedSectionsArray = is_array($selectedSectionsArray) ? $selectedSectionsArray : [];
+
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (array_key_exists($sectionId, $selectedSectionsArray))
+    {
+        $additionalConfig = $submissionConfig[$sectionId]['config'] ?? [];
+        $selectedSectionsArray[$sectionId]['config'] = $additionalConfig;
+
+        $freetext .= $this->submissionSectionDetails(
+            $sectionId,
+            $selectedSectionsArray[$sectionId],
+            $readonly,
+            $submission['version']
+        );
+        if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
+            $freetext .= $this->partial('sections/cases/pages/submission/attach-comment',
+                [
+                    'submissionConfig' => $submissionConfig,
+                    'form' => $selectedSectionsArray[$sectionId]['attachmentsForm'],
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
+                    'caseId' => $case['id'],
+                    'submissionId' => $submission['id'],
+                    'readonly' => $readonly
+                ]
+            );
+        }
+    }
+}
+$actions = [];
+if ($submission['canClose'] && !$isInternalReadOnly) {
+    $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'close'];
+    $closeActionUrl = [
+        'label' => 'Close submission',
+        'url' => $this->url(
+            'submission', $params
+        )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+if ($submission['canReopen'] && !$isInternalReadOnly) {
+    $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'reopen'];
+    $closeActionUrl = [
+        'label' => 'Reopen submission',
+        'url' => $this->url(
+            'submission', $params
+        )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+array_push($actions, [
+    'label' => 'Return to list',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'index'
+        ]
+    )
+]);
+if (!$readonly) {
+    array_push($actions, [
+        'label' => 'Edit submission',
+        'url' => $this->url(
+            'submission', [
+                'case' => $case['id'],
+                'action' => 'edit',
+                'submission' => $submission['id']
+            ]
+        )
+    ]);
+}
+
+
+array_push($actions, [
+    'label' => 'Print submission',
+    'attributes' => ['target' => '_blank'],
+    'class' => 'govuk-button govuk-button--secondary',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'print',
+            'submission' => $submission['id']
+        ]
+    )
+]);
+
+if (!$isInternalReadOnly) {
+  array_push($actions, [
+    'label' => 'Create snapshot',
+    'class' => 'govuk-button govuk-button--secondary',
+    'url' => $this->url(
+      'submission', [
+        'case' => $case['id'],
+        'action' => 'snapshot',
+        'submission' => $submission['id']
+      ]
+    )
+  ]);
+}
+
+//last submission
+echo $this->render('partials/read-only/header',
+    [
+        'header' => $submission['submissionTypeTitle']['description'],
+        'actions' => $actions
+    ]
+);
+
+echo $this->partial(
+    'sections/cases/pages/submission/submission-declaration',
+    [
+        'submission' => $submission,
+    ]
+);
+
+
+?>
+
+<?php echo $freetext; ?>
+
+
+<?php if (count($submission['submissionActions']) > 0): ?>
+<h4 class="title">Submission actions</h4>
+
+<ul class="submission-actions" style="width: 100%">
+    <?php foreach ($submission['submissionActions'] as $sa): ?>
+        <?php
+            $createdBy = '';
+            if (isset($sa['createdBy']['contactDetails']['person'])) {
+                $createdBy = $sa['createdBy']['contactDetails']['person']['forename'] . ' ' .
+                    $sa['createdBy']['contactDetails']['person']['familyName'];
+            }
+        ?>
+    <li class="submission-item">
+
+        <h4><?php echo $sa['isDecision'] === 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
+            <?php
+            echo implode(', ', array_column($sa['actionTypes'], 'description'));
+            ?></h4>
+
+        <?php if (!$readonly): ?>
+            <?php $route = 'submission_action_' . ($sa['isDecision'] === 'Y' ? 'decision' : 'recommendation'); ?>
+            <a class="submission-item__edit js-modal-ajax" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
+        <?php endif; ?>
+
+        <p><?php echo nl2br($sa['comment']); ?></p>
+        <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
+        <p><b>Created by:</b><br /><?php echo $createdBy; ?></p>
+        <p><b>Created:</b><br /><?php echo $this->date(strtotime($sa['createdOn']), 'H:i d/m/Y'); ?></p>
+    </li><!-- submission-item -->
+  <?php endforeach; ?>
+</ul>
+
+<?php endif; ?>
+
+<div>&nbsp;</div>
+
+<?php if (!$readonly): ?>
+<div id="submissionActions" class="govuk-button-group" data-group="form-actions">
+    <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>"
+       class="govuk-button js-modal-ajax" role="button" draggable="false" data-module="govuk-button">Add recommendation</a>
+    <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>"
+       class="govuk-button js-modal-ajax" role="button" draggable="false" data-module="govuk-button">Add decision reason</a>
+    <a href="<?php echo $this->url('submission_process', ['action' => 'information-complete'], [],
+        true); ?>" class="govuk-button govuk-button--secondary js-modal-ajax" role="button" draggable="false" data-module="govuk-button">Set info complete</a>
+    <?php
+    if (!empty($submission['informationCompleteDate'])) {
+    ?>
+    <a href="<?php echo $this->url('submission_process', ['action' => 'assign'], [],
+        true); ?>" class="govuk-button govuk-button--secondary js-modal-ajax" role="button" draggable="false" data-module="govuk-button">Assign submission</a>
+    <?php
+    }
+    ?>
+
+</div>
+<?php endif; ?>
+
+<?php if (!empty($submission['informationCompleteDate'])):
+    $completeDate = \Dvsa\Olcs\Utils\Helper\DateTimeHelper::format($submission['informationCompleteDate'], 'd/m/Y');
+    ?>
+    <div id="submissionFooter" class="govuk-button-group">
+        <div>
+            <p><strong>Information complete: <?php echo $completeDate; ?></strong></p>
+        </div>
+    </div>
+<?php endif; ?>
+
+</div>

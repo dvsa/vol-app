@@ -1,0 +1,99 @@
+<?php
+
+$transactionStatusFormatter = new \Common\Service\Table\Formatter\TransactionStatus();
+
+echo $this->render(
+    'partials/read-only/main',
+    [
+        'multiItems' => [
+            [
+                ['label' => 'Id:', 'value' => $transaction['id'], 'class' => 'full-width'],
+                ['label' => 'Created Date:', 'date' => $transaction['createdOn'], 'class' => 'full-width'],
+                ['label' => 'Received date:', 'date' => $transaction['completedDate'], 'class' => 'full-width'],
+                ['label' => 'Type:', 'value' => $transaction['type']['description'], 'class' => 'full-width'],
+                ['label' => 'Method:', 'value' => $transaction['paymentMethod']['description'], 'class' => 'full-width'],
+                ['label' => 'Amount:', 'class' => 'full-width', 'value' => $transaction['displayAmount']],
+                [
+                    // @todo don't show for refunds
+                    'label' => 'Previous payment:',
+                    'class' => 'full-width',
+                    'url' => "../".$transaction['previousTransactionId'],
+                    'value' => $transaction['previousTransactionId'],
+                    'hideIfEmpty' => true,
+                ],
+                ['label' => 'Reference:', 'value' => $transaction['reference'], 'class' => 'full-width'],
+                [
+                    'label' => 'Payer name:',
+                    'value' => $transaction['payerName'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Paying in slip number:',
+                    'value' => $transaction['payingInSlipNumber'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Cheque/PO number:',
+                    'value' => $transaction['chequePoNumber'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Cheque date:',
+                    'date' => $transaction['chequePoDate'],
+                    'dateFormat' => 'Y-m-d',
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Recommendation date:',
+                    'date' => $transaction['waiveRecommendationDate'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Recommended by:',
+                    'value' => $transaction['waiveRecommenderUser']['loginId'] ?? '',
+                    'hideIfEmpty' => true,
+                    'class' => 'full-width',
+                ],
+                ['label' => 'Processed by:', 'value' => $transaction['processedByUser']['loginId'], 'class' => 'full-width'],
+                [
+                    'label' => 'Comment:',
+                    'value' => $transaction['comment'],
+                    'hideIfEmpty' => true,
+                    'class' => 'full-width',
+                ],
+                [
+                    'label' => 'Status:',
+                    'noEscape' => true,
+                    'value' => $transactionStatusFormatter->format($transaction),
+                    'class' => 'full-width',
+                ],
+            ],
+        ]
+    ]
+);
+
+if ($table) {
+    echo $table;
+}
+?>
+<div class="govuk-button-group">
+    <?php
+    /* OLCS-11825
+    if ($adjustLink): ?>
+        <a href="<?php echo $adjustLink; ?>" class="action--primary js-modal-ajax" target="_blank">Adjust payment</a>
+    <?php endif;
+    */
+    ?>
+    <?php if ($reverseLink): ?>
+        <a href="<?php echo $reverseLink; ?>" class="govuk-button js-modal-ajax" target="_blank">Reverse payment</a>
+    <?php endif; ?>
+    <?php if ($receiptLink): ?>
+        <a href="<?php echo $receiptLink; ?>" class="govuk-button" target="_blank">Generate receipt</a>
+    <?php endif; ?>
+    <a href="<?php echo $backLink; ?>" class="govuk-button govuk-button--secondary">Back</a>
+</div>

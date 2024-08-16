@@ -1,0 +1,10 @@
+<ul class="user-menu">
+    <li class="user-menu__item"><?php echo $this->currentUser()->getFullName()?>:</li>
+    <?php foreach ($this->container as $page): ?>
+        <?php if($page->isVisible(true)): ?>
+            <li class="user-menu__item">
+                <?php echo $this->navigation()->menu()->htmlify($page) . PHP_EOL; ?>
+            </li>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</ul>
