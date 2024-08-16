@@ -28,15 +28,11 @@ jobs:
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
-    env:
-      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
-      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
-          path: app/${{ inputs.project }}
+          sparse-checkout: app/${{ inputs.project }}
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -64,14 +60,11 @@ jobs:
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
-    env:
-      # Temporary until this repository becomes a mono-repository.
-      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
+          sparse-checkout: app/${{ inputs.project }}
           path: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -116,14 +109,11 @@ jobs:
   #   defaults:
   #     run:
   #       working-directory: app/${{ inputs.project }}
-  #   env:
-  #     # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
-  #     REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
   #   steps:
   #     - uses: actions/checkout@v4
   #       with:
-  #         repository: ${{ env.REMOTE_REPOSITORY }}
   #         ref: ${{ inputs.ref || null }}
+  #         sparse-checkout: app/${{ inputs.project }}
   #         path: app/${{ inputs.project }}
   #     - name: Setup PHP
   #       uses: shivammathur/setup-php@v2
@@ -155,14 +145,11 @@ jobs:
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
-    env:
-      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
-      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
+          sparse-checkout: app/${{ inputs.project }}
           path: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
