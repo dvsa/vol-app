@@ -1,0 +1,93 @@
+<?php
+/** @var \Laminas\Navigation\Page\Mvc $backPage */
+$backPage = $this->navigationParentPage();
+
+if (isset($payingFromFlow) && $payingFromFlow) {
+    echo $this->partial(
+        'partials/page-header-continuation',
+        [
+            'pageTitle' => $this->translate('continuation.payment.title.pay-fee'),
+            'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') . ' ' . $licNo,
+            'backUrl' => ['url' => $this->url('continuation/declaration', [], [], true)],
+        ]
+    );
+} else {
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->fee['description'],
+            'pageSubTitle' => $this->translate('licence') . ' ' . $this->fee['licence']['licNo'],
+            'backUrl' => [
+                'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
+            ],
+        ]
+    );
+}
+?>
+
+
+<div class="row">
+
+  <div class="three-quarters">
+  
+      <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+              ?>
+              <div class="govuk-inset-text">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+              <?php
+          endforeach;
+      }
+      ?>
+  
+    <?php echo $this->render(
+      'partials/read-only/main',
+      [
+          'multiItems' => [
+              [
+                  [
+                      'label' => 'pay-fees.fee-no',
+                      'value' => $fee['id'],
+                  ],
+                  [
+                      'label' => 'pay-fees.description',
+                      'value' => $fee['description'],
+                  ],
+                  [
+                      'label' => 'pay-fees.reference',
+                      'value' => $fee['licence']['licNo'],
+                  ],
+                  [
+                      'label' => 'pay-fees.created',
+                      'date' => $fee['invoicedDate'],
+                  ],
+                  [
+                      'label' => 'pay-fees.amount',
+                      'value' => '£'.number_format($fee['amount'],2),
+                  ],
+                  [
+                      'label' => 'pay-fees.outstanding',
+                      'value' => '£'.number_format($fee['outstanding'],2),
+                  ],
+              ],
+            ],
+        ]
+      );
+    ?>
+  
+    <hr>
+  
+    <?php echo $this->translate('markup-pay-fees-notice' . ($hasContinuation ? '-continuation' : '')); ?>
+  
+    <hr>
+  
+    <?php if (isset($form)): ?>
+      <?php echo $this->form($form); ?>
+    <?php endif ?>
+  
+  </div>
+
+</div>

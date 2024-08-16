@@ -1,0 +1,33 @@
+<?php
+$count = $this->results->getTotal();
+$results = $this->results;
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('selfserve.search.busreg.browse.result.title'),
+        'pageHeaderText' =>
+            '<p>' . $this->translateReplace('selfserve.search.busreg.browse.result.subtitle', [$count]) . '</p>',
+        'pageHeaderTextEscape' => false,
+        'backUrl' => [
+            'url' => $this->url($this->backRoute),
+        ],
+    ]
+);
+?>
+
+<div class="row">
+    <div class="one-third sidebar--plain search-filter">
+
+        <h3 id="filterTitle"><?php echo $this->translate('search.form.title') ?></h3>
+
+        <?php echo $this->form($this->filterForm) ?>
+
+    </div>
+
+    <div class="two-thirds">
+
+        <?php echo ($this->noResultsMessage) ? $this->translate($this->noResultsMessage) : $results; ?>
+
+    </div>
+</div><!-- row -->

@@ -1,0 +1,15 @@
+<ul id="navigation" class="govuk-header__navigation-list" aria-label="<?php echo $this->escapeHtml($this->translate('top.level.navigation')); ?>">
+<?php
+
+foreach ($this->container as $page) {
+  if ($page->isVisible() && $this->navigation()->menu()->accept($page)) {
+      $activeClass = $page->isActive() ? ' govuk-header__navigation-item--active' : '';
+    ?>
+    <li class="govuk-header__navigation-item<?php echo $activeClass; ?>">
+      <?php echo $this->link($page->getHref(), $page->getLabel(), 'govuk-header__link'); ?>
+    </li>
+    <?php
+  }
+}
+
+?></ul>

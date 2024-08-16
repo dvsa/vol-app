@@ -1,0 +1,41 @@
+<?php
+echo $this->partial(
+  'partials/page-header-simple',
+  [
+    'pageTitle' => $this->translate('dashboard.messages.new.title'),
+  ],
+);
+?>
+
+<div class="row">
+  <div class="dashboard two-thirds js-body">
+    <?php
+    echo $this->flashMessengerAll();
+
+    /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+    $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+
+    echo $menu->setMinDepth(0)
+              ->setMaxDepth(0)
+              ->setPartial('partials/tabs-nav');
+    ?>
+
+    <div class="govuk-footer__heading">
+      <a href="<?php echo $this->backUrl; ?>" class="govuk-back-link">
+        <?php echo $this->translate('Back to conversations'); ?>
+      </a>
+    </div>
+
+    <h2><?php echo $this->translate('Start a new conversation'); ?></h2>
+
+    <div>
+      <?php
+        echo $this->formErrors($this->form);
+        echo $this->form($this->form);
+      ?>
+    </div>
+
+  </div>
+
+  <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>

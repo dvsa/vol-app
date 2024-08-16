@@ -1,0 +1,136 @@
+<?php
+
+return [
+    'config_parameters' => [
+      'providers' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+    ],
+
+    // Debugging, display environment and version on interface
+    'version' => [
+        'environment' => 'localdev',
+        'description' => 'olcs.localdev',
+    ],
+
+    'api_router' => [
+        'routes' => [
+            'api' => [
+                'child_routes' => [
+                    'backend' => [
+                        'options' => [
+                            // Backend service URI *Environment specific*
+                            'route' => 'backend-nginx',
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+
+    // Service addresses
+    'service_api_mapping' => [
+        'endpoints' => [
+            // Backend service URI *Environment specific*
+            'backend' => [
+                'url' => 'backend-nginx',
+            ],
+            // Postcode/Address service URI *Environment specific*
+            'postcode' => [
+                'url' => 'http://address.reg.olcs.dev-dvsacloud.uk/',
+            ],
+        ]
+    ],
+
+    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific for local use http://127.0.0.1:7001*
+    'asset_path' => 'http://localhost:7001',
+
+    'openam' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+
+    'view_manager' => [
+        'template_map' => [
+            // Dev versions of 404 and error
+            'error/404' => __DIR__ . '/../../module/Olcs/view/error/dev-404.phtml',
+            'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
+            'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
+        ],
+    ],
+    /**
+     * Configure the location of the application log
+     */
+    'log' => [
+        'allowPasswordLogging' => true,
+        'Logger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => 'php://stdout'
+                    ],
+                ]
+            ]
+        ],
+        'ExceptionLogger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => 'php://stdout'
+                    ],
+                ]
+            ]
+        ]
+    ],
+
+    // enable the virus scanning of uploaded files
+    // To disable scanning comment out this section or set 'cliCommand' to ""
+    'antiVirus' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+
+    // Show extra debug info in flash messages
+    'debug' => [
+        'showApiMessages' => false
+    ],
+
+    // Google Tag Manager id. If empty or not exists (commented out), then no Google Tag Manager code will be rendered
+    'google-tag' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+
+    // The domain value needed to delete GA cookies
+    'google-ga-domain' => '',
+
+    'caches' => [
+        'default-cache' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+            'options' => [
+                'server' => [
+                    'host' => 'redis',
+                ],
+            ],
+        ],
+    ],
+    'cache-encryption' => [
+        'adapter' => 'openssl',
+        'options' => [
+            'algo' => 'aes',
+            'mode' => 'gcm',
+        ],
+        'secrets' => [
+            'node' => 'ssweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
+        ],
+    ],
+    'query_cache' => [
+        // whether the cqrs cache is enabled
+        'enabled' => true,
+        // sets the ttl for cqrs cache - note that these caches are also used by internal
+        'ttl' => [
+            \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600, //10 minutes
+            \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
+        ],
+    ],
+
+    'verify' => [
+        'forwarder' => [
+            'valid-origin' => ''
+        ]
+    ],
+
+    'auth' => [
+        'user_unique_id_salt' => '1234',
+    ],
+];

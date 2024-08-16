@@ -1,0 +1,322 @@
+<?php
+
+/** @var \Common\View\Helper\CurrentUser $currentUser */
+$currentUser = $this->currentUser();
+$isLoggedIn = $currentUser->isLoggedIn();
+
+?>
+<?php echo $this->doctype(); ?>
+<html lang="en" class="govuk-template app-html-class">
+
+<head>
+  <meta charset="utf-8">
+  <?php
+
+  $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
+  if ($cookieBannerMode == 'confirmation') {
+
+  ?>
+  <meta name="robots" content="noindex">
+  <?php
+
+  }
+
+  ?>
+  <?php echo $this->headTitle(strip_tags($this->pageTitle()))->append('header-vehicle-operator-licensing')->append('header-gov.uk')->setSeparator(' - '); ?>
+  <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0'); ?>
+  <?php echo $this->headMeta()->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
+  <?php echo $this->headMeta()->appendName('theme-color', 'blue'); ?>
+  <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
+  <?php echo $this->headScript(); ?>
+  <script type='text/javascript' src='//static.queue-it.net/script/queueclient.min.js'></script>
+
+  <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="<?php echo $this->assetPath('/assets/images/favicon.ico'); ?>" type="image/x-icon">
+  <link rel="mask-icon" href="<?php echo $this->assetPath('/assets/images/govuk-mask-icon.svg'); ?>" color="blue">
+  <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $this->assetPath('/assets/images/govuk-apple-touch-icon-180x180.png'); ?>">
+  <link rel="apple-touch-icon" sizes="167x167" href="<?php echo $this->assetPath('/assets/images/govuk-apple-touch-icon-167x167.png'); ?>">
+  <link rel="apple-touch-icon" sizes="152x152" href="<?php echo $this->assetPath('/assets/images/govuk-apple-touch-icon-152x152.png'); ?>">
+  <link rel="apple-touch-icon" href="<?php echo $this->assetPath('/assets/images/govuk-apple-touch-icon.png'); ?>">
+  <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
+
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <meta property="og:image" content="<?php echo $this->assetPath('/assets/images/govuk-opengraph-image.png') ?>">
+  <?php if ($isLoggedIn) {
+    echo $this->sessionTimeoutWarning()->generateHeadMetaTags();
+  } ?>
+</head>
+
+<body class="govuk-template__body app-body-class selfserve govuk-frontend-supported" id="<?php echo $this->pageId(); ?>">
+  <?php
+      $userId = $currentUser->getUniqueId();
+      if (!empty($userId)) {
+          $userType = 'Anonymous';
+          $numberOfVehicles = $currentUser->getNumberOfVehicles();
+          if ($currentUser->isPartner()) {
+              $userType = 'Partner';
+          } elseif ($currentUser->isLocalAuthority()) {
+              $userType = 'Local authority';
+          } elseif ($currentUser->isOperator()) {
+              $userType = 'Operator';
+          } elseif ($currentUser->isTransportManager()) {
+              $userType = 'Transport Manager';
+          }
+    ?>
+    <script type="text/javascript">
+      var dataLayer = window.dataLayer = window.dataLayer || [];
+      dataLayer.push({
+          'userID' : '<?php echo $userId; ?>',
+          'userType' : '<?php echo $userType; ?>',
+          'noOfVehicles': <?php echo $numberOfVehicles; ?>
+      });
+    </script>
+  <?php } ?>
+  <?php echo $this->partial('partials/google-tag-manager'); ?>
+  <?php echo $this->version(); ?>
+
+  <script>
+    document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
+  </script>
+  <script data-queueit-c='dvsavol' type='text/javascript' src='//static.queue-it.net/script/queueconfigloader.min.js'></script>
+
+  <?php
+  if ($cookieBannerMode != '') {
+  ?>
+
+  <div id="global-cookie-message" class="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet>
+
+  <?php
+  if ($cookieBannerMode == 'banner') {
+  ?>
+
+    <form>
+      <div class="gem-c-cookie-banner__wrapper govuk-width-container">
+        <div class="govuk-grid-row">
+          <div class=" govuk-grid-column-two-thirds">
+            <div class="gem-c-cookie-banner__message">
+              <span class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('cookie-banner.tell-us')); ?></span>
+              <p class="govuk-body">
+              <?php
+
+                  $blurb = sprintf(
+                      $this->translate('cookie-banner.blurb'),
+                      $this->url('cookies/settings')
+                  );
+
+                  echo($blurb);
+
+              ?>
+              </p>
+            </div>
+            <div class="gem-c-cookie-banner__buttons">
+              <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
+                  <button class="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted"><?php echo $this->escapeHtml($this->translate('cookie-banner.accept-all')); ?></button>
+              </div>
+              <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-settings govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
+                  <a class="gem-c-button govuk-button gem-c-button--inline" role="button" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked" href="<?php echo $this->url('cookies/settings');?>"><?php echo $this->escapeHtml($this->translate('cookie-banner.set-prefs')); ?></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="acceptAllCookies" value="true">
+    </form>
+
+  <?php
+  } elseif ($cookieBannerMode == 'confirmation') {
+  ?>
+
+    <form>
+      <div class="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
+        <p class="gem-c-cookie-banner__confirmation-message">
+          <?php
+              $blurb = sprintf(
+                  $this->translate('cookie-confirmation.blurb'),
+                  $this->url('cookies/settings')
+              );
+
+              echo($blurb);
+          ?>
+        </p>
+        <button class="gem-c-cookie-banner__hide-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner"><?php echo $this->escapeHtml($this->translate('cookie-confirmation.hide')); ?></button>
+      </div>
+    </form>
+
+  <?php
+  }
+  ?>
+
+  </div>
+
+  <?php
+  }
+  ?>
+
+  <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><?php echo $this->escapeHtml($this->translate('skip-content')); ?></a>
+
+  <header class="govuk-header" role="banner" data-module="govuk-header">
+    <div class="govuk-header__container govuk-width-container">
+      <div class="govuk-header__logo">
+        <a href="/" class="govuk-header__link govuk-header__link--homepage">
+          <svg
+            focusable="false"
+            role="img"
+            class="govuk-header__logotype"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 148 30"
+            height="30"
+            width="148"
+            aria-label="GOV.UK">
+            <title>GOV.UK</title>
+            <path d="M22.6 10.4c-1 .4-2-.1-2.4-1-.4-.9.1-2 1-2.4.9-.4 2 .1 2.4 1s-.1 2-1 2.4m-5.9 6.7c-.9.4-2-.1-2.4-1-.4-.9.1-2 1-2.4.9-.4 2 .1 2.4 1s-.1 2-1 2.4m10.8-3.7c-1 .4-2-.1-2.4-1-.4-.9.1-2 1-2.4.9-.4 2 .1 2.4 1s0 2-1 2.4m3.3 4.8c-1 .4-2-.1-2.4-1-.4-.9.1-2 1-2.4.9-.4 2 .1 2.4 1s-.1 2-1 2.4M17 4.7l2.3 1.2V2.5l-2.3.7-.2-.2.9-3h-3.4l.9 3-.2.2c-.1.1-2.3-.7-2.3-.7v3.4L15 4.7c.1.1.1.2.2.2l-1.3 4c-.1.2-.1.4-.1.6 0 1.1.8 2 1.9 2.2h.7c1-.2 1.9-1.1 1.9-2.1 0-.2 0-.4-.1-.6l-1.3-4c-.1-.2 0-.2.1-.3m-7.6 5.7c.9.4 2-.1 2.4-1 .4-.9-.1-2-1-2.4-.9-.4-2 .1-2.4 1s0 2 1 2.4m-5 3c.9.4 2-.1 2.4-1 .4-.9-.1-2-1-2.4-.9-.4-2 .1-2.4 1s.1 2 1 2.4m-3.2 4.8c.9.4 2-.1 2.4-1 .4-.9-.1-2-1-2.4-.9-.4-2 .1-2.4 1s0 2 1 2.4m14.8 11c4.4 0 8.6.3 12.3.8 1.1-4.5 2.4-7 3.7-8.8l-2.5-.9c.2 1.3.3 1.9 0 2.7-.4-.4-.8-1.1-1.1-2.3l-1.2 4c.7-.5 1.3-.8 2-.9-1.1 2.5-2.6 3.1-3.5 3-1.1-.2-1.7-1.2-1.5-2.1.3-1.2 1.5-1.5 2.1-.1 1.1-2.3-.8-3-2-2.3 1.9-1.9 2.1-3.5.6-5.6-2.1 1.6-2.1 3.2-1.2 5.5-1.2-1.4-3.2-.6-2.5 1.6.9-1.4 2.1-.5 1.9.8-.2 1.1-1.7 2.1-3.5 1.9-2.7-.2-2.9-2.1-2.9-3.6.7-.1 1.9.5 2.9 1.9l.4-4.3c-1.1 1.1-2.1 1.4-3.2 1.4.4-1.2 2.1-3 2.1-3h-5.4s1.7 1.9 2.1 3c-1.1 0-2.1-.2-3.2-1.4l.4 4.3c1-1.4 2.2-2 2.9-1.9-.1 1.5-.2 3.4-2.9 3.6-1.9.2-3.4-.8-3.5-1.9-.2-1.3 1-2.2 1.9-.8.7-2.3-1.2-3-2.5-1.6.9-2.2.9-3.9-1.2-5.5-1.5 2-1.3 3.7.6 5.6-1.2-.7-3.1 0-2 2.3.6-1.4 1.8-1.1 2.1.1.2.9-.3 1.9-1.5 2.1-.9.2-2.4-.5-3.5-3 .6 0 1.2.3 2 .9l-1.2-4c-.3 1.1-.7 1.9-1.1 2.3-.3-.8-.2-1.4 0-2.7l-2.9.9C1.3 23 2.6 25.5 3.7 30c3.7-.5 7.9-.8 12.3-.8m28.3-11.6c0 .9.1 1.7.3 2.5.2.8.6 1.5 1 2.2.5.6 1 1.1 1.7 1.5.7.4 1.5.6 2.5.6.9 0 1.7-.1 2.3-.4s1.1-.7 1.5-1.1c.4-.4.6-.9.8-1.5.1-.5.2-1 .2-1.5v-.2h-5.3v-3.2h9.4V28H55v-2.5c-.3.4-.6.8-1 1.1-.4.3-.8.6-1.3.9-.5.2-1 .4-1.6.6s-1.2.2-1.8.2c-1.5 0-2.9-.3-4-.8-1.2-.6-2.2-1.3-3-2.3-.8-1-1.4-2.1-1.8-3.4-.3-1.4-.5-2.8-.5-4.3s.2-2.9.7-4.2c.5-1.3 1.1-2.4 2-3.4.9-1 1.9-1.7 3.1-2.3 1.2-.6 2.6-.8 4.1-.8 1 0 1.9.1 2.8.3.9.2 1.7.6 2.4 1s1.4.9 1.9 1.5c.6.6 1 1.3 1.4 2l-3.7 2.1c-.2-.4-.5-.9-.8-1.2-.3-.4-.6-.7-1-1-.4-.3-.8-.5-1.3-.7-.5-.2-1.1-.2-1.7-.2-1 0-1.8.2-2.5.6-.7.4-1.3.9-1.7 1.5-.5.6-.8 1.4-1 2.2-.3.8-.4 1.9-.4 2.7zM71.5 6.8c1.5 0 2.9.3 4.2.8 1.2.6 2.3 1.3 3.1 2.3.9 1 1.5 2.1 2 3.4s.7 2.7.7 4.2-.2 2.9-.7 4.2c-.4 1.3-1.1 2.4-2 3.4-.9 1-1.9 1.7-3.1 2.3-1.2.6-2.6.8-4.2.8s-2.9-.3-4.2-.8c-1.2-.6-2.3-1.3-3.1-2.3-.9-1-1.5-2.1-2-3.4-.4-1.3-.7-2.7-.7-4.2s.2-2.9.7-4.2c.4-1.3 1.1-2.4 2-3.4.9-1 1.9-1.7 3.1-2.3 1.2-.5 2.6-.8 4.2-.8zm0 17.6c.9 0 1.7-.2 2.4-.5s1.3-.8 1.7-1.4c.5-.6.8-1.3 1.1-2.2.2-.8.4-1.7.4-2.7v-.1c0-1-.1-1.9-.4-2.7-.2-.8-.6-1.6-1.1-2.2-.5-.6-1.1-1.1-1.7-1.4-.7-.3-1.5-.5-2.4-.5s-1.7.2-2.4.5-1.3.8-1.7 1.4c-.5.6-.8 1.3-1.1 2.2-.2.8-.4 1.7-.4 2.7v.1c0 1 .1 1.9.4 2.7.2.8.6 1.6 1.1 2.2.5.6 1.1 1.1 1.7 1.4.6.3 1.4.5 2.4.5zM88.9 28 83 7h4.7l4 15.7h.1l4-15.7h4.7l-5.9 21h-5.7zm28.8-3.6c.6 0 1.2-.1 1.7-.3.5-.2 1-.4 1.4-.8.4-.4.7-.8.9-1.4.2-.6.3-1.2.3-2v-13h4.1v13.6c0 1.2-.2 2.2-.6 3.1s-1 1.7-1.8 2.4c-.7.7-1.6 1.2-2.7 1.5-1 .4-2.2.5-3.4.5-1.2 0-2.4-.2-3.4-.5-1-.4-1.9-.9-2.7-1.5-.8-.7-1.3-1.5-1.8-2.4-.4-.9-.6-2-.6-3.1V6.9h4.2v13c0 .8.1 1.4.3 2 .2.6.5 1 .9 1.4.4.4.8.6 1.4.8.6.2 1.1.3 1.8.3zm13-17.4h4.2v9.1l7.4-9.1h5.2l-7.2 8.4L148 28h-4.9l-5.5-9.4-2.7 3V28h-4.2V7zm-27.6 16.1c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7z"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="govuk-header__content">
+        <a href="/" class="govuk-header__link govuk-header__service-name">
+          <?php
+              echo (!$isLoggedIn && ($this->placeholder('usePageTitleAsHeader')->getValue() === true))
+                  ? $this->pageTitle()
+                  : $this->translate('header-vehicle-operator-licensing');
+          ?>
+        </a>
+        <?php  if ($isLoggedIn): ?>
+        <nav aria-label="Menu" class="govuk-header__navigation">
+        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="<?php echo $this->escapeHtml($this->translate('show.or.hide.top.level.navigation')); ?>">
+            <?php echo $this->escapeHtml($this->translate('menu')); ?>
+        </button>
+          <?php
+              // get Home navigation
+              $navigation = $this->navigation('navigation')->getContainer()->findBy('id', 'home');
+
+              if ($currentUser->isLocalAuthority() || $currentUser->isPartner()) {
+                  // show Search
+                  $navigation->findOneById('selfserve-topnav-search')->setVisible(true);
+              }
+
+              /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+              $menu = $this->navigation($navigation)->menu();
+
+              // We need to use a dedicated partial because the template requires classes to be set of the <a> tags
+              $menu->setPartial('partials/layout/top-level-navigation');
+              $menu->setMaxDepth(0);
+              $menu->setMinDepth(0);
+
+              echo $menu;
+
+              // This seems irrelevant, but it's very important as the partial is set elsewhere
+              $menu->setPartial(null);
+          ?>
+         </nav>
+        <?php endif; ?>
+      </div>
+    </div>
+  </header>
+
+  <?php
+  //  system info messages
+  if (! $this->currentUser()->isLoggedIn()) :
+      echo $this->systemInfoMessages(false);
+  endif;
+  ?>
+
+  <div class="govuk-width-container app-width-container">
+    <?php if($this->currentUser()->isLoggedIn()):?>
+        <ul class="user-menu">
+            <li class="user-menu__item">
+                <?php if($this->IsGranted('can-manage-user-selfserve')):?>
+                    <?php echo $this->currentUser()->getFullName() ?> (<?php echo $this->translate('Admin'); ?>),
+                <?php else: ?>
+                    <?php echo $this->currentUser()->getFullName() ?>,
+                <?php endif;?>
+                <b><?php echo $this->currentUser()->getOrganisationName() ?></b>
+            </li>
+        </ul>
+    <?php endif;?>
+
+    <?php echo $this->translate('markup-alpha-banner'); ?>
+
+    <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
+      <?php echo $this->content; ?>
+    </main>
+  </div>
+
+  <footer class="govuk-footer" role="contentinfo">
+    <div class="govuk-width-container ">
+      <div class="govuk-footer__meta">
+        <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+          <h2 class="govuk-visually-hidden"><?php echo $this->escapeHtml($this->translate('support.links')); ?></h2>
+          <ul class="govuk-footer__list govuk-!-margin-bottom-5">
+              <li class="govuk-footer__list-item">
+                  <?php echo $this->translate('markup-support-helpline'); ?>
+              </li>
+          </ul>
+          <ul class="govuk-footer__inline-list">
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="<?php echo $this->url('terms-and-conditions'); ?>">
+                <?php echo $this->escapeHtml($this->translate('terms-and-conditions-title')); ?>
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="<?php echo $this->url('cookies/settings'); ?>">
+                <?php echo $this->escapeHtml($this->translate('cookies-title')); ?>
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="<?php echo $this->url('privacy-notice'); ?>">
+                <?php echo $this->escapeHtml($this->translate('privacy-notice-title')); ?>
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <a class="govuk-footer__link" href="<?php echo $this->url('accessibility-statement'); ?>">
+                <?php echo $this->escapeHtml($this->translate('accessibility-statement-footer-title')); ?>
+              </a>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <?php echo $this->languageLink(); ?>
+            </li>
+            <li class="govuk-footer__inline-list-item">
+              <?php echo $this->escapeHtml($this->translate('built-by')); ?>
+              <a class="govuk-footer__link" href="<?php echo $this->translate('DVSA-link'); ?>">
+                <?php echo $this->escapeHtml($this->translate('driver-and-vehicle-standards-agency')); ?>
+              </a>
+            </li>
+          </ul>
+          <svg aria-hidden="true" focusable="false" class="govuk-footer__licence-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7" height="17" width="41">
+            <path fill="currentColor" d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145" />
+          </svg>
+          <span class="govuk-footer__licence-description">
+              <?php echo $this->translate('open-government-link'); ?>
+          </span>
+        </div>
+        <div class="govuk-footer__meta-item">
+          <a class="govuk-footer__link govuk-footer__copyright-logo" href="<?php echo $this->translate('crown-copyright-link'); ?>">© <?php echo $this->escapeHtml($this->translate('crown-copyright')); ?></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <?php
+  if($isLoggedIn) {
+      echo $this->partial('partials/modal-session-timeout');
+  }
+  ?>
+
+  <?php echo $this->inlineScript()->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
+
+  <script>
+    OLCS.ready(function() {
+      OLCS.eventEmitter.emit("render");
+    });
+  </script>
+  <script>
+      var cookieConfig = <?php echo $this->cookieManager();?>;
+  </script>
+  <script type="module">
+    import { initAll } from '<?php echo $this->assetPath('js/govuk-frontend.min.js'); ?>'
+    initAll()
+  </script>
+</body>
+</html>

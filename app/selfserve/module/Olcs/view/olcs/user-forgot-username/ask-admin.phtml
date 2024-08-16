@@ -1,0 +1,24 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('user-forgot-username.page.ask-admin.title'),
+    ]
+);
+?>
+
+<div class="row">
+    
+  <div class="two-thirds">
+    
+    <div class="article">
+      <p><?php echo $this->translate('user-forgot-username.page.ask-admin.text'); ?></p>
+    </div>
+  
+    <div class="govuk-button-group">
+        <?php echo $this->link($this->url('index'), 'back-to-home'); ?>
+    </div>
+    
+  </div>
+
+</div>

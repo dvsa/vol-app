@@ -1,0 +1,52 @@
+<?php
+echo $this->partial(
+  'partials/page-header-simple',
+  [
+    'pageTitle' => $this->translate('dashboard.messages.view.title'),
+  ],
+);
+?>
+
+<div class="row">
+  <div class="dashboard two-thirds js-body">
+    <?php
+    echo $this->flashMessengerAll();
+
+    /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+    $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+
+    echo $menu->setMinDepth(0)
+              ->setMaxDepth(0)
+              ->setPartial('partials/tabs-nav');
+    ?>
+
+    <div class="govuk-footer__heading">
+      <a href="<?php echo $this->backUrl; ?>" class="govuk-back-link">
+        <?php echo $this->translate('Back to conversations'); ?>
+      </a>
+    </div>
+
+    <h3><?php echo $this->subject; ?></h3>
+
+    <?php if ($this->canReply): ?>
+      <details class="govuk-details" data-module="govuk-details" <?php if ($this->openReply): ?>open<?php endif; ?>>
+        <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
+          <span class="govuk-details__summary-text">
+              Send a reply
+          </span>
+        </summary>
+        <div class="govuk-details__text" id="details-content-operating-centre">
+          <?php
+          echo $this->formErrors($this->form);
+          echo $this->form($this->form);
+          ?>
+        </div>
+      </details>
+    <?php endif; ?>
+    <?php
+    echo $this->table;
+    ?>
+  </div>
+
+  <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>

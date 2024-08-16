@@ -1,0 +1,19 @@
+<div class="govuk-inset-text">
+    <?php
+        if (!is_array($this->guidance)) {
+            echo $this->escapeHtml($this->translate($this->guidance));
+        } else {
+            if (isset($this->guidance['disableHtmlEscape']) && ($this->guidance['disableHtmlEscape'] === true)) {
+                echo $this->translate($this->guidance['value']);
+            } else {
+                foreach ($this->guidance as $key => $line) {
+                    echo $this->escapeHtml($this->translate($line));
+
+                    if ($key !== (count($this->guidance) - 1)) {
+                        echo '<br /><br />';
+                    }
+                }
+            }
+        }
+    ?>
+</div>
