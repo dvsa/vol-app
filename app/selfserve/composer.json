@@ -1,0 +1,96 @@
+{
+    "name": "olcs/olcs-selfserve",
+    "description": "OLCS Self Service Web Site",
+    "require": {
+        "php": "~8.2.0",
+        "ext-redis": "*",
+        "doctrine/annotations": "^1.14.2",
+        "doctrine/doctrine-module": "^5",
+        "dvsa/laminas-config-cloud-parameters": "^0.2.0",
+        "laminas/laminas-authentication": "^2.6",
+        "laminas/laminas-cache": "^3.6",
+        "laminas/laminas-cache-storage-adapter-redis": "^2.4",
+        "laminas/laminas-eventmanager": "^3.0",
+        "laminas/laminas-filter": "^2.22",
+        "laminas/laminas-form": "^3.0",
+        "laminas/laminas-http": "^2.8",
+        "laminas/laminas-i18n": "^2.14",
+        "laminas/laminas-inputfilter": "^2.21",
+        "laminas/laminas-mvc": "^3.0",
+        "laminas/laminas-mvc-plugin-flashmessenger": "^1.8",
+        "laminas/laminas-mvc-plugin-prg": "^1.7",
+        "laminas/laminas-navigation": "^2.15",
+        "laminas/laminas-serializer": "^2.10",
+        "laminas/laminas-servicemanager": "^3.3",
+        "laminas/laminas-session": "^2.8",
+        "laminas/laminas-stdlib": "^3.0",
+        "laminas/laminas-validator": "^2.25",
+        "laminas/laminas-view": "^2.11",
+        "lm-commons/lmc-rbac-mvc": "^3.3",
+        "olcs/olcs-auth": "^8.0",
+        "olcs/olcs-common": "^7.6.0",
+        "olcs/olcs-logging": "^7.2",
+        "olcs/olcs-transfer": "^7.0",
+        "olcs/olcs-utils": "^6.0.0",
+        "psr/container": "^1.1|^2",
+        "aws/aws-sdk-php": "^3.300"
+    },
+    "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8",
+        "johnkary/phpunit-speedtrap": "^4.0",
+        "laminas/laminas-developer-tools": "*",
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^9.6",
+        "san/san-session-toolbar": "*"
+    },
+    "autoload": {
+        "classmap": [
+            "module/Olcs/src",
+            "module/Permits/src",
+            "module/Application/src",
+            "vendor/olcs/olcs-common/Common/src/Common"
+        ],
+        "psr-4": {
+            "Common\\": "vendor/olcs/olcs-common/Common/src/Common"
+        }
+    },
+  "autoload-dev": {
+    "psr-4": {
+      "OlcsTest\\": "test/Olcs/src",
+      "PermitsTest\\": "test/Permits/src"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "laminas/laminas-dependency-plugin": true,
+      "bamarni/composer-bin-plugin": true
+    },
+    "platform": {
+      "ext-redis": "4.3"
+    }
+  },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "post-install-cmd": [
+      "@composer bin all install"
+    ],
+    "test": "phpunit",
+    "phpcs": "phpcs",
+    "psalm": "psalm",
+    "phpstan": "phpstan",
+    "all": [
+      "@test",
+      "@phpcs",
+      "@psalm",
+      "@phpstan"
+    ]
+  },
+    "extra": {
+      "bamarni-bin": {
+        "bin-links": true,
+        "forward-command": true
+      }
+    }
+}

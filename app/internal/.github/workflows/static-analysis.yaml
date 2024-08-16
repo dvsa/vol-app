@@ -1,0 +1,83 @@
+name: Static analysis
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        required: false
+        type: string
+        default: 'latest'
+      composer-version:
+        required: false
+        type: string
+        default: 'v2'
+
+jobs:
+  phpstan:
+
+    name: PHPStan - ${{ inputs.php-version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          tools: phpstan, composer:${{ inputs.composer-version }}
+
+      - name: Install Composer dependancies
+        run: composer install --no-progress --no-interaction
+
+      - name: Execute PHPStan
+        run: phpstan analyze --no-progress
+
+  php-codesniffer:
+
+    name: PHP-CodeSniffer - ${{ inputs.php-version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          tools: php-cs-fixer, phpcs, composer:${{ inputs.composer-version }}
+
+      - name: Install Composer dependancies
+        run: composer install --no-progress --no-interaction
+
+      - name: Execute PHP CodeSniffer
+        run: phpcs -q
+
+  psalm:
+
+    name: Psalm - ${{ inputs.php-version }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: none
+          extensions: mbstring, intl, redis-phpredis/phpredis@6.0.2
+          tools: vimeo/psalm, composer:${{ inputs.composer-version }}
+        env:
+          REDIS_CONFIGURE_OPTS: --enable-redis-igbinary
+
+      - name: Install Composer dependancies
+        run: composer install --no-progress --no-interaction
+
+      - name: Execute Psalm
+        run: psalm --no-progress --output-format=github --root=${GITHUB_WORKSPACE}

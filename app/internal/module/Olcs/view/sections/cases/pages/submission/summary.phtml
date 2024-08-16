@@ -1,0 +1,93 @@
+<?php
+$operatorName = (isset($this->data['data']['overview']['organisationName']) ?
+    $this->data['data']['overview']['organisationName'] : '') .
+    ((isset($this->data['data']['overview']['isMlh']) && $this->data['data']['overview']['isMlh'] == 'Y') ?
+    '(MLH)' : '');
+
+$isMlh = (!empty($this->data['data']['overview']['isMlh']) ?
+    'Y' : 'N');
+
+$entity = (isset($this->data['data']['overview']['organisationType']) ?
+    $this->data['data']['overview']['organisationType'] : '');
+
+$ecmsNo = (isset($this->data['data']['overview']['ecmsNo']) ?
+    $this->data['data']['overview']['ecmsNo'] : '');
+
+$disqualificationStatus = (isset($this->data['data']['overview']['disqualificationStatus']) ?
+    $this->data['data']['overview']['disqualificationStatus'] : '');
+
+$licenceItems = [
+    ['label' => 'Licence number', 'value' => $this->data['data']['overview']['licNo']],
+    ['label' => 'Licence start date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['licenceStartDate']],
+    ['label' => 'Licence type', 'value' => $this->data['data']['overview']['licenceType']],
+    ['label' => 'Licence status', 'value' => $this->data['data']['overview']['licenceStatus']],
+    ['label' => 'Type of licence', 'value' => $this->data['data']['overview']['goodsOrPsv']]
+];
+
+if (isset($this->data['data']['overview']['caseType']) && $this->data['data']['overview']['caseType'] == 'case_t_app') {
+    $licenceItems[] = ['label' => 'Service standard date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['serviceStandardDate']];
+}
+
+$authorisationItems = [];
+$overviewData = $this->data['data']['overview'];
+
+if (array_key_exists('totAuthorisedVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Total vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedVehicles']
+    ];
+}
+
+if (array_key_exists('totAuthorisedHgvVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Heavy goods vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedHgvVehicles']
+    ];
+}
+
+if (array_key_exists('totAuthorisedLgvVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Light goods vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedLgvVehicles']
+    ];
+}
+
+$authorisationItems[] = [
+    'label' => 'Vehicles in possession',
+    'numeric' => $overviewData['vehiclesInPossession']
+];
+
+if (array_key_exists('totAuthorisedTrailers', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Trailer authorisation',
+        'numeric' => $overviewData['totAuthorisedTrailers']
+    ];
+}
+
+if (array_key_exists('trailersInPossession', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Trailers in possession',
+        'numeric' => $overviewData['trailersInPossession']
+    ];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'id' => $this->data['submissionSection'],
+        'multiItems' => [
+            0 => [
+                ['label' => 'Operator name', 'value' => $operatorName],
+                ['label' => 'Is MLH?', 'value' => $isMlh, 'type' => 'yesno'],
+                ['label' => 'Entity', 'value' => $entity],
+                ['label' => 'ECMS', 'value' => $ecmsNo],
+                ['label' => 'Nature of business', 'value' =>
+                    isset($this->data['data']['overview']['businessType']) ?
+                        $this->data['data']['overview']['businessType'] : ''],
+                ['label' => 'Disqualification', 'value' => $disqualificationStatus],
+
+            ],
+            1 => $licenceItems,
+            2 => $authorisationItems
+        ]
+    ]
+);

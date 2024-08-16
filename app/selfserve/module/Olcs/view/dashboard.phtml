@@ -1,0 +1,22 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('dashboard.licences.title'),
+    ]
+);
+?>
+<div class="row">
+
+  <div class="dashboard two-thirds">
+    <?php
+      echo $this->flashMessengerAll();
+          echo $this->partial(
+              'dashboard-tables',
+              compact('applications', 'licences', 'variations', 'showVariationTable', 'showApplicationTable')
+          );
+    ?>
+  </div>
+
+  <?php echo $this->partial('partials/dashboard-right-column'); ?>
+</div>

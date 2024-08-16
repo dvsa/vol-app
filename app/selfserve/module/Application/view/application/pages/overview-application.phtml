@@ -1,0 +1,80 @@
+<?php
+/**
+ * @NOTE: might want to DRY up with Licence / Application Variation overview
+ * templates if maintaining three is a pain. Lots of common ground, but they're
+ * small templates so no biggie to have them separate for now
+ */
+?>
+
+<div class="row">
+  <div class="two-thirds">
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('application.apply-for-new-licence.title'),
+            'pageSubTitle' => (
+                !empty($this->licNo)
+                ? $this->licNo . (!empty($this->applicationId) ? ' / ' . $this->applicationId : '')
+                : ''
+            ),
+            'backUrl' => [
+                'url' => $this->url('dashboard'),
+            ],
+        ]
+    );
+    ?>
+    <p><?php echo $this->translate('application.apply-for-new-licence.guide.text'); ?></p>
+    <ol class="overview__list">
+        <?php
+            foreach ($sections as $section) {
+                echo $this->render($section);
+            }
+        ?>
+    </ol>
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar" role="complementary">
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('progress'); ?></h3>
+        <h4 class="info-box__heading"><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></h4>
+        <?php if (isset($submissionForm)): ?>
+          <?php echo $this->form($submissionForm); ?>
+        <?php endif ?>
+      </div>
+
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+        <?php if ($canCancel): ?>
+          <ul class="govuk-list">
+            <li>
+                <?php
+                    echo $this->linkModal($this->url('lva-application/cancel', [], [], true), 'application.cancel');
+                ?>
+            </li>
+          </ul>
+        <?php endif; ?>
+      </div>
+
+      <?php if ($this->receivedDate || $this->completionDate): ?>
+        <div class="info-box info-box--blue">
+            <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+            <dl class="meta">
+              <?php if ($this->receivedDate): ?>
+                <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+                <dd><?php echo date('d F Y', strtotime($this->receivedDate)); ?></dd>
+              <?php endif; ?>
+              <?php if ($this->completionDate): ?>
+                <dt><?php echo $this->translate('target-completion-date'); ?></dt>
+                <dd><?php echo date('d F Y', strtotime($this->completionDate)); ?></dd>
+              <?php endif; ?>
+            </dl>
+        </div>
+      <?php endif; ?>
+  
+    </div>
+  </div>
+</div>

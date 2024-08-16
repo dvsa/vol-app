@@ -1,0 +1,31 @@
+<?php
+    $stockId = $this->placeholder('stockId')->getValue();
+    $operationBaseUrl = 'admin-dashboard/admin-permits/scoring';
+    $runWithDeviationHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'deviation' => 'deviation', 'action' => 'runWithMeanDeviation']);
+    $runHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'runStandard']);
+    $acceptHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'accept']);
+    $postScoringReportHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'postScoringReport']);
+    $alignStockHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'alignStock']);
+?>
+<div style="float: right;">
+    <a id="runWithDeviationButton" style="display: none;" class="govuk-button js-modal-ajax" data-href="<?php echo($runWithDeviationHref); ?>">
+        Run with mean deviation
+    </a>
+    <input type="number" id="deviation" min="0" style="visibility: hidden" name="deviation" placeholder="Mean deviation"/>
+     <a id="runButton" style="margin-left: 20px; visibility: hidden;" class="govuk-button js-modal-ajax" href="<?php echo($runHref); ?>">
+        Run
+    </a>
+    <a id="acceptButton" style="margin-left: 10px; visibility: hidden;" class="govuk-button js-modal-ajax" href="<?php echo($acceptHref); ?>">
+        Accept
+    </a>
+    <a id="alignStockButton" style="margin-left: 40px; visibility: hidden;" class="govuk-button" href="<?php echo($alignStockHref); ?>">
+        Align stock
+    </a>
+    <a id="postScoringReportButton" style="margin-left: 10px; visibility: hidden;" class="govuk-button" href="<?php echo($postScoringReportHref); ?>">
+        Report
+    </a>
+</div>
+
+<div id="statusContainer" data-stock-id="<?php echo($this->placeholder('stockId')->getValue()); ?>">
+    <h2>One moment please...</h2>
+</div>

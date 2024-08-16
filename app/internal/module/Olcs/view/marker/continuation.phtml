@@ -1,0 +1,10 @@
+<p class="notice--danger">
+    <strong><?php echo $this->translate('Licence continuation') ?></strong><br>
+    <?php echo $this->dateTime->format('m/Y'); ?><br>
+    <?php
+        echo $this->linkModal(
+            $this->url('licence/update-continuation', ['licence' => $this->licenceId]),
+            'Update details'
+        );
+    ?>
+</p>

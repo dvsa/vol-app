@@ -1,0 +1,16 @@
+<?php
+$this->placeholder('right')->set(null);
+$this->placeholder('horizontalNavigationId')->set(null);
+$this->placeholder('horizontalNavigationContainer')->set(null);
+$this->placeholder('status')->set([]);
+
+$this->placeholder('pageTitle')->set('500-title');
+?>
+
+<div class="article">
+    <?php echo $this->translate('markup-500-text'); ?>
+    <hr>
+    <p><?php echo $this->link($this->url('dashboard'), 'back-to-home'); ?></p>
+
+    <?php echo $this->partial('partials/error/exception'); ?>
+</div>

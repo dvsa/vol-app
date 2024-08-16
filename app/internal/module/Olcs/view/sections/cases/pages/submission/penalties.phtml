@@ -1,0 +1,44 @@
+<?php
+
+echo $this->render('partials/read-only/main',
+    [
+        'id' => $this->data['submissionSection'],
+        'header' => 'ERRU penalties',
+        'multiItems' => [
+            0 => [
+                ['label' => 'VRM', 'value' => $this->data['data']['overview']['vrm']],
+            ],
+            1 => [
+                ['label' => 'Infringement ID', 'value' => $this->data['data']['overview']['infringementId']],
+                ['label' => 'Notification number', 'value' => $this->data['data']['overview']['notificationNumber']],
+            ],
+            2 => [
+                ['label' => 'Date of infringement', 'date' => $this->data['data']['overview']['infringementDate']],
+                ['label' => 'Date of check', 'date' => $this->data['data']['overview']['checkDate']],
+                ['label' => 'Category', 'value' => $this->data['data']['overview']['category']],
+                [
+                    'label' => 'Type',
+                    'value' => $this->data['data']['overview']['categoryType'],
+                    'class' => 'full-width'
+                ]
+            ],
+            3 => [
+                [
+                    'label' => 'Transport undertaking name',
+                    'value' => $this->data['data']['overview']['transportUndertakingName'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Member state',
+                    'value' => $this->data['data']['overview']['memberState'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Originating authority',
+                    'value' => $this->data['data']['overview']['originatingAuthority'],
+                    'class' => 'full-width'
+                ]
+            ]
+        ]
+    ]
+);

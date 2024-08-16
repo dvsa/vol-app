@@ -1,0 +1,72 @@
+<?php
+    $data = $this->placeholder('penalties')->getValue();
+
+    $infringement = [
+        'header' => 'Serious infringement',
+        'actions' => [
+            [
+                'url' => $this->url('case_penalty', ['action' => null], [], true),
+                'label' => 'Back',
+                'class' => 'govuk-button govuk-button--secondary'
+            ]
+        ],
+        'multiItems' => [
+            0 => [
+                ['label' => 'VRM', 'value' => $data['case']['erruRequest']['vrm']],
+            ],
+            1 => [
+                [
+                    'label' => 'Infringement ID',
+                    'value' => $data['id'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Business case ID',
+                    'value' => $data['case']['erruRequest']['notificationNumber'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Workflow ID',
+                    'value' => $data['case']['erruRequest']['workflowId'],
+                    'class' => 'full-width'
+                ],
+            ],
+            2 => [
+                [
+                    'label' => 'Date of infringement',
+                    'date' => $data['infringementDate'],
+                    'dateFormat' => 'Y-m-d'
+                ],
+                ['label' => 'Date of check', 'date' => $data['checkDate'], 'dateFormat' => 'Y-m-d'],
+                ['label' => 'Category', 'value' => $data['siCategory']['description']],
+                [
+                    'label' => 'Type',
+                    'value' => $data['siCategoryType']['description'],
+                    'class' => 'full-width'
+                ]
+            ],
+            3 => [
+                [
+                    'label' => 'Transport undertaking name',
+                    'value' => $data['case']['erruRequest']['transportUndertakingName'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Member state',
+                    'value' => $data['case']['erruRequest']['memberStateCode']['countryDesc'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Originating authority',
+                    'value' => $data['case']['erruRequest']['originatingAuthority'],
+                    'class' => 'full-width'
+                ]
+            ]
+        ]
+    ];
+
+    echo $this->render('partials/read-only/main', $infringement);
+    echo $this->placeholder('erru-imposed')->getValue();
+    echo $this->placeholder('erru-requested')->getValue();
+    echo $this->placeholder('erru-applied')->getValue();
+    echo $this->render('pages/comments');

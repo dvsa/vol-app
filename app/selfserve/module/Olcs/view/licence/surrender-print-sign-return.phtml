@@ -1,0 +1,29 @@
+<div class="govuk-grid-row">
+
+    <?php echo $this->flashMessengerAll(); ?>
+    <div class="govuk-!-width-two-thirds">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($pageTitle)
+            ]
+        );
+        ?>
+        <div class="govuk-!-width-two-thirds">
+            <p>
+                <?php
+                echo $this->translate('markup-licence-surrender-print-sign-return-content');
+                ?>
+            </p>
+            <div class>
+                <?php echo $this->linkNewWindow(
+                        $printLink,
+                        'print-declaration-form',
+                        'download govuk-link govuk-!-font-size-19 print-form'
+                    );
+                ?>
+            </div>
+        </div>
+        <p><a href="<?php echo $returnLink;?>" title="return to home" class="govuk-button" role="button"><?php echo $this->translate($returnLinkText);?></a> </p>
+    </div>

@@ -1,0 +1,115 @@
+<?php
+
+$key3Content = [
+    [
+        'label' => 'No. of vehicles',
+        'value' => $numberOfVehicles,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of operating centres',
+        'value' => $numberOfOperatingCentres,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of issued discs',
+        'numeric' => $numberOfIssuedDiscs,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
+        'numeric' => $numberOfCommunityLicences,
+        'hideIfEmpty' => true,
+    ],
+];
+
+if (isset($totalVehicleAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total vehicle authorisation',
+        'value' => $totalVehicleAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalHgvAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total Heavy goods vehicle authorisation',
+        'value' => $totalHgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalLgvAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total Light goods vehicle authorisation',
+        'value' => $totalLgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalTrailerAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total trailer authorisation',
+        'value' => $totalTrailerAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>  [
+            0 => [
+                [
+                    'label' => 'Operator name',
+                    'url' => $this->url('operator/business-details', ['organisation' => $operatorId]),
+                    'value' => $operatorName,
+                ],
+                ['label' => 'Trading name', 'value' => $tradingName],
+                ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
+                ['label' => 'No. of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'Current applications ', 'value' => $currentApplications, 'noEscape' => true],
+            ],
+            1 => [
+                ['label' => 'Application created', 'date' => $applicationCreated],
+                ['label' => 'Out of objection', 'date' => $outOfOpposition, 'dateFormat' => 'Y-m-d'],
+                ['label' => 'No. of oppositions', 'numeric' => $oppositionCount],
+                ['label' => 'Out of representation', 'date' =>  $outOfRepresentation, 'dateFormat' => 'Y-m-d'],
+                ['label' => 'Change of entity', 'value' => $changeOfEntity, 'noEscape' => true, 'hideIfEmpty' => true],
+                ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true, 'hideIfEmpty' => true],
+            ],
+            2 => [
+                ['label' => 'Licence status', 'value' => $this->status($licenceStatus), 'noEscape' => true],
+                ['label' => 'Outstanding fees', 'numeric' => $outstandingFees],
+                ['label' => 'Application licence type', 'value' => $this->translate((string)$appLicenceType)],
+
+                [
+                    'label' => 'Continuation date',
+                    'date' => $continuationDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Licence start date',
+                    'date' => $licenceStartDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                ['label' => 'Grace period', 'value' => $licenceGracePeriods, 'noEscape' => true],
+                ['label' => 'Current licence type', 'value' => $this->translate((string)$licenceType), 'hideIfEmpty' => true]
+            ],
+            3 => $key3Content,
+            4 => [
+                ['label' => 'Open cases', 'value' => $openCases],  // not numeric, may be suffixed with ' (PI)'
+                ['label' => 'Current review complaints', 'numeric' => $currentReviewComplaints],
+                ['label' => 'Receives mail electronically', 'value' => $receivesMailElectronically],
+                ['label' => 'Registered for self service', 'value' => $registeredForSelfService],
+            ],
+        ],
+    ]
+);
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

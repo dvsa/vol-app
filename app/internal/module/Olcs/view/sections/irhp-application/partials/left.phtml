@@ -1,0 +1,6 @@
+<?php
+    $currentSection = $this->navigation('navigation')->findById('licence_irhp_permits-application-details');
+?>
+    <h4 class="title">Application Details</h4>
+<?php
+echo $this->navigation($currentSection)->menu()->setPartial('partials/vertical-navigation');

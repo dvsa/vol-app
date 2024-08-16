@@ -1,0 +1,134 @@
+<?php
+
+return [
+    'config_parameters' => [
+        'providers' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+    ],
+
+    // Debugging, display environment and version on interface
+    'version' => [
+        'environment' => 'localdev',
+        'description' => 'olcs.localdev',
+    ],
+
+    'api_router' => [
+        'routes' => [
+            'api' => [
+                'child_routes' => [
+                    'backend' => [
+                        'options' => [
+                            // Backend service URI *Environment specific*
+                            'route' => 'backend-nginx',
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+
+    // Service addresses
+    'service_api_mapping' => [
+        'endpoints' => [
+            // Backend service URI *Environment specific*
+            'backend' => [
+                'url' => 'backend-nginx',
+            ],
+            // Postcode/Address service URI *Environment specific*
+            'postcode' => [
+                'url' => 'backend-nginx',
+            ],
+        ]
+    ],
+
+    // Document service
+    'windows_7_document_share' => [
+        // File hyperlink to document
+        'uri_pattern' => ''
+    ],
+    'windows_10_document_share' => [
+        // File hyperlink to document
+        'uri_pattern' => ''
+    ],
+    'northern_i_document_share' => [
+        'uri_pattern' => ''
+    ],
+
+    // WebDav
+    'webdav' => [
+        // Private key used to sign JWT tokens when generating WebDAV links. (PEM Format)
+        // Can be a path to a .pem file or base64 encoded private key in PEM format.
+        'private_key' => '',
+        // The default length in seconds the JWT is valid for.
+        'default_lifetime_seconds' => 21600,
+        // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
+        'url_pattern' => ''
+    ],
+
+    // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
+    'asset_path' => 'http://localhost:7001',
+
+    'openam' => [
+        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ],
+
+    /**
+     * Configure the location of the application log
+     */
+    'log' => [
+        'Logger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => 'php://stdout'
+                    ],
+                ]
+            ]
+        ],
+    ],
+
+    // enable the virus scanning of uploaded files
+    // To disable scanning comment out this section or set 'cliCommand' to ""
+    'antiVirus' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
+
+    // Show extra debug info in flash messages
+    'debug' => [
+        'showApiMessages' => false
+    ],
+    'cache-encryption' => [
+        'node_suffix' => 'iuweb',
+        'adapter' => 'openssl',
+        'options' => [
+            'algo' => 'aes',
+            'mode' => 'gcm',
+        ],
+        'secrets' => [
+            'node' => 'iuweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
+        ],
+    ],
+    'query_cache' => [
+        // whether the cqrs cache is enabled
+        'enabled' => true,
+        // sets the ttl for cqrs cache - note that these caches are also used by selfserve
+        'ttl' => [
+            \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600,
+            \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200,
+        ],
+    ],
+    'caches' => [
+        'default-cache' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+            'options' => [
+                'server' => [
+                    'host' => 'redis',
+                ],
+            ],
+        ],
+    ],
+    'auth' => [
+        'user_unique_id_salt' => '1234',
+    ],
+];

@@ -1,0 +1,30 @@
+<?php
+/** @var \Laminas\Navigation\Page\Mvc $backPage */
+
+$backPage = $this->navigationParentPage();
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('pay-fee.title'),
+        'backUrl' => [
+            'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
+        ],
+    ]
+);
+
+?>
+
+
+<div class="row">
+
+  <div class="three-quarters">
+
+      <?php echo $this->translateReplace(
+          'markup-late-fee',
+          [$this->escapeHtml($licenceExpiryDate)]
+      ); ?>
+
+  </div>
+
+</div>

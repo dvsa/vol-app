@@ -1,0 +1,92 @@
+<?php
+/**
+ * @NOTE: might want to DRY up with Licence / Application Variation overview
+ * templates if maintaining three is a pain. Lots of common ground, but they're
+ * small templates so no biggie to have them separate for now
+ */
+?>
+
+<div class="row">
+  <?php echo $this->flashMessengerAll(); ?>
+  <div class="two-thirds">
+    <?php
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('licence.overview.title'),
+            'pageSubTitle' => $this->licenceId,
+            'hintText' => $this->translate('licence.overview.hintText'),
+            'backUrl' => [
+                'url' => $this->url('dashboard'),
+            ],
+        ]
+    );
+    ?>
+    <ul class="overview-navigation">
+        <?php
+        foreach ($sections as $section) {
+            echo $this->render($section);
+        }
+        ?>
+    </ul>
+  </div>
+
+    <div class="one-third">
+        <div class="sidebar" role="complementary">
+
+            <?php if ($this->showExpiryWarning === true): ?>
+            <div class="info-box info-box--pink">
+                <h3 class="exclamation info-box__heading info-box__heading--icon">
+                    <?php printf($this->translate('This licence is due to expire on %s'), $this->date(strtotime($this->expiryDate))); ?>
+                </h3>
+                <p class="info-box__text"><?php echo $this->translate('The licence will automatically end after the expiry date.') ?></p>
+                <a href="<?php echo $this->url('continuation', ['continuationDetailId' => $this->continuationDetailId]) ?>" class="govuk-button" role="button" draggable="false" data-module="govuk-button">
+                    <?php echo $this->translate('Continue licence')?>
+                </a>
+            </div>
+            <?php endif; ?>
+
+            <?php if ($this->isExpired === true): ?>
+            <div class="info-box info-box--pink">
+                <h3 class="exclamation info-box__heading info-box__heading--icon">
+                    <?php echo $this->translate('This licence has expired'); ?>
+                </h3>
+                <p class="info-box__text"><?php echo $this->translate('If you need to continue this licence you should contact the central licensing office as a matter of urgency.'); ?></p>
+                <p class="info-box__text"><?php echo $this->translate('markup-support-helpline-continuations');?></p>
+            </div>
+            <?php endif; ?>
+
+            <div class="info-box info-box--grey">
+                <h3 class="info-box__heading"><?php echo $this->translate('licence-status'); ?></h3>
+                <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+                <?php foreach ($infoBoxLinks as $link): ?>
+                <ul class="govuk-list">
+                    <li>
+                        <?php
+                            $url = $this->url(
+                                $link['linkUrl']['route'],
+                                $link['linkUrl']['params'],
+                                $link['linkUrl']['options'],
+                                $link['linkUrl']['reuseMatchedParams']
+                            );
+
+                            echo $this->link($url, $link['linkText']);
+                        ?>
+                    </li>
+                </ul>
+                <?php endforeach; ?>
+            </div>
+            <div class="info-box info-box--blue">
+                <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+                <dl class="meta">
+                    <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
+                    <dd><?php echo $this->startDate ? date('d F Y', strtotime($this->startDate)) : ''; ?></dd>
+                    <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
+                    <dd><?php echo $this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''; ?></dd>
+                </dl>
+            </div>
+        </div>
+
+
+    </div>
+</div>

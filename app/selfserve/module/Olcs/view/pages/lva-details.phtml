@@ -1,0 +1,129 @@
+<?php
+$subTitle = '';
+
+if ($this->lva === 'licence') {
+    $subTitle = $this->licNo;
+
+} elseif ($this->lva === 'application') {
+    if ((int)$this->stepX > 0) {
+        $subTitle = (
+            (int)$this->stepY > 0
+            ? sprintf($this->translate('application.steps'), $this->stepX, $this->stepY)
+            : sprintf($this->translate('application.step'), $this->stepX)
+        );
+    }
+
+} elseif ($this->lva === 'variation') {
+    $subTitle = $this->reference;
+}
+
+/** @var \Laminas\Navigation\Page\Mvc $backPage */
+$backPage = $this->navigationParentPage();
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate($this->title),
+        'pageHeaderText' => $this->translate($this->headerText),
+        'pageSubTitle' => $subTitle,
+        'backUrl' => $this->vars()->offsetExists('backUrlOverride')
+            ? $this->backUrlOverride
+            : ['url' => ($backPage !== null ? $backPage->getHref() : null)],
+    ]
+);
+?>
+
+<div class="row">
+
+  <?php if (isset($filterForm)): ?>
+
+  <div class="one-quarter sidebar--plain">
+    <h4>Filter by:</h4>
+    <?php echo $this->form($filterForm); ?>
+    <?php
+    $statusTranslated = $this->translate($this->status);
+
+    if ($this->lva === 'application') {
+      echo $this->translateReplace(
+          'markup-application-right-column', [$this->escapeHtml($reference), $statusTranslated]
+      );
+    } elseif ($this->lva === 'variation') {
+      echo $this->translateReplace(
+          'markup-variation-right-column', [$this->escapeHtml($reference), $statusTranslated]
+      );
+    } elseif ($this->lva === 'licence') {
+      echo $this->translateReplace(
+          'markup-licence-right-column',
+          [
+              $this->escapeHtml($this->licNo),
+              $statusTranslated,
+              ($this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''),
+              ($this->startDate ? date('d F Y', strtotime($this->startDate)) : ''),
+          ]
+      );
+    }
+    ?>
+  </div>
+
+  <?php endif; ?>
+
+  <div class="<?php echo $this->mainWrapperCssClass ?: 'three-quarters' ?> lva-details">
+    <div class="js-body">
+
+        <?php if (isset($warningText)): ?>
+          <p class="important">
+              <strong>
+                  <?php echo $this->translate($warningText); ?>
+              </strong>
+          </p>
+        <?php endif; ?>
+
+    <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message): ?>
+              <div class="govuk-inset-text">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+          <?php endforeach;
+      }
+
+      if (isset($sectionText)) {
+        ?><p><?php  echo $this->translate($sectionText);
+      }
+              ?></p>
+
+      <?php
+        $messages = $this->flashMessengerAll('norender')->getMessagesFromNamespace('prominent-error');
+
+        foreach ($messages as $message) {
+            ?>
+            <div class="validation-summary">
+                <?php echo $this->translate($message); ?>
+            </div>
+            <?php
+        }
+
+        echo $this->flashMessengerAll();
+
+        if (isset($searchForm)) {
+            $searchForm->prepare();
+            echo $this->formErrors($searchForm);
+            echo $this->form($searchForm);
+        }
+
+        if (isset($table)) {
+          echo $table;
+        }
+
+        if (isset($form)) {
+          $form->prepare();
+          echo $this->formErrors($form);
+          echo $this->form($form);
+        }
+      ?>
+
+      </div> <!-- /js-body -->
+    </div>
+
+</div>

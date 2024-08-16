@@ -1,0 +1,30 @@
+<?php
+echo $this->render(
+    '/partials/page-header.phtml',
+    [
+        'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
+        'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
+        'pageSubTitleUrl'=> $this->pageSubTitleUrl,
+        'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
+        'backUrl' => [
+            'url' => $this->urlBackToSearch,
+        ],
+    ]
+);
+?>
+
+<div class="row">
+
+    <div id="top" class="full-width">
+        <?php echo $this->content; ?>
+        <div class="govuk-button-group">
+            <a class="govuk-button govuk-button--secondary js-disable-crud" href="#top"
+               role="button" draggable="false" data-module="govuk-button"
+                ><?php echo $this->translate('search-result-nav-back-to-top');?></a>
+            <a class="govuk-button govuk-button--secondary js-disable-crud" href="<?php echo $this->urlBackToSearch; ?>"
+               role="button" draggable="false" data-module="govuk-button"
+                ><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
+        </div>
+    </div><!-- .three-quarters .js-disable-crud -->
+
+</div>

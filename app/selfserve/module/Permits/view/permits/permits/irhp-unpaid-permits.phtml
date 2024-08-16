@@ -1,0 +1,49 @@
+<?php
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\View\Helper\IrhpApplicationSection;
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-xl">
+            <span class="govuk-visually-hidden">
+                <?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?>
+            </span>
+            <?php echo $this->escapeHtml($data[IrhpAppDataSource::DATA_KEY]['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
+        </h1>
+
+        <p class="govuk-body">
+            <?php echo $this->escapeHtml(
+                $this->translateReplace(
+                    'permits.irhp.unpaid.permits.summary',
+                    [
+                        $data[IrhpAppDataSource::DATA_KEY]['irhpPermitType']['name']['description'],
+                        $data[IrhpAppDataSource::DATA_KEY]['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validityYear'],
+                    ]
+                )
+            ); ?>
+        </p>
+        <?php
+
+        if ($data[IrhpAppDataSource::DATA_KEY]['irhpPermitType']['isEcmtShortTerm']) {
+            ?><div class="govuk-inset-text"><?php
+            echo $this->escapeHtml($this->translate('permits.irhp.unpaid.ecmt-short-term.inset'));
+            ?></div><?php
+        }
+
+        echo $tables['unpaid-irhp-permits'];
+
+        ?>
+        <p class="govuk-!-margin-top-4">
+            <?php
+                echo $this->link(
+                    $this->url(IrhpApplicationSection::ROUTE_AWAITING_FEE, [], [], true),
+                    'permits.link.return.to.fee.overview'
+                );
+            ?>
+        </p>
+    </div>
+</div>

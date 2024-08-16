@@ -1,0 +1,93 @@
+<?php
+    $busReg = $this->placeholder('busReg')->getValue();
+    $note = $this->placeholder('note')->getValue();
+?>
+<div class="small-module">
+    <h4 class="title">Operator details</h4>
+    <p class="small-module__details">
+        <?php
+        echo $this->link(
+            $this->url('operator/business-details', ['organisation' => $busReg['licence']['organisation']['id']], [], true),
+            $busReg['licence']['organisation']['name']
+        );
+        ?>
+    </p>
+</div>
+
+<div class="small-module">
+    <h4 class="title">Licence details</h4>
+    <p class="small-module__details">
+        <?php
+        echo $this->link(
+            $this->url('lva-licence', ['licence' => $busReg['licence']['id']], [], false),
+            $busReg['licence']['licNo']
+        );
+        ?>
+        <br/>
+        <?php echo $this->translate($busReg['licence']['licenceType']['id']); ?><br/>
+        <?php echo $this->translate($busReg['licence']['status']['id']); ?>
+    </p>
+</div>
+
+<?php
+echo $this->showMarkers(
+    [
+        \Olcs\Service\Marker\BusRegShortNoticeRefused::class,
+        \Olcs\Service\Marker\BusRegEbsrMarker::class,
+        \Olcs\Service\Marker\DisqualificationMarker::class,
+    ]
+);
+?>
+
+<?php
+/**
+ * Case quick actions
+ *
+ * @var \Laminas\Navigation\Navigation
+ */
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'bus-registration-quick-actions'))
+    ->setPartial('partials/record-actions__group');
+?>
+<?php if (count($nav->getContainer()) > 0): ?>
+    <div class="record-actions">
+        <h4 class="title">Quick actions</h4>
+        <?php echo $nav; ?>
+    </div>
+<?php endif; ?>
+
+<?php
+/**
+ * Case quick actions
+ *
+ * @var \Laminas\Navigation\Navigation
+ */
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'bus-registration-decisions'))
+    ->setPartial('partials/record-actions__group');
+?>
+<?php if (count($nav->getContainer()) > 0): ?>
+    <div class="record-actions">
+        <h4 class="title">Decisions</h4>
+        <?php echo $nav; ?>
+    </div>
+<?php endif; ?>
+
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)):?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo $this->escapeHtml(substr($note, 0, 100)); ?></div>
+        <?php
+            echo $this->link(
+                $this->url(
+                    'licence/bus-processing/notes',
+                    [
+                        'licence' => $busReg['licence']['id'],
+                        'busRegId' => $busReg['id']
+                    ]
+                ),
+                'View all notes',
+                'latest-note__link'
+            )
+        ?>
+    </div>
+<?php endif; ?>

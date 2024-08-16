@@ -1,0 +1,33 @@
+<?php
+$note = $this->placeholder('note')->getValue();
+$tm = $this->placeholder('transportManager')->getValue();
+
+echo $this->showMarkers();
+
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findById('transport-manager-quick-actions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages()) {
+    ?>
+    <div class="record-actions">
+        <h4 class="title"><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h4>
+        <?php echo $nav; ?>
+    </div>
+<?php
+}
+?>
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)):?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo $this->escapeHtml(substr($note, 0, 100)); ?></div>
+        <a
+            class="latest-note__link"
+            href="<?php echo $this->url(
+                'transport-manager/processing/notes',
+                [
+                    'transportManager' => $tm['id']
+                ]
+            ); ?>"
+        >View all notes</a>
+    </div>
+<?php endif; ?>

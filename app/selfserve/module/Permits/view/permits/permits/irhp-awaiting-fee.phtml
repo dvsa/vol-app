@@ -1,0 +1,59 @@
+<?php
+    use Permits\Controller\Config\DataSource\IrhpApplication;
+    use Permits\View\Helper\IrhpApplicationSection;
+?>
+
+<?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->flashMessengerAll(); ?>
+        <?php echo $this->formErrors($form); ?>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['heading'])); ?>
+        </h1>
+        <?php
+            if (!empty($data[IrhpApplication::DATA_KEY]['guidance'])) {
+                echo $this->partial(
+                    'partials/guidance-blue-component',
+                    [
+                        'guidance' => $data[IrhpApplication::DATA_KEY]['guidance'],
+                    ]
+                );
+            }
+        ?>
+        <h3><?php echo $this->escapeHtml($this->translate('permits.page.irhp.awaiting-fee.fee-summary')); ?></h3>
+        <?php
+            echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]);
+
+            if ($data['application']['canViewCandidatePermits']) {
+                echo $this->partial(
+                    'partials/warning-component',
+                    [
+                        'translationKey' => $this->translateReplace(
+                            'permits.page.irhp.awaiting-fee.before-continuing-candidate-warning',
+                            [$this->url(IrhpApplicationSection::ROUTE_UNPAID_PERMITS, [], [], true)]
+                        ),
+                        'disableHtmlEscape' => true
+                    ]
+                );
+            }
+
+            if ($data['application']['canSelectCandidatePermits']) {
+                $permitTypeName = $data[IrhpApplication::DATA_KEY]['irhpPermitType']['name']['description'];
+                $stockValidTo = $data[IrhpApplication::DATA_KEY]['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'];
+                $stockEndYear = (new \DateTime($stockValidTo))->format('Y');
+
+                echo $this->translateReplace(
+                    'markup-irhp-candidate-permit-selection-header',
+                    [$permitTypeName, $stockEndYear]
+                );
+
+                echo $tables['unpaid-irhp-permits'];
+            }
+
+        ?>
+
+        <?php echo $this->form($form); ?>
+        <p><?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard', IrhpApplicationSection::ROUTE_PERMITS); ?></p>
+    </div>
+</div>

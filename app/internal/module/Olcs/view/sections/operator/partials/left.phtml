@@ -1,0 +1,37 @@
+<?php
+if (!isset($navigation)) {
+
+    $navigation = $this->navigation('navigation');
+
+    if ($navigation) {
+        $routes = $navigation->findAllBy('active', true);
+
+        $active = null;
+        if (!empty($routes)) {
+            $active = array_pop($routes);
+        }
+
+        if ($active) {
+            $navigation = $active->getParent();
+        } else {
+            $navigation = null;
+        }
+    }
+}
+
+if ($navigation):
+
+    ?>
+    <h4 class="title"><?php echo $this->translate($navigation->getLabel()); ?></h4>
+    <?php
+    echo $this->navigation($navigation)
+        ->menu()->setPartial('partials/vertical-navigation');
+
+endif;
+
+if (isset($documents) && $documents && isset($filterForm)): ?>
+    <div class="filters">
+        <?php echo $this->form($filterForm); ?>
+    </div>
+    <?php
+endif;
