@@ -8,6 +8,7 @@ use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Auth\Adapter\SelfserveCommandAdapterFactory;
 use Olcs\Auth\Service\AuthenticationServiceFactory;
 use Olcs\Auth\Service\AuthenticationServiceInterface;
+use Olcs\Controller\ConsultantRegistrationController;
 use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
 use Olcs\Controller\Cookie\DetailsControllerFactory;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
@@ -502,7 +503,50 @@ $routes = [
             'route' => '/register[/]',
             'defaults' => [
                 'controller' => UserRegistrationController::class,
-                'action' => 'add'
+                'action' => 'start'
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'operator' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'operator[/]',
+                    'defaults' => [
+                        'controller' => UserRegistrationController::class,
+                        'action' => 'add'
+                    ]
+                ]
+            ],
+            'operator-representation' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'operator-representation[/]',
+                    'defaults' => [
+                        'controller' => ConsultantRegistrationController::class,
+                        'action' => 'operatorRepresentation'
+                    ]
+                ]
+            ],
+            'register-for-operator' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'register-for-operator[/]',
+                    'defaults' => [
+                        'controller' => ConsultantRegistrationController::class,
+                        'action' => 'registerForOperator'
+                    ]
+                ]
+            ],
+            'register-consultant-account' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'register-consultant-account[/]',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\ConsultantRegistrationController::class,
+                        'action' => 'registerConsultantAccount'
+                    ]
+                ]
             ]
         ]
     ],
@@ -1326,6 +1370,7 @@ return [
             Olcs\Controller\UserController::class => \Olcs\Controller\Factory\UserControllerFactory::class,
             UserForgotUsernameController::class => \Olcs\Controller\Factory\UserForgotUsernameControllerFactory::class,
             UserRegistrationController::class => \Olcs\Controller\Factory\UserRegistrationControllerFactory::class,
+            ConsultantRegistrationController::class => \Olcs\Controller\Factory\ConsultantRegistrationControllerFactory::class,
 
             Olcs\Controller\Entity\ViewController::class => \Olcs\Controller\Factory\Entity\ViewControllerFactory::class,
 
@@ -1434,7 +1479,10 @@ return [
             'CookieSettingsCookieNamesProvider' => CookieService\SettingsCookieNamesProvider::class,
             'QaIrhpApplicationViewGenerator' => QaService\ViewGenerator\IrhpApplicationViewGenerator::class,
             'QaIrhpPermitApplicationViewGenerator' => QaService\ViewGenerator\IrhpPermitApplicationViewGenerator::class,
-            LicenceVehicleManagement::class => LicenceVehicleManagement::class
+            LicenceVehicleManagement::class => LicenceVehicleManagement::class,
+            \Olcs\Session\ConsultantRegistration::class => \Olcs\Session\ConsultantRegistration::class,
+            \Olcs\Controller\Mapper\CreateAccountMapper::class => \Olcs\Controller\Mapper\CreateAccountMapper::class,
+
         ],
         'abstract_factories' => [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
@@ -1668,7 +1716,7 @@ return [
                 'verify/process-response' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
-                'user-registration' => ['*'],
+                'user-registration*' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies*' => ['*'],
                 'privacy-notice' => ['*'],
@@ -1701,5 +1749,10 @@ return [
             'options_default_plus_cancel' => \Permits\Form\Model\Fieldset\SubmitOrCancelApplication::class,
             'options_bilateral' => \Permits\Form\Model\Fieldset\SubmitOnly::class,
         ]
-    ]
+    ],
+    'validators' => [
+        'factories' => [
+            \Olcs\Form\Validator\UniqueConsultantDetails::class => \Olcs\Form\Validator\Factory\UniqueConsultantDetailsFactory::class,
+        ],
+    ],
 ];

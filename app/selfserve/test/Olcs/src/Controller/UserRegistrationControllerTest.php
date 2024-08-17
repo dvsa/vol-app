@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumber
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Controller\UserRegistrationController as Sut;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
@@ -37,6 +38,8 @@ class UserRegistrationControllerTest extends TestCase
 
     private $mockUrlHelper;
 
+    private $mockFormatSaveDataMapper;
+
     public function setUp(): void
     {
         $this->sut = m::mock(Sut::class)
@@ -50,6 +53,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
         $this->mockUrlHelper = m::mock(UrlHelperService::class)->makePartial();
         $this->mockTranslationHelper = m::mock(TranslationHelperService::class)->makePartial();
+        $this->mockFormatSaveDataMapper = m::mock(CreateAccountMapper::class)->makePartial();
 
         $reflectionClass = new ReflectionClass(Sut::class);
         $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
@@ -59,6 +63,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'scriptFactory', $this->mockScriptFactory);
         $this->setMockedProperties($reflectionClass, 'urlHelper', $this->mockUrlHelper);
         $this->setMockedProperties($reflectionClass, 'translationHelper', $this->mockTranslationHelper);
+        $this->setMockedProperties($reflectionClass, 'formatDataMapper', $this->mockFormatSaveDataMapper);
     }
 
     /**
@@ -112,6 +117,12 @@ class UserRegistrationControllerTest extends TestCase
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
+
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'page.title.user-registration.add')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
         $view = $this->sut->addAction();
 
@@ -190,6 +201,9 @@ class UserRegistrationControllerTest extends TestCase
             ->once();
         $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
+        $this->mockFormatSaveDataMapper->shouldReceive('formatSaveData')->once()->with($postData)->andReturn($postData);
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($postData);
+
         $view = $this->sut->addAction();
 
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
@@ -264,6 +278,9 @@ class UserRegistrationControllerTest extends TestCase
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
+
+        $this->mockFormatSaveDataMapper->shouldReceive('formatSaveData')->once()->with($postData)->andReturn($postData);
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($postData);
 
         $view = $this->sut->addAction();
 
@@ -347,6 +364,8 @@ class UserRegistrationControllerTest extends TestCase
             ->with('pageTitle', 'user-registration.page.check-details.title')
             ->once();
         $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
+
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($formattedPostData);
 
         $view = $this->sut->addAction();
 
@@ -433,6 +452,8 @@ class UserRegistrationControllerTest extends TestCase
             ->with('user-registration')
             ->once();
 
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($formattedPostData);
+
         $view = $this->sut->addAction();
 
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
@@ -498,6 +519,9 @@ class UserRegistrationControllerTest extends TestCase
             ->with('pageTitle', 'user-registration.page.account-created.title')
             ->once();
         $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
+
+        $this->mockFormatSaveDataMapper->shouldReceive('formatSaveData')->once()->with($formattedPostData)->andReturn($formattedPostData);
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($formattedPostData);
 
         $view = $this->sut->addAction();
 
@@ -582,6 +606,10 @@ class UserRegistrationControllerTest extends TestCase
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
+
+        $this->mockFormatSaveDataMapper->shouldReceive('formatSaveData')->once()->with($formattedPostData)->andReturn($formattedPostData);
+        $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($formattedPostData);
+
 
         $view = $this->sut->addAction();
 

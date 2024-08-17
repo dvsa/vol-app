@@ -374,6 +374,7 @@ return [
     TransferCommand\User\UpdatePartner::class => CommandHandler\User\UpdatePartner::class,
     TransferCommand\User\DeletePartner::class => CommandHandler\User\DeletePartner::class,
     TransferCommand\User\UpdateUserLastLoginAt::class => CommandHandler\User\UpdateUserLastLoginAt::class,
+    TransferCommand\User\RegisterConsultantAndOperator::class => CommandHandler\User\RegisterConsultantAndOperator::class,
 
     // Transfer - Team
     TransferCommand\Team\CreateTeam::class => CommandHandler\Team\CreateTeam::class,

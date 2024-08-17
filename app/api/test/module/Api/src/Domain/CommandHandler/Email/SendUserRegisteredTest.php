@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Dvsa\Olcs\Email\Data\Message;
 use Dvsa\Olcs\Email\Domain\Command\SendEmail;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
@@ -32,6 +33,7 @@ class SendUserRegisteredTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices = [
             TemplateRenderer::class => m::mock(TemplateRenderer::class),
+            ToggleService::class => m::mock(ToggleService::class)
         ];
 
         parent::setUp();
@@ -86,6 +88,10 @@ class SendUserRegisteredTest extends AbstractCommandHandlerTestCase
                 ],
                 'default'
             );
+
+        $this->mockedSmServices[ToggleService::class]->shouldReceive('isEnabled')
+            ->with(\Dvsa\Olcs\Api\Entity\System\FeatureToggle::TRANSPORT_CONSULTANT_ROLE)
+            ->andReturn(false);
 
         $this->expectedSideEffect(
             SendEmail::class,
