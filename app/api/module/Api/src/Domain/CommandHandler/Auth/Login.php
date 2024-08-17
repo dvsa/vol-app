@@ -15,7 +15,6 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Auth\Exception\UserRealmMismatchExceptio
 use Dvsa\Olcs\Api\Domain\CommandHandler\Auth\Exception\UserSoftDeletedException;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Repository\User as UserRepository;
-use Dvsa\Olcs\Api\Domain\Util\DoctrineExtension\Logger;
 use Dvsa\Olcs\Api\Entity\User\Role;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Auth\Service\AuthenticationServiceInterface;
@@ -31,6 +30,7 @@ class Login extends AbstractCommandHandler
     public const REALM_SELFSERVE = 'selfserve';
 
     public const SELFSERVE_ROLE_ORG_CHECK = [
+        Role::ROLE_OPERATOR_TC,
         Role::ROLE_OPERATOR_ADMIN,
         Role::ROLE_OPERATOR_USER,
         Role::ROLE_OPERATOR_TM

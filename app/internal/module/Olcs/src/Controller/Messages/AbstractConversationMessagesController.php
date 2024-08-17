@@ -15,7 +15,6 @@ use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Messaging\Messages\ByConversation;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
@@ -55,7 +54,12 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['includeReadRoles'] = 1;
-        $parameters['readRoles'] = [RefData::ROLE_OPERATOR_ADMIN, RefData::ROLE_OPERATOR_TM, RefData::ROLE_OPERATOR_USER];
+        $parameters['readRoles'] = [
+            RefData::ROLE_OPERATOR_TC,
+            RefData::ROLE_OPERATOR_ADMIN,
+            RefData::ROLE_OPERATOR_TM,
+            RefData::ROLE_OPERATOR_USER,
+        ];
 
         return $parameters;
     }

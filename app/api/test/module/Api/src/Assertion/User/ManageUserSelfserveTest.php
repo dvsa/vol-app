@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Assertion\User;
 
 use Dvsa\Olcs\Api\Assertion\User\ManageUserSelfserve as Sut;
@@ -14,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  */
 class ManageUserSelfserveTest extends MockeryTestCase
 {
-    protected $sut;
+    protected Sut $sut;
 
     protected $auth;
 
@@ -24,7 +26,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    public function testAssertWithoutContext()
+    public function testAssertWithoutContext(): void
     {
         $this->assertEquals(true, $this->sut->assert($this->auth));
     }
@@ -39,7 +41,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $userType,
         $userEntityId,
         $expected
-    ) {
+    ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
         $currentUser->shouldReceive('getPartnerContactDetails->getId')->andReturn($currentUserEntityId);
@@ -58,7 +60,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForPartnerDataProvider()
+    public function getAssertForPartnerDataProvider(): array
     {
         return [
             [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, true],
@@ -78,7 +80,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $userType,
         $userEntityId,
         $expected
-    ) {
+    ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
         $currentUser->shouldReceive('getLocalAuthority->getId')->andReturn($currentUserEntityId);
@@ -97,7 +99,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForLocalAuthorityDataProvider()
+    public function getAssertForLocalAuthorityDataProvider(): array
     {
         return [
             [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, true],
@@ -107,54 +109,64 @@ class ManageUserSelfserveTest extends MockeryTestCase
         ];
     }
 
+    public function testAssertForOperatorTm(): void
+    {
+        $user = m::mock(User::class);
+        $user->expects('getUserType')->withNoArgs()->andReturn(User::USER_TYPE_OPERATOR);
+
+        $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN)->andReturnFalse();
+        $this->auth->expects('isGranted')->with(Permission::OPERATOR_TC)->andReturnFalse();
+
+        $this->assertFalse($this->sut->assert($this->auth, $user));
+    }
+
     /**
-     * @dataProvider getAssertForOperatorDataProvider
+     * @dataProvider dpCanRead
      */
-    public function testAssertForOperator(
-        $isGranted,
-        $currentUserType,
-        $userType,
-        $expected,
-        $canRead
-    ) {
-        $currentUser = m::mock(User::class)->makePartial();
-        $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
+    public function testAssertForOperatorAdmin(bool $canRead): void
+    {
+        $user = m::mock(User::class);
+        $user->expects('getUserType')->withNoArgs()->andReturn(User::USER_TYPE_OPERATOR);
 
-        $user = m::mock(User::class)->makePartial();
-        $user->shouldReceive('getUserType')->andReturn($userType);
+        $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN)->andReturnTrue();
 
-        $this->auth->shouldReceive('getIdentity->getUser')->andReturn($currentUser);
-
-        $this->auth->shouldReceive('isGranted')
-            ->once()
-            ->with(Permission::OPERATOR_ADMIN)
-            ->andReturn($isGranted);
-
-        $this->auth->shouldReceive('isGranted')
+        $this->auth->expects('isGranted')
             ->with(Permission::CAN_READ_USER_SELFSERVE, $user)
             ->andReturn($canRead);
 
-        $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
+        $this->assertEquals($canRead, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForOperatorDataProvider()
+    /**
+     * @dataProvider dpCanRead
+     */
+    public function testAssertForOperatorTc(bool $canRead): void
+    {
+        $user = m::mock(User::class);
+        $user->expects('getUserType')->withNoArgs()->andReturn(User::USER_TYPE_OPERATOR);
+
+        $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN)->andReturnFalse();
+        $this->auth->expects('isGranted')->with(Permission::OPERATOR_TC)->andReturnTrue();
+
+        $this->auth->expects('isGranted')
+            ->with(Permission::CAN_READ_USER_SELFSERVE, $user)
+            ->andReturn($canRead);
+
+        $this->assertEquals($canRead, $this->sut->assert($this->auth, $user));
+    }
+
+    public function dpCanRead(): array
     {
         return [
-            // operator manages operator
-            [true, User::USER_TYPE_OPERATOR, User::USER_TYPE_OPERATOR, true, true],
-            [true, User::USER_TYPE_OPERATOR, User::USER_TYPE_OPERATOR, false, false],
-            [false, User::USER_TYPE_OPERATOR, User::USER_TYPE_OPERATOR, false, true],
-            // operator manages TM
-            [true, User::USER_TYPE_OPERATOR, User::USER_TYPE_TRANSPORT_MANAGER, true, true],
-            [true, User::USER_TYPE_OPERATOR, User::USER_TYPE_TRANSPORT_MANAGER, false, false],
-            [false, User::USER_TYPE_OPERATOR, User::USER_TYPE_TRANSPORT_MANAGER, false, true],
+            [true],
+            [false],
         ];
     }
 
-    public function testAssertForInternal()
+    public function testAssertForInternal(): void
     {
-        $user = m::mock(User::class)->makePartial();
-        $user->shouldReceive('getUserType')->andReturn(User::USER_TYPE_INTERNAL);
+        $user = m::mock(User::class);
+        $user->expects('getUserType')->withNoArgs()->andReturn(User::USER_TYPE_INTERNAL);
 
         $this->assertFalse($this->sut->assert($this->auth, $user));
     }

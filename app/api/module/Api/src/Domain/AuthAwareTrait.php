@@ -2,21 +2,13 @@
 
 namespace Dvsa\Olcs\Api\Domain;
 
-use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
-use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreas;
-use Dvsa\Olcs\Transfer\FieldType\Traits\TrafficAreasOptional;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Domain\Repository\User as UserRepoService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 
-/**
- * Auth Aware
- */
 trait AuthAwareTrait
 {
     /**
@@ -134,7 +126,7 @@ trait AuthAwareTrait
      */
     public function isInternalUser()
     {
-        return ($this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::INTERNAL_USER));
+        return ($this->isGranted(Permission::INTERNAL_USER));
     }
 
     /**
@@ -174,7 +166,7 @@ trait AuthAwareTrait
      */
     public function isExternalUser()
     {
-        return ($this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER));
+        return ($this->isGranted(Permission::SELFSERVE_USER));
     }
 
     /**
@@ -195,8 +187,8 @@ trait AuthAwareTrait
     public function isLocalAuthority()
     {
         return (
-            $this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::LOCAL_AUTHORITY_USER) ||
-            $this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::LOCAL_AUTHORITY_ADMIN)
+            $this->isGranted(Permission::LOCAL_AUTHORITY_USER) ||
+            $this->isGranted(Permission::LOCAL_AUTHORITY_ADMIN)
         );
     }
 
@@ -208,8 +200,9 @@ trait AuthAwareTrait
     public function isOperator()
     {
         return (
-            $this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::OPERATOR_ADMIN) ||
-            $this->isGranted(\Dvsa\Olcs\Api\Entity\User\Permission::OPERATOR_USER)
+            $this->isGranted(Permission::OPERATOR_ADMIN) ||
+            $this->isGranted(Permission::OPERATOR_TC) ||
+            $this->isGranted(Permission::OPERATOR_USER)
         );
     }
 

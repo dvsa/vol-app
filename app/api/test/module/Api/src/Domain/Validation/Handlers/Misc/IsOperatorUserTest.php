@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Is Operator Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
@@ -14,11 +10,6 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsOperatorUser;
 
-/**
- * Is Operator User Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 class IsOperatorUserTest extends AbstractHandlerTestCase
 {
     /**
@@ -33,7 +24,7 @@ class IsOperatorUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidOperatorAdmin()
+    public function testIsValidOperatorAdmin(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -43,23 +34,36 @@ class IsOperatorUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidOperator()
+    public function testIsValidOperatorTc(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
 
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, true);
+
+        $this->assertTrue($this->sut->isValid($dto));
+    }
+
+    public function testIsValidOperator(): void
+    {
+        /** @var CommandInterface $dto */
+        $dto = m::mock(CommandInterface::class);
+
+        $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, false);
         $this->setIsGranted(Permission::OPERATOR_USER, true);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidOperatorFail()
+    public function testIsValidOperatorFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
 
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, false);
         $this->setIsGranted(Permission::OPERATOR_USER, false);
 
         $this->assertFalse($this->sut->isValid($dto));
