@@ -105,6 +105,8 @@ services:
       MYSQL_DATABASE: olcs_be
       MYSQL_USER: mysql
       MYSQL_PASSWORD: olcs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   openldap:
     image: bitnami/openldap:2.6
