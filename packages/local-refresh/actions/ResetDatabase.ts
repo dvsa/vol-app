@@ -41,7 +41,7 @@ export default class ResetDatabase implements ActionInterface {
       },
     ]);
 
-    if (!response["database-refresh"]) {
+    if (response["refresh-type"] === undefined) {
       return false;
     }
 
@@ -54,6 +54,10 @@ export default class ResetDatabase implements ActionInterface {
       initial: cache.getKey("etlDirectory") || "../olcs-etl",
       validate: (value) => (fs.existsSync(value) ? true : "Path does not exist"),
     });
+
+    if (etlDirectoryPrompt.directory === undefined) {
+      return false;
+    }
 
     cache.setKey("etlDirectory", etlDirectoryPrompt.directory);
     cache.save();
