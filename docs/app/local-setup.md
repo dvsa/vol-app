@@ -69,8 +69,20 @@ You will need:
 
 1. Start the application
 
+    :::warning
+
+    The `olcs-etl` project needs to be mounted as a volume in the `db` container. By default, the directory is set to `../olcs-etl`.
+
+    You can customise this using the `OLCS_ETL_DIR` environment variable before running the `docker compose` command.
+
+    ```sh
+    export OLCS_ETL_DIR=/path/to/olcs-etl
+    ```
+
+    :::
+
     ```bash
-    docker-compose up -d
+    docker compose up -d
     ```
 
 1. Run the local setup script - this script will also as a local reset and is safe to run multiple times.

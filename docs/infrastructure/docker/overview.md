@@ -14,9 +14,9 @@ Images are also pushed to the GitHub Container Registry (GHCR) for public access
 
 :::
 
-# Layers
+# Image hierarchy
 
-The VOL application images are built up of the following high-level layers:
+The VOL application image hierarchy is as follows:
 
 ```mermaid
 ---
