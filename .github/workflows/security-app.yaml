@@ -15,18 +15,6 @@ jobs:
         working-directory: app
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          repository: dvsa/olcs-backend
-          path: app/api
-      - uses: actions/checkout@v4
-        with:
-          repository: dvsa/olcs-selfserve
-          path: app/selfserve
-      - uses: actions/checkout@v4
-        with:
-          repository: dvsa/olcs-internal
-          path: app/internal
       - name: Setup Snyk
         uses: snyk/actions/setup@master
       - name: Scan

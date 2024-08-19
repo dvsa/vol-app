@@ -65,7 +65,6 @@ jobs:
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
-          path: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -114,7 +113,6 @@ jobs:
   #       with:
   #         ref: ${{ inputs.ref || null }}
   #         sparse-checkout: app/${{ inputs.project }}
-  #         path: app/${{ inputs.project }}
   #     - name: Setup PHP
   #       uses: shivammathur/setup-php@v2
   #       with:
@@ -150,7 +148,6 @@ jobs:
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
-          path: app/${{ inputs.project }}
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:

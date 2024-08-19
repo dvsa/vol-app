@@ -97,6 +97,7 @@ services:
     command: --log_bin_trust_function_creators=1 --sql_mode=NO_ENGINE_SUBSTITUTION
     volumes:
       - db-data:/var/lib/mysql
+      - ${OLCS_ETL_DIR:-../olcs-etl}:/var/lib/etl
     ports:
       - 3306:3306
     environment:
