@@ -25,9 +25,17 @@ export default class ResetDatabase implements ActionInterface {
       return false;
     }
 
+    // Get environment variable for ETL directory or default to ../../../../olcs-etl
+    const etlDirectory = process.env.OLCS_ETL_DIR || "../../../../olcs-etl";
+
+    phpAppDirectories.push(path.resolve(__dirname, etlDirectory));
+
     const appConfigDistFiles = phpAppDirectories
       .map((dir) => {
-        const configDir = path.join(dir, "config");
+        let configDir = dir;
+        if (fs.existsSync(path.join(dir, "config"))) {
+          configDir = path.join(dir, "config");
+        }
 
         return fs
           .readdirSync(configDir, { recursive: true })
