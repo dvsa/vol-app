@@ -97,6 +97,7 @@ services:
     command: --log_bin_trust_function_creators=1 --sql_mode=NO_ENGINE_SUBSTITUTION
     volumes:
       - db-data:/var/lib/mysql
+      - ${OLCS_ETL_DIR:-../olcs-etl}:/var/lib/etl
     ports:
       - 3306:3306
     environment:
@@ -104,6 +105,8 @@ services:
       MYSQL_DATABASE: olcs_be
       MYSQL_USER: mysql
       MYSQL_PASSWORD: olcs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   openldap:
     image: bitnami/openldap:2.6
