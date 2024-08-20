@@ -4,7 +4,6 @@ import { program } from "commander";
 import fs from "node:fs";
 import path from "node:path";
 import chalk from "chalk";
-import createDebug from "debug";
 import cliProgress from "cli-progress";
 import ActionInterface from "./actions/ActionInterface";
 

@@ -54,7 +54,7 @@ export default class ResetDatabase implements ActionInterface {
       },
     ]);
 
-    if (shouldResetDatabase || refreshType === undefined) {
+    if (shouldResetDatabase === undefined || refreshType === undefined) {
       return false;
     }
 
@@ -65,17 +65,20 @@ export default class ResetDatabase implements ActionInterface {
       name: "directory",
       message: "Enter the path to the ETL directory",
       initial: cache.getKey("etlDirectory") || this.etlDirectory,
-      validate: (value) => (fs.existsSync(value) ? true : "Path does not exist"),
+      validate: (value) =>
+        fs.existsSync(path.isAbsolute(value) ? value : path.resolve(__dirname, "../../../../", value))
+          ? true
+          : "Path does not exist",
     });
 
     if (typeof directory !== "string") {
       return false;
     }
 
-    cache.setKey("etlDirectory", directory);
-    cache.save();
+    this.etlDirectory = path.isAbsolute(directory) ? directory : path.resolve(__dirname, "../../../../", directory);
 
-    this.etlDirectory = directory;
+    cache.setKey("etlDirectory", this.etlDirectory);
+    cache.save();
 
     debug(
       `Checking for liquibase properties file at: ${path.join(this.etlDirectory, this.liquibasePropertiesFileName)}`,
@@ -167,7 +170,7 @@ export default class ResetDatabase implements ActionInterface {
       `docker run \
       --rm \
       -e INSTALL_MYSQL=true \
-      -v "$PWD/${this.etlDirectory}/":/liquibase/changelog \
+      -v "${this.etlDirectory}":/liquibase/changelog \
       -w /liquibase/changelog \
       liquibase/liquibase \
         --defaultsFile=${this.liquibasePropertiesFileName} \

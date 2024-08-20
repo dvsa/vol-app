@@ -13,12 +13,6 @@ const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirna
 
 export default class ComposerInstall implements ActionInterface {
   async prompt(): Promise<boolean> {
-    try {
-      exec("composer --version", debug);
-    } catch (e: unknown) {
-      throw new Error("Composer is not installed. Please install Composer before running this action.");
-    }
-
     const { shouldInstall } = await prompts({
       type: "confirm",
       name: "shouldInstall",
@@ -30,6 +24,12 @@ export default class ComposerInstall implements ActionInterface {
 
   async execute(progress: GenericBar): Promise<void> {
     progress.start(phpAppDirectories.length, 0);
+
+    try {
+      exec("composer --version", debug);
+    } catch (e: unknown) {
+      throw new Error("Composer is not installed. Please install Composer before running this action.");
+    }
 
     phpAppDirectories.forEach((dir) => {
       debug(chalk.blue(`Running composer install in ${dir}...`));
