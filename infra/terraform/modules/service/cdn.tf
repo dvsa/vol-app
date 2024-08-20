@@ -198,7 +198,7 @@ module "log_bucket" {
 
 module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "~> 3.1"
+  version = "~> 4.0"
 
   zone_id = data.aws_route53_zone.private.zone_id
 
