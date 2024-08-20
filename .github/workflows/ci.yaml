@@ -65,7 +65,6 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-app-files
         with:
-          dir_names: true
           files: |
             app/api/**
             app/selfserve/**
@@ -74,7 +73,6 @@ jobs:
       - uses: tj-actions/changed-files@v44
         id: changed-asset-files
         with:
-          dir_names: true
           files: |
             app/cdn/**
           # since_last_remote_commit: true
