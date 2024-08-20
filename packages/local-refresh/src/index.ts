@@ -2,11 +2,22 @@
 
 import { program } from "commander";
 import fs from "node:fs";
-import path from "path";
+import path from "node:path";
 import chalk from "chalk";
+import createDebug from "debug";
+import cliProgress from "cli-progress";
 import ActionInterface from "./actions/ActionInterface";
 
-program.description("Reset the VOL local environment.").action(async () => {
+const progressBarFactory = () => {
+  return new cliProgress.Bar(
+    {
+      clearOnComplete: true,
+    },
+    cliProgress.Presets.shades_classic,
+  );
+};
+
+program.description("Script to refresh the local VOL application").action(async () => {
   const actions = await Promise.all(
     fs
       .readdirSync(path.resolve(__dirname, "actions"))
@@ -29,29 +40,34 @@ program.description("Reset the VOL local environment.").action(async () => {
     const shouldRun = await instance.prompt();
 
     if (shouldRun) {
-      console.info(`Running action: ${instance.constructor.name}`);
-      await instance.execute();
+      try {
+        await instance.execute(progressBarFactory());
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.error(`\n\n${chalk.red(e.message)}\n`);
+        }
+      }
     }
   }
 
   const hostsFile = fs.readFileSync("/etc/hosts", "utf8");
 
   if (!hostsFile.includes("local.olcs.dev-dvsacloud.uk")) {
-    console.warn(chalk.yellow(`/etc/hosts has not been updated with local domains. Please run:`));
+    console.warn(chalk.yellow(`/etc/hosts has not been updated with the local domains. Please run:`));
     console.warn(
       chalk.bgYellow(
         `sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk" >> /etc/hosts`,
       ),
     );
-
-    return;
   }
 
-  console.info(chalk.greenBright("Local environment reset complete."));
+  process.exit(0);
 });
 
 program.parse(process.argv);
 
 process.on("unhandledRejection", (err) => {
+  console.error(`\n\nUncaught Error: ${chalk.red(err)}\n\n`);
+
   process.exit(1);
 });

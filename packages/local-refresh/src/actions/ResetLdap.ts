@@ -1,33 +1,36 @@
 import prompts from "prompts";
-import shell from "shelljs";
+import exec from "../exec";
 import chalk from "chalk";
 import dedent from "dedent";
 import ActionInterface from "./ActionInterface";
 import createDebug from "debug";
+import { GenericBar } from "cli-progress";
 
 const debug = createDebug("refresh:actions:ResetLdap");
 
 export default class ResetLdap implements ActionInterface {
   async prompt(): Promise<boolean> {
-    const response = await prompts({
+    const { shouldRefresh } = await prompts({
       type: "confirm",
-      name: "ldap-refresh",
+      name: "shouldRefresh",
       message: "Do you want to reset the LDAP userpool?",
     });
 
-    return response["ldap-refresh"];
+    return shouldRefresh;
   }
 
-  async execute(): Promise<void> {
-    debug(chalk.greenBright(`Deleting existing users`));
+  async execute(progress: GenericBar): Promise<void> {
+    progress.start(3, 0);
+
+    debug(chalk.greenBright(`Deleting existing users from LDAP`));
 
     const searchLdap = `ldapsearch -D "cn=admin,dc=vol,dc=dvsa" -H ldap://localhost:1389 -w admin -LLL -s one -b "ou=users,dc=vol,dc=dvsa" "(cn=*)" dn`;
-    const search = shell.exec(
+    const search = exec(
       `docker compose exec -T openldap /bin/bash -c '${searchLdap}' | awk '/^dn: / {print $2}'`,
-      {
-        silent: !debug.enabled,
-      },
+      debug,
     );
+
+    progress.increment();
 
     const allExistingUsers = search.stdout.split("\n").filter(Boolean);
 
@@ -37,22 +40,24 @@ export default class ResetLdap implements ActionInterface {
                                 ${deleteLdif}
                                 !`;
 
-    const deleteUsers = shell.exec(`docker compose exec openldap /bin/bash -c "${ldifDeletions}"`);
+    const deleteUsers = exec(`docker compose exec openldap /bin/bash -c "${ldifDeletions}"`, debug);
 
     if (deleteUsers.code !== 0) {
-      console.error(chalk.red(`Error while deleting users from LDAP`));
-      return;
+      throw new Error("Delete users from LDAP failed");
     }
 
-    const selectAllUsersCmd = shell.exec(
+    progress.increment();
+
+    const selectAllUsersCmd = exec(
       `docker compose exec db /bin/bash -c 'mysql -u mysql -polcs -N -e "SELECT login_id FROM olcs_be.user WHERE login_id IS NOT NULL"'`,
-      { silent: !debug.enabled, env: { ...process.env, FORCE_COLOR: "1" } },
+      debug,
     );
 
     if (selectAllUsersCmd.code !== 0) {
-      console.error(chalk.red(`Error while selecting users from database`));
-      return;
+      throw new Error("Select users from database failed");
     }
+
+    progress.increment();
 
     const allUsers = selectAllUsersCmd.stdout.split("\n").filter(Boolean);
 
@@ -67,22 +72,13 @@ export default class ResetLdap implements ActionInterface {
       )
       .join("\n\n");
 
-    debug(chalk.greenBright(`Adding new users`));
+    debug(`Adding new users into LDAP`);
 
     const ldifModify = dedent`ldapmodify -D "cn=admin,dc=vol,dc=dvsa" -H ldap://localhost:1389 -w admin -c <<!
                               ${ldif}
                               !`;
+    exec(`docker compose exec openldap /bin/bash -c "${ldifModify}"`, debug);
 
-    if (
-      shell.exec(`docker compose exec openldap /bin/bash -c "${ldifModify}"`, {
-        env: {
-          ...process.env,
-          FORCE_COLOR: "1",
-        },
-      }).code !== 0
-    ) {
-      console.error(chalk.red(`Error while adding users to LDAP`));
-      return;
-    }
+    progress.stop();
   }
 }
