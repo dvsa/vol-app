@@ -32,24 +32,24 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       # Docs
-      should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
+      should-deploy-docs: ${{ steps.changed-website-files.outputs.any_modified == 'true' || null }}
       # App
-      should-build-app: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-api: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-selfserve: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-internal: ${{ needs.release-please.outputs.release_created || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-app: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
+      should-build-api: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || null }}
+      should-build-selfserve: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
+      should-build-internal: ${{ needs.release-please.outputs.release_created || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
       # Assets
-      should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_changed == 'true' || null }}
+      should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_modified == 'true' || null }}
       # Docker
-      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-cli-docker-files.outputs.any_changed == 'true' || null}}
-      should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || null}}
+      should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
       # Terraform account
-      should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
+      should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
-      should-apply-environment-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-environments-terraform-files.outputs.any_changed == 'true' || null }}
+      should-apply-environment-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-environments-terraform-files.outputs.any_modified == 'true' || null }}
     steps:
       - uses: actions/checkout@v4
         with:
