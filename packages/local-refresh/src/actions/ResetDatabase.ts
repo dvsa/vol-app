@@ -172,6 +172,7 @@ export default class ResetDatabase implements ActionInterface {
       -e INSTALL_MYSQL=true \
       -v "${this.etlDirectory}":/liquibase/changelog \
       -w /liquibase/changelog \
+      --add-host=host.docker.internal:host-gateway \
       liquibase/liquibase \
         --defaultsFile=${this.liquibasePropertiesFileName} \
         update \
