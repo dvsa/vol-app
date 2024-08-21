@@ -18,7 +18,7 @@ return [
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => 'backend-nginx',
+                            'route' => 'api.local.olcs.dev-dvsacloud.uk',
                         ]
                     ]
                 ]
@@ -31,11 +31,11 @@ return [
         'endpoints' => [
             // Backend service URI *Environment specific*
             'backend' => [
-                'url' => 'backend-nginx',
+                'url' => 'api.local.olcs.dev-dvsacloud.uk',
             ],
             // Postcode/Address service URI *Environment specific*
             'postcode' => [
-                'url' => 'backend-nginx',
+                'url' => 'https://int.nonprod.address.dvsa.api.gov.uk/',
             ],
         ]
     ],
@@ -65,7 +65,7 @@ return [
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
-    'asset_path' => 'http://localhost:7001',
+    'asset_path' => 'http://cdn.local.olcs.dev-dvsacloud.uk/',
 
     'openam' => [
         'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
@@ -82,7 +82,15 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => 'php://stdout'
+                        'stream' => 'php://stdout',
+                        'filters' => [
+                            'priority' => [
+                                'name' => 'priority',
+                                'options' => [
+                                    'priority' => \Laminas\Log\Logger::WARN,
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             ]

@@ -69,12 +69,4 @@ $config = [
     ],
 ];
 
-if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/src/Module.php')) {
-    $config['modules'][] = 'Laminas\DeveloperTools';
-
-    if (file_exists(__DIR__ . '/../vendor/san/san-session-toolbar/src/Module.php')) {
-        $config['modules'][] = 'SanSessionToolbar';
-    }
-}
-
 return $config;

@@ -54,13 +54,8 @@ return [
             ],
             'export' => [
                 'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
-                'params' => $doctrine_connection_params +
-                    [
-                        'driverOptions' => [
-                            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
-                            PDO::CURSOR_FWDONLY => true,
-                        ],
-                    ],
+                // Database connection details
+                'params' => $doctrine_connection_params,
             ],
         ],
         'driver' => [
@@ -381,7 +376,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN
+                                    'priority' => '%log_level%'
                                 ]
                             ],
                         ]
@@ -398,7 +393,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN
+                                    'priority' => '%log_level%'
                                 ]
                             ],
                         ]

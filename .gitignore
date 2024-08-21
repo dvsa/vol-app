@@ -1,5 +1,7 @@
 # IntelliJ project files
-.idea
+.idea/**
+!.idea/php.xml
+!.idea/.name
 
 # Logs
 logs

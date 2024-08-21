@@ -1,3 +1,5 @@
+import { GenericBar } from "cli-progress";
+
 export default interface ActionInterface {
   /**
    * Prompt the user for input.
@@ -9,5 +11,5 @@ export default interface ActionInterface {
   /**
    * Execute the action.
    */
-  execute(): Promise<void>;
+  execute(progressBar: GenericBar): Promise<void>;
 }

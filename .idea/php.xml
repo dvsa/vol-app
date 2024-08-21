@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LaravelPintOptionsConfiguration">
+    <option name="ruleset" value="laravel" />
+  </component>
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="localhost" id="4f8b8235-1548-4de2-802a-9617f5ed7b38" name="vol.local.api" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/app/api" remote-root="/var/www/html" />
+        </path_mappings>
+      </server>
+      <server host="localhost" id="0b6cc859-9268-4469-864b-d5027744e5bc" name="vol.local.selfserve" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/app/selfserve" remote-root="/var/www/html" />
+        </path_mappings>
+      </server>
+      <server host="localhost" id="aa18c293-f3b2-4b5f-96a6-6ad3c7874fdd" name="vol.local.internal" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/app/internal" remote-root="/var/www/html" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
+</project>
