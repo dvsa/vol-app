@@ -20,6 +20,6 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "refresh": "ts-node packages/local-refresh/index.ts"
+    "refresh": "npm run start --workspace @vol-app/local-refresh"
   }
 }
