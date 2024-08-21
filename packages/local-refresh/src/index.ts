@@ -23,8 +23,6 @@ program
     "Run in non-interactive mode; this will execute the following: composer install, copy app dist files (all), reset database, create liquibase.properties file, flush redis, and reset ldap.",
   )
   .action(async (options) => {
-    console.log(options);
-
     const actions = await Promise.all(
       fs
         .readdirSync(path.resolve(__dirname, "actions"))
