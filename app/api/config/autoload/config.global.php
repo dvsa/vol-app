@@ -376,7 +376,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN
+                                    'priority' => '%log_level%'
                                 ]
                             ],
                         ]
@@ -393,7 +393,7 @@ return [
                             'priority' => [
                                 'name' => 'priority',
                                 'options' => [
-                                    'priority' => \Laminas\Log\Logger::WARN
+                                    'priority' => '%log_level%'
                                 ]
                             ],
                         ]
