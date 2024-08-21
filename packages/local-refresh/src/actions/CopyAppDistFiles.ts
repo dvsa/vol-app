@@ -53,22 +53,26 @@ export default class ResetDatabase implements ActionInterface {
       });
     }
 
-    const { files } = await prompts({
-      type: "multiselect",
-      name: "files",
-      message: "Which config files do you want to copy?",
-      choices: Array.from(appConfigDistFiles.keys()).map((file) => ({
-        title: appConfigDistFiles.get(file) || file,
-        value: file,
-      })),
-      hint: "- Space to select. Return to submit",
-    });
+    if (!noInteraction) {
+      const { files } = await prompts({
+        type: "multiselect",
+        name: "files",
+        message: "Which config files do you want to copy?",
+        choices: Array.from(appConfigDistFiles.keys()).map((file) => ({
+          title: appConfigDistFiles.get(file) || file,
+          value: file,
+        })),
+        hint: "- Space to select. Return to submit",
+      });
 
-    if (!files) {
-      return false;
+      if (!files) {
+        return false;
+      }
+
+      this.filesToCopy = files;
     }
 
-    this.filesToCopy = files;
+    this.filesToCopy = Array.from(appConfigDistFiles.keys());
 
     return this.filesToCopy.length > 0;
   }
