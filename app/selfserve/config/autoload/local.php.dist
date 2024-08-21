@@ -63,6 +63,14 @@ return [
                 'full' => [
                     'options' => [
                         'stream' => 'php://stdout'
+                        'filters' => [
+                            'priority' => [
+                                'name' => 'priority',
+                                'options' => [
+                                    'priority' => \Laminas\Log\Logger::WARN,
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             ]
@@ -71,7 +79,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => 'php://stdout',
+                        'stream' => 'php://stderr',
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',
