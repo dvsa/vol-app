@@ -7,7 +7,11 @@ import { GenericBar } from "cli-progress";
 const debug = createDebug("refresh:actions:FlushRedis");
 
 export default class FlushRedis implements ActionInterface {
-  async prompt(): Promise<boolean> {
+  async prompt(noInteraction: boolean): Promise<boolean> {
+    if (noInteraction) {
+      return true;
+    }
+
     const { shouldFlush } = await prompts({
       type: "confirm",
       name: "shouldFlush",

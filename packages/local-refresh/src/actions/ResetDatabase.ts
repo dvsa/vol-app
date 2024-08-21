@@ -36,7 +36,14 @@ export default class ResetDatabase implements ActionInterface {
   liquibasePropertiesFileName = `vol-app.liquibase.properties`;
   createLiquibaseProperties = false;
 
-  async prompt(): Promise<boolean> {
+  async prompt(noInteraction: boolean): Promise<boolean> {
+    if (noInteraction) {
+      this.refreshType = DatabaseRefreshEnum.FULL;
+      this.etlDirectory = cache.getKey("etlDirectory") || this.etlDirectory;
+      this.createLiquibaseProperties = true;
+      return true;
+    }
+
     const { shouldResetDatabase, refreshType } = await prompts([
       {
         type: "confirm",

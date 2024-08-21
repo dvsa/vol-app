@@ -9,7 +9,11 @@ import { GenericBar } from "cli-progress";
 const debug = createDebug("refresh:actions:ResetLdap");
 
 export default class ResetLdap implements ActionInterface {
-  async prompt(): Promise<boolean> {
+  async prompt(noInteraction: boolean): Promise<boolean> {
+    if (noInteraction) {
+      return true;
+    }
+
     const { shouldRefresh } = await prompts({
       type: "confirm",
       name: "shouldRefresh",

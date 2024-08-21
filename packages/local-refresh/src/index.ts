@@ -16,7 +16,11 @@ const progressBarFactory = () => {
   );
 };
 
-program.description("Script to refresh the local VOL application").action(async () => {
+program.option("--no-interaction", "Do not prompt for any input; run everything");
+
+program.description("Script to refresh the local VOL application");
+
+program.action(async (options) => {
   const actions = await Promise.all(
     fs
       .readdirSync(path.resolve(__dirname, "actions"))
@@ -36,7 +40,7 @@ program.description("Script to refresh the local VOL application").action(async 
       continue;
     }
 
-    const shouldRun = await instance.prompt();
+    const shouldRun = await instance.prompt(options.noInteraction);
 
     if (shouldRun) {
       try {
