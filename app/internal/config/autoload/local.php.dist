@@ -93,24 +93,24 @@ return [
                         ],
                     ],
                 ],
-                'ExceptionLogger' => [
-                  'writers' => [
-                    'full' => [
-                      'options' => [
-                        'stream' => 'php://stderr',
-                        'filters' => [
-                          'priority' => [
-                            'name' => 'priority',
-                            'options' => [
-                              'priority' => \Laminas\Log\Logger::WARN
-                            ],
-                          ],
-                        ],
-                      ],
+            ]
+        ],
+        'ExceptionLogger' => [
+          'writers' => [
+            'full' => [
+              'options' => [
+                'stream' => 'php://stderr',
+                'filters' => [
+                  'priority' => [
+                    'name' => 'priority',
+                    'options' => [
+                      'priority' => \Laminas\Log\Logger::WARN
                     ],
                   ],
                 ],
-            ]
+              ],
+            ],
+          ],
         ],
     ],
 
