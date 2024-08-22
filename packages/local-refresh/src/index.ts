@@ -22,7 +22,7 @@ program
   .description("Script to refresh the local VOL application")
   .option(
     "-i, --no-interaction",
-    "Run in non-interactive mode; this will execute the following: composer install, copy app dist files (all), reset database (full), create liquibase.properties file, flush redis, and reset ldap.",
+    "Run in non-interactive mode; Does not ask any interactive question. All the actions will run with defaults.",
   )
   .action(async (options) => {
     const actions = await Promise.all(
