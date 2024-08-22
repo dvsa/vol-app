@@ -91,7 +91,9 @@ return [
        * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Laminas\Stdlib\DispatchableInterface')
        * Expects: array
        */
-      'identifiers' => [],
+      'identifiers' => [
+        'all' => null,
+      ],
     ],
     /**
      * General Toolbar settings
