@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Messaging\Conversations;
 
 use ArrayIterator;
@@ -56,7 +58,7 @@ class ByLicenceTest extends QueryHandlerTestCase
         $this->repoMap[Repository\Conversation::class]
             ->shouldReceive('applyOrderForListing')
             ->once()
-            ->with($mockQb, ['operator-admin', 'operator-user'])
+            ->with($mockQb, ['operator-tc', 'operator-admin', 'operator-user'])
             ->andReturn($mockQb);
         $this->repoMap[Repository\Conversation::class]
             ->shouldReceive('filterByStatuses')

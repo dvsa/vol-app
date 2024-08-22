@@ -37,6 +37,7 @@ abstract class AbstractConversationQueryHandler extends AbstractQueryHandler
             ];
         } else {
             return [
+                Role::ROLE_OPERATOR_TC,
                 Role::ROLE_OPERATOR_ADMIN,
                 Role::ROLE_OPERATOR_USER,
             ];

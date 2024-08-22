@@ -58,11 +58,13 @@ class User extends AbstractUser implements OrganisationProviderInterface
             RoleEntity::ROLE_LOCAL_AUTHORITY_USER,
         ],
         self::USER_TYPE_OPERATOR => [
+            RoleEntity::ROLE_OPERATOR_TC,
             RoleEntity::ROLE_OPERATOR_ADMIN,
             RoleEntity::ROLE_OPERATOR_USER,
             RoleEntity::ROLE_OPERATOR_TM,
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
+            RoleEntity::ROLE_OPERATOR_TC,
             RoleEntity::ROLE_OPERATOR_ADMIN,
             RoleEntity::ROLE_OPERATOR_USER,
             RoleEntity::ROLE_OPERATOR_TM,
@@ -95,12 +97,12 @@ class User extends AbstractUser implements OrganisationProviderInterface
             self::PERMISSION_USER => [RoleEntity::ROLE_LOCAL_AUTHORITY_USER],
         ],
         self::USER_TYPE_OPERATOR => [
-            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
-            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
         ],
@@ -276,7 +278,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
             }
 
             $rolesAvailable = array_intersect(
-                // user's roles selected
+            // user's roles selected
                 array_map(
                     fn($role) => $role->getRole(),
                     $roles
@@ -544,7 +546,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     {
         return !$this->roles->isEmpty() && !empty(
             array_intersect(
-                // list of roles to check for
+            // list of roles to check for
                 $roles,
                 // user's roles
                 array_map(
@@ -552,7 +554,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
                     $this->roles->toArray()
                 )
             )
-        );
+            );
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanGovUkAccount as Sut;
@@ -25,32 +27,35 @@ class CanGovUkAccountTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * testIsValidForOperatorUser
-     */
     public function testIsValidForOperatorUser()
     {
-        /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, false);
         $this->setIsGranted(Permission::OPERATOR_USER, true);
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidForOperator()
+    public function testIsValidForOperatorAdmin()
     {
-
-        /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, true);
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidForTransportManager()
+    public function testIsValidForOperatorTransportConsultant()
     {
-        /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
         $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, true);
+        $this->assertTrue($this->sut->isValid($dto));
+    }
+
+    public function testIsValidForTransportManager()
+    {
+        $dto = m::mock(CommandInterface::class);
+        $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
+        $this->setIsGranted(Permission::OPERATOR_TC, false);
         $this->setIsGranted(Permission::OPERATOR_USER, false);
         $this->setIsGranted(Permission::TRANSPORT_MANAGER, true);
         $this->assertTrue($this->sut->isValid($dto));

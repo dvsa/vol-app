@@ -24,6 +24,7 @@ class Role extends AbstractRole implements RoleInterface
     public const ROLE_INTERNAL_CASE_WORKER = 'internal-case-worker';
     public const ROLE_INTERNAL_ADMIN = 'internal-admin';
     public const ROLE_INTERNAL_IRHP_ADMIN = 'internal-irhp-admin';
+    public const ROLE_OPERATOR_TC = 'operator-tc';
     public const ROLE_OPERATOR_ADMIN = 'operator-admin';
     public const ROLE_OPERATOR_USER = 'operator-user';
     public const ROLE_OPERATOR_TM = 'operator-tm';
@@ -46,6 +47,7 @@ class Role extends AbstractRole implements RoleInterface
             self::ROLE_INTERNAL_CASE_WORKER,
             self::ROLE_INTERNAL_READ_ONLY,
             self::ROLE_INTERNAL_LIMITED_READ_ONLY,
+            self::ROLE_OPERATOR_TC,
             self::ROLE_OPERATOR_ADMIN,
             self::ROLE_OPERATOR_USER,
             self::ROLE_OPERATOR_TM,
@@ -60,6 +62,7 @@ class Role extends AbstractRole implements RoleInterface
             self::ROLE_INTERNAL_CASE_WORKER,
             self::ROLE_INTERNAL_READ_ONLY,
             self::ROLE_INTERNAL_LIMITED_READ_ONLY,
+            self::ROLE_OPERATOR_TC,
             self::ROLE_OPERATOR_ADMIN,
             self::ROLE_OPERATOR_USER,
             self::ROLE_OPERATOR_TM,
@@ -74,6 +77,7 @@ class Role extends AbstractRole implements RoleInterface
             self::ROLE_INTERNAL_CASE_WORKER,
             self::ROLE_INTERNAL_READ_ONLY,
             self::ROLE_INTERNAL_LIMITED_READ_ONLY,
+            self::ROLE_OPERATOR_TC,
             self::ROLE_OPERATOR_ADMIN,
             self::ROLE_OPERATOR_USER,
             self::ROLE_OPERATOR_TM,
@@ -86,6 +90,7 @@ class Role extends AbstractRole implements RoleInterface
             self::ROLE_INTERNAL_CASE_WORKER,
             self::ROLE_INTERNAL_READ_ONLY,
             self::ROLE_INTERNAL_LIMITED_READ_ONLY,
+            self::ROLE_OPERATOR_TC,
             self::ROLE_OPERATOR_ADMIN,
             self::ROLE_OPERATOR_USER,
             self::ROLE_OPERATOR_TM,

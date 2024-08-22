@@ -40,6 +40,7 @@ class OperatorUsersController extends AbstractInternalController implements
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['roles'] = [
+            RefData::ROLE_OPERATOR_TC,
             RefData::ROLE_OPERATOR_ADMIN,
             RefData::ROLE_OPERATOR_TM,
             RefData::ROLE_OPERATOR_USER

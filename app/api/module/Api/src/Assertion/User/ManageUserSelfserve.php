@@ -68,7 +68,7 @@ class ManageUserSelfserve implements AssertionInterface
     private function canManageOperator(AuthorizationService $authorizationService, User $context)
     {
         if (
-            $authorizationService->isGranted(Permission::OPERATOR_ADMIN)
+            ($authorizationService->isGranted(Permission::OPERATOR_ADMIN) || $authorizationService->isGranted(Permission::OPERATOR_TC))
             && $authorizationService->isGranted(Permission::CAN_READ_USER_SELFSERVE, $context)
         ) {
             // has related admin permission

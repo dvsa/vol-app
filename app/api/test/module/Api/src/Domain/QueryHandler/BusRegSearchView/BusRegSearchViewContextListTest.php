@@ -1,24 +1,20 @@
 <?php
 
-/**
- * BusRegSearchViewContextList Test
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\BusRegSearchView;
 
-use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BusRegSearchView\BusRegSearchViewContextList;
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewContextList as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 
-/**
- * BusRegSearchViewContextList Test
- */
 class BusRegSearchViewContextListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -26,7 +22,7 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         $this->sut = new BusRegSearchViewContextList();
         $this->mockRepo('BusRegSearchView', Repository\BusRegSearchView::class);
         $this->mockedSmServices = [
-            \LmcRbacMvc\Service\AuthorizationService::class => m::mock(\LmcRbacMvc\Service\AuthorizationService::class)
+            AuthorizationService::class => m::mock(AuthorizationService::class)
         ];
         parent::setUp();
     }
@@ -76,10 +72,10 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         $currentUser = $this->getCurrentUser(null, $organisationId);
 
         // check for operator
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]->shouldReceive('isGranted')
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->with(m::type('string'), null)->andReturn(true);
 
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]
+        $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('getIdentity')
             ->andReturn($currentUser);
 
@@ -99,7 +95,7 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
 
         $expected = [
             'result' => [
-               ['foo' => 'bar']
+                ['foo' => 'bar']
             ],
             'count' => 1
         ];
@@ -115,16 +111,18 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         $currentUser = $this->getCurrentUser($localAuthorityId, null);
 
         // checks for operator before local authority so we mock these first
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]->shouldReceive('isGranted')
-            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::OPERATOR_ADMIN, null)->andReturn(false);
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]->shouldReceive('isGranted')
-            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::OPERATOR_USER, null)->andReturn(false);
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]->shouldReceive('isGranted')
-            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::LOCAL_AUTHORITY_USER, null)->andReturn(true);
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]->shouldReceive('isGranted')
-            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::LOCAL_AUTHORITY_ADMIN, null)->andReturn(true);
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::OPERATOR_ADMIN, null)->andReturnFalse();
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::OPERATOR_TC, null)->andReturnFalse();
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::OPERATOR_USER, null)->andReturnFalse();
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::LOCAL_AUTHORITY_USER, null)->andReturnTrue();
+        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
+            ->with(Permission::LOCAL_AUTHORITY_ADMIN, null)->andReturnTrue();
 
-        $this->mockedSmServices[\LmcRbacMvc\Service\AuthorizationService::class]
+        $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('getIdentity')
             ->andReturn($currentUser);
 

@@ -25,6 +25,7 @@ class Permission extends AbstractPermission
     public const INTERNAL_EDIT = 'internal-edit';
     public const LOCAL_AUTHORITY_ADMIN = 'local-authority-admin';
     public const LOCAL_AUTHORITY_USER = 'local-authority-user';
+    public const OPERATOR_TC = 'operator-tc';
     public const OPERATOR_ADMIN = 'operator-admin';
     public const OPERATOR_USER = 'operator-user';
     public const PARTNER_ADMIN = 'partner-admin';
