@@ -91,11 +91,7 @@ return [
        * Example: 'identifiers' => array('all' => null, 'dispatchable' => 'Laminas\Stdlib\DispatchableInterface')
        * Expects: array
        */
-      'identifiers' => [
-        // There's a bug in Laminas Form that causes a TypeError caused by the Laminas Developer tools returning `void` into a `bool` type hint.
-        // https://github.com/laminas/laminas-form/blob/6e6e8210ef7b54fdecc0eb31c8ad30613b4ab299/src/Annotation/AbstractBuilder.php#L320
-        'all' => null,
-      ],
+      'identifiers' => [],
     ],
     /**
      * General Toolbar settings
