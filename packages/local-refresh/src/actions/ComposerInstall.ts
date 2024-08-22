@@ -12,7 +12,11 @@ const phpAppDirectoryNames = ["api", "selfserve", "internal"];
 const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../../app/${dir}`));
 
 export default class ComposerInstall implements ActionInterface {
-  async prompt(): Promise<boolean> {
+  async prompt(noInteraction: boolean): Promise<boolean> {
+    if (noInteraction) {
+      return true;
+    }
+
     const { shouldInstall } = await prompts({
       type: "confirm",
       name: "shouldInstall",

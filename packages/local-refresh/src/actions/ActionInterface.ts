@@ -6,7 +6,7 @@ export default interface ActionInterface {
    *
    * @return {Promise<boolean>} Whether the action should be executed.
    */
-  prompt(): Promise<boolean>;
+  prompt(noInteraction: boolean): Promise<boolean>;
 
   /**
    * Execute the action.

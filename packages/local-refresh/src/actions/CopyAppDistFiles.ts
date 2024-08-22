@@ -11,19 +11,21 @@ const debug = createDebug("refresh:actions:CopyAppDistFiles");
 const phpAppDirectoryNames = ["api", "selfserve", "internal"];
 const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../../app/${dir}`));
 
-export default class ResetDatabase implements ActionInterface {
+export default class CopyAppDistFiles implements ActionInterface {
   filesToCopy: string[] = [];
 
-  async prompt(): Promise<boolean> {
-    const { shouldCopy } = await prompts({
-      type: "confirm",
-      name: "shouldCopy",
-      message: "Copy the Laminas configuration dist files?",
-      warn: "This will overwrite existing configuration files.",
-    });
+  async prompt(noInteraction: boolean): Promise<boolean> {
+    if (!noInteraction) {
+      const { shouldCopy } = await prompts({
+        type: "confirm",
+        name: "shouldCopy",
+        message: "Copy the Laminas configuration dist files?",
+        warn: "This will overwrite existing configuration files.",
+      });
 
-    if (!shouldCopy) {
-      return false;
+      if (!shouldCopy) {
+        return false;
+      }
     }
 
     let appConfigDistFiles: Map<string, string> = new Map();
@@ -49,6 +51,11 @@ export default class ResetDatabase implements ActionInterface {
 
         appConfigDistFiles.set(file, truncatedPath);
       });
+    }
+
+    if (noInteraction) {
+      this.filesToCopy = Array.from(appConfigDistFiles.keys());
+      return this.filesToCopy.length > 0;
     }
 
     const { files } = await prompts({
