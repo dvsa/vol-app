@@ -53,26 +53,27 @@ export default class CopyAppDistFiles implements ActionInterface {
       });
     }
 
-    if (!noInteraction) {
-      const { files } = await prompts({
-        type: "multiselect",
-        name: "files",
-        message: "Which config files do you want to copy?",
-        choices: Array.from(appConfigDistFiles.keys()).map((file) => ({
-          title: appConfigDistFiles.get(file) || file,
-          value: file,
-        })),
-        hint: "- Space to select. Return to submit",
-      });
-
-      if (!files) {
-        return false;
-      }
-
-      this.filesToCopy = files;
+    if (noInteraction) {
+      this.filesToCopy = Array.from(appConfigDistFiles.keys());
+      return this.filesToCopy.length > 0;
     }
 
-    this.filesToCopy = Array.from(appConfigDistFiles.keys());
+    const { files } = await prompts({
+      type: "multiselect",
+      name: "files",
+      message: "Which config files do you want to copy?",
+      choices: Array.from(appConfigDistFiles.keys()).map((file) => ({
+        title: appConfigDistFiles.get(file) || file,
+        value: file,
+      })),
+      hint: "- Space to select. Return to submit",
+    });
+
+    if (!files) {
+      return false;
+    }
+
+    this.filesToCopy = files;
 
     return this.filesToCopy.length > 0;
   }
