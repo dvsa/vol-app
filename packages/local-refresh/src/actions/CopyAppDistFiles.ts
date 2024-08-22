@@ -11,7 +11,7 @@ const debug = createDebug("refresh:actions:CopyAppDistFiles");
 const phpAppDirectoryNames = ["api", "selfserve", "internal"];
 const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../../app/${dir}`));
 
-export default class ResetDatabase implements ActionInterface {
+export default class CopyAppDistFiles implements ActionInterface {
   filesToCopy: string[] = [];
 
   async prompt(noInteraction: boolean): Promise<boolean> {

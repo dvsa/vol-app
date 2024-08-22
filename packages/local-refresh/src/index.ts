@@ -7,10 +7,12 @@ import chalk from "chalk";
 import cliProgress from "cli-progress";
 import ActionInterface from "./actions/ActionInterface";
 
-const progressBarFactory = () => {
+const progressBarFactory = (name: string) => {
   return new cliProgress.Bar(
     {
-      clearOnComplete: true,
+      format: `${name.padEnd(20)} | {bar} {percentage}% | ETA: {eta_formatted} | Step: {value}/{total}`,
+      autopadding: true,
+      clearOnComplete: false,
     },
     cliProgress.Presets.shades_classic,
   );
@@ -46,7 +48,8 @@ program
 
       if (shouldRun) {
         try {
-          await instance.execute(progressBarFactory());
+          const progressBar = progressBarFactory(instance.constructor.name);
+          await instance.execute(progressBar);
         } catch (e: unknown) {
           if (e instanceof Error) {
             console.error(`\n\n${chalk.red(e.message)}\n`);

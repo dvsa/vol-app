@@ -27,6 +27,8 @@ export default class FlushRedis implements ActionInterface {
 
     exec(`docker compose exec redis redis-cli -c "FLUSHALL"`, debug);
 
+    progress.increment(1);
+
     progress.stop();
   }
 }
