@@ -64,7 +64,7 @@ You will need:
     :::
 
     ```bash
-    sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk" >> /etc/hosts
+    sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk mailpit.local.olcs.dev-dvsacloud.uk" >> /etc/hosts
     ```
 
 1. Start the application
@@ -102,5 +102,7 @@ You will need:
 All done!
 
 Visit the application in your browser: - [Internal Application](http://iuweb.local.olcs.dev-dvsacloud.uk) - [Self Service Application](http://ssweb.local.olcs.dev-dvsacloud.uk)
+
+Any mail sent by the app can be viewed via: - [Mailpit](http://mailpit.local.olcs.dev-dvsacloud.uk)
 
 :::

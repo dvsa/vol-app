@@ -119,8 +119,8 @@ return [
   'mail' => [
     'type' => '\Laminas\Mail\Transport\Smtp',
     'options' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([
-      'name' => 'mailhog',
-      'host' => 'mailhog',
+      'name' => 'mailpit',
+      'host' => 'mailpit',
       'port' => 1025,
       'connection_config' => [
         'username' => 'null',
