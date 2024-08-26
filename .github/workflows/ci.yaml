@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-app-files
         with:
           dir_names: true
@@ -71,21 +71,21 @@ jobs:
             app/selfserve/**
             app/internal/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-asset-files
         with:
           dir_names: true
           files: |
             app/cdn/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-docker-files
         with:
           dir_names: true
           files: |
             infra/docker/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
         with:
           dir_names: true
@@ -95,7 +95,7 @@ jobs:
           files_ignore: |
             infra/terraform/modules/service/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-environments-terraform-files
         with:
           dir_names: true
@@ -107,7 +107,7 @@ jobs:
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v44
+      - uses: tj-actions/changed-files@v45
         id: changed-website-files
         with:
           files: |
