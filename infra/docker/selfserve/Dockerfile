@@ -26,6 +26,9 @@ COPY /clamav/supervisord.conf /etc/supervisor/conf.d/clamd.conf
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
+# PHP-FPM config file
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
+
 # nginx server config file
 COPY selfserve.conf /etc/nginx/conf.d/selfserve.conf
 
