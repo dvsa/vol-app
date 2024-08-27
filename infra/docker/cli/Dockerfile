@@ -18,6 +18,9 @@ RUN apk add --no-cache icu-dev \
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
+# PHP-FPM config file
+COPY php-fpm.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
+
 EXPOSE 8080
 
 FROM cli AS production
