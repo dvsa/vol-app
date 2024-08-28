@@ -37,7 +37,7 @@ class WebDavClientTest extends MockeryTestCase
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
-        $this->sut = new Client($this->mockFileSystem);
+        $this->sut = new Client($this->mockFileSystem, $this->createMock(\Laminas\Log\Logger::class));
 
         $this->mockFile = m::mock(DsFile::class);
 

@@ -48,7 +48,12 @@ class WebDavClient implements DocumentStoreInterface
 
         try {
             $readStream = $this->filesystem->readStream($path);
-            file_put_contents($tmpFileName, $readStream) or throw new \Exception(error_get_last());
+            $fpc = file_put_contents($tmpFileName, $readStream);
+
+            if ($fpc === false) {
+                $this->logger->err('Failed to write file to temp location', ['path' => $path, 'tmpFileName' => $tmpFileName]);
+                return false;
+            }
 
             $file = new File();
             $file->setContentFromStream($tmpFileName);
@@ -98,9 +103,15 @@ class WebDavClient implements DocumentStoreInterface
     {
         $response = new WebDavResponse();
         try {
-            $fh = fopen($file->getResource(), 'rb') or throw new \Exception(error_get_last());
+            $fh = fopen($file->getResource(), 'rb');
 
-            $response->setResponse($this->filesystem->writeStream($path, $fh));
+            if ($fh === false) {
+                $this->logger->err('Failed to open file for reading', ['file' => $file->getResource(), 'path' => $path]);
+
+                $response->setResponse(false);
+            } else {
+                $response->setResponse($this->filesystem->writeStream($path, $fh));
+            }
         } catch (FileExistsException) {
             $response->setResponse(false);
         } finally {
