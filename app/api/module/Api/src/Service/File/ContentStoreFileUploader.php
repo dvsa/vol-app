@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterface
 {
-    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s. Code: %s';
+    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s (HTTP status code: %s)';
 
     /**
      * @var DocumentStoreInterface
@@ -43,11 +43,11 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     {
         $file->setIdentifier($identifier);
 
-        $this->logger->err(__METHOD__, ['identifier' => $identifier, 'file' => $file]);
+        $this->logger->debug(__METHOD__, ['identifier' => $identifier, 'file' => $file]);
 
         $response = $this->write($identifier, $file);
 
-        $this->logger->err(__METHOD__, ['response' => $response]);
+        $this->logger->debug(__METHOD__, ['response' => $response]);
 
         if ($response->isSuccess()) {
             return $file;

@@ -99,12 +99,12 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         $respBody = 'unit_RespBody';
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(sprintf(ContentStoreFileUploader::ERR_UNABLE_UPLOAD, $respBody));
+        $this->expectExceptionMessage(sprintf(ContentStoreFileUploader::ERR_UNABLE_UPLOAD, $respBody, 500));
 
         $response = m::mock(Response::class);
         $response
             ->shouldReceive('isSuccess')->once()->andReturn(false)
-            ->shouldReceive('getStatusCode')->once()->andReturn(Response::STATUS_CODE_500)
+            ->shouldReceive('getStatusCode')->andReturn(Response::STATUS_CODE_500)
             ->shouldReceive('getBody')->once()->andReturn($respBody);
 
         $this->mockContentStoreCli->shouldReceive('write')
