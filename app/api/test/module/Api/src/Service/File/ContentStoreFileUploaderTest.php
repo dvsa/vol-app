@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Service\File\MimeNotAllowedException;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as DsFile;
 use Dvsa\Olcs\DocumentShare\Service\WebDavClient as ContentStoreClient;
 use Laminas\Http\Response;
+use Laminas\Log\Logger;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -43,6 +44,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
             );
 
         $sm->setService('ContentStore', $this->mockContentStoreCli);
+        $sm->setService('Logger', $this->createMock(Logger::class));
 
         static::assertSame($this->sut, $this->sut->__invoke($sm, null));
     }
@@ -97,12 +99,12 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         $respBody = 'unit_RespBody';
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(sprintf(ContentStoreFileUploader::ERR_UNABLE_UPLOAD, $respBody));
+        $this->expectExceptionMessage(sprintf(ContentStoreFileUploader::ERR_UNABLE_UPLOAD, $respBody, 500));
 
         $response = m::mock(Response::class);
         $response
             ->shouldReceive('isSuccess')->once()->andReturn(false)
-            ->shouldReceive('getStatusCode')->once()->andReturn(Response::STATUS_CODE_500)
+            ->shouldReceive('getStatusCode')->andReturn(Response::STATUS_CODE_500)
             ->shouldReceive('getBody')->once()->andReturn($respBody);
 
         $this->mockContentStoreCli->shouldReceive('write')

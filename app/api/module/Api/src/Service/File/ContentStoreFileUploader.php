@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Service\File;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\Http\Response;
+use Laminas\Log\Logger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -16,12 +17,17 @@ use Psr\Container\ContainerInterface;
  */
 class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterface
 {
-    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s';
+    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s (HTTP status code: %s)';
 
     /**
      * @var DocumentStoreInterface
      */
     private $contentStoreClient;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     /**
      * Upload file to remote storage
@@ -37,7 +43,11 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     {
         $file->setIdentifier($identifier);
 
+        $this->logger->debug(__METHOD__, ['identifier' => $identifier, 'file' => $file]);
+
         $response = $this->write($identifier, $file);
+
+        $this->logger->debug(__METHOD__, ['response' => $response]);
 
         if ($response->isSuccess()) {
             return $file;
@@ -47,7 +57,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
             throw new MimeNotAllowedException();
         }
 
-        throw new Exception(sprintf(self::ERR_UNABLE_UPLOAD, $response->getBody()));
+        throw new Exception(sprintf(self::ERR_UNABLE_UPLOAD, $response->getBody(), $response->getStatusCode()));
     }
 
     /**
@@ -89,6 +99,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->contentStoreClient = $container->get('ContentStore');
+        $this->logger = $container->get('Logger');
         return $this;
     }
 }
