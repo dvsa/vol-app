@@ -43,8 +43,11 @@ class WebDavClient implements DocumentStoreInterface
         $tmpFileName = tempnam(sys_get_temp_dir(), self::DS_DOWNLOAD_FILE_PREFIX);
 
         if ($tmpFileName === false) {
+            $this->logger->err('Failed to create temp file', ['path' => $path, 'tmpDir' => sys_get_temp_dir()]);
             return false;
         }
+
+        $this->logger->debug('Temp file created', ['tmpFileName' => $tmpFileName, 'is_file' => is_file($tmpFileName), 'is_readable' => is_readable($tmpFileName), 'is_writable' => is_writable($tmpFileName)]);
 
         try {
             $readStream = $this->filesystem->readStream($path);
@@ -103,6 +106,10 @@ class WebDavClient implements DocumentStoreInterface
     {
         $response = new WebDavResponse();
         try {
+            $this->logger->debug('Opening file for reading', ['file' => $file->getResource(), 'path' => $path]);
+
+            $this->logger->debug('File contents', ['contents' => file_get_contents($file->getResource())]);
+
             $fh = fopen($file->getResource(), 'rb');
 
             if ($fh === false) {
