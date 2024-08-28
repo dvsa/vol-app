@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Service\File;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\Http\Response;
+use Laminas\Log\Logger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -24,6 +25,11 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     private $contentStoreClient;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
      * Upload file to remote storage
      *
      * @param string           $identifier File name on Storage
@@ -37,7 +43,11 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     {
         $file->setIdentifier($identifier);
 
+        $this->logger->err(__METHOD__, ['identifier' => $identifier, 'file' => $file]);
+
         $response = $this->write($identifier, $file);
+
+        $this->logger->err(__METHOD__, ['response' => $response]);
 
         if ($response->isSuccess()) {
             return $file;
@@ -89,6 +99,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->contentStoreClient = $container->get('ContentStore');
+        $this->logger = $container->get('Logger');
         return $this;
     }
 }
