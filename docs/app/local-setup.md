@@ -101,8 +101,70 @@ You will need:
 
 All done!
 
-Visit the application in your browser: - [Internal Application](http://iuweb.local.olcs.dev-dvsacloud.uk) - [Self Service Application](http://ssweb.local.olcs.dev-dvsacloud.uk)
+You can visit the application in your browser:
 
-Any mail sent by the app can be viewed via: - [Mailpit](http://mailpit.local.olcs.dev-dvsacloud.uk)
+-   http://iuweb.local.olcs.dev-dvsacloud.uk
+-   http://ssweb.local.olcs.dev-dvsacloud.uk
+
+Any email sent by the app can be viewed via: [Mailpit](http://mailpit.local.olcs.dev-dvsacloud.uk)
+
+:::
+
+## Logging in
+
+The local dataset has a number of different users that you can log in as.
+
+:::info
+
+The default password for all users while using LDAP is `Password1`.
+
+:::
+
+### Selfserve
+
+| Username   | Role                          |
+| ---------- | ----------------------------- |
+| `usr542`   | Operator - User               |
+| `usr543`   | Operator - Transport Manager  |
+| `usr611`   | Operator - Admin              |
+| `usr612`   | Operator - Admin              |
+| `usr778`   | Partner - Admin               |
+| `usr779`   | Partner - Admin               |
+| `usr1964`  | Partner - User                |
+| `usr1965`  | Partner - User                |
+| `usr20131` | Local Authority administrator |
+| `usr20132` | Local Authority user          |
+
+### Internal
+
+| Username   | Role              |
+| ---------- | ----------------- |
+| `usr20`    | Case worker       |
+| `usr21`    | Case worker       |
+| `usr59`    | Admin             |
+| `usr273`   | Admin             |
+| `usr291`   | System Admin      |
+| `usr322`   | Admin             |
+| `usr331`   | Limited read only |
+| `usr342`   | Limited read only |
+| `usr455`   | Admin             |
+| `usr528`   | Read only         |
+| `usr529`   | Read only         |
+| `usr1071`  | Admin             |
+| `usr29431` | IRHP Admin        |
+| `usr36047` | Admin             |
+| `usr39158` | Admin             |
+| `usr68648` | Admin             |
+| `usr73852` | Admin             |
+| `usr76189` | Admin             |
+| `usr76754` | Admin             |
+
+:::info
+
+In the event that the local dataset changes, the above tables can be reproduced using the SQL:
+
+```sql
+SELECT u.login_id, r.description, IF(u.team_id IS NULL, "Selfserve", "Internal") as tenant FROM user u JOIN user_role ur ON u.id = ur.user_id JOIN role r ON r.id = ur.role_id;
+```
 
 :::
