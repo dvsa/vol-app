@@ -49,17 +49,6 @@ program.description("Script to refresh the local VOL application").action(async 
     }
   }
 
-  const hostsFile = fs.readFileSync("/etc/hosts", "utf8");
-
-  if (!hostsFile.includes("local.olcs.dev-dvsacloud.uk")) {
-    console.warn(chalk.yellow(`/etc/hosts has not been updated with the local domains. Please run:`));
-    console.warn(
-      chalk.bgYellow(
-        `sudo echo "127.0.0.1 iuweb.local.olcs.dev-dvsacloud.uk ssweb.local.olcs.dev-dvsacloud.uk api.local.olcs.dev-dvsacloud.uk cdn.local.olcs.dev-dvsacloud.uk" >> /etc/hosts`,
-      ),
-    );
-  }
-
   process.exit(0);
 });
 
