@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
  */
 class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterface
 {
-    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s';
+    public const ERR_UNABLE_UPLOAD = 'Unable to store uploaded file: %s. Code: %s';
 
     /**
      * @var DocumentStoreInterface
@@ -47,7 +47,7 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
             throw new MimeNotAllowedException();
         }
 
-        throw new Exception(sprintf(self::ERR_UNABLE_UPLOAD, $response->getBody()));
+        throw new Exception(sprintf(self::ERR_UNABLE_UPLOAD, $response->getBody(), $response->getStatusCode()));
     }
 
     /**
