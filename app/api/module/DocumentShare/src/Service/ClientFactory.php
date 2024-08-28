@@ -101,6 +101,8 @@ class ClientFactory implements FactoryInterface
         $adapter = new WebDAVAdapter($sabreClient, $clientOptions['workspace']);
         $fileSystem = new Filesystem($adapter);
 
-        return new WebDavClient($fileSystem);
+        $logger = $container->get('Logger');
+
+        return new WebDavClient($fileSystem, $logger);
     }
 }

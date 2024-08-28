@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\DocumentShare\Service;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
+use Laminas\Log\Logger;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
@@ -10,11 +11,6 @@ use League\Flysystem\FilesystemInterface;
 class WebDavClient implements DocumentStoreInterface
 {
     public const DS_DOWNLOAD_FILE_PREFIX = 'ds_dwnld_';
-
-    /**
-     * @var FilesystemInterface
-     */
-    protected $filesystem;
 
     /**
      * @var string
@@ -31,23 +27,28 @@ class WebDavClient implements DocumentStoreInterface
      *
      * @param FilesystemInterface $filesystem File System
      */
-    public function __construct(FilesystemInterface $filesystem)
-    {
-        $this->filesystem = $filesystem;
-    }
+    public function __construct(
+        protected FilesystemInterface $filesystem,
+        protected Logger $logger
+    ) {}
 
     /**
      * Read content from document store
      *
      * @param string $path Path
+     * @throws \Exception
      */
     public function read($path): File | false
     {
         $tmpFileName = tempnam(sys_get_temp_dir(), self::DS_DOWNLOAD_FILE_PREFIX);
 
+        if ($tmpFileName === false) {
+            return false;
+        }
+
         try {
             $readStream = $this->filesystem->readStream($path);
-            file_put_contents($tmpFileName, $readStream);
+            file_put_contents($tmpFileName, $readStream) or throw new \Exception(error_get_last());
 
             $file = new File();
             $file->setContentFromStream($tmpFileName);
@@ -97,7 +98,8 @@ class WebDavClient implements DocumentStoreInterface
     {
         $response = new WebDavResponse();
         try {
-            $fh = fopen($file->getResource(), 'rb');
+            $fh = fopen($file->getResource(), 'rb') or throw new \Exception(error_get_last());
+
             $response->setResponse($this->filesystem->writeStream($path, $fh));
         } catch (FileExistsException) {
             $response->setResponse(false);
