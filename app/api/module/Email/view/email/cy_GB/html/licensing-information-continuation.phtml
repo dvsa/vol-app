@@ -1,14 +1,7 @@
-<p>Annwyl weithredwr,</p>
+<?php echo $this->translate('email.licensing-information-continuation-html.body'); ?>
 
-<p>Rhoddwyd dogfennaeth bwysig ynghylch parhad eich Trwydded Gweithredwr&rsquo;s
-    am <?php echo $this->escapeHtml($this->licNo) . ' ' . $this->escapeHtml($this->operatorName); ?> wedi'i rhoi yn eich
-    mewnflwch gohebiaeth Hunan Wasanaeth.</p>
-
-<p>Nodwch fod rhaid ichi brintio'r ddogfen barhad, ei llofnodi a'i dychwelyd i'r swyddfa cyn gynted â phosibl,
-    gan amlygu unrhyw newidiadau i'r manylion ar y ddogfen.</p>
-
-<p>Nid anfonir copi papur o'r ddogfen hon ichi.</p>
+<p>Trwydded: <?php echo $this->escapeHtml($this->licNo) . ' ' . $this->escapeHtml($this->operatorName); ?></p>
 
 <p>
-    <a href="<?php echo $this->escapeHtml($this->url); ?>">Mewngofnodi i'ch cyfrif</a>
+  <a href="<?php echo $this->escapeHtml($this->url); ?>">Mewngofnodi i'ch cyfrif</a>
 </p>
