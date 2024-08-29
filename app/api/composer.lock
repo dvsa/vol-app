@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "09dafd059e7f1129bd2316ef96f48bfe",
+  "content-hash": "7c29a180f505918478039c3f59d22742",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -1736,16 +1736,16 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v0.1.1",
+      "version": "v1.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "1cec4e8cdf16bf61c848be45f758697977659c1e"
+        "reference": "7d3fe94fabc215d4721d550393018944055a6168"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/1cec4e8cdf16bf61c848be45f758697977659c1e",
-        "reference": "1cec4e8cdf16bf61c848be45f758697977659c1e",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7d3fe94fabc215d4721d550393018944055a6168",
+        "reference": "7d3fe94fabc215d4721d550393018944055a6168",
         "shasum": ""
       },
       "require": {
@@ -1753,8 +1753,9 @@
         "laminas/laminas-config": "^2.0|^3.0",
         "laminas/laminas-config-aggregator": "^1.7",
         "laminas/laminas-modulemanager": "^2.4|^3.0",
-        "php": "^7.4 || ^8.0",
-        "symfony/dependency-injection": "^5.4"
+        "php": "^8.0",
+        "symfony/dependency-injection": "^5.4",
+        "symfony/property-access": "^5.4|^6.3"
       },
       "require-dev": {
         "aws/aws-sdk-php": "^3.281",
@@ -1782,9 +1783,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v0.1.1"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v1.0.0"
       },
-      "time": "2023-11-06T10:01:58+00:00"
+      "time": "2024-03-19T14:06:05+00:00"
     },
     {
       "name": "dvsa/php-govuk-account",
@@ -8796,6 +8797,158 @@
         }
       ],
       "time": "2024-04-18T09:22:46+00:00"
+    },
+    {
+      "name": "symfony/property-access",
+      "version": "v6.4.8",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/property-access.git",
+        "reference": "e4d9b00983612f9c0013ca37c61affdba2dd975a"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/property-access/zipball/e4d9b00983612f9c0013ca37c61affdba2dd975a",
+        "reference": "e4d9b00983612f9c0013ca37c61affdba2dd975a",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.1",
+        "symfony/deprecation-contracts": "^2.5|^3",
+        "symfony/property-info": "^5.4|^6.0|^7.0"
+      },
+      "require-dev": {
+        "symfony/cache": "^5.4|^6.0|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\PropertyAccess\\": ""
+        },
+        "exclude-from-classmap": ["/Tests/"]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Fabien Potencier",
+          "email": "fabien@symfony.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Provides functions to read and write from/to an object or array using a simple string notation",
+      "homepage": "https://symfony.com",
+      "keywords": [
+        "access",
+        "array",
+        "extraction",
+        "index",
+        "injection",
+        "object",
+        "property",
+        "property-path",
+        "reflection"
+      ],
+      "support": {
+        "source": "https://github.com/symfony/property-access/tree/v6.4.8"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-05-31T14:49:08+00:00"
+    },
+    {
+      "name": "symfony/property-info",
+      "version": "v6.4.10",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/property-info.git",
+        "reference": "edaea9dcc723cb4a0ab6a00f7d6f8c07c0d8ff77"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/property-info/zipball/edaea9dcc723cb4a0ab6a00f7d6f8c07c0d8ff77",
+        "reference": "edaea9dcc723cb4a0ab6a00f7d6f8c07c0d8ff77",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.1",
+        "symfony/string": "^5.4|^6.0|^7.0"
+      },
+      "conflict": {
+        "phpdocumentor/reflection-docblock": "<5.2",
+        "phpdocumentor/type-resolver": "<1.5.1",
+        "symfony/dependency-injection": "<5.4",
+        "symfony/serializer": "<6.4"
+      },
+      "require-dev": {
+        "phpdocumentor/reflection-docblock": "^5.2",
+        "phpstan/phpdoc-parser": "^1.0",
+        "symfony/cache": "^5.4|^6.0|^7.0",
+        "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+        "symfony/serializer": "^6.4|^7.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\PropertyInfo\\": ""
+        },
+        "exclude-from-classmap": ["/Tests/"]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Kévin Dunglas",
+          "email": "dunglas@gmail.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Extracts information about PHP class' properties using metadata of popular sources",
+      "homepage": "https://symfony.com",
+      "keywords": [
+        "doctrine",
+        "phpdoc",
+        "property",
+        "symfony",
+        "type",
+        "validator"
+      ],
+      "support": {
+        "source": "https://github.com/symfony/property-info/tree/v6.4.10"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-07-26T07:32:07+00:00"
     },
     {
       "name": "symfony/service-contracts",

@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "75a2c30145f06bfaaf8515d2fc3a4d73",
+  "content-hash": "24e3c05e129acee0f6334b3520160946",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -993,16 +993,16 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v0.2.0",
+      "version": "v1.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "073c97dd6fb426e31bec5a592e3119c3ffcb668d"
+        "reference": "7d3fe94fabc215d4721d550393018944055a6168"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/073c97dd6fb426e31bec5a592e3119c3ffcb668d",
-        "reference": "073c97dd6fb426e31bec5a592e3119c3ffcb668d",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7d3fe94fabc215d4721d550393018944055a6168",
+        "reference": "7d3fe94fabc215d4721d550393018944055a6168",
         "shasum": ""
       },
       "require": {
@@ -1010,7 +1010,7 @@
         "laminas/laminas-config": "^2.0|^3.0",
         "laminas/laminas-config-aggregator": "^1.7",
         "laminas/laminas-modulemanager": "^2.4|^3.0",
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
         "symfony/dependency-injection": "^5.4",
         "symfony/property-access": "^5.4|^6.3"
       },
@@ -1040,9 +1040,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v0.2.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v1.0.0"
       },
-      "time": "2023-11-17T11:31:22+00:00"
+      "time": "2024-03-19T14:06:05+00:00"
     },
     {
       "name": "ezyang/htmlpurifier",

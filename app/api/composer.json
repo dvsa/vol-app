@@ -1,133 +1,133 @@
 {
-    "name": "olcs/backend",
-    "description": "Back End Application for OLCS Project",
-    "require": {
-        "php": "~8.2.0",
-        "ext-intl": "*",
-        "ext-json": "*",
-        "ext-curl": "*",
-        "ext-redis": "*",
-        "ext-pdo": "*",
-        "aws/aws-sdk-php": "^3.183",
-        "beberlei/doctrineextensions": "^1.0",
-        "caseyamcl/guzzle_retry_middleware": "^2.7.1",
-        "doctrine/doctrine-orm-module": "^5",
-        "doctrine/orm": "^2.19.5",
-        "doctrine/persistence": "^2.1",
-        "dvsa/authentication-cognito": "^2.0",
-        "dvsa/laminas-config-cloud-parameters": "^0.1.0",
-        "dvsa/php-govuk-account": "^2.0.1",
-        "gedmo/doctrine-extensions": "^3",
-        "guzzlehttp/guzzle": "^7.5",
-        "league/flysystem": "^1.0",
-        "league/flysystem-webdav": "1.0.10",
-        "monolog/monolog": "^2.9",
-        "olcs/olcs-logging": "^7.0",
-        "olcs/olcs-transfer": "^7.4.0",
-        "olcs/olcs-utils": "^6.0.0",
-        "olcs/olcs-xmltools": "~7.0.0",
-        "oro/doctrine-extensions": "^2",
-        "phprtflite/phprtflite": "~1.3.3",
-        "phpseclib/phpseclib": "^2.0.6",
-        "qandidate/toggle": "^1.1",
-        "ramsey/uuid": "^3.6",
-        "ruflin/elastica": "^7.0",
-        "saeven/zf3-purifier": "^1.1",
-        "simplesamlphp/saml2": "~3.4.2",
-        "symfony/filesystem": "^5",
-        "symfony/finder": "^5",
-        "symfony/lock": "^5",
-        "twig/twig": "^2.0",
-        "lm-commons/lmc-rbac-mvc": "^3.3",
-        "laminas/laminas-mail": "^2.16",
-        "laminas/laminas-mvc": "^3.3",
-        "laminas/laminas-mvc-i18n": "^1.4",
-        "laminas/laminas-servicemanager": "^3.17",
-        "laminas/laminas-http": "^2.16",
-        "laminas/laminas-view": "^2.23",
-        "laminas/laminas-i18n": "^2.17",
-        "laminas/laminas-serializer": "^2.13",
-        "laminas/laminas-eventmanager": "^3.5",
-        "psr/container": "^1.1|^2",
-        "laminas/laminas-cli": "^1.5"
-    },
-    "autoload": {
-        "psr-4": {
-            "Dvsa\\Olcs\\Db\\": "module/Db/src",
-            "Dvsa\\Olcs\\AcquiredRights\\": "module/AcquiredRights/src",
-            "Dvsa\\Olcs\\Api\\": "module/Api/src",
-            "Dvsa\\Olcs\\DocumentShare\\": "module/DocumentShare/src",
-            "Dvsa\\Olcs\\Cli\\": "module/Cli/src",
-            "Dvsa\\Olcs\\Scanning\\": "module/Scanning/src",
-            "Dvsa\\Olcs\\Email\\": "module/Email/src",
-            "Dvsa\\Olcs\\Address\\": "module/Address/src",
-            "Dvsa\\Olcs\\DvsaAddressService\\": "module/DvsaAddressService/src",
-            "Dvsa\\Olcs\\Snapshot\\": "module/Snapshot/src",
-            "Dvsa\\Olcs\\GdsVerify\\": "module/GdsVerify/src",
-            "Dvsa\\Olcs\\Queue\\": "module/Queue/src",
-            "Dvsa\\Olcs\\AwsSdk\\": "module/AwsSdk/src",
-            "Dvsa\\Olcs\\Auth\\": "module/Auth/src",
-            "Dvsa\\Olcs\\CompaniesHouse\\": "module/CompaniesHouse/src",
-            "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dvsa\\OlcsTest\\Auth\\": "test/module/Auth/src",
-            "Dvsa\\OlcsTest\\CompaniesHouse\\": "test/module/CompaniesHouse/src",
-            "Dvsa\\OlcsTest\\Cpms\\": "test/module/Cpms/src",
-            "Dvsa\\OlcsTest\\Db\\": "test/module/Olcs/Db/src",
-            "Dvsa\\OlcsTest\\": "test/src",
-            "Dvsa\\OlcsTest\\Address\\": "test/module/Address/src",
-            "Dvsa\\OlcsTest\\Api\\": "test/module/Api/src",
-            "Dvsa\\OlcsTest\\Cli\\": "test/module/Cli/src",
-            "Dvsa\\OlcsTest\\DocumentShare\\": "test/module/DocumentShare/src",
-            "Dvsa\\OlcsTest\\Email\\": "test/module/Email/src",
-            "Dvsa\\OlcsTest\\Scanning\\": "test/module/Scanning/src",
-            "Dvsa\\OlcsTest\\Snapshot\\": "test/module/Snapshot/src",
-            "Dvsa\\OlcsTest\\AwsSdk\\": "test/module/AwsSdk/src",
-            "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "platform": {
-            "ext-redis": "4.3"
-        },
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true
-        }
-    },
-    "scripts": {
-        "bin": "echo 'bin not installed'",
-        "post-install-cmd": [
-            "@composer bin all install"
-        ],
-        "test": "phpunit",
-        "phpcs": "phpcs",
-        "psalm": "psalm",
-        "phpstan": "phpstan",
-        "all": [
-            "@test",
-            "@phpcs",
-            "@psalm",
-            "@phpstan"
-        ]
-    },
-    "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.8",
-        "phpunit/phpunit": "^9.6",
-        "mockery/mockery": "^1.6",
-        "johnkary/phpunit-speedtrap": "^4.0",
-        "mikey179/vfsstream": "^1.6",
-        "dms/phpunit-arraysubset-asserts": "^0.5.0",
-        "dvsa/authentication-ldap": "^3"
-    },
-    "extra" : {
-      "bamarni-bin": {
-        "bin-links": true,
-        "forward-command": true
-      }
+  "name": "olcs/backend",
+  "description": "Back End Application for OLCS Project",
+  "require": {
+    "php": "~8.2.0",
+    "ext-intl": "*",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "ext-redis": "*",
+    "ext-pdo": "*",
+    "aws/aws-sdk-php": "^3.183",
+    "beberlei/doctrineextensions": "^1.0",
+    "caseyamcl/guzzle_retry_middleware": "^2.7.1",
+    "doctrine/doctrine-orm-module": "^5",
+    "doctrine/orm": "^2.19.5",
+    "doctrine/persistence": "^2.1",
+    "dvsa/authentication-cognito": "^2.0",
+    "dvsa/laminas-config-cloud-parameters": "^1.0",
+    "dvsa/php-govuk-account": "^2.0.1",
+    "gedmo/doctrine-extensions": "^3",
+    "guzzlehttp/guzzle": "^7.5",
+    "league/flysystem": "^1.0",
+    "league/flysystem-webdav": "1.0.10",
+    "monolog/monolog": "^2.9",
+    "olcs/olcs-logging": "^7.0",
+    "olcs/olcs-transfer": "^7.4.0",
+    "olcs/olcs-utils": "^6.0.0",
+    "olcs/olcs-xmltools": "~7.0.0",
+    "oro/doctrine-extensions": "^2",
+    "phprtflite/phprtflite": "~1.3.3",
+    "phpseclib/phpseclib": "^2.0.6",
+    "qandidate/toggle": "^1.1",
+    "ramsey/uuid": "^3.6",
+    "ruflin/elastica": "^7.0",
+    "saeven/zf3-purifier": "^1.1",
+    "simplesamlphp/saml2": "~3.4.2",
+    "symfony/filesystem": "^5",
+    "symfony/finder": "^5",
+    "symfony/lock": "^5",
+    "twig/twig": "^2.0",
+    "lm-commons/lmc-rbac-mvc": "^3.3",
+    "laminas/laminas-mail": "^2.16",
+    "laminas/laminas-mvc": "^3.3",
+    "laminas/laminas-mvc-i18n": "^1.4",
+    "laminas/laminas-servicemanager": "^3.17",
+    "laminas/laminas-http": "^2.16",
+    "laminas/laminas-view": "^2.23",
+    "laminas/laminas-i18n": "^2.17",
+    "laminas/laminas-serializer": "^2.13",
+    "laminas/laminas-eventmanager": "^3.5",
+    "psr/container": "^1.1|^2",
+    "laminas/laminas-cli": "^1.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dvsa\\Olcs\\Db\\": "module/Db/src",
+      "Dvsa\\Olcs\\AcquiredRights\\": "module/AcquiredRights/src",
+      "Dvsa\\Olcs\\Api\\": "module/Api/src",
+      "Dvsa\\Olcs\\DocumentShare\\": "module/DocumentShare/src",
+      "Dvsa\\Olcs\\Cli\\": "module/Cli/src",
+      "Dvsa\\Olcs\\Scanning\\": "module/Scanning/src",
+      "Dvsa\\Olcs\\Email\\": "module/Email/src",
+      "Dvsa\\Olcs\\Address\\": "module/Address/src",
+      "Dvsa\\Olcs\\DvsaAddressService\\": "module/DvsaAddressService/src",
+      "Dvsa\\Olcs\\Snapshot\\": "module/Snapshot/src",
+      "Dvsa\\Olcs\\GdsVerify\\": "module/GdsVerify/src",
+      "Dvsa\\Olcs\\Queue\\": "module/Queue/src",
+      "Dvsa\\Olcs\\AwsSdk\\": "module/AwsSdk/src",
+      "Dvsa\\Olcs\\Auth\\": "module/Auth/src",
+      "Dvsa\\Olcs\\CompaniesHouse\\": "module/CompaniesHouse/src",
+      "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dvsa\\OlcsTest\\Auth\\": "test/module/Auth/src",
+      "Dvsa\\OlcsTest\\CompaniesHouse\\": "test/module/CompaniesHouse/src",
+      "Dvsa\\OlcsTest\\Cpms\\": "test/module/Cpms/src",
+      "Dvsa\\OlcsTest\\Db\\": "test/module/Olcs/Db/src",
+      "Dvsa\\OlcsTest\\": "test/src",
+      "Dvsa\\OlcsTest\\Address\\": "test/module/Address/src",
+      "Dvsa\\OlcsTest\\Api\\": "test/module/Api/src",
+      "Dvsa\\OlcsTest\\Cli\\": "test/module/Cli/src",
+      "Dvsa\\OlcsTest\\DocumentShare\\": "test/module/DocumentShare/src",
+      "Dvsa\\OlcsTest\\Email\\": "test/module/Email/src",
+      "Dvsa\\OlcsTest\\Scanning\\": "test/module/Scanning/src",
+      "Dvsa\\OlcsTest\\Snapshot\\": "test/module/Snapshot/src",
+      "Dvsa\\OlcsTest\\AwsSdk\\": "test/module/AwsSdk/src",
+      "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "platform": {
+      "ext-redis": "4.3"
+    },
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "post-install-cmd": [
+      "@composer bin all install"
+    ],
+    "test": "phpunit",
+    "phpcs": "phpcs",
+    "psalm": "psalm",
+    "phpstan": "phpstan",
+    "all": [
+      "@test",
+      "@phpcs",
+      "@psalm",
+      "@phpstan"
+    ]
+  },
+  "require-dev": {
+    "bamarni/composer-bin-plugin": "^1.8",
+    "phpunit/phpunit": "^9.6",
+    "mockery/mockery": "^1.6",
+    "johnkary/phpunit-speedtrap": "^4.0",
+    "mikey179/vfsstream": "^1.6",
+    "dms/phpunit-arraysubset-asserts": "^0.5.0",
+    "dvsa/authentication-ldap": "^3"
+  },
+  "extra": {
+    "bamarni-bin": {
+      "bin-links": true,
+      "forward-command": true
+    }
+  }
 }
