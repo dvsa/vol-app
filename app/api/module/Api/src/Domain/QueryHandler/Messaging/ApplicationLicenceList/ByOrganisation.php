@@ -43,13 +43,22 @@ class ByOrganisation extends AbstractQueryHandler implements ToggleRequiredInter
 
         $licences = $licenceRepository->fetchByOrganisationIdAndStatuses(
             $orgId,
-            [Licence::LICENCE_STATUS_VALID, Licence::LICENCE_STATUS_SUSPENDED, Licence::LICENCE_STATUS_CURTAILED],
+            [
+                Licence::LICENCE_STATUS_VALID,
+                Licence::LICENCE_STATUS_SUSPENDED,
+                Licence::LICENCE_STATUS_CURTAILED,
+                Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
+            ],
         );
 
         /** @var Application[] $applications */
         $applications = $applicationRepository->fetchByOrganisationIdAndStatuses(
             $orgId,
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, Entity::APPLICATION_STATUS_UNDER_CONSIDERATION],
+            [
+                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                Entity::APPLICATION_STATUS_GRANTED
+            ],
         );
 
         $results = array_fill_keys(['licences', 'applications'], []);
