@@ -37,7 +37,7 @@ class WebDavClientTest extends MockeryTestCase
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
-        $this->sut = new Client($this->mockFileSystem);
+        $this->sut = new Client($this->mockFileSystem, $this->createMock(\Laminas\Log\Logger::class));
 
         $this->mockFile = m::mock(DsFile::class);
 
@@ -97,7 +97,7 @@ class WebDavClientTest extends MockeryTestCase
 
         /** @var DsFile $mockFile */
         $mockFile = m::mock(DsFile::class)
-            ->shouldReceive('getResource')->once()->andReturn($res)
+            ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(true);
@@ -119,7 +119,7 @@ class WebDavClientTest extends MockeryTestCase
 
         /** @var DsFile $mockFile */
         $mockFile = m::mock(DsFile::class)
-            ->shouldReceive('getResource')->once()->andReturn($res)
+            ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(false);
@@ -141,7 +141,7 @@ class WebDavClientTest extends MockeryTestCase
 
         /** @var DsFile $mockFile */
         $mockFile = m::mock(DsFile::class)
-            ->shouldReceive('getResource')->once()->andReturn($res)
+            ->shouldReceive('getResource')->andReturn($res)
             ->getMock();
 
         $this->mockFileSystem->expects('writeStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(

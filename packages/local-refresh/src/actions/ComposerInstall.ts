@@ -12,12 +12,25 @@ const phpAppDirectoryNames = ["api", "selfserve", "internal"];
 const phpAppDirectories = phpAppDirectoryNames.map((dir) => path.resolve(__dirname, `../../../../app/${dir}`));
 
 export default class ComposerInstall implements ActionInterface {
+  private ignorePlatformReqs: boolean = false;
+
   async prompt(): Promise<boolean> {
     const { shouldInstall } = await prompts({
       type: "confirm",
       name: "shouldInstall",
       message: "Install Composer dependencies?",
     });
+
+    if (shouldInstall) {
+      const { ignoreReqs } = await prompts({
+        type: "confirm",
+        name: "ignoreReqs",
+        message: "Do you want to add the --ignore-platform-reqs flag?",
+        initial: false,
+      });
+
+      this.ignorePlatformReqs = ignoreReqs;
+    }
 
     return shouldInstall;
   }
@@ -34,7 +47,9 @@ export default class ComposerInstall implements ActionInterface {
     phpAppDirectories.forEach((dir) => {
       debug(chalk.blue(`Running composer install in ${dir}...`));
 
-      exec("composer install --no-interaction --no-progress", debug, {
+      const command = `composer install ${this.ignorePlatformReqs ? '--ignore-platform-reqs' : ''} --no-interaction --no-progress`;
+
+      exec(command, debug, {
         cwd: dir,
       });
 
