@@ -28,9 +28,21 @@ class ByOrganisationTest extends QueryHandlerTestCase
         $this->mockRepo(Repository\Application::class, Repository\Application::class);
         $this->mockRepo(Repository\Licence::class, Repository\Licence::class);
 
-        $this->mockedSmServices = ['SectionAccessService' => m::mock(), AuthorizationService::class => m::mock(AuthorizationService::class)->shouldReceive('isGranted')->with(Permission::SELFSERVE_USER, null)->andReturn(true)->shouldReceive('isGranted')->with(Permission::INTERNAL_USER, null)->andReturn(false)->getMock(),];
+        $this->mockedSmServices = [
+            'SectionAccessService' => m::mock(),
+            AuthorizationService::class => m::mock(AuthorizationService::class)
+                ->shouldReceive('isGranted')
+                ->with(Permission::SELFSERVE_USER, null)
+                ->andReturn(true)
+                ->shouldReceive('isGranted')
+                ->with(Permission::INTERNAL_USER, null)
+                ->andReturn(false)
+                ->getMock(),
+            ];
 
-        $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser->getId')->andReturn(1);
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser->getId')
+            ->andReturn(1);
 
         parent::setUp();
     }
