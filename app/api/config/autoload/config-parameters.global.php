@@ -1,5 +1,6 @@
 <?php
 
+use Dvsa\LaminasConfigCloudParameters\Cast\Integer;
 use Dvsa\LaminasConfigCloudParameters\ParameterProvider\Aws\SecretsManager;
 use Dvsa\LaminasConfigCloudParameters\ParameterProvider\Aws\ParameterStore;
 
@@ -36,5 +37,9 @@ return [
     ],
     'config_parameters' => [
         'providers' => $providers,
+    ],
+    'casts' => [
+        '[log][Logger][writers][full][options][filters][priority][options][priority]' => Integer::class,
+        '[log][ExceptionLogger][writers][full][options][filters][priority][options][priority]' => Integer::class,
     ],
 ];
