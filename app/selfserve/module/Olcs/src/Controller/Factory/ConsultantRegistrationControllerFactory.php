@@ -8,6 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\ConsultantRegistrationController;
 use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Session\ConsultantRegistration;
 use Psr\Container\ContainerInterface;
@@ -15,7 +16,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\UserRegistrationController;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class UserRegistrationControllerFactory implements FactoryInterface
+class ConsultantRegistrationControllerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
@@ -23,7 +24,7 @@ class UserRegistrationControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return UserRegistrationController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UserRegistrationController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConsultantRegistrationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
@@ -32,9 +33,10 @@ class UserRegistrationControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $urlHelper = $container->get(UrlHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $consultantRegistrationSession = $container->get(ConsultantRegistration::class);
         $formatDataMapper = $container->get(CreateAccountMapper::class);
 
-        return new UserRegistrationController(
+        return new ConsultantRegistrationController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
@@ -42,6 +44,7 @@ class UserRegistrationControllerFactory implements FactoryInterface
             $translationHelper,
             $urlHelper,
             $flashMessengerHelper,
+            $consultantRegistrationSession,
             $formatDataMapper
         );
     }

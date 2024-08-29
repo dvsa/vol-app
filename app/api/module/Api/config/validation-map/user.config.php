@@ -31,6 +31,7 @@ return [
     CommandHandler\User\RegisterUserSelfserve::class                            => NoValidationRequired::class,
     CommandHandler\User\RegisterUserSelfserveFactory::class                     => NoValidationRequired::class,
     CommandHandler\User\RemindUsernameSelfserve::class                          => NoValidationRequired::class,
+    CommandHandler\User\RegisterConsultantAndOperator::class                    => NoValidationRequired::class,
     CommandHandler\User\UpdatePartner::class                                    => IsInternalUser::class,
     CommandHandler\User\CreateUserSelfserve::class                              => CanManageUser::class,
     CommandHandler\User\CreateUserSelfServeFactory::class                       => CanManageUser::class,

@@ -7,15 +7,19 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\ToggleAwareInterface;
+use Dvsa\Olcs\Api\Domain\ToggleAwareTrait;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 
 /**
  * Send User Registered Email
  */
-final class SendUserRegistered extends AbstractCommandHandler implements \Dvsa\Olcs\Api\Domain\EmailAwareInterface
+final class SendUserRegistered extends AbstractCommandHandler implements \Dvsa\Olcs\Api\Domain\EmailAwareInterface, ToggleAwareInterface
 {
     use \Dvsa\Olcs\Api\Domain\EmailAwareTrait;
+    use ToggleAwareTrait;
 
     protected $repoServiceName = 'User';
 
@@ -35,9 +39,13 @@ final class SendUserRegistered extends AbstractCommandHandler implements \Dvsa\O
 
         $message->setTranslateToWelsh($user->getTranslateToWelsh());
 
+        $template = $this->toggleService->isEnabled(
+            FeatureToggle::TRANSPORT_CONSULTANT_ROLE)
+            ? 'user-registered-tc' : 'user-registered';
+
         $this->sendEmailTemplate(
             $message,
-            'user-registered',
+            $template,
             [
                 'orgName' => $user->getRelatedOrganisationName(),
                 'loginId' => $user->getLoginId(),

@@ -60,6 +60,9 @@ final class RegisterUserSelfserve extends AbstractUserCommandHandler implements
         } elseif (!empty($data['organisationName'])) {
             // create organisation and link with it
             $data['organisations'] = [$this->createOrganisation($data)];
+        } elseif (!empty($data['organisation'])) {
+            // link with the organisation
+            $data['organisations'] = [$this->getRepo('Organisation')->fetchById($data['organisation'])];
         }
 
         if (empty($data['organisations'])) {

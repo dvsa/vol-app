@@ -3,6 +3,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\FeatureToggle;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -12,9 +13,11 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
+use Olcs\Controller\Mapper\CreateAccountMapper;
 
 /**
  * User Registration Controller
@@ -28,9 +31,28 @@ class UserRegistrationController extends AbstractController
         protected ScriptFactory $scriptFactory,
         protected TranslationHelperService $translationHelper,
         protected UrlHelperService $urlHelper,
-        protected FlashMessengerHelperService $flashMessengerHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected CreateAccountMapper $formatDataMapper
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
+    }
+
+    /**
+     * Temporary method to start the user registration flow based on Transport Consultant Role feature toggle.
+     *
+     * @return mixed
+     */
+    public function startAction()
+    {
+        if($this->handleQuery(
+            IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]])
+        )->getResult()['isEnabled']) {
+            // If the feature toggle is enabled, start the TC journey in new controller
+            return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add']);
+        } else {
+            // If disabled, start the normal add journey in this controller
+            return $this->forward()->dispatch(static::class, ['action' => 'add']);
+        }
     }
 
     /**
@@ -49,7 +71,7 @@ class UserRegistrationController extends AbstractController
                 return $this->redirectToHome();
             }
 
-            $postData = $this->formatPostData(
+            $postData = $this->formatDataMapper->formatPostData(
                 $this->params()->fromPost()
             );
 
@@ -67,6 +89,7 @@ class UserRegistrationController extends AbstractController
             ]
         );
         $view->setTemplate('olcs/user-registration/index');
+        $this->placeholder()->setPlaceholder('pageTitle', 'page.title.user-registration.add');
 
         $this->scriptFactory->loadFile('user-registration');
 
@@ -275,7 +298,7 @@ class UserRegistrationController extends AbstractController
      */
     private function createUser($formData)
     {
-        $data = $this->formatSaveData($formData);
+        $data = $this->formatDataMapper->formatSaveData($formData);
 
         $response = $this->handleCommand(
             RegisterDto::create($data)
@@ -297,51 +320,6 @@ class UserRegistrationController extends AbstractController
         }
 
         return $this->generateContentForUserRegistration($formData, $errors);
-    }
-
-    /**
-     * Formats the data from what's in the form to what the service needs.
-     * This is mapping, not business logic.
-     *
-     * @param array $data Posted form data
-     *
-     * @return array
-     */
-    private function formatSaveData($data)
-    {
-        $output = [];
-        $output['loginId'] = $data['fields']['loginId'];
-        $output['translateToWelsh'] = $data['fields']['translateToWelsh'];
-        $output['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
-        $output['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
-        $output['contactDetails']['person']['forename']   = $data['fields']['forename'];
-
-        if ('Y' === $data['fields']['isLicenceHolder']) {
-            $output['licenceNumber'] = $data['fields']['licenceNumber'];
-        } else {
-            $output['organisationName'] = $data['fields']['organisationName'];
-            $output['businessType'] = $data['fields']['businessType'];
-        }
-
-        return $output;
-    }
-
-    /**
-     * A radio button is used and validated only if a checkbox is selected.
-     * As browsers by default do not post the value or default value of a radio
-     * button.  We specify an empty input for this field.
-     *
-     * @param array $postData Data from posted form
-     *
-     * @return array
-     */
-    private function formatPostData(array $postData)
-    {
-        if (empty($postData['fields']['businessType'])) {
-            $postData['fields']['businessType'] = null;
-        }
-
-        return $postData;
     }
 
     /**
