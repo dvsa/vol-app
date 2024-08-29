@@ -1,14 +1,7 @@
-<p>Dear operator,</p>
+<?php echo $this->translate('email.licensing-information-continuation-html.body'); ?>
 
-<p>Important documentation relating to your Operator&rsquo;s Licence continuation for
- <?php echo $this->escapeHtml($this->licNo) . ' ' . $this->escapeHtml($this->operatorName); ?> has been placed in your
- Self Service correspondence inbox.</p>
-
-<p>Please note that you must print off the continuation document, sign it and return it
-to the office as soon as possible, highlighting any changes to the details on the document.</p>
-
-<p>You will not be sent a paper copy of this document.</p>
+<p>Licence: <?php echo $this->escapeHtml($this->licNo) . ' ' . $this->escapeHtml($this->operatorName); ?></p>
 
 <p>
-    <a href="<?php echo $this->escapeHtml($this->url); ?>">Sign in to your account</a>
+  <a href="<?php echo $this->escapeHtml($this->url); ?>">Sign in to your account</a>
 </p>
