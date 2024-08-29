@@ -45,5 +45,7 @@ return [
         '[query_cache][enabled]' => Boolean::class,
         '[query_cache][ttl][' . CacheableMediumTermQueryInterface::class . ']' => Integer::class,
         '[query_cache][ttl][' . CacheableLongTermQueryInterface::class . ']' => Integer::class,
+        '[log][Logger][writers][full][options][filters][priority][options][priority]' => Integer::class,
+        '[log][ExceptionLogger][writers][full][options][filters][priority][options][priority]' => Integer::class,
     ],
 ];
