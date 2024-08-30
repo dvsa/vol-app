@@ -149,7 +149,7 @@ module "service" {
 
   services = {
     "api" = {
-      cpu    = 1024
+      cpu    = 2048
       memory = 4096
 
       version    = var.api_image_tag
@@ -168,7 +168,7 @@ module "service" {
     }
 
     "internal" = {
-      cpu    = 1024
+      cpu    = 2048
       memory = 4096
 
       version    = var.internal_image_tag
@@ -208,7 +208,7 @@ module "service" {
     }
 
     "selfserve" = {
-      cpu    = 1024
+      cpu    = 2048
       memory = 4096
 
       version    = var.selfserve_image_tag
