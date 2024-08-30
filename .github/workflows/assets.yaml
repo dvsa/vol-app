@@ -41,7 +41,7 @@ jobs:
       - run: npm install --prefer-offline
         shell: bash
 
-      - run: npm run build:container
+      - run: npm run build:production
         shell: bash
 
       - name: Configure AWS credentials
