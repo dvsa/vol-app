@@ -168,3 +168,21 @@ SELECT u.login_id, r.description, IF(u.team_id IS NULL, "Selfserve", "Internal")
 ```
 
 :::
+
+## Executing CLI Commands for API (Batch/Queue/etc)
+
+
+:::info
+
+The additional environment variables are only required if you are running commands which will interact with AWS.
+
+:::
+
+```sh
+docker exec -it \
+   -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+   -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+   -e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
+   vol-app-api-1 \
+   /bin/sh -c "HOME=/tmp php -d memory_limit=1024M /var/www/html/vendor/bin/laminas --container=config/container-cli.php queue:process-queue"
+```
