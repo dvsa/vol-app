@@ -128,7 +128,7 @@ class LoginController implements InjectApplicationEventInterface
         $result = $this->attemptAuthentication($request);
 
         if ($result->getCode() === Result::SUCCESS) {
-            return $this->handleSuccessfulAuthentication($result, $response, $request);
+            return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
         }
 
         if ($result->getCode() === static::AUTH_SUCCESS_WITH_CHALLENGE) {
@@ -220,33 +220,6 @@ class LoginController implements InjectApplicationEventInterface
 
         $result = $this->authenticationService->authenticate($this->authenticationAdapter);
         return $result;
-    }
-
-    /**
-     * Handles successful authentication.
-     *
-     * @return Response
-     */
-    private function handleSuccessfulAuthentication(Result $result, Response $response, Request $request)
-    {
-        $identityProvider = $result->getIdentity()['provider'];
-
-        if ($identityProvider === self::DVSA_OLCS_AUTH_CLIENT_COGNITO) {
-            return $this->handleSuccessCognitoResult();
-        }
-
-        return $this->redirectHelper->toRoute(static::ROUTE_AUTH_LOGIN_GET);
-    }
-
-    /**
-     * @param array $identity
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
-    private function handleSuccessCognitoResult()
-    {
-        return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
     }
 
     /**
