@@ -92,7 +92,10 @@ class LdapAdapter extends AbstractAdapter
      */
     public function register(string $identifier, string $password, string $email, array $attributes = []): void
     {
-        $attributes = array_merge(['email' => $email], $attributes);
+        // The `sn` attribute is required while using the object class `inetOrgPerson`.
+        // This is a local authentication adapter so the data in the `sn` field isn't important.
+        $attributes['sn'] = $identifier;
+
         $this->client->register($identifier, $password, $attributes);
     }
 

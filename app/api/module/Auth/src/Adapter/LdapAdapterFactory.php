@@ -12,7 +12,13 @@ class LdapAdapterFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LdapAdapter
     {
+        /**
+         * @var Client $client
+         */
         $client = $container->get(Client::class);
+
+        // Using an object class without a `userAccountControl` attribute.
+        $client->setUserAccountControlAttribute(null);
 
         return new LdapAdapter($client);
     }
