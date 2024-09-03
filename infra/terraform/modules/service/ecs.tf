@@ -109,6 +109,10 @@ module "ecs_service" {
             name  = "APP_VERSION"
             value = var.services[each.key].version
           },
+          {
+            name  = "ELASTICACHE_URL"
+            value = var.elasticache_url
+          }
         ],
         each.value.add_cdn_url_to_env ? [
           {

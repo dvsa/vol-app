@@ -23,6 +23,11 @@ variable "vpc_id" {
   description = "The VPC ID"
 }
 
+variable "elasticache_url" {
+  type        = string
+  description = "The URL of the Elasticache cluster"
+}
+
 variable "services" {
   type = map(object({
     version    = string

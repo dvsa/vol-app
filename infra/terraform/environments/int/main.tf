@@ -147,6 +147,8 @@ module "service" {
 
   vpc_id = data.aws_vpc.this.id
 
+  elasticache_url = "tcp://cache.qa.olcs.dev-dvsacloud.uk:6379"
+
   services = {
     "api" = {
       cpu    = 2048
