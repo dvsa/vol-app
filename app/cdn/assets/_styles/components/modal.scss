@@ -19,7 +19,6 @@
 
 .modal,
 .modal--alert {
-
   margin: 5% auto;
   padding: $gutter;
   max-width: 600px;
@@ -28,7 +27,7 @@
   background: $white;
   z-index: 2;
 
-  @media(max-width: breakpoint('break-3')) {
+  @media (max-width: breakpoint("break-3")) {
     width: 90%;
     left: 0;
   }
@@ -70,8 +69,7 @@
   td {
     word-break: break-word;
   }
-
-}// .modal
+} // .modal
 
 //specific problem with continuations - ideally we'll find time to remove this
 //for now we can alter the padding slightly
@@ -87,7 +85,7 @@ form#updateContinuation .govuk-button-group {
  * Selfserve only styles
  */
 
-@if $app == 'selfserve' {
+@if $app == "selfserve" {
   .modal {
     &__header {
       margin-bottom: $gutter-half;
@@ -97,7 +95,7 @@ form#updateContinuation .govuk-button-group {
       @extend %h2;
     }
     &__close {
-      @include svg('selfserve-modal-close');
+      @include svg("selfserve-modal-close");
     }
   }
   .modal--alert {
@@ -110,21 +108,19 @@ form#updateContinuation .govuk-button-group {
     }
   }
   .modal--blockBackground {
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
-
-}// selfserve
+} // selfserve
 
 /**
  * Internal only styles
  */
 
-@if $app == 'internal' {
-
+@if $app == "internal" {
   .modal,
   .modal--alert {
     border-radius: 3px;
-    padding: 0 0 $gutter * 1.5;
+    padding: 0 0;
     &__title {
       @extend %h4;
     }
@@ -135,24 +131,15 @@ form#updateContinuation .govuk-button-group {
       border-bottom: 1px solid $grey-3;
     }
     &__close {
-      @include svg('internal-modal-close');
+      @include svg("internal-modal-close");
       top: 13px;
       right: 15px;
     }
     &__content {
       padding: $gutter-two-thirds $gutter-half;
     }
-    .govuk-button-group {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      padding: 15px;
-      width: auto;
-    }
     p {
       @extend %paragraph--small;
     }
   }
-
-}// internal
+} // internal
