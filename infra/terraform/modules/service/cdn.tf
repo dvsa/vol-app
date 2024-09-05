@@ -21,15 +21,9 @@ data "aws_route53_zone" "public" {
   name = var.domain_name
 }
 
-data "aws_route53_zone" "private" {
-  name = var.domain_name
-
-  private_zone = true
-}
-
 locals {
-  domain_name = trimsuffix(data.aws_route53_zone.public.name, ".")
-  subdomain   = "cdn"
+  domain_name = data.aws_route53_zone.public.name
+  subdomain   = "${environment}-cdn"
 }
 
 module "acm" {
