@@ -31,7 +31,7 @@ return [
         'endpoints' => [
             // Backend service URI *Environment specific*
             'backend' => [
-                'url' => 'api.local.olcs.dev-dvsacloud.uk',
+                'url' => 'http://api.local.olcs.dev-dvsacloud.uk/',
             ],
             // Postcode/Address service URI *Environment specific*
             'postcode' => [
