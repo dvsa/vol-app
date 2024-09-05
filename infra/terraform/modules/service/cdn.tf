@@ -200,7 +200,7 @@ module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 4.0"
 
-  zone_id = data.aws_route53_zone.private.zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
 
   records = [
     {
