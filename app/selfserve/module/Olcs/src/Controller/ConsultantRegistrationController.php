@@ -59,7 +59,7 @@ class ConsultantRegistrationController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
                 if(($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
-                    // Add "speak to your adminstrator page
+                    $this->redirect()->toRoute('user-registration/contact-your-administrator');
                 } elseif (($formData['fields']['existingOperatorLicence'] ?? null) === 'N') {
                     $this->redirect()->toRoute('user-registration/operator-representation');
                 }
@@ -101,6 +101,14 @@ class ConsultantRegistrationController extends AbstractController
         return $this->prepareView('olcs/user-registration/index', [
             'form' => $form,
         ]);
+    }
+
+    /**
+     * @return Response|ViewModel
+     */
+    public function contactYourAdministratorAction()
+    {
+        return $this->prepareView('olcs/user-registration/contact-your-administrator');
     }
 
 

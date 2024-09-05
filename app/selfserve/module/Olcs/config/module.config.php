@@ -1,7 +1,7 @@
 <?php
 
+use Common\Service\Data as CommonDataService;
 use Laminas\Router\Http\Segment;
-use Laminas\Router\Http\HttpRouterFactory;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
@@ -19,18 +19,25 @@ use Olcs\Controller\Factory\Ebsr\UploadsControllerFactory;
 use Olcs\Controller\Factory\IndexControllerFactory;
 use Olcs\Controller\Factory\MyDetailsControllerFactory;
 use Olcs\Controller\IndexController;
-use Common\Service\Data as CommonDataService;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
+use Olcs\Controller\Lva\DirectorChange as LvaDirectorChangeControllers;
 use Olcs\Controller\Lva\Factory\Adapter\ApplicationPeopleAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\LicencePeopleAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\VariationPeopleAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory;
+use Olcs\Controller\Lva\Factory\Controller\DirectorChange as LvaDirectorChangeControllerFactories;
+use Olcs\Controller\Lva\Factory\Controller\Licence as LvaLicenceControllerFactories;
+use Olcs\Controller\Lva\Factory\Controller\TransportManager as LvaTransportManagerControllerFactories;
+use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFactories;
+use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
+use Olcs\Controller\Lva\TransportManager as LvaTransportManagerControllers;
+use Olcs\Controller\Lva\Variation as LvaVariationControllers;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
@@ -51,16 +58,6 @@ use Olcs\Service\Data as DataService;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Qa as QaService;
 use Olcs\Session\LicenceVehicleManagement;
-use Olcs\Controller\Lva\Application as LvaApplicationControllers;
-use Olcs\Controller\Lva\Factory\Controller\Application as LvaApplicationControllerFactories;
-use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
-use Olcs\Controller\Lva\Factory\Controller\Licence as LvaLicenceControllerFactories;
-use Olcs\Controller\Lva\Variation as LvaVariationControllers;
-use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFactories;
-use Olcs\Controller\Lva\TransportManager as LvaTransportManagerControllers;
-use Olcs\Controller\Lva\Factory\Controller\TransportManager as LvaTransportManagerControllerFactories;
-use Olcs\Controller\Lva\DirectorChange as LvaDirectorChangeControllers;
-use Olcs\Controller\Lva\Factory\Controller\DirectorChange as LvaDirectorChangeControllerFactories;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
@@ -543,8 +540,18 @@ $routes = [
                 'options' => [
                     'route' => 'register-consultant-account[/]',
                     'defaults' => [
-                        'controller' => \Olcs\Controller\ConsultantRegistrationController::class,
+                        'controller' => ConsultantRegistrationController::class,
                         'action' => 'registerConsultantAccount'
+                    ]
+                ]
+            ],
+            'contact-your-administrator' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'contact-your-administrator[/]',
+                    'defaults' => [
+                        'controller' => ConsultantRegistrationController::class,
+                        'action' => 'contactYourAdministrator'
                     ]
                 ]
             ]
