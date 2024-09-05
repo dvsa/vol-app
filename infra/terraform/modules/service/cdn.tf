@@ -23,7 +23,7 @@ data "aws_route53_zone" "public" {
 
 locals {
   domain_name = data.aws_route53_zone.public.name
-  subdomain   = "${environment}-cdn"
+  subdomain   = "${var.environment}-cdn"
 }
 
 module "acm" {
