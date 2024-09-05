@@ -1,5 +1,4 @@
 <?php
-
 echo $this->partial(
     'partials/page-header-simple',
     [
@@ -10,20 +9,13 @@ echo $this->partial(
 ?>
 
 <div class="row">
-
   <div class="two-thirds">
     <div class="article">
       <p>
-          <?php echo $this->translateReplace(
-                'user-registration.page.contact-your-administrator.content',
-                [
-                    $this->url('auth/login/GET')
-                ]
-            ); ?>
+          <?php echo $this->translate('user-registration.page.contact-your-administrator.content'); ?>
       </p>
-      <p><a href="<?php echo $this->url('auth/login/GET'); ?>" class="govuk-button" >Back to Login</a>
+      <p><a href="<?php echo $this->url('auth/login/GET'); ?>" class="govuk-button" ><?php echo $this->translate('back-to-login'); ?></a>
       </p>
     </div>
   </div>
-
 </div>
