@@ -9,12 +9,10 @@ var OLCS = OLCS || {};
  * in some way by the input received in the current one.
  */
 
-OLCS.cascadeForm = (function(document, $, undefined) {
-
+OLCS.cascadeForm = (function (document, $, undefined) {
   "use strict";
 
   return function init(options) {
-
     var selector = options.form || "form";
     var formSelector = selector;
     var previousFieldset;
@@ -27,7 +25,7 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       // target fieldset and clears them out
       return function clear() {
         var elems = $(target).find(":input");
-        $.each(elems, function(i, elem) {
+        $.each(elems, function (i, elem) {
           elem = $(elem);
           if (elem.is(":checked")) {
             elem.prop("checked", false);
@@ -37,7 +35,6 @@ OLCS.cascadeForm = (function(document, $, undefined) {
         $(target).trigger("change");
       };
     }
-
 
     // iterate over the form, checking the relevant rulesets
     function checkForm() {
@@ -70,7 +67,6 @@ OLCS.cascadeForm = (function(document, $, undefined) {
      * if so; although currently there are exceptions to this
      */
     function triggerRule(group, selector, rule) {
-
       var show;
       var elem;
       var action = "none";
@@ -99,11 +95,17 @@ OLCS.cascadeForm = (function(document, $, undefined) {
         action = "hide";
       }
       OLCS.logger.verbose(
-        group + " > " + selector +
-        ", should show? (" + show + "), is visible? (" +
-        elem.is(":visible") + "), action: (" +
-        action + ")",
-        "cascadeForm"
+        group +
+          " > " +
+          selector +
+          ", should show? (" +
+          show +
+          "), is visible? (" +
+          elem.is(":visible") +
+          "), action: (" +
+          action +
+          ")",
+        "cascadeForm",
       );
 
       if (action !== "none") {
@@ -114,11 +116,11 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       if (action === "show") {
         elem.attr("aria-hidden", "false");
         elem.removeClass("hidden");
+        elem.css("display", "");
       } else if (action === "hide") {
         elem.attr("aria-hidden", "true");
         elem.addClass("hidden");
       }
-
     }
 
     /**
@@ -127,7 +129,6 @@ OLCS.cascadeForm = (function(document, $, undefined) {
      * the group itself rather than a child
      */
     function findContainer(group, selector) {
-
       if (selector === "*") {
         return OLCS.formHelper(group);
       }
@@ -140,16 +141,19 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       }
 
       if (selector.search(":") !== -1) {
-
         parts = selector.split(":");
 
         switch (parts[0]) {
           case "label":
-            return $(formSelector).find("label[for=" + parts[1] + "]").parents(".field");
+            return $(formSelector)
+              .find("label[for=" + parts[1] + "]")
+              .parents(".field");
           case "selector":
             return $(formSelector).find(parts[1]);
           case "date":
-            return $(formSelector).find("[name*=" + parts[1] + "]").parents(".field");
+            return $(formSelector)
+              .find("[name*=" + parts[1] + "]")
+              .parents(".field");
           case "parent":
             return $(formSelector).find(parts[1]).parent();
           default:
@@ -160,15 +164,17 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       if (selector.search("=") !== -1) {
         // assume a name=value pair specifies a radio button with a given value
         parts = selector.split("=");
-        return OLCS.formHelper.findInput(group, parts[0])
-          .filter("[value=" + parts[1] + "]")
-          // radios are always wrapped inside a label
-          .parents("label:last");
+        return (
+          OLCS.formHelper
+            .findInput(group, parts[0])
+            .filter("[value=" + parts[1] + "]")
+            // radios are always wrapped inside a label
+            .parents("label:last")
+        );
       }
 
       // otherwise assume a straight input name which we assume is inside a field container
       return OLCS.formHelper(group, selector).parents(".field");
-
     }
 
     /*
@@ -180,10 +186,7 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       for (var fieldset in options.rulesets) {
         var current = findContainer(fieldset, "*");
         if (previousFieldset) {
-          $(previousFieldset).on(
-            "change",
-            clearFieldset(current)
-          );
+          $(previousFieldset).on("change", clearFieldset(current));
         }
         previousFieldset = current;
       }
@@ -191,7 +194,7 @@ OLCS.cascadeForm = (function(document, $, undefined) {
 
     if (onSubmit) {
       // we'd like to use bind, but IE8 won't let us
-      $(document).on("submit", formSelector, function(e) {
+      $(document).on("submit", formSelector, function (e) {
         onSubmit.call($(formSelector), e);
       });
     }
@@ -202,5 +205,4 @@ OLCS.cascadeForm = (function(document, $, undefined) {
 
     checkForm();
   };
-
-}(document, window.jQuery));
+})(document, window.jQuery);
