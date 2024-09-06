@@ -142,7 +142,7 @@ module "service" {
 
   legacy_environment = "QA"
 
-  domain_name    = "qa.olcs.dev-dvsacloud.uk"
+  domain_name    = "dev-dvsacloud.uk"
   assets_version = var.assets_version
 
   vpc_id = data.aws_vpc.this.id

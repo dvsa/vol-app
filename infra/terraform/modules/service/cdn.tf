@@ -21,15 +21,9 @@ data "aws_route53_zone" "public" {
   name = var.domain_name
 }
 
-data "aws_route53_zone" "private" {
-  name = var.domain_name
-
-  private_zone = true
-}
-
 locals {
-  domain_name = trimsuffix(data.aws_route53_zone.public.name, ".")
-  subdomain   = "cdn"
+  domain_name = data.aws_route53_zone.public.name
+  subdomain   = "${var.environment}-cdn"
 }
 
 module "acm" {
@@ -200,7 +194,7 @@ module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
   version = "~> 4.0"
 
-  zone_id = data.aws_route53_zone.private.zone_id
+  zone_id = data.aws_route53_zone.public.zone_id
 
   records = [
     {
