@@ -3,13 +3,13 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
+use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
 use Dvsa\Olcs\Api\Domain\Exception\MissingEmailException;
 use Dvsa\Olcs\Api\Domain\Repository\ReadonlyRepositoryInterface;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Email\Data\Message;
-use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
-use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
 /**
  * Generic email sending handler
