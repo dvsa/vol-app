@@ -30,7 +30,7 @@ OLCS.cascadeForm = (function(document, $, undefined) {
         $.each(elems, function(i, elem) {
           elem = $(elem);
           if (elem.is(":checked")) {
-            elem.removeAttr("checked");
+            elem.prop("checked", false);
           }
         });
         // ensure the change notification cascades down the line
@@ -100,9 +100,9 @@ OLCS.cascadeForm = (function(document, $, undefined) {
       }
       OLCS.logger.verbose(
         group + " > " + selector +
-          ", should show? (" + show + "), is visible? (" +
-          elem.is(":visible") + "), action: (" +
-          action + ")",
+        ", should show? (" + show + "), is visible? (" +
+        elem.is(":visible") + "), action: (" +
+        action + ")",
         "cascadeForm"
       );
 
@@ -161,9 +161,9 @@ OLCS.cascadeForm = (function(document, $, undefined) {
         // assume a name=value pair specifies a radio button with a given value
         parts = selector.split("=");
         return OLCS.formHelper.findInput(group, parts[0])
-        .filter("[value=" + parts[1] + "]")
-        // radios are always wrapped inside a label
-        .parents("label:last");
+          .filter("[value=" + parts[1] + "]")
+          // radios are always wrapped inside a label
+          .parents("label:last");
       }
 
       // otherwise assume a straight input name which we assume is inside a field container
@@ -199,6 +199,8 @@ OLCS.cascadeForm = (function(document, $, undefined) {
     $(document).on("change", formSelector, checkForm);
 
     OLCS.eventEmitter.on("render", checkForm);
+
+    checkForm();
   };
 
 }(document, window.jQuery));
