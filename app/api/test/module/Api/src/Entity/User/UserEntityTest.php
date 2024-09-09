@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as LocalAuthorityEntity;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
+use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
+use Dvsa\Olcs\Api\Entity\User\Team as TeamEntity;
+use Dvsa\Olcs\Api\Entity\User\User as Entity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
-use Dvsa\Olcs\Api\Entity\Bus\LocalAuthority as LocalAuthorityEntity;
-use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
-use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
-use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
-use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
-use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
-use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
-use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
-use Dvsa\Olcs\Api\Entity\User\User as Entity;
-use Dvsa\Olcs\Api\Entity\User\Team as TeamEntity;
 use Mockery as m;
 use ReflectionClass;
 
@@ -1405,8 +1405,40 @@ class UserEntityTest extends EntityTester
     public function dpOperatorAdminRoles(): array
     {
         return [
-            [RoleEntity::ROLE_OPERATOR_ADMIN],
-            [RoleEntity::ROLE_OPERATOR_TC],
+            [RoleEntity::ROLE_OPERATOR_ADMIN]
         ];
+    }
+
+    public function testIsTransportConsultant()
+    {
+        $roleTC = m::mock(RoleEntity::class)->makePartial();
+        $roleTC->setRole(RoleEntity::ROLE_OPERATOR_TC);
+
+        $roleOther = m::mock(RoleEntity::class)->makePartial();
+        $roleOther->setRole('some_other_role');
+
+        $userTC = new UserEntity('pid', UserEntity::USER_TYPE_OPERATOR);
+        $userTC->setRoles(new ArrayCollection([$roleTC]));
+        $this->assertTrue($userTC->isTransportConsultant(), 'User should be identified as a transport consultant');
+
+        $userNonTC = new UserEntity('pid', UserEntity::USER_TYPE_OPERATOR);
+        $userNonTC->setRoles(new ArrayCollection([$roleOther]));
+        $this->assertFalse($userNonTC->isTransportConsultant(), 'User should not be identified as a transport consultant');
+    }
+
+    public function testGetUserTypeForTransportConsultant()
+    {
+        $roleTC = m::mock(RoleEntity::class)->makePartial();
+        $roleTC->setRole(RoleEntity::ROLE_OPERATOR_TC);
+
+        $user = new UserEntity('pid', UserEntity::USER_TYPE_OPERATOR);
+        $user->setRoles(new ArrayCollection([$roleTC]));
+
+        $reflectionClass = new ReflectionClass(UserEntity::class);
+        $property = $reflectionClass->getProperty('userType');
+        $property->setAccessible(true);
+        $property->setValue($user, null);
+
+        $this->assertEquals(UserEntity::USER_TYPE_TC, $user->getUserType(), 'User type should be set to transport consultant');
     }
 }

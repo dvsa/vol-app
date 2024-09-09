@@ -3,14 +3,13 @@
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
-use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
-use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 
 /**
@@ -39,6 +38,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     public const USER_TYPE_ANON = 'anon';
     public const USER_TYPE_LOCAL_AUTHORITY = 'local-authority';
     public const USER_TYPE_OPERATOR = 'operator';
+    public const USER_TYPE_TC = 'operator-tc';
     public const USER_TYPE_PARTNER = 'partner';
     public const USER_TYPE_TRANSPORT_MANAGER = 'transport-manager';
 
@@ -57,14 +57,15 @@ class User extends AbstractUser implements OrganisationProviderInterface
             RoleEntity::ROLE_LOCAL_AUTHORITY_ADMIN,
             RoleEntity::ROLE_LOCAL_AUTHORITY_USER,
         ],
-        self::USER_TYPE_OPERATOR => [
+        self::USER_TYPE_TC => [
             RoleEntity::ROLE_OPERATOR_TC,
+        ],
+        self::USER_TYPE_OPERATOR => [
             RoleEntity::ROLE_OPERATOR_ADMIN,
             RoleEntity::ROLE_OPERATOR_USER,
             RoleEntity::ROLE_OPERATOR_TM,
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
-            RoleEntity::ROLE_OPERATOR_TC,
             RoleEntity::ROLE_OPERATOR_ADMIN,
             RoleEntity::ROLE_OPERATOR_USER,
             RoleEntity::ROLE_OPERATOR_TM,
@@ -96,8 +97,11 @@ class User extends AbstractUser implements OrganisationProviderInterface
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_LOCAL_AUTHORITY_ADMIN],
             self::PERMISSION_USER => [RoleEntity::ROLE_LOCAL_AUTHORITY_USER],
         ],
+        self::USER_TYPE_TC => [
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_TC],
+        ],
         self::USER_TYPE_OPERATOR => [
-            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
         ],
@@ -415,6 +419,8 @@ class User extends AbstractUser implements OrganisationProviderInterface
                 $this->userType = self::USER_TYPE_TRANSPORT_MANAGER;
             } elseif (isset($this->partnerContactDetails)) {
                 $this->userType = self::USER_TYPE_PARTNER;
+            } elseif ($this->isTransportConsultant()) {
+                $this->userType = self::USER_TYPE_TC;
             } else {
                 $this->userType = self::USER_TYPE_OPERATOR;
             }
@@ -514,6 +520,18 @@ class User extends AbstractUser implements OrganisationProviderInterface
     {
         return (self::USER_TYPE_INTERNAL === $this->getUserType());
     }
+
+    /**
+     * Checks whether the user is of internal type
+     *
+     * @return bool
+     */
+    public function isTransportConsultant()
+    {
+        return $this->hasRoles([RoleEntity::ROLE_OPERATOR_TC]);
+    }
+
+
 
     /**
      * Get permission
