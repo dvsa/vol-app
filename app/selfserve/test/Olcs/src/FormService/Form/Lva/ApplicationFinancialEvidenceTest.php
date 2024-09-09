@@ -9,16 +9,16 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Validator\ValidateIf;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
 use Laminas\InputFilter\InputFilterInterface;
 use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorPluginManager;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
-use Laminas\Form\Form;
-use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
-use LmcRbacMvc\Service\AuthorizationService;
 
 class ApplicationFinancialEvidenceTest extends MockeryTestCase
 {
@@ -128,16 +128,6 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
                             ->getMock()
                     )
                     ->once()
-                    ->shouldReceive('get')
-                    ->with('sendByPostRadio')
-                    ->andReturn(
-                        m::mock(ElementInterface::class)
-                            ->shouldReceive('setName')
-                            ->with('uploadNow')
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
                     ->shouldReceive('setOption')
                     ->with('hint', 'BAR')
                     ->once()
@@ -158,7 +148,6 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
 
         $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
         $mockEvidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
-        $mockEvidenceInputFilter->shouldReceive('get')->with('sendByPostRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
 
         $mockEvidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($mockUploadedFileCountInput);
         $mockUploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);

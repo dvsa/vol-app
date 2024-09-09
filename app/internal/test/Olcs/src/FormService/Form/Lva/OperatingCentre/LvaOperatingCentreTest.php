@@ -2,17 +2,16 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
+use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
+use Common\RefData;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Form;
 use Laminas\InputFilter\BaseInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
+use Laminas\Validator\Identical as ValidatorIdentical;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Form\Fieldset;
-use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
-use Laminas\Validator\Identical as ValidatorIdentical;
-use Common\RefData;
-use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 
 /**
  * Lva Operating Centre Test
@@ -111,9 +110,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->once()
             ->shouldReceive('removeValidator')
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)
-            ->once()
-            ->shouldReceive('remove')
-            ->with($form, 'advertisements->adSendByPostContent')
             ->once()
             ->shouldReceive('remove')
             ->with($form, 'advertisements->adPlacedLaterContent')

@@ -2,13 +2,13 @@
 
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
+use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
+use Common\RefData;
 use Common\Service\Helper\FormHelperService;
+use Common\Validator\ValidateIf;
 use Laminas\Form\Form;
 use Laminas\Validator\Identical as ValidatorIdentical;
-use Common\Validator\ValidateIf;
-use Common\RefData;
-use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 
 /**
  * Lva Internal Operating Centres
@@ -43,7 +43,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $appliedVia = $params['appliedVia'];
         }
 
-        $this->formHelper->remove($form, 'advertisements->adSendByPostContent');
         $this->formHelper->remove($form, 'advertisements->adPlacedLaterContent');
 
         $advertisements = $form->get('advertisements');

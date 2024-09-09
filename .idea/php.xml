@@ -587,8 +587,6 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/app/api/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/app/api/vendor/autoload.php" use_configuration_file="true" />
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/app/internal/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/app/internal/vendor/autoload.php" use_configuration_file="true" />
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/app/selfserve/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/app/selfserve/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>

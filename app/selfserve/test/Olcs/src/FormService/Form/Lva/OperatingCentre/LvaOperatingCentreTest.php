@@ -2,17 +2,17 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Form\ElementInterface;
+use Laminas\Form\Form;
 use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
 use Laminas\InputFilter\InputInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
-use Common\Service\Helper\FormHelperService;
 
 class LvaOperatingCentreTest extends MockeryTestCase
 {
@@ -31,7 +31,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
     protected $valueOptions = [
         'adPlaced' => 'lva-oc-adplaced-y-selfserve',
-        'adSendByPost' => 'lva-oc-adplaced-n-selfserve',
         'adPlacedLater' => 'lva-oc-adplaced-l-selfserve',
     ];
 
@@ -124,9 +123,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $inputFilter = m::mock(InputFilterInterface::class);
         $inputFilter->shouldReceive('get')->with('address')->andReturn($addressInputFilter);
 
-        $adSendByPost = m::mock(ElementInterface::class);
-        $adSendByPost->shouldReceive('setValue')->getMock();
-
         $form->shouldReceive('getInputFilter')->andReturn($inputFilter);
 
         $radio = m::mock(ElementInterface::class)
@@ -139,10 +135,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->getMock();
 
         $advertisements = m::mock(ElementInterface::class)
-            ->shouldReceive('get')
-            ->with('adSendByPostContent')
-            ->andReturn($adSendByPost)
-            ->once()
             ->shouldReceive('get')
             ->with('radio')
             ->andReturn($radio)
@@ -242,9 +234,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
         // ... existing mocks ...
 
-        $adSendByPost = m::mock(ElementInterface::class);
-        $adSendByPost->shouldReceive('setValue');
-
         $radio = m::mock(ElementInterface::class)
             ->shouldReceive('getValueOptions')
             ->andReturn([])
@@ -255,10 +244,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->getMock();
 
         $advertisements = m::mock(ElementInterface::class)
-            ->shouldReceive('get')
-            ->with('adSendByPostContent')
-            ->andReturn($adSendByPost)
-            ->once()
             ->shouldReceive('get')
             ->with('radio')
             ->andReturn($radio)
