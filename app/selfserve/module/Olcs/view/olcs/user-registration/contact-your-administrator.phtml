@@ -1,0 +1,21 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('user-registration.page.contact-your-administrator.title'),
+
+    ]
+);
+?>
+
+<div class="row">
+  <div class="two-thirds">
+    <div class="article">
+      <p>
+          <?php echo $this->translate('user-registration.page.contact-your-administrator.content'); ?>
+      </p>
+      <p><a href="<?php echo $this->url('auth/login/GET'); ?>" class="govuk-button" ><?php echo $this->translate('back-to-login'); ?></a>
+      </p>
+    </div>
+  </div>
+</div>

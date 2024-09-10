@@ -2,8 +2,6 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Laminas\Form\Annotation as Form;
-
 /**
  * @Form\Name("RegisterForOperator")
  * @Form\Attributes({"method":"post","label":"operator-registration.form.labe"})
@@ -72,7 +70,6 @@ class RegisterForOperator
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"user-registration.field.organisationName.label", "hint": "user-registration.field.organisation-name.hint"})
-     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $organisationName = null;
@@ -88,7 +85,6 @@ class RegisterForOperator
      *     "category": "org_type",
      *     "exclude": {"org_t_ir"}
      * })
-     * @Form\Validator("Laminas\Validator\NotEmpty", options={"string"})
      */
     public $businessType = null;
 
