@@ -54,18 +54,8 @@ return [
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
-    'asset_path' => function () {
-        global $environment;
-        if (\Aws\Credentials\CredentialProvider::shouldUseEcs()) {
-            return match ($environment) {
-                'DEV' => 'https://dev-cdn.dev-dvsacloud.uk',
-                'QA' => 'https://int-cdn.dev-dvsacloud.uk',
-                default => throw new \InvalidArgumentException('Asset Path: Should use ECS but environment not recognised'),
-            };
-        }
-        return '/static/public';
-    },
-
+    'asset_path' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%assets_url%' : '/static/public'),
+    
     'cookie-manager' => [
         'delete-undefined-cookies' => true,
         'user-preference-cookie-name' => 'cookie_policy',
