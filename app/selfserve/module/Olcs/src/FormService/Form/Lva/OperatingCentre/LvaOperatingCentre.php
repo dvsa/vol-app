@@ -6,7 +6,6 @@ use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
-use Common\View\Helper\ReturnToAddress;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
 use Laminas\Form\Form;
 
@@ -38,8 +37,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
     public function alterForm(Form $form, array $params)
     {
         $isNi = $this->isNi($params);
-
-        $this->setSendByPostContent($form, $isNi, $params);
 
         $this->setAdPlacedLabels($form, $isNi, $params['isVariation']);
 
@@ -105,45 +102,9 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $valuesOptions = $radio->getValueOptions();
 
         $valuesOptions['adPlaced'] = 'lva-oc-adplaced-y-selfserve';
-        $valuesOptions['adSendByPost'] = 'lva-oc-adplaced-n-selfserve';
         $valuesOptions['adPlacedLater'] = 'lva-oc-adplaced-l-selfserve';
 
         $radio->setValueOptions($valuesOptions);
-    }
-
-    /**
-     * Set Send By Post address in depend from parameters
-     *
-     * @param Form $form Form
-     * @param boolean $isNi Is NI
-     * @param array $params Lva object data
-     *
-     * @return void
-     */
-    protected function setSendByPostContent(Form $form, $isNi, $params)
-    {
-        /** @var \Common\Form\Elements\Types\HtmlTranslated $adSendByPost */
-        $adSendByPost = $form->get('advertisements')->get('adSendByPostContent');
-
-        if (empty($params['licNo'])) {
-            $reference = '';
-        } else {
-            if (isset($params['applicationId'])) {
-                $reference = ': <b>' . $params['licNo'] . '/' . $params['applicationId'] . '</b>';
-            } else {
-                $reference = ': <b>' . $params['licNo'] . '</b>';
-            }
-        }
-
-        $value = $this->getTranslator()->translateReplace(
-            'markup-lva-oc-ad-send-by-post-text',
-            [
-                ReturnToAddress::getAddress($isNi, '<br />'),
-                $reference
-            ]
-        );
-
-        $adSendByPost->setValue($value);
     }
 
     /**
