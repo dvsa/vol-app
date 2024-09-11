@@ -2,6 +2,8 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
+use Laminas\Form\Annotation as Form;
+
 /**
  * @Form\Name("RegisterForOperator")
  * @Form\Attributes({"method":"post","label":"operator-registration.form.labe"})
