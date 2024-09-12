@@ -301,22 +301,29 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
     with:
       platform_env: dev
-      cucumber_tags: '@smoke'
-      browser_name: 'edge'
-      browser_version: 'latest'
+      cucumber_tags: "@smoke"
+      browser_name: "edge"
+      browser_version: "latest"
     secrets: inherit
+    permissions:
+      checks: write
+      contents: write
+      id-token: write
 
   full-regression-test:
     name: Run Full Regression Tests
     if: ${{ needs.smoke-test.result == 'success' }}
-    needs: smoke-test
     uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
     with:
       platform_env: dev
-      cucumber_tags: '@FullRegression'
-      browser_name: 'edge'
-      browser_version: 'latest'
+      cucumber_tags: "@FullRegression"
+      browser_name: "edge"
+      browser_version: "latest"
     secrets: inherit
+    permissions:
+      checks: write
+      contents: write
+      id-token: write
 
   terraform-env-int:
     name: Environment (int)
