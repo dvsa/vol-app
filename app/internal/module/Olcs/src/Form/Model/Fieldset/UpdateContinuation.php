@@ -62,6 +62,7 @@ class UpdateContinuation
 
     /**
      * @Form\Name("message")
+     * @Form\Attributes({"data-container-class":"govuk-inset-text govuk-!-padding-bottom-5"})
      * @Form\Type("Common\Form\Elements\Types\GuidanceTranslated")
      */
     public $message;

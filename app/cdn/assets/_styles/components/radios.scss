@@ -3,7 +3,7 @@
  * Can be removed on resolution of: https://dvsa.atlassian.net/browse/VOL-5688
  */
 .govuk-radios__label {
-  .govuk-hint {
-    display: block;
-  }
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
