@@ -313,6 +313,7 @@ jobs:
   full-regression-test:
     name: Run Full Regression Tests
     if: ${{ needs.smoke-test.result == 'success' }}
+    needs: smoke-test
     uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
     with:
       platform_env: dev

@@ -1,6 +1,6 @@
 /**
  * Temporary override to support how some hints are being defined in translation keys for radio option labels.
- * Can be removed on resolution of: https://dvsa.atlassian.net/browse/VOL-5688
+ * Can be removed on resolution of: https://dvsa.atlassian.net/browse/VOL-5688 which updated the radio button generation
  */
 .govuk-radios__label {
   display: flex;
