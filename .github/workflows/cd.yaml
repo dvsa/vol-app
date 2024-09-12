@@ -298,18 +298,24 @@ jobs:
   smoke-test:
     name: Run Smoke Tests
     needs: terraform-env-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
     with:
       platform_env: dev
+      cucumber_tags: '@smoke'
+      browser_name: 'edge'
+      browser_version: 'latest'
     secrets: inherit
 
   full-regression-test:
     name: Run Full Regression Tests
-    needs: smoke-test
     if: ${{ needs.smoke-test.result == 'success' }}
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
+    needs: smoke-test
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
     with:
       platform_env: dev
+      cucumber_tags: '@FullRegression'
+      browser_name: 'edge'
+      browser_version: 'latest'
     secrets: inherit
 
   terraform-env-int:
