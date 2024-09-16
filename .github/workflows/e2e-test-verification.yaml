@@ -2,6 +2,9 @@ name: Test E2E Integration
 
 on:
   workflow_dispatch:
+    test:
+      type: string
+      default: 'sync'
 
 jobs:
   e2e-smoke-test:
@@ -9,6 +12,7 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
+      test: ${{ inputs.test }}
 
   e2e-full-regression-test:
     name: E2E Full Regression Test on Dev
@@ -17,3 +21,4 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
     with:
       platform_env: dev
+      test: ${{ inputs.test }}
