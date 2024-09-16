@@ -14,7 +14,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - uses: terraform-docs/gh-actions@v1.2.0
+      - uses: terraform-docs/gh-actions@v1.2.2
         with:
           find-dir: "infra/terraform/modules"
           git-commit-message: "docs: update Terraform docs"
