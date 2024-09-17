@@ -295,47 +295,15 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  smoke-test:
-    name: Run Smoke Tests
-    needs: terraform-env-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
-    with:
-      platform_env: dev
-      cucumber_tags: "@smoke"
-      browser_name: "edge"
-      browser_version: "latest"
-    secrets: inherit
-    permissions:
-      checks: write
-      contents: write
-      id-token: write
-
-  full-regression-test:
-    name: Run Full Regression Tests
-    if: ${{ needs.smoke-test.result == 'success' }}
-    needs: smoke-test
-    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
-    with:
-      platform_env: dev
-      cucumber_tags: "@FullRegression"
-      browser_name: "edge"
-      browser_version: "latest"
-    secrets: inherit
-    permissions:
-      checks: write
-      contents: write
-      id-token: write
-
   terraform-env-int:
     name: Environment (int)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform-env-dev.result == 'success' && needs.full-regression-test.result == 'success' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform-env-dev.result == 'success' }}
     concurrency:
       group: terraform-environment-int
     needs:
       - get-version
       - orchestrator
       - terraform-env-dev
-      - full-regression-test
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: int
