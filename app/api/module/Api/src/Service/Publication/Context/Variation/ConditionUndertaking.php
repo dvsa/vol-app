@@ -89,13 +89,10 @@ final class ConditionUndertaking extends AbstractContext implements AddressForma
     private function getAttachedToText(ConditionUndertakingEntity $conditionUndertaking)
     {
         $text = null;
-        if (
-            $conditionUndertaking->getAttachedTo()->getId() ===
-            ConditionUndertakingEntity::ATTACHED_TO_OPERATING_CENTRE
-        ) {
+        if ($conditionUndertaking->getAttachedTo()?->getId() === ConditionUndertakingEntity::ATTACHED_TO_OPERATING_CENTRE) {
             $text = 'Attached to Operating: ' .
-                $this->getAddressFormatter()->format($conditionUndertaking->getOperatingCentre()->getAddress());
-        } elseif ($conditionUndertaking->getAttachedTo()->getId() === ConditionUndertakingEntity::ATTACHED_TO_LICENCE) {
+                $this->getAddressFormatter()->format($conditionUndertaking->getOperatingCentre()?->getAddress());
+        } elseif ($conditionUndertaking->getAttachedTo()?->getId() === ConditionUndertakingEntity::ATTACHED_TO_LICENCE) {
             $text = 'Attached to licence';
         }
 
