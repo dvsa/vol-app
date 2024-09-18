@@ -121,7 +121,7 @@ final class ConditionsAndUndertakings extends AbstractSection
         $thisEntity['addedVia'] = $entity->getAddedVia()->getDescription();
         $thisEntity['isFulfilled'] = $entity->getIsFulfilled();
         $thisEntity['isDraft'] = $entity->getIsDraft();
-        $thisEntity['attachedTo'] = $entity->getAttachedTo()->getDescription();
+        $thisEntity['attachedTo'] = $entity->getAttachedTo()?->getDescription();
         $thisEntity['notes'] = $entity->getNotes();
 
         if (empty($entity->getOperatingCentre())) {

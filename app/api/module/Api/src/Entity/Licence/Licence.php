@@ -565,7 +565,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
         /** @var ConditionUndertaking $cu */
         foreach ($conditionsUndertakings as &$cu) {
             $conditionType = $map[$cu->getConditionType()->getId()];
-            if ($cu->getAttachedTo()->getId() === ConditionUndertaking::ATTACHED_TO_LICENCE) {
+            if ($cu->getAttachedTo()?->getId() === ConditionUndertaking::ATTACHED_TO_LICENCE) {
                 $licenceConditionsUndertakings[$conditionType][] = [
                     'notes' => $cu->getNotes(),
                     'createdOn' => $cu->getCreatedOn(true)
