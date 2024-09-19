@@ -107,9 +107,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
             $searchFilterForm->add($fs);
 
             if ($searchFilterForm->has('submit')) {
-                $submitButton = $searchFilterForm->get('submit');
-                $searchFilterForm->remove('submit');
-                $searchFilterForm->add($submitButton);
+                $searchFilterForm->setPriority('submit', -1);
             }
         }
 
