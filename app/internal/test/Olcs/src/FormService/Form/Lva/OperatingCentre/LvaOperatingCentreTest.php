@@ -64,13 +64,20 @@ class LvaOperatingCentreTest extends MockeryTestCase
                         m::mock(ElementInterface::class)
                         ->shouldReceive('getValueOptions')
                         ->andReturn(['foo' => 'bar', OperatingCentreMapper::VALUE_OPTION_AD_UPLOAD_LATER => 'cake'])
-                        ->once()
+                        ->twice()
                         ->shouldReceive('setValueOptions')
                         ->with(['foo' => 'bar'])
                         ->once()
+                        ->shouldReceive('setValueOptions')
+                        ->with([
+                            'foo' => 'bar',
+                            'adPlacedLater' => 'cake',
+                            'adSendByPost' => 'No (operator to post)'
+                        ])
+                        ->once()
                         ->getMock()
                     )
-                    ->once()
+                    ->twice()
                     ->shouldReceive('setLabel')
                     ->with('application_operating-centres_authorisation-sub-action.advertisements.adPlaced')
                     ->once()

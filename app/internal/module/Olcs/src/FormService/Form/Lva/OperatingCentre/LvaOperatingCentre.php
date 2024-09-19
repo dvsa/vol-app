@@ -48,6 +48,13 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $advertisements = $form->get('advertisements');
         $advertisements->setLabel('application_operating-centres_authorisation-sub-action.advertisements.adPlaced');
 
+        $adPlaced = $advertisements->get('radio');
+
+        // Add operator to post option back in just for caseworker form: https://dvsa.atlassian.net/browse/VOL-5814
+        $valueOptions = $adPlaced->getValueOptions();
+        $valueOptions['adSendByPost'] = 'No (operator to post)';
+        $adPlaced->setValueOptions($valueOptions);
+
         $form->get('data')->get('guidance')->setValue('lva-operating-centre-newspaper-advert');
         $form->get('data')->get('permission')->setLabel('');
 
