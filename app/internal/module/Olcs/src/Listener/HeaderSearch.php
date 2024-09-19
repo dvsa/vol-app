@@ -105,6 +105,12 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
             $fs = $this->getFormElementManager()
                 ->get(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort']);
             $searchFilterForm->add($fs);
+
+            if ($searchFilterForm->has('submit')) {
+                $submitButton = $searchFilterForm->get('submit');
+                $searchFilterForm->remove('submit');
+                $searchFilterForm->add($submitButton);
+            }
         }
 
         $container = new Container(SearchController::CONTAINER);
