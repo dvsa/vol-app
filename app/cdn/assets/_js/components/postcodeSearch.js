@@ -156,10 +156,10 @@ OLCS.postcodeSearch = (function(document, $, undefined) {
             if(response.hasErrors === false) {
               var rootElem = document.querySelector(root);
               var fieldsetSelector = 'fieldset[data-group="' + fieldset[0].getAttribute('data-group') + '"]';
-              var fieldSetElement = rootElem.querySelector(fieldsetSelector); 
+              var fieldSetElement = rootElem.querySelector(fieldsetSelector);
               var selectElement = fieldSetElement.querySelector('.address__select select');
               if (null === selectElement) {
-                var nextInputElement = fieldSetElement.querySelector('input:not([type="hidden"]):not([id^="postcodeInput"])'); 
+                var nextInputElement = fieldSetElement.querySelector('input:not([type="hidden"]):not([id^="postcodeInput"])');
                 nextInputElement.focus();
               } else {
                 selectElement.focus();
@@ -200,6 +200,13 @@ OLCS.postcodeSearch = (function(document, $, undefined) {
     function lookupError() {
       $(selectClass).hide();
       $('.postcode-connectionLost').removeClass('govuk-visually-hidden');
+
+      // Remove form__action if defined; else submitting the form will result in another lookup and potential error.
+      $(container)
+        .closest('form')           // Traverse up to the nearest parent form
+        .find('.form__action')      // Find the form__action
+        .first()
+        .remove();
     }
 
     // Ensure any time the page is re-rendered we resolve our components' state
