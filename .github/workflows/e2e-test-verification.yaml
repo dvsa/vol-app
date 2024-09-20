@@ -9,7 +9,6 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
-      test: 'sync'
 
   e2e-full-regression-test:
     name: E2E Full Regression Test on Dev
@@ -18,5 +17,4 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
     with:
       platform_env: dev
-      test: 'sync'
 
