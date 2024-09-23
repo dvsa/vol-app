@@ -570,7 +570,7 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
                     'notes' => $cu->getNotes(),
                     'createdOn' => $cu->getCreatedOn(true)
                 ];
-            } else {
+            } elseif ($cu->getOperatingCentre() !== null && $cu->getOperatingCentre()->getId() !== null) {
                 $ocConditionsUndertakings[$cu->getOperatingCentre()->getId()][$conditionType][] = [
                     'notes' => $cu->getNotes(),
                     'address' => [
