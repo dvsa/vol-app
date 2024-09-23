@@ -66,6 +66,12 @@ class SearchController extends AbstractController
     {
         $index = $this->params()->fromRoute('index');
 
+        if ($index === 'vehicle-external') {
+            if (!$this->authService->isGranted('selfserve-search-vehicle-external')) {
+                return $this->redirect()->toRoute('auth/login/GET');
+            }
+        }
+
         if (empty($index)) {
             // show index page if index empty
             $view = new ViewModel();
