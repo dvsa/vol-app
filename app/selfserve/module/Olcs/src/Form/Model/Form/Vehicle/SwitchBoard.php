@@ -40,6 +40,7 @@ class SwitchBoard
      *     "class": "govuk-button",
      * })
      * @Form\Type("Button")
+     * @Form\Flags({"priority": -10})
      */
     public $formActions = null;
 }
