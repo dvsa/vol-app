@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.8.1](https://github.com/dvsa/vol-app/compare/v5.8.0...v5.8.1) (2024-09-25)
+
+
+### Bug Fixes
+
+* Check records are actually related to an Operating Centre before accesing that property. ([#347](https://github.com/dvsa/vol-app/issues/347)) ([822ce06](https://github.com/dvsa/vol-app/commit/822ce063d0bce029e577ece8ca64c452c55ad9d5))
+* Ensure filter button is rendered at the end of the filter form. ([#350](https://github.com/dvsa/vol-app/issues/350)) ([5dec8c9](https://github.com/dvsa/vol-app/commit/5dec8c97401d89496d5b0608931ad9409dec131c))
+* Ensure filter button is rendered at the end of the filter form. Bump Common to pull in a fox on a shared form ([#349](https://github.com/dvsa/vol-app/issues/349)) ([b409c62](https://github.com/dvsa/vol-app/commit/b409c622c7c3d15de7d942fa337718ecfb66e11f))
+* External search form button mis-alignment ([#351](https://github.com/dvsa/vol-app/issues/351)) ([32637e9](https://github.com/dvsa/vol-app/commit/32637e900df0e32ec9fc445b83c1a08c229de321))
+* removes form__action field from failed postcode lookups ([#341](https://github.com/dvsa/vol-app/issues/341)) ([c1bca49](https://github.com/dvsa/vol-app/commit/c1bca491136b1de388c9346a870eb23b77ad4d8a))
+* Resolves vehicle search being accessible incorrectly to logged out users ([#348](https://github.com/dvsa/vol-app/issues/348)) ([05e8d21](https://github.com/dvsa/vol-app/commit/05e8d21fd7c818bbc3559c965bf8155910576aff))
+
 ## [5.8.0](https://github.com/dvsa/vol-app/compare/v5.7.0...v5.8.0) (2024-09-19)
 
 
