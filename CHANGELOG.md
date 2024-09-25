@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.8.2](https://github.com/dvsa/vol-app/compare/v5.8.1...v5.8.2) (2024-09-25)
+
+
+### Bug Fixes
+
+* bring button fix in via updated common dep ([#354](https://github.com/dvsa/vol-app/issues/354)) ([94a35c7](https://github.com/dvsa/vol-app/commit/94a35c7aee9cf731e82efef9d4b7e522914160c4))
+* External search form button mis-alignment ([#352](https://github.com/dvsa/vol-app/issues/352)) ([2527e3c](https://github.com/dvsa/vol-app/commit/2527e3ceba39e68698f249696202b9efb5fc1af7))
+
 ## [5.8.1](https://github.com/dvsa/vol-app/compare/v5.8.0...v5.8.1) (2024-09-25)
 
 
