@@ -52,6 +52,7 @@ class SearchFilter
      *     "label": "search.form.filter.update_button"
      * })
      * @Form\Type("\Laminas\Form\Element\Button")
+     * @Form\Flags({"priority": -1})
      */
     public $submit = null;
 }
