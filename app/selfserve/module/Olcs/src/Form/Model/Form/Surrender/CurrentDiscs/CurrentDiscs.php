@@ -38,6 +38,7 @@ class CurrentDiscs
      * })
      * @Form\Options({"label":"continue.button"})
      * @Form\Type("\Laminas\Form\Element\Button")
+     * @Form\Flags({"priority": -2})
      */
     public $submit = null;
 }
