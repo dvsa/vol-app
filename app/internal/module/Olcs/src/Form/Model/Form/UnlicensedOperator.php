@@ -39,12 +39,14 @@ class UnlicensedOperator
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Flags({"priority": -1})
      */
     public $isExempt = null;
 
     /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorActions")
+     * @Form\Flags({"priority": -2})
      */
     public $formActions = null;
 }
