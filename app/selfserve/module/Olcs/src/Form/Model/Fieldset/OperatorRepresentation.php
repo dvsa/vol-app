@@ -16,7 +16,7 @@ class OperatorRepresentation
      * @Form\Options({
      *     "label": "user-registration.field.act-on-operators-behalf.label",
      *     "hint": "user-registration.field.act-on-operators-behalf.hint",
-     *     "value_options":{"N":"select-option-no", "Y":"select-option-yes"},
+     *     "value_options":{"Y":"select-option-yes", "N":"select-option-no"},
      *     "label_attributes": {"class": "form-control form-control--radio form-control--inline"}
      * })
      * @Form\Required(true)
