@@ -81,7 +81,7 @@ class RegisterForOperator
      * @Form\Type("DynamicRadio")
      * @Form\Options({
      *     "fieldset-attributes": {"id": "businessType"},
-     *     "label": "user-registration.field.businessType.label",
+     *     "label": "register-for-operator.field.businessType.label",
      *     "label_attributes": {"class": "form-control form-control--radio"},
      *     "disable_inarray_validator": false,
      *     "category": "org_type",
