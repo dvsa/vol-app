@@ -99,16 +99,15 @@ class User extends AbstractUser implements OrganisationProviderInterface
             self::PERMISSION_USER => [RoleEntity::ROLE_LOCAL_AUTHORITY_USER],
         ],
         self::USER_TYPE_OPERATOR => [
-            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
-            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
+            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
-            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
+            self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
-            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
         ],
         self::USER_TYPE_PARTNER => [
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_PARTNER_ADMIN],
