@@ -34,6 +34,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     public const PERMISSION_ADMIN = 'admin';
     public const PERMISSION_USER = 'user';
     public const PERMISSION_TM = 'tm';
+    public const PERMISSION_OPERATOR_TC = 'operator-tc';
 
     public const USER_TYPE_INTERNAL = 'internal';
     public const USER_TYPE_ANON = 'anon';
@@ -41,6 +42,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     public const USER_TYPE_OPERATOR = 'operator';
     public const USER_TYPE_PARTNER = 'partner';
     public const USER_TYPE_TRANSPORT_MANAGER = 'transport-manager';
+    public const USER_TYPE_OPERATOR_TC = 'operator-tc';
 
     public const ERROR_ADMIN_USER_ALREADY_EXISTS = 'err_admin_user_already_exists';
     public const ERR_ANON_USERNAME = 'ERR_ANON_USERNAME';
@@ -100,6 +102,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
+            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_TC],
