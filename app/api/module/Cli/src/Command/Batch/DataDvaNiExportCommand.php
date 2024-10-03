@@ -15,8 +15,7 @@ class DataDvaNiExportCommand extends AbstractBatchCommand
     {
         $this
             ->setDescription('Export to csv for Northern Ireland')
-            ->addOption('report-name', null, InputOption::VALUE_REQUIRED, 'Export report name')
-            ->addOption('path', null, InputOption::VALUE_REQUIRED, 'Path to save export file');
+            ->addOption('report-name', null, InputOption::VALUE_REQUIRED, 'Export report name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
