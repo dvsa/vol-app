@@ -3,22 +3,19 @@
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\User;
 
 use DateTimeImmutable;
-use Doctrine\ORM\AbstractQuery;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
-use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Transfer\Query\User\OperatorAdminForOrganisationHasLoggedIn as Qry;
 
-/**
- * Returns true if an operator admin for the organisation has logged in
- */
 class OperatorAdminForOrganisationHasLoggedIn extends AbstractQueryHandler
 {
+    public const DEFAULT_LAST_LOGGED_IN_FROM = '1970-01-01';
+
     protected $repoServiceName = Repository\User::class;
 
     /**
@@ -44,14 +41,14 @@ class OperatorAdminForOrganisationHasLoggedIn extends AbstractQueryHandler
             'organisation' => $query->getOrganisation(),
             'roles' => [Entity\User\Role::ROLE_OPERATOR_ADMIN],
             'page' => 1,
-            'limit' => 100,
+            'limit' => 1,
             'sort' => 'id',
             'order' => 'DESC',
         ];
 
-        $lastLoginDate = DateTimeImmutable::createFromFormat("Y-m-d", '1970-01-01');
+        $lastLoginDate = static::DEFAULT_LAST_LOGGED_IN_FROM;
         if (!empty($query->getLastLoggedInFrom())) {
-            $lastLoginDate = DateTimeImmutable::createFromFormat("Y-m-d", $query->getLastLoggedInFrom());
+            $lastLoginDate = $query->getLastLoggedInFrom();
         }
 
         $params['lastLoggedInFrom'] = $lastLoginDate;
@@ -60,7 +57,7 @@ class OperatorAdminForOrganisationHasLoggedIn extends AbstractQueryHandler
 
         $result = [
             'organisation' => (int) $query->getOrganisation(),
-            'lastLoggedInFrom' => $lastLoginDate->format('Y-m-d'),
+            'lastLoggedInFrom' => $lastLoginDate,
             'operatorAdminHasLoggedIn' => false,
         ];
 
