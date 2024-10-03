@@ -23,8 +23,7 @@ class DataGovUkExportCommand extends AbstractBatchCommand
         $this->initializeOutputInterface($output);
 
         $params = [
-            'reportName' => $input->getOption('report-name'),
-            'path' => $input->getOption('path'),
+            'reportName' => $input->getOption('report-name')
         ];
 
         $result = $this->handleCommand([DataGovUkExport::create($params)]);
