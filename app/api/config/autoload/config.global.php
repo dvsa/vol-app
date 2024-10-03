@@ -408,9 +408,13 @@ return [
         'export_path' => '/tmp/ViExtract'
     ],
 
-    // Path to export CSV data for data.gov.uk
+    // s3 bucket URI to export CSV data for data.gov.uk
     'data-gov-uk-export' => [
-        'path' => '/tmp/dataGovUk',
+        's3_uri' => '%data-gov-uk-export-s3uri%'
+    ],
+
+    'data-dva-ni-export' => [
+        's3_uri' => '%data-dva-ni-export-s3uri%'
     ],
 
     // Path to export CSV data for Companies House differences

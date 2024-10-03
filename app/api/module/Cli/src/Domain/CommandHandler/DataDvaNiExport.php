@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Cli\Domain\CommandHandler;
 
+use Aws\S3\S3Client;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
@@ -30,11 +31,6 @@ final class DataDvaNiExport extends AbstractDataExport
     private $reportName;
 
     /**
-     * @var string
-     */
-    protected $path;
-
-    /**
      * @var Repository\DataDvaNi
      */
     private $dataDvaNiRepo;
@@ -50,7 +46,6 @@ final class DataDvaNiExport extends AbstractDataExport
      */
     public function handleCommand(CommandInterface $command)
     {
-        $this->path = (trim($command->getPath()) ?: $this->path);
         $this->reportName = $command->getReportName();
 
         $this->dataDvaNiRepo = $this->getRepo();
@@ -71,20 +66,33 @@ final class DataDvaNiExport extends AbstractDataExport
      */
     private function processNiOperatorLicences()
     {
-
         $this->result->addMessage('Fetching data from DB for NI Operator Licences');
         $dbalResult = $this->dataDvaNiRepo->fetchNiOperatorLicences();
 
-        $this->singleCsvFromDbalResult($dbalResult, 'NiGvLicences', '-');
+        $csvFilePath = $this->singleCsvFromDbalResult($dbalResult, 'NiGvLicences', '-');
+
+        $manifestPath = $this->createManifest([$csvFilePath]);
+
+        $archivePath = $this->createTarGzArchive([$csvFilePath], $manifestPath);
+
+        $this->uploadToS3($archivePath);
+
+        $this->cleanUpFiles([$csvFilePath, $manifestPath, $archivePath]);
     }
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-        $exportCfg = (!empty($config['data-dva-ni-export']) ? $config['data-dva-ni-export'] : []);
-        if (isset($exportCfg['path'])) {
-            $this->path = $exportCfg['path'];
+        $exportCfg = $config['data-dva-ni-export'] ?? [];
+
+        if (isset($exportCfg['s3_uri'])) {
+            $parsedUrl = parse_url(rtrim($exportCfg['s3_uri'], '/'));
+            $this->s3Bucket = $parsedUrl['host'];
+            $this->path = ltrim($parsedUrl['path'], '/');
         }
+
+        $this->s3Client = $container->get(S3Client::class);
+
         return parent::__invoke($container, $requestedName, $options);
     }
 }

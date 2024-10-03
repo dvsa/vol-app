@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Cli\Domain\CommandHandler;
 
+use Aws\S3\S3Client;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendPsvOperatorListReport;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendInternationalGoods as SendIntlGoodsEmailCmd;
@@ -46,11 +47,6 @@ final class DataGovUkExport extends AbstractDataExport
     private $reportName;
 
     /**
-     * @var string
-     */
-    protected $path;
-
-    /**
      * @var Repository\DataGovUk
      */
     private $dataGovUkRepo;
@@ -66,9 +62,7 @@ final class DataGovUkExport extends AbstractDataExport
      */
     public function handleCommand(CommandInterface $command)
     {
-        $this->path = trim($command->getPath() ?? '') ?: $this->path;
         $this->reportName = $command->getReportName();
-
         $this->dataGovUkRepo = $this->getRepo();
 
         if ($this->reportName === self::OPERATOR_LICENCE) {
@@ -110,7 +104,6 @@ final class DataGovUkExport extends AbstractDataExport
             ['id' => $document->getId('document')],
             $document->getId('document')
         );
-
         $email = $this->handleSideEffect($emailQueue);
         $this->result->merge($email);
 
@@ -129,7 +122,6 @@ final class DataGovUkExport extends AbstractDataExport
         /** @var Repository\Licence $repo */
         $repo = $this->getRepo('Licence');
         $dbalResult = $repo->internationalGoodsReport();
-
         $csvContent = $this->singleCsvFromDbalResult($dbalResult, 'international_goods');
 
         $document = $this->handleSideEffect(
@@ -205,7 +197,6 @@ final class DataGovUkExport extends AbstractDataExport
 
         $this->result->addMessage('Fetching data from DB for Operator Licences');
         $dbalResult = $this->dataGovUkRepo->fetchOperatorLicences($areas);
-
         $this->makeCsvsFromDbalResult($dbalResult, 'GeographicRegion', 'OLBSLicenceReport');
     }
 
@@ -223,7 +214,6 @@ final class DataGovUkExport extends AbstractDataExport
 
         $this->result->addMessage('Fetching data from DB for Bus Registered Only');
         $dbalResult = $this->dataGovUkRepo->fetchBusRegisteredOnly($areas);
-
         $this->makeCsvsFromDbalResult($dbalResult, 'Current Traffic Area', 'Bus_RegisteredOnly');
     }
 
@@ -241,17 +231,22 @@ final class DataGovUkExport extends AbstractDataExport
 
         $this->result->addMessage('Fetching data from DB for Bus Variation');
         $dbalResult = $this->dataGovUkRepo->fetchBusVariation($areas);
-
         $this->makeCsvsFromDbalResult($dbalResult, 'Current Traffic Area', 'Bus_Variation');
     }
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-        $exportCfg = (!empty($config['data-gov-uk-export']) ? $config['data-gov-uk-export'] : []);
-        if (isset($exportCfg['path'])) {
-            $this->path = $exportCfg['path'];
+        $exportCfg = $config['data-gov-uk-export'] ?? [];
+
+        if (isset($exportCfg['s3_uri'])) {
+            $parsedUrl = parse_url($exportCfg['s3_uri']);
+            $this->s3Bucket = $parsedUrl['host'];
+            $this->path = ltrim($parsedUrl['path'], '/');
         }
+
+        $this->s3Client = $container->get(S3Client::class);
+
         return parent::__invoke($container, $requestedName, $options);
     }
 }

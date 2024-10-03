@@ -373,4 +373,11 @@ return [
             'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
         ],
     ],
+    'data-gov-uk-export' => [
+            's3_uri' => 's3://devapp-vol-content/olcs.local.nonprod.dvsa.aws/data-gov-uk-export/'
+        ],
+
+    'data-dva-ni-export' => [
+        's3_uri' => 's3://devapp-olcs-pri-integration-dva-s3/
+    ],
 ];
