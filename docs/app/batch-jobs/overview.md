@@ -39,21 +39,21 @@ Here's a list of available batch commands:
 
 ## DataGovUK & DVA-NI Export Commands - Upload to S3
 
-The `batch:data-dva-ni-export` and `batch:data-gov-uk-export` commands are used to export data to CSV files for UK and NI use in other departments. These commands also upload the generated CSV files to an S3 bucket.
+The `batch:data-dva-ni-export` and `batch:data-gov-uk-export` commands are used to export data to CSV files for use in other departments. These commands also upload the generated CSV files to an S3 bucket.
 
 ### Data DVA NI EXPORT
 
-`batch:data-dva-ni-export` supports one `report-name` parameter of `ni-operator-licence'` - A tarball with a csv file and a manifest hash file is created and uploaded to a S3 bucket.
+`batch:data-dva-ni-export` supports one `report-name` parameter of `ni-operator-licence` - A tarball with a csv file and a manifest hash file is created and uploaded to a S3 bucket.
 
 ### Data GOV UK Export
 
 `batch:data-gov-uk-export` supports the following `report-name` parameters:
 
--   operator-licence
--   bus-registered-only
--   bus-variation
--   psv-operator-list
--   international-goods
+-   `operator-licence`
+-   `bus-registered-only`
+-   `bus-variation`
+-   `psv-operator-list`
+-   `international-goods`
 
 Each will create 1 or more CSV files, and upload these directly to an S3 bucket.
 
@@ -77,18 +77,18 @@ In addition to batch commands, we also have several queue-related commands:
 Here are some examples of commands that require parameters to operate.
 
 :::note
-Remember to replace `/opt/dvsa/olcs/api/` with the appropriate path to your project root.
+These examples assume you are in the `app/api` directory.
 :::
 
 ```bash
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:ch-vs-olcs-diffs -v --path=/tmp/
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:clean-up-variations -v
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:cns -v
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:create-psv-licence-surrender-tasks -v
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-dva-ni-export -v --report-name=ni-operator-licence
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-gov-uk-export -v --report-name=operator-licence
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-retention -v --populate
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-retention -v --precheck
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-retention -v --delete
-./vendor/bin/laminas --container=/opt/dvsa/olcs/api/config/container-cli.php batch:data-retention -v --postcheck
+./vendor/bin/laminas --container=config/container-cli.php batch:ch-vs-olcs-diffs -v --path=/tmp/
+./vendor/bin/laminas --container=config/container-cli.php batch:clean-up-variations -v
+./vendor/bin/laminas --container=config/container-cli.php batch:cns -v
+./vendor/bin/laminas --container=config/container-cli.php batch:create-psv-licence-surrender-tasks -v
+./vendor/bin/laminas --container=config/container-cli.php batch:data-dva-ni-export -v --report-name=ni-operator-licence
+./vendor/bin/laminas --container=config/container-cli.php batch:data-gov-uk-export -v --report-name=operator-licence
+./vendor/bin/laminas --container=config/container-cli.php batch:data-retention -v --populate
+./vendor/bin/laminas --container=config/container-cli.php batch:data-retention -v --precheck
+./vendor/bin/laminas --container=config/container-cli.php batch:data-retention -v --delete
+./vendor/bin/laminas --container=config/container-cli.php batch:data-retention -v --postcheck
 ```
