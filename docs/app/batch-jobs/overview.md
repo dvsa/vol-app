@@ -1,7 +1,9 @@
 # Batch Commands Overview
 
 :::info
-This document provides an overview of the Batch Commands available in VOL. The top level batch jobs which are called are implemented as Laminas CLI commands, but generally are wrappers for CQRS Commands. The actual business logic is implemented in the associated Command Handlers.
+This document provides an overview of the Batch Commands available in VOL.
+
+The Batch Jobs are Laminas CLI Commands. Most are just wrappers that call Command Handlers which implement the business logic.
 :::
 
 :::tip
