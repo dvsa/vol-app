@@ -506,7 +506,9 @@ class User extends AbstractUser implements OrganisationProviderInterface
         // is admin if has roles for admin permission
         return $this->hasRoles(
             self::getRolesByUserType($this->getUserType(), self::PERMISSION_ADMIN)
-        );
+        ) || $this->hasRoles(
+            self::getRolesByUserType($this->getUserType(), self::PERMISSION_OPERATOR_TC)
+            );
     }
 
     /**
