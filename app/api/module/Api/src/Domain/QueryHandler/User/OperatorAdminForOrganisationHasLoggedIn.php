@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\User;
 
-use DateTimeImmutable;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Query\User\UserListSelfserve as ListDto;
