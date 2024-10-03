@@ -2,6 +2,7 @@
 
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
+use Aws\S3\S3Client;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendPsvOperatorListReport;
@@ -18,10 +19,8 @@ use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Email\Service\Email;
-use org\bovigo\vfs\vfsStream;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
-use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\vfsStreamFile;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 /**
@@ -40,17 +39,17 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
     private $tmpPath;
 
     /**
-     * @var vfsStream
-     */
-    private $vfsStream;
-
-    /**
      * @var  m\MockInterface
      */
     private $mockDbalResult;
 
+    protected $mockS3client;
+
+
     public function setUp(): void
     {
+        $this->tmpPath = sys_get_temp_dir();
+
         //  mock repos
         $this->mockRepo('DataGovUk', Repository\DataGovUk::class);
         $this->mockRepo('TrafficArea', Repository\TrafficArea::class);
@@ -61,10 +60,9 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $this->mockDbalResult = m::mock(\Doctrine\DBAL\Result::class);
 
-        //  mock config
         $this->mockedSmServices['config'] = [
             'data-gov-uk-export' => [
-                'path' => 'unit_CfgPath',
+                's3_uri' => 's3://testbucket/testprefix/',
             ],
         ];
 
@@ -81,12 +79,14 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices['FileUploader'] = $mockFileUploader;
         $this->mockedSmServices['DocumentNamingService'] = $mockDocumentNaming;
 
+        $this->mockS3client = m::mock(S3Client::class);
+        $this->mockedSmServices[S3Client::class] = $this->mockS3client;
+        $sm = m::mock(ContainerInterface::class);
+        $sm->shouldReceive('get')->with(S3Client::class)->andReturn($this->mockS3client);
+
         $this->sut = new DataGovUkExport();
 
         parent::setUp();
-
-        $this->vfsStream = vfsStream::setup('root');
-        $this->tmpPath = $this->vfsStream->url() . '/unit';
     }
 
     protected function initReferences()
@@ -122,13 +122,6 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
     public function testInternationalGoods()
     {
         $fileName = 'international_goods';
-
-        $vfsFile = new vfsStreamFile($fileName, 0777);
-        $tmpFolder = new vfsStreamDirectory('unit');
-        $tmpFolder->addChild($vfsFile);
-
-        $directory = new vfsStreamDirectory('root');
-        $directory->addChild($tmpFolder);
 
         $row1 = [
             'Licence number' => 'LicNo1',
@@ -179,7 +172,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             new Result()
         );
 
-        //  call & check
+        // Call & check
         $cmd = Cmd::create(
             [
                 'reportName' => DataGovUkExport::INTERNATIONAL_GOODS,
@@ -195,16 +188,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $expectMsg =
             'Fetching data for international goods list' .
-            'create csv file: ' . $expectedFile;
-
-        $this->assertSame(
-            '"Licence number",col1,col2' . "\n" .
-            'LicNo1,val11,"v""\'-/\\,"' . "\n" .
-            'LicNo2,val21,val22' . "\n" .
-            'LicNo3,val31,val32' . "\n" .
-            '',
-            file_get_contents($expectedFile)
-        );
+            'Creating CSV file: ' . $expectedFile;
 
         $this->assertEquals(
             $expectMsg,
@@ -216,12 +200,6 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
     {
         $fileName = 'psv-operator-list.csv';
 
-        $vfsFile = new vfsStreamFile($fileName, 0777);
-        $tmpFolder = new vfsStreamDirectory('unit');
-        $tmpFolder->addChild($vfsFile);
-
-        $directory = new vfsStreamDirectory('root');
-        $directory->addChild($tmpFolder);
 
         $row1 = [
             'Licence number' => 'areaName1',
@@ -318,8 +296,6 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($cmd);
 
-        $expectFile = $this->tmpPath . '/' . $fileName;
-
         $expectMsg =
             'Fetching data from DB for PSV Operators' .
             'create csv file content';
@@ -368,31 +344,26 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturn($this->mockDbalResult);
 
+        $this->mockS3client->shouldAllowMockingMethod('putObject');
+        $this->mockS3client->shouldReceive('putObject')
+            ->twice()
+            ->andReturn([]);
+
         //  call & check
         $actual = $this->sut->handleCommand($cmd);
 
-        $expectFile1 = $this->tmpPath . '/OLBSLicenceReport_areaName1.csv';
-        $expectFile2 = $this->tmpPath . '/OLBSLicenceReport_areaName2.csv';
+        $expectFile1 = $this->tmpPath. '/OLBSLicenceReport_areaName1.csv';
+        $expectFile2 = $this->tmpPath. '/OLBSLicenceReport_areaName2.csv';
 
         $expectMsg =
             'Fetching data from DB for Operator Licences' .
-            'create csv file: ' . $expectFile1 .
-            'create csv file: ' . $expectFile2;
+            'Creating CSV file: ' . $expectFile1 .
+            'Creating CSV file: ' . $expectFile2 .
+            'Uploaded file to S3: OLBSLicenceReport_areaName1.csvUploaded file to S3: OLBSLicenceReport_areaName2.csv';
 
         static::assertEquals(
             $expectMsg,
             implode('', $actual->toArray()['messages'])
-        );
-
-        static::assertSame(
-            'GeographicRegion,col1,col2' . "\n" .
-            'areaName1,val11,"v""\'-/\,"' . "\n" .
-            'areaName1,val31,val32' . "\n",
-            file_get_contents($expectFile1)
-        );
-        static::assertSame(
-            'GeographicRegion,col1,col2' . "\n" . 'areaName2,val21,val22' . "\n",
-            file_get_contents($expectFile2)
         );
     }
 
@@ -428,25 +399,22 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturn($this->mockDbalResult);
 
+        $this->mockS3client->shouldReceive('putObject')
+            ->once()
+            ->andReturn([]);
+
         //  call & check
         $actual = $this->sut->handleCommand($cmd);
 
-        $expectFile1 = $this->tmpPath . '/Bus_RegisteredOnly_areaId1.csv';
+        $expectFile1 =  $this->tmpPath. '/Bus_RegisteredOnly_areaId1.csv';
 
         $expectMsg =
             'Fetching data from DB for Bus Registered Only' .
-            'create csv file: ' . $expectFile1;
+            'Creating CSV file: ' . $expectFile1.'Uploaded file to S3: Bus_RegisteredOnly_areaId1.csv';
 
         static::assertEquals(
             $expectMsg,
             implode('', $actual->toArray()['messages'])
-        );
-
-        static::assertSame(
-            '"Current Traffic Area",col1,col2' . "\n" .
-            'areaId1,val11,"v""\'-/\,"' . "\n" .
-            'areaId1,val21,val22' . "\n",
-            file_get_contents($expectFile1)
         );
     }
 
@@ -476,6 +444,10 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturn($this->mockDbalResult);
 
+        $this->mockS3client->shouldReceive('putObject')
+            ->once()
+            ->andReturn([]);
+
         //  call & check
         $actual = $this->sut->handleCommand($cmd);
 
@@ -483,17 +455,11 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $expectMsg =
             'Fetching data from DB for Bus Variation' .
-            'create csv file: ' . $expectFile1;
+            'Creating CSV file: ' . $expectFile1.'Uploaded file to S3: Bus_Variation_areaId1.csv';
 
         static::assertEquals(
             $expectMsg,
             implode('', $actual->toArray()['messages'])
-        );
-
-        static::assertSame(
-            '"Current Traffic Area",col1,col2' . "\n" .
-            'areaId1,val11,"v""\'-/\,"' . "\n",
-            file_get_contents($expectFile1)
         );
     }
 

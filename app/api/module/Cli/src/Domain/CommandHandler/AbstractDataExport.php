@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Cli\Domain\CommandHandler;
 
+use Aws\S3\S3Client;
 use Doctrine\DBAL\Result;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Cli\Service\Utils\ExportToCsv;
 use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Service\Exception;
@@ -36,15 +36,13 @@ abstract class AbstractDataExport extends AbstractCommandHandler
         'Licence'
     ];
 
-    /**
-     * @var string
-     */
-    protected $path;
+    protected string $path;
 
-    /**
-     * @var array
-     */
-    private $csvPool = [];
+    private array $csvPool = [];
+
+    protected S3Client $s3Client;
+
+    protected string $s3Bucket;
 
     /**
      * Fill a CSV with the result of a doctrine statement
@@ -58,18 +56,16 @@ abstract class AbstractDataExport extends AbstractCommandHandler
     protected function singleCsvFromDbalResult(Result $dbalResult, $fileName, $fileNameSeparator = '_')
     {
         $date = new DateTime('now');
+        $fileBaseName = $fileName . $fileNameSeparator . $date->format(static::FILE_DATETIME_FORMAT) . '.csv';
 
-        $filePath = $this->path . '/' . $fileName . $fileNameSeparator . $date->format(static::FILE_DATETIME_FORMAT) . '.csv';
+        $tempCsvPath = sys_get_temp_dir() . '/' . $fileBaseName;
+        $this->result->addMessage('Creating CSV file: ' . $tempCsvPath);
+        $fh = fopen($tempCsvPath, 'w');
 
-        //  create csv file
-        $this->result->addMessage('create csv file: ' . $filePath);
-        $fh = ExportToCsv::createFile($filePath);
         $firstRow = false;
 
-        //  add rows
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             if (!$firstRow) {
-                //add title
                 fputcsv($fh, array_keys($row));
                 $firstRow = true;
             }
@@ -79,7 +75,7 @@ abstract class AbstractDataExport extends AbstractCommandHandler
 
         fclose($fh);
 
-        return file_get_contents($filePath);
+        return $tempCsvPath;
     }
 
     /**
@@ -93,35 +89,38 @@ abstract class AbstractDataExport extends AbstractCommandHandler
      */
     protected function makeCsvsFromDbalResult(Result $dbalResult, $keyFld, $fileName)
     {
-        //  add rows
+        $filePaths = [];
+        $fileHandles = [];
+
+        // add rows
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             $key = $row[$keyFld];
 
-            if (!isset($this->csvPool[$key])) {
-                //  create csv file
-                $filePath = $this->path . '/' . $fileName . '_' . $key . '.csv';
+            if (!isset($fileHandles[$key])) {
+                $fileBaseName = $fileName . '_' . $key . '.csv';
+                $filePath = sys_get_temp_dir() . '/' . $fileBaseName;
 
-                $this->result->addMessage('create csv file: ' . $filePath);
-                $fh = ExportToCsv::createFile($filePath);
+                $this->result->addMessage('Creating CSV file: ' . $filePath);
+                $fh = fopen($filePath, 'w');
 
-                //  add title & first row
                 fputcsv($fh, array_keys($row));
                 fputcsv($fh, $row);
 
-                $this->csvPool[$key] = $fh;
+                $fileHandles[$key] = $fh;
+                $filePaths[$key] = $filePath;
 
                 continue;
             }
 
-            //  add rows to csv from pool
-            $fh = $this->csvPool[$key];
-
+            $fh = $fileHandles[$key];
             fputcsv($fh, $row);
         }
 
-        //  close files
-        foreach ($this->csvPool as $fh) {
+        foreach ($fileHandles as $key => $fh) {
             fclose($fh);
+            $filePath = $filePaths[$key];
+            $this->uploadToS3($filePath);
+            unlink($filePath);
         }
     }
 
@@ -178,5 +177,69 @@ abstract class AbstractDataExport extends AbstractCommandHandler
         }
 
         return $items;
+    }
+
+    protected function createManifest(array $filePaths)
+    {
+        $manifestLines = [];
+
+        foreach ($filePaths as $filePath) {
+            $hash = hash_file('sha256', $filePath);
+            $fileName = basename($filePath);
+            $manifestLines[] = $hash . '  ' . $fileName;
+        }
+
+        $manifestContent = implode("\n", $manifestLines);
+
+        $manifestPath = sys_get_temp_dir() . '/dvaoplic-manifest.txt';
+        file_put_contents($manifestPath, $manifestContent);
+
+        return $manifestPath;
+    }
+
+    protected function createTarGzArchive(array $filePaths, $manifestPath)
+    {
+        $date = new DateTime('now');
+        $archiveBaseName = 'dvaoplic-' . $date->format(static::FILE_DATETIME_FORMAT) . '.tar';
+        $archiveGzBaseName = $archiveBaseName . '.gz';
+        $archivePath = sys_get_temp_dir() . '/' . $archiveBaseName;
+        $archiveGzPath = sys_get_temp_dir() . '/' . $archiveGzBaseName;
+
+        $tar = new \PharData($archivePath);
+
+        foreach ($filePaths as $filePath) {
+            $tar->addFile($filePath, basename($filePath));
+        }
+
+        $tar->addFile($manifestPath, basename($manifestPath));
+        $tar->compress(\Phar::GZ);
+        unlink($archivePath);
+
+        return $archiveGzPath;
+    }
+
+    protected function uploadToS3($filePath)
+    {
+        $fileName = basename($filePath);
+        $fileResource = fopen($filePath, 'r');
+
+        $this->s3Client->putObject([
+            'Bucket' => $this->s3Bucket,
+            'Key'    => $this->path . '/' . $fileName,
+            'Body'   => $fileResource,
+        ]);
+
+        fclose($fileResource);
+
+        $this->result->addMessage('Uploaded file to S3: ' . $fileName);
+    }
+
+    protected function cleanUpFiles(array $filePaths)
+    {
+        foreach ($filePaths as $filePath) {
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
     }
 }
