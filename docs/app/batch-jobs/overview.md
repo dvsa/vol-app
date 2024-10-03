@@ -5,13 +5,46 @@ This document provides an overview of the Batch Commands available in VOL. The t
 :::
 
 :::tip
-To run these commands locally, use the following format from the api root directory:
+To run these commands locally, run in the following format from the api root directory:
 
 ```bash
 ./vendor/bin/laminas --container=config/container-cli.php -v [command] [options]
 ```
 
 :::
+
+## CLI Command Structure and Registration
+
+:::info
+CLI Commands are defined in the following directory:
+
+```
+app/api/module/Cli/src/Command
+```
+
+:::
+
+### Command Structure
+
+Most CLI Commands in our system extend `Dvsa\Olcs\Cli\Command\AbstractCommand`. This base class provides shared functionality for logging and dry run behaviors, promoting consistency across our command implementations.
+
+### Command Registration
+
+Currently, all CLI Commands are registered in the service container using a `ConfigAbstractFactory` block. This configuration can be found in:
+
+```
+app/api/module/Cli/config/module.config.php
+```
+
+This approach allows for automated dependency injection and centralized configuration of our CLI Commands.
+
+:::tip
+When creating a new CLI Command, remember to:
+
+1. Place it in the correct directory
+2. Extend `AbstractCommand` if appropriate
+3. Register it in the `module.config.php` file
+   :::
 
 ## Available Commands
 
