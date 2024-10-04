@@ -82,7 +82,7 @@ class UserDetails extends Base
      *          "tm":"manage-users.field.permission.tm.label",
      *          "user":"manage-users.field.permission.user.label",
      *          "admin":"manage-users.field.permission.admin.label",
-     *          "operator-tc": "manage-users.field.permission.operator-tc.label",
+     *          "tc": "manage-users.field.permission.tc.label",
      *      }
      * })
      * @Form\Required(true)

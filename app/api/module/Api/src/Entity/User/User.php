@@ -34,7 +34,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     public const PERMISSION_ADMIN = 'admin';
     public const PERMISSION_USER = 'user';
     public const PERMISSION_TM = 'tm';
-    public const PERMISSION_OPERATOR_TC = 'operator-tc';
+    public const PERMISSION_TC = 'tc';
 
     public const USER_TYPE_INTERNAL = 'internal';
     public const USER_TYPE_ANON = 'anon';
@@ -98,13 +98,13 @@ class User extends AbstractUser implements OrganisationProviderInterface
             self::PERMISSION_USER => [RoleEntity::ROLE_LOCAL_AUTHORITY_USER],
         ],
         self::USER_TYPE_OPERATOR => [
-            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
+            self::PERMISSION_TC => [RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
         ],
         self::USER_TYPE_TRANSPORT_MANAGER => [
-            self::PERMISSION_OPERATOR_TC => [RoleEntity::ROLE_OPERATOR_TC],
+            self::PERMISSION_TC => [RoleEntity::ROLE_OPERATOR_TC],
             self::PERMISSION_ADMIN => [RoleEntity::ROLE_OPERATOR_ADMIN],
             self::PERMISSION_USER => [RoleEntity::ROLE_OPERATOR_USER],
             self::PERMISSION_TM => [RoleEntity::ROLE_OPERATOR_TM],
@@ -506,7 +506,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
         return $this->hasRoles(
             self::getRolesByUserType($this->getUserType(), self::PERMISSION_ADMIN)
         ) || $this->hasRoles(
-            self::getRolesByUserType($this->getUserType(), self::PERMISSION_OPERATOR_TC)
+            self::getRolesByUserType($this->getUserType(), self::PERMISSION_TC)
             );
     }
 
