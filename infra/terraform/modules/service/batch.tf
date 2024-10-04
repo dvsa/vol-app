@@ -155,6 +155,93 @@ module "eventbridge" {
   }
 
   schedules = local.schedules
+
+}
+
+module "eventbridge_sns" {
+  source = "terraform-aws-modules/eventbridge/aws"
+
+  create_bus = false
+
+  role_name = "batch-fail-role"
+
+  rules = {
+    batch-fail-sns = {
+      name        = "${var.environment}-batch-fail-event"
+      description = "Capture failed Batch Events sent to SNS"
+      event_pattern = jsonencode({
+        "detail-type" : [
+          "Batch Job State Change"
+        ],
+        "source" : [
+          "aws.batch"
+        ],
+        "detail" : {
+          "status" : [
+            "FAILED"
+          ]
+        }
+      })
+      enabled = true
+    }
+  }
+
+  targets = {
+    batch-fail-sns = [
+      {
+        name = "batch-fail-event"
+        arn  = module.sns_batch_fail.topic_arn
+      }
+    ]
+  }
+
+}
+
+module "sns_batch_fail" {
+  source = "terraform-aws-modules/sns/aws"
+
+  name            = "${var.environment}-batch-fail-topic"
+  use_name_prefix = true
+  display_name    = "batch-event-failed"
+
+
+  create_topic_policy         = true
+  enable_default_topic_policy = true
+  topic_policy_statements = {
+    pub = {
+      actions = ["sns:Publish"]
+      principals = [{
+        type = "AWS"
+        identifiers = [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        ]
+      }]
+    },
+
+    sub = {
+      actions = [
+        "sns:Subscribe",
+        "sns:Receive",
+      ]
+
+      principals = [{
+        type        = "Service"
+        identifiers = ["events.amazonaws.com"]
+      }]
+
+      conditions = [{
+        test     = "ArnLike"
+        variable = "aws:SourceArn"
+        values   = [module.eventbridge_sns.eventbridge_bus_arn]
+      }]
+    }
+  }
+
+  tags = {
+    "Name" = "${var.environment}-aws-sns-batch-fail"
+
+  }
+
 }
 
 resource "aws_cloudwatch_log_group" "this" {
