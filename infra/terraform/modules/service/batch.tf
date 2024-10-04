@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 locals {
   default_retry_policy = {
     attempts = 1
@@ -159,7 +161,8 @@ module "eventbridge" {
 }
 
 module "eventbridge_sns" {
-  source = "terraform-aws-modules/eventbridge/aws"
+  source  = "terraform-aws-modules/eventbridge/aws"
+  version = "~> 3.7"
 
   create_bus = false
 
@@ -198,7 +201,8 @@ module "eventbridge_sns" {
 }
 
 module "sns_batch_fail" {
-  source = "terraform-aws-modules/sns/aws"
+  source  = "terraform-aws-modules/sns/aws"
+  version = "~> 6.1"
 
   name            = "${var.environment}-batch-fail-topic"
   use_name_prefix = true
