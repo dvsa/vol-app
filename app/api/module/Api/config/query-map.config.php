@@ -299,6 +299,7 @@ return [
     TransferQuery\User\RoleList::class => QueryHandler\User\RoleList::class,
     TransferQuery\User\UserListInternal::class => QueryHandler\User\UserListInternal::class,
     Query\User\UserListInternalByTrafficArea::class => QueryHandler\User\UserListInternalByTrafficArea::class,
+    TransferQuery\User\OperatorAdminForOrganisationHasLoggedIn::class => QueryHandler\User\OperatorAdminForOrganisationHasLoggedIn::class,
 
     // User
     TransferQuery\Team\Team::class => QueryHandler\Team\Team::class,

@@ -22,6 +22,7 @@ return [
     QueryHandler\User\UserListInternalByTrafficArea::class                      => IsInternalUser::class,
     QueryHandler\User\UserListSelfserve::class                                  => CanManageUser::class,
     QueryHandler\User\UserSelfserve::class                                      => CanReadUser::class,
+    QueryHandler\User\OperatorAdminForOrganisationHasLoggedIn::class            => CanAccessUserList::class,
 
     // Commands
     CommandHandler\MyAccount\UpdateMyAccountInternal::class                     => IsInternalUser::class,

@@ -72,7 +72,8 @@ class UserTest extends RepositoryTestCase
             [
                 'localAuthority' => 11,
                 'partnerContactDetails' => 22,
-                'organisation' => 43
+                'organisation' => 43,
+                'lastLoggedInFrom' => '2015-01-01',
             ]
         );
 
@@ -90,6 +91,11 @@ class UserTest extends RepositoryTestCase
             ->with('u.organisationUsers', 'ou', \Doctrine\ORM\Query\Expr\Join::WITH, 'ou.organisation = :organisation')
             ->once();
         $mockQb->shouldReceive('setParameter')->with('organisation', 43)->once();
+
+        $mockQb->shouldReceive('andWhere')->with('lastLoggedInFrom')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr->gte')->with('u.lastLoginAt', ':lastLoggedInFrom')->once()
+            ->andReturn('lastLoggedInFrom');
+        $mockQb->shouldReceive('setParameter')->with('lastLoggedInFrom', '2015-01-01')->once();
 
         $mockQb->shouldReceive('expr->neq')->with('u.id', ':systemUser')->once()->andReturn('systemUser');
         $mockQb->shouldReceive('andWhere')->with('systemUser')->once()->andReturnSelf();
