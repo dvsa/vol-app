@@ -14,8 +14,11 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
+use Dvsa\Olcs\Transfer\Query\User\OperatorAdminForOrganisationHasLoggedIn;
+use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Exception;
 use LmcRbacMvc\Service\AuthorizationService;
 
 /**
@@ -84,6 +87,13 @@ abstract class AbstractUndertakingsController extends AbstractController
         }
 
         if ($request->isPost()) {
+            $operatorAdminHasLoggedIn = $this->checkIfOperatorAdminHasLoggedIn($applicationData['licence']['organisation']['id']);
+
+            // If form is submitted, but an operator admin has not logged in, abort and redirect to undertakings.
+            if (!$operatorAdminHasLoggedIn) {
+                return $this->redirect()->refresh();
+            }
+
             $data = (array) $request->getPost();
             $form->setData($data);
             if ($form->isValid()) {
@@ -112,6 +122,9 @@ abstract class AbstractUndertakingsController extends AbstractController
             $data = $this->formatDataForForm($applicationData);
             $form->setData($data);
         }
+
+        // Check if operator admin has logged in; if not, disable the submit buttons and display a message.
+        $this->checkIfOperatorAdminHasLoggedIn($applicationData['licence']['organisation']['id'], $form);
 
         return $this->render('undertakings', $form);
     }
@@ -181,7 +194,7 @@ abstract class AbstractUndertakingsController extends AbstractController
                 'returnUrl' => $returnUrl,
             ]));
             if (!$urlResult->isOk()) {
-                throw new \Exception('GetGovUkAccountRedirect command returned non-OK', $urlResult->getStatusCode());
+                throw new Exception('GetGovUkAccountRedirect command returned non-OK', $urlResult->getStatusCode());
             }
             return $this->redirect()->toUrl($urlResult->getResult()['messages'][0]);
         }
@@ -253,7 +266,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      */
     protected function formatDataForForm($applicationData)
     {
-        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+        $goodsOrPsv = $applicationData['goodsOrPsv']['id'];
 
         $output = [
             'declarationsAndUndertakings' => [
@@ -305,5 +318,65 @@ abstract class AbstractUndertakingsController extends AbstractController
         } else {
             $formHelper->remove($form, 'form-actions->submitAndPay');
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function operatorAdminForOrganisationHasLoggedIn($organisationId): bool
+    {
+        $query = OperatorAdminForOrganisationHasLoggedIn::create([
+            'organisation' => $organisationId
+        ]);
+
+        $result = $this->handleQuery($query);
+
+        if (!$result->isOk()) {
+            throw new Exception('OperatorAdminForOrganisationHasLoggedIn query returned non-OK (' . $result->getStatusCode() . ') -- ' . $result->getBody());
+        }
+
+        $decodedResult = $result->getResult();
+        if (!isset($decodedResult['operatorAdminHasLoggedIn'])) {
+            throw new Exception('OperatorAdminForOrganisationHasLoggedIn query returned unexpected result (expected operatorAdminHasLoggedIn) -- ' . $result->getBody());
+        }
+
+        return $decodedResult['operatorAdminHasLoggedIn'];
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function checkIfOperatorAdminHasLoggedIn($organisationId, $form = null): bool
+    {
+        $operatorAdminHasLoggedIn = $this->operatorAdminForOrganisationHasLoggedIn($organisationId);
+
+        if (!$operatorAdminHasLoggedIn && $form instanceof \Laminas\Form\Form) {
+            if ($form->has('form-actions')) {
+                $form->remove('form-actions');
+            }
+            if ($form->has('signatureOptions')) {
+                $form->remove('signatureOptions');
+            }
+            if ($form->has('interim')) {
+                $form->remove('interim');
+            }
+            if ($form->has('declarationsAndUndertakings') && $form->get('declarationsAndUndertakings')->has('signatureOptions')) {
+                $form->get('declarationsAndUndertakings')->remove('signatureOptions');
+            }
+            $form->add(
+                [
+                    'name' => 'operator-admin-login-required',
+                    'type' => \Common\Form\Elements\Types\HtmlTranslated::class,
+                    'attributes' => [
+                        'value' => 'markup-operator-admin-login-required-text',
+                    ],
+                ],
+                [
+                    'priority' => 1000,
+                ]
+            );
+        }
+
+        return $operatorAdminHasLoggedIn;
     }
 }

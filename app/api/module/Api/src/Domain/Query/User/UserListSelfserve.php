@@ -6,6 +6,9 @@
 
 namespace Dvsa\Olcs\Api\Domain\Query\User;
 
+use Dvsa\Olcs\Transfer\FieldType\Traits\LastLoggedInFromOptional;
+use Dvsa\Olcs\Transfer\FieldType\Traits\OrganisationOptional;
+use Dvsa\Olcs\Transfer\FieldType\Traits\RolesOptional;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\OrderedQueryInterface;
 use Dvsa\Olcs\Transfer\Query\OrderedTrait;
@@ -19,6 +22,9 @@ final class UserListSelfserve extends AbstractQuery implements PagedQueryInterfa
 {
     use PagedTrait;
     use OrderedTrait;
+    use RolesOptional;
+    use OrganisationOptional;
+    use LastLoggedInFromOptional;
 
     /**
      * @Transfer\Filter("Laminas\Filter\Digits")
@@ -37,14 +43,6 @@ final class UserListSelfserve extends AbstractQuery implements PagedQueryInterfa
     protected $partnerContactDetails = null;
 
     /**
-     * @Transfer\Filter("Laminas\Filter\Digits")
-     * @Transfer\Validator("Laminas\Validator\Digits")
-     * @Transfer\Validator("Laminas\Validator\GreaterThan", options={"min": 0})
-     * @Transfer\Optional
-     */
-    protected $organisation = null;
-
-    /**
      * @return int
      */
     public function getLocalAuthority()
@@ -58,13 +56,5 @@ final class UserListSelfserve extends AbstractQuery implements PagedQueryInterfa
     public function getPartnerContactDetails()
     {
         return $this->partnerContactDetails;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
     }
 }
