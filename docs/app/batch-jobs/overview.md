@@ -50,27 +50,20 @@ When creating a new CLI Command, remember to:
 
 ## Available Commands
 
-Here's a list of available batch commands:
+:::info
+To list all registered commands, run the following:
 
-| Command                                    | Description                                                                                                                                           |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `batch:ch-vs-olcs-diffs`                   | Find differences between Companies House and OLCS data and export them.                                                                               |
-| `batch:clean-up-variations`                | Clean up abandoned variations.                                                                                                                        |
-| `batch:cns`                                | Process licences for Continuation Not Sought (CNS).                                                                                                   |
-| `batch:create-psv-licence-surrender-tasks` | Create tasks to surrender PSV licences that have expired.                                                                                             |
-| `batch:data-dva-ni-export`                 | Export to csv for Northern Ireland                                                                                                                    |
-| `batch:data-gov-uk-export`                 | Export to csv for data.gov.uk                                                                                                                         |
-| `batch:data-retention`                     | Run data retention rules                                                                                                                              |
-| `batch:database-maintenance`               | Perform database management tasks, e.g., changing is_irfo flags                                                                                       |
-| `batch:digital-continuation-reminders`     | Generate digital continuation reminders.                                                                                                              |
-| `batch:duplicate-vehicle-removal`          | Duplicate vehicle removal                                                                                                                             |
-| `batch:duplicate-vehicle-warning`          | Send duplicate vehicle warning letters                                                                                                                |
-| `batch:enqueue-ch-compare`                 | Enqueue Companies House lookup for all Organisations                                                                                                  |
-| `batch:expire-bus-registration`            | Expire bus registrations past their end date.                                                                                                         |
-| `batch:flag-urgent-tasks`                  | Flag tasks as urgent                                                                                                                                  |
-| `batch:import-users-from-csv`              | Import user from csv file                                                                                                                             |
-| `batch:inspection-request-email`           | Process inspection request email                                                                                                                      |
-| `batch:interim-end-date-enforcement`       | Enforces interim end date by checking applications under consideration with an in-force interim that have an end date of the previous day or earlier. |
+```bash
+./vendor/bin/laminas --container=config/container-cli.php list
+```
+
+To see more details for a specific command, and any parameters it accepts (if any) you can add --help after the command name. e.g:
+
+```bash
+./vendor/bin/laminas --container=config/container-cli.php -v batch:data-gov-uk-export --help
+```
+
+:::
 
 ## DataGovUK & DVA-NI Export Commands - Upload to S3
 
@@ -94,19 +87,6 @@ Each will create 1 or more CSV files, and upload these directly to an S3 bucket.
 
 `psv-operator-list` and `international-goods` each also send an email to an address specified in a System Parameter
 
-## Queue Commands
-
-In addition to batch commands, we also have several queue-related commands:
-
-| Command                         | Description                                                     |
-| ------------------------------- | --------------------------------------------------------------- |
-| `queue:company-profile-dlq`     | Processes the Company Profile DLQ (Dead Letter Queue) items.    |
-| `queue:process-company-profile` | Processes the Company Profile queue items.                      |
-| `queue:process-insolvency`      | Processes the Process Insolvency queue items.                   |
-| `queue:process-insolvency-dlq`  | Processes the Process Insolvency DLQ (Dead Letter Queue) items. |
-| `queue:process-queue`           | Processes queue items.                                          |
-| `queue:transxchange-consumer`   | Processes TransXChange queue items.                             |
-
 ## Command Examples with Parameters
 
 Here are some examples of commands that require parameters to operate.
@@ -117,9 +97,6 @@ These examples assume you are in the `app/api` directory.
 
 ```bash
 ./vendor/bin/laminas --container=config/container-cli.php batch:ch-vs-olcs-diffs -v --path=/tmp/
-./vendor/bin/laminas --container=config/container-cli.php batch:clean-up-variations -v
-./vendor/bin/laminas --container=config/container-cli.php batch:cns -v
-./vendor/bin/laminas --container=config/container-cli.php batch:create-psv-licence-surrender-tasks -v
 ./vendor/bin/laminas --container=config/container-cli.php batch:data-dva-ni-export -v --report-name=ni-operator-licence
 ./vendor/bin/laminas --container=config/container-cli.php batch:data-gov-uk-export -v --report-name=operator-licence
 ./vendor/bin/laminas --container=config/container-cli.php batch:data-retention -v --populate
