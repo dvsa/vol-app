@@ -36,5 +36,6 @@ runs:
             echo "version=$LATEST_APP_COMMIT" >> $GITHUB_OUTPUT
           fi
         else
-          echo "version=release/$LATEST_RELEASE" >> $GITHUB_OUTPUT
+          SANITIZED_LATEST_RELEASE=$(echo $LATEST_RELEASE | sed 's/\//-/g')
+          echo "version=release-$SANITIZED_LATEST_RELEASE" >> $GITHUB_OUTPUT
         fi
