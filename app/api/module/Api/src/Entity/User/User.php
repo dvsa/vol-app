@@ -42,7 +42,6 @@ class User extends AbstractUser implements OrganisationProviderInterface
     public const USER_TYPE_OPERATOR = 'operator';
     public const USER_TYPE_PARTNER = 'partner';
     public const USER_TYPE_TRANSPORT_MANAGER = 'transport-manager';
-    public const USER_TYPE_OPERATOR_TC = 'operator-tc';
 
     public const ERROR_ADMIN_USER_ALREADY_EXISTS = 'err_admin_user_already_exists';
     public const ERR_ANON_USERNAME = 'ERR_ANON_USERNAME';

@@ -67,7 +67,6 @@ final class CreateUserSelfserve extends AbstractUserCommandHandler implements
                 $data['localAuthority'] = $this->getCurrentUser()->getLocalAuthority()->getId();
                 break;
             case User::USER_TYPE_OPERATOR:
-            case User::USER_TYPE_OPERATOR_TC:
             case User::USER_TYPE_TRANSPORT_MANAGER:
                 $data['userType'] = User::USER_TYPE_OPERATOR;
                 $data['organisations'] = array_map(
