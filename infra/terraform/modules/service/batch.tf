@@ -166,23 +166,22 @@ module "eventbridge_sns" {
 
   create_bus = false
 
-  role_name = "batch-fail-role"
+  role_name = "vol-app-${var.environment}-batch-fail-role"
 
   rules = {
     batch-fail-sns = {
       name        = "${var.environment}-batch-fail-event"
       description = "Capture failed Batch Events sent to SNS"
       event_pattern = jsonencode({
-        "detail-type" : [
-          "Batch Job State Change"
-        ],
-        "source" : [
-          "aws.batch"
-        ],
+        "source" : ["aws.batch"],
+        "detail-type" : ["Batch Job State Change"],
         "detail" : {
           "status" : [
             "FAILED"
-          ]
+          ],
+          "jobName" : [{
+            "wildcard" : "vol-app-${var.environment}-*"
+          }]
         }
       })
       enabled = true
@@ -204,7 +203,7 @@ module "sns_batch_fail" {
   source  = "terraform-aws-modules/sns/aws"
   version = "~> 6.1"
 
-  name            = "${var.environment}-batch-fail-topic"
+  name            = "vol-app-${var.environment}-batch-fail-topic"
   use_name_prefix = true
   display_name    = "batch-event-failed"
 
@@ -242,7 +241,7 @@ module "sns_batch_fail" {
   }
 
   tags = {
-    "Name" = "${var.environment}-aws-sns-batch-fail"
+    "Name" = "vol-app-${var.environment}-aws-sns-batch-fail"
 
   }
 
