@@ -231,7 +231,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $savedUser = $this->commonHandleCommandTest();
 
         $this->assertEquals($permissions['userType'], $savedUser->getUserType());
-        // $this->assertEquals("","","Role not set as expected");
     }
 
     public function testHandleCommandForTm()
@@ -261,21 +260,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
 
-    }
-
-    public function dataProviderOperatorPermissions(): array
-    {
-        return [
-            [
-                'operator TC permission gets right role' => [
-                    'permission' => UserEntity::PERMISSION_TC,
-                    'userType' =>
-                        UserEntity::USER_TYPE_OPERATOR,
-                    'expectedRoles' =>
-                        RoleEntity::ROLE_OPERATOR_ADMIN
-                ]
-            ]
-        ];
     }
 
     public function testHandleCommandThrowsIncorrectUserTypeException()
