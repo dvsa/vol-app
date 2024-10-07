@@ -207,10 +207,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_LOCAL_AUTHORITY, $savedUser->getUserType());
     }
 
-    /**
-     * @dataProvider dataProviderOperatorPermissions
-     */
-    public function testHandleCommandForOperator( array $permissions)
+    public function testHandleCommandForOperator()
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -230,7 +227,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $savedUser = $this->commonHandleCommandTest();
 
-        $this->assertEquals($permissions['userType'], $savedUser->getUserType());
+        $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
     public function testHandleCommandForTm()
