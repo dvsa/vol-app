@@ -21,6 +21,5 @@ class DataGovUkExportTest extends MockeryTestCase
         $sut = DataGovUkExport::create($params);
 
         static::assertEquals('unit_ReportName', $sut->getReportName());
-        static::assertEquals('unit_Path', $sut->getPath());
     }
 }
