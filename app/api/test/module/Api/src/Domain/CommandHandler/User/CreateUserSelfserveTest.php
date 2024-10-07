@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
+use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Service\PasswordService;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as Cmd;
@@ -206,7 +207,10 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(UserEntity::USER_TYPE_LOCAL_AUTHORITY, $savedUser->getUserType());
     }
 
-    public function testHandleCommandForOperator()
+    /**
+     * @dataProvider dataProviderOperatorPermissions
+     */
+    public function testHandleCommandForOperator( array $permissions)
     {
         /** @var OrganisationEntity $organisation */
         $organisation = m::mock(OrganisationEntity::class)->makePartial();
@@ -226,7 +230,8 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $savedUser = $this->commonHandleCommandTest();
 
-        $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
+        $this->assertEquals($permissions['userType'], $savedUser->getUserType());
+        // $this->assertEquals("","","Role not set as expected");
     }
 
     public function testHandleCommandForTm()
@@ -255,6 +260,22 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $savedUser = $this->commonHandleCommandTest();
 
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
+
+    }
+
+    public function dataProviderOperatorPermissions(): array
+    {
+        return [
+            [
+                'operator TC permission gets right role' => [
+                    'permission' => UserEntity::PERMISSION_TC,
+                    'userType' =>
+                        UserEntity::USER_TYPE_OPERATOR,
+                    'expectedRoles' =>
+                        RoleEntity::ROLE_OPERATOR_ADMIN
+                ]
+            ]
+        ];
     }
 
     public function testHandleCommandThrowsIncorrectUserTypeException()
