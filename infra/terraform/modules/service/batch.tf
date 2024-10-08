@@ -166,11 +166,8 @@ module "eventbridge_sns" {
 
   create_bus = false
 
-  role_name = "vol-app-${var.environment}-batch-fail-role"
-
   rules = {
-    batch-fail-sns = {
-      name        = "${var.environment}-batch-fail-event"
+    "${var.environment}-batch-fail-event" = {
       description = "Capture failed Batch Events sent to SNS"
       event_pattern = jsonencode({
         "source" : ["aws.batch"],
@@ -205,8 +202,6 @@ module "sns_batch_fail" {
 
   name            = "vol-app-${var.environment}-batch-fail-topic"
   use_name_prefix = true
-  display_name    = "batch-event-failed"
-
 
   create_topic_policy         = true
   enable_default_topic_policy = true
