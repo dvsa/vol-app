@@ -122,6 +122,8 @@ jobs:
         with:
           image-ref: ${{ steps.build-and-push.outputs.imageid }}
           skip-dirs: /var/clamav
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
