@@ -164,7 +164,9 @@ module "eventbridge_sns" {
   source  = "terraform-aws-modules/eventbridge/aws"
   version = "~> 3.7"
 
-  create_bus = false
+  create_bus  = false
+  create_role = true
+  role_name   = "vol-app-${var.environment}-batch-failures"
 
   rules = {
     "vol-app-${var.environment}-batch-failure-event" = {
@@ -233,6 +235,13 @@ module "sns_batch_failure" {
         variable = "aws:SourceArn"
         values   = [module.eventbridge_sns.eventbridge_bus_arn]
       }]
+    }
+  }
+
+  subscriptions = {
+    "vol-app-${var.environment}-batch-failure-email" = {
+      protocol = "email"
+      endpoint = "william.shelley@dvsa.gov.uk"
     }
   }
 
