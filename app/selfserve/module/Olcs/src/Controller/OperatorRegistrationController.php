@@ -48,7 +48,7 @@ class OperatorRegistrationController extends AbstractController
 
                 if ($response->isOk()) {
                     return $this->prepareView('olcs/user-registration/check-email', [
-                        'emailAddress' => $formattedOperatorData['fields']['emailAddress'],
+                        'emailAddress' => $formattedOperatorData['contactDetails']['emailAddress'],
                         'pageTitle' => 'user-registration.page.check-email.title'
                     ]);
                 }
