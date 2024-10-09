@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
+use Dvsa\Olcs\Api\Entity\User\Role as RoleEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Service\PasswordService;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as Cmd;
@@ -255,6 +256,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $savedUser = $this->commonHandleCommandTest();
 
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
+
     }
 
     public function testHandleCommandThrowsIncorrectUserTypeException()
