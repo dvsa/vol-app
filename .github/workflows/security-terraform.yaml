@@ -22,6 +22,8 @@ jobs:
           output: "trivy-results.sarif"
           severity: "CRITICAL"
           limit-severities-for-sarif: true
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v3

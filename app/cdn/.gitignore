@@ -26,3 +26,4 @@ composer.lock
 editorconfig.org
 assets/vendor
 .scannerwork/
+# Trigger CD - 2024-10-07-1613
