@@ -39,6 +39,7 @@ use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
 use Olcs\Controller\Lva\TransportManager as LvaTransportManagerControllers;
 use Olcs\Controller\Lva\Variation as LvaVariationControllers;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\OperatorRegistrationController;
 use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\SessionTimeoutController;
@@ -510,7 +511,7 @@ $routes = [
                 'options' => [
                     'route' => 'operator[/]',
                     'defaults' => [
-                        'controller' => UserRegistrationController::class,
+                        'controller' => \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class,
                         'action' => 'add'
                     ]
                 ]
@@ -1378,6 +1379,8 @@ return [
             UserForgotUsernameController::class => \Olcs\Controller\Factory\UserForgotUsernameControllerFactory::class,
             UserRegistrationController::class => \Olcs\Controller\Factory\UserRegistrationControllerFactory::class,
             ConsultantRegistrationController::class => \Olcs\Controller\Factory\ConsultantRegistrationControllerFactory::class,
+            OperatorRegistrationController::class => \Olcs\Controller\Factory\OperatorRegistrationControllerFactory::class,
+            \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class => \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class,
 
             Olcs\Controller\Entity\ViewController::class => \Olcs\Controller\Factory\Entity\ViewControllerFactory::class,
 
