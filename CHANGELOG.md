@@ -1,5 +1,26 @@
 # Changelog
 
+## [5.9.0](https://github.com/dvsa/vol-app/compare/v5.8.2...v5.9.0) (2024-10-10)
+
+
+### Features
+
+* 5809 batch alarm email testing ([#377](https://github.com/dvsa/vol-app/issues/377)) ([2ecbd09](https://github.com/dvsa/vol-app/commit/2ecbd09873b7cdf262e0db83fdb6e5282def5715))
+* add `Consultant Administrator` option to add users page ([#363](https://github.com/dvsa/vol-app/issues/363)) ([9703d68](https://github.com/dvsa/vol-app/commit/9703d68f4dab2111f38f9566d6162648d7ca22ed))
+* cannot sign declaration unless op-adm for org has logged in ([#364](https://github.com/dvsa/vol-app/issues/364)) ([47e31e4](https://github.com/dvsa/vol-app/commit/47e31e42ba9ea1a04bd36f4332ca5e0f7e20f513))
+* create monitoring in cloudwatch for aws batch failures ([#367](https://github.com/dvsa/vol-app/issues/367)) ([58c076c](https://github.com/dvsa/vol-app/commit/58c076c8cd203edd165855d8d360703a9f1df168))
+* operator self-registration revamp post consultant toggle ([#375](https://github.com/dvsa/vol-app/issues/375)) ([cf3f117](https://github.com/dvsa/vol-app/commit/cf3f1179ce83ccd8f5e55b1dd8b2e87c42fc77a3))
+* Update DataGovUkExport.php to upload to S3 bucket. ([#357](https://github.com/dvsa/vol-app/issues/357)) ([3414573](https://github.com/dvsa/vol-app/commit/34145736d0ba78b7f9142fe2bb0ec89ab09670d8))
+
+
+### Bug Fixes
+
+* 5809 batch alarm rule names ([#374](https://github.com/dvsa/vol-app/issues/374)) ([1168502](https://github.com/dvsa/vol-app/commit/1168502af325b0e36831e1438bc0c0ec21cd91ad))
+* Operator representation registration form radio options switched ([#355](https://github.com/dvsa/vol-app/issues/355)) ([2984dde](https://github.com/dvsa/vol-app/commit/2984dde08ac191cc7f2412d8b8be274365ccf91c))
+* sanitize the returned version - dont return string with slashes in ([#366](https://github.com/dvsa/vol-app/issues/366)) ([7d13277](https://github.com/dvsa/vol-app/commit/7d13277045a9bf957415f56e3e8aefa9e3ba6fa1))
+* Two methods in DataGovUkExport did not call new parent uploadToS3 method. ([#378](https://github.com/dvsa/vol-app/issues/378)) ([d4b8b9f](https://github.com/dvsa/vol-app/commit/d4b8b9f8fb95c36069cd6934cec66b690b8a1501))
+* updated businessType label for register for operator to have its own translation key ([#362](https://github.com/dvsa/vol-app/issues/362)) ([8918d18](https://github.com/dvsa/vol-app/commit/8918d185013c0725163c16c8266cdd3022231f3e))
+
 ## [5.8.2](https://github.com/dvsa/vol-app/compare/v5.8.1...v5.8.2) (2024-09-25)
 
 
