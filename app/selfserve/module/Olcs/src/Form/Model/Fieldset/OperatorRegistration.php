@@ -6,8 +6,8 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("OperatorRegistration")
- * @Form\Attributes({"method":"post"})
- * @Form\Options({"prefer_form_input_filter": true, "label": ""})
+ * @Form\Attributes({"method":"post","label":"user-registration.form.label"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "user-registration.form.label"})
  */
 class OperatorRegistration
 {
