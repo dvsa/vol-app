@@ -52,7 +52,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         $adminUsersCount = $this->getCurrentOrganisation()->getAdminUsers()->count();
 
         if (($adminUsersCount - 1) == 0) {
-            throw new BadRequestException('You can not have no admin users');
+            throw new BadRequestException('You can not have 0 admin users');
         }
 
         /** @var \Dvsa\Olcs\Api\Entity\User\User $user */

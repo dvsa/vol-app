@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractUserCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
@@ -64,6 +65,13 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
         $user = $this->getRepo()->fetchById($command->getId(), Query::HYDRATE_OBJECT, $command->getVersion());
 
         $data = $command->getArrayCopy();
+
+        if ($user->isAdministrator() && $data['permission'] == 'user') {
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminUsers()->count();
+            if (($adminUsersCount - 1) == 0) {
+                throw new BadRequestException('You can not have 0 admin users');
+            }
+        }
 
         // populate roles based on the user type and permission
         $data['roles'] = User::getRolesByUserType($user->getUserType(), $data['permission']);
