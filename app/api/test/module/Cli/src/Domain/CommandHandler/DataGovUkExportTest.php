@@ -180,15 +180,22 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             ]
         );
 
+        $this->mockS3client->shouldAllowMockingMethod('putObject');
+        $this->mockS3client->shouldReceive('putObject')
+            ->once()
+            ->andReturn([]);
+
         $actual = $this->sut->handleCommand($cmd);
 
         $date = new DateTime('now');
-        $expectedFile = $this->tmpPath . '/' . $fileName . '_' .
+
+        $expectedFileName = $fileName . '_' .
             $date->format(DataGovUkExport::FILE_DATETIME_FORMAT) . '.csv';
+        $expectedFilePath = $this->tmpPath . '/' . $expectedFileName;
 
         $expectMsg =
             'Fetching data for international goods list' .
-            'Creating CSV file: ' . $expectedFile;
+            'Creating CSV file: ' . $expectedFilePath . 'Uploaded file to S3: '.$expectedFileName;
 
         $this->assertEquals(
             $expectMsg,
@@ -294,16 +301,20 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             ]
         );
 
+        $this->mockS3client->shouldAllowMockingMethod('putObject');
+        $this->mockS3client->shouldReceive('putObject')
+            ->once()
+            ->andReturn([]);
+
         $actual = $this->sut->handleCommand($cmd);
 
         $expectMsg =
             'Fetching data from DB for PSV Operators' .
-            'create csv file content';
+            'create csv file contentUploaded file to S3: psv_operator_list_';
 
-        static::assertEquals(
-            $expectMsg,
-            implode('', $actual->toArray()['messages'])
-        );
+        $actualMsg = implode('', $actual->toArray()['messages']);
+
+        static::assertStringStartsWith($expectMsg, $actualMsg);
     }
 
     public function testOperatorLicenceOk()
