@@ -13,6 +13,7 @@ jobs:
       browser_name: "edge"
       browser_version: "latest"
       exclude_tags: "none"
+      test_oidc_role: ${{ vars.TEST_OIDC_ROLE }}
 
   e2e-full-regression-test:
     name: E2E Full Regression Test on Dev
@@ -25,3 +26,4 @@ jobs:
       browser_name: "edge"
       browser_version: "latest"
       exclude_tags: "none"
+      test_oidc_role: ${{ vars.TEST_OIDC_ROLE }}
