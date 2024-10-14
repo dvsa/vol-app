@@ -27,7 +27,7 @@
 | <a name="module_records"></a> [records](#module\_records) | terraform-aws-modules/route53/aws//modules/records | ~> 4.0 |
 | <a name="module_route53_records"></a> [route53\_records](#module\_route53\_records) | terraform-aws-modules/acm/aws | ~> 5.0 |
 | <a name="module_sns_batch_failure"></a> [sns\_batch\_failure](#module\_sns\_batch\_failure) | terraform-aws-modules/sns/aws | ~> 6.1 |
-| <a name="module_sqs_deadletter"></a> [sqs\_deadletter](#module\_sqs\_deadletter) | terraform-aws-modules/sqs/aws | ~> 4.2.1 |
+| <a name="module_sqs_deadletter"></a> [sqs\_deadletter](#module\_sqs\_deadletter) | terraform-aws-modules/sqs/aws | n/a |
 
 ## Resources
 
