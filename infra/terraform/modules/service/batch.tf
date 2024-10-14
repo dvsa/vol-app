@@ -192,7 +192,7 @@ module "eventbridge_sns" {
       {
         name            = "batch-fail-event"
         arn             = module.sns_batch_failure.topic_arn
-        dead_letter_arn = module.sqs_deadletter.queue_arn
+        dead_letter_arn = module.sqs_deadletter.arn
       }
     ]
   }
@@ -254,8 +254,7 @@ module "sns_batch_failure" {
 }
 
 module "sqs_deadletter" {
-  version = "~> 4.2.1"
-  source  = "terraform-aws-modules/sqs/aws"
+  source = "terraform-aws-modules/sqs/aws"
 
   name = "vol-app-${var.environment}-batch-failure-dlq"
 
