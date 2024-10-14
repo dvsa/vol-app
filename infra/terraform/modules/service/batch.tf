@@ -190,8 +190,9 @@ module "eventbridge_sns" {
   targets = {
     "vol-app-${var.environment}-batch-failure-event" = [
       {
-        name = "batch-fail-event"
-        arn  = module.sns_batch_failure.topic_arn
+        name            = "batch-fail-event"
+        arn             = module.sns_batch_failure.topic_arn
+        dead_letter_arn = aws_sqs_queue.sqs-deadletter-queue.arn
       }
     ]
   }
@@ -250,6 +251,23 @@ module "sns_batch_failure" {
 
   }
 
+}
+
+resource "aws_sqs_queue" "main" {
+  name = "vol-app-${var.environment}-batch-failure-queue"
+
+  redrive_policy = jsonencode({
+    deadletterTargetArn = aws_sqs_queue.sqs-deadletter-queue.arn
+    maxReceiveCount     = 4
+  })
+  redrive_allow_policy = jsonencode({
+    redrivePermission = "byQuery"
+    sourceQueueArns   = [aws_sqs_queue.sqs-deadletter-queue.arn]
+  })
+}
+
+resource "aws_sqs_queue" "sqs-deadletter-queue" {
+  name = "vol-app-${var.environment}-batch-failure-dlq"
 }
 
 resource "aws_cloudwatch_log_group" "this" {

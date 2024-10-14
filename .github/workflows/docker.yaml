@@ -77,6 +77,28 @@ jobs:
             type=raw,enable=${{ !inputs.is-release }},value=${{ inputs.version }}
             type=raw,value=latest
 
+      - name: Build Docker image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ env.WORKING_DIR }}
+          target: production
+          platforms: linux/arm64
+          push: false
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ inputs.project }}
+          cache-to: type=gha,mode=max,scope=${{ inputs.project }}
+
+      - name: Scan
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ steps.build.outputs.imageid }}
+          skip-dirs: /var/clamav
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
         uses: aws-actions/configure-aws-credentials@v4
@@ -103,27 +125,19 @@ jobs:
         run: |
           aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=latest
 
-      - name: Build ${{ inputs.push && 'and push ' || '' }}Docker image
-        id: build-and-push
+      - name: Push Docker image
+        if: ${{ inputs.push }}
         uses: docker/build-push-action@v6
         with:
           context: ${{ env.WORKING_DIR }}
           target: production
           platforms: linux/arm64
-          push: ${{ inputs.push }}
-          load: true
+          push: true
+          load: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ inputs.project }}
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
-
-      - name: Scan
-        uses: aquasecurity/trivy-action@0.24.0
-        with:
-          image-ref: ${{ steps.build-and-push.outputs.imageid }}
-          skip-dirs: /var/clamav
-        env:
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
       - name: Setup Notation CLI
         if: ${{ inputs.push }}
@@ -139,4 +153,4 @@ jobs:
           plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
           plugin_checksum: cccfe8fdcdf853d83fd57ffc80524eddda75ad7ae9d9a257b087007230ec02f9
           key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
-          target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}:${{ inputs.version}}
+          target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}:${{ inputs.version }}
