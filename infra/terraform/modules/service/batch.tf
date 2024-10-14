@@ -249,7 +249,8 @@ module "sns_batch_failure" {
 }
 
 module "sqs_deadletter" {
-  source = "terraform-aws-modules/sqs/aws"
+  version = "~> 4.2.1"
+  source  = "terraform-aws-modules/sqs/aws"
 
   name = "vol-app-${var.environment}-batch-failure-queue"
 
