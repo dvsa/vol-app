@@ -6,7 +6,7 @@ on:
 jobs:
   e2e-smoke-test:
     name: E2E Smoke Test on Dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@test_oidc_role
     with:
       platform_env: dev
       cucumber_tags: "@ec2_smoke"
@@ -18,7 +18,7 @@ jobs:
     name: E2E Full Regression Test on Dev
     needs:
       - e2e-smoke-test
-    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@test_oidc_role
     with:
       platform_env: dev
       cucumber_tags: "@FullRegression"
