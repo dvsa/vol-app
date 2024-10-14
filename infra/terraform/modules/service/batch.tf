@@ -192,7 +192,7 @@ module "eventbridge_sns" {
       {
         name            = "batch-fail-event"
         arn             = module.sns_batch_failure.topic_arn
-        dead_letter_arn = aws_sqs_queue.sqs-deadletter-queue.arn
+        dead_letter_arn = module.sqs_deadletter.queue_arn
       }
     ]
   }
@@ -253,21 +253,17 @@ module "sns_batch_failure" {
 
 }
 
-resource "aws_sqs_queue" "main" {
-  name = "vol-app-${var.environment}-batch-failure-queue"
+module "sqs_deadletter" {
+  version = "~> 4.2.1"
+  source  = "terraform-aws-modules/sqs/aws"
 
-  redrive_policy = jsonencode({
-    deadletterTargetArn = aws_sqs_queue.sqs-deadletter-queue.arn
-    maxReceiveCount     = 4
-  })
-  redrive_allow_policy = jsonencode({
-    redrivePermission = "byQuery"
-    sourceQueueArns   = [aws_sqs_queue.sqs-deadletter-queue.arn]
-  })
-}
-
-resource "aws_sqs_queue" "sqs-deadletter-queue" {
   name = "vol-app-${var.environment}-batch-failure-dlq"
+
+  create_dlq = true
+  redrive_policy = {
+    # default is 5 for this module
+    maxReceiveCount = 10
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
