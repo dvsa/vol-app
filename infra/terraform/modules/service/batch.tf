@@ -192,7 +192,7 @@ module "eventbridge_sns" {
       {
         name            = "batch-fail-event"
         arn             = module.sns_batch_failure.topic_arn
-        dead_letter_arn = module.sqs_deadletter.arn
+        dead_letter_arn = module.sqs_deadletter.queue_arn
       }
     ]
   }
