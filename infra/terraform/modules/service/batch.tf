@@ -222,6 +222,7 @@ module "sns_batch_failure" {
 
     sub = {
       actions = [
+        "sns:Publish",
         "sns:Subscribe",
         "sns:Receive",
       ]
@@ -257,7 +258,7 @@ module "sqs_deadletter" {
   version = "~> 4.2.1"
   source  = "terraform-aws-modules/sqs/aws"
 
-  name = "vol-app-${var.environment}-batch-failure-dlq"
+  name = "vol-app-${var.environment}-batch-failure-queue"
 
   create_dlq = true
   redrive_policy = {
