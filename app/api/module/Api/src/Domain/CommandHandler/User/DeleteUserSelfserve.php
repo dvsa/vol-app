@@ -52,7 +52,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         /** @var \Dvsa\Olcs\Api\Entity\User\User $user */
         $user = $this->getRepo()->fetchUsingId($command);
 
-        if ($user->isAdministrator()) {
+        if ($user->getPermission() == 'admin') {
             $adminUsersCount = $this->getCurrentOrganisation()->getAdminUsers()->count();
 
             if (($adminUsersCount - 1) == 0) {
