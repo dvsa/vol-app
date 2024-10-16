@@ -6,11 +6,13 @@
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\ContactDetails;
 use Dvsa\Olcs\Api\Domain\Repository\User;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Entity\User\Role;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Rbac\JWTIdentityProvider;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
@@ -124,6 +126,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         /** @var UserEntity $user */
         $user = m::mock(UserEntity::class)->makePartial();
         $user->setContactDetails($contactDetails);
+        $user->setRoles(new ArrayCollection([new Role()]));
         $user->setId($userId);
         $user->setPid('pid');
         $user->setLoginId($data['loginId']);
@@ -234,8 +237,9 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $user->setPid('pid');
         $user->setLoginId($data['loginId']);
         $user->setContactDetails($contactDetails);
+        $user->setRoles(new ArrayCollection([new Role()]));
 
-        $user->shouldReceive('getUserType')->once()->withNoArgs()->andReturn($userType);
+        $user->shouldReceive('getUserType')->times(3)->withNoArgs()->andReturn($userType);
 
         $user->shouldReceive('update')->once()->with($data)->andReturnSelf();
 
