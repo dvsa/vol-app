@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
@@ -11,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\OrganisationUser as OrganisationUserRepo;
 use Dvsa\Olcs\Api\Domain\Repository\Task as TaskRepo;
 use Dvsa\Olcs\Api\Domain\Repository\User as UserRepo;
 use Dvsa\Olcs\Api\Entity\User\Permission as PermissionEntity;
+use Dvsa\Olcs\Api\Entity\User\Role;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Adapter\CognitoAdapter;
 use Dvsa\Olcs\Auth\Exception\DeleteUserException;
@@ -51,6 +53,7 @@ class DeleteUserTest extends AbstractCommandHandlerTestCase
         $this->userEntity = m::mock(UserEntity::class)->makePartial();
         $this->userEntity->setId('DUMMY-USER-ID');
         $this->userEntity->setLoginId('login_id');
+        $this->userEntity->setRoles(new ArrayCollection([new Role()]));
 
         $this->repoMap['User']
             ->shouldReceive('fetchUsingId')
