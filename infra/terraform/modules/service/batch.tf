@@ -231,12 +231,6 @@ module "sns_batch_failure" {
         type        = "Service"
         identifiers = ["events.amazonaws.com"]
       }]
-
-      conditions = [{
-        test     = "ArnLike"
-        variable = "aws:SourceArn"
-        values   = [module.eventbridge_sns.eventbridge_bus_arn]
-      }]
     }
   }
 
