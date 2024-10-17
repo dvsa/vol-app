@@ -53,7 +53,7 @@ return [
                          * @var TableBuilder $this
                          * @psalm-scope-this TableBuilder
                          */
-                        $this->translator->translate('role.' . $role['role']),
+                        $this->translator->translate('role.' . $role['role'] . ' '),
                     $row['roles']
                 )
             )

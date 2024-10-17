@@ -106,6 +106,7 @@ class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
         $userEntity = m::mock(UserEntity::class);
         $userEntity->expects('getId')->withNoArgs()->andReturn(self::USER_ID);
         $userEntity->expects('getLoginId')->withNoArgs()->andReturn(self::LOGIN_ID);
+        $userEntity->expects('isAdministrator')->withNoArgs()->andReturn(false);
 
         $cognitoResult = m::mock(DeleteUserResult::class);
         $cognitoResult->expects('isValid')->withNoArgs()->andReturnFalse();
