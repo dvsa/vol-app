@@ -6,15 +6,25 @@ on:
 jobs:
   e2e-smoke-test:
     name: E2E Smoke Test on Dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@test_oidc_role
     with:
       platform_env: dev
+      cucumber_tags: "@ec2_smoke"
+      browser_name: "edge"
+      browser_version: "latest"
+      exclude_tags: "none"
+      #test_oidc_role: ${{ vars.TEST_OIDC_ROLE }} TODO: adding test role as an input
+
 
   e2e-full-regression-test:
     name: E2E Full Regression Test on Dev
     needs:
       - e2e-smoke-test
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2etest.yaml@test_oidc_role
     with:
       platform_env: dev
-
+      cucumber_tags: "@FullRegression"
+      browser_name: "edge"
+      browser_version: "latest"
+      exclude_tags: "none"
+      #test_oidc_role: ${{ vars.TEST_OIDC_ROLE }} TODO: adding test role as an input
