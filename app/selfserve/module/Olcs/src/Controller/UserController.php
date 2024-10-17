@@ -4,6 +4,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
+use Common\FeatureToggle;
 use Common\Form\Form;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -13,6 +14,7 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -196,6 +198,13 @@ class UserController extends AbstractController
      */
     public function alterForm($form, $data)
     {
+        // Hide TC option when feature toggle is disabled
+        if (!$this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]]))->getResult()['isEnabled']) {
+            $form->get('main')
+                ->get('permission')
+                ->unsetValueOption('tc');
+        }
+
         if (!isset($data['main']['currentPermission']) || ($data['main']['currentPermission'] !== 'tm')) {
             // the option should only be available if editing already TM user
             $form->get('main')
