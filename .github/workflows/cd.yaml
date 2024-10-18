@@ -157,7 +157,7 @@ jobs:
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@main
+        uses: dvsa/.github/.github/actions/get-vol-app-version@5.0.2
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
