@@ -190,8 +190,9 @@ module "eventbridge_sns" {
   targets = {
     "vol-app-${var.environment}-batch-failure-event" = [
       {
-        name = "batch-fail-event"
-        arn  = module.sns_batch_failure.topic_arn
+        name            = "batch-fail-event"
+        arn             = module.sns_batch_failure.topic_arn
+        dead_letter_arn = module.sqs_deadletter.queue_arn
       }
     ]
   }
@@ -221,6 +222,7 @@ module "sns_batch_failure" {
 
     sub = {
       actions = [
+        "sns:Publish",
         "sns:Subscribe",
         "sns:Receive",
       ]
@@ -228,12 +230,6 @@ module "sns_batch_failure" {
       principals = [{
         type        = "Service"
         identifiers = ["events.amazonaws.com"]
-      }]
-
-      conditions = [{
-        test     = "ArnLike"
-        variable = "aws:SourceArn"
-        values   = [module.eventbridge_sns.eventbridge_bus_arn]
       }]
     }
   }
@@ -250,6 +246,19 @@ module "sns_batch_failure" {
 
   }
 
+}
+
+module "sqs_deadletter" {
+  version = "~> 4.2.1"
+  source  = "terraform-aws-modules/sqs/aws"
+
+  name = "vol-app-${var.environment}-batch-failure-queue"
+
+  create_dlq = true
+  redrive_policy = {
+    # default is 5 for this module
+    maxReceiveCount = 10
+  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
