@@ -18,6 +18,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractUserCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -106,6 +107,14 @@ final class UpdateUser extends AbstractUserCommandHandler implements
 
         // validate roles
         $this->validateRoles($data['roles'], $user->getRoles()->toArray());
+
+        if ($user->getPermission() == 'admin' && $data['roles'] != 'operator-admin') {
+            $operatorAdmins = $user->getRelatedOrganisation()->getAdminUsers('admin');
+            $operatorAdminsCount = $operatorAdmins->count();
+            if (($operatorAdminsCount - 1) == 0) {
+                throw new BadRequestException('You can not have 0 admin users');
+            }
+        }
 
         $user->update(
             $this->getRepo()->populateRefDataReference($data)

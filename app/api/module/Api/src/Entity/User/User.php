@@ -500,7 +500,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
      *
      * @return bool
      */
-    private function isAdministrator()
+    public function isAdministrator()
     {
         // is admin if has roles for admin permission
         return $this->hasRoles(
