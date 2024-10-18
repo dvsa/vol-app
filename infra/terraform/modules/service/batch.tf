@@ -190,9 +190,8 @@ module "eventbridge_sns" {
   targets = {
     "vol-app-${var.environment}-batch-failure-event" = [
       {
-        name            = "batch-fail-event"
-        arn             = module.sns_batch_failure.topic_arn
-        dead_letter_arn = module.sqs_deadletter.queue_arn
+        name = "batch-fail-event"
+        arn  = module.sns_batch_failure.topic_arn
       }
     ]
   }
@@ -233,32 +232,19 @@ module "sns_batch_failure" {
       }]
     }
   }
-
+  /*
   subscriptions = {
     "vol-app-${var.environment}-batch-failure-email" = {
       protocol = "email"
-      endpoint = "william.shelley@dvsa.gov.uk"
+      endpoint = ""
     }
-  }
+  */
 
   tags = {
     "Name" = "vol-app-${var.environment}-aws-sns-batch-failure"
 
   }
 
-}
-
-module "sqs_deadletter" {
-  version = "~> 4.2.1"
-  source  = "terraform-aws-modules/sqs/aws"
-
-  name = "vol-app-${var.environment}-batch-failure-queue"
-
-  create_dlq = true
-  redrive_policy = {
-    # default is 5 for this module
-    maxReceiveCount = 10
-  }
 }
 
 resource "aws_cloudwatch_log_group" "this" {
