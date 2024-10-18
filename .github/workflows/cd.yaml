@@ -149,23 +149,23 @@ jobs:
         with:
           fetch-depth: 0
       - id: api-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@main
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
         with:
           project-path: app/api infra/docker/api
       - id: cli-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@main
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@main
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
         with:
           project-path: app/internal infra/docker/internal
       - id: assets-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@main
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
         with:
           project-path: app/cdn
       - name: Add to summary
