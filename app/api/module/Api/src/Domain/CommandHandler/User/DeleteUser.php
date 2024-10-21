@@ -58,9 +58,8 @@ final class DeleteUser extends AbstractCommandHandler implements
         $user = $this->getUser($command);
 
         if ($user->getPermission() == 'admin') {
-            $operatorAdmins = $user->getRelatedOrganisation()->getAdminUsers('admin');
-            $operatorAdminsCount = $operatorAdmins->count();
-            if (($operatorAdminsCount - 1) == 0) {
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminOrganisationUsers('admin')->count();
+            if (($adminUsersCount - 1) == 0) {
                 throw new BadRequestException('You can not have 0 admin users');
             }
         }

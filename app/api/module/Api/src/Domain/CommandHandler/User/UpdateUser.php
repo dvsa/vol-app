@@ -109,9 +109,8 @@ final class UpdateUser extends AbstractUserCommandHandler implements
         $this->validateRoles($data['roles'], $user->getRoles()->toArray());
 
         if ($user->getPermission() == 'admin' && $data['roles'] != 'operator-admin') {
-            $operatorAdmins = $user->getRelatedOrganisation()->getAdminUsers('admin');
-            $operatorAdminsCount = $operatorAdmins->count();
-            if (($operatorAdminsCount - 1) == 0) {
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminOrganisationUsers('admin')->count();
+            if (($adminUsersCount - 1) == 0) {
                 throw new BadRequestException('You can not have 0 admin users');
             }
         }

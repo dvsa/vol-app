@@ -1216,32 +1216,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     {
         return $this->organisationUsers;
     }
-
-    /**
-     * Get the organisation users that are admins
-     *
-     * @return ArrayCollection
-     */
-    public function getAdminUsers($filter = 'all')
-    {
-        $adminUsers = new ArrayCollection();
-
-        foreach ($this->organisationUsers as $organisationUser) {
-            if ($organisationUser->getIsAdministrator() != 'Y') {
-                continue;
-            }
-            if ($filter == 'all') {
-                $adminUsers->add($organisationUser);
-                continue;
-            }
-
-            $user = $organisationUser->getUser();
-            if ($user->getPermission() == $filter) {
-                $adminUsers->add($organisationUser);
-            }
-        }
-        return $adminUsers;
-    }
+    
     /**
      * Add a organisation users
      *

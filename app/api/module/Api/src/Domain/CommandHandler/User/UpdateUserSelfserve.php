@@ -66,10 +66,10 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
 
         $data = $command->getArrayCopy();
 
-        if ($user->getPermission() == 'admin' && $data['permission'] == 'user') {
-            $adminUsersCount = $this->getCurrentOrganisation()->getAdminUsers()->count();
+        if ($user->getPermission() == 'admin' && $data['roles'] != 'operator-admin') {
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminOrganisationUsers('admin')->count();
             if (($adminUsersCount - 1) == 0) {
-                throw new BadRequestException('You can not have 0 admin users');
+                throw new BadRequestException('You must have at least one Operator Administrator');
             }
         }
 

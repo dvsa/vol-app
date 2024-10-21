@@ -53,8 +53,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         $user = $this->getRepo()->fetchUsingId($command);
 
         if ($user->getPermission() == 'admin') {
-            $adminUsersCount = $this->getCurrentOrganisation()->getAdminUsers()->count();
-
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminOrganisationUsers('admin')->count();
             if (($adminUsersCount - 1) == 0) {
                 throw new BadRequestException('You can not have 0 admin users');
             }
