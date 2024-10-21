@@ -62,12 +62,13 @@ return [
         [
             'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
-            'isRemoveVisible' => fn($row) =>
-                /**
-                 * @var TableBuilder $this
-                 * @psalm-scope-this TableBuilder
-                 */
-                $this->permissionService->canRemoveSelfserveUser($row['id']),
+//            'isRemoveVisible' => fn($row) =>
+//                /**
+//                 * @var TableBuilder $this
+//                 * @psalm-scope-this TableBuilder
+//                 */
+//
+//                $this->permissionService->canRemoveSelfserveUser($row['id']),
             'ariaDescription' => function ($row, $column) {
                 $column['formatter'] = Name::class;
                 /**
