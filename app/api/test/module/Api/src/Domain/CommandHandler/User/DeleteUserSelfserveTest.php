@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\CommandHandler\User\DeleteUserSelfserve;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Adapter\CognitoAdapter;
 use Dvsa\Olcs\Auth\Exception\DeleteUserException;
@@ -103,10 +105,10 @@ class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $command = Cmd::create($data);
 
-        $userEntity = m::mock(UserEntity::class);
-        $userEntity->expects('getId')->withNoArgs()->andReturn(self::USER_ID);
-        $userEntity->expects('getLoginId')->withNoArgs()->andReturn(self::LOGIN_ID);
-        $userEntity->expects('isAdministrator')->withNoArgs()->andReturn(false);
+        $userEntity = new UserEntity(self::USER_ID, UserEntity::USER_TYPE_OPERATOR);
+        $userEntity->setId(self::USER_ID);
+        $userEntity->setLoginId(self::LOGIN_ID);
+        $userEntity->setOrganisationUsers(new ArrayCollection([$userEntity]));
 
         $cognitoResult = m::mock(DeleteUserResult::class);
         $cognitoResult->expects('isValid')->withNoArgs()->andReturnFalse();

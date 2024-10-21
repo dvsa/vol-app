@@ -239,6 +239,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $user->setContactDetails($contactDetails);
         $user->setRoles(new ArrayCollection([new Role()]));
 
+        // times > 1 due to $user->getPermission calling getUserType twice
         $user->shouldReceive('getUserType')->times(3)->withNoArgs()->andReturn($userType);
 
         $user->shouldReceive('update')->once()->with($data)->andReturnSelf();
