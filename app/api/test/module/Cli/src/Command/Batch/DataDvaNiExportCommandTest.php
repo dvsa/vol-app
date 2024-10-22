@@ -22,8 +22,7 @@ class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
     {
         return [
             DataDvaNiExport::create([
-                'reportName' => 'exampleReport',
-                'path' => '/path/to/save'
+                'reportName' => 'exampleReport'
             ]),
         ];
     }
@@ -31,20 +30,17 @@ class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
     public function testExecuteSuccess()
     {
         $params = [
-            'reportName' => 'exampleReport',
-            'path' => '/path/to/save',
+            'reportName' => 'exampleReport'
         ];
 
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
             ->with($this->callback(fn($command) => $command instanceof DataDvaNiExport
-                && $command->getReportName() === $params['reportName']
-                && $command->getPath() === $params['path']))
+                && $command->getReportName() === $params['reportName']))
             ->willReturn(new Result());
 
         $this->executeCommand([
-            '--report-name' => $params['reportName'],
-            '--path' => $params['path'],
+            '--report-name' => $params['reportName']
         ]);
     }
 }

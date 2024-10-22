@@ -10,7 +10,6 @@ class DataGovUkExportCommandTest extends AbstractBatchCommandCases
 {
     protected $additionalArguments = [
         '--report-name' => 'govReport',
-        '--path' => '/gov/path/to/save',
     ];
 
     protected function getCommandClass()
@@ -27,8 +26,7 @@ class DataGovUkExportCommandTest extends AbstractBatchCommandCases
     {
         return [
             DataGovUkExport::create([
-                'reportName' => $this->additionalArguments['--report-name'],
-                'path' => $this->additionalArguments['--path']
+                'reportName' => $this->additionalArguments['--report-name']
             ])
         ];
     }
