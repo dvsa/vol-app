@@ -269,7 +269,7 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform-env-dev:
+  terraform_env_dev:
     name: Environment (dev)
     if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success') }}
     concurrency:
@@ -295,15 +295,26 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform-env-int:
+  test-dev:
+    name: Run Tests on DEV
+    needs:
+      - terraform_env_dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run E2E Smoke Test on DEV
+        uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+        with:
+          platform_env: dev
+
+  terraform_env_int:
     name: Environment (int)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform-env-dev.result == 'success' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
     concurrency:
       group: terraform-environment-int
     needs:
       - get-version
       - orchestrator
-      - terraform-env-dev
+      - terraform_env_dev
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: int
@@ -319,6 +330,49 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  test_int:
+    name: Run Tests on INT
+    needs:
+      - terraform_env_int
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run E2E Smoke Test on INT
+        uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+        with:
+          platform_env: int
+
+  rollback_int:
+    name: Rollback INT Deployment
+    if: ${{ needs.test_int.result == 'failure' }}
+    needs:
+      - test_int
+      - terraform_env_int
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ENV_int_TF_OIDC_ROLE }}
+          aws-region: ${{ vars.ENV_int_TF_AWS_REGION }}
+      - name: Terraform Init
+        run: terraform init -no-color -input=false
+        working-directory: infra/terraform/environments/int
+      - name: Plan Rollback
+        run: |
+          terraform plan -no-color -input=false -out=tfplan \
+            -var "api_image_tag=${{ needs.terraform_env_int.outputs.previous_api_image_tag }}" \
+            -var "cli_image_tag=${{ needs.terraform_env_int.outputs.previous_cli_image_tag }}" \
+            -var "selfserve_image_tag=${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}" \
+            -var "internal_image_tag=${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}" \
+            -var "assets_version=${{ needs.terraform_env_int.outputs.previous_assets_version }}"
+        working-directory: infra/terraform/environments/int
+      - name: Apply Rollback
+        run: terraform apply -no-color -input=false -auto-approve tfplan
+        working-directory: infra/terraform/environments/int
+
   terraform-account-prod:
     name: Account (prod)
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
@@ -327,7 +381,8 @@ jobs:
     needs:
       - release-please
       - orchestrator
-      - terraform-env-int
+      - terraform_env_int
+      - test_int
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -338,7 +393,7 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform-env-prep:
+  terraform_env_prep:
     name: Environment (prep)
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
@@ -363,7 +418,7 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform-env-prod:
+  terraform_env_prod:
     name: Environment (prod)
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
@@ -372,7 +427,7 @@ jobs:
       - release-please
       - get-version
       - orchestrator
-      - terraform-env-prep
+      - terraform_env_prep
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prod

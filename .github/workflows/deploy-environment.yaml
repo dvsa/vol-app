@@ -84,6 +84,21 @@ on:
       terraform-output:
         description: "Terraform output"
         value: ${{ jobs.deploy.outputs.terraform-output }}
+      previous_api_image_tag:
+        description: "Previous API image tag"
+        value: ${{ jobs.deploy.outputs.previous_api_image_tag }}
+      previous_cli_image_tag:
+        description: "Previous CLI image tag"
+        value: ${{ jobs.deploy.outputs.previous_cli_image_tag }}
+      previous_selfserve_image_tag:
+        description: "Previous Selfserve image tag"
+        value: ${{ jobs.deploy.outputs.previous_selfserve_image_tag }}
+      previous_internal_image_tag:
+        description: "Previous Internal image tag"
+        value: ${{ jobs.deploy.outputs.previous_internal_image_tag }}
+      previous_assets_version:
+        description: "Previous Assets version"
+        value: ${{ jobs.deploy.outputs.previous_assets_version }}
 
 permissions:
   contents: read
@@ -104,6 +119,11 @@ jobs:
       name: ${{ (inputs.apply && !inputs.destroy) && (inputs.workspace || inputs.environment) || null }}
     outputs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
+      previous_api_image_tag: ${{ steps.get_current_versions.outputs.api_image_tag }}
+      previous_cli_image_tag: ${{ steps.get_current_versions.outputs.cli_image_tag }}
+      previous_selfserve_image_tag: ${{ steps.get_current_versions.outputs.selfserve_image_tag }}
+      previous_internal_image_tag: ${{ steps.get_current_versions.outputs.internal_image_tag }}
+      previous_assets_version: ${{ steps.get_current_versions.outputs.assets_version }}
     env:
       WORKING_DIR: infra/terraform/environments/${{ inputs.environment }}
       AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC{1}_ROLE', inputs.environment, (inputs.apply && '' || '_READONLY'))] || (inputs.apply && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
@@ -251,6 +271,16 @@ jobs:
                 body: output
               })
             }
+
+      - name: Get Current Versions from Terraform State
+        id: get_current_versions
+        run: |
+          terraform output -json > outputs.json
+          echo "api_image_tag=$(jq -r '.api_image_tag.value' outputs.json)" >> $GITHUB_OUTPUT
+          echo "cli_image_tag=$(jq -r '.cli_image_tag.value' outputs.json)" >> $GITHUB_OUTPUT
+          echo "selfserve_image_tag=$(jq -r '.selfserve_image_tag.value' outputs.json)" >> $GITHUB_OUTPUT
+          echo "internal_image_tag=$(jq -r '.internal_image_tag.value' outputs.json)" >> $GITHUB_OUTPUT
+          echo "assets_version=$(jq -r '.assets_version.value' outputs.json)" >> $GITHUB_OUTPUT
 
       - name: Apply
         id: apply
