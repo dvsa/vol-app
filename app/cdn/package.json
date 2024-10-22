@@ -16,7 +16,7 @@
     "@dvsa/cookie-manager": "^1.0.*",
     "autoprefixer": "^10.4.19",
     "chosen-npm": "^1.4.2",
-    "govuk-frontend": "^5.4.1",
+    "govuk-frontend": "^5.6.0",
     "jquery": "^3.7.1",
     "pace-progress": "^1.0.2"
   },
