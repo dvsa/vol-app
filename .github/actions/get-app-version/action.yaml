@@ -30,10 +30,12 @@ runs:
           TAG=$(git describe --tags --exact-match $LATEST_APP_COMMIT 2>/dev/null) || true
 
           if [[ -n $TAG ]]; then
-            echo "version=release/$TAG" >> $GITHUB_OUTPUT
+            SANITIZED_TAG=$(echo $TAG | sed 's/\//-/g')
+            echo "version=release-$SANITIZED_TAG" >> $GITHUB_OUTPUT
           else
             echo "version=$LATEST_APP_COMMIT" >> $GITHUB_OUTPUT
           fi
         else
-          echo "version=release/$LATEST_RELEASE" >> $GITHUB_OUTPUT
+          SANITIZED_LATEST_RELEASE=$(echo $LATEST_RELEASE | sed 's/\//-/g')
+          echo "version=release-$SANITIZED_LATEST_RELEASE" >> $GITHUB_OUTPUT
         fi

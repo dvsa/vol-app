@@ -5,15 +5,16 @@ namespace Olcs\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Name("UserDetails")
- * @Form\Attributes({"method":"post","label":"User details"})
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Name("OperatorRegistration")
+ * @Form\Attributes({"method":"post","label":"user-registration.form.label"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "user-registration.form.label"})
  */
-class UserDetails extends Base
+class OperatorRegistration
 {
     /**
      * @Form\Options({
      *     "label":"user-name",
+     *     "hint": "user-registration.field.username.hint"
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
@@ -26,9 +27,7 @@ class UserDetails extends Base
 
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Options({
-     *     "label":"user-details.first-name"
-     * })
+     * @Form\Options({"label":"first-name"})
      * @Form\Type("Text")
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
@@ -46,10 +45,7 @@ class UserDetails extends Base
 
     /**
      * @Form\Attributes({"class":"long"})
-     * @Form\Options({
-     *     "label":"email-address",
-     *     "error-message": "userDetails_emailAddress-error"
-     * })
+     * @Form\Options({"label":"email-address"})
      * @Form\Type("Text")
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
@@ -59,37 +55,34 @@ class UserDetails extends Base
 
     /**
      * @Form\Attributes({"class":"long"})
-     * @Form\Options({
-     *     "label":"confirm-email-address",
-     *     "error-message": "userDetails_emailConfirm-error"
-     * })
+     * @Form\Options({"label":"confirm-email-address"})
      * @Form\Type("Text")
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $emailConfirm = null;
 
     /**
-     * @Form\Name("permission")
-     * @Form\Options({
-     *     "label": "manage-users.field.permission.label",
-     *     "label_options": {
-     *         "disable_html_escape": "true"
-     *     },
-     *     "label_attributes" : {
-     *         "class":"form-control form-control--radio form-control--advanced"
-     *     },
-     *     "value_options":{
-     *          "tm":"manage-users.field.permission.tm.label",
-     *          "user":"manage-users.field.permission.user.label",
-     *          "admin":"manage-users.field.permission.admin.label",
-     *          "tc": "manage-users.field.permission.tc.label",
-     *      }
-     * })
      * @Form\Required(true)
-     * @Form\Attributes({"id":"permission", "placeholder":"", "value":"user"})
-     * @Form\Type("Radio")
+     * @Form\Type("Text")
+     * @Form\Attributes({"class":"medium"})
+     * @Form\Options({"label":"user-registration.field.organisationName.label"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      */
-    public $permission;
+    public $organisationName = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Type("DynamicRadio")
+     * @Form\Options({
+     *     "fieldset-attributes": {"id": "businessType"},
+     *     "label": "user-registration.field.businessType.label",
+     *     "label_attributes": {"class": "form-control form-control--radio"},
+     *     "disable_inarray_validator": false,
+     *     "category": "org_type",
+     *     "exclude": {"org_t_ir"}
+     * })
+     */
+    public $businessType = null;
 
     /**
      * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
@@ -103,11 +96,21 @@ class UserDetails extends Base
      * })
      * @Form\Type("OlcsCheckbox")
      */
+
     public $translateToWelsh = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Attributes({"id": "termsAgreed", "placeholder": ""})
+     * @Form\Options({
+     *     "label": "user-registration.field.termsAgreed.label",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N",
+     *     "must_be_value": "Y"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
-    public $currentPermission = null;
+    public $termsAgreed = null;
 }

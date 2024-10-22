@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OlcsTest\Controller;
 
 use Common\Form\Form;
+use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
@@ -243,6 +244,12 @@ class UserControllerTest extends MockeryTestCase
         $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')->with('User', $this->mockRequest)->andReturn($this->mockForm);
 
+        $mockIsEnabledResponse = m::mock(Response::class);
+        $mockIsEnabledResponse->shouldReceive('getResult')->andReturn([
+            'isEnabled' => true,
+        ]);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(TransferQry\FeatureToggle\IsEnabled::class))->andReturn($mockIsEnabledResponse);
+
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
@@ -432,6 +439,13 @@ class UserControllerTest extends MockeryTestCase
             ->shouldReceive('disableElement')
             ->with($this->mockForm, 'main->loginId')
             ->once();
+
+        $mockIsEnabledResponse = m::mock(Response::class);
+        $mockIsEnabledResponse->shouldReceive('getResult')->andReturn([
+            'isEnabled' => true,
+        ]);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(TransferQry\FeatureToggle\IsEnabled::class))->andReturn($mockIsEnabledResponse);
+
 
         $view = $this->sut->editAction();
 

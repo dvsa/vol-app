@@ -147,6 +147,12 @@ class User extends AbstractRepository
             $qb->setParameter('roles', $query->getRoles());
         }
 
+        // filter by lastLoggedInFrom if it has been specified
+        if (method_exists($query, 'getLastLoggedInFrom') && !empty($query->getLastLoggedInFrom())) {
+            $qb->andWhere($qb->expr()->gte($this->alias . '.lastLoginAt', ':lastLoggedInFrom'))
+                ->setParameter('lastLoggedInFrom', $query->getLastLoggedInFrom());
+        }
+
         // exclude system user from all lists
         $qb->andWhere($qb->expr()->neq($this->alias . '.id', ':systemUser'))
             ->setParameter('systemUser', IdentityProviderInterface::SYSTEM_USER);

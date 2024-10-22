@@ -104,6 +104,12 @@ final class DataGovUkExport extends AbstractDataExport
             ['id' => $document->getId('document')],
             $document->getId('document')
         );
+
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'psv_operator_list_');
+        file_put_contents($tempFilePath, $csvContent);
+        $this->uploadToS3($tempFilePath);
+        unlink($tempFilePath);
+
         $email = $this->handleSideEffect($emailQueue);
         $this->result->merge($email);
 
@@ -134,6 +140,8 @@ final class DataGovUkExport extends AbstractDataExport
             ['id' => $document->getId('document')],
             $document->getId('document')
         );
+
+        $this->uploadToS3($csvContent);
 
         $email = $this->handleSideEffect($emailQueue);
         $this->result->merge($email);
