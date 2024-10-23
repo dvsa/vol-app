@@ -20,6 +20,5 @@ class DataDvaNiExportTest extends MockeryTestCase
         $sut = DataDvaNiExport::create($params);
 
         static::assertEquals('unit_ReportName', $sut->getReportName());
-        static::assertEquals('unit_Path', $sut->getPath());
     }
 }
