@@ -53,7 +53,8 @@ return [
                          * @var TableBuilder $this
                          * @psalm-scope-this TableBuilder
                          */
-                        $this->translator->translate('role.' . $role['role']),
+                        //@TODO Remove [. ' ']
+                        $this->translator->translate('role.' . $role['role'] . ' '),
                     $row['roles']
                 )
             )
@@ -66,7 +67,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $this->permissionService->canRemoveSelfserveUser($row['id']),
+                $this->permissionService->canRemoveSelfserveUser($row['id'], $row['disableRemove']),
             'ariaDescription' => function ($row, $column) {
                 $column['formatter'] = Name::class;
                 /**

@@ -52,6 +52,13 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         /** @var \Dvsa\Olcs\Api\Entity\User\User $user */
         $user = $this->getRepo()->fetchUsingId($command);
 
+        if ($user->getPermission() == 'admin') {
+            $adminUsersCount = $this->getCurrentOrganisation()->getAdminOrganisationUsers('admin')->count();
+            if (($adminUsersCount - 1) == 0) {
+                throw new BadRequestException('You can not have 0 admin users');
+            }
+        }
+
         $this->getRepo('OrganisationUser')->deleteByUserId($user->getId());
         $this->getRepo()->delete($user);
 

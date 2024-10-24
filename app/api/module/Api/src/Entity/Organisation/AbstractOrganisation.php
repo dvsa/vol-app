@@ -1216,7 +1216,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     {
         return $this->organisationUsers;
     }
-
+    
     /**
      * Add a organisation users
      *

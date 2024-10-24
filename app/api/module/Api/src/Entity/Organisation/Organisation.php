@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Service\Document\ContextProviderInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use function Aws\filter;
 
 /**
  * Organisation Entity
@@ -73,7 +74,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
      *
      * @return ArrayCollection|OrganisationUserEntity[]
      */
-    public function getAdminOrganisationUsers()
+    public function getAdminOrganisationUsers($filter = 'all')
     {
         $criteria = Criteria::create();
         $criteria->andWhere(
@@ -94,7 +95,9 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
                     $user instanceof UserEntity
                     && $user->getAccountDisabled() !== 'Y'
                 ) {
-                    $enabledOrgUsers->add($orgUser);
+                    if ($filter == 'all' || $user->getPermission() == $filter) {
+                        $enabledOrgUsers->add($orgUser);
+                    }
                 }
             } catch (EntityNotFoundException) {
                 // we may have the user id but will not be able to load it
