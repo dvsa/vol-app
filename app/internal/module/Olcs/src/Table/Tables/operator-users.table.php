@@ -2,11 +2,22 @@
 
 use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 return [
     'variables' => [
         'title' => 'Users',
         'titleSingular' => 'User',
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'delete' => [
+                    'requireRows' => false,
+                    'class' => 'govuk-button govuk-button--warning js-require--one'
+                ]
+            ]
+        ]
     ],
     'columns' => [
         [
@@ -41,6 +52,11 @@ return [
             'title' => 'Role',
             'name' => 'role',
             'formatter' => fn($row) => empty($row['roles']) ? 'N/A' : Escape::html($row['roles'][0]['description'])
-        ]
+        ],
+        [
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ],
     ]
 ];
