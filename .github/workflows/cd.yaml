@@ -295,16 +295,13 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  test-dev:
+  test_dev:
     name: Run Tests on DEV
     needs:
       - terraform_env_dev
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run E2E Smoke Test on DEV
-        uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-        with:
-          platform_env: dev
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    with:
+      platform_env: dev
 
   terraform_env_int:
     name: Environment (int)
@@ -334,12 +331,9 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run E2E Smoke Test on INT
-        uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-        with:
-          platform_env: int
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    with:
+      platform_env: int
 
   rollback_int:
     name: Rollback INT Deployment
