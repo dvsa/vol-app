@@ -302,6 +302,10 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
 
   terraform_env_int:
     name: Environment (int)
@@ -334,6 +338,10 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
 
   rollback_int:
     name: Rollback INT Deployment
