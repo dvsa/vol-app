@@ -297,6 +297,7 @@ jobs:
 
   test_dev:
     name: Run Tests on DEV
+    if: ${{ needs.terraform_env_dev.outputs.deploy_success == 'true' }}
     needs:
       - terraform_env_dev
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
