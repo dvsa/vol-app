@@ -99,6 +99,7 @@ jobs:
           version: "v0.54.1"
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
