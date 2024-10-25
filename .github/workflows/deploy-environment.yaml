@@ -121,7 +121,7 @@ jobs:
     environment:
       name: ${{ (inputs.apply && !inputs.destroy) && (inputs.workspace || inputs.environment) || null }}
     outputs:
-      deploy_success: ${{ steps.deployment-status.outputs.success }}
+      deploy_success: ${{ steps.apply.outcome }}
       terraform-output: ${{ steps.terraform-output.outputs.json }}
       previous_api_image_tag: ${{ steps.get_current_versions.outputs.api_image_tag }}
       previous_cli_image_tag: ${{ steps.get_current_versions.outputs.cli_image_tag }}
@@ -296,21 +296,6 @@ jobs:
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform apply ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
-
-      - name: Record Deployment Status
-        id: deployment-status
-        if: ${{ always() }}
-        run: |
-          if [[ "${{ inputs.apply }}" == "true" ]]; then
-            if [[ "${{ steps.apply.outcome }}" == "success" ]]; then
-              echo "success=true" >> $GITHUB_OUTPUT
-            else
-              echo "success=false" >> $GITHUB_OUTPUT
-            fi
-          else
-            # If this was just a plan, consider it successful
-            echo "success=true" >> $GITHUB_OUTPUT
-          fi
 
       - name: Delete workspace
         if: ${{ inputs.apply && inputs.destroy && inputs.workspace }}
