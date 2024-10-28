@@ -149,23 +149,23 @@ jobs:
         with:
           fetch-depth: 0
       - id: api-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/api infra/docker/api
       - id: cli-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/internal infra/docker/internal
       - id: assets-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.2
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/cdn
       - name: Add to summary
@@ -297,7 +297,7 @@ jobs:
 
   test_dev:
     name: Run Tests on DEV
-    if: ${{ needs.terraform_env_dev.outputs.deploy_success == 'true' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
     needs:
       - terraform_env_dev
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
@@ -317,6 +317,7 @@ jobs:
       - get-version
       - orchestrator
       - terraform_env_dev
+      - test_dev
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: int
@@ -333,6 +334,7 @@ jobs:
     secrets: inherit
 
   test_int:
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
     name: Run Tests on INT
     needs:
       - terraform_env_int
