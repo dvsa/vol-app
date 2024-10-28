@@ -92,12 +92,14 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
 
       - name: Scan
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           skip-dirs: /var/clamav
+          version: "v0.54.1"
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
