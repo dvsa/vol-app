@@ -338,7 +338,7 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@fail
     with:
       platform_env: int
     permissions:
