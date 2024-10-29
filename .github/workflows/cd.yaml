@@ -348,7 +348,10 @@ jobs:
 
   rollback_int:
     name: Rollback INT Deployment
-    if: ${{ needs.test_int.result == 'failure' }}
+    if: |
+      always() &&
+      (needs.test_int.result == 'failure' || needs.test_int.result == 'cancelled') &&
+      needs.terraform_env_int.result == 'success'
     needs:
       - test_int
       - terraform_env_int
