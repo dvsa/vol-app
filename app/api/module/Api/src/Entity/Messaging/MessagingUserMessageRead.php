@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *        @ORM\Index(name="fk_messaging_user_message_read_last_modified_by_user_id",
      *     columns={"last_modified_by"}),
  *        @ORM\Index(name="fk_messaging_user_message_read_messaging_message_id",
-     *     columns={"message_id"})
+     *     columns={"messaging_message_id"})
  *    }
  * )
  */
