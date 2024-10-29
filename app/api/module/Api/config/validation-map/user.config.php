@@ -41,4 +41,5 @@ return [
     CommandHandler\User\UpdateUserSelfserve::class                              => CanManageUser::class,
     CommandHandler\User\UpdateUserSelfserveFactory::class                       => CanManageUser::class,
     CommandHandler\User\UpdateUserLastLoginAt::class                            => NotIsAnonymousUser::class,
+    CommandHandler\User\AgreeTerms::class                                       => IsExternalUser::class,
 ];
