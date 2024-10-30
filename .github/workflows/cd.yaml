@@ -355,31 +355,21 @@ jobs:
     needs:
       - test_int
       - terraform_env_int
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.ENV_int_TF_OIDC_ROLE }}
-          aws-region: ${{ vars.ENV_int_TF_AWS_REGION }}
-      - name: Terraform Init
-        run: terraform init -no-color -input=false
-        working-directory: infra/terraform/environments/int
-      - name: Plan Rollback
-        run: |
-          terraform plan -no-color -input=false -out=tfplan \
-            -var "api_image_tag=${{ needs.terraform_env_int.outputs.previous_api_image_tag }}" \
-            -var "cli_image_tag=${{ needs.terraform_env_int.outputs.previous_cli_image_tag }}" \
-            -var "selfserve_image_tag=${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}" \
-            -var "internal_image_tag=${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}" \
-            -var "assets_version=${{ needs.terraform_env_int.outputs.previous_assets_version }}"
-        working-directory: infra/terraform/environments/int
-      - name: Apply Rollback
-        run: terraform apply -no-color -input=false -auto-approve tfplan
-        working-directory: infra/terraform/environments/int
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: int
+      rollback: true
+      apply: true
+      api-image-tag: ${{ needs.terraform_env_int.outputs.previous_api_image_tag }}
+      cli-image-tag: ${{ needs.terraform_env_int.outputs.previous_cli_image_tag }}
+      selfserve-image-tag: ${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}
+      internal-image-tag: ${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}
+      assets-version: ${{ needs.terraform_env_int.outputs.previous_assets_version }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
 
   terraform-account-prod:
     name: Account (prod)
