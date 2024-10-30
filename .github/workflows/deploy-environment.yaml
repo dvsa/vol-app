@@ -80,6 +80,11 @@ on:
         type: boolean
         required: false
         default: false
+      rollback:
+        type: boolean
+        required: false
+        default: false
+
     outputs:
       terraform-output:
         description: "Terraform output"
@@ -110,7 +115,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: ${{ inputs.destroy && 'Destroy ' || '' }}${{ inputs.apply && 'Apply' || 'Plan' }}
+    name: ${{ inputs.rollback && 'Rollback' || '' }}${{ inputs.destroy && 'Destroy ' || '' }}${{ inputs.apply && 'Apply' || 'Plan' }}
     runs-on: ubuntu-latest
     # As a workaround for: https://github.com/actions/runner/issues/2120
     # Environment will not be defined for non-apply jobs to ensure that deployments are kept accurate in the GitHub UI.
@@ -296,6 +301,18 @@ jobs:
       - name: Delete workspace
         if: ${{ inputs.apply && inputs.destroy && inputs.workspace }}
         run: terraform workspace select default && terraform workspace delete ${{ inputs.workspace }}
+
+      - name: Add Rollback Notice
+        if: ${{ inputs.rollback && inputs.apply }}
+        run: |
+          echo "## ⚠️ Environment Rollback Performed" >> $GITHUB_STEP_SUMMARY
+          echo "Environment: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "Rolled back to:" >> $GITHUB_STEP_SUMMARY
+          echo "- API: ${{ inputs.api-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- CLI: ${{ inputs.cli-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Selfserve: ${{ inputs.selfserve-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Internal: ${{ inputs.internal-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Assets: ${{ inputs.assets-version }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Set outputs
         if: ${{ always() && !cancelled() && !failure() && !inputs.destroy }}
