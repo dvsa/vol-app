@@ -348,6 +348,13 @@ abstract class AbstractUndertakingsController extends AbstractController
      */
     protected function checkIfOperatorAdminHasLoggedIn($organisationId, $form = null): bool
     {
+        /**
+         * @todo we need this check to always return true for now
+         * @see https://dvsa.atlassian.net/browse/VOL-5886
+         * @see https://dvsa.atlassian.net/browse/VOL-5885
+         */
+        return true;
+
         $operatorAdminHasLoggedIn = $this->operatorAdminForOrganisationHasLoggedIn($organisationId);
 
         if (!$operatorAdminHasLoggedIn && $form instanceof \Laminas\Form\Form) {
