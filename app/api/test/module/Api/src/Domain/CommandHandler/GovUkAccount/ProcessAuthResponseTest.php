@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\GovUkAccount;
 
-use Dvsa\GovUkAccount\Provider\GovUkAccountUser;
 use Dvsa\GovUkAccount\Token\AccessToken;
+use Dvsa\GovUkAccount\Token\GovUkAccountUser;
 use Dvsa\Olcs\Api\Domain\Command\DigitalSignature\UpdateApplication;
 use Dvsa\Olcs\Api\Domain\Command\DigitalSignature\UpdateContinuationDetail;
 use Dvsa\Olcs\Api\Domain\Command\DigitalSignature\UpdateSurrender;
