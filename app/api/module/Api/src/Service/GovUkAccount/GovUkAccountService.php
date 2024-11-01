@@ -4,8 +4,8 @@ namespace Dvsa\Olcs\Api\Service\GovUkAccount;
 
 use Dvsa\GovUkAccount\Exception\InvalidTokenException;
 use Dvsa\GovUkAccount\Provider\GovUkAccount;
-use Dvsa\GovUkAccount\Provider\GovUkAccountUser;
 use Dvsa\GovUkAccount\Token\AccessToken;
+use Dvsa\GovUkAccount\Token\GovUkAccountUser;
 use Dvsa\Olcs\Api\Service\GovUkAccount\Response\GetAuthorisationUrlResponse;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
