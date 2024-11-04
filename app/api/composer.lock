@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "69973a4789103ed12a70841c4ab3d018",
+  "content-hash": "ffb74c37a4471a9c0c5322cd0c513d9d",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -1789,16 +1789,16 @@
     },
     {
       "name": "dvsa/php-govuk-account",
-      "version": "2.0.1",
+      "version": "3.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/php-govuk-account.git",
-        "reference": "3b2652973e6162c6da6df4ca1b74343f229711c5"
+        "reference": "211bc55e19eaac4b4ee48baec61c76ff70d67b98"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/3b2652973e6162c6da6df4ca1b74343f229711c5",
-        "reference": "3b2652973e6162c6da6df4ca1b74343f229711c5",
+        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/211bc55e19eaac4b4ee48baec61c76ff70d67b98",
+        "reference": "211bc55e19eaac4b4ee48baec61c76ff70d67b98",
         "shasum": ""
       },
       "require": {
@@ -1834,13 +1834,13 @@
           "email": "james.wragg@dvsa.gov.uk"
         }
       ],
-      "description": "A league/oauth2-client provider for GOV.UK Account",
-      "keywords": ["dvsa", "govuk", "sdk", "signin"],
+      "description": "A league/oauth2-client provider for GOV.UK One Login",
+      "keywords": ["dvsa", "govuk", "onelogin", "sdk", "signin"],
       "support": {
         "issues": "https://github.com/dvsa/php-govuk-account/issues",
-        "source": "https://github.com/dvsa/php-govuk-account/tree/2.0.1"
+        "source": "https://github.com/dvsa/php-govuk-account/tree/3.0.0"
       },
-      "time": "2024-05-16T08:52:39+00:00"
+      "time": "2024-10-31T08:30:10+00:00"
     },
     {
       "name": "elasticsearch/elasticsearch",

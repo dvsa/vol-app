@@ -583,12 +583,12 @@ return [
             'algorithm' => '%govuk_account_private_key_algorithm%',
             'private_key' => '%govuk_account_private_key%',
             'public_key' => '%govuk_account_public_key%',
-            'identity_assurance_public_key' => '%govuk_account_id_assurance_public_key%',
         ],
         'redirect_uri' => [
             'logged_in' => '%olcs_ss_uri%/govuk-id/loggedin',
             'logged_out' => '%olcs_ss_uri%/govuk-id/loggedout',
         ],
+        'core_identity_did_document_url' => '%govuk_account_core_identity_did_document_url%',
         'expected_core_identity_issuer' => '%govuk_account_id_assurance_issuer%',
         'proxy' => 'http://%shd_proxy%',
     ],

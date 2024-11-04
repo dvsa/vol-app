@@ -16,7 +16,7 @@
     "doctrine/persistence": "^2.1",
     "dvsa/authentication-cognito": "^2.0",
     "dvsa/laminas-config-cloud-parameters": "^1.0",
-    "dvsa/php-govuk-account": "^2.0.1",
+    "dvsa/php-govuk-account": "^3.0",
     "gedmo/doctrine-extensions": "^3",
     "guzzlehttp/guzzle": "^7.5",
     "league/flysystem": "^1.0",
