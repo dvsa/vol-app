@@ -416,6 +416,19 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  test_prep:
+    name: Run Tests on PREP
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
+    needs:
+      - terraform_env_prep
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    with:
+      platform_env: prep
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
   terraform_env_prod:
     name: Environment (prod)
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
