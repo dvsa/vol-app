@@ -53,9 +53,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var string
      *
-     * @ORM\Column(type="yesno", name="allow_email", nullable=false, options={"default": 0})
+     * @ORM\Column(type="yesno", name="allow_email", nullable=false, options={"default": 1})
      */
-    protected $allowEmail = 0;
+    protected $allowEmail = 1;
 
     /**
      * Company cert seen
