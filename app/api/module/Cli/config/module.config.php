@@ -1,8 +1,11 @@
 <?php
 
+use Doctrine\Migrations\Tools\Console\Command as MigrationCommands;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
+use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
 use Dvsa\Olcs\Cli\Domain\CommandHandler;
-use Dvsa\Olcs\Cli\Domain\Command;
 use Dvsa\Olcs\Cli\Domain\Query;
 use Dvsa\Olcs\Cli\Domain\QueryHandler;
 use Dvsa\Olcs\Cli;
@@ -10,6 +13,7 @@ use Dvsa\Olcs\Cli\Command\Batch as BatchCommands;
 use Dvsa\Olcs\Cli\Command\Permits as PermitsCommands;
 use Dvsa\Olcs\Cli\Command\Queue as QueueCommands;
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
+
 
 $commonCommandDeps = [
     'CommandHandlerManager',
@@ -57,7 +61,70 @@ return [
             'queue:process-insolvency' => Dvsa\Olcs\Cli\Command\Queue\ProcessInsolvencySQSQueueCommand::class,
             'queue:process-insolvency-dlq' => Dvsa\Olcs\Cli\Command\Queue\ProcessInsolvencyDlqSQSQueueCommand::class,
             'queue:transxchange-consumer' => Dvsa\Olcs\Cli\Command\Queue\TransXChangeConsumerSQSQueueCommand::class,
+            'migrations:current'    => MigrationCommands\CurrentCommand::class,
+            'migrations:execute'    => MigrationCommands\ExecuteCommand::class,
+            'migrations:generate'   => MigrationCommands\GenerateCommand::class,
+            'migrations:latest'     => MigrationCommands\LatestCommand::class,
+            'migrations:list'       => MigrationCommands\ListCommand::class,
+            'migrations:migrate'    => MigrationCommands\MigrateCommand::class,
+            'migrations:status'     => MigrationCommands\StatusCommand::class,
+            'migrations:version'    => MigrationCommands\VersionCommand::class,
+        ],
+    ],
+    'dependencies' => [
+        'factories' => [
+            // DependencyFactory setup
+            DependencyFactory::class => function (ContainerInterface $container) {
+                $config = $container->get('config');
+                $doctrineConfig = $config['doctrine'];
+                $migrationsConfig = $doctrineConfig['migrations'];
 
+                $configurationArray = [
+                    'migrations_paths' => [
+                        $migrationsConfig['namespace'] => $migrationsConfig['directory'],
+                    ],
+                    'table_storage' => [
+                        'table_name'          => $migrationsConfig['table'],
+                        'version_column_name' => $migrationsConfig['column'],
+                    ],
+                    'all_or_nothing'          => $migrationsConfig['all_or_nothing'],
+                    'check_database_platform' => $migrationsConfig['check_database_platform'],
+                ];
+
+                $configArray = new ConfigurationArray($configurationArray);
+
+                $entityManager = $container->get('doctrine.entitymanager.orm_default');
+
+                return DependencyFactory::fromEntityManager(
+                    $configArray,
+                    new \Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager($entityManager)
+                );
+            },
+            // Factories for Doctrine Migrations commands
+            MigrationCommands\CurrentCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\CurrentCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\ExecuteCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\ExecuteCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\GenerateCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\GenerateCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\LatestCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\LatestCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\ListCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\ListCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\MigrateCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\MigrateCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\StatusCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\StatusCommand($container->get(DependencyFactory::class));
+            },
+            MigrationCommands\VersionCommand::class => function (ContainerInterface $container) {
+                return new MigrationCommands\VersionCommand($container->get(DependencyFactory::class));
+            },
         ],
     ],
     'service_manager' => [
@@ -271,20 +338,20 @@ return [
     ],
     \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::CONFIG_KEY => [
         'factories' => [
-            Command\RemoveReadAudit::class => CommandHandler\RemoveReadAudit::class,
-            Command\CleanUpAbandonedVariations::class => CommandHandler\CleanUpAbandonedVariations::class,
-            Command\CreateViExtractFiles::class => CommandHandler\CreateViExtractFiles::class,
-            Command\SetViFlags::class => CommandHandler\SetViFlags::class,
-            Command\DataGovUkExport::class => CommandHandler\DataGovUkExport::class,
-            Command\DataDvaNiExport::class => CommandHandler\DataDvaNiExport::class,
-            Command\CompaniesHouseVsOlcsDiffsExport::class => CommandHandler\CompaniesHouseVsOlcsDiffsExport::class,
-            Command\Bus\Expire::class => CommandHandler\Bus\Expire::class,
-            Command\Permits\WithdrawUnpaidIrhp::class => CommandHandler\Permits\WithdrawUnpaidIrhp::class,
-            Command\LastTmLetter::class => CommandHandler\LastTmLetter::class,
-            Command\Permits\CloseExpiredWindows::class => CommandHandler\Permits\CloseExpiredWindows::class,
-            Command\Permits\CancelUnsubmittedBilateral::class => CommandHandler\Permits\CancelUnsubmittedBilateral::class,
-            Command\Permits\MarkExpiredPermits::class => CommandHandler\Permits\MarkExpiredPermits::class,
-            Command\InterimEndDateEnforcement::class => CommandHandler\InterimEndDateEnforcement::class,
+            Cli\Domain\Command\RemoveReadAudit::class => CommandHandler\RemoveReadAudit::class,
+            Cli\Domain\Command\CleanUpAbandonedVariations::class => CommandHandler\CleanUpAbandonedVariations::class,
+            Cli\Domain\Command\CreateViExtractFiles::class => CommandHandler\CreateViExtractFiles::class,
+            Cli\Domain\Command\SetViFlags::class => CommandHandler\SetViFlags::class,
+            Cli\Domain\Command\DataGovUkExport::class => CommandHandler\DataGovUkExport::class,
+            Cli\Domain\Command\DataDvaNiExport::class => CommandHandler\DataDvaNiExport::class,
+            Cli\Domain\Command\CompaniesHouseVsOlcsDiffsExport::class => CommandHandler\CompaniesHouseVsOlcsDiffsExport::class,
+            Cli\Domain\Command\Bus\Expire::class => CommandHandler\Bus\Expire::class,
+            Cli\Domain\Command\Permits\WithdrawUnpaidIrhp::class => CommandHandler\Permits\WithdrawUnpaidIrhp::class,
+            Cli\Domain\Command\LastTmLetter::class => CommandHandler\LastTmLetter::class,
+            Cli\Domain\Command\Permits\CloseExpiredWindows::class => CommandHandler\Permits\CloseExpiredWindows::class,
+            Cli\Domain\Command\Permits\CancelUnsubmittedBilateral::class => CommandHandler\Permits\CancelUnsubmittedBilateral::class,
+            Cli\Domain\Command\Permits\MarkExpiredPermits::class => CommandHandler\Permits\MarkExpiredPermits::class,
+            Cli\Domain\Command\InterimEndDateEnforcement::class => CommandHandler\InterimEndDateEnforcement::class,
         ],
     ],
 

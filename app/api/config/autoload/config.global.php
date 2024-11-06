@@ -74,6 +74,17 @@ return [
                 //'sql_logger' => 'DoctrineLogger',
             ]
         ],
+        'migrations' => [
+            'em' => 'default',
+            'orm_default' => [
+                'directory' => 'data/Migrations',
+                'namespace' => 'Migrations',
+                'table'     => 'migrations',
+                'column'    => 'version',
+                'all_or_nothing' => true,
+                'check_database_platform' => true,
+            ],
+        ],
     ],
 
     // Companies house XML gateway credentials
