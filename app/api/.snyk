@@ -17,4 +17,14 @@ ignore:
         reason: None Given
         expires:
         created: 2024-02-28T13:46:38.578Z
+  SNYK-PHP-TWIGTWIG-8349790:
+      - '*':
+          reason: Upgrade planned in VOL-5894
+          expires:
+          created: 2024-11-07T02:01:00.000Z
+    SNYK-PHP-TWIGTWIG-8349791:
+      - '*':
+          reason: Upgrade planned in VOL-5894
+          expires:
+          created: 2024-11-07T02:01:00.000Z
 patch: {}
