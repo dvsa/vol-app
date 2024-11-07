@@ -425,6 +425,7 @@ jobs:
       - terraform_env_prep
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
+      environment: prep
       platform_env: prep
     permissions:
       contents: write
