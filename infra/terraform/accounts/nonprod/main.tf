@@ -38,9 +38,12 @@ module "account" {
     ],
   )
 
-  github_oidc_readonly_subjects = [
-    for env in local.environments : "dvsa/vol-app:pull_request"
-  ]
+  github_oidc_readonly_subjects = concat(
+    [
+      "dvsa/vol-app:ref:refs/heads/main",
+      "dvsa/vol-app:pull_request",
+    ]
+  )
 
   github_oidc_readonly_role_policies = merge(
     {

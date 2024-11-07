@@ -281,7 +281,7 @@ jobs:
       matrix:
         account:
           - nonprod
-          #- prod
+          - prod
         exclude:
           - account: ${{ needs.orchestrator.outputs.should-plan-nonprod-account-terraform && 'ignored' || 'nonprod' }}
           - account: ${{ needs.orchestrator.outputs.should-plan-prod-account-terraform && 'ignored' || 'prod' }}
