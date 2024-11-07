@@ -69,8 +69,6 @@ module "ecs_service" {
 
   #Removing wait conditions in stead state as these look to be causing timeout in apply to service/cluster changes
   depends_on = [module.ecs_cluster]
-  wait_until_stable = 0
-  wait_for_steady_state = 0
 
   tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
 
@@ -145,6 +143,7 @@ module "ecs_service" {
   security_group_ids    = var.services[each.key].security_group_ids
   subnet_ids            = var.services[each.key].subnet_ids
 
-  wait_for_steady_state = true
-  wait_until_stable     = true
+  #Altered to false as applies are timing out due to health status not pulling through correctly
+  wait_for_steady_state = false
+  wait_until_stable     = false
 }
