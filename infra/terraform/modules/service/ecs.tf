@@ -67,6 +67,8 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
+  depends_on = [module.ecs_cluster]
+
   tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
 
   enable_execute_command = true
@@ -140,6 +142,8 @@ module "ecs_service" {
   security_group_ids    = var.services[each.key].security_group_ids
   subnet_ids            = var.services[each.key].subnet_ids
 
-  wait_for_steady_state = true
+  #Altered to false as applies are timing out due to health status not pulling through correctly
+  wait_for_steady_state = false
   wait_until_stable     = true
+  force_new_deployment  = false
 }
