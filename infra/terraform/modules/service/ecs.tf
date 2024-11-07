@@ -67,7 +67,6 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
-  #Removing wait conditions in stead state as these look to be causing timeout in apply to service/cluster changes
   depends_on = [module.ecs_cluster]
 
   tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
