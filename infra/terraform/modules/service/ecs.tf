@@ -144,5 +144,6 @@ module "ecs_service" {
 
   #Altered to false as applies are timing out due to health status not pulling through correctly
   wait_for_steady_state = false
-  wait_until_stable     = false
+  wait_until_stable     = true
+  force_new_deployment  = false
 }
