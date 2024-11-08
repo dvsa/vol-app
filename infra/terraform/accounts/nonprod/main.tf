@@ -42,6 +42,9 @@ module "account" {
     [
       "dvsa/vol-app:ref:refs/heads/main",
       "dvsa/vol-app:pull_request",
+      "dvsa/vol-app:environment:account-nonprod",
+      "dvsa/vol-app:environment:dev",
+      "dvsa/vol-app:environment:int",
     ]
   )
 
