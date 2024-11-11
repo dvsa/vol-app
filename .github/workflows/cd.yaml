@@ -302,7 +302,7 @@ jobs:
       - terraform_env_dev
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
-      environment: dev
+      platform_env: dev
     permissions:
       contents: write
       id-token: write
@@ -340,7 +340,7 @@ jobs:
       - terraform_env_int
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@fail
     with:
-      environment: int
+      platform_env: int
     permissions:
       contents: write
       id-token: write
@@ -423,7 +423,7 @@ jobs:
       - terraform_env_prep
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
-      environment: prep
+      platform_env: prep
     permissions:
       contents: write
       id-token: write
