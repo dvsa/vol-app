@@ -15,12 +15,10 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Dvsa\Olcs\Transfer\Query\User\OperatorAdminForOrganisationHasLoggedIn;
-use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Exception;
 use LmcRbacMvc\Service\AuthorizationService;
-use Rbac\Role\Role;
 
 /**
  * External Abstract Undertakings Controller
