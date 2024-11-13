@@ -4113,16 +4113,16 @@
     },
     {
       "name": "olcs/olcs-auth",
-      "version": "v8.1.0",
+      "version": "v8.1.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-auth.git",
-        "reference": "42d1594bfd0f00dd19eb44d61cb2095a2f26fb41"
+        "reference": "df4e8a5c8a46f8d15484bef3a1459af19177b477"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/42d1594bfd0f00dd19eb44d61cb2095a2f26fb41",
-        "reference": "42d1594bfd0f00dd19eb44d61cb2095a2f26fb41",
+        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/df4e8a5c8a46f8d15484bef3a1459af19177b477",
+        "reference": "df4e8a5c8a46f8d15484bef3a1459af19177b477",
         "shasum": ""
       },
       "require": {
@@ -4167,22 +4167,22 @@
       "license": ["MIT"],
       "description": "OLCS Authentication",
       "support": {
-        "source": "https://github.com/dvsa/olcs-auth/tree/v8.1.0"
+        "source": "https://github.com/dvsa/olcs-auth/tree/v8.1.1"
       },
-      "time": "2024-05-13T10:59:17+00:00"
+      "time": "2024-11-12T10:00:53+00:00"
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v7.13.0",
+      "version": "v7.13.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "5af71769b788ee388f6b652b41040351920ec5e2"
+        "reference": "f51afc040ae1a8c9e10da8f0db03d00ca7cd91e7"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/5af71769b788ee388f6b652b41040351920ec5e2",
-        "reference": "5af71769b788ee388f6b652b41040351920ec5e2",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/f51afc040ae1a8c9e10da8f0db03d00ca7cd91e7",
+        "reference": "f51afc040ae1a8c9e10da8f0db03d00ca7cd91e7",
         "shasum": ""
       },
       "require": {
@@ -4241,9 +4241,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v7.13.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v7.13.1"
       },
-      "time": "2024-11-05T10:22:48+00:00"
+      "time": "2024-11-13T09:31:29+00:00"
     },
     {
       "name": "olcs/olcs-logging",
