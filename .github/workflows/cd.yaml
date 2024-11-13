@@ -303,6 +303,9 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
     permissions:
       contents: write
       id-token: write
@@ -338,9 +341,12 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@fail
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml
     with:
       platform_env: int
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
     permissions:
       contents: write
       id-token: write
@@ -424,6 +430,9 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: prep
+      aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
     permissions:
       contents: write
       id-token: write
