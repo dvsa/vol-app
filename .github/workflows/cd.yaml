@@ -341,7 +341,7 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
