@@ -131,8 +131,8 @@ jobs:
       previous_assets_version: ${{ steps.get_current_versions.outputs.assets_version }}
     env:
       WORKING_DIR: infra/terraform/environments/${{ inputs.environment }}
-      AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC{1}_ROLE', inputs.environment, (inputs.apply && '' || '_READONLY'))] || (inputs.apply && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
-      AWS_REGION: ${{ vars[format('ENV_{0}_TF_AWS_REGION', inputs.environment)] || vars.TF_AWS_REGION }}
+      AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC_ROLE', inputs.environment)] || vars[(inputs.environment == 'prep' || inputs.environment == 'prod') && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
+      AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
     defaults:
       run:
         shell: bash
