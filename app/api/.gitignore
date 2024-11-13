@@ -27,4 +27,3 @@ phpstan.neon
 phpunit.xml
 psalm.xml
 # Trigger CD - 2024-11-13-1730
-
