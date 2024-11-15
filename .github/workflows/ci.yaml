@@ -181,6 +181,7 @@ jobs:
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
+      push: true
       version: ${{ needs.get-version.outputs.assets }}
     permissions:
       contents: read
