@@ -1,0 +1,23 @@
+<?php
+echo $this->partial(
+  '/partials/page-header-continuation.phtml',
+  [
+    'pageTitle' => $this->translate('user.welcome.title'),
+    'pageSubTitle'=> $this->translate('user.welcome.subtitle'),
+    'backUrl' => false,
+  ]
+);
+?>
+
+<div class="row">
+  <div class="dashboard two-thirds js-body">
+    <?php
+    echo $this->flashMessengerAll();
+
+    if (isset($this->form)):
+      echo $this->formErrors($this->form);
+      echo $this->form($this->form);
+    endif;
+    ?>
+  </div>
+</div>

@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Register User Selfserve Test
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
@@ -30,9 +28,6 @@ use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-/**
- * Register User Selfserve Test
- */
 class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
 {
     /**
@@ -72,8 +67,9 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @dataProvider dpHandleCommand
      */
-    public function testHandleCommandWithOrg()
+    public function testHandleCommandWithOrg(bool $createdByConsultant): void
     {
         $userId = 111;
 
@@ -88,6 +84,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
             ],
             'organisationName' => 'Org Name',
             'businessType' => OrganisationEntity::ORG_TYPE_SOLE_TRADER,
+            'createdByConsultant' => $createdByConsultant,
         ];
 
         $command = Cmd::create($data);
@@ -184,13 +181,20 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
             $savedUser->getContactDetails()->getEmailAddress()
         );
 
+        //if record created by a consultant terms won't have been agreed, if created by the operator, they will be
+        $this->assertEquals(
+            !$createdByConsultant,
+            $savedUser->hasAgreedTermsAndConditions()
+        );
+
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @dataProvider dpHandleCommand
      */
-    public function testHandleCommandWithLicence()
+    public function testHandleCommandWithLicence(bool $createdByConsultant): void
     {
         $userId = 111;
         $licId = 222;
@@ -205,6 +209,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'licenceNumber' => 'licNo',
+            'createdByConsultant' => $createdByConsultant,
         ];
 
         $command = Cmd::create($data);
@@ -311,10 +316,25 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
             $savedUser->getContactDetails()->getEmailAddress()
         );
 
+        //if record created by a consultant terms won't have been agreed, if created by the operator, they will be
+        $this->assertEquals(
+            !$createdByConsultant,
+            $savedUser->hasAgreedTermsAndConditions()
+        );
+
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
     }
 
-    public function testHandleCommandThrowsIncorrectOrgException()
+    public function dpHandleCommand(): array
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
+
+    public function testHandleCommandThrowsIncorrectOrgException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
@@ -344,7 +364,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsUsernameExistsException()
+    public function testHandleCommandThrowsUsernameExistsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -367,7 +387,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandThrowsExceptionWhenUnableToStoreUser()
+    public function testHandleCommandThrowsExceptionWhenUnableToStoreUser(): void
     {
         $data = [
             'loginId' => 'login_id',

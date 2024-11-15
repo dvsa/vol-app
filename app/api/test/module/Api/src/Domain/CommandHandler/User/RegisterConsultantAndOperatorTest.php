@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\User\RegisterConsultantAndOperator;
@@ -26,9 +28,10 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
-        $operatorDetails = ['organisationName' => 'Operator Org',];
+        $operatorDetails = ['organisationName' => 'Operator Org'];
+        $operatorModifiedDetails = ['organisationName' => 'Operator Org', 'createdByConsultant' => true];
 
         $command = RegisterConsultantAndOperatorCommand::create(
             [
@@ -41,7 +44,7 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
 
         $this->expectedSideEffect(
             RegisterUserSelfServeCommand::class,
-            $operatorDetails,
+            $operatorModifiedDetails,
             $operatorResult
         );
 
@@ -69,6 +72,8 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
             ->with(m::type(\Doctrine\Common\Collections\ArrayCollection::class))
             ->once()
             ->andReturnSelf();
+
+        $consultant->expects('agreeTermsAndConditions')->withNoArgs();
 
         $this->repoMap['User']->shouldReceive('save')->with($consultant);
 

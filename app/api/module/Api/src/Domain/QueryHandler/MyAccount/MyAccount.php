@@ -95,6 +95,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
         $result = $this->result(
             $user,
             [
+                'termsAgreed',
                 'team',
                 'transportManager',
                 'partnerContactDetails',

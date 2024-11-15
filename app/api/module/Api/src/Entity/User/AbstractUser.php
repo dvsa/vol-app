@@ -206,6 +206,15 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     protected $translateToWelsh = 0;
 
     /**
+     * Terms agreed
+     *
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", name="terms_agreed", nullable=false, options={"default": 0})
+     */
+    protected $termsAgreed = 0;
+
+    /**
      * Transport manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
@@ -301,6 +310,30 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     public function getAccountDisabled()
     {
         return $this->accountDisabled;
+    }
+
+    /**
+     * Set the terms agreed
+     *
+     * @param boolean $termsAgreed new value being set
+     *
+     * @return User
+     */
+    public function setTermsAgreed($termsAgreed)
+    {
+        $this->termsAgreed = $termsAgreed;
+
+        return $this;
+    }
+
+    /**
+     * Get the terms agreed
+     *
+     * @return boolean
+     */
+    public function getTermsAgreed()
+    {
+        return $this->termsAgreed;
     }
 
     /**

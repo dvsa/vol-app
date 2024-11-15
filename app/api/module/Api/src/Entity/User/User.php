@@ -765,4 +765,16 @@ class User extends AbstractUser implements OrganisationProviderInterface
         //disabled users can't reset
         return !$this->isDisabled();
     }
+
+    public function agreeTermsAndConditions(): User
+    {
+        $this->termsAgreed = true;
+
+        return $this;
+    }
+
+    public function hasAgreedTermsAndConditions(): bool
+    {
+        return $this->termsAgreed;
+    }
 }

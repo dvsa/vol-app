@@ -1409,4 +1409,12 @@ class UserEntityTest extends EntityTester
             [RoleEntity::ROLE_OPERATOR_TC],
         ];
     }
+
+    public function testAgreeTermsAndConditions(): void
+    {
+        $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
+        $this->assertFalse($user->hasAgreedTermsAndConditions());
+        $user->agreeTermsAndConditions();
+        $this->assertTrue($user->hasAgreedTermsAndConditions());
+    }
 }
