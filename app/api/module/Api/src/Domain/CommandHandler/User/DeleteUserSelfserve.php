@@ -10,14 +10,12 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Auth\Exception\DeleteUserException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Result\Auth\DeleteUserResult;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 
-/**
- * Delete User Selfserve
- */
 final class DeleteUserSelfserve extends AbstractCommandHandler implements
     TransactionedInterface,
     AuthAwareInterface,
@@ -25,6 +23,8 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
 {
     use AuthAwareTrait;
     use CacheAwareTrait;
+
+    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 
@@ -52,7 +52,13 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         /** @var \Dvsa\Olcs\Api\Entity\User\User $user */
         $user = $this->getRepo()->fetchUsingId($command);
 
-        $this->getRepo('OrganisationUser')->deleteByUserId($user->getId());
+        if ($user->isLastOperatorAdmin()) {
+            throw new BadRequestException(self::ADMIN_ROLE_ERROR);
+        }
+
+        $userId = $user->getId();
+
+        $this->getRepo('OrganisationUser')->deleteByUserId($userId);
         $this->getRepo()->delete($user);
 
         $cognitoDeleteResult = $this->adapter->deleteUser($user->getLoginId());
@@ -62,8 +68,13 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
             throw new DeleteUserException('Could not delete user');
         }
 
-        $userId = $user->getId();
-        $this->clearUserCaches([$userId]);
+        $organisation = $user->getRelatedOrganisation();
+
+        if ($organisation instanceof Organisation) {
+            $this->clearOrganisationCaches($organisation);
+        } else {
+            $this->clearUserCaches([$userId]);
+        }
 
         $result = new Result();
         $result->addId('user', $userId);
