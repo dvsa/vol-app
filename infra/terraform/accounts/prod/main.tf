@@ -1,5 +1,5 @@
 locals {
-  environments = ["prep", "prod"]
+  environments = ["prep"]
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
