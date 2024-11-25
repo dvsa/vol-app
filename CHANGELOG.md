@@ -1,5 +1,46 @@
 # Changelog
 
+## [5.9.4-alpha.1](https://github.com/dvsa/vol-app/compare/v5.9.0...v5.9.4-alpha.1) (2024-11-25)
+
+
+### Features
+
+* 5261 provision prod account ([#431](https://github.com/dvsa/vol-app/issues/431)) ([1de9af3](https://github.com/dvsa/vol-app/commit/1de9af35213a1a0e6509105fd33c4a8285b16998))
+* add 2 new item to decision list, hide old one from dropdown but leave in refdata table for old records ([#453](https://github.com/dvsa/vol-app/issues/453)) ([9c0ec62](https://github.com/dvsa/vol-app/commit/9c0ec62d17b5fccfb5ddc11faddb69fb1a6b17af))
+* add prep test stage ([#429](https://github.com/dvsa/vol-app/issues/429)) ([7360163](https://github.com/dvsa/vol-app/commit/7360163b55812adedb7894f9ddf88efeb8046d1d))
+* apply prep account ([#463](https://github.com/dvsa/vol-app/issues/463)) ([336478a](https://github.com/dvsa/vol-app/commit/336478a9fa081d3fbde315b682864ff88eca65ae))
+* bump govuk-frontend to 5.7.1 (royal coat of arms) ([#422](https://github.com/dvsa/vol-app/issues/422)) ([bb460ce](https://github.com/dvsa/vol-app/commit/bb460ceb19ce1234409819164c2df8d5d92eec0a))
+* bumped php-govuk-account for did document support ([#424](https://github.com/dvsa/vol-app/issues/424)) ([58c503d](https://github.com/dvsa/vol-app/commit/58c503de8c3ff9baaac267da24169acf90cea542))
+* e2e test runs after deploy, rollback in unsuccessful in int ([#402](https://github.com/dvsa/vol-app/issues/402)) ([145009a](https://github.com/dvsa/vol-app/commit/145009a38432ca86fc4311a30025ef47357d3a48))
+* integrate doctrine migrations vol 5793 ([#420](https://github.com/dvsa/vol-app/issues/420)) ([bcaeab0](https://github.com/dvsa/vol-app/commit/bcaeab0480391d685fc3965dce777ff698b6fb63))
+* permission fixes, improve permission tests, facilitate check for last op admin user VOL-4718 VOL-5796 ([#458](https://github.com/dvsa/vol-app/issues/458)) ([990f446](https://github.com/dvsa/vol-app/commit/990f446a5082bc7773ed8f17555533bfd3d874fc))
+* use deploy-environment workflow for int rollback. ([#421](https://github.com/dvsa/vol-app/issues/421)) ([e70824e](https://github.com/dvsa/vol-app/commit/e70824e2a1bbf19deaa2c796cda44718b5efb77f))
+* welcome page for external users with terms and conditions VOL-5664 ([#419](https://github.com/dvsa/vol-app/issues/419)) ([e4a5102](https://github.com/dvsa/vol-app/commit/e4a5102e7fc278338d0ac460a7afaf323f26c106))
+
+
+### Bug Fixes
+
+* 5261 role privileges ([#440](https://github.com/dvsa/vol-app/issues/440)) ([c3966da](https://github.com/dvsa/vol-app/commit/c3966dafca8e5b87bcea3a42bfd692f734a79a4e))
+* change defualt `allowEmail` to 1 ([#428](https://github.com/dvsa/vol-app/issues/428)) ([4884242](https://github.com/dvsa/vol-app/commit/4884242b0dbad531af14682983f2ccf62010f547))
+* give e22 tests requisite permissions ([#405](https://github.com/dvsa/vol-app/issues/405)) ([fb2330b](https://github.com/dvsa/vol-app/commit/fb2330bc01aad2d0300c70d7a5b6d4e34241af5a))
+* only op-tc are affected by the submit app/var block op-adm check ([#447](https://github.com/dvsa/vol-app/issues/447)) ([4ce6321](https://github.com/dvsa/vol-app/commit/4ce632119fbe2b354c9f956f2fdb30647ef041d9))
+* place explicit dependency between service and cluster ([#435](https://github.com/dvsa/vol-app/issues/435)) ([b00e969](https://github.com/dvsa/vol-app/commit/b00e9694afb985ee576ebef9bb53dbeb4c3d8b01))
+* properly call reuseable workflow in test-dev and test-int ([#404](https://github.com/dvsa/vol-app/issues/404)) ([bdc9155](https://github.com/dvsa/vol-app/commit/bdc9155776dcebc42bbac48b406a35ce2e76e12a))
+* reinstate transport manager ability to have TC role ([#465](https://github.com/dvsa/vol-app/issues/465)) ([fd9f8a5](https://github.com/dvsa/vol-app/commit/fd9f8a516ae7287b38d6d88f8626a9b741141540))
+* remove healthcheck wait conditions ([#437](https://github.com/dvsa/vol-app/issues/437)) ([b6ea3c1](https://github.com/dvsa/vol-app/commit/b6ea3c14774b08fbe121e17bca2946c83588c5a3))
+* remove placeholders that have been removed from paramstore - followup ticket will assess if config blocks can go too ([#466](https://github.com/dvsa/vol-app/issues/466)) ([41f8333](https://github.com/dvsa/vol-app/commit/41f8333331316e7c9001d853c74404c02876b4ca))
+* temporary removal of check for operator admin login ([#423](https://github.com/dvsa/vol-app/issues/423)) ([2c3e25c](https://github.com/dvsa/vol-app/commit/2c3e25cd484220279badc5284d25a4cb0c93bb1b))
+* tests called specifying environment ([#439](https://github.com/dvsa/vol-app/issues/439)) ([e4503ed](https://github.com/dvsa/vol-app/commit/e4503ed452a16514fe8c4ba767eaeb70893861af))
+* tweak deployment approaches ([#438](https://github.com/dvsa/vol-app/issues/438)) ([985aaae](https://github.com/dvsa/vol-app/commit/985aaae1ab1b6f6f01cc13c01418e6d30fb4d9b7))
+* Update dependency that had sub-dependency with security vuln ([#434](https://github.com/dvsa/vol-app/issues/434)) ([86179ed](https://github.com/dvsa/vol-app/commit/86179ed1ef79b90ac29bc272e0b9ee22efeff992))
+* upgrade autoprefixer from 10.4.19 to 10.4.20 ([#397](https://github.com/dvsa/vol-app/issues/397)) ([1fdc262](https://github.com/dvsa/vol-app/commit/1fdc262aaac492828c30cecd7dff5654d5488d9f))
+* use aws trivy java db registry avoid ratelimits ([#408](https://github.com/dvsa/vol-app/issues/408)) ([aab2c92](https://github.com/dvsa/vol-app/commit/aab2c92fe0544b3d7f436b1e06f7a9d51a82a4e6))
+
+
+### Miscellaneous Chores
+
+* bump ([#473](https://github.com/dvsa/vol-app/issues/473)) ([da2d9a0](https://github.com/dvsa/vol-app/commit/da2d9a0775f9c4044aa2fc20073dfea0df4501fd))
+
 ## [5.9.0](https://github.com/dvsa/vol-app/compare/v5.8.2...v5.9.0) (2024-10-17)
 
 
