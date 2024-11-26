@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.10.0](https://github.com/dvsa/vol-app/compare/v5.9.4-alpha.1...v5.10.0) (2024-11-26)
+
+
+### Miscellaneous Chores
+
+* release 5.10.0 ([#474](https://github.com/dvsa/vol-app/issues/474)) ([321c7e7](https://github.com/dvsa/vol-app/commit/321c7e71216eaa9833b8215e671ff24be0d186ab))
+
 ## [5.9.4-alpha.1](https://github.com/dvsa/vol-app/compare/v5.9.0...v5.9.4-alpha.1) (2024-11-25)
 
 
