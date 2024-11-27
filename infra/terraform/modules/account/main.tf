@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "s3_policy" {
     principals {
       type        = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
-  }
+    }
     principals {
       type        = "AWS"
       identifiers =  ["arn:aws:sts::054614622558:assumed-role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
