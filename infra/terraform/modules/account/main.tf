@@ -9,12 +9,16 @@ module "assets" {
 
 data "aws_iam_policy_document" "s3_policy" {
   statement {
-    actions   = ["s3:GetObject"]
+    actions   = ["s3:GetObject", "s3:ListBucket"]
     resources = ["${module.assets[0].s3_bucket_arn}/*"]
 
     principals {
       type        = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
+  }
+    principals {
+      type        = "AWS"
+      identifiers =  ["arn:aws:sts::054614622558:assumed-role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
     }
   }
 }
