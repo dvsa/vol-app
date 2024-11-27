@@ -13,14 +13,14 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current_account" {}
 
 data "aws_route53_zone" "public" {
   name = var.domain_name
 }
 
 locals {
-  bucket      = "${data.aws_caller_identity.current.account_id}-vol-app-assets"
+  bucket      = "${data.aws_caller_identity.current_account.account_id}-vol-app-assets"
   domain_name = data.aws_route53_zone.public.name
   subdomain   = "${var.environment}-cdn"
 }
