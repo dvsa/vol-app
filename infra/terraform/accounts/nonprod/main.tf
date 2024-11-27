@@ -32,7 +32,6 @@ module "account" {
     [
       "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
       "dvsa/vol-app:environment:account-nonprod", # `.github/workflows/deploy-account.yaml`.
-      "dvsa/vol-app:pull_request"
     ],
     [
       for env in local.environments : "dvsa/vol-app:environment:${env}" # `.github/workflows/deploy-environment.yaml`
