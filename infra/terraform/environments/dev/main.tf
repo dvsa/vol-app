@@ -139,6 +139,7 @@ module "service" {
   source = "../../modules/service"
 
   environment = "dev"
+  account     = "054614622558"
 
   legacy_environment = "DEV"
 

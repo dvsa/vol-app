@@ -19,8 +19,11 @@ data "aws_route53_zone" "public" {
   name = var.domain_name
 }
 
+data "aws_s3_bucket" "assets" {
+  bucket = "${var.account}-vol-app-assets"
+}
+
 locals {
-  bucket      = "${data.aws_caller_identity.current_account.account_id}-vol-app-assets"
   domain_name = data.aws_route53_zone.public.name
   subdomain   = "${var.environment}-cdn"
 }
@@ -96,7 +99,7 @@ module "cloudfront" {
 
   origin = {
     (local.oac_id) = {
-      domain_name           = local.bucket.bucket_regional_domain_name
+      domain_name           = data.aws_s3_bucket.assets.bucket_regional_domain_name
       origin_access_control = local.oac_id
       origin_path           = "/${trimprefix(var.assets_version, "/")}"
     }
