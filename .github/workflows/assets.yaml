@@ -6,6 +6,10 @@ on:
       ref:
         type: string
         required: false
+      account:
+        description: "Environment to deploy"
+        type: string
+        required: true
       version:
         type: string
         required: true
@@ -13,6 +17,9 @@ on:
         type: boolean
         default: false
         required: false
+
+concurrency:
+  group: assets-${{ inputs.account }}
 
 jobs:
   build:
@@ -23,7 +30,8 @@ jobs:
         working-directory: app/cdn
     env:
       ASSET_BUCKET: "vol-app-assets"
-      AWS_OIDC_ROLE: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+      ACCOUNT_NUMBER: ${{ vars[inputs.account == 'prod' && 'ACCOUNT_PROD' || 'ACCOUNT_NONPROD'] }}
+      AWS_OIDC_ROLE: ${{ vars[inputs.account == 'prod' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
       AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
     steps:
       - uses: actions/checkout@v4
@@ -53,4 +61,4 @@ jobs:
 
       - name: Upload assets to CloudFront assets bucket
         if: ${{ inputs.push }}
-        run: aws s3 cp ./public s3://${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive
+        run: aws s3 cp ./public s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive
