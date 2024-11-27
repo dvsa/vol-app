@@ -18,7 +18,7 @@ data "aws_route53_zone" "public" {
 }
 
 data "aws_s3_bucket" "assets" {
-  bucket = "${var.account}-vol-app-assets"
+  bucket = "*-vol-app-assets"
 }
 
 locals {
