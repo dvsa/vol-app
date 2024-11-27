@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "s3_policy" {
     }
     principals {
       type        = "AWS"
-      identifiers =  ["arn:aws:sts::054614622558:assumed-role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
+      identifiers = ["arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
     }
   }
 }
