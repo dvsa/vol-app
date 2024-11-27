@@ -40,6 +40,7 @@ jobs:
       should-build-api: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/api') || null }}
       should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/selfserve') || null }}
       should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/internal') || null }}
+      should-build-search: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/search') || null }}
       # Assets
       should-build-assets: ${{ steps.changed-asset-files.outputs.any_modified == 'true' || null }}
       # Docker
@@ -48,6 +49,7 @@ jobs:
       should-build-cli-docker: ${{ contains(steps.changed-docker-files.outputs.all_modified_files, 'infra/docker/cli') || null }}
       should-build-selfserve-docker: ${{ contains(steps.changed-docker-files.outputs.all_modified_files, 'infra/docker/selfserve') || null }}
       should-build-internal-docker: ${{ contains(steps.changed-docker-files.outputs.all_modified_files, 'infra/docker/internal') || null }}
+      should-build-search-docker: ${{ contains(steps.changed-docker-files.outputs.all_modified_files, 'infra/docker/search') || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_modified_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_modified_files, 'infra/terraform/accounts/nonprod') || null }}
@@ -141,6 +143,7 @@ jobs:
       cli: ${{ steps.cli-version.outputs.version }}
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
+      search: ${{ steps.search-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
@@ -163,6 +166,10 @@ jobs:
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/internal infra/docker/internal
+      - id: search-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/search infra/docker/search
       - id: assets-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
@@ -236,11 +243,13 @@ jobs:
           - cli
           - selfserve
           - internal
+          - search
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-internal-docker && 'ignored' || 'internal' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-search-docker && 'ignored' || 'search' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
@@ -327,6 +336,7 @@ jobs:
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       assets-version: ${{ needs.get-version.outputs.assets }}
     permissions:
       contents: read

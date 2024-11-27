@@ -22,13 +22,8 @@ locals {
     platform_capabilities = ["FARGATE"]
 
     container_properties = jsonencode({
-      command = concat([
-        "/var/www/html/vendor/bin/laminas",
-        "--container=/var/www/html/config/container-cli.php"
-      ], job.commands)
-
-      image = "${var.batch.repository}:${var.batch.version}"
-
+      command = concat(job.binaries, job.commands)
+      image   = job.image == "" ? "${var.batch.repository}:${var.batch.version}" : image
       environment = [
         {
           name  = "ENVIRONMENT_NAME"
