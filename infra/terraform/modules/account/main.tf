@@ -10,7 +10,7 @@ module "assets" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 4.0"
 
-  bucket = "${account_id}-vol-app-assets"
+  bucket = "${local.account_id}-vol-app-assets"
 }
 
 data "aws_iam_policy_document" "s3_policy" {
