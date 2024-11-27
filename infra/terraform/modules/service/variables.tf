@@ -69,6 +69,8 @@ variable "batch" {
     jobs = list(object({
       name     = string
       commands = list(string)
+      binaries = optional(list(string), ["/var/www/html/vendor/bin/laminas", "--container=/var/www/html/config/container-cli.php"]),
+      image    = optional(string, null)
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
