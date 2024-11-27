@@ -13,8 +13,6 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
-data "aws_caller_identity" "current_account" {}
-
 data "aws_route53_zone" "public" {
   name = var.domain_name
 }
