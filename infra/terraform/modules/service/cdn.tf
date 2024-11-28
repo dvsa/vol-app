@@ -13,12 +13,17 @@ provider "aws" {
   skip_requesting_account_id = false
 }
 
-data "aws_s3_bucket" "assets" {
-  bucket = "vol-app-assets"
-}
-
 data "aws_route53_zone" "public" {
   name = var.domain_name
+}
+
+data "aws_caller_identity" "current_account_id" {}
+
+locals {
+  asset_bucket = "${data.aws_caller_identity.current_account_id.account_id}-vol-app-assets"
+}
+data "aws_s3_bucket" "assets" {
+  bucket = local.asset_bucket
 }
 
 locals {

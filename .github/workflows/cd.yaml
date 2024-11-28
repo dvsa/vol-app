@@ -177,15 +177,18 @@ jobs:
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
-  cdn:
+  cdn-nonprod:
     name: CDN
     if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    concurrency:
+      group: assets-nonprod
     needs:
       - orchestrator
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
       push: true
+      account: nonprod
       version: ${{ needs.get-version.outputs.assets }}
     permissions:
       contents: read
@@ -380,6 +383,23 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
+
+  cdn-prod:
+    name: CDN
+    if: ${{ needs.orchestrator.outputs.should-build-assets && needs.release-please.outputs.release_created }}
+    concurrency:
+      group: assets-prod
+    needs:
+      - orchestrator
+      - get-version
+    uses: ./.github/workflows/assets.yaml
+    with:
+      push: true
+      account: prod
+      version: ${{ needs.get-version.outputs.assets }}
+    permissions:
+      contents: read
+      id-token: write
 
   terraform-account-prod:
     name: Account (prod)

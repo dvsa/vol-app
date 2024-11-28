@@ -1,10 +1,16 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 module "assets" {
   count = var.create_assets_bucket ? 1 : 0
 
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 4.0"
 
-  bucket = "vol-app-assets"
+  bucket = "${local.account_id}-vol-app-assets"
 }
 
 data "aws_iam_policy_document" "s3_policy" {
@@ -18,7 +24,7 @@ data "aws_iam_policy_document" "s3_policy" {
     }
     principals {
       type        = "AWS"
-      identifiers =  ["arn:aws:sts::054614622558:assumed-role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
+      identifiers = ["arn:aws:sts::054614622558:assumed-role/OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"]
     }
   }
 }

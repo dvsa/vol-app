@@ -176,12 +176,15 @@ jobs:
   cdn:
     name: CDN
     if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    concurrency:
+      group: assets-nonprod
     needs:
       - orchestrator
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
       version: ${{ needs.get-version.outputs.assets }}
+      account: nonprod
     permissions:
       contents: read
       id-token: write

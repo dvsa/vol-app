@@ -155,7 +155,7 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform init -no-color -input=false
+        run: terraform init -no-color -input=false -upgrade
 
       - name: Select workspace
         if: ${{ inputs.workspace }}
