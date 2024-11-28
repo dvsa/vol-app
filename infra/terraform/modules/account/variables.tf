@@ -51,3 +51,9 @@ variable "create_assets_bucket" {
   description = "Whether to create the assets bucket."
   default     = false
 }
+
+variable "assets_bucket_policy_role" {
+  type        = string
+  description = "Assets bucket policy role "
+  default     = ""
+}

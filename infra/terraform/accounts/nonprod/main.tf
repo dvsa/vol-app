@@ -24,6 +24,8 @@ module "environment-remote-state" {
 module "account" {
   source = "../../modules/account"
 
+  assets_bucket_policy_role = "OLCS-DEVAPPCI-DEVCI-OLCSCISLAVE"
+
   create_ecr_resources    = true
   create_assets_bucket    = true
   create_github_resources = true
