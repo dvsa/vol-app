@@ -472,3 +472,13 @@ module "service" {
     ]
   }
 }
+
+resource "null_resource" "deployed_versions" {
+  triggers = {
+    deployed_api_image_tag       = var.api_image_tag
+    deployed_internal_image_tag  = var.internal_image_tag
+    deployed_selfserve_image_tag = var.selfserve_image_tag
+    deployed_cli_image_tag       = var.cli_image_tag
+    deployed_assets_version      = var.assets_version
+  }
+}
