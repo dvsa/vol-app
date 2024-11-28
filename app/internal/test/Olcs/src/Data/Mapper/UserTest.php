@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -14,16 +16,13 @@ class UserTest extends MockeryTestCase
 {
     /**
     * @dataProvider mapFromResultDataProvider
-    *
-    * @param $inData
-    * @param $expected
     */
-    public function testMapFromResult($inData, $expected)
+    public function testMapFromResult(array $inData, array $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public function mapFromResultDataProvider(): array
     {
         return [
             // add
@@ -84,6 +83,7 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'Y',
+                    'isLastOperatorAdmin' => false,
                 ],
                 "expected" => [
                     'id' => 987,
@@ -102,6 +102,8 @@ class UserTest extends MockeryTestCase
                         'userType' => 'internal',
                         'role' => 'role',
                         'team' => 3,
+                        'isLastOperatorAdmin' => false,
+                        'lastOperatorAdminText' => 'No',
                     ],
                     'userPersonal' => [
                         'forename' => 'fn1',
@@ -167,6 +169,7 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'N',
+                    'isLastOperatorAdmin' => true,
                 ],
                 "expected" => [
                     'id' => 987,
@@ -184,6 +187,8 @@ class UserTest extends MockeryTestCase
                         'role' => 'role',
                         'currentTransportManager' => 3,
                         'currentTransportManagerName' => 'test me',
+                        'isLastOperatorAdmin' => true,
+                        'lastOperatorAdminText' => 'Yes (there must always be at least one operator administrator account)',
                     ],
                     'userPersonal' => [
                         'forename' => 'fn1',
@@ -237,6 +242,7 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'N',
+                    'isLastOperatorAdmin' => false,
                 ],
                 "expected" => [
                     'id' => 987,
@@ -253,6 +259,8 @@ class UserTest extends MockeryTestCase
                         'userType' => 'partner',
                         'role' => 'role',
                         'partnerContactDetails' => 3,
+                        'isLastOperatorAdmin' => false,
+                        'lastOperatorAdminText' => 'No',
                     ],
                     'userPersonal' => [
                         'forename' => 'fn1',
@@ -306,6 +314,7 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'N',
+                    'isLastOperatorAdmin' => false,
                 ],
                 "expected" => [
                     'id' => 987,
@@ -322,6 +331,8 @@ class UserTest extends MockeryTestCase
                         'userType' => 'local-authority',
                         'role' => 'role',
                         'localAuthority' => 3,
+                        'isLastOperatorAdmin' => false,
+                        'lastOperatorAdminText' => 'No',
                     ],
                     'userPersonal' => [
                         'forename' => 'fn1',
@@ -347,16 +358,13 @@ class UserTest extends MockeryTestCase
 
     /**
     * @dataProvider mapFromFormDataProvider
-    *
-    * @param $inData
-    * @param $expected
     */
-    public function testMapFromForm($inData, $expected)
+    public function testMapFromForm(array $inData, array $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function mapFromFormDataProvider()
+    public function mapFromFormDataProvider(): array
     {
         return [
             // edit - internal
@@ -737,7 +745,7 @@ class UserTest extends MockeryTestCase
     /**
     * @dataProvider dpMapFromErrors
     */
-    public function testMapFromErrors($errors, $expectedFormErrors, $expected)
+    public function testMapFromErrors($errors, $expectedFormErrors, $expected): void
     {
         $mockForm = m::mock(Form::class)
             ->shouldReceive('setMessages')
@@ -748,7 +756,7 @@ class UserTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function dpMapFromErrors()
+    public function dpMapFromErrors(): array
     {
         return [
             'username error' => [

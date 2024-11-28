@@ -216,4 +216,18 @@ class UserType
      * @Form\Attributes({"id":"role","placeholder":"","required":false})
      */
     public $role = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $isLastOperatorAdmin = null;
+
+    /**
+     * @Form\Options({"label":"Last operator admin?"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"lastOperatorAdminText", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\ReadonlyElement")
+     */
+    public $lastOperatorAdminText = null;
 }
