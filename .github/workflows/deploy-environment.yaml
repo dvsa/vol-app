@@ -167,16 +167,6 @@ jobs:
             echo "No outputs found, could be first run"
           fi
 
-      - name: Get Current Versions from Terraform State
-        id: get_current_versions
-        run: |
-          terraform output -json > outputs.json || true
-          if [ -s outputs.json ] && [ "$(jq -r 'length' outputs.json)" -gt 0 ]; then
-            jq -r 'to_entries[] | select(.key | startswith("deployed_")) | "\(.key | ltrimstr("deployed_"))=\(.value.value // "")"' outputs.json >> $GITHUB_OUTPUT
-          else
-            echo "No outputs found, could be first run"
-          fi
-
       - name: Select workspace
         if: ${{ inputs.workspace }}
         run: terraform workspace select -or-create ${{ inputs.workspace }}
