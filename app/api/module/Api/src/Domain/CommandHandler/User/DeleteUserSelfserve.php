@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Auth\Exception\DeleteUserException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Result\Auth\DeleteUserResult;
@@ -52,7 +53,8 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
         /** @var \Dvsa\Olcs\Api\Entity\User\User $user */
         $user = $this->getRepo()->fetchUsingId($command);
 
-        if ($user->isLastOperatorAdmin()) {
+        //only internal users can delete the last operator admin
+        if ($user->isLastOperatorAdmin() && !$this->isGranted(Permission::CAN_MANAGE_USER_INTERNAL)) {
             throw new BadRequestException(self::ADMIN_ROLE_ERROR);
         }
 

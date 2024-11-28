@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\User\DeleteUserSelfserve;
 use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Auth\Adapter\CognitoAdapter;
 use Dvsa\Olcs\Auth\Exception\DeleteUserException;
@@ -135,6 +136,51 @@ class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
+    public function testHandleCommandLastOperatorAdminInternalCanManage(): void
+    {
+        $data = [
+            'id' => self::USER_ID,
+        ];
+
+        $command = Cmd::create($data);
+
+        $userEntity = m::mock(UserEntity::class);
+        $userEntity->expects('getId')->withNoArgs()->andReturn(self::USER_ID);
+        $userEntity->expects('getLoginId')->withNoArgs()->andReturn(self::LOGIN_ID);
+        $userEntity->expects('isLastOperatorAdmin')->withNoArgs()->andReturnTrue();
+        $userEntity->expects('getRelatedOrganisation')->withNoArgs()->andReturnNull();
+
+        $this->mockAuth
+            ->expects('isGranted')
+            ->with(Permission::CAN_MANAGE_USER_INTERNAL, null)
+            ->andReturnTrue();
+
+        $cognitoResult = m::mock(DeleteUserResult::class);
+        $cognitoResult->expects('isValid')->withNoArgs()->andReturnTrue();
+        $this->adapter->expects('deleteUser')->with(self::LOGIN_ID)->andReturn($cognitoResult);
+
+        $this->repoMap['User']
+            ->shouldReceive('fetchUsingId')->once()->andReturn($userEntity)
+            ->shouldReceive('delete')->once();
+
+        $this->repoMap['OrganisationUser']
+            ->shouldReceive('deleteByUserId')->with(self::USER_ID)->once();
+
+        $this->expectedUserCacheClear([self::USER_ID]);
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [
+                'user' => self::USER_ID,
+            ],
+            'messages' => [
+                'User deleted successfully'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+    }
+
     public function testHandleCommandLastOperatorAdmin(): void
     {
         $this->expectException(BadRequestException::class);
@@ -148,6 +194,11 @@ class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $userEntity = m::mock(UserEntity::class);
         $userEntity->expects('isLastOperatorAdmin')->withNoArgs()->andReturnTrue();
+
+        $this->mockAuth
+            ->expects('isGranted')
+            ->with(Permission::CAN_MANAGE_USER_INTERNAL, null)
+            ->andReturnFalse();
 
         $this->repoMap['User']->expects('fetchUsingId')->with($command)->andReturn($userEntity);
 

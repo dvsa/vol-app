@@ -5,17 +5,13 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\User;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType;
+use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-/**
- * User
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class User extends AbstractQueryHandler
 {
     protected $repoServiceName = 'User';
@@ -37,6 +33,7 @@ class User extends AbstractQueryHandler
             throw new ForbiddenException('You do not have permission to manage the record');
         }
 
+        /** @var UserEntity $user */
         $user = $this->getRepo()->fetchUsingId($query);
 
         // get user's latest password reset event
@@ -74,6 +71,7 @@ class User extends AbstractQueryHandler
                 ],
             ],
             [
+                'isLastOperatorAdmin' => $user->isLastOperatorAdmin(),
                 'userType' => $user->getUserType(),
                 'lastLoggedInOn' => $user->getLastLoginAt() ?? null,
                 'lockedOn' => $lockedOn,

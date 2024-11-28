@@ -130,6 +130,25 @@ class UserManagementController extends AbstractInternalController implements Lef
         return $this->redirect()->toRoute('search', ['index' => 'user', 'action' => 'search'], ['code' => 303]);
     }
 
+    public function deleteAction()
+    {
+        //we need to check the user isn't the last operator admin
+        $userQuery = ItemDto::create(['id' => $this->params('user')]);
+        $response = $this->handleQuery($userQuery);
+
+        if ($response->isOk()) {
+            $user = $response->getResult();
+            if ($user['isLastOperatorAdmin'] === true) {
+                $this->deleteModalTitle = 'Delete the last admin user?';
+                $this->deleteConfirmMessage = 'This is the last operator admin user. There must always be an operator admin account. Are you sure you want to delete this user?';
+            }
+        } elseif ($response->isClientError() || $response->isServerError()) {
+            $this->handleErrors($response->getResult());
+        }
+
+        return parent::deleteAction();
+    }
+
     /**
      * Gets a form from either a built or custom form config.
      *
@@ -184,6 +203,18 @@ class UserManagementController extends AbstractInternalController implements Lef
      */
     protected function alterFormForEdit($form, $data)
     {
+        /**
+         * read only fields aren't repopulated on post, so we need to add this one field back in manually
+         * in case of a post with errors
+         */
+        $lastOperatorAdminText = Mapper::IS_NOT_LAST_OP_ADMIN;
+
+        if ($data['userType']['isLastOperatorAdmin']) {
+            $lastOperatorAdminText = Mapper::IS_LAST_OP_ADMIN;
+        }
+
+         $form->get('userType')->get('lastOperatorAdminText')->setValue($lastOperatorAdminText);
+
         /**
          * @var FormFieldset $userLoginSecurity
          * @var RadioElement $resetPwField
