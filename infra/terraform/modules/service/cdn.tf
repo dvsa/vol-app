@@ -23,7 +23,7 @@ locals {
   asset_bucket = "${data.aws_caller_identity.current_account_id.account_id}-vol-app-assets"
 }
 data "aws_s3_bucket" "assets" {
-  bucket = "${local.asset_bucket}"
+  bucket = local.asset_bucket
 }
 
 locals {
