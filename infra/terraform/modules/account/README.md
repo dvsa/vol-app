@@ -33,7 +33,6 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_assets_bucket_policy_role"></a> [assets\_bucket\_policy\_role](#input\_assets\_bucket\_policy\_role) | Assets bucket policy role | `string` | `""` | no |
 | <a name="input_create_assets_bucket"></a> [create\_assets\_bucket](#input\_create\_assets\_bucket) | Whether to create the assets bucket. | `bool` | `false` | no |
 | <a name="input_create_ecr_resources"></a> [create\_ecr\_resources](#input\_create\_ecr\_resources) | Whether to create the ECR resources. | `bool` | `false` | no |
 | <a name="input_create_github_resources"></a> [create\_github\_resources](#input\_create\_github\_resources) | Whether to create the GitHub resources. | `bool` | `false` | no |
