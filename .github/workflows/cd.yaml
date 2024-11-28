@@ -281,7 +281,7 @@ jobs:
       - get-version
       - orchestrator
       - docker
-      - cdn
+      - cdn-nonprod
       - terraform-account-nonprod
     uses: ./.github/workflows/deploy-environment.yaml
     with:
