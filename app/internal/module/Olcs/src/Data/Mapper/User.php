@@ -61,6 +61,8 @@ class User implements MapperInterface
 
             $formData['userType']['id'] = $data['id'];
             $formData['userType']['userType'] = $data['userType'];
+            $formData['userType']['isLastOperatorAdmin'] = $data['isLastOperatorAdmin'];
+            $formData['userType']['lastOperatorAdminText'] = $data['isLastOperatorAdmin'] ? 'Yes (there must always be at least one operator administrator account)' : 'No';
 
             // get the first role from the list (it should be only one)
             $formData['userType']['role']

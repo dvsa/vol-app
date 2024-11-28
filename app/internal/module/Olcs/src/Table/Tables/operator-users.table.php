@@ -8,6 +8,13 @@ return [
         'title' => 'Users',
         'titleSingular' => 'User',
     ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one'],
+            ]
+        ]
+    ],
     'columns' => [
         [
             'title' => 'Username',
@@ -41,6 +48,11 @@ return [
             'title' => 'Role',
             'name' => 'role',
             'formatter' => fn($row) => empty($row['roles']) ? 'N/A' : Escape::html($row['roles'][0]['description'])
-        ]
+        ],
+        [
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ],
     ]
 ];

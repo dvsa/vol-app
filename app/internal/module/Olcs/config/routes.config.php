@@ -1655,7 +1655,11 @@ $routes = [
             'users' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'users[/]',
+                    'route' => 'users[/:action][/:id][/]',
+                    'constraints' => [
+                        'action' => '(index|edit|delete)',
+                        'id' => '[0-9]+'
+                    ],
                     'defaults' => [
                         'controller' => Olcs\Controller\Operator\OperatorUsersController::class,
                         'action' => 'index',

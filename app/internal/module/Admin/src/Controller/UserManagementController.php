@@ -188,6 +188,10 @@ class UserManagementController extends AbstractInternalController implements Lef
          * @var FormFieldset $userLoginSecurity
          * @var RadioElement $resetPwField
          */
+        if ($this->getRequest()->isPost()) {
+            $this->checkLastOperatorAdmin($data);
+        }
+
         $userLoginSecurity = $form->get('userLoginSecurity');
 
         if (empty($data['userLoginSecurity']['disabledDate'])) {
@@ -229,6 +233,15 @@ class UserManagementController extends AbstractInternalController implements Lef
         }
 
         return $form;
+    }
+
+    private function checkLastOperatorAdmin(array $data)
+    {
+        if ($data['userType']['isLastOperatorAdmin']
+            && ($data['userType']['role'] !== RefData::ROLE_OPERATOR_ADMIN || $data['userType']['userType'] !== 'operator')) {
+            $this->flashMessengerHelperService->addErrorMessage('There must always be at least one operator administrator account');
+            return $this->redirectRefresh();
+        }
     }
 
     /**
