@@ -22,10 +22,6 @@ data "aws_iam_policy_document" "s3_policy" {
       type        = "Service"
       identifiers = ["cloudfront.amazonaws.com"]
     }
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:sts::${local.account_id}:assumed-role/${var.assets_bucket_policy_role}"]
-    }
   }
 }
 
