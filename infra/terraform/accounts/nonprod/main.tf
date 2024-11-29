@@ -30,7 +30,7 @@ module "account" {
 
   github_oidc_subjects = concat(
     [
-      "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
+      "dvsa/vol-app:ref:refs/heads/main", # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
       "dvsa/vol-app:environment:account-nonprod",
       "dvsa/vol-app:pull_request", # `.github/workflows/deploy-account.yaml`.
     ],
