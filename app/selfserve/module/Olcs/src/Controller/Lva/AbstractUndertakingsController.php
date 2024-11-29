@@ -15,7 +15,6 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Dvsa\Olcs\Transfer\Query\User\OperatorAdminForOrganisationHasLoggedIn;
-use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Exception;
@@ -348,12 +347,9 @@ abstract class AbstractUndertakingsController extends AbstractController
      */
     protected function checkIfOperatorAdminHasLoggedIn($organisationId, $form = null): bool
     {
-        /**
-         * @todo we need this check to always return true for now
-         * @see https://dvsa.atlassian.net/browse/VOL-5886
-         * @see https://dvsa.atlassian.net/browse/VOL-5885
-         */
-        return true;
+        if (!$this->authService->isGranted(RefData::ROLE_OPERATOR_TC)) {
+            return true;
+        }
 
         $operatorAdminHasLoggedIn = $this->operatorAdminForOrganisationHasLoggedIn($organisationId);
 

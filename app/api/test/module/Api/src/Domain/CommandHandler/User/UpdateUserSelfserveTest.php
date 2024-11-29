@@ -7,9 +7,11 @@
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
 use Doctrine\ORM\Query;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Domain\Repository\ContactDetails;
 use Dvsa\Olcs\Api\Domain\Repository\User;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Rbac\JWTIdentityProvider;
@@ -83,7 +85,41 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithNewContactDetails()
+    public function testHandleCommandLastOperatorAdmin(): void
+    {
+        $this->expectException(BadRequestException::class);
+        $this->expectExceptionMessage(Sut::ADMIN_ROLE_ERROR);
+
+        $userId = 111;
+
+        $data = [
+            'id' => 111,
+            'version' => 1,
+            'userType' => UserEntity::USER_TYPE_OPERATOR,
+            'loginId' => 'login_id',
+            'contactDetails' => [
+                'emailAddress' => 'test1@test.me',
+                'person' => [
+                    'forename' => 'updated forename',
+                    'familyName' => 'updated familyName',
+                ],
+            ],
+            'permission' => UserEntity::PERMISSION_USER,
+        ];
+
+        $command = Cmd::create($data);
+
+        $user = m::mock(UserEntity::class);
+        $user->expects('isLastOperatorAdmin')->withNoArgs()->andReturnTrue();
+
+        $this->repoMap['User']->expects('fetchById')
+            ->with($userId, Query::HYDRATE_OBJECT, 1)
+            ->andReturn($user);
+
+        $this->sut->handleCommand($command);
+    }
+
+    public function testHandleCommandWithNewContactDetails(): void
     {
         $userId = 111;
 
@@ -121,6 +157,9 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturn($contactType);
 
+        $organisation = m::mock(Organisation::class);
+        $this->expectedOrganisationCacheClear($organisation);
+
         /** @var UserEntity $user */
         $user = m::mock(UserEntity::class)->makePartial();
         $user->setContactDetails($contactDetails);
@@ -128,6 +167,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $user->setPid('pid');
         $user->setLoginId($data['loginId']);
         $user->shouldReceive('update')->once()->with($data)->andReturnSelf();
+        $user->expects('getRelatedOrganisation')->withNoArgs()->andReturn($organisation);
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
@@ -169,7 +209,6 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
             ->with('login_id', 'email', 'test1@test.me')
             ->once();
 
-        $this->expectedUserCacheClear([$userId]);
         $result = $this->sut->handleCommand($command);
 
         $expected = [
@@ -197,7 +236,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
     /**
      * @dataProvider dpTestHandleCommandWithUpdatedContactDetails
      */
-    public function testHandleCommandWithUpdatedContactDetails($userType, $canUpdatePerson, $existingEmail, $eventHistoryTimes)
+    public function testHandleCommandWithUpdatedContactDetails($userType, $canUpdatePerson, $existingEmail, $eventHistoryTimes): void
     {
         $userId = 111;
 
@@ -234,6 +273,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $user->setPid('pid');
         $user->setLoginId($data['loginId']);
         $user->setContactDetails($contactDetails);
+        $user->expects('getRelatedOrganisation')->withNoArgs()->andReturnNull();
 
         $user->shouldReceive('getUserType')->once()->withNoArgs()->andReturn($userType);
 
@@ -297,7 +337,7 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpTestHandleCommandWithUpdatedContactDetails()
+    public function dpTestHandleCommandWithUpdatedContactDetails(): array
     {
         return [
             [UserEntity::USER_TYPE_OPERATOR, false, 'test2@test.me', 1],

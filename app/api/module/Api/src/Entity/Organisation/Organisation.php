@@ -530,6 +530,28 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
     }
 
     /**
+     * can only delete operator admin if more than one exists
+     */
+    public function canDeleteOperatorAdmin(): bool
+    {
+        $numOperatorAdmins = 0;
+        $administratorUsers = $this->getAdministratorUsers();
+
+        /** @var OrganisationUserEntity $orgUser */
+        foreach ($administratorUsers as $orgUser) {
+            if ($orgUser->getUser()->isOperatorAdministrator()) {
+                $numOperatorAdmins++;
+            }
+
+            if ($numOperatorAdmins > 1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the latest Trading Name that hasnt been deleted
      *
      * @return string

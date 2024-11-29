@@ -496,18 +496,32 @@ class User extends AbstractUser implements OrganisationProviderInterface
     }
 
     /**
-     * Checks whther the user is an administrator
-     *
-     * @return bool
+     * Checks whether the user is selfserve administrator
      */
-    private function isAdministrator()
+    public function isAdministrator(): bool
     {
         // is admin if has roles for admin permission
+        return $this->isOperatorAdministrator() || $this->isConsultantAdministrator();
+    }
+
+    /**
+     * Checks whether the user is aperator administrator
+     */
+    public function isOperatorAdministrator(): bool
+    {
         return $this->hasRoles(
             self::getRolesByUserType($this->getUserType(), self::PERMISSION_ADMIN)
-        ) || $this->hasRoles(
+        );
+    }
+
+    /**
+     * Checks whether the user is consultant administrator
+     */
+    public function isConsultantAdministrator(): bool
+    {
+        return $this->hasRoles(
             self::getRolesByUserType($this->getUserType(), self::PERMISSION_TC)
-            );
+        );
     }
 
     /**
@@ -764,5 +778,43 @@ class User extends AbstractUser implements OrganisationProviderInterface
     {
         //disabled users can't reset
         return !$this->isDisabled();
+    }
+
+    public function agreeTermsAndConditions(): User
+    {
+        $this->termsAgreed = true;
+
+        return $this;
+    }
+
+    public function hasAgreedTermsAndConditions(): bool
+    {
+        return $this->termsAgreed;
+    }
+
+    public function isLastOperatorAdmin(): bool
+    {
+        if (!$this->isOperatorAdministrator()) {
+            return false;
+        }
+
+        $org = $this->getRelatedOrganisation();
+
+        if ($org instanceof Organisation) {
+            return !$this->getRelatedOrganisation()->canDeleteOperatorAdmin();
+        }
+
+        return false;
+    }
+
+    public function organisationCanDeleteOperatorAdmin(): bool
+    {
+        $org = $this->getRelatedOrganisation();
+
+        if ($org instanceof Organisation) {
+            return $this->getRelatedOrganisation()->canDeleteOperatorAdmin();
+        }
+
+        return false;
     }
 }

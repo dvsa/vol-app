@@ -54,6 +54,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
         $isEligibleForPrompt = false;
         $hasActivePsv = false;
         $hasSubmittedLicenceApplication = false;
+        $canDeleteOperatorAdmin = false;
         $numVehicles = 0;
 
         $dataAccess = [];
@@ -79,6 +80,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
             ];
         } elseif ($userId !== User::USER_TYPE_ANON) {
             $isEligibleForPermits = $user->isEligibleForPermits();
+            $canDeleteOperatorAdmin = $user->organisationCanDeleteOperatorAdmin();
 
             if ($isEligibleForPermits) {
                 //for now we need to leave this, as selfserve users don't have access to system param query
@@ -95,6 +97,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
         $result = $this->result(
             $user,
             [
+                'termsAgreed',
                 'team',
                 'transportManager',
                 'partnerContactDetails',
@@ -117,6 +120,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
                 'eligibleForPrompt' => $isEligibleForPrompt,
                 'dataAccess' => $dataAccess,
                 'isInternal' => $isInternal,
+                'canDeleteOperatorAdmin' => $canDeleteOperatorAdmin,
             ]
         );
 

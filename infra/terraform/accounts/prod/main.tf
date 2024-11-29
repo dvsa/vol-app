@@ -1,5 +1,5 @@
 locals {
-  environments = ["prep", "prod"]
+  environments = ["prep"]
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
@@ -30,8 +30,9 @@ module "account" {
 
   github_oidc_subjects = concat(
     [
-      "dvsa/vol-app:ref:refs/heads/main",      # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
-      "dvsa/vol-app:environment:account-prod", # `.github/workflows/deploy-account.yaml`.
+      "dvsa/vol-app:ref:refs/heads/main", # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
+      "dvsa/vol-app:environment:account-prod",
+      "dvsa/vol-app:pull_request", # `.github/workflows/deploy-account.yaml`.
     ],
     [
       for env in local.environments : "dvsa/vol-app:environment:${env}" # `.github/workflows/deploy-environment.yaml`

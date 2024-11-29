@@ -45,6 +45,7 @@ use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\SessionTimeoutController;
 use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
+use Olcs\Controller\WelcomeController;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldset;
@@ -54,6 +55,8 @@ use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Logging\Log\Processor\CorrelationId;
 use Olcs\Logging\Log\Processor\CorrelationIdFactory;
+use Olcs\Mvc\TermsAgreedListener;
+use Olcs\Mvc\TermsAgreedListenerFactory;
 use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Data as DataService;
 use Olcs\Service\Processing as ProcessingService;
@@ -107,6 +110,16 @@ $routes = [
                 'action' => 'index'
             ]
         ]
+    ],
+    'welcome' => [
+        'type' => Segment::class,
+        'options' =>  [
+            'route' => '/welcome[/]',
+            'defaults' => [
+                'controller' => WelcomeController::class,
+                'action' => 'generic',
+            ],
+        ],
     ],
     'cookies' => [
         'type' => 'segment',
@@ -1412,6 +1425,7 @@ return [
             \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationControllerFactory::class,
             Olcs\Controller\ConversationsController::class                                                  => Olcs\Controller\Factory\ConversationsControllerFactory::class,
             PromptController::class                                                                         => \Olcs\Controller\PromptControllerFactory::class,
+            WelcomeController::class                                                                         => \Olcs\Controller\WelcomeControllerFactory::class,
             // Process Signature from GOV.UK Account
             \Olcs\Controller\SignatureVerificationController::class                                         => \Olcs\Controller\SignatureVerificationControllerFactory::class,
             // LVA Controller Factories
@@ -1498,6 +1512,7 @@ return [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => [
+            TermsAgreedListener::class => TermsAgreedListenerFactory::class,
             'CookieListener' => \Olcs\Mvc\CookieListenerFactory::class,
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListenerFactory::class,
             'CookieAcceptAllSetCookieGenerator' => CookieService\AcceptAllSetCookieGeneratorFactory::class,
