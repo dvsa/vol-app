@@ -311,7 +311,7 @@ jobs:
         environment:
           - dev
           - int
-          #- prep
+          - prep
           #- prod
         exclude:
           - environment: ${{ needs.orchestrator.outputs.should-plan-dev-environment-terraform && 'ignored' || 'dev' }}
