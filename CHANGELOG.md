@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.11.0](https://github.com/dvsa/vol-app/compare/v5.10.2...v5.11.0) (2024-11-29)
+
+
+### Features
+
+* 5259 create prep environment ([#432](https://github.com/dvsa/vol-app/issues/432)) ([f7c7c7b](https://github.com/dvsa/vol-app/commit/f7c7c7bfdfaf27f564710e52679badf01089efe1))
+
 ## [5.10.2](https://github.com/dvsa/vol-app/compare/v5.10.1...v5.10.2) (2024-11-29)
 
 
