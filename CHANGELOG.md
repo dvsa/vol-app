@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.10.2](https://github.com/dvsa/vol-app/compare/v5.10.1...v5.10.2) (2024-11-29)
+
+
+### Bug Fixes
+
+* internal to use previous auth package for now VOL-5896 ([#491](https://github.com/dvsa/vol-app/issues/491)) ([9f63591](https://github.com/dvsa/vol-app/commit/9f63591d9f8e5622435e26296d14a9d79a69b5b1))
+* trust policies for PR ([#488](https://github.com/dvsa/vol-app/issues/488)) ([e064bdf](https://github.com/dvsa/vol-app/commit/e064bdfb707284fa5983c1f15c0c7244f0466543))
+
 ## [5.10.1](https://github.com/dvsa/vol-app/compare/v5.10.0...v5.10.1) (2024-11-29)
 
 
