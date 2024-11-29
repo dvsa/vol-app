@@ -116,7 +116,7 @@ data "aws_cognito_user_pools" "this" {
 data "aws_lb" "this" {
   for_each = toset(local.legacy_service_names)
 
-  name = "APPPP-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
+  name = "APPPP-OLCS-${each.key == "SSWEB" ? "PUB" : "PRI"}-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
