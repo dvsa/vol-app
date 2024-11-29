@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.10.1](https://github.com/dvsa/vol-app/compare/v5.10.0...v5.10.1) (2024-11-29)
+
+
+### Bug Fixes
+
+* added policy for jenkins to access asset bucket ([#476](https://github.com/dvsa/vol-app/issues/476)) ([2a4309b](https://github.com/dvsa/vol-app/commit/2a4309bd8e2c7a097348f779da4b230b97f2237f))
+* assets bucket policy ([#485](https://github.com/dvsa/vol-app/issues/485)) ([9e6a459](https://github.com/dvsa/vol-app/commit/9e6a459b662bd54ab4d45b4f48a251ce14647e39))
+* list bucket policy on assets bucket ([#486](https://github.com/dvsa/vol-app/issues/486)) ([e83835c](https://github.com/dvsa/vol-app/commit/e83835c1035756383628e139c065e5f901a58a41))
+* vol assets bucket ([#478](https://github.com/dvsa/vol-app/issues/478)) ([e28b505](https://github.com/dvsa/vol-app/commit/e28b505375e4c6883074d00a628bac67763d0e45))
+* vol assets bucket role policy ([#484](https://github.com/dvsa/vol-app/issues/484)) ([9f6aa18](https://github.com/dvsa/vol-app/commit/9f6aa187a2e425caf60331a1e7631e8360877e0a))
+
 ## [5.10.0](https://github.com/dvsa/vol-app/compare/v5.9.4-alpha.1...v5.10.0) (2024-11-26)
 
 ### Features
