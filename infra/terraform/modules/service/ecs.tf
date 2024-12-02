@@ -129,8 +129,8 @@ module "ecs_service" {
       memory_reservation = 100
     }
   }
-
   load_balancer = {
+    count = var.services[each.key].listener_rule_enable ? 1 : 0
     service = {
       target_group_arn = aws_lb_target_group.this[each.key].arn
       container_name   = each.key
