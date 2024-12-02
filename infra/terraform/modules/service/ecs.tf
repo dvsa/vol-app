@@ -135,7 +135,7 @@ module "ecs_service" {
       container_name   = each.key
       container_port   = 8080
     }
-  } : null
+  } : {}
 
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
