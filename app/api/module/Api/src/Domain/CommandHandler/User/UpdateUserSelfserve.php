@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Update User Selfserve
- */
-
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\User;
 
 use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
@@ -13,20 +9,17 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractUserCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
+use Dvsa\Olcs\Api\Domain\Exception\BadRequestException;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
-use Dvsa\Olcs\Auth\Adapter\CognitoAdapter;
 use Dvsa\Olcs\Auth\Service\PasswordService;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Doctrine\ORM\Query;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
-/**
- * Update User Selfserve
- */
 final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
     TransactionedInterface,
     CacheAwareInterface,
@@ -34,6 +27,8 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
 {
     use CacheAwareTrait;
     use ConfigAwareTrait;
+
+    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 
@@ -64,6 +59,10 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
         $user = $this->getRepo()->fetchById($command->getId(), Query::HYDRATE_OBJECT, $command->getVersion());
 
         $data = $command->getArrayCopy();
+
+        if ($data['permission'] !== User::PERMISSION_ADMIN && $user->isLastOperatorAdmin()) {
+            throw new BadRequestException(self::ADMIN_ROLE_ERROR);
+        }
 
         // populate roles based on the user type and permission
         $data['roles'] = User::getRolesByUserType($user->getUserType(), $data['permission']);
@@ -108,7 +107,14 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
         $result->addId('user', $userId);
         $result->addMessage('User updated successfully');
 
-        $this->clearUserCaches([$userId]);
+        $organisation = $user->getRelatedOrganisation();
+        $userId = $user->getId();
+
+        if ($organisation instanceof Organisation) {
+            $this->clearOrganisationCaches($organisation);
+        } else {
+            $this->clearUserCaches([$userId]);
+        }
 
         return $result;
     }

@@ -53,9 +53,10 @@ return [
                     'replace'       => \Oro\ORM\Query\AST\Functions\String\Replace::class,
                     'date_format'   => \Oro\ORM\Query\AST\Functions\String\DateFormat::class,
                     'ifnull'        => \DoctrineExtensions\Query\Mysql\IfNull::class,
-                ]
+                ],
             ],
-        ]
+        ],
+
     ],
     'document_share' => [
         'http' => [

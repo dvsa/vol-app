@@ -10,10 +10,6 @@ use Dvsa\Olcs\Api\Service\GovUkAccount\Data\Attributes;
  *
  * @ORM\Entity
  * @ORM\Table(name="digital_signature",
- *    indexes={
- *        @ORM\Index(name="ix_digital_signature_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_digital_signature_tma_id", columns={"tma_id"})
- *    }
  * )
  */
 class DigitalSignature extends AbstractDigitalSignature

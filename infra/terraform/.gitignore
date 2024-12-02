@@ -1,0 +1,13 @@
+#Ignore tf lock files and associated transient lock files
+.terraform.tfstate.lock.info
+.terraform.lock.hcl
+#Ignore state files, this uses a remote state
+*.tfstate
+*.tfstate.*
+#Crash logs done belong in here
+crash.log
+crash.*.log
+#Ignore plan files
+*tfplan*
+#Ignore local terraform directories
+**/.terraform/*

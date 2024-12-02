@@ -30,17 +30,24 @@ module "account" {
 
   github_oidc_subjects = concat(
     [
-      "dvsa/vol-app:ref:refs/heads/main",         # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
-      "dvsa/vol-app:environment:account-nonprod", # `.github/workflows/deploy-account.yaml`.
+      "dvsa/vol-app:ref:refs/heads/main", # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
+      "dvsa/vol-app:environment:account-nonprod",
+      "dvsa/vol-app:pull_request", # `.github/workflows/deploy-account.yaml`.
     ],
     [
       for env in local.environments : "dvsa/vol-app:environment:${env}" # `.github/workflows/deploy-environment.yaml`
     ],
   )
 
-  github_oidc_readonly_subjects = [
-    for env in local.environments : "dvsa/vol-app:pull_request"
-  ]
+  github_oidc_readonly_subjects = concat(
+    [
+      "dvsa/vol-app:ref:refs/heads/main",
+      "dvsa/vol-app:pull_request",
+      "dvsa/vol-app:environment:account-nonprod",
+      "dvsa/vol-app:environment:dev",
+      "dvsa/vol-app:environment:int",
+    ]
+  )
 
   github_oidc_readonly_role_policies = merge(
     {

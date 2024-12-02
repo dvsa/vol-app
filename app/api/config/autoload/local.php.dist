@@ -344,12 +344,12 @@ return [
       'algorithm' => 'RS256',
       'private_key' => '',
       'public_key' => '',
-      'identity_assurance_public_key' => (array)json_decode('{"kty":"EC","use":"sig","crv":"P-256","x":"NPGA7cyIKtH1nz2CJIH14s9_CtC93NwdCQcEi-ADvxg=","y":"2cTdmHAmZjighly34lXcxEw50cbKFV7FTOdZKhOG7ps=","alg":"ES256"}'),
     ],
     'redirect_uri' => [
       'logged_in' => 'http://ssweb.local.olcs.dev-dvsacloud.uk/govuk-id/loggedin',
       'logged_out' => 'http://ssweb.local.olcs.dev-dvsacloud.uk/govuk-id/loggedout',
     ],
+    'core_identity_did_document_url' => 'https://identity.integration.account.gov.uk/.well-known/did.json',
     'expected_core_identity_issuer' => 'https://identity.integration.account.gov.uk/',
     'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
   ],

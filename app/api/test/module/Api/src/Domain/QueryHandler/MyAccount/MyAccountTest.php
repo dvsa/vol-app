@@ -84,7 +84,7 @@ class MyAccountTest extends QueryHandlerTestCase
     /**
      * @dataProvider dpHandleQuery
      */
-    public function testHandleQuery($isSelfservePromptEnabled, $isEligibleForPermits, $expectedEligibleForPrompt): void
+    public function testHandleQuery($isSelfservePromptEnabled, $isEligibleForPermits, $expectedEligibleForPrompt, $canDeleteAdmin): void
     {
         $userId = 1;
 
@@ -98,6 +98,7 @@ class MyAccountTest extends QueryHandlerTestCase
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->andReturn(true);
         $mockUser->expects('isEligibleForPermits')->withNoArgs()->andReturn($isEligibleForPermits);
         $mockUser->expects('getTeam')->never();
+        $mockUser->expects('organisationCanDeleteOperatorAdmin')->withNoArgs()->andReturn($canDeleteAdmin);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
             ->andReturn($mockUser);
@@ -123,6 +124,7 @@ class MyAccountTest extends QueryHandlerTestCase
             'eligibleForPrompt' => $expectedEligibleForPrompt,
             'dataAccess' => [],
             'isInternal' => false,
+            'canDeleteOperatorAdmin' => $canDeleteAdmin,
         ];
 
         $this->mockedSmServices[CacheEncryption::class]->expects('setCustomItem')
@@ -186,6 +188,7 @@ class MyAccountTest extends QueryHandlerTestCase
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->never();
         $mockUser->expects('isEligibleForPermits')->never();
         $mockUser->expects('getTeam')->andReturn($mockTeam);
+        $mockUser->expects('organisationCanDeleteOperatorAdmin')->never();
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
             ->andReturn($mockUser);
@@ -205,6 +208,7 @@ class MyAccountTest extends QueryHandlerTestCase
             'eligibleForPrompt' => false,
             'dataAccess' => $dataAccess,
             'isInternal' => true,
+            'canDeleteOperatorAdmin' => false,
         ];
 
         $this->mockedSmServices[CacheEncryption::class]->expects('setCustomItem')
@@ -224,16 +228,19 @@ class MyAccountTest extends QueryHandlerTestCase
                 'isSelfservePromptEnabled' => false,
                 'isEligibleForPermits' => true,
                 'expectedEligibleForPrompt' => false,
+                'expectedDeleteAdmin' => false,
             ],
             [
                 'isSelfservePromptEnabled' => true,
                 'isEligibleForPermits' => false,
                 'expectedEligibleForPrompt' => false,
+                'expectedDeleteAdmin' => false,
             ],
             [
                 'isSelfservePromptEnabled' => true,
                 'isEligibleForPermits' => true,
                 'expectedEligibleForPrompt' => true,
+                'expectedDeleteAdmin' => true,
             ],
         ];
     }
@@ -252,6 +259,7 @@ class MyAccountTest extends QueryHandlerTestCase
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->never();
         $mockUser->expects('isEligibleForPermits')->never();
         $mockUser->expects('getTeam')->never();
+        $mockUser->expects('organisationCanDeleteOperatorAdmin')->never();
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
             ->andReturn($mockUser);
@@ -271,6 +279,7 @@ class MyAccountTest extends QueryHandlerTestCase
             'eligibleForPrompt' => false,
             'dataAccess' => [],
             'isInternal' => false,
+            'canDeleteOperatorAdmin' => false,
         ];
 
         $this->mockedSmServices[CacheEncryption::class]->expects('setCustomItem')

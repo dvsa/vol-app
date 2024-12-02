@@ -176,12 +176,15 @@ jobs:
   cdn:
     name: CDN
     if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    concurrency:
+      group: assets-nonprod
     needs:
       - orchestrator
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
       version: ${{ needs.get-version.outputs.assets }}
+      account: nonprod
     permissions:
       contents: read
       id-token: write
@@ -281,7 +284,7 @@ jobs:
       matrix:
         account:
           - nonprod
-          #- prod
+          - prod
         exclude:
           - account: ${{ needs.orchestrator.outputs.should-plan-nonprod-account-terraform && 'ignored' || 'nonprod' }}
           - account: ${{ needs.orchestrator.outputs.should-plan-prod-account-terraform && 'ignored' || 'prod' }}
@@ -308,7 +311,7 @@ jobs:
         environment:
           - dev
           - int
-          #- prep
+          - prep
           #- prod
         exclude:
           - environment: ${{ needs.orchestrator.outputs.should-plan-dev-environment-terraform && 'ignored' || 'dev' }}

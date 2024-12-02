@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Organisation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -616,6 +618,75 @@ class OrganisationEntityTest extends EntityTester
         $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3]));
 
         $this->assertEquals($expectedEmails, $entity->getAdminEmailAddresses());
+    }
+
+    /**
+     * two operator admins are found, so the final one can be deleted
+     */
+    public function testCanDeleteOperatorAdminTrue(): void
+    {
+        $entity = new Entity();
+
+        //not an admin user, so not checked
+        $user1 = m::mock(OrganisationUser::class)->makePartial();
+        $user1->setIsAdministrator('N');
+        $user1->expects('getUser->isOperatorAdministrator')->never();
+
+        //the first operator admin
+        $user2 = m::mock(OrganisationUser::class)->makePartial();
+        $user2->setIsAdministrator('Y');
+        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
+
+        //administrator, but not operator administrator - skipped
+        $user3 = m::mock(OrganisationUser::class)->makePartial();
+        $user3->setIsAdministrator('Y');
+        $user3->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        //the second operator admin
+        $user4 = m::mock(OrganisationUser::class)->makePartial();
+        $user4->setIsAdministrator('Y');
+        $user4->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
+
+        //already found two operator admins, so this user isn't checked
+        $user5 = m::mock(OrganisationUser::class)->makePartial();
+        $user5->setIsAdministrator('Y');
+        $user5->expects('getUser->isOperatorAdministrator')->never();
+
+        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3, $user4, $user5]));
+
+        $this->assertTrue($entity->canDeleteOperatorAdmin());
+    }
+
+    /**
+     * only one operator admin is found, so the final operator admin can't be deleted
+     */
+    public function testCanDeleteOperatorAdminFalse(): void
+    {
+        $entity = new Entity();
+
+        //not an admin user, so not checked
+        $user1 = m::mock(OrganisationUser::class)->makePartial();
+        $user1->setIsAdministrator('N');
+        $user1->expects('getUser->isOperatorAdministrator')->never();
+
+        //the first operator admin
+        $user2 = m::mock(OrganisationUser::class)->makePartial();
+        $user2->setIsAdministrator('Y');
+        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
+
+        //administrator, but not operator administrator - skipped
+        $user3 = m::mock(OrganisationUser::class)->makePartial();
+        $user3->setIsAdministrator('Y');
+        $user3->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        //the second operator admin
+        $user4 = m::mock(OrganisationUser::class)->makePartial();
+        $user4->setIsAdministrator('Y');
+        $user4->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3, $user4]));
+
+        $this->assertFalse($entity->canDeleteOperatorAdmin());
     }
 
     /**

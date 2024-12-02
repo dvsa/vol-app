@@ -89,6 +89,11 @@ final class RegisterUserSelfserve extends AbstractUserCommandHandler implements
             )
         );
 
+        //if the user wasn't created by a transport consultant
+        if ($command->getCreatedByConsultant() !== true) {
+            $user->agreeTermsAndConditions();
+        }
+
         $result = new Result();
 
         $this->getRepo()->save($user);

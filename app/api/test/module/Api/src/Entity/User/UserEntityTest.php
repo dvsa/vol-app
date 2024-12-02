@@ -123,6 +123,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals('DVSA', $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function dpCreateInternal()
@@ -194,6 +195,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals('DVSA', $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function dpUpdateInternal()
@@ -210,10 +212,10 @@ class UserEntityTest extends EntityTester
     /**
      * @dataProvider dpOperatorAdminRoles
      */
-    public function testCreateTransportManager(string $adminRoleAsString): void
+    public function testCreateTransportManager(): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
-        $adminRole->setRole($adminRoleAsString);
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_ADMIN);
 
         $orgName = 'Org Name';
         $org = m::mock(OrganisationEntity::class)->makePartial();
@@ -248,6 +250,9 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertTrue($entity->isAdministrator());
+        $this->assertTrue($entity->isOperatorAdministrator());
+        $this->assertFalse($entity->isConsultantAdministrator());
     }
 
     public function testUpdateTransportManager()
@@ -308,6 +313,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('N', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function testCreatePartner()
@@ -349,6 +355,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function testUpdatePartner()
@@ -410,6 +417,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function testCreateLocalAuthority()
@@ -451,6 +459,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     public function testUpdateLocalAuthority()
@@ -512,15 +521,16 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $entity->getOrganisationUsers()->count());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     /**
      * @dataProvider dpOperatorAdminRoles
      */
-    public function testCreateOperator(string $adminRoleAsString): void
+    public function testCreateOperatorAdmin(): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
-        $adminRole->setRole($adminRoleAsString);
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_ADMIN);
 
         $orgName = 'Org Name';
         $org = m::mock(OrganisationEntity::class)->makePartial();
@@ -555,9 +565,55 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertTrue($entity->isAdministrator());
+        $this->assertTrue($entity->isOperatorAdministrator());
+        $this->assertFalse($entity->isConsultantAdministrator());
     }
 
-    public function testUpdateOperator()
+    public function testCreateTransportConsultant(): void
+    {
+        $adminRole = m::mock(RoleEntity::class)->makePartial();
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_TC);
+
+        $orgName = 'Org Name';
+        $org = m::mock(OrganisationEntity::class)->makePartial();
+        $org->setName($orgName);
+
+        $data = [
+            'loginId' => 'loginId',
+            'roles' => [$adminRole],
+            'translateToWelsh' => 'N',
+            'accountDisabled' => 'Y',
+            'team' => m::mock(TeamEntity::class),
+            'transportManager' => m::mock(TransportManagerEntity::class),
+            'partnerContactDetails' => m::mock(ContactDetailsEntity::class),
+            'localAuthority' => m::mock(LocalAuthorityEntity::class),
+            'organisations' => [$org],
+        ];
+
+        $entity = Entity::create('pid', Entity::USER_TYPE_OPERATOR, $data);
+
+        $this->assertEquals($data['loginId'], $entity->getLoginId());
+        $this->assertEquals($data['roles'], $entity->getRoles()->toArray());
+        $this->assertEquals($data['translateToWelsh'], $entity->getTranslateToWelsh());
+        $this->assertEquals($data['accountDisabled'], $entity->getAccountDisabled());
+        $this->assertInstanceOf(\DateTime::class, $entity->getDisabledDate());
+
+        $this->assertEquals(Entity::USER_TYPE_OPERATOR, $entity->getUserType());
+        $this->assertEquals(null, $entity->getTeam());
+        $this->assertEquals(null, $entity->getTransportManager());
+        $this->assertEquals(null, $entity->getPartnerContactDetails());
+        $this->assertEquals(null, $entity->getLocalAuthority());
+        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
+        $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
+        $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertTrue($entity->isAdministrator());
+        $this->assertFalse($entity->isOperatorAdministrator());
+        $this->assertTrue($entity->isConsultantAdministrator());
+    }
+
+    public function testUpdateOperatorUser()
     {
         $nonAdminRole = m::mock(RoleEntity::class)->makePartial();
         $nonAdminRole->setRole(RoleEntity::ROLE_OPERATOR_USER);
@@ -615,6 +671,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('N', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
+        $this->assertFalse($entity->isAdministrator());
     }
 
     /**
@@ -1408,5 +1465,67 @@ class UserEntityTest extends EntityTester
             [RoleEntity::ROLE_OPERATOR_ADMIN],
             [RoleEntity::ROLE_OPERATOR_TC],
         ];
+    }
+
+    public function testAgreeTermsAndConditions(): void
+    {
+        $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
+        $this->assertFalse($user->hasAgreedTermsAndConditions());
+        $user->agreeTermsAndConditions();
+        $this->assertTrue($user->hasAgreedTermsAndConditions());
+    }
+
+    public function testIsNotLastOperatorAdmin(): void
+    {
+        $adminRole = m::mock(RoleEntity::class)->makePartial();
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_ADMIN);
+
+        $org = m::mock(OrganisationEntity::class)->makePartial();
+        $org->expects('canDeleteOperatorAdmin')->withNoArgs()->andReturnTrue();
+
+        $data = [
+            'loginId' => 'loginId',
+            'roles' => [$adminRole],
+            'organisations' => [$org],
+        ];
+
+        $entity = Entity::create('pid', Entity::USER_TYPE_OPERATOR, $data);
+        $this->assertFalse($entity->isLastOperatorAdmin());
+    }
+
+    public function testIsLastOperatorAdmin(): void
+    {
+        $adminRole = m::mock(RoleEntity::class)->makePartial();
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_ADMIN);
+
+        $org = m::mock(OrganisationEntity::class)->makePartial();
+        $org->expects('canDeleteOperatorAdmin')->withNoArgs()->andReturnFalse();
+
+        $data = [
+            'loginId' => 'loginId',
+            'roles' => [$adminRole],
+            'organisations' => [$org],
+        ];
+
+        $entity = Entity::create('pid', Entity::USER_TYPE_OPERATOR, $data);
+        $this->assertTrue($entity->isLastOperatorAdmin());
+    }
+
+    public function testTransportConsultantNeverLastAdministrator(): void
+    {
+        $adminRole = m::mock(RoleEntity::class)->makePartial();
+        $adminRole->setRole(RoleEntity::ROLE_OPERATOR_TC);
+
+        $org = m::mock(OrganisationEntity::class)->makePartial();
+        $org->expects('canDeleteOperatorAdmin')->never();
+
+        $data = [
+            'loginId' => 'loginId',
+            'roles' => [$adminRole],
+            'organisations' => [$org],
+        ];
+
+        $entity = Entity::create('pid', Entity::USER_TYPE_OPERATOR, $data);
+        $this->assertFalse($entity->isLastOperatorAdmin());
     }
 }

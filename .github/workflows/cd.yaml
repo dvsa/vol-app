@@ -177,15 +177,18 @@ jobs:
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
-  cdn:
+  cdn-nonprod:
     name: CDN
     if: ${{ needs.orchestrator.outputs.should-build-assets }}
+    concurrency:
+      group: assets-nonprod
     needs:
       - orchestrator
       - get-version
     uses: ./.github/workflows/assets.yaml
     with:
       push: true
+      account: nonprod
       version: ${{ needs.get-version.outputs.assets }}
     permissions:
       contents: read
@@ -278,7 +281,7 @@ jobs:
       - get-version
       - orchestrator
       - docker
-      - cdn
+      - cdn-nonprod
       - terraform-account-nonprod
     uses: ./.github/workflows/deploy-environment.yaml
     with:
@@ -303,6 +306,11 @@ jobs:
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
     permissions:
       contents: write
       id-token: write
@@ -338,9 +346,14 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@fail
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
     permissions:
       contents: write
       id-token: write
@@ -370,6 +383,23 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
+
+  cdn-prod:
+    name: CDN
+    if: ${{ needs.orchestrator.outputs.should-build-assets && needs.release-please.outputs.release_created }}
+    concurrency:
+      group: assets-prod
+    needs:
+      - orchestrator
+      - get-version
+    uses: ./.github/workflows/assets.yaml
+    with:
+      push: true
+      account: prod
+      version: ${{ needs.get-version.outputs.assets }}
+    permissions:
+      contents: read
+      id-token: write
 
   terraform-account-prod:
     name: Account (prod)
@@ -415,6 +445,24 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
+
+  test_prep:
+    name: Run Tests on PREP
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
+    needs:
+      - terraform_env_prep
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    with:
+      platform_env: prep
+      aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
 
   terraform_env_prod:
     name: Environment (prod)

@@ -74,6 +74,17 @@ return [
                 //'sql_logger' => 'DoctrineLogger',
             ]
         ],
+        'migrations' => [
+            'em' => 'default',
+            'orm_default' => [
+                'directory' => 'data/Migrations',
+                'namespace' => 'Migrations',
+                'table'     => 'migrations',
+                'column'    => 'version',
+                'all_or_nothing' => true,
+                'check_database_platform' => true,
+            ],
+        ],
     ],
 
     // Companies house XML gateway credentials
@@ -306,7 +317,7 @@ return [
             'oauth2' => [
                 'client_id' => '%olcs_txc_client_id%',
                 'client_secret' => '%olcs_txc_client_secret%',
-                'token_url' => '%olcs_txc_token_url%',
+                'token_url' => '',
                 'scope' => '%olcs_txc_scope%',
                 'proxy' => 'http://%shd_proxy%',
                 'service_name' => 'TransXchange',
@@ -332,7 +343,7 @@ return [
     'nr' => [
         // @to-do currently waiting on the actual nr address
         'inr_service' => [
-            'uri' => '%olcs_natreg_uri%',
+            'uri' => '',
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'options' => [
                 'sslcert' => '/opt/dvsa/inr/certs/inr_client_cert.pem',
@@ -348,7 +359,7 @@ return [
             ]
         ],
         'repute_url' => [
-            'uri' => '%olcs_natreg_repute%'
+            'uri' => ''
         ],
     ],
 
@@ -425,7 +436,7 @@ return [
     // Nysiis configuration
     'nysiis' => [
         'rest' => [
-            'uri' => 'http://localhost:8080/nysiis-%olcs_nysiis_version%/nysiis/convert',
+            'uri' => 'http://localhost:8080/nysiis-/nysiis/convert',
             'options' => [
                 'timeout' => 5
             ]
@@ -583,12 +594,12 @@ return [
             'algorithm' => '%govuk_account_private_key_algorithm%',
             'private_key' => '%govuk_account_private_key%',
             'public_key' => '%govuk_account_public_key%',
-            'identity_assurance_public_key' => '%govuk_account_id_assurance_public_key%',
         ],
         'redirect_uri' => [
             'logged_in' => '%olcs_ss_uri%/govuk-id/loggedin',
             'logged_out' => '%olcs_ss_uri%/govuk-id/loggedout',
         ],
+        'core_identity_did_document_url' => '%govuk_account_core_identity_did_document_url%',
         'expected_core_identity_issuer' => '%govuk_account_id_assurance_issuer%',
         'proxy' => 'http://%shd_proxy%',
     ],

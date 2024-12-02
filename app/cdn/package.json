@@ -13,7 +13,7 @@
     "last 2 versions"
   ],
   "dependencies": {
-    "@dvsa/cookie-manager": "^1.0.*",
+    "@dvsa/cookie-manager": "^1.1.2",
     "autoprefixer": "^10.4.20",
     "chosen-npm": "^1.4.2",
     "govuk-frontend": "^5.7.1",
