@@ -130,12 +130,11 @@ module "ecs_service" {
     }
   }
   load_balancer = {
-    count = var.services[each.key].listener_rule_enable ? 1 : 0
-    service = {
+    service = var.services[each.key].listener_rule_enable ? {
       target_group_arn = aws_lb_target_group.this[each.key].arn
       container_name   = each.key
       container_port   = 8080
-    }
+    } : {}
   }
 
   create_security_group = false
