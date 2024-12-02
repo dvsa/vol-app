@@ -15,7 +15,7 @@ module "assets" {
 
 data "aws_iam_policy_document" "s3_policy" {
   statement {
-    actions   = ["s3:GetObject", "s3:ListBucket"]
+    actions   = ["s3:GetObject"]
     resources = ["${module.assets[0].s3_bucket_arn}/*"]
 
     principals {
