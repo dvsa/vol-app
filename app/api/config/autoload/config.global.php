@@ -343,7 +343,7 @@ return [
     'nr' => [
         // @to-do currently waiting on the actual nr address
         'inr_service' => [
-            'uri' => '',
+            'uri' => '%olcs_natreg_uri%',
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'options' => [
                 'sslcert' => '/opt/dvsa/inr/certs/inr_client_cert.pem',
@@ -359,7 +359,7 @@ return [
             ]
         ],
         'repute_url' => [
-            'uri' => ''
+            'uri' => '%olcs_natreg_repute%'
         ],
     ],
 
