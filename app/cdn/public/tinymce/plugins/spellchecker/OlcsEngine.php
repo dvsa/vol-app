@@ -27,7 +27,7 @@ class OlcsEngine extends TinyMCE_SpellChecker_Engine
         header("Pragma: no-cache");
 
         $method = self::getParam("method", "spellcheck");
-        $lang = self::getParam("lang", "en_US");
+        $lang = self::getParam("lang", "en_GB");
         $text = self::getParam("text");
 
         if ($method == "spellcheck") {
