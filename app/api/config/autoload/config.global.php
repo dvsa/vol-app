@@ -317,7 +317,7 @@ return [
             'oauth2' => [
                 'client_id' => '%olcs_txc_client_id%',
                 'client_secret' => '%olcs_txc_client_secret%',
-                'token_url' => '',
+                'token_url' => '%olcs_txc_token_url%',
                 'scope' => '%olcs_txc_scope%',
                 'proxy' => 'http://%shd_proxy%',
                 'service_name' => 'TransXchange',
