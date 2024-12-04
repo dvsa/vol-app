@@ -168,7 +168,7 @@ class ConsultantRegistrationController extends AbstractController
         }
 
         return $this->prepareView('olcs/user-registration/index', [
-            'form' => $form,
+            'form' => $this->alterForm($form),
             'pageTitle' => 'register-consultant-account.form.label'
         ]);
     }
@@ -195,6 +195,23 @@ class ConsultantRegistrationController extends AbstractController
         $this->flashMessengerHelper->addErrorMessage('unknown-error');
 
         $this->redirect()->toRoute('user-registration');
+    }
+
+    private function alterForm($form)
+    {
+        // inject link into terms agreed label
+        $termsAgreed = $form->get('fields')->get('termsAgreed');
+
+        $label = $this->translationHelper->translateReplace(
+            $termsAgreed->getLabel(),
+            [
+                $this->urlHelper->fromRoute('terms-and-conditions')
+            ]
+        );
+
+        $termsAgreed->setLabel($label);
+
+        return $form;
     }
 
     /**
