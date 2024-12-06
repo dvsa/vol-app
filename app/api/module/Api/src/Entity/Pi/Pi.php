@@ -451,9 +451,9 @@ class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
     /**
      * Is this a Transport Manager Pi?
      */
-    public function isTm()
+    public function isTm(): bool
     {
-        return $this->case->isTm();
+        return $this->case instanceof CasesEntity && $this->case->isTm();
     }
 
     /**
