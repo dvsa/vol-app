@@ -317,7 +317,7 @@ return [
             'oauth2' => [
                 'client_id' => '%olcs_txc_client_id%',
                 'client_secret' => '%olcs_txc_client_secret%',
-                'token_url' => '',
+                'token_url' => '%olcs_txc_token_url%',
                 'scope' => '%olcs_txc_scope%',
                 'proxy' => 'http://%shd_proxy%',
                 'service_name' => 'TransXchange',
@@ -343,7 +343,7 @@ return [
     'nr' => [
         // @to-do currently waiting on the actual nr address
         'inr_service' => [
-            'uri' => '',
+            'uri' => '%olcs_natreg_uri%',
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'options' => [
                 'sslcert' => '/opt/dvsa/inr/certs/inr_client_cert.pem',
@@ -359,7 +359,7 @@ return [
             ]
         ],
         'repute_url' => [
-            'uri' => ''
+            'uri' => '%olcs_natreg_repute%'
         ],
     ],
 
