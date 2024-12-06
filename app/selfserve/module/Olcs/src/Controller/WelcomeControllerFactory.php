@@ -6,6 +6,7 @@ namespace Olcs\Controller;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -19,6 +20,8 @@ class WelcomeControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        return new WelcomeController($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+        $urlHelper = $container->get(UrlHelperService::class);
+
+        return new WelcomeController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $urlHelper);
     }
 }

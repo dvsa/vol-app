@@ -6,6 +6,7 @@ namespace Olcs\Controller;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\User\AgreeTerms as AgreeTermsCmd;
 use Laminas\Http\Response;
@@ -38,7 +39,8 @@ class WelcomeController extends AbstractSelfserveController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
-        MapperManager $mapperManager
+        MapperManager $mapperManager,
+        private readonly UrlHelperService $urlHelper
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
@@ -55,5 +57,22 @@ class WelcomeController extends AbstractSelfserveController
         if ($this->currentUser()->getIdentity()->hasAgreedTerms()) {
             return $this->conditionalDisplayNotMet('index');
         }
+    }
+
+    public function alterForm($form)
+    {
+        // inject link into terms agreed label
+        $termsAgreed = $form->get('fields')->get('termsAgreed');
+
+        $label = $this->translationHelper->translateReplace(
+            $termsAgreed->getLabel(),
+            [
+                $this->urlHelper->fromRoute('terms-and-conditions')
+            ]
+        );
+
+        $termsAgreed->setLabel($label);
+
+        return parent::alterForm($form);
     }
 }
