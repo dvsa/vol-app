@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.11.1](https://github.com/dvsa/vol-app/compare/v5.11.0...v5.11.1) (2024-12-06)
+
+
+### Bug Fixes
+
+* 5936 lb toggle on ecs service ([#494](https://github.com/dvsa/vol-app/issues/494)) ([b6f0894](https://github.com/dvsa/vol-app/commit/b6f0894ad5b31e8e28f2f29a41a874e849e8fb81))
+* default language for spellcheck to en_GB ([#482](https://github.com/dvsa/vol-app/issues/482)) ([22cb471](https://github.com/dvsa/vol-app/commit/22cb4714301f207fc3e2c744e754f5bd153e6d01))
+* fix null previous image tags being provided to rollback step ([#481](https://github.com/dvsa/vol-app/issues/481)) ([909e697](https://github.com/dvsa/vol-app/commit/909e697f690f7eb18cbb59ce7f2bc1c7ad9750c0))
+* pi records without a case no longer throw errors VOL-5297 ([#499](https://github.com/dvsa/vol-app/issues/499)) ([5b01069](https://github.com/dvsa/vol-app/commit/5b01069b92ab1ab3015a9c64aeb96de2234efb0b))
+* replace inr/natreg config placeholders ([#497](https://github.com/dvsa/vol-app/issues/497)) ([2b7d1a6](https://github.com/dvsa/vol-app/commit/2b7d1a6dec3f2644967d07bd819d0a4597fce325))
+* terms and conditions link populated on TC journey VOL-5943 ([#498](https://github.com/dvsa/vol-app/issues/498)) ([7d29ff6](https://github.com/dvsa/vol-app/commit/7d29ff612d6ca0049a95ff18eccbbaa625897751))
+
 ## [5.11.0](https://github.com/dvsa/vol-app/compare/v5.10.2...v5.11.0) (2024-11-29)
 
 
