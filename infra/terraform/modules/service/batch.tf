@@ -15,8 +15,8 @@ locals {
     }
   }
   images = {
-    cli : "${var.batch.repository}:${var.batch.version}",
-    search : "${var.batch.search_repository}:${var.batch.search_version}"
+    "cli" : "${var.batch.repository}:${var.batch.version}",
+    "search" : "${var.batch.search_repository}:${var.batch.search_version}"
   }
 
   jobs = { for job in var.batch.jobs : job.name => {
@@ -27,7 +27,7 @@ locals {
 
     container_properties = jsonencode({
       command = concat(job.binaries, job.commands)
-      image   = job.image == "" ? local.images[cli.value] : local.images[[job.image].value]
+      image   = local.images[(job.image).value]
       environment = [
         {
           name  = "ENVIRONMENT_NAME"
