@@ -266,6 +266,9 @@ module "service" {
     version    = var.cli_image_tag
     repository = data.aws_ecr_repository.this["cli"].repository_url
 
+    search_version    = var.search_image_tag
+    search_repository = data.aws_ecr_repository.this["search"].repository_url
+
     task_iam_role_statements = local.task_iam_role_statements
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
