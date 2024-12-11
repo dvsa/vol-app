@@ -5,47 +5,47 @@ namespace Olcs\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Name("ExistingOperatorLicence")
- * @Form\Attributes({"method":"post"})
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Type("\Common\Form\Elements\Types\RadioVertical")
+ * @Form\Name("existing-operator-licence")
+ * @Form\Options({
+ *     "radio-element": "existingOperatorLicence"
+ * })
  */
 class ExistingOperatorLicence
 {
-
-
     /**
-     * @Form\Name("existingOperatorLicence")
+     *
      * @Form\Attributes({
-     *     "radios_wrapper_attributes": {"class": "govuk-radios--conditional", "data-module":"radios"}
-     * })
-     * @Form\Attributes({"id":"existingOperatorLicence", "placeholder":"", "required":false})
+     *      "radios_wrapper_attributes": {"class": "govuk-radios", "data-module":"govuk-radios"}
+     *  })
      * @Form\Options({
      *     "label": "user-registration.field.existing-operator-licence.label",
-     *     "label_attributes": {
-     *         "class":"form-control form-control--radio form-control--advanced"
-     *     },
      *     "hint": "user-registration.field.existing-operator-licence.hint",
-     *     "value_options": {
-     *          "N": {
-     *              "label": "select-option-no",
-     *              "value": "N",
+     *     "value_options":{
+     *      "NoLicence":{
+     *          "label":"select-option-no",
+     *          "value":"N",
      *
-     *          },
-     *          "Y": {
-     *              "label": "select-option-yes",
-     *              "value": "Y",
-     *              "attributes": {"data-aria-controls":"conditional-", "id":"existingOperatorLicenceApplication"},
-     *          }
-     *      }
+     *
+     *      },
+     *      "licence":{
+     *         "label":"select-option-yes",
+     *         "attributes": {"data-aira-controls": "conditional-existingOperatorLicenceApplication"},
+     *          "value":"Y"
+     *       }
+     *     },
+     *     "label_attributes": {
+     *          "class":"form-control form-control--radio form-control--advanced"
+     *      },
      * })
-     * @Form\Type("\Common\Form\Elements\Types\Radio")
      * @Form\Required(true)
+     * @Form\Type("\Common\Form\Elements\Types\Radio")
      */
     public $existingOperatorLicence = null;
 
 
     /**
-     * @Form\ComposedObject("\Olcs\Form\Model\Form\Fieldset\ExistingLicenceApplicationNumber")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ExistingOperatorLicenceApplication")
      */
-    public $existingLicenceApplicationNumber = null;
+    public $licenceContent = null;
 }

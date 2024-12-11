@@ -2,13 +2,17 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
+use Laminas\Form\Annotation as Form;
+
 /**
- * @Form\Name("existing-licence-application")
+ * @Form\Name("existingOperatorLicenceApplication")
+ *
  */
 class ExistingOperatorLicenceApplication
 {
 
 /**
+ *
  * @Form\Required(true)
  * @Form\Type("Text")
  * @Form\Options({
@@ -17,15 +21,7 @@ class ExistingOperatorLicenceApplication
  * })
  * @Form\Filter("Laminas\Filter\StringTrim")
  * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
- * @Form\Validator("ValidateIf",
- *      options={
- *          "context_field": "existingOperatorLicence",
- *          "context_values": {"Y"},
- *          "validators": {
- *              {"name": "Laminas\Validator\StringLength", "options": {"min": 2, "max": 35}}
- *          }
- *      }
- * )
+ * @Form\Validator({"name": "Laminas\Validator\StringLength", "options": {"min":"2","max": "35"}})
  */
 public $licenceNumber = null;
 
