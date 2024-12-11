@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Global_Types.xsd"/>
+	<xs:complexType name="cgrMemberStateType">
+		<xs:attribute name="memberStateCode" type="globalMemberStateCodeType" use="required">
+			<xs:annotation>
+				<xs:documentation>The country code of the Member State responding to the Check Good Repute request.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="statusCode" type="globalSearchResponseStatusCodeType" use="required">
+			<xs:annotation>
+				<xs:documentation>The status code of the Check Good Repute response. One of:
+'Found'
+'NotFound'
+'Timeout'
+'NotAvailable'</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="statusMessage" type="globalStatusMessageType" use="optional">
+			<xs:annotation>
+				<xs:documentation>An explanatory message (if necessary) adding context to the status code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="cgrTransportManagerFoundType">
+		<xs:attributeGroup ref="globalNameGroup"/>
+		<xs:attribute name="dateOfBirth" type="globalDateType" use="required">
+			<xs:annotation id="dateOfBirth">
+				<xs:documentation>The date of birth of the transport manager.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="placeOfBirth" type="globalPlaceOfBirthType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The place of birth of the transport manager.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="cgrTransportManagerResponseType">
+		<xs:attribute name="respondingAuthority" type="globalAuthorityIdentifierType" use="required">
+			<xs:annotation>
+				<xs:documentation>The competent authority or administration responding to the search request or notification.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="searchMethod" use="required">
+			<xs:annotation>
+				<xs:documentation>The search method used to find this particular transport manager. One of:
+'CPC'
+'NYSIIS'
+'Local'</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="CPC"/>
+					<xs:enumeration value="NYSIIS"/>
+					<xs:enumeration value="Local"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="cgrTransportManagerSearchType">
+		<xs:complexContent>
+			<xs:extension base="globalSearchNameType">
+        <xs:sequence>
+          <xs:element name="TransportManagerAddressDetails" type="globalAddressDetailsType" minOccurs="0"/>
+        </xs:sequence>
+				<xs:attribute name="familyNameSearchKey" type="globalNameType" use="optional">
+					<xs:annotation>
+						<xs:documentation>The NYSIIS key (of the family name) that must be used for any name searches.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="firstNameSearchKey" type="globalNameType" use="optional">
+					<xs:annotation>
+						<xs:documentation>The NYSIIS key (of the first first name) that must be used for any name searches.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="cgrTransportUndertakingVehiclesType">
+		<xs:attribute name="totalManagedUndertakings" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The total number of transport undertakings managed by the transport manager.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="totalManagedVehicles" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The total number of vehicles (across all managed transport undertakings) managed by the transport manager.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

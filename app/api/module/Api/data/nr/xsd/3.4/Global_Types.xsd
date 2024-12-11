@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:annotation id="versionControl">
+    <xs:documentation>3.0 Changes</xs:documentation>
+    <xs:documentation>2022-07-29 Modify for ERRU 3 changes</xs:documentation>
+    <xs:documentation>3.1 Changes</xs:documentation>
+    <xs:documentation>2023-08-25 CheckTransportUndertakingData_Response - allow multiple TransportUndertaking elements</xs:documentation>
+    <xs:documentation>2023-09-05 allow NotifyUnfitness broadcast</xs:documentation>
+    <xs:documentation>2023-09-06 CheckTransportUndertakingData_Response - add @searchMethod</xs:documentation>
+    <xs:documentation>2023-09-12 CheckTransportUndertakingData - add @requestAllVehicles</xs:documentation>
+    <xs:documentation>2023-09-13 CheckTransportUndertakingData_Response - allow multiple CertifiedTrueCopy elements</xs:documentation>
+    <xs:documentation>2023-09-25 The version of the schemas is raised to 3.1</xs:documentation>
+    <xs:documentation>2023-09-26 CheckGoodRepute_Response - @placeOfBirth is optional</xs:documentation>
+    <xs:documentation>2023-09-27 CheckGoodRepute_Response - TransportManagerAddressDetails is optional</xs:documentation>
+    <xs:documentation>2023-09-28 CheckTransportUndertakingData_Response - add @trueCopyWithdrawalDate</xs:documentation>
+    <xs:documentation>2023-09-29 CheckTransportUndertakingData_Response - remove @trueCopyIssueCountry</xs:documentation>
+    <xs:documentation>2023-10-02 NotifyCheckResult_Request - add @appealPossible</xs:documentation>
+    <xs:documentation>2023-10-03 CheckGoodRepute - add Transport Manager Address to search criteria</xs:documentation>
+    <xs:documentation>2023-10-05 CheckTransportUndertakingData - enforce at least two search parameters</xs:documentation>
+    <xs:documentation>2023-10-06 NotifyCheckResult_Request - add option CleanCheck to CheckSummary/@checkResult enum</xs:documentation>
+    <xs:documentation>2023-10-09 Set utf-8 for all XSD schemas</xs:documentation>
+    <xs:documentation>2023-10-12 Modify namespace to https://webgate.ec.testa.eu/move-hub/erru/3.1</xs:documentation>
+    <xs:documentation>2023-10-16 CheckGoodRepute - rename search criteria Address to TransportManagerAddressDetails</xs:documentation>
+    <xs:documentation>3.2 Changes</xs:documentation>
+    <xs:documentation>2023-12-12 The version of the schemas is raised to 3.2</xs:documentation>
+    <xs:documentation>2023-12-12 NotifyCheckResult_Request - add @notExecutedReason</xs:documentation>
+    <xs:documentation>3.3 Changes</xs:documentation>
+    <xs:documentation>2024-03-21 The version of the schemas is raised to 3.3</xs:documentation>
+    <xs:documentation>2024-03-21 NotifyCheckResult_Request - add missing infringement types</xs:documentation>
+    <xs:documentation>2024-04-18 Remove Exchange option from the request purpose xsd description (documentation tag)</xs:documentation>
+    <xs:documentation>2024-04-18 CIA option changed to CA on the request source xsd description (documentation tag)</xs:documentation>
+    <xs:documentation>3.4 Changes</xs:documentation>
+    <xs:documentation>2024-07-01 The version of the schemas is raised to 3.4</xs:documentation>
+    <xs:documentation>2024-07-01 NotifyCheckResult_Request - infringement types 830 and 831 were removed</xs:documentation>
+  </xs:annotation>
+  <xs:complexType name="globalAddressDetailsType">
+    <xs:attribute name="address" use="required">
+      <xs:annotation>
+        <xs:documentation>The street address of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:minLength value="1"/>
+          <xs:maxLength value="150"/>
+          <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="postCode" use="required">
+      <xs:annotation>
+        <xs:documentation>The post code of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:minLength value="1"/>
+          <xs:maxLength value="10"/>
+          <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="city" type="globalCityType" use="required">
+      <xs:annotation>
+        <xs:documentation>The city of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="country" type="globalMemberStateCodeType" use="required">
+      <xs:annotation>
+        <xs:documentation>The country of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalBodyRequestType">
+    <xs:attributeGroup ref="globalBusinessCaseOriginatingAuthGroup"/>
+    <xs:attributeGroup ref="globalSourcePurposeGroup"/>
+  </xs:complexType>
+  <xs:complexType name="globalBodyResponseType">
+    <xs:attributeGroup ref="globalBusinessCaseOriginatingAuthGroup"/>
+    <xs:attribute name="respondingAuthority" type="globalAuthorityIdentifierType" use="required">
+      <xs:annotation>
+        <xs:documentation>The competent authority or administration responding to the search request or notification.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalBodyBroadcastResponseType">
+    <xs:attributeGroup ref="globalBusinessCaseOriginatingAuthGroup"/>
+  </xs:complexType>
+  <xs:complexType name="globalCertificateDetailsType">
+    <xs:attribute name="certificateNumber" type="globalCertificateNumberType" use="required">
+      <xs:annotation>
+        <xs:documentation>The serial number of the certificate of professional competence issued to the transport manager.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="certificateIssueDate" type="globalDateType" use="required">
+      <xs:annotation>
+        <xs:documentation>The issue date of the certificate of professional competence.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="certificateIssueCountry" type="globalMemberStateCodeType" use="required">
+      <xs:annotation>
+        <xs:documentation>The issue country of the certificate of professional competencer.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalCertificateDetailsResponseType">
+    <xs:complexContent>
+      <xs:extension base="globalCertificateDetailsType">
+        <xs:attribute name="certificateValidity" type="globalCertificateValidity">
+          <xs:annotation>
+            <xs:documentation>The validity of the certificate of professional competence (Valid or Invalid) according to the issuing member state.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="globalCommunityLicenceBasicDetailsType">
+    <xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="required">
+      <xs:annotation>
+        <xs:documentation>The number of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="communityLicenceStatus" type="globalCommunityLicenceStatusType" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The status of the community licence of the transport undertaking as recorded in the register. One of:
+          - ‘Active’
+          - ‘Suspended’
+          - ‘Withdrawn’
+          - ‘Expired’
+          - ‘LostOrStolen’
+          - ‘Annulled’
+          - ‘Returned’
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalHeaderType">
+    <xs:attribute name="version" type="xs:string" use="required" fixed="3.4">
+      <xs:annotation id="version">
+        <xs:documentation>The official version of the XML specifications will be specified through the namespace defined in the message XSD and in the version attribute of the Header element of any XML message. The version number (‘n.m’) will be defined as a fixed value in every release of the XML Schema Definition file (xsd).</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="testId" type="globalTestIdType" use="optional">
+      <xs:annotation id="testId">
+        <xs:documentation>Optional id for testing. The originator of the test will populate the id and all participants in the workflow will forward/return the same id. In production it should be ignored and will not be used if it is supplied.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="technicalId" type="globalUuidType" use="required">
+      <xs:annotation id="technicalId">
+        <xs:documentation>A UUID uniquely identifying each individual message. The sender generates a UUID and populates this attribute. This data is not used in any business capacity.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="workflowId" type="globalUuidType" use="required">
+      <xs:annotation id="workflowId">
+        <xs:documentation>The workflowId is a UUID and should be generated by the requesting Member State. This id is then used in all messages to correlate the workflow.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="sentAt" type="globalDateTimeType" use="required">
+      <xs:annotation id="sentAt">
+        <xs:documentation>The date and time (UTC) that the message was sent.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="timeoutValue" type="globalDateTimeType" use="optional">
+      <xs:annotation id="timeoutValue">
+        <xs:documentation>This is an optional date and time (in UTC format) attribute. This value will be set only by the Hub for forwarded requests. This will inform the responding Member State of the time when the request will be timed out. This value is not required in requests sent to the Hub and neither in response messages. It is optional so that the same header definition can be used for all message types regardless of whether or not the timeoutValue attribute is required.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="from" type="globalMemberStateCodeType" use="required">
+      <xs:annotation id="from">
+        <xs:documentation>The ISO 3166-1 Alpha 2 code of the Member State sending the message or ‘EU’.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="to" type="globalMemberStateCodeType" use="required">
+      <xs:annotation id="to">
+        <xs:documentation>The ISO 3166-1 Alpha 2 code of the Member State to which the message is being sent. In the case of a CGR broadcast search this attribute will contain ZZ, and for EN messages being sent to the hub it will contain ‘EU’.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalSearchNameType">
+    <xs:attributeGroup ref="globalNameGroup"/>
+    <xs:attribute name="dateOfBirth" type="globalDateType" use="required">
+      <xs:annotation id="dateOfBirth">
+        <xs:documentation>The date of birth of the transport manager.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="placeOfBirth" type="globalPlaceOfBirthType" use="optional">
+      <xs:annotation>
+        <xs:documentation>The place of birth of the transport manager.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalTransportManagerFitnessStartDateType">
+    <xs:attribute name="unfitStartDate" type="globalDateType" use="optional">
+      <xs:annotation>
+        <xs:documentation>If the transport manager has been declared unfit, the start of the period of unfitness.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalTransportManagerFitnessType">
+    <xs:complexContent>
+      <xs:extension base="globalTransportManagerFitnessStartDateType">
+        <xs:attribute name="fitnessStatus" use="required">
+          <xs:annotation>
+            <xs:documentation>
+              Declaration of the transport manager's fitness. One of:
+              'Fit'
+              'Unfit'
+            </xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="Fit"/>
+              <xs:enumeration value="Unfit"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="unfitEndDate" type="globalDateType" use="optional">
+          <xs:annotation>
+            <xs:documentation>If the transport manager has been declared unfit, the end of the period of unfitness.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="globalTransportUndertakingType">
+    <xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="required">
+      <xs:annotation>
+        <xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="numberOfVehicles" type="xs:nonNegativeInteger" use="required">
+      <xs:annotation>
+        <xs:documentation>The number of vehicles managed by the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="required">
+      <xs:annotation>
+        <xs:documentation>The number of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="communityLicenceStatus" type="globalCommunityLicenceStatusType" use="required">
+      <xs:annotation>
+        <xs:documentation>
+          The status of the community licence of the transport undertaking as recorded in the register. One of:
+          - ‘Active’
+          - ‘Suspended’
+          - ‘Withdrawn’
+          - ‘Expired’
+          - ‘LostOrStolen’
+          - ‘Annulled’
+          - ‘Returned’
+        </xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="globalVehicleRegistrationType">
+    <xs:attribute name="vehicleRegistrationNumber" use="required">
+      <xs:annotation>
+        <xs:documentation>The vehicle registration number for which the certified true copy of the community licence is issued.</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:maxLength value="15"/>
+          <xs:minLength value="1"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="vehicleRegistrationCountry" type="globalMemberStateCodeType" use="required">
+      <xs:annotation>
+        <xs:documentation>The country in which the vehicle is registered.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:simpleType name="globalAcknowledgementStatusCodeType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="Timeout"/>
+      <xs:enumeration value="NotAvailable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalAddressType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="150"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalAuthorityIdentifierType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalLegalFormType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalBusinessCaseIdType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="36"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCertificateNumberType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCertificateValidity">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Invalid"/>
+      <xs:enumeration value="Valid"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCityType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCommunityLicenceNumberType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCommunityLicenceStatusType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="20"/>
+      <xs:whiteSpace value="collapse"/>
+      <xs:enumeration value="Active"/>
+      <xs:enumeration value="Suspended"/>
+      <xs:enumeration value="Withdrawn"/>
+      <xs:enumeration value="Expired"/>
+      <xs:enumeration value="LostOrStolen"/>
+      <xs:enumeration value="Annulled"/>
+      <xs:enumeration value="Returned"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalRiskBandType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Red"/>
+      <xs:enumeration value="Amber"/>
+      <xs:enumeration value="Green"/>
+      <xs:enumeration value="Grey"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalCommunityLicenceType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="60"/>
+      <xs:whiteSpace value="collapse"/>
+      <xs:enumeration value="Community licence for passenger transport"/>
+      <xs:enumeration value="National licence for passenger transport"/>
+      <xs:enumeration value="Community licence for goods transport"/>
+      <xs:enumeration value="Community licence for goods transport, exclusively ≤3.5 t"/>
+      <xs:enumeration value="National licence for goods transport"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalSuspensionOrWithdrawalReasonType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="No effective and stable establishment"/>
+      <xs:enumeration value="No appropriate financial standing"/>
+      <xs:enumeration value="No requisite professional competence"/>
+      <xs:enumeration value="Not of good repute"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalDateTimeType">
+    <xs:restriction base="xs:dateTime">
+      <xs:minInclusive value="1753-01-01T00:00:00Z"/>
+      <xs:pattern value=".{19}Z"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalDateType">
+    <xs:restriction base="xs:date">
+      <xs:pattern value="\d{4}-\d{2}-\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalMemberStateCodeType">
+    <xs:restriction base="xs:token">
+      <xs:length value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalNameType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalPlaceOfBirthType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="50"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalRequestPurposeType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Issue"/>
+      <xs:enumeration value="Control"/>
+      <xs:enumeration value="Heartbeat"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalRequestSourceType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="CA"/>
+      <xs:enumeration value="RSI"/>
+      <xs:enumeration value="Hub"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalRiskRatingType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Green"/>
+      <xs:enumeration value="Amber"/>
+      <xs:enumeration value="Red"/>
+      <xs:enumeration value="Grey"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalSearchResponseStatusCodeType">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Found"/>
+      <xs:enumeration value="NotFound"/>
+      <xs:enumeration value="Timeout"/>
+      <xs:enumeration value="NotAvailable"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalStatusMessageType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="512"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalTestIdType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="8"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="globalTransportUndertakingNameType">
+    <xs:restriction base="globalNameType"/>
+  </xs:simpleType>
+  <xs:simpleType name="globalUuidType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:attributeGroup name="globalNameGroup">
+    <xs:attribute name="familyName" type="globalNameType" use="required">
+      <xs:annotation id="familyName">
+        <xs:documentation>The family name of the transport manager or driver.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="firstName" type="globalNameType" use="required">
+      <xs:annotation id="firstName">
+        <xs:documentation>The first name of the transport manager or driver.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="globalSourcePurposeGroup">
+    <xs:attribute name="requestPurpose" type="globalRequestPurposeType" use="required">
+      <xs:annotation id="requestPurpose">
+        <xs:documentation>The purpose for which the request has been made: Issue, Control, Heartbeat, Other.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="requestSource" type="globalRequestSourceType" use="required">
+      <xs:annotation id="requestSource">
+        <xs:documentation>The type of authority from which the request originated: CA, RSI, Hub, Other.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="globalBusinessCaseOriginatingAuthGroup">
+    <xs:attribute name="businessCaseId" type="globalBusinessCaseIdType" use="required">
+      <xs:annotation>
+        <xs:documentation>The business identifier / reference number / case number assigned to the workflow by the originating Member State. It is not checked for uniqueness by the Hub. It will be included on all subsequent messages in the workflow.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="originatingAuthority" type="globalAuthorityIdentifierType" use="required">
+      <xs:annotation>
+        <xs:documentation>The competent authority or administration sending the search request or notification.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:attributeGroup>
+</xs:schema>
