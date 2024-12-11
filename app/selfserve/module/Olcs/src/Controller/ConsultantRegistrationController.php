@@ -8,7 +8,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\User\RegisterConsultantAndOperator;
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
@@ -71,6 +73,28 @@ class ConsultantRegistrationController extends AbstractController
             'form' => $form,
             'pageTitle' => 'user-registration.page.title'
         ]);
+    }
+
+    private function fetchOperatorDetails(string $licenceNumber): array {
+        $response = $this->handleQuery(LicenceByNumber::create(['licenceNumber' => $licenceNumber]));
+        $result = $response->getResult();
+
+        if (!$result->isOk()) {
+            return [];
+        }
+
+        $organisation = $result->getOrganisation();
+        if (empty($organisation)) {
+            return [];
+        }
+
+        if (!$organisation->hasOperatorAdmin()) {
+            return [];
+        }
+
+
+
+        return $result;
     }
 
     /**
