@@ -11,17 +11,41 @@ use Laminas\Form\Annotation as Form;
  */
 class ExistingOperatorLicence
 {
+
+
     /**
      * @Form\Name("existingOperatorLicence")
+     * @Form\Attributes({
+     *     "radios_wrapper_attributes": {"class": "govuk-radios--conditional", "data-module":"radios"}
+     * })
+     * @Form\Attributes({"id":"existingOperatorLicence", "placeholder":"", "required":false})
      * @Form\Options({
      *     "label": "user-registration.field.existing-operator-licence.label",
+     *     "label_attributes": {
+     *         "class":"form-control form-control--radio form-control--advanced"
+     *     },
      *     "hint": "user-registration.field.existing-operator-licence.hint",
-     *     "value_options":{"N":"select-option-no", "Y":"select-option-yes"},
-     *     "label_attributes": {"class": "form-control form-control--radio form-control--inline"}
+     *     "value_options": {
+     *          "N": {
+     *              "label": "select-option-no",
+     *              "value": "N",
+     *
+     *          },
+     *          "Y": {
+     *              "label": "select-option-yes",
+     *              "value": "Y",
+     *              "attributes": {"data-aria-controls":"conditional-", "id":"existingOperatorLicenceApplication"},
+     *          }
+     *      }
      * })
+     * @Form\Type("\Common\Form\Elements\Types\Radio")
      * @Form\Required(true)
-     * @Form\Attributes({"id":"existingOperatorLicence", "placeholder":"", "required":false})
-     * @Form\Type("Radio")
      */
     public $existingOperatorLicence = null;
+
+
+    /**
+     * @Form\ComposedObject("\Olcs\Form\Model\Form\Fieldset\ExistingLicenceApplicationNumber")
+     */
+    public $existingLicenceApplicationNumber = null;
 }

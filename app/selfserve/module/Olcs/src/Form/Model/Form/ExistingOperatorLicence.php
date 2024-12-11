@@ -19,6 +19,7 @@ class ExistingOperatorLicence
      */
     public $fields = null;
 
+
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"govuk-button-group"})

@@ -59,6 +59,7 @@ class ConsultantRegistrationController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
                 if(($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
+                    //@todo checks here to see if licence / App Number has operator admin
                     $this->redirect()->toRoute('user-registration/contact-your-administrator');
                 } elseif (($formData['fields']['existingOperatorLicence'] ?? null) === 'N') {
                     $this->redirect()->toRoute('user-registration/operator-representation');
