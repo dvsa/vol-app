@@ -529,6 +529,20 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
         return $this->organisationUsers->matching($criteria);
     }
 
+    public function hasOperatorAdmin(): bool
+    {
+        $administratorUsers = $this->getAdministratorUsers();
+
+        /** @var OrganisationUserEntity $orgUser */
+        foreach ($administratorUsers as $orgUser) {
+            if ($orgUser->getUser()->isOperatorAdministrator()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * can only delete operator admin if more than one exists
      */

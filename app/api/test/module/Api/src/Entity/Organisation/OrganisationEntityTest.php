@@ -690,6 +690,50 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
+     * first user not op admin, 2nd user is op admin, 3rd user doesn't need to be checked
+     */
+    public function testHasOperatorAdminTrue(): void
+    {
+        $entity = new Entity();
+
+        $user1 = m::mock(OrganisationUser::class)->makePartial();
+        $user1->setIsAdministrator('Y');
+        $user1->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        $user2 = m::mock(OrganisationUser::class)->makePartial();
+        $user2->setIsAdministrator('Y');
+        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
+
+        $user3 = m::mock(OrganisationUser::class)->makePartial();
+        $user3->setIsAdministrator('Y');
+        $user3->expects('getUser->isOperatorAdministrator')->never();
+
+        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3]));
+
+        $this->assertTrue($entity->hasOperatorAdmin());
+    }
+
+    /**
+     * no operator admins are found
+     */
+    public function testHasOperatorAdminFalse(): void
+    {
+        $entity = new Entity();
+
+        $user1 = m::mock(OrganisationUser::class)->makePartial();
+        $user1->setIsAdministrator('Y');
+        $user1->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        $user2 = m::mock(OrganisationUser::class)->makePartial();
+        $user2->setIsAdministrator('Y');
+        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2]));
+
+        $this->assertFalse($entity->hasOperatorAdmin());
+    }
+
+    /**
      *  test if org user not found due to soft delete
      */
     public function testGetAdminEmailAddressesWhenOrganisationUserNotFound()
