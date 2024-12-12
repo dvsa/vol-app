@@ -3,15 +3,14 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
-use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress;
-use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
+use Dvsa\Olcs\Transfer\Query\Licence\ExistsWithOperatorAdmin;
 use Dvsa\Olcs\Transfer\Command\User\RegisterConsultantAndOperator;
-use Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
@@ -29,16 +28,17 @@ use Olcs\Session\ConsultantRegistration;
 class ConsultantRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation $niTextTranslationUtil,
-        AuthorizationService $authService,
-        protected FormHelperService $formHelper,
-        protected ScriptFactory $scriptFactory,
-        protected TranslationHelperService $translationHelper,
-        protected UrlHelperService $urlHelper,
+        NiTextTranslation                     $niTextTranslationUtil,
+        AuthorizationService                  $authService,
+        protected FormHelperService           $formHelper,
+        protected ScriptFactory               $scriptFactory,
+        protected TranslationHelperService    $translationHelper,
+        protected UrlHelperService            $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected ConsultantRegistration $consultantRegistrationSession,
-        protected CreateAccountMapper $formatDataMapper
-    ) {
+        protected ConsultantRegistration      $consultantRegistrationSession,
+        protected CreateAccountMapper         $formatDataMapper
+    )
+    {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -61,11 +61,18 @@ class ConsultantRegistrationController extends AbstractController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                if(($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
-                    if(!$this->hasOperatorAdminRole($formData['fields']['licenceContent']['licenceNumber'])) {
-                      $this->redirect()->toRoute('user-registration/operator');
+                if (($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
+                    $licenceNumber = $formData['fields']['licenceContent']['licenceNumber'];
+                    $checks = $this->licenseHasAdmin($licenceNumber);
+
+                    if (!$checks['licenceExists'] ?? false) {
+                        $form->setMessages(['fields' => ['licenceContent'=>['licenceNumber' => ['record-not-found']]]]);
+                    } elseif (!$checks['hasAdmin'] ?? false) {
+                        $this->redirect()->toRoute('user-registration/operator');
+                    } else {
+                        $this->redirect()->toRoute('user-registration/contact-your-administrator');
                     }
-                    $this->redirect()->toRoute('user-registration/contact-your-administrator');
+
                 } elseif (($formData['fields']['existingOperatorLicence'] ?? null) === 'N') {
                     $this->redirect()->toRoute('user-registration/operator-representation');
                 }
@@ -75,24 +82,17 @@ class ConsultantRegistrationController extends AbstractController
         return $this->prepareView('olcs/user-registration/operator-registration', [
             'form' => $form,
             'pageTitle' => 'user-registration.page.title'
+
         ]);
     }
 
-    private function hasOperatorAdminRole(string $licenceNumber): Bool {
-                $response = $this->handleQuery(LicenceRegisteredAddress::create(['licenceNumber' => $licenceNumber]));
-
-                if($response->isOk()) {
-                    $licence = $response->getResult();
-                    $organisationId = $licence['organisation']['id'];
-                    $response = $this->handleQuery(Organisation::create(['id' => $organisationId]));
-                    if($response->isOk()) {
-                        $organisation = $response->getResult();
-                        return $organisation['hasOperatorAdmin'];
-                    }
-                }
-
-
-        return false;
+    private function licenseHasAdmin(string $licenceNumber): array
+    {
+        $response = $this->handleQuery(ExistsWithOperatorAdmin::create(['licNo' => $licenceNumber]));
+        if ($response->isOk()) {
+           return $response->getResult();
+        }
+        return [];
     }
 
     /**
