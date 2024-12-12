@@ -19,8 +19,6 @@ class ExistingOperatorLicence
      *      "radios_wrapper_attributes": {"class": "govuk-radios", "data-module":"govuk-radios"}
      *  })
      * @Form\Options({
-     *     "label": "user-registration.field.existing-operator-licence.label",
-     *     "hint": "user-registration.field.existing-operator-licence.hint",
      *     "value_options":{
      *      "NoLicence":{
      *          "label":"select-option-no",

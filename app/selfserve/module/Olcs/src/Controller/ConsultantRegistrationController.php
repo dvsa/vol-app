@@ -8,7 +8,8 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
-use Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Organisation;
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress;
+use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\User\RegisterConsultantAndOperator;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -61,9 +62,9 @@ class ConsultantRegistrationController extends AbstractController
             if ($form->isValid()) {
                 $formData = $form->getData();
                 if(($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
-
-                    
-
+                    if(!$this->hasOperatorAdminRole($formData['fields']['licenceContent']['licenceNumber'])) {
+                      $this->redirect()->toRoute('user-registration/operator');
+                    }
                     $this->redirect()->toRoute('user-registration/contact-your-administrator');
                 } elseif (($formData['fields']['existingOperatorLicence'] ?? null) === 'N') {
                     $this->redirect()->toRoute('user-registration/operator-representation');
@@ -77,26 +78,21 @@ class ConsultantRegistrationController extends AbstractController
         ]);
     }
 
-    private function fetchOperatorDetails(string $licenceNumber): array {
-        $response = $this->handleQuery(LicenceByNumber::create(['licenceNumber' => $licenceNumber]));
-        $result = $response->getResult();
+    private function hasOperatorAdminRole(string $licenceNumber): Bool {
+                $response = $this->handleQuery(LicenceRegisteredAddress::create(['licenceNumber' => $licenceNumber]));
 
-        if (!$result->isOk()) {
-            return [];
-        }
-
-        $organisation = $result->getOrganisation();
-        if (empty($organisation)) {
-            return [];
-        }
-
-        if (!$organisation->hasOperatorAdmin()) {
-            return [];
-        }
+                if($response->isOk()) {
+                    $licence = $response->getResult();
+                    $organisationId = $licence['organisation']['id'];
+                    $response = $this->handleQuery(Organisation::create(['id' => $organisationId]));
+                    if($response->isOk()) {
+                        $organisation = $response->getResult();
+                        return $organisation['hasOperatorAdmin'];
+                    }
+                }
 
 
-
-        return $result;
+        return false;
     }
 
     /**
@@ -223,6 +219,7 @@ class ConsultantRegistrationController extends AbstractController
 
         $this->redirect()->toRoute('user-registration');
     }
+
 
     private function alterForm($form)
     {
