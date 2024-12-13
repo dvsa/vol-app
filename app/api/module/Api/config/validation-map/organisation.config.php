@@ -7,7 +7,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
 return [
     // Queries
     QueryHandler\Organisation\Dashboard::class => Misc\CanAccessOrganisationWithId::class,
-    QueryHandler\Organisation\Organisation::class => Misc\IsAnonymousUser::class,
+    QueryHandler\Organisation\Organisation::class => Misc\CanAccessOrganisationWithId::class,
     QueryHandler\Organisation\OrganisationAvailableLicences::class => Misc\CanAccessOrganisationWithId::class,
     QueryHandler\Organisation\OutstandingFees::class => Misc\CanAccessOrganisationWithId::class,
     QueryHandler\Organisation\BusinessDetails::class => Misc\IsInternalUser::class,

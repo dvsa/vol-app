@@ -8,7 +8,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
-use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\ExistsWithOperatorAdmin;
+use Dvsa\Olcs\Transfer\Query\Licence\ExistsWithOperatorAdmin;
 use Dvsa\Olcs\Transfer\Command\User\RegisterConsultantAndOperator;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
