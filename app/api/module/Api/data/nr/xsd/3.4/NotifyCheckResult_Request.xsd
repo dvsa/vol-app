@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="NotifyCheckResult_Types.xsd"/>
+	<xs:element name="NotifyCheckResult_Request">
+		<xs:annotation>
+			<xs:documentation>The Notify Check Result workflow enables a competent authority or roadside inspector in one member state to notify the competent authority in another member state that a check has been made against a vehicle of a transport undertaking registered in another member state.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="globalBodyRequestType">
+								<xs:sequence>
+									<xs:element name="TransportUndertaking">
+										<xs:annotation>
+											<xs:documentation>The details of the transport undertaking for which penalties have been applied to one of the vehicles.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="ncrTransportManagerType">
+													<xs:sequence>
+														<xs:element name="CheckSummary" type="ncrCheckResult">
+															<xs:annotation>
+																<xs:documentation>The basic result of the check.</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="MinorInfringement" type="ncrMinorInfringementType" minOccurs="0"/>
+														<xs:element name="SeriousInfringement" minOccurs="0" maxOccurs="unbounded">
+															<xs:annotation>
+																<xs:documentation>A list of the serious infringements and resulting penalties applied to the vehicle / transport undertaking.</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:complexContent>
+																	<xs:extension base="ncrSeriousInfringementType">
+																		<xs:sequence>
+																			<xs:element name="PenaltiesImposed">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="PenaltyImposed" type="ncrPenaltyImposedRequestType" maxOccurs="unbounded">
+																							<xs:annotation>
+																								<xs:documentation>A list of the penalties imposed in the member state where the infringement occurred.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																			<xs:element name="PenaltiesRequested" minOccurs="0">
+																				<xs:complexType>
+																					<xs:sequence>
+																						<xs:element name="PenaltyRequested" type="ncrPenaltyRequestedType" minOccurs="1" maxOccurs="unbounded">
+																							<xs:annotation>
+																								<xs:documentation>A list of penalties that the member state where the infringement occurs requests to be applied in the member state where the transport undertaking is registered.</xs:documentation>
+																							</xs:annotation>
+																						</xs:element>
+																					</xs:sequence>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:extension>
+																</xs:complexContent>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

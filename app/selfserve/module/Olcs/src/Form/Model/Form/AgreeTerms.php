@@ -13,7 +13,7 @@ use Laminas\Form\Annotation as Form;
 class AgreeTerms
 {
     /**
-     * @Form\Name("main")
+     * @Form\Name("fields")
      * @Form\Options({"label":""})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\AgreeTerms")
      */
