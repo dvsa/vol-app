@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="CheckGoodRepute_Types.xsd"/>
+	<xs:element name="CheckGoodRepute_Response">
+		<xs:annotation>
+			<xs:documentation>The Check Good Repute workflow enables a competent authority in one member state, prior to issuing a certificate of professional competence, to search the transport undertaking register in all other member states for transport managers that may have already been issued a certificate of professional competence.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="globalBodyBroadcastResponseType">
+								<xs:sequence>
+									<xs:element name="SearchedTransportManager">
+										<xs:annotation>
+											<xs:documentation>An authorised administration supplies either or both the name of the transport manager and the existing certificate of professional competence that the responding member states must search for in their register of transport undertakings.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:choice>
+												<xs:sequence>
+													<xs:element name="TransportManagerNameDetails" type="cgrTransportManagerSearchType">
+														<xs:annotation>
+															<xs:documentation>The name of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="TransportManagerCertificateDetails" type="globalCertificateDetailsType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The certificate of professional competence of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:sequence>
+													<xs:element name="TransportManagerCertificateDetails" type="globalCertificateDetailsType">
+														<xs:annotation>
+															<xs:documentation>The certificate of professional competence of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:choice>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="MemberState" maxOccurs="unbounded">
+										<xs:annotation>
+											<xs:documentation>The country code of the Member State responding to the Check Good Repute search request.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="cgrMemberStateType">
+													<xs:sequence>
+														<xs:element name="TransportManagerDetails" minOccurs="0" maxOccurs="unbounded">
+															<xs:annotation>
+																<xs:documentation>The details of the found transport managers.</xs:documentation>
+															</xs:annotation>
+															<xs:complexType>
+																<xs:complexContent>
+																	<xs:extension base="cgrTransportManagerResponseType">
+																		<xs:sequence>
+																			<xs:element name="TransportManagerNameDetails" type="cgrTransportManagerFoundType">
+																				<xs:annotation>
+																					<xs:documentation>The personal details of the found transport manager.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="TransportManagerAddressDetails" type="globalAddressDetailsType" minOccurs="0">
+																				<xs:annotation>
+																					<xs:documentation>The address details of the found transport manager.</xs:documentation>
+																				</xs:annotation>
+																			</xs:element>
+																			<xs:element name="TransportManagerCertificateDetails">
+																				<xs:annotation>
+																					<xs:documentation>The Certificate of Professional Competence details of the found transport manager.</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:complexContent>
+																						<xs:extension base="globalCertificateDetailsResponseType">
+																							<xs:sequence>
+																								<xs:element name="Fitness" type="globalTransportManagerFitnessType">
+																									<xs:annotation>
+																										<xs:documentation>The fitness details of the found transport manager.</xs:documentation>
+																									</xs:annotation>
+																								</xs:element>
+																							</xs:sequence>
+																						</xs:extension>
+																					</xs:complexContent>
+																				</xs:complexType>
+																			</xs:element>
+																			<xs:element name="TransportUndertakings">
+																				<xs:annotation>
+																					<xs:documentation>The details of the transport undertakings manager by the found transport manager.</xs:documentation>
+																				</xs:annotation>
+																				<xs:complexType>
+																					<xs:complexContent>
+																						<xs:extension base="cgrTransportUndertakingVehiclesType">
+																							<xs:sequence>
+																								<xs:element name="TransportUndertaking" minOccurs="0" maxOccurs="unbounded">
+																									<xs:annotation>
+																										<xs:documentation>The details of each of the transport undertakings manager by the found transport manager.</xs:documentation>
+																									</xs:annotation>
+																									<xs:complexType>
+																										<xs:complexContent>
+																											<xs:extension base="globalTransportUndertakingType">
+																												<xs:sequence>
+																													<xs:element name="TransportUndertakingAddress" type="globalAddressDetailsType">
+																														<xs:annotation>
+																															<xs:documentation>The address of the transport undertaking (address, postal code, city, country) as recorded in the register.</xs:documentation>
+																														</xs:annotation>
+																													</xs:element>
+																												</xs:sequence>
+																											</xs:extension>
+																										</xs:complexContent>
+																									</xs:complexType>
+																								</xs:element>
+																							</xs:sequence>
+																						</xs:extension>
+																					</xs:complexContent>
+																				</xs:complexType>
+																			</xs:element>
+																		</xs:sequence>
+																	</xs:extension>
+																</xs:complexContent>
+															</xs:complexType>
+														</xs:element>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

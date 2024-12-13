@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="NotifyCheckResult_Types.xsd"/>
+	<xs:element name="NotifyCheckResult_Acknowledgement">
+		<xs:annotation>
+			<xs:documentation>The Notify Check Result workflow enables a competent authority or roadside inspector in one member state to notify the competent authority in another member state that a check has been made against a vehicle of a transport undertaking registered in another member state.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body" type="ncrBodyAcknowledgementType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

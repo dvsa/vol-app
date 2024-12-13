@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -37,7 +39,7 @@ class PiEntityTest extends EntityTester
     /**
      * test create
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $caseEntity = m::mock(CasesEntity::class);
         $caseEntity->shouldReceive('isClosed')->andReturn(false);
@@ -82,7 +84,7 @@ class PiEntityTest extends EntityTester
     /**
      * test create throws exception when case is closed
      */
-    public function testCreateClosedCaseException()
+    public function testCreateClosedCaseException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -116,7 +118,7 @@ class PiEntityTest extends EntityTester
     /**
      * test agreed and legislation
      */
-    public function testAgreedAndLegislation()
+    public function testAgreedAndLegislation(): void
     {
         $agreedByTc = m::mock(PresidingTcEntity::class);
         $agreedByTcRole = m::mock(RefData::class);
@@ -155,7 +157,7 @@ class PiEntityTest extends EntityTester
     /**
      * test agreed and legislation accepts null for assignedCaseworker and ecmsFirstReceivedDate
      */
-    public function testAgreedAndLegislationNullValues()
+    public function testAgreedAndLegislationNullValues(): void
     {
         $agreedByTc = m::mock(PresidingTcEntity::class);
         $agreedByTcRole = m::mock(RefData::class);
@@ -192,7 +194,7 @@ class PiEntityTest extends EntityTester
     /**
      * test agreed and legislation throws exception when Pi is closed
      */
-    public function testAgreedAndLegislationClosedException()
+    public function testAgreedAndLegislationClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -225,7 +227,7 @@ class PiEntityTest extends EntityTester
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdatePiWithDecision($inputDate, $entityDate)
+    public function testUpdatePiWithDecision($inputDate, $entityDate): void
     {
         $decidedByTc = m::mock(PresidingTcEntity::class);
         $decidedByTcRole = m::mock(RefData::class);
@@ -276,7 +278,7 @@ class PiEntityTest extends EntityTester
      * @param $decisionDate
      * @param $hearingDate
      */
-    public function testUpdatePiWithDecisionDecisionBeforeHearing($expectException, $decisionDate, $hearingDate)
+    public function testUpdatePiWithDecisionDecisionBeforeHearing($expectException, $decisionDate, $hearingDate): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getIsAdjourned')->andReturn('N');
@@ -314,7 +316,7 @@ class PiEntityTest extends EntityTester
         }
     }
 
-    public function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing()
+    public function dataProviderTestUpdatePiWithDecisionDecisionBeforeHearing(): array
     {
         return [
             [false, null, null],
@@ -329,7 +331,7 @@ class PiEntityTest extends EntityTester
         ];
     }
 
-    public function testUpdatePiWithDecisionClosedException()
+    public function testUpdatePiWithDecisionClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -360,7 +362,7 @@ class PiEntityTest extends EntityTester
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeNone($inputDate, $entityDate)
+    public function testUpdateWrittenOutcomeNone($inputDate, $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -377,7 +379,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getWrittenReasonLetterDate());
     }
 
-    public function testUpdateWrittenOutcomeNoneClosedException()
+    public function testUpdateWrittenOutcomeNoneClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -393,7 +395,7 @@ class PiEntityTest extends EntityTester
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeVerbalDecision($inputDate, $entityDate)
+    public function testUpdateWrittenOutcomeVerbalDecision($inputDate, $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -416,7 +418,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getWrittenReasonLetterDate());
     }
 
-    public function testUpdateWrittenOutcomeVerbalClosedException()
+    public function testUpdateWrittenOutcomeVerbalClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -432,7 +434,7 @@ class PiEntityTest extends EntityTester
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeDecision($inputDate, $entityDate)
+    public function testUpdateWrittenOutcomeDecision($inputDate, $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -457,7 +459,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getWrittenReasonLetterDate());
     }
 
-    public function testUpdateWrittenOutcomeDecisionClosedException()
+    public function testUpdateWrittenOutcomeDecisionClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -473,7 +475,7 @@ class PiEntityTest extends EntityTester
      * @param string $inputDate
      * @param \DateTime|null $entityDate
      */
-    public function testUpdateWrittenOutcomeReason($inputDate, $entityDate)
+    public function testUpdateWrittenOutcomeReason($inputDate, $entityDate): void
     {
         $writtenOutcome = m::mock(RefData::class);
         $callUpLetterDate = $inputDate;
@@ -498,7 +500,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($entityDate, $this->entity->getWrittenReasonLetterDate());
     }
 
-    public function testUpdateWrittenOutcomeReasonClosedException()
+    public function testUpdateWrittenOutcomeReasonClosedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -515,7 +517,7 @@ class PiEntityTest extends EntityTester
      * @param $closedDate
      * @param $returnValue
      */
-    public function testCanCloseWithHearing($isCancelled, $closedDate, $returnValue)
+    public function testCanCloseWithHearing($isCancelled, $closedDate, $returnValue): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getIsCancelled')->andReturn($isCancelled);
@@ -531,7 +533,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public function canCloseWithHearingProvider()
+    public function canCloseWithHearingProvider(): array
     {
         $date = '2015-12-25';
 
@@ -542,7 +544,7 @@ class PiEntityTest extends EntityTester
         ];
     }
 
-    public function testCanCloseNoHearingNoOutcome()
+    public function testCanCloseNoHearingNoOutcome(): void
     {
         $this->entity->setPiHearings(new ArrayCollection());
         $this->entity->setCallUpLetterDate(new \DateTime());
@@ -563,7 +565,7 @@ class PiEntityTest extends EntityTester
         $decisionLetterSentDate,
         $closedDate,
         $returnValue
-    ) {
+    ): void {
         $writtenOutcome = m::mock(RefData::class);
         $writtenOutcome->shouldReceive('getId')->andReturn($writtenOutcomeId);
         $this->entity->setClosedDate($closedDate);
@@ -580,7 +582,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals($returnValue, $this->entity->canClose());
     }
 
-    public function canCloseWithOutcomeProvider()
+    public function canCloseWithOutcomeProvider(): array
     {
         $date = '2015-12-25';
 
@@ -607,7 +609,7 @@ class PiEntityTest extends EntityTester
      * @param $briefToTcDate
      * @param $callUpLetterDate
      */
-    public function testCanCloseWithMissingGeneralSla($briefToTcDate, $callUpLetterDate)
+    public function testCanCloseWithMissingGeneralSla($briefToTcDate, $callUpLetterDate): void
     {
         $this->entity->setPiHearings(new ArrayCollection());
         $this->entity->setCallUpLetterDate($briefToTcDate);
@@ -616,7 +618,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(false, $this->entity->canClose());
     }
 
-    public function canCloseWithMissingGeneralSlaProvider()
+    public function canCloseWithMissingGeneralSlaProvider(): array
     {
         $date = '2015-12-25';
 
@@ -629,7 +631,7 @@ class PiEntityTest extends EntityTester
     /**
      * Tests closing a Pi
      */
-    public function testClose()
+    public function testClose(): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getIsCancelled')->andReturn('Y');
@@ -641,7 +643,7 @@ class PiEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testCloseThrowsException()
+    public function testCloseThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -653,7 +655,7 @@ class PiEntityTest extends EntityTester
     /**
      * Tests reopen
      */
-    public function testReopen()
+    public function testReopen(): void
     {
         $this->entity->setClosedDate(new \DateTime());
 
@@ -662,7 +664,7 @@ class PiEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getClosedDate());
     }
 
-    public function testReopenThrowsException()
+    public function testReopenThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -680,7 +682,7 @@ class PiEntityTest extends EntityTester
      * @param string $isCancelled
      * @param string|null $returnValue
      */
-    public function testGetHearingDate($hearingDate, $isAdjourned, $isCancelled, $returnValue)
+    public function testGetHearingDate($hearingDate, $isAdjourned, $isCancelled, $returnValue): void
     {
         $piHearing = m::mock(PiHearingEntity::class);
         $piHearing->shouldReceive('getHearingDate')->andReturn($hearingDate);
@@ -695,7 +697,7 @@ class PiEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function dpGetHearingDateProvider()
+    public function dpGetHearingDateProvider(): array
     {
         $date = '2015-12-25';
 
@@ -710,7 +712,7 @@ class PiEntityTest extends EntityTester
     /**
      * Tests getCalculatedBundleValues
      */
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $isTm = true;
 
@@ -732,11 +734,35 @@ class PiEntityTest extends EntityTester
     }
 
     /**
+     * @dataProvider isTmProvider
+     */
+    public function testIsTm(bool $isTm): void
+    {
+        //test with no case attached
+        $this->entity->setCase(null);
+        $this->assertFalse($this->entity->isTm());
+
+        $case = m::mock(CasesEntity::class);
+        $case->shouldReceive('isTm')->andReturn($isTm);
+        $this->entity->setCase($case);
+
+        $this->assertEquals($isTm, $this->entity->isTm());
+    }
+
+    public function isTmProvider(): array
+    {
+        return [
+            [true],
+            [false]
+        ];
+    }
+
+    /**
      * provider to check dates are processed properly
      *
      * @return array
      */
-    public function dateProvider()
+    public function dateProvider(): array
     {
         $date = '2015-12-25';
 
@@ -749,7 +775,7 @@ class PiEntityTest extends EntityTester
     /**
      * Tests flattenSlaTargetDates
      */
-    public function testFlattenSlaTargetDates()
+    public function testFlattenSlaTargetDates(): void
     {
         $date1 = new \DateTime('2015-03-14');
 

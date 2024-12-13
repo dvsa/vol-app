@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+	<xs:include schemaLocation="Global_Types.xsd"/>
+	<xs:complexType name="ctudBodyResponseType">
+		<xs:complexContent>
+			<xs:extension base="globalBodyResponseType">
+				<xs:attribute name="statusCode" type="globalSearchResponseStatusCodeType" use="required">
+					<xs:annotation>
+						<xs:documentation>
+              The status code of the Check Company Data response. One of:
+              'Found'
+              'NotFound'
+              'Timeout'
+              'NotAvailable'
+            </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="statusMessage" type="globalStatusMessageType" use="optional">
+					<xs:annotation>
+						<xs:documentation>An explanatory message (if necessary) adding context to the status code.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ctudCommunityLicenceFullDetailsType">
+		<xs:complexContent>
+			<xs:extension base="globalCommunityLicenceBasicDetailsType">
+				<xs:attribute name="communityLicenceType" type="globalCommunityLicenceType" use="required">
+					<xs:annotation>
+						<xs:documentation>
+              The type of the community licence as recorded in the register. One of:
+              - 'Community licence for passenger transport'
+              - 'National licence for passenger transport'
+              - 'Community licence for goods transport'
+              - 'Community licence for goods transport, exclusively ≤3.5 t'
+              - 'National licence for goods transport'
+            </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="startDate" type="globalDateType" use="required">
+					<xs:annotation>
+						<xs:documentation>The start date of the community licence.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="expiryDate" type="globalDateType" use="required">
+					<xs:annotation>
+						<xs:documentation>The expiry date of the community licence.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="withdrawalDate" type="globalDateType" use="optional">
+					<xs:annotation>
+						<xs:documentation>The withdrawal date of the community licence.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="suspensionDate" type="globalDateType" use="optional">
+					<xs:annotation>
+						<xs:documentation>The suspension date of the community licence.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="suspensionExpiryDate" type="globalDateType" use="optional">
+					<xs:annotation>
+						<xs:documentation>The date on which the community licence suspension expires.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="suspensionOrWithdrawalReason" type="globalSuspensionOrWithdrawalReasonType" use="optional">
+					<xs:annotation>
+						<xs:documentation>
+              Reason for suspension or withdrawal of the Community licence. Declaration of (one of):
+              - 'No effective and stable establishment'
+              - 'No appropriate financial standing'
+              - 'No requisite professional competence'
+              - 'Not of good repute'
+              - 'Other'
+            </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="licencingAuthority" type="globalAuthorityIdentifierType" use="required">
+					<xs:annotation>
+						<xs:documentation>The authority that issued the Community Licence.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ctudSearchedCompanyDataType">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element name="SearchByLicenceAndName">
+					<xs:annotation>
+						<xs:documentation>Search by using the transport undertaking name and then by using the community licence number (or certified true copy number) and / or vehicle registration if they are supplied.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Vehicle" type="globalVehicleRegistrationType" minOccurs="0"/>
+						</xs:sequence>
+						<xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="required">
+							<xs:annotation>
+								<xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="required">
+							<xs:annotation>
+								<xs:documentation>The number of the community licence of the transport undertaking or the number of the certified true copy of the community licence as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element name="SearchByLicenceAndVehicle">
+					<xs:annotation>
+						<xs:documentation>Search by using the community licence number (or certified true copy number) and then also using the transport undertaking name and / or the vehicle registration if they are supplied.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Vehicle" type="globalVehicleRegistrationType"/>
+						</xs:sequence>
+						<xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="optional">
+							<xs:annotation>
+								<xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="required">
+							<xs:annotation>
+								<xs:documentation>The number of the community licence of the transport undertaking or the number of the certified true copy of the community licence as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element name="SearchByNameAndVehicle">
+					<xs:annotation>
+						<xs:documentation>Search by using the vehicle registration and then by using the community licence number (or certified true copy number) and / or the transport undertaking name if they are supplied.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Vehicle" type="globalVehicleRegistrationType"/>
+						</xs:sequence>
+						<xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="required">
+							<xs:annotation>
+								<xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="optional">
+							<xs:annotation>
+								<xs:documentation>The number of the community licence of the transport undertaking or the number of the certified true copy of the community licence as recorded in the register.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:choice>
+		<xs:attribute name="requestAllVehicles" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>If @requestAllVehicles=true in the request then the response should have Body/TransportUndertaking/VehicleRegistrations/Vehicle elements for each vehicle managed by the transport undertaking.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ctudTransportUndertakingType">
+		<xs:sequence>
+			<xs:element name="VehicleRegistrations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The vehicles operated by the transport undertaking.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Vehicle" type="globalVehicleRegistrationType" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>A list of the registration numbers of the vehicles operated by the transport undertaking.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TransportUndertakingAddress" type="globalAddressDetailsType">
+				<xs:annotation>
+					<xs:documentation>The address of the transport undertaking (address, postal code, city, country) as recorded in the register.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CommunityLicenceDetails" type="ctudCommunityLicenceFullDetailsType" maxOccurs="4">
+				<xs:annotation>
+					<xs:documentation>For the found transport undertaking, the details of the community licence recorded in the transport undertaking register.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CertifiedTrueCopyDetails" minOccurs="0" maxOccurs="1">
+				<xs:annotation>
+					<xs:documentation>The list of certified true copies.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CertifiedTrueCopy" type="ctudTrueCopyDetailsType" minOccurs="1" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>For the found transport undertaking, the details of the certified true copy of the community licence; if supplied in the search request.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="legalForm" type="globalLegalFormType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The legal form of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfVehicles" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The number of vehicles managed by the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfEmployees" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The number of employees of the transport undertaking as at the last 31st December.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="riskRating" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The risk rating of the transport undertaking.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="riskBand" type="globalRiskBandType" use="required">
+			<xs:annotation>
+				<xs:documentation>
+          The risk band of the transport undertaking. One of:
+          - ‘Red’
+          - ‘Amber’
+          - ‘Green’
+          - ‘Grey’
+        </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="searchMethod" use="required">
+			<xs:annotation>
+				<xs:documentation>
+          The search method used to find this particular transport undertaking. One of:
+          'CompanyName'
+          'CommunityLicence'
+          'VehicleRegistration'
+          'Local'
+        </xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="CompanyName"/>
+					<xs:enumeration value="CommunityLicence"/>
+					<xs:enumeration value="VehicleRegistration"/>
+					<xs:enumeration value="Local"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ctudTrueCopyDetailsType">
+		<xs:attribute name="trueCopyNumber" type="globalCommunityLicenceNumberType" use="required">
+			<xs:annotation>
+				<xs:documentation>The serial number of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="trueCopyIssueDate" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The issue date of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="trueCopyExpiryDate" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The expiry date of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="trueCopySuspensionDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The suspension date of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="trueCopySuspensionExpiryDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The date of expiry of the suspension of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="trueCopyWithdrawalDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The withdrawal date of the certified true copy of the community licence of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>
