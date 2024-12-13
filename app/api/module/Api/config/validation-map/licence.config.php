@@ -9,6 +9,7 @@ return [
     QueryHandler\Licence\Addresses::class => Misc\CanAccessLicenceWithId::class,
     QueryHandler\Licence\BusinessDetails::class => Misc\CanAccessLicenceWithId::class,
     QueryHandler\Licence\ConditionUndertaking::class => Misc\CanAccessLicenceWithId::class,
+    QueryHandler\Licence\ExistsWithOperatorAdmin::class => Misc\NoValidationRequired::class,
     QueryHandler\Licence\Licence::class => Misc\CanAccessLicenceWithId::class,
     QueryHandler\Licence\LicenceWithCorrespondenceCd::class => Misc\CanAccessLicenceWithId::class,
     QueryHandler\Licence\LicenceByNumber::class => Misc\CanAccessLicenceWNoithLicNo::class,
