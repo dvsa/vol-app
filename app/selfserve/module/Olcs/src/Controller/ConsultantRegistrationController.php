@@ -3,13 +3,12 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
-use Dvsa\Olcs\Transfer\Query\Licence\ExistsWithOperatorAdmin;
+use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\ExistsWithOperatorAdmin;
 use Dvsa\Olcs\Transfer\Command\User\RegisterConsultantAndOperator;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
@@ -88,7 +87,7 @@ class ConsultantRegistrationController extends AbstractController
 
     private function licenseHasAdmin(string $licenceNumber): array
     {
-        $response = $this->handleQuery(::create(['licNo' => $licenceNumber]));
+        $response = $this->handleQuery(ExistsWithOperatorAdmin::create(['licNo' => $licenceNumber]));
         if ($response->isOk()) {
            return $response->getResult();
         }
