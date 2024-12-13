@@ -65,13 +65,12 @@ class ConsultantRegistrationController extends AbstractController
                     $checks = $this->licenseHasAdmin($licenceNumber);
 
                     if (!$checks['licenceExists'] ?? false) {
-                        $form->setMessages(['fields' => ['licenceContent'=>['licenceNumber' => ['record-not-found']]]]);
+                        $form->setMessages(['fields' => ['licenceContent' => ['licenceNumber' => ['record-not-found']]]]);
                     } elseif (!$checks['hasOperatorAdmin'] ?? false) {
                         $this->redirect()->toRoute('user-registration/operator');
                     } else {
                         $this->redirect()->toRoute('user-registration/contact-your-administrator');
                     }
-
                 } elseif (($formData['fields']['existingOperatorLicence'] ?? null) === 'N') {
                     $this->redirect()->toRoute('user-registration/operator-representation');
                 }
@@ -81,7 +80,6 @@ class ConsultantRegistrationController extends AbstractController
         return $this->prepareView('olcs/user-registration/operator-registration', [
             'form' => $form,
             'pageTitle' => 'user-registration.page.title'
-
         ]);
     }
 
@@ -89,7 +87,7 @@ class ConsultantRegistrationController extends AbstractController
     {
         $response = $this->handleQuery(ExistsWithOperatorAdmin::create(['licNo' => $licenceNumber]));
         if ($response->isOk()) {
-           return $response->getResult();
+            return $response->getResult();
         }
         return [];
     }
