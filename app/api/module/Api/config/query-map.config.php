@@ -100,6 +100,7 @@ return [
 
     // Licence
     TransferQuery\Licence\BusinessDetails::class => QueryHandler\Licence\BusinessDetails::class,
+    TransferQuery\Licence\ExistsWithOperatorAdmin::class => QueryHandler\Licence\ExistsWithOperatorAdmin::class,
     TransferQuery\Licence\Licence::class => QueryHandler\Licence\Licence::class,
     TransferQuery\Licence\LicenceWithCorrespondenceCd::class => QueryHandler\Licence\LicenceWithCorrespondenceCd::class,
     TransferQuery\Licence\LicenceByNumber::class => QueryHandler\Licence\LicenceByNumber::class,

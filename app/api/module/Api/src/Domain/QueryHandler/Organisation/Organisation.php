@@ -1,21 +1,10 @@
 <?php
 
-/**
- * Organisation
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
-/**
- * Organisation
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class Organisation extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Organisation';
@@ -37,6 +26,7 @@ class Organisation extends AbstractQueryHandler
                 'isDisqualified' => $organisation->getDisqualifications()->count() > 0,
                 'taValueOptions' => $this->getTrafficAreaValueOptions($allowedOperatorLocation),
                 'allowedOperatorLocation' => $allowedOperatorLocation,
+                'hasOperatorAdmin' => $organisation->hasOperatorAdmin()
             ]
         );
     }

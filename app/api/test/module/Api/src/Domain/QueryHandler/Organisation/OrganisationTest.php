@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Organisation Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Organisation;
 
@@ -14,13 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Organisation as OrganisationRepo;
 use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation as Qry;
 use Mockery as m;
-use SAML2\Utilities\ArrayCollection;
 
-/**
- * Organisation Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class OrganisationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -32,7 +22,7 @@ class OrganisationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryDisqualified()
+    public function testHandleQueryDisqualified(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -40,6 +30,7 @@ class OrganisationTest extends QueryHandlerTestCase
         $mockOrganisation->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
         $mockOrganisation->shouldReceive('getDisqualifications->count')->andReturn(2);
         $mockOrganisation->shouldReceive('getAllowedOperatorLocation')->andReturn('GB')->once();
+        $mockOrganisation->expects('hasOperatorAdmin')->withNoArgs()->andReturnTrue();
 
         $mockTa = m::mock()
             ->shouldReceive('getId')
@@ -64,13 +55,14 @@ class OrganisationTest extends QueryHandlerTestCase
             'foo' => 'bar',
             'isDisqualified' => true,
             'allowedOperatorLocation' => 'GB',
+            'hasOperatorAdmin' => true,
             'taValueOptions' => [1 => 'foo'],
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
     }
 
-    public function testHandleQueryNotDisqualified()
+    public function testHandleQueryNotDisqualified(): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -78,6 +70,7 @@ class OrganisationTest extends QueryHandlerTestCase
         $mockOrganisation->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
         $mockOrganisation->shouldReceive('getDisqualifications->count')->andReturn(0);
         $mockOrganisation->shouldReceive('getAllowedOperatorLocation')->andReturn('GB')->once();
+        $mockOrganisation->expects('hasOperatorAdmin')->withNoArgs()->andReturnFalse();
 
         $mockTa = m::mock()
             ->shouldReceive('getId')
@@ -102,6 +95,7 @@ class OrganisationTest extends QueryHandlerTestCase
             'foo' => 'bar',
             'isDisqualified' => false,
             'allowedOperatorLocation' => 'GB',
+            'hasOperatorAdmin' => false,
             'taValueOptions' => [1 => 'foo'],
         ];
 

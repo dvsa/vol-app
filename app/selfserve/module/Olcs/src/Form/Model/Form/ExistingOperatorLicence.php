@@ -14,10 +14,13 @@ class ExistingOperatorLicence
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({"label":""})
+     * @Form\Options({"label": "user-registration.field.existing-operator-licence.label",
+     *      "hint": "user-registration.field.existing-operator-licence.hint"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ExistingOperatorLicence")
+     *
      */
     public $fields = null;
+
 
     /**
      * @Form\Name("form-actions")
