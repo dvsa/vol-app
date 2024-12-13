@@ -1,0 +1,5 @@
+ignore:
+  'SNYK-PHP-SIMPLESAMLPHPSAML2-8449140':
+    - '*':
+      reason: 'we cannot seem to get a fix into sprint'
+      expires: '2024-12-31T00:00:00.000Z'
