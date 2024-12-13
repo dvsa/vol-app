@@ -179,7 +179,7 @@ module "eventbridge_sns" {
             "FAILED"
           ],
           "jobName" : [{
-            "wildcard" : "vol-app-${var.environment}-*"
+            "wildcard" : "*"
           }]
         }
       })
