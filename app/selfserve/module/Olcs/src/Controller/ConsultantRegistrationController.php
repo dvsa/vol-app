@@ -67,7 +67,7 @@ class ConsultantRegistrationController extends AbstractController
 
                     if (!$checks['licenceExists'] ?? false) {
                         $form->setMessages(['fields' => ['licenceContent'=>['licenceNumber' => ['record-not-found']]]]);
-                    } elseif (!$checks['hasAdmin'] ?? false) {
+                    } elseif (!$checks['hasOperatorAdmin'] ?? false) {
                         $this->redirect()->toRoute('user-registration/operator');
                     } else {
                         $this->redirect()->toRoute('user-registration/contact-your-administrator');
@@ -88,7 +88,7 @@ class ConsultantRegistrationController extends AbstractController
 
     private function licenseHasAdmin(string $licenceNumber): array
     {
-        $response = $this->handleQuery(ExistsWithOperatorAdmin::create(['licNo' => $licenceNumber]));
+        $response = $this->handleQuery(::create(['licNo' => $licenceNumber]));
         if ($response->isOk()) {
            return $response->getResult();
         }

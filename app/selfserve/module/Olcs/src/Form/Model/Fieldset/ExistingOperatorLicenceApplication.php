@@ -21,7 +21,7 @@ class ExistingOperatorLicenceApplication
  * })
  * @Form\Filter("Laminas\Filter\StringTrim")
  * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
- * @Form\Validator({"name": "Laminas\Validator\StringLength", "options": {"min":"2","max": "35"}})
+ * @Form\Validator({"name": "Laminas\Validator\StringLength", "options": {"min":"9","max": "9"}})
  */
 public $licenceNumber = null;
 
