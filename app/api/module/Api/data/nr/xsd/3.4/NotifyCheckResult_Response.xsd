@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="NotifyCheckResult_Types.xsd"/>
+	<xs:element name="NotifyCheckResult_Response">
+		<xs:annotation>
+			<xs:documentation>The Notify Check Result workflow enables a competent authority or roadside inspector in one member state to notify the competent authority in another member state that a check has been made against a vehicle of a transport undertaking registered in another member state.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="ncrBodyResponseType">
+								<xs:sequence>
+									<xs:element name="TransportUndertaking" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>The details of the transport undertaking for which penalties were notified and, optionally, requested.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="globalTransportUndertakingType">
+													<xs:sequence>
+														<xs:element name="TransportUndertakingAddress" type="globalAddressDetailsType"/>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="PenaltiesImposed" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="PenaltyImposed" type="ncrPenaltyImposedResponseType" minOccurs="1" maxOccurs="unbounded">
+													<xs:annotation>
+														<xs:documentation>The list of penalties requested to be applied in the member state of registration of the transport undertaking and the status of the request.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

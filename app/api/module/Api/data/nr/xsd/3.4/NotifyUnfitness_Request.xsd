@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:include schemaLocation="NotifyUnfitness_Types.xsd"/>
+  <xs:element name="NotifyUnfitness_Request">
+    <xs:annotation>
+      <xs:documentation>The Notify Unfitness workflow enables a competent authority that issued a certificate of professional competence to notify all other member states that the transport manager concerned has been sanctioned by the witdrawal of the certificate or that the sanction has been discharged and the certificate reinstated.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Header" type="globalHeaderType"/>
+        <xs:element name="Body">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="globalBodyRequestType">
+                <xs:sequence>
+                  <xs:element name="TransportManager">
+                    <xs:annotation>
+                      <xs:documentation>The details of the transport undertaking for which penalties have been applied to one of the vehicles.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:complexContent>
+                        <xs:extension base="globalTransportManagerFitnessStartDateType">
+                          <xs:choice>
+                            <xs:element name="TransportManagerNameDetails">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="TransportManager" type="nurTransportManagerType"/>
+                                  <xs:element name="CertificateOfProfessionalCompetence" type="globalCertificateDetailsType" minOccurs="0"/>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="TransportManagerCertificateDetails">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="CertificateOfProfessionalCompetence" type="globalCertificateDetailsType"/>
+                                  <xs:element name="TransportManager" type="nurTransportManagerType" minOccurs="0"/>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:choice>
+                        </xs:extension>
+                      </xs:complexContent>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

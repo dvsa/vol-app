@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="CheckGoodRepute_Types.xsd"/>
+	<xs:element name="CheckGoodRepute_Request">
+		<xs:annotation>
+			<xs:documentation>The Check Good Repute workflow enables a competent authority in one country, prior to issuing a certificate of professional competence, to search the transport undertaking register register in all other countries for transport managers that may have already been issued a certificate of professional competence.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="globalBodyRequestType">
+								<xs:sequence>
+									<xs:element name="SearchedTransportManager">
+										<xs:annotation>
+											<xs:documentation>An authorised administration supplies either or both the name of the transport manager and the existing certificate of professional competence that the responding member states must search for in their register of transport undertakings.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:choice>
+												<xs:sequence>
+													<xs:element name="TransportManagerNameDetails" type="cgrTransportManagerSearchType">
+														<xs:annotation>
+															<xs:documentation>The name of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="TransportManagerCertificateDetails" type="globalCertificateDetailsType" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>The certificate of professional competence of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+												<xs:sequence>
+													<xs:element name="TransportManagerCertificateDetails" type="globalCertificateDetailsType">
+														<xs:annotation>
+															<xs:documentation>The certificate of professional competence of the transport manager requested in the search.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:choice>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

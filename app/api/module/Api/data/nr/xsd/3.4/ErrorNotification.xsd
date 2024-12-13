@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="ErrorNotification_Types.xsd"/>
+	<xs:element name="ErrorNotification">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="errorNotificationType">
+								<xs:sequence>
+									<xs:element name="OriginalMessage" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>The message that caused the failure. XML prohibited characters will need to be escaped.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
