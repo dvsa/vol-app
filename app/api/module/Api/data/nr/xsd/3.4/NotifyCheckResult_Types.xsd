@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Global_Types.xsd"/>
+	<xs:complexType name="ncrBodyAcknowledgementType">
+		<xs:complexContent>
+			<xs:extension base="globalBodyResponseType">
+				<xs:attribute name="acknowledgementType" use="required">
+					<xs:annotation>
+						<xs:documentation>Defines whther the acknowledgement is for an infringement notification or an infringement response. One of:
+- ‘NCRN_Ack’
+- ‘NCRR_Ack’</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:enumeration value="NCRN_Ack"/>
+							<xs:enumeration value="NCRR_Ack"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="statusCode" type="ncrAcknowledgementStatusCodeType" use="required">
+					<xs:annotation>
+						<xs:documentation>The status code of the Infringement Acknowledgement. One of:
+'OK'
+'Timeout'
+'NotAvailable'</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="statusMessage" type="globalStatusMessageType" use="optional">
+					<xs:annotation>
+						<xs:documentation>An explanatory message (if necessary) adding context to the status code.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ncrBodyResponseType">
+		<xs:complexContent>
+			<xs:extension base="globalBodyResponseType">
+				<xs:attribute name="statusCode" type="ncrResponseStatusCodeType" use="required">
+					<xs:annotation>
+						<xs:documentation>The status code of the Infringement Response. One of:
+'OK'
+'NotFound'						</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="statusMessage" type="globalStatusMessageType" use="optional">
+					<xs:annotation>
+						<xs:documentation>An explanatory message (if necessary) adding context to the status code.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ncrCheckResult">
+		<xs:attribute name="checkResult" use="required">
+			<xs:annotation>
+				<xs:documentation>The result of the check: Pass or Fail or CleanCheck.</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="Pass"/>
+					<xs:enumeration value="Fail"/>
+          <xs:enumeration value="CleanCheck"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="dateOfCheck" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The date of the check at which infringement has been ascertained.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrMinorInfringementType">
+		<xs:attribute name="dateOfInfringement" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The date on which the infringement occurred or was ascertained.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfInfringements" type="xs:nonNegativeInteger" use="required">
+			<xs:annotation>
+				<xs:documentation>The number of minor infringements found.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrPenaltyImposedRequestType">
+		<xs:attribute name="penaltyImposedIdentifier" type="ncrPenaltyIdentifierType" use="required">
+			<xs:annotation>
+				<xs:documentation>The serial number of the individual penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="finalDecisionDate" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The final decision date of the penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="penaltyTypeImposed" type="ncrPenaltyCodeImposedRequestType" use="required">
+			<xs:annotation>
+				<xs:documentation>The code of the penalty imposed. One of:
+- '101' (Warning)
+- '102' (Other)
+- '201' (Temporary ban on cabotage operations)
+- '202' (Fine)
+- '203' (Prohibition)
+- '204' (Immobilisation)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="startDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The start date of the penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="endDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The end date of the penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isExecuted" type="ncrIsExecutedEnumType" use="required">
+			<xs:annotation>
+				<xs:documentation>Execution result specifying whether or not the penalty has been applied.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+    <xs:attribute name="notExecutedReason" type="ncrReasonType" use="optional">
+      <xs:annotation>
+        <xs:documentation>Reason if the penalty is not executed.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrPenaltyImposedResponseType">
+		<xs:attribute name="penaltyRequestedIdentifier" type="ncrPenaltyIdentifierType" use="required">
+			<xs:annotation>
+				<xs:documentation>The serial number of the individual penalty imposed (given in the Penalty Requested Identifier of the Infringement Notification).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="authorityImposingPenalty" type="globalAuthorityIdentifierType" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of the authority imposing penalty.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isImposed" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>A bolean value stating whether or not the penalty has been imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="penaltyTypeImposed" type="ncrPenaltyCodeImposedResponseType" use="required">
+			<xs:annotation>
+				<xs:documentation>The code of the penalty that has been imposed. One of:
+- '101' (Warning)
+- '102' (Other)
+- '301' (Temporary withdrawal of some or all of the certified true copies of the Community licence)
+- '302' (Permanent withdrawal of some or all of the certified true copies of the Community licence)
+- '303' (Temporary withdrawal of the Community licence)
+- '304' (Permanent withdrawal of the Community licence)
+- '305' (Suspension of the issue of driver attestations)
+- '306' (Withdrawal of driver attestations)
+- '307' (Issue of driver attestatins subject to additional conditions in order to prevent misuse)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="startDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The start date of the penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="endDate" type="globalDateType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The end date of the penalty imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="reason" type="ncrReasonType" use="optional">
+			<xs:annotation>
+				<xs:documentation>Reason if penalty is not imposed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrPenaltyRequestedType">
+		<xs:attribute name="penaltyRequestedIdentifier" type="ncrPenaltyIdentifierType" use="required">
+			<xs:annotation>
+				<xs:documentation>The serial number of the individual penalty requested.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="penaltyTypeRequested" type="ncrPenaltyCodeRequestedType" use="required">
+			<xs:annotation>
+				<xs:documentation>The code of the penalty requested to be applied in the member state of registration. One of:
+- '101' (Warning)
+- '301' (Temporary withdrawal of some or all of the certified true copies of the Community licence)
+- '302' (Permanent withdrawal of some or all of the certified true copies of the Community licence)
+- '303' (Temporary withdrawal of the Community licence)
+- '304' (Permanent withdrawal of the Community licence)
+- '305' (Suspension of the issue of driver attestations)
+- '306' (Withdrawal of driver attestations)
+- '307' (Issue of driver attestations subject to additional condit­ ions in order to prevent misuse)</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="duration" type="xs:positiveInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>The duration of the requested penalty (calendar days).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrSeriousInfringementType">
+		<xs:attribute name="dateOfInfringement" type="globalDateType" use="required">
+			<xs:annotation>
+				<xs:documentation>The date on which the infringement occurred or was ascertained.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="category" type="ncrCategoryType" use="required">
+			<xs:annotation>
+				<xs:documentation>The category of the infringement. One of:
+- 'MSI'
+- 'VSI'
+- 'SI'</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="infringementType" type="ncrInfringementType" use="required">
+			<xs:annotation>
+				<xs:documentation>The type of infringement as defined in Annex IV to Regulation (EC) No 1071/2009 and Annex I to Regulation (EU) 2016/403.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+    <xs:attribute name="appealPossible" type="xs:boolean" use="required">
+      <xs:annotation>
+        <xs:documentation>If the infringement is possible to appeal</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ncrTransportManagerType">
+		<xs:sequence>
+			<xs:element name="Vehicle" type="globalVehicleRegistrationType"/>
+		</xs:sequence>
+		<xs:attribute name="transportUndertakingName" type="globalTransportUndertakingNameType" use="required">
+			<xs:annotation>
+				<xs:documentation>The name of the transport undertaking as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="communityLicenceNumber" type="globalCommunityLicenceNumberType" use="required">
+			<xs:annotation>
+				<xs:documentation>The number of the community licence of the transport undertaking or the number of the certified true copy of the community licence as recorded in the register.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="ncrAcknowledgementStatusCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="Timeout"/>
+			<xs:enumeration value="NotAvailable"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrCategoryType">
+		<xs:annotation>
+			<xs:documentation>The category of the infringement. One of:
+- 'MSI'
+- 'VSI'
+- 'SI'</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="MSI"/>
+			<xs:enumeration value="VSI"/>
+			<xs:enumeration value="SI"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrInfringementType">
+		<xs:restriction base="xs:token">
+      <xs:enumeration value="101"/>
+      <xs:enumeration value="102"/>
+      <xs:enumeration value="103"/>
+      <xs:enumeration value="104"/>
+      <xs:enumeration value="201"/>
+      <xs:enumeration value="202"/>
+      <xs:enumeration value="203"/>
+      <xs:enumeration value="204"/>
+      <xs:enumeration value="205"/>
+      <xs:enumeration value="301"/>
+      <xs:enumeration value="302"/>
+      <xs:enumeration value="401"/>
+      <xs:enumeration value="402"/>
+      <xs:enumeration value="403"/>
+      <xs:enumeration value="501"/>
+      <xs:enumeration value="503"/>
+      <xs:enumeration value="504"/>
+      <xs:enumeration value="601"/>
+      <xs:enumeration value="602"/>
+      <xs:enumeration value="603"/>
+      <xs:enumeration value="701"/>
+      <xs:enumeration value="702"/>
+      <xs:enumeration value="800"/>
+      <xs:enumeration value="801"/>
+      <xs:enumeration value="802"/>
+      <xs:enumeration value="803"/>
+      <xs:enumeration value="804"/>
+      <xs:enumeration value="805"/>
+      <xs:enumeration value="806"/>
+      <xs:enumeration value="807"/>
+      <xs:enumeration value="808"/>
+      <xs:enumeration value="809"/>
+      <xs:enumeration value="810"/>
+      <xs:enumeration value="811"/>
+      <xs:enumeration value="812"/>
+      <xs:enumeration value="813"/>
+      <xs:enumeration value="814"/>
+      <xs:enumeration value="815"/>
+      <xs:enumeration value="816"/>
+      <xs:enumeration value="817"/>
+      <xs:enumeration value="818"/>
+      <xs:enumeration value="819"/>
+      <xs:enumeration value="820"/>
+      <xs:enumeration value="821"/>
+      <xs:enumeration value="822"/>
+      <xs:enumeration value="823"/>
+      <xs:enumeration value="824"/>
+      <xs:enumeration value="825"/>
+      <xs:enumeration value="826"/>
+      <xs:enumeration value="827"/>
+      <xs:enumeration value="828"/>
+      <xs:enumeration value="829"/>
+      <xs:enumeration value="832"/>
+      <xs:enumeration value="833"/>
+      <xs:enumeration value="834"/>
+      <xs:enumeration value="835"/>
+      <xs:enumeration value="836"/>
+      <xs:enumeration value="837"/>
+      <xs:enumeration value="838"/>
+      <xs:enumeration value="839"/>
+      <xs:enumeration value="840"/>
+      <xs:enumeration value="841"/>
+      <xs:enumeration value="842"/>
+      <xs:enumeration value="843"/>
+      <xs:enumeration value="844"/>
+      <xs:enumeration value="845"/>
+      <xs:enumeration value="846"/>
+      <xs:enumeration value="847"/>
+      <xs:enumeration value="848"/>
+      <xs:enumeration value="849"/>
+      <xs:enumeration value="850"/>
+      <xs:enumeration value="851"/>
+      <xs:enumeration value="852"/>
+      <xs:enumeration value="853"/>
+      <xs:enumeration value="854"/>
+      <xs:enumeration value="855"/>
+      <xs:enumeration value="856"/>
+      <xs:enumeration value="857"/>
+      <xs:enumeration value="858"/>
+      <xs:enumeration value="859"/>
+      <xs:enumeration value="860"/>
+      <xs:enumeration value="861"/>
+      <xs:enumeration value="862"/>
+      <xs:enumeration value="863"/>
+      <xs:enumeration value="864"/>
+      <xs:enumeration value="865"/>
+      <xs:enumeration value="866"/>
+      <xs:enumeration value="867"/>
+      <xs:enumeration value="868"/>
+      <xs:enumeration value="869"/>
+      <xs:enumeration value="870"/>
+      <xs:enumeration value="871"/>
+      <xs:enumeration value="872"/>
+      <xs:enumeration value="873"/>
+      <xs:enumeration value="874"/>
+      <xs:enumeration value="875"/>
+      <xs:enumeration value="876"/>
+      <xs:enumeration value="877"/>
+      <xs:enumeration value="878"/>
+      <xs:enumeration value="879"/>
+      <xs:enumeration value="900"/>
+      <xs:enumeration value="901"/>
+      <xs:enumeration value="902"/>
+      <xs:enumeration value="903"/>
+      <xs:enumeration value="904"/>
+      <xs:enumeration value="905"/>
+      <xs:enumeration value="906"/>
+      <xs:enumeration value="907"/>
+      <xs:enumeration value="908"/>
+      <xs:enumeration value="909"/>
+      <xs:enumeration value="910"/>
+      <xs:enumeration value="911"/>
+      <xs:enumeration value="912"/>
+      <xs:enumeration value="913"/>
+      <xs:enumeration value="914"/>
+      <xs:enumeration value="915"/>
+      <xs:enumeration value="916"/>
+      <xs:enumeration value="917"/>
+      <xs:enumeration value="918"/>
+      <xs:enumeration value="919"/>
+      <xs:enumeration value="920"/>
+      <xs:enumeration value="921"/>
+      <xs:enumeration value="922"/>
+      <xs:enumeration value="923"/>
+      <xs:enumeration value="924"/>
+      <xs:enumeration value="925"/>
+      <xs:enumeration value="926"/>
+      <xs:enumeration value="927"/>
+      <xs:enumeration value="928"/>
+      <xs:enumeration value="929"/>
+      <xs:enumeration value="930"/>
+      <xs:enumeration value="931"/>
+      <xs:enumeration value="932"/>
+      <xs:enumeration value="933"/>
+      <xs:enumeration value="934"/>
+      <xs:enumeration value="935"/>
+      <xs:enumeration value="936"/>
+      <xs:enumeration value="937"/>
+      <xs:enumeration value="938"/>
+      <xs:enumeration value="939"/>
+      <xs:enumeration value="940"/>
+      <xs:enumeration value="941"/>
+      <xs:enumeration value="942"/>
+      <xs:enumeration value="943"/>
+      <xs:enumeration value="944"/>
+      <xs:enumeration value="945"/>
+      <xs:enumeration value="946"/>
+      <xs:enumeration value="947"/>
+      <xs:enumeration value="948"/>
+      <xs:enumeration value="949"/>
+      <xs:enumeration value="950"/>
+      <xs:enumeration value="951"/>
+      <xs:enumeration value="952"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrIsExecutedEnumType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrPenaltyCodeImposedRequestType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="101"/>
+			<xs:enumeration value="102"/>
+			<xs:enumeration value="201"/>
+			<xs:enumeration value="202"/>
+			<xs:enumeration value="203"/>
+			<xs:enumeration value="204"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrPenaltyCodeImposedResponseType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="101"/>
+			<xs:enumeration value="102"/>
+			<xs:enumeration value="301"/>
+			<xs:enumeration value="302"/>
+			<xs:enumeration value="303"/>
+			<xs:enumeration value="304"/>
+			<xs:enumeration value="305"/>
+			<xs:enumeration value="306"/>
+			<xs:enumeration value="307"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrPenaltyCodeRequestedType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="101"/>
+			<xs:enumeration value="102"/>
+			<xs:enumeration value="301"/>
+			<xs:enumeration value="302"/>
+			<xs:enumeration value="303"/>
+			<xs:enumeration value="304"/>
+			<xs:enumeration value="305"/>
+			<xs:enumeration value="306"/>
+			<xs:enumeration value="307"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ncrPenaltyIdentifierType">
+		<xs:restriction base="xs:positiveInteger"/>
+	</xs:simpleType>
+	<xs:simpleType name="ncrResponseStatusCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="OK"/>
+			<xs:enumeration value="NotFound"/>
+		</xs:restriction>
+	</xs:simpleType>
+  <xs:simpleType name="ncrReasonType">
+    <xs:restriction base="xs:token">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="500"/>
+      <xs:whiteSpace value="collapse"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

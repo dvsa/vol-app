@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="RoadSideInspection_Types.xsd"/>
+	<xs:element name="RoadSideInspection_Request">
+		<xs:annotation>
+			<xs:documentation>The Road Side Inspection workflow enables an enforcement officer or roadside inspector in one member state to notify the competent authority in another member state that a transport undertaking's vehicle has failed a technical inspection.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="globalHeaderType"/>
+				<xs:element name="Body">
+					<xs:complexType>
+						<xs:complexContent>
+							<xs:extension base="rsiBodyRequestType">
+								<xs:sequence>
+									<xs:element name="InspectionDetails">
+										<xs:annotation>
+											<xs:documentation>The details of the itechnical inspection of the vehicle: the date, location, inspecting officer or authority and result.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:complexContent>
+												<xs:extension base="rsiDetailsType">
+													<xs:sequence>
+														<xs:element name="InspectionResult" type="rsiResultType">
+															<xs:annotation>
+																<xs:documentation>The result of the inspection and, if the vehicle failed, whether the vehicle has been restricted or prohibited and whether a PTI inspection has been requested in the Member State of registration.</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+													</xs:sequence>
+												</xs:extension>
+											</xs:complexContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="IdentificationDetails">
+										<xs:annotation>
+											<xs:documentation>The details that identify the vehicle, the transport undertaking (or vehicle operator) and the driver.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="VehicleDetails" type="rsiVehicleDetailsType">
+													<xs:annotation>
+														<xs:documentation>The details of the vehicle that has failed a technical inspection.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="DriverDetails" type="rsiDriverDetails">
+													<xs:annotation>
+														<xs:documentation>The details of the driver that was operating the vehicle.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:choice>
+													<xs:element name="TransportUndertakingDetails">
+														<xs:annotation>
+															<xs:documentation>The details of the transport undertaking that operates the vehicle.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:complexContent>
+																<xs:extension base="rsiTransportUndertakingType">
+																	<xs:sequence>
+																		<xs:element name="TransportUndertakingAddress" type="globalAddressDetailsType">
+																			<xs:annotation>
+																				<xs:documentation>The address of the transport undertaking (address, postal code, city, country) as recorded in the register.</xs:documentation>
+																			</xs:annotation>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:extension>
+															</xs:complexContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="HolderDetails">
+														<xs:annotation>
+															<xs:documentation>The details of the vehicle holder (if it is not a transport undertaking).</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:choice>
+																<xs:element name="Company">
+																	<xs:annotation>
+																		<xs:documentation>The details of the company if the holder of the registration certificate is a company.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:complexContent>
+																			<xs:extension base="globalAddressDetailsType">
+																				<xs:attribute name="companyName" type="globalTransportUndertakingNameType" use="required">
+																					<xs:annotation>
+																						<xs:documentation>The company name.</xs:documentation>
+																					</xs:annotation>
+																				</xs:attribute>
+																			</xs:extension>
+																		</xs:complexContent>
+																	</xs:complexType>
+																</xs:element>
+																<xs:element name="NaturalPerson">
+																	<xs:annotation>
+																		<xs:documentation>The details of the person if the holder of the registration certificate is a natural person.</xs:documentation>
+																	</xs:annotation>
+																	<xs:complexType>
+																		<xs:complexContent>
+																			<xs:extension base="globalAddressDetailsType">
+																				<xs:attributeGroup ref="globalNameGroup"/>
+																			</xs:extension>
+																		</xs:complexContent>
+																	</xs:complexType>
+																</xs:element>
+															</xs:choice>
+															<xs:attribute name="registrationCertificate" type="globalCertificateNumberType" use="optional">
+																<xs:annotation>
+																	<xs:documentation>The serial number of the registration certificate of the vehicle holder company.</xs:documentation>
+																</xs:annotation>
+															</xs:attribute>
+														</xs:complexType>
+													</xs:element>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="CheckedItems">
+										<xs:annotation>
+											<xs:documentation>The list of items checked during the RSI.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="CheckedItem" maxOccurs="12">
+													<xs:annotation>
+														<xs:documentation>There are 12 categories of check:
+0 - Identification
+1 - Braking equipment
+2 - Steering
+3 - Visibility
+4 - Lighting equipment and electrical system
+5 - Axles, wheels, tyres, suspension
+6 - Chassis and chassis attachments
+7 - Other equipment incl. tachograph and speed limitation device
+8 - Nuisance incl. emissions and spillage of fuel and / or oil
+9 - Supplementary tests for category M2 and M3 vehicles
+10 - Cargo securing; stability of the vehicle
+20 - Cargo securing; restraining methods</xs:documentation>
+													</xs:annotation>
+													<xs:complexType>
+														<xs:complexContent>
+															<xs:extension base="rsiCheckedItemType">
+																<xs:sequence>
+																	<xs:element name="FailedChecks" minOccurs="0" maxOccurs="1">
+																		<xs:annotation>
+																			<xs:documentation>The list of failed checks.</xs:documentation>
+																		</xs:annotation>
+																		<xs:complexType>
+																			<xs:sequence>
+																				<xs:element name="FailedCheck" type="rsiFailedCheckType" minOccurs="1" maxOccurs="unbounded">
+																					<xs:annotation>
+																						<xs:documentation>For each failed check the reason and status.</xs:documentation>
+																					</xs:annotation>
+																				</xs:element>
+																			</xs:sequence>
+																		</xs:complexType>
+																	</xs:element>
+																</xs:sequence>
+															</xs:extension>
+														</xs:complexContent>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:extension>
+						</xs:complexContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

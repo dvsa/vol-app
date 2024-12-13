@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4" targetNamespace="https://webgate.ec.testa.eu/move-hub/erru/3.4" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="Global_Types.xsd"/>
+	<xs:complexType name="errorNotificationType">
+		<xs:attribute name="businessCaseId" type="globalBusinessCaseIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>The business identifier / reference number / case number assigned to the workflow by the originating Member State. It is not checked for uniqueness by the Hub. It will be included on all subsequent messages in the workflow.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="statusCode" type="errorStatusCodeType" use="required">
+			<xs:annotation id="errorStatusCode">
+				<xs:documentation>The status code of the error as appropriate (e.g. timeout, server error, invalid format, etc.).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="statusMessage" type="globalStatusMessageType" use="optional">
+			<xs:annotation id="errorStatusMessage">
+				<xs:documentation>An explanatory message (if necessary) adding context to the status code.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="errorStatusCodeType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="InvalidFormat"/>
+			<xs:enumeration value="InvalidData"/>
+			<xs:enumeration value="Timeout"/>
+			<xs:enumeration value="ServerError"/>
+			<xs:enumeration value="Other"/>
+			<xs:enumeration value="ResponseNotCorrelated"/>
+			<xs:enumeration value="DuplicateRequest"/>
+			<xs:enumeration value="DuplicateResponse"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
