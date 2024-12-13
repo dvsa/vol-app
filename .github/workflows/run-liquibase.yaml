@@ -1,76 +1,106 @@
-name: Run Database Migrations
-
+name: Run Liquibase Migrations
 on:
-  workflow_call:
-    inputs:
-      environment:
-        type: string
-        required: true
-      ref:
-        type: string
-        required: false
-      dry-run:
-        type: boolean
-        required: false
-        default: true
   workflow_dispatch:
     inputs:
-      environment:
-        description: "Environment to run migrations against"
-        type: choice
-        options: [dev, int, prep]
+      version:
+        description: "Version tag for the container"
         required: true
-      ref:
-        description: "Branch to run migrations from"
         type: string
+      account:
+        description: "Target AWS account"
+        required: true
+        type: choice
+        options:
+          - nonprod
+          - prod
+      dry_run:
+        description: "Run in dry-run mode (show pending changes only)"
+        required: true
+        type: boolean
+        default: true
+      ref:
+        description: "Git ref to checkout (branch, tag, or commit SHA)"
         required: false
-      dry-run:
-        description: "Run migrations without applying changes"
+        type: string
+        default: "main"
+      submit_job:
+        description: "Submit AWS Batch job after building"
+        required: true
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      version:
+        type: string
+        required: true
+      push:
         type: boolean
         required: true
-        default: true
-
-permissions:
-  id-token: write
-  contents: read
-
+        default: false
+      account:
+        type: string
+        required: true
+        enum: ["nonprod", "prod"]
+      ref:
+        type: string
+        required: false
+        default: "main"
+env:
+  REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+  AWS_OIDC_ROLE: ${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
 jobs:
-  migrate:
+  build:
     runs-on: ubuntu-latest
-    environment: ${{ !inputs.dry-run && inputs.environment || null }}
-    env:
-      AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
-      AWS_OIDC_ROLE: ${{ vars[format('ENV_{0}_TF_OIDC_ROLE', inputs.environment)] || vars[(inputs.environment == 'prep' || inputs.environment == 'prod') && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
-      BATCH_QUEUE: ${{ vars[format('ACCOUNT_{0}_BATCH_JOB_QUEUE', (inputs.environment == 'prep' || inputs.environment == 'prod') && 'PROD' || 'NONPROD')] }}
-
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || null }}
-
+          ref: ${{ inputs.ref || github.event.inputs.ref }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Configure AWS credentials
+        if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Login to ECR
+        if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./infra/docker/liquibase
+          push: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
+          tags: |
+            ${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version || github.event.inputs.version }}
+            ${{ env.REGISTRY }}/vol-app/liquibase:latest
+          cache-from: type=gha,scope=liquibase
+          cache-to: type=gha,mode=max,scope=liquibase
+          build-args: |
+            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+  submit-batch-job:
+    needs: build
+    if: |
+      (inputs.push || (github.event_name == 'workflow_dispatch' && github.event.inputs.submit_job == 'true'))
+    runs-on: ubuntu-latest
+    steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: Submit Batch Job
-        id: submit-job
+      - name: Submit AWS Batch job
         run: |
-          JOB_ID=$(aws batch submit-job \
-            --job-name "db-migration-${{ inputs.environment }}-${{ github.run_id }}" \
-            --job-queue "${{ env.BATCH_QUEUE }}" \
-            --job-definition "db-migration-${{ inputs.environment }}" \
-            --parameters environment="${{ inputs.environment }}" \
-            --query 'jobId' --output text)
-
-          echo "job-id=${JOB_ID}" >> $GITHUB_OUTPUT
-
-      - name: Wait for job completion
-        run: |
-          aws batch wait job-complete --jobs ${{ steps.submit-job.outputs.job-id }}
-          STATUS=$(aws batch describe-jobs --jobs ${{ steps.submit-job.outputs.job-id }} --query 'jobs[0].status' --output text)
-          if [ "$STATUS" != "SUCCEEDED" ]; then
-            echo "Job failed with status: ${STATUS}"
-            exit 1
-          fi
+          aws batch submit-job \
+            --job-name "liquibase-migration-${{ inputs.version || github.event.inputs.version }}" \
+            --job-queue "${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_BATCH_JOB_QUEUE || vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}" \
+            --job-definition "${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_BATCH_LIQUIBASE_JOB_DEFINITION || vars.ACCOUNT_NONPROD_BATCH_LIQUIBASE_JOB_DEFINITION }}" \
+            --container-overrides "{
+              \"image\": \"${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version || github.event.inputs.version }}\",
+              \"environment\": [
+                {\"name\": \"DRY_RUN\", \"value\": \"${{ github.event.inputs.dry_run || 'false' }}\"}
+              ]
+            }"

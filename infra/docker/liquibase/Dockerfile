@@ -1,19 +1,13 @@
 FROM alpine/git AS repo
+ARG GITHUB_TOKEN
 WORKDIR /app
-RUN git clone https://github.com/dvsa/olcs-etl .
+RUN git clone https://${GITHUB_TOKEN}@github.com/dvsa/olcs-etl .
 
 FROM liquibase/liquibase
-
-RUN apt-get update && apt-get install -y \
-    aws-cli \
-    jq \
-    && rm -rf /var/lib/apt/lists/*
-
+USER root
 COPY --from=repo /app /liquibase/changelog
-
 COPY entrypoint.sh /liquibase/
 RUN chmod +x /liquibase/entrypoint.sh
-
 ENV INSTALL_MYSQL=true
-
+USER liquibase
 ENTRYPOINT ["/liquibase/entrypoint.sh"]
