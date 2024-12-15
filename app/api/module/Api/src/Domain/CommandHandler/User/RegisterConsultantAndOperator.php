@@ -25,6 +25,7 @@ final class RegisterConsultantAndOperator extends AbstractUserCommandHandler imp
         $operatorDetails = $command->getOperatorDetails();
         $operatorDetails['createdByConsultant'] = true;
 
+
         // Register the operator first, a new Org will be created.
         $this->result->merge($this->handleSideEffect(RegisterUserSelfServeCommand::create($operatorDetails)));
 

@@ -48,12 +48,14 @@ class UserRegistrationController extends AbstractController
             IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]])
         )->getResult()['isEnabled']) {
             // If the feature toggle is enabled, start the TC journey in new controller
-            return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add']);
+                return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add', 'params' => $this->params()->fromQuery()]);
         } else {
             // If disabled, start the normal add journey in this controller
             return $this->forward()->dispatch(static::class, ['action' => 'add']);
         }
     }
+
+
 
     /**
      * Method used for the registration form page
@@ -76,7 +78,6 @@ class UserRegistrationController extends AbstractController
             );
 
             $form->setData($postData);
-
             if ($form->isValid()) {
                 return $this->processUserRegistration($form->getData());
             }
@@ -171,7 +172,7 @@ class UserRegistrationController extends AbstractController
         if ($this->isButtonPressed('postAccount')) {
             // create a user for an existing licence
             return $this->createUserWithLic($formData);
-        } elseif ('Y' === $formData['fields']['isLicenceHolder']) {
+        } elseif ('Y' === $formData['fields']['isLicenceHolder'] || 'Y' === $formData['fields']['existingOperatorLicence']) {
             // show licence details to confirm an address
             return $this->showLicence($formData);
         } else {

@@ -24,4 +24,12 @@ class OperatorRepresentation
      * @Form\Type("Radio")
      */
     public $actingOnOperatorsBehalf = null;
+
+    /**
+     * @Form\Name("licenceNumber")
+     * @Form\Required(false)
+     * @Form\Type("hidden")
+     *
+     */
+    public $licenceNumber = null;
 }
