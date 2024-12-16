@@ -58,7 +58,6 @@ class UserRegistrationController extends AbstractController
         }
     }
 
-
     /**
      * Method used for the registration form page
      *
