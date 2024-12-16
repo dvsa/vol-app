@@ -527,7 +527,6 @@ $routes = [
                     'defaults' => [
                         'controller' => \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class,
                         'action' => 'add',
-
                     ]
                 ]
             ],
