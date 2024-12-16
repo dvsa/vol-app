@@ -15,21 +15,20 @@ use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Form\Model\Form\RegisterOperatorAccount;
-use Olcs\Session\ConsultantRegistration;
 
 class OperatorRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation $niTextTranslationUtil,
-        AuthorizationService $authService,
-        protected FormHelperService $formHelper,
-        protected ScriptFactory $scriptFactory,
-        protected TranslationHelperService $translationHelper,
-        protected UrlHelperService $urlHelper,
+        NiTextTranslation                     $niTextTranslationUtil,
+        AuthorizationService                  $authService,
+        protected FormHelperService           $formHelper,
+        protected ScriptFactory               $scriptFactory,
+        protected TranslationHelperService    $translationHelper,
+        protected UrlHelperService            $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper $formatDataMapper,
-        protected ConsultantRegistration $consultantRegistrationSession
-    ) {
+        protected CreateAccountMapper         $formatDataMapper
+    )
+    {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -41,22 +40,16 @@ class OperatorRegistrationController extends AbstractController
             $form->setData($postData);
             if ($form->isValid()) {
                 $formattedOperatorData = $this->formatDataMapper->formatSaveData($form->getData());
-                if (!$this->consultantRegistrationSession->getOperatorAdmin()) {
-                    $formattedOperatorData['licenceNumber'] = $this->consultantRegistrationSession->getExistingLicence();
-                }
-
                 $response = $this->handleCommand(
                     RegisterUserSelfserve::create($formattedOperatorData)
                 );
 
                 if ($response->isOk()) {
-                    if( !$this->consultantRegistrationSession->getOperatorAdmin()) {
-                        return $this->redirect()->toRoute('user-registration/operator-confirm');
-                    }
-                        return $this->prepareView('olcs/user-registration/check-email', [
-                            'emailAddress' => $formattedOperatorData['contactDetails']['emailAddress'],
-                            'pageTitle' => 'user-registration.page.check-email.title'
-                        ]);
+
+                    return $this->prepareView('olcs/user-registration/check-email', [
+                        'emailAddress' => $formattedOperatorData['contactDetails']['emailAddress'],
+                        'pageTitle' => 'user-registration.page.check-email.title'
+                    ]);
                 }
 
                 $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');

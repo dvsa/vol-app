@@ -547,7 +547,7 @@ $routes = [
                     'route' => 'operator-confirm[/]',
                     'defaults' => [
                         'controller' => UserRegistrationController::class,
-                        'action' => 'operatorConfirm'
+                        'action' => 'add'
                     ]
                 ]
             ],

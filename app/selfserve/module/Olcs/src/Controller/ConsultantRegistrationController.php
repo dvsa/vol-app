@@ -69,7 +69,7 @@ class ConsultantRegistrationController extends AbstractController
                         // no admin, move to operator representation but store licence number and admin state in session
                         $this->consultantRegistrationSession->setExistingLicence($licenceNumber);
                         $this->consultantRegistrationSession->setOperatorAdmin($checks['hasOperatorAdmin']);
-                        $this->redirect()->toRoute('user-registration/operator');
+                        $this->redirect()->toRoute('user-registration/operator-confirm');
                     } else {
                         $this->redirect()->toRoute('user-registration/contact-your-administrator');
                     }

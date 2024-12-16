@@ -12,7 +12,6 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Controller\OperatorRegistrationController;
-use Olcs\Session\ConsultantRegistration;
 use Psr\Container\ContainerInterface;
 
 class OperatorRegistrationControllerFactory implements FactoryInterface
@@ -27,7 +26,6 @@ class OperatorRegistrationControllerFactory implements FactoryInterface
         $urlHelper = $container->get(UrlHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $formatDataMapper = $container->get(CreateAccountMapper::class);
-        $consultantRegistrationSession = $container->get(ConsultantRegistration::class);
 
         return new OperatorRegistrationController(
             $niTextTranslationUtil,
@@ -37,8 +35,7 @@ class OperatorRegistrationControllerFactory implements FactoryInterface
             $translationHelper,
             $urlHelper,
             $flashMessengerHelper,
-            $formatDataMapper,
-            $consultantRegistrationSession
+            $formatDataMapper
         );
     }
 }
