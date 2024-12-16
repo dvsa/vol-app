@@ -126,7 +126,6 @@ class ConsultantRegistrationController extends AbstractController
         }
         return $this->prepareView('olcs/user-registration/index', [
             'form' => $form,
-
         ]);
     }
 
