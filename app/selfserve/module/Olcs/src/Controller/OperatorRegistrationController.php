@@ -19,29 +19,27 @@ use Olcs\Form\Model\Form\RegisterOperatorAccount;
 class OperatorRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation $niTextTranslationUtil,
-        AuthorizationService $authService,
-        protected FormHelperService $formHelper,
-        protected ScriptFactory $scriptFactory,
-        protected TranslationHelperService $translationHelper,
-        protected UrlHelperService $urlHelper,
+        NiTextTranslation                     $niTextTranslationUtil,
+        AuthorizationService                  $authService,
+        protected FormHelperService           $formHelper,
+        protected ScriptFactory               $scriptFactory,
+        protected TranslationHelperService    $translationHelper,
+        protected UrlHelperService            $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper $formatDataMapper
-    ) {
+        protected CreateAccountMapper         $formatDataMapper
+    )
+    {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
     public function addAction(): Response|ViewModel
     {
         $form = $this->formHelper->createFormWithRequest(RegisterOperatorAccount::class, $this->getRequest());
-
         if ($this->getRequest()->isPost()) {
             $postData = $this->formatDataMapper->formatPostData($this->params()->fromPost());
             $form->setData($postData);
-
             if ($form->isValid()) {
                 $formattedOperatorData = $this->formatDataMapper->formatSaveData($form->getData());
-
                 $response = $this->handleCommand(
                     RegisterUserSelfserve::create($formattedOperatorData)
                 );
@@ -56,7 +54,6 @@ class OperatorRegistrationController extends AbstractController
                 $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
             }
         }
-
         return $this->prepareView('olcs/user-registration/index', [
             'form' => $this->alterForm($form),
             'pageTitle' => 'operator-registration.page.title'
@@ -76,7 +73,6 @@ class OperatorRegistrationController extends AbstractController
         );
 
         $termsAgreed->setLabel($label);
-
         return $form;
     }
 

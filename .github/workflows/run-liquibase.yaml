@@ -76,6 +76,7 @@ jobs:
           path: infra/docker/liquibase/changelog
           ref: ${{ inputs.etl_ref || 'main' }}
 
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 

@@ -18,6 +18,7 @@ use Olcs\Controller\Factory\CorrespondenceControllerFactory;
 use Olcs\Controller\Factory\Ebsr\UploadsControllerFactory;
 use Olcs\Controller\Factory\IndexControllerFactory;
 use Olcs\Controller\Factory\MyDetailsControllerFactory;
+use Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
@@ -525,7 +526,7 @@ $routes = [
                     'route' => 'operator[/]',
                     'defaults' => [
                         'controller' => \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class,
-                        'action' => 'add'
+                        'action' => 'add',
                     ]
                 ]
             ],
@@ -536,6 +537,16 @@ $routes = [
                     'defaults' => [
                         'controller' => ConsultantRegistrationController::class,
                         'action' => 'operatorRepresentation'
+                    ]
+                ]
+            ],
+            'operator-confirm' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'operator-confirm[/]',
+                    'defaults' => [
+                        'controller' => UserRegistrationController::class,
+                        'action' => 'add'
                     ]
                 ]
             ],

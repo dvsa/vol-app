@@ -63,11 +63,13 @@ class ConsultantRegistrationController extends AbstractController
                 if (($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
                     $licenceNumber = $formData['fields']['licenceContent']['licenceNumber'];
                     $checks = $this->licenseHasAdmin($licenceNumber);
-
-                    if (!$checks['licenceExists'] ?? false) {
+                    if (!$checks['licenceExists']) {
                         $form->setMessages(['fields' => ['licenceContent' => ['licenceNumber' => ['record-not-found']]]]);
-                    } elseif (!$checks['hasOperatorAdmin'] ?? false) {
-                        $this->redirect()->toRoute('user-registration/operator');
+                    } elseif (!$checks['hasOperatorAdmin']) {
+                        // no admin, move to operator representation but store licence number and admin state in session
+                        $this->consultantRegistrationSession->setExistingLicence($licenceNumber);
+                        $this->consultantRegistrationSession->setOperatorAdmin($checks['hasOperatorAdmin']);
+                        $this->redirect()->toRoute('user-registration/operator-confirm');
                     } else {
                         $this->redirect()->toRoute('user-registration/contact-your-administrator');
                     }
@@ -106,9 +108,8 @@ class ConsultantRegistrationController extends AbstractController
 
             $postData = $this->formatDataMapper->formatPostData($this->params()->fromPost());
             $form->setData($postData);
-
             if ($form->isValid()) {
-                if ($postData['fields']['actingOnOperatorsBehalf'] == 'Y') {
+                if ($postData['fields']['actingOnOperatorsBehalf'] === 'Y') {
                     // Move on to capture details for an operator, then consultant account
                     return $this->redirect()->toRoute('user-registration/register-for-operator');
                 } else {
@@ -117,7 +118,12 @@ class ConsultantRegistrationController extends AbstractController
                 }
             }
         }
-
+        if ($this->getRequest()->isGet()) {
+            $licenceNumber = $this->params()->fromQuery('licenceNumber');
+            if ($licenceNumber) {
+                 $form->setData(['fields' => ['licenceNumber' => $licenceNumber]]);
+            }
+        }
         return $this->prepareView('olcs/user-registration/index', [
             'form' => $form,
         ]);
@@ -163,7 +169,7 @@ class ConsultantRegistrationController extends AbstractController
     /**
      * @return Response|ViewModel
      */
-    public function registerConsultantAccountAction()
+    public function registerConsultantAccountAction(): Response|ViewModel
     {
         $form = $this->formHelper->createFormWithRequest(RegisterConsultantAccount::class, $this->getRequest());
 
@@ -196,6 +202,11 @@ class ConsultantRegistrationController extends AbstractController
     private function registerConsultantAndOperator($consultantFormData)
     {
         $operatorData = $this->consultantRegistrationSession->getOperatorDetails();
+        if (!empty($this->consultantRegistrationSession->getExistingLicence()) && $this->consultantRegistrationSession->getOperatorAdmin())
+        {
+            $operatorData['fields']['licenceNumber'] = $this->consultantRegistrationSession->getExistingLicence();
+            $operatorData['fields']['isLicenceHolder'] = 'Y';
+        }
         $formattedOperatorData = $this->formatDataMapper->formatSaveData($operatorData);
         $formattedConsultantData = $this->formatDataMapper->formatSaveData($consultantFormData);
 

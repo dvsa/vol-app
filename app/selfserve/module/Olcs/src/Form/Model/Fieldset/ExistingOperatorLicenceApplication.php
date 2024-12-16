@@ -13,7 +13,7 @@ class ExistingOperatorLicenceApplication
 
 /**
  *
- * @Form\Required(true)
+ * @Form\Required(false)
  * @Form\Type("Text")
  * @Form\Options({
  *     "label": "user-registration.field.licenceNumber.label",

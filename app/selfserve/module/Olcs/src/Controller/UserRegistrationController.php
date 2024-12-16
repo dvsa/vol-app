@@ -18,6 +18,7 @@ use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Mapper\CreateAccountMapper;
+use Olcs\Session\ConsultantRegistration;
 
 /**
  * User Registration Controller
@@ -25,15 +26,17 @@ use Olcs\Controller\Mapper\CreateAccountMapper;
 class UserRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation $niTextTranslationUtil,
-        AuthorizationService $authService,
-        protected FormHelperService $formHelper,
-        protected ScriptFactory $scriptFactory,
-        protected TranslationHelperService $translationHelper,
-        protected UrlHelperService $urlHelper,
+        NiTextTranslation                     $niTextTranslationUtil,
+        AuthorizationService                  $authService,
+        protected FormHelperService           $formHelper,
+        protected ScriptFactory               $scriptFactory,
+        protected TranslationHelperService    $translationHelper,
+        protected UrlHelperService            $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper $formatDataMapper
-    ) {
+        protected CreateAccountMapper         $formatDataMapper,
+        protected ConsultantRegistration      $consultantRegistrationSession
+    )
+    {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -44,11 +47,11 @@ class UserRegistrationController extends AbstractController
      */
     public function startAction()
     {
-        if($this->handleQuery(
+        if ($this->handleQuery(
             IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]])
         )->getResult()['isEnabled']) {
             // If the feature toggle is enabled, start the TC journey in new controller
-            return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add']);
+            return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add', 'params' => $this->params()->fromQuery()]);
         } else {
             // If disabled, start the normal add journey in this controller
             return $this->forward()->dispatch(static::class, ['action' => 'add']);
@@ -76,7 +79,6 @@ class UserRegistrationController extends AbstractController
             );
 
             $form->setData($postData);
-
             if ($form->isValid()) {
                 return $this->processUserRegistration($form->getData());
             }
@@ -117,6 +119,11 @@ class UserRegistrationController extends AbstractController
 
         $termsAgreed->setLabel($label);
 
+        if ($this->consultantRegistrationSession->getOperatorAdmin() === false) {
+            $form->get('fields')->get('licenceNumber')->setValue($this->consultantRegistrationSession->getExistingLicence())->setAttribute('type', 'hidden');
+            $form->get('fields')->get('isLicenceHolder')->setValue('Y')->setAttribute('type', 'hidden');
+            $form->get('fields')->get('isLicenceHolder')->setLabel('');
+        }
         return $form;
     }
 
@@ -124,7 +131,7 @@ class UserRegistrationController extends AbstractController
      * Generate content for user registration
      *
      * @param array $formData Form data
-     * @param array $errors   Errors from ZF Validation Chain
+     * @param array $errors Errors from ZF Validation Chain
      *
      * @return ViewModel
      */
@@ -157,6 +164,17 @@ class UserRegistrationController extends AbstractController
         $this->scriptFactory->loadFile('user-registration');
 
         return $view;
+    }
+
+    public function operatorConfirmAction(): ViewModel
+    {
+        $existingLicence = $this->consultantRegistrationSession->getExistingLicence();
+        return $this->showLicence([
+            'fields' => [
+                'licenceNumber' => $existingLicence,
+                'isLicenceHolder' => 'Y'
+            ]
+        ]);
     }
 
     /**
