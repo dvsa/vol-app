@@ -26,8 +26,6 @@ class UserRegistrationControllerToggleAwareFactory extends BinaryFeatureToggleAw
     protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null)
     {
         return $container->get('ControllerManager')->get(OperatorRegistrationController::class);
-
-
     }
 
     /**

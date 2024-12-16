@@ -222,9 +222,6 @@ class ConsultantRegistrationController extends AbstractController
         );
 
         if ($response->isOk()) {
-           /** if (!$this->consultantRegistrationSession->getOperatorAdmin()) {
-                $this->redirect()->toRoute('user-registration/administrator-confirmation-post', ['licenceNumber' => $this->consultantRegistrationSession->getExistingLicence()]);
-            } */
             return null;
         }
 
