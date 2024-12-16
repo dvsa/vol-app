@@ -1,5 +1,5 @@
 locals {
-  service_names = ["api", "selfserve", "internal", "cli"]
+  service_names = ["api", "selfserve", "internal", "cli", "search"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
@@ -253,6 +253,9 @@ module "service" {
   batch = {
     version    = var.cli_image_tag
     repository = data.aws_ecr_repository.this["cli"].repository_url
+
+    search_version    = var.search_image_tag
+    search_repository = data.aws_ecr_repository.this["search"].repository_url
 
     task_iam_role_statements = local.task_iam_role_statements
 

@@ -24,6 +24,10 @@ on:
         description: "CLI image tag"
         type: string
         required: true
+      search-image-tag:
+        description: "search image tag"
+        type: string
+        required: true
       selfserve-image-tag:
         description: "Selfserve image tag"
         type: string
@@ -64,6 +68,10 @@ on:
         description: "CLI image tag"
         type: string
         required: true
+      search-image-tag:
+        description: "search image tag"
+        type: string
+        required: true
       selfserve-image-tag:
         type: string
         required: true
@@ -95,6 +103,9 @@ on:
       previous_cli_image_tag:
         description: "Previous CLI image tag"
         value: ${{ jobs.deploy.outputs.previous_cli_image_tag }}
+      previous_search_image_tag:
+        description: "Previous search image tag"
+        value: ${{ jobs.deploy.outputs.previous_search_image_tag }}
       previous_selfserve_image_tag:
         description: "Previous Selfserve image tag"
         value: ${{ jobs.deploy.outputs.previous_selfserve_image_tag }}
@@ -126,6 +137,7 @@ jobs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
       previous_api_image_tag: ${{ steps.get_current_versions.outputs.api_image_tag }}
       previous_cli_image_tag: ${{ steps.get_current_versions.outputs.cli_image_tag }}
+      previous_search_image_tag: ${{ steps.get_current_versions.outputs.search_image_tag }}
       previous_selfserve_image_tag: ${{ steps.get_current_versions.outputs.selfserve_image_tag }}
       previous_internal_image_tag: ${{ steps.get_current_versions.outputs.internal_image_tag }}
       previous_assets_version: ${{ steps.get_current_versions.outputs.assets_version }}
@@ -181,6 +193,7 @@ jobs:
         env:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
           TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
+          TF_VAR_search_image_tag: ${{ inputs.search-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
@@ -293,6 +306,7 @@ jobs:
         env:
           TF_VAR_api_image_tag: ${{ inputs.api-image-tag }}
           TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
+          TF_VAR_search_image_tag: ${{ inputs.search-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
@@ -310,6 +324,7 @@ jobs:
           echo "Rolled back to:" >> $GITHUB_STEP_SUMMARY
           echo "- API: ${{ inputs.api-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- CLI: ${{ inputs.cli-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- search: ${{ inputs.search-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Selfserve: ${{ inputs.selfserve-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Internal: ${{ inputs.internal-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Assets: ${{ inputs.assets-version }}" >> $GITHUB_STEP_SUMMARY

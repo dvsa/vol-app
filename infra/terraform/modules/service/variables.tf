@@ -58,9 +58,11 @@ variable "services" {
 variable "batch" {
   description = "Configuration for the batch process"
   type = object({
-    version    = string
-    repository = string
-    subnet_ids = list(string)
+    version           = string
+    repository        = string
+    search_version    = string
+    search_repository = string
+    subnet_ids        = list(string)
     task_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)
@@ -69,6 +71,8 @@ variable "batch" {
     jobs = list(object({
       name     = string
       commands = list(string)
+      binaries = optional(list(string), ["/var/www/html/vendor/bin/laminas", "--container=/var/www/html/config/container-cli.php"]),
+      image    = optional(string, "cli")
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
