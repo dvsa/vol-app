@@ -1,5 +1,28 @@
 # Changelog
 
+## [5.12.0](https://github.com/dvsa/vol-app/compare/v5.11.0...v5.12.0) (2024-12-16)
+
+
+### Features
+
+* added files for ERRU version 3.4 VOL-5800 ([#504](https://github.com/dvsa/vol-app/issues/504)) ([a3bdc1b](https://github.com/dvsa/vol-app/commit/a3bdc1b63bde4b23cfdd2526c1c6a21f1b33dceb))
+* liquibase runs in containerised environments via aws batch. WIP ([#496](https://github.com/dvsa/vol-app/issues/496)) ([13f85f8](https://github.com/dvsa/vol-app/commit/13f85f8d194ad7172ef77ef15cc452af6167ac83))
+* parameterise etl ref ([#513](https://github.com/dvsa/vol-app/issues/513)) ([ba1ee1f](https://github.com/dvsa/vol-app/commit/ba1ee1fbcaff6fffc7f194da2a4bc3aca973be3d))
+* vol-5955 operators no admin role ([#512](https://github.com/dvsa/vol-app/issues/512)) ([9547b67](https://github.com/dvsa/vol-app/commit/9547b672bf0cdb62da0b0646eb208c0536eeb3ac))
+
+
+### Bug Fixes
+
+* 5936 lb toggle on ecs service ([#494](https://github.com/dvsa/vol-app/issues/494)) ([b6f0894](https://github.com/dvsa/vol-app/commit/b6f0894ad5b31e8e28f2f29a41a874e849e8fb81))
+* default language for spellcheck to en_GB ([#482](https://github.com/dvsa/vol-app/issues/482)) ([22cb471](https://github.com/dvsa/vol-app/commit/22cb4714301f207fc3e2c744e754f5bd153e6d01))
+* fix null previous image tags being provided to rollback step ([#481](https://github.com/dvsa/vol-app/issues/481)) ([909e697](https://github.com/dvsa/vol-app/commit/909e697f690f7eb18cbb59ce7f2bc1c7ad9750c0))
+* liquibase workflow parameters ([#510](https://github.com/dvsa/vol-app/issues/510)) ([a32d688](https://github.com/dvsa/vol-app/commit/a32d6883a64bb3584e79e2d9387dbe1c36f5816e))
+* pi records without a case no longer throw errors VOL-5297 ([#499](https://github.com/dvsa/vol-app/issues/499)) ([5b01069](https://github.com/dvsa/vol-app/commit/5b01069b92ab1ab3015a9c64aeb96de2234efb0b))
+* replace inr/natreg config placeholders ([#497](https://github.com/dvsa/vol-app/issues/497)) ([2b7d1a6](https://github.com/dvsa/vol-app/commit/2b7d1a6dec3f2644967d07bd819d0a4597fce325))
+* simplify dockerfile stages and etl checkout ([#511](https://github.com/dvsa/vol-app/issues/511)) ([6dfe2e7](https://github.com/dvsa/vol-app/commit/6dfe2e7c47ec243afa8e4cd55c667a53840149ef))
+* terms and conditions link populated on TC journey VOL-5943 ([#498](https://github.com/dvsa/vol-app/issues/498)) ([7d29ff6](https://github.com/dvsa/vol-app/commit/7d29ff612d6ca0049a95ff18eccbbaa625897751))
+* vol 5955 transport consultant bug ([#507](https://github.com/dvsa/vol-app/issues/507)) ([04461a2](https://github.com/dvsa/vol-app/commit/04461a2c6fa705c3b79b634eb086c49c71e4c2af))
+
 ## [5.11.0](https://github.com/dvsa/vol-app/compare/v5.10.2...v5.11.0) (2024-11-29)
 
 
