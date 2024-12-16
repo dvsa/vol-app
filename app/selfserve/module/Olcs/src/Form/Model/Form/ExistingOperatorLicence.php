@@ -9,7 +9,6 @@ use Laminas\Form\Annotation as Form;
  * @Form\Attributes({"method":"post","label":"user-registration.form.label"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
- *
  */
 class ExistingOperatorLicence
 {
