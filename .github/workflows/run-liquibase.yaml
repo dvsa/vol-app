@@ -1,4 +1,7 @@
 name: Run Liquibase Migrations
+permissions:
+  id-token: write
+  contents: read
 on:
   workflow_dispatch:
     inputs:
@@ -36,11 +39,9 @@ on:
       push:
         type: boolean
         required: true
-        default: false
       account:
         type: string
         required: true
-        enum: ["nonprod", "prod"]
       ref:
         type: string
         required: false
@@ -56,19 +57,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref || github.event.inputs.ref }}
+
+      - name: Checkout ETL repository
+        uses: actions/checkout@v4
+        with:
+          repository: dvsa/olcs-etl
+          path: infra/docker/liquibase/changelog
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
       - name: Configure AWS credentials
         if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
       - name: Login to ECR
         if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -79,8 +91,6 @@ jobs:
             ${{ env.REGISTRY }}/vol-app/liquibase:latest
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
-          build-args: |
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
   submit-batch-job:
     needs: build
     if: |
