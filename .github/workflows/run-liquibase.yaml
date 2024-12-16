@@ -40,7 +40,6 @@ on:
       account:
         type: string
         required: true
-        enum: ["nonprod", "prod"]
       ref:
         type: string
         required: false
