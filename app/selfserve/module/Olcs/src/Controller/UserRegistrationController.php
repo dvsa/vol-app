@@ -254,7 +254,6 @@ class UserRegistrationController extends AbstractController
             ];
         }
 
-
         return $this->generateContentForUserRegistration($formData, $errors);
     }
 
