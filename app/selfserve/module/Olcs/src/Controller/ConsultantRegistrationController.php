@@ -184,7 +184,6 @@ class ConsultantRegistrationController extends AbstractController
             if ($form->isValid()) {
                 $result = $this->registerConsultantAndOperator($form->getData());
                 if ($result === null) {
-
                     return $this->prepareView('olcs/user-registration/check-email-consultant', [
                         'consultantEmailAddress' => $form->get('fields')->get('emailAddress')->getValue(),
                         'operatorEmailAddress' => $this->consultantRegistrationSession->getOperatorDetails()['fields']['emailAddress'],
