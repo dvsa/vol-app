@@ -541,6 +541,16 @@ $routes = [
                     ]
                 ]
             ],
+            'operator-confirm' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'operator-confirm[/]',
+                    'defaults' => [
+                        'controller' => UserRegistrationController::class,
+                        'action' => 'operatorConfirm'
+                    ]
+                ]
+            ],
             'register-for-operator' => [
                 'type' => 'segment',
                 'options' => [

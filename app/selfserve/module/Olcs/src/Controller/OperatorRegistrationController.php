@@ -15,6 +15,7 @@ use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Form\Model\Form\RegisterOperatorAccount;
+use Olcs\Session\ConsultantRegistration;
 
 class OperatorRegistrationController extends AbstractController
 {
@@ -26,7 +27,7 @@ class OperatorRegistrationController extends AbstractController
         protected TranslationHelperService $translationHelper,
         protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper $formatDataMapper
+        protected ConsultantRegistration $consultantRegistrationSession,
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -43,7 +44,11 @@ class OperatorRegistrationController extends AbstractController
                 $response = $this->handleCommand(
                     RegisterUserSelfserve::create($formattedOperatorData)
                 );
+
                 if ($response->isOk()) {
+                    if( !$this->consultantRegistrationSession->getOperatorAdmin()) {
+                        return $this->redirect()->toRoute('user-registration/operator-confirm');
+                    }
                         return $this->prepareView('olcs/user-registration/check-email', [
                             'emailAddress' => $formattedOperatorData['contactDetails']['emailAddress'],
                             'pageTitle' => 'user-registration.page.check-email.title'

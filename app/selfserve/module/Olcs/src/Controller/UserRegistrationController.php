@@ -18,6 +18,7 @@ use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Controller\Mapper\CreateAccountMapper;
+use Olcs\Session\ConsultantRegistration;
 
 /**
  * User Registration Controller
@@ -32,7 +33,8 @@ class UserRegistrationController extends AbstractController
         protected TranslationHelperService $translationHelper,
         protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper $formatDataMapper
+        protected CreateAccountMapper $formatDataMapper,
+        protected ConsultantRegistration $consultantRegistrationSession
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -159,7 +161,16 @@ class UserRegistrationController extends AbstractController
 
         return $view;
     }
-
+    public function operatorConfirmAction(): ViewModel
+    {
+        $existingLicence = $this->consultantRegistrationSession->getExistingLicence();
+        return $this->showLicence([
+            'fields' => [
+                'licenceNumber' => $existingLicence,
+                'isLicenceHolder' => 'Y'
+            ]
+        ]);
+    }
     /**
      * Process user registration form data
      *
@@ -172,7 +183,7 @@ class UserRegistrationController extends AbstractController
         if ($this->isButtonPressed('postAccount')) {
             // create a user for an existing licence
             return $this->createUserWithLic($formData);
-        } elseif ('Y' === $formData['fields']['isLicenceHolder'] || 'Y' === $formData['fields']['existingOperatorLicence']) {
+        } elseif ('Y' === $formData['fields']['isLicenceHolder']) {
             // show licence details to confirm an address
             return $this->showLicence($formData);
         } else {
