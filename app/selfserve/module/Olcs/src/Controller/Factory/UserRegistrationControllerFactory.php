@@ -33,6 +33,7 @@ class UserRegistrationControllerFactory implements FactoryInterface
         $urlHelper = $container->get(UrlHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $formatDataMapper = $container->get(CreateAccountMapper::class);
+        $consultantRegistrationSession = $container->get(ConsultantRegistration::class);
 
         return new UserRegistrationController(
             $niTextTranslationUtil,
@@ -42,7 +43,8 @@ class UserRegistrationControllerFactory implements FactoryInterface
             $translationHelper,
             $urlHelper,
             $flashMessengerHelper,
-            $formatDataMapper
+            $formatDataMapper,
+            $consultantRegistrationSession
         );
     }
 }
