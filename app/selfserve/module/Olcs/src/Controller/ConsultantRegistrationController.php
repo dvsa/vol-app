@@ -63,12 +63,12 @@ class ConsultantRegistrationController extends AbstractController
                 if (($formData['fields']['existingOperatorLicence'] ?? null) === 'Y') {
                     $licenceNumber = $formData['fields']['licenceContent']['licenceNumber'];
                     $checks = $this->licenseHasAdmin($licenceNumber);
-                    if (!$checks['licenceExists'] ?? false) {
+                    if (!$checks['licenceExists']) {
                         $form->setMessages(['fields' => ['licenceContent' => ['licenceNumber' => ['record-not-found']]]]);
-                    } elseif (!$checks['hasOperatorAdmin'] ?? false) {
+                    } elseif (!$checks['hasOperatorAdmin']) {
                         // no admin, move to operator representation but store licence number and admin state in session
                         $this->consultantRegistrationSession->setExistingLicence($licenceNumber);
-                        $this->consultantRegistrationSession->setOperatorAdmin(false);
+                        $this->consultantRegistrationSession->setOperatorAdmin($checks['hasOperatorAdmin']);
                         $this->redirect()->toRoute('user-registration/operator');
                     } else {
                         $this->redirect()->toRoute('user-registration/contact-your-administrator');

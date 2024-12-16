@@ -27,7 +27,8 @@ class OperatorRegistrationController extends AbstractController
         protected TranslationHelperService $translationHelper,
         protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected ConsultantRegistration $consultantRegistrationSession,
+        protected CreateAccountMapper $formatDataMapper,
+        protected ConsultantRegistration $consultantRegistrationSession
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -39,8 +40,11 @@ class OperatorRegistrationController extends AbstractController
             $postData = $this->formatDataMapper->formatPostData($this->params()->fromPost());
             $form->setData($postData);
             if ($form->isValid()) {
-
                 $formattedOperatorData = $this->formatDataMapper->formatSaveData($form->getData());
+                if (!$this->consultantRegistrationSession->getOperatorAdmin()) {
+                    $formattedOperatorData['licenceNumber'] = $this->consultantRegistrationSession->getExistingLicence();
+                }
+
                 $response = $this->handleCommand(
                     RegisterUserSelfserve::create($formattedOperatorData)
                 );
@@ -77,7 +81,6 @@ class OperatorRegistrationController extends AbstractController
         );
 
         $termsAgreed->setLabel($label);
-
         return $form;
     }
 
