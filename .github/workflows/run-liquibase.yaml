@@ -1,4 +1,7 @@
 name: Run Liquibase Migrations
+permissions:
+  id-token: write
+  contents: read
 on:
   workflow_dispatch:
     inputs:
@@ -40,7 +43,6 @@ on:
       account:
         type: string
         required: true
-        enum: ["nonprod", "prod"]
       ref:
         type: string
         required: false
