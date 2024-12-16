@@ -1,4 +1,7 @@
 name: Run Liquibase Migrations
+permissions:
+  id-token: write
+  contents: read
 on:
   workflow_dispatch:
     inputs:
