@@ -38,7 +38,7 @@ class ConsultantRegistration extends \Laminas\Session\Container
         return $this;
     }
 
-    public function getOperatorAdmin(): bool
+    public function getOperatorAdmin(): ?bool
     {
         return $this->offsetGet(self::OPERATOR_ADMIN);
     }
