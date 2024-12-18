@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.12.2](https://github.com/dvsa/vol-app/compare/v5.12.1...v5.12.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* remove &lt;/p&gt; being added to end of usernames ([#521](https://github.com/dvsa/vol-app/issues/521)) ([635cefe](https://github.com/dvsa/vol-app/commit/635cefea83f7f84cc64ec3d40b584e9c58968a88))
+* snyk scanning and errors fixed ([#523](https://github.com/dvsa/vol-app/issues/523)) ([b698d12](https://github.com/dvsa/vol-app/commit/b698d12bb1f14734ecbededf4fb6a1e15c36a129))
+
 ## [5.12.1](https://github.com/dvsa/vol-app/compare/v5.12.0...v5.12.1) (2024-12-18)
 
 
