@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.12.1](https://github.com/dvsa/vol-app/compare/v5.12.0...v5.12.1) (2024-12-18)
+
+
+### Features
+
+* get token for olcs-etl checkout from new github app ([#514](https://github.com/dvsa/vol-app/issues/514)) ([db9a36d](https://github.com/dvsa/vol-app/commit/db9a36da6ea9c662065be0e35c6f9b1cd6da6b78))
+
+
+### Bug Fixes
+
+* add liquibase repo to ecr ([#516](https://github.com/dvsa/vol-app/issues/516)) ([9f7fc59](https://github.com/dvsa/vol-app/commit/9f7fc59a62f03b200e2d407ef769b86cddaa3996))
+* correct email address in TC registration emails VOL-5963 ([#517](https://github.com/dvsa/vol-app/issues/517)) ([3b61cf1](https://github.com/dvsa/vol-app/commit/3b61cf105111dbc69ead5e1b2480a676c8678f56))
+
+
+### Miscellaneous Chores
+
+* release 5.12.1 ([#520](https://github.com/dvsa/vol-app/issues/520)) ([6d46ad4](https://github.com/dvsa/vol-app/commit/6d46ad45372563e60d3c34ac5bbc509467a7d658))
+
 ## [5.12.0](https://github.com/dvsa/vol-app/compare/v5.11.0...v5.12.0) (2024-12-16)
 
 
