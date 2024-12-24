@@ -504,7 +504,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         );
 
         return (m::Mock(Organisation::class)
-            ->shouldReceive('getAdministratorUsers')
+            ->shouldReceive('getAdminOrganisationUsers')
             ->andReturn(new ArrayCollection($mockUsers))
             ->getMock());
     }

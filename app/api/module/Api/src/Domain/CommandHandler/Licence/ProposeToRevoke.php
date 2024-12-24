@@ -132,7 +132,7 @@ class ProposeToRevoke extends AbstractCommandHandler implements AuthAwareInterfa
                     $this->licenceId
                 );
             },
-            $this->licenceEntity->getOrganisation()->getAdministratorUsers()->toArray()
+            $this->licenceEntity->getOrganisation()->getAdminOrganisationUsers()->toArray()
         );
 
         if (is_null($correspondenceEmail) && empty($selfServeUserEmailCommands)) {

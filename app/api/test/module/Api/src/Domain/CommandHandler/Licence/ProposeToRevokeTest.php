@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +22,6 @@ use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
-use Dvsa\Olcs\Transfer\Command\Document\PrintLetters;
 use Dvsa\Olcs\Transfer\Command\Licence\ProposeToRevoke as ProposeToRevokeCmd;
 use Dvsa\Olcs\Api\Entity\User\Team;
 use Dvsa\Olcs\Api\Entity\User\User;
@@ -60,7 +61,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $contactDetails->shouldReceive('getEmailAddress')->andReturn('someEmail@email.com');
 
         $organisation = m::mock(Organisation::class);
-        $organisation->shouldReceive('getAdministratorUsers')->andReturn(new ArrayCollection([]));
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn(new ArrayCollection([]));
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getId')->andReturn(7)->getMock();
@@ -186,7 +187,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         );
 
         $organisation = m::mock(Organisation::class);
-        $organisation->shouldReceive('getAdministratorUsers')->andReturn(new ArrayCollection($mockUsers));
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn(new ArrayCollection($mockUsers));
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getId')->andReturn(7)->getMock();
@@ -289,7 +290,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $contactDetails->shouldReceive('getEmailAddress')->andReturn(null);
 
         $organisation = m::mock(Organisation::class);
-        $organisation->shouldReceive('getAdministratorUsers')->andReturn(new ArrayCollection([]));
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn(new ArrayCollection([]));
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getId')->andReturn(7)->getMock();
@@ -390,7 +391,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $contactDetails->shouldReceive('getEmailAddress')->andReturn('someEmail@email.com');
 
         $organisation = m::mock(Organisation::class);
-        $organisation->shouldReceive('getAdministratorUsers')->andReturn(new ArrayCollection([]));
+        $organisation->shouldReceive('getAdminOrganisationUsers')->andReturn(new ArrayCollection([]));
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getId')->andReturn(7)->getMock();
