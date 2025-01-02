@@ -2,12 +2,14 @@
 
 namespace Olcs\Session;
 
+use Laminas\Session\Container;
+
 /**
  * Class ConsultantRegistration
  *
  * @template-extends \Laminas\Session\Container<string, mixed>
  */
-class ConsultantRegistration extends \Laminas\Session\Container
+class ConsultantRegistration extends Container
 {
     public const SESSION_NAME = 'ConsultantRegistration';
     protected const OPERATOR_DETAILS = 'operatorDetails';
@@ -38,7 +40,7 @@ class ConsultantRegistration extends \Laminas\Session\Container
         return $this;
     }
 
-    public function getOperatorAdmin(): bool
+    public function getOperatorAdmin(): ?bool
     {
         return $this->offsetGet(self::OPERATOR_ADMIN);
     }

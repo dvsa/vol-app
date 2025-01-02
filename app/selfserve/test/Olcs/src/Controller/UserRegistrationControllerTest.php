@@ -16,6 +16,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\Mapper\CreateAccountMapper;
 use Olcs\Controller\UserRegistrationController as Sut;
+use Olcs\Session\ConsultantRegistration;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
 
@@ -40,6 +41,9 @@ class UserRegistrationControllerTest extends TestCase
 
     private $mockFormatSaveDataMapper;
 
+    private $mockConsultantRegistrationSession;
+
+
     public function setUp(): void
     {
         $this->sut = m::mock(Sut::class)
@@ -54,6 +58,9 @@ class UserRegistrationControllerTest extends TestCase
         $this->mockUrlHelper = m::mock(UrlHelperService::class)->makePartial();
         $this->mockTranslationHelper = m::mock(TranslationHelperService::class)->makePartial();
         $this->mockFormatSaveDataMapper = m::mock(CreateAccountMapper::class)->makePartial();
+        $this->mockConsultantRegistrationSession = m::mock(ConsultantRegistration::class)->makePartial();
+
+        $this->mockConsultantRegistrationSession->shouldReceive('getOperatorAdmin')->andReturn(true);
 
         $reflectionClass = new ReflectionClass(Sut::class);
         $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
@@ -64,6 +71,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'urlHelper', $this->mockUrlHelper);
         $this->setMockedProperties($reflectionClass, 'translationHelper', $this->mockTranslationHelper);
         $this->setMockedProperties($reflectionClass, 'formatDataMapper', $this->mockFormatSaveDataMapper);
+        $this->setMockedProperties($reflectionClass, 'consultantRegistrationSession', $this->mockConsultantRegistrationSession);
     }
 
     /**
@@ -81,6 +89,8 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+
 
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
