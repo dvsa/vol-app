@@ -346,7 +346,7 @@ jobs:
     name: Run Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
     with:
       platform_env: int
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
@@ -451,7 +451,7 @@ jobs:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
     needs:
       - terraform_env_prep
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eFullRegression.yaml@main
     with:
       platform_env: prep
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
@@ -466,7 +466,16 @@ jobs:
 
   terraform_env_prod:
     name: Environment (prod)
-    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      needs.release-please.outputs.release_created &&
+      !contains(needs.get-version.outputs.api, '-') &&
+      !contains(needs.get-version.outputs.cli, '-') &&
+      !contains(needs.get-version.outputs.selfserve, '-') &&
+      !contains(needs.get-version.outputs.internal, '-') &&
+      !contains(needs.get-version.outputs.assets, '-')
     concurrency:
       group: terraform-environment-prod
     needs:
