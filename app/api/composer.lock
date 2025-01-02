@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "0e74a2688bfb55530134d3eea6f39670",
+  "content-hash": "e010c679dbcc6135fe2148b6f99d5407",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -6831,41 +6831,6 @@
       "time": "2023-11-16T16:16:50+00:00"
     },
     {
-      "name": "robrichards/xmlseclibs",
-      "version": "3.1.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/robrichards/xmlseclibs.git",
-        "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/f8f19e58f26cdb42c54b214ff8a820760292f8df",
-        "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df",
-        "shasum": ""
-      },
-      "require": {
-        "ext-openssl": "*",
-        "php": ">= 5.4"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "RobRichards\\XMLSecLibs\\": "src"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["BSD-3-Clause"],
-      "description": "A PHP library for XML Security",
-      "homepage": "https://github.com/robrichards/xmlseclibs",
-      "keywords": ["security", "signature", "xml", "xmldsig"],
-      "support": {
-        "issues": "https://github.com/robrichards/xmlseclibs/issues",
-        "source": "https://github.com/robrichards/xmlseclibs/tree/3.1.1"
-      },
-      "time": "2020-09-05T13:00:25+00:00"
-    },
-    {
       "name": "ruflin/elastica",
       "version": "7.3.2",
       "source": {
@@ -7406,65 +7371,6 @@
         "source": "https://github.com/Saeven/Soflomo-Purifier/tree/1.1.0"
       },
       "time": "2022-01-31T15:07:45+00:00"
-    },
-    {
-      "name": "simplesamlphp/saml2",
-      "version": "v3.4.5",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/simplesamlphp/saml2.git",
-        "reference": "acc47782592866423942dc30002c5220203ab466"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/acc47782592866423942dc30002c5220203ab466",
-        "reference": "acc47782592866423942dc30002c5220203ab466",
-        "shasum": ""
-      },
-      "require": {
-        "ext-dom": "*",
-        "ext-openssl": "*",
-        "ext-zlib": "*",
-        "php": ">=5.4",
-        "psr/log": "~1.0",
-        "robrichards/xmlseclibs": "^3.0.4",
-        "webmozart/assert": "^1.4"
-      },
-      "require-dev": {
-        "mockery/mockery": "~0.9",
-        "phpmd/phpmd": "~2.6",
-        "phpunit/phpunit": "~5.7",
-        "sebastian/phpcpd": "~2.0",
-        "sensiolabs/security-checker": "~4.1",
-        "simplesamlphp/simplesamlphp-test-framework": "0.0.11",
-        "squizlabs/php_codesniffer": "~3.2"
-      },
-      "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-master": "v3.1.x-dev"
-        }
-      },
-      "autoload": {
-        "files": ["src/_autoload.php"],
-        "psr-0": {
-          "SAML2\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["LGPL-2.1-or-later"],
-      "authors": [
-        {
-          "name": "Andreas Åkre Solberg",
-          "email": "andreas.solberg@uninett.no"
-        }
-      ],
-      "description": "SAML2 PHP library from SimpleSAMLphp",
-      "support": {
-        "issues": "https://github.com/simplesamlphp/saml2/issues",
-        "source": "https://github.com/simplesamlphp/saml2/tree/release-3.x"
-      },
-      "time": "2020-05-14T16:38:12+00:00"
     },
     {
       "name": "symfony/cache",

@@ -33,7 +33,6 @@
     "ramsey/uuid": "^3.6",
     "ruflin/elastica": "^7.0",
     "saeven/zf3-purifier": "^1.1",
-    "simplesamlphp/saml2": "~3.4.2",
     "symfony/filesystem": "^5",
     "symfony/finder": "^5",
     "symfony/lock": "^5",

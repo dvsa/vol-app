@@ -1,5 +1,25 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  'SNYK-PHP-SIMPLESAMLPHPSAML2-8449140':
+  'snyk:lic:composer:phprtflite:phprtflite:GPL-3.0':
     - '*':
-      reason: 'we cannot seem to get a fix into sprint'
-      expires: '2024-12-31T00:00:00.000Z'
+        reason: Due to licence. Being looked at in VOL-5968
+        expires: 2025-12-18T02:01:00.000Z
+        created: 2024-02-28T13:46:27.880Z
+  'snyk:lic:composer:behat:transliterator:Artistic-1.0':
+    - '*':
+        reason: Issue is due to licence
+        expires: 2025-12-18T02:01:00.000Z
+        created: 2024-02-28T13:46:38.578Z
+  'SNYK-PHP-TWIGTWIG-8349790':
+    - '*':
+        reason: Upgrade planned in VOL-5894
+        expires: 2025-01-18T02:01:00.000Z
+        created: 2024-11-07T02:01:00.000Z
+  'SNYK-PHP-TWIGTWIG-8349791':
+    - '*':
+        reason: Upgrade planned in VOL-5894
+        expires: 2025-01-18T02:01:00.000Z
+        created: 2024-11-07T02:01:00.000Z
+patch: {}
