@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Service\Nr;
 
+use Dvsa\Olcs\Api\Service\AccessToken\Provider;
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Http\Client as RestClient;
@@ -29,9 +30,15 @@ class InrClientFactory implements FactoryInterface
         if (!isset($config['nr']['inr_service'])) {
             throw new \RuntimeException('Missing INR service config');
         }
+
+        /** @var Provider $tokenProvider */
+        $tokenProvider = $container->build(Provider::class, $config['nr']['inr_service']['oauth2']);
+        $headers = ['Authorization' => 'Bearer ' .  $tokenProvider->getToken()];
+        
         $httpClient = new RestClient($config['nr']['inr_service']['uri']);
         $httpClient->setAdapter($config['nr']['inr_service']['adapter']);
         $httpClient->getAdapter()->setOptions($config['nr']['inr_service']['options']);
+        $httpClient->setHeaders($headers);
         $wrapper = new ClientAdapterLoggingWrapper();
         $wrapper->wrapAdapter($httpClient);
         return new InrClient($httpClient);
