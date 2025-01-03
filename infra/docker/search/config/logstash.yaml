@@ -1,0 +1,6 @@
+path.data: /var/lib/logstash
+pipeline.workers: 4
+pipeline.batch.size: 1024
+log.level: info
+path.logs: /var/log/logstash
+config.reload.automatic: true
