@@ -345,17 +345,12 @@ return [
         'inr_service' => [
             'uri' => '%olcs_natreg_uri%',
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
-            'options' => [
-                'sslcert' => '/opt/dvsa/inr/certs/inr_client_cert.pem',
-                'sslverifypeer' => 1, //debug only, must be set to 1 in production
-                'curloptions' => [
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_SSL_VERIFYHOST => 2, //debug only, must be set to 2 in production
-                    CURLOPT_CAINFO => '/etc/ssl/certs/atos-ca1.pem',
-                    CURLOPT_SSLKEY => '/opt/dvsa/inr/certs/inr_client_key.pem',
-                    CURLOPT_SSLKEYTYPE => 'PEM'
-                ]
-
+            'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
+                'client_id' => '%olcs_natreg_client_id%', //param
+                'client_secret' => '%olcs_natreg_client_secret%', // secret
+                'token_url' => '%olcs_natreg_token_url%', //param
+                'scope' => '%olcs_natreg_client_scope%', //param
+                'proxy' => 'http://%shd_proxy%',
             ]
         ],
         'repute_url' => [

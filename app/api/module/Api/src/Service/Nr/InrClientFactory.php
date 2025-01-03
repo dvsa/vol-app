@@ -32,7 +32,7 @@ class InrClientFactory implements FactoryInterface
         }
 
         /** @var Provider $tokenProvider */
-        $tokenProvider = $container->build(Provider::class, $config['oauth2']);
+        $tokenProvider = $container->build(Provider::class, $config['nr']['inr_service']['oauth2']);
         $headers = ['Authorization' => 'Bearer ' .  $tokenProvider->getToken()];
 
 

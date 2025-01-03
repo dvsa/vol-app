@@ -9,7 +9,6 @@ use Dvsa\Olcs\Api\Service\Nr\InrClientInterface;
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
 use Laminas\Http\Client as RestClient;
 use Laminas\Http\Client\Adapter\Curl;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
@@ -29,15 +28,16 @@ class InrClientFactoryTest extends TestCase
 
     public function testCreateService()
     {
-        $oauth2 = 'options';
+        $oauth2 = ['options'];
         $config = [
             'nr' => [
                 'inr_service' => [
                     'uri' => 'http://testServiceAddress',
                     'adapter' => Curl::class,
-                    'options' => []
+                    'options' => [],
+                    'oauth2' => $oauth2
                 ],
-                'oauth2' => $oauth2
+
 
             ]
         ];
@@ -46,11 +46,11 @@ class InrClientFactoryTest extends TestCase
             ->shouldReceive('getHeaders')->andReturn(['Authorization' => 'Bearer token']);
 
         $mockTokenProvider = m::mock(Provider::class)
-            ->expects('getToken')->withNoArgs()->andReturn('token');
+            ->expects('getToken')->andReturn('token')->getMock();
 
 
-        $mockSl = m::mock(ServiceLocatorInterface::class);
-        var_dump($mockSl);
+        $mockSl = m::mock(ContainerInterface::class);
+
         $mockSl->shouldReceive('get')->with('config')->andReturn($config);
         $mockSl->shouldReceive('get')->with(RestClient::class)->andReturn($restClient);
         $mockSl->shouldReceive('build')->with(Provider::class, $oauth2)->andReturn($mockTokenProvider);
