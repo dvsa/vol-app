@@ -34,8 +34,7 @@ class InrClientFactory implements FactoryInterface
         /** @var Provider $tokenProvider */
         $tokenProvider = $container->build(Provider::class, $config['nr']['inr_service']['oauth2']);
         $headers = ['Authorization' => 'Bearer ' .  $tokenProvider->getToken()];
-
-
+        
         $httpClient = new RestClient($config['nr']['inr_service']['uri']);
         $httpClient->setAdapter($config['nr']['inr_service']['adapter']);
         $httpClient->getAdapter()->setOptions($config['nr']['inr_service']['options']);
