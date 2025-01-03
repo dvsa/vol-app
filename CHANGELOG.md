@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.12.2](https://github.com/dvsa/vol-app/compare/v5.12.1...v5.12.2) (2025-01-03)
+
+
+### Bug Fixes
+
+* change extra places where spellchecker language not defaulting to en_GB VOL-5907 ([#532](https://github.com/dvsa/vol-app/issues/532)) ([34e2c7f](https://github.com/dvsa/vol-app/commit/34e2c7fe54f77c863355e2049d91119672c91652))
+* operator admin checks now account for disabled users VOL-5959 ([#528](https://github.com/dvsa/vol-app/issues/528)) ([b1096ab](https://github.com/dvsa/vol-app/commit/b1096abef2d4b20905c029eadb46a0772b77dddc))
+* remove &lt;/p&gt; being added to end of usernames ([#521](https://github.com/dvsa/vol-app/issues/521)) ([635cefe](https://github.com/dvsa/vol-app/commit/635cefea83f7f84cc64ec3d40b584e9c58968a88))
+* snyk scanning and errors fixed ([#523](https://github.com/dvsa/vol-app/issues/523)) ([b698d12](https://github.com/dvsa/vol-app/commit/b698d12bb1f14734ecbededf4fb6a1e15c36a129))
+* vol 5955 operators no admin role toggle off ([#531](https://github.com/dvsa/vol-app/issues/531)) ([bc869e2](https://github.com/dvsa/vol-app/commit/bc869e2dc1f6b15ab0be577b9712ec9521ccecf9))
+
 ## [5.12.1](https://github.com/dvsa/vol-app/compare/v5.12.0...v5.12.1) (2024-12-18)
 
 
