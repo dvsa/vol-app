@@ -1,4 +1,4 @@
-FROM liquibase/liquibase
+FROM liquibase/liquibase:4.30
 USER root
 COPY changelog /liquibase/changelog
 COPY entrypoint.sh /liquibase/

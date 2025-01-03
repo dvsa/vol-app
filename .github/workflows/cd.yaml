@@ -341,12 +341,30 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  test_int:
+  test_int_selfserve:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    name: Run Tests on INT
+    name: Run Selfserve Regression Tests on INT
     needs:
       - terraform_env_int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
+    with:
+      platform_env: int
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  test_int_internal:
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
+    name: Run Internal Regression Tests on INT
+    needs:
+      - terraform_env_int
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
     with:
       platform_env: int
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
@@ -363,10 +381,12 @@ jobs:
     name: Rollback INT Deployment
     if: |
       always() &&
-      (needs.test_int.result == 'failure' || needs.test_int.result == 'cancelled') &&
-      needs.terraform_env_int.result == 'success'
+      (needs.test_int_selfserve.result == 'failure' || needs.test_int_selfserve.result == 'cancelled' ||
+       needs.test_int_internal.result == 'failure' || needs.test_int_internal.result == 'cancelled') &&
+       needs.terraform_env_int.result == 'success'
     needs:
-      - test_int
+      - test_int_selfserve
+      - test_int_internal
       - terraform_env_int
     uses: ./.github/workflows/deploy-environment.yaml
     with:
@@ -410,7 +430,8 @@ jobs:
       - release-please
       - orchestrator
       - terraform_env_int
-      - test_int
+      - test_int_internal
+      - test_int_selfserve
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -446,12 +467,30 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  test_prep:
-    name: Run Tests on PREP
+  test_prep_selfserve:
+    name: Run Selfserve Regression Tests on PREP
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
     needs:
       - terraform_env_prep
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
+    with:
+      platform_env: prep
+      aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  test_prep_internal:
+    name: Run Internal Regression Tests on PREP
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
+    needs:
+      - terraform_env_prep
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
     with:
       platform_env: prep
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
@@ -466,7 +505,16 @@ jobs:
 
   terraform_env_prod:
     name: Environment (prod)
-    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      needs.release-please.outputs.release_created &&
+      !contains(needs.get-version.outputs.api, '-') &&
+      !contains(needs.get-version.outputs.cli, '-') &&
+      !contains(needs.get-version.outputs.selfserve, '-') &&
+      !contains(needs.get-version.outputs.internal, '-') &&
+      !contains(needs.get-version.outputs.assets, '-')
     concurrency:
       group: terraform-environment-prod
     needs:
@@ -474,6 +522,8 @@ jobs:
       - get-version
       - orchestrator
       - terraform_env_prep
+      - test_prep_selfserve
+      - test_prep_internal
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prod
