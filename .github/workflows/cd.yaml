@@ -381,10 +381,12 @@ jobs:
     name: Rollback INT Deployment
     if: |
       always() &&
-      (needs.test_int.result == 'failure' || needs.test_int.result == 'cancelled') &&
-      needs.terraform_env_int.result == 'success'
+      (needs.test_int_selfserve.result == 'failure' || needs.test_int_selfserve.result == 'cancelled' ||
+       needs.test_int_internal.result == 'failure' || needs.test_int_internal.result == 'cancelled') &&
+       needs.terraform_env_int.result == 'success'
     needs:
-      - test_int
+      - test_int_selfserve
+      - test_int_internal
       - terraform_env_int
     uses: ./.github/workflows/deploy-environment.yaml
     with:
@@ -428,7 +430,8 @@ jobs:
       - release-please
       - orchestrator
       - terraform_env_int
-      - test_int
+      - test_int_internal
+      - test_int_selfserve
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -519,6 +522,8 @@ jobs:
       - get-version
       - orchestrator
       - terraform_env_prep
+      - test_prep_selfserve
+      - test_prep_internal
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prod
