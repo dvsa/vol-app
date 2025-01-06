@@ -234,11 +234,13 @@ jobs:
           - cli
           - selfserve
           - internal
+          - liquibase
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-internal-docker && 'ignored' || 'internal' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-liquibase-docker && 'ignored' || 'liquibase' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
