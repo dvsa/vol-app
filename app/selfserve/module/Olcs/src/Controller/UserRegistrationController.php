@@ -119,7 +119,7 @@ class UserRegistrationController extends AbstractController
 
         $termsAgreed->setLabel($label);
 
-        if ($this->consultantRegistrationSession->getOperatorAdmin() === false) {
+        if (($this->consultantRegistrationSession->getOperatorAdmin() ?? true) === false) {
             $form->get('fields')->get('licenceNumber')->setValue($this->consultantRegistrationSession->getExistingLicence())->setAttribute('type', 'hidden');
             $form->get('fields')->get('isLicenceHolder')->setValue('Y')->setAttribute('type', 'hidden');
             $form->get('fields')->get('isLicenceHolder')->setLabel('');
