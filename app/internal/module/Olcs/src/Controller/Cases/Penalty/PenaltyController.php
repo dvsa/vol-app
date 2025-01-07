@@ -125,9 +125,9 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         }
 
         //multiple tables on a page, so we need to give our plugin a new table builder each time
-        $tableBuilderFactory = new TableBuilderFactory();
+        $tableBuilderFactory = clone $this->tableFactory;
 
-        $tableBuilder = $this->tableFactory;
+        $tableBuilder = $tableBuilderFactory->getTableBuilder();
 
         if (
             !empty($data['case']['erruRequest']['responseSent'])
