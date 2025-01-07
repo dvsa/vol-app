@@ -252,7 +252,7 @@ class ProcessInsolvency extends AbstractConsumer
                     $this->company->getId()
                 );
             },
-            $licence->getOrganisation()->getAdministratorUsers()->toArray()
+            $licence->getOrganisation()->getAdminOrganisationUsers()->toArray()
         );
 
         if (is_null($correspondenceEmail) && empty($selfServeUserEmailCommands)) {

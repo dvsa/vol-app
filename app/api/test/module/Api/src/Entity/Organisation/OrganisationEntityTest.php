@@ -589,7 +589,7 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
-     * Tests we're retreiving admin email addresses correctly
+     * Tests we're retrieving admin email addresses correctly
      */
     public function testGetAdminEmailAddresses()
     {
@@ -603,19 +603,13 @@ class OrganisationEntityTest extends EntityTester
             1 => $email2
         ];
 
-        $user1 = new OrganisationUser();
-        $user1->setIsAdministrator('N');
+        $disabledOrgUser = $this->getDisabledOrgUser();
+        $deletedOrgUser = $this->getDeletedOrgUser();
+        $nonAdminOrgUser = $this->getNonAdminOrgUser();
+        $orgUser1 = $this->getAdminOrgUserWithEmail($email1);
+        $orgUser2 = $this->getAdminOrgUserWithEmail($email2);
 
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-
-        $user2->shouldReceive('getUser->getContactDetails->getEmailAddress')->once()->andReturn($email1);
-
-        $user3 = m::mock(OrganisationUser::class)->makePartial();
-        $user3->setIsAdministrator('Y');
-        $user3->shouldReceive('getUser->getContactDetails->getEmailAddress')->once()->andReturn($email2);
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3]));
+        $entity->setOrganisationUsers(new ArrayCollection([$disabledOrgUser, $deletedOrgUser, $nonAdminOrgUser, $orgUser1, $orgUser2]));
 
         $this->assertEquals($expectedEmails, $entity->getAdminEmailAddresses());
     }
@@ -627,32 +621,15 @@ class OrganisationEntityTest extends EntityTester
     {
         $entity = new Entity();
 
-        //not an admin user, so not checked
-        $user1 = m::mock(OrganisationUser::class)->makePartial();
-        $user1->setIsAdministrator('N');
-        $user1->expects('getUser->isOperatorAdministrator')->never();
+        $disabledOrgUser = $this->getDisabledOrgUser();
+        $deletedOrgUser = $this->getDeletedOrgUser();
+        $nonAdminOrgUser = $this->getNonAdminOrgUser();
+        $orgUser1 = $this->getOperatorAdminOrgUser();
+        $orgUser2 = $this->getAdminOrgUserNotOperatorAdminRole();
+        $orgUser3 = $this->getOperatorAdminOrgUser();
+        $orgUser4 = $this->getAdminOrgUserRoleNotChecked();
 
-        //the first operator admin
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
-
-        //administrator, but not operator administrator - skipped
-        $user3 = m::mock(OrganisationUser::class)->makePartial();
-        $user3->setIsAdministrator('Y');
-        $user3->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
-
-        //the second operator admin
-        $user4 = m::mock(OrganisationUser::class)->makePartial();
-        $user4->setIsAdministrator('Y');
-        $user4->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
-
-        //already found two operator admins, so this user isn't checked
-        $user5 = m::mock(OrganisationUser::class)->makePartial();
-        $user5->setIsAdministrator('Y');
-        $user5->expects('getUser->isOperatorAdministrator')->never();
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3, $user4, $user5]));
+        $entity->setOrganisationUsers(new ArrayCollection([$disabledOrgUser, $deletedOrgUser, $nonAdminOrgUser, $orgUser1, $orgUser2, $orgUser3, $orgUser4]));
 
         $this->assertTrue($entity->canDeleteOperatorAdmin());
     }
@@ -664,51 +641,32 @@ class OrganisationEntityTest extends EntityTester
     {
         $entity = new Entity();
 
-        //not an admin user, so not checked
-        $user1 = m::mock(OrganisationUser::class)->makePartial();
-        $user1->setIsAdministrator('N');
-        $user1->expects('getUser->isOperatorAdministrator')->never();
+        $disabledOrgUser = $this->getDisabledOrgUser();
+        $deletedOrgUser = $this->getDeletedOrgUser();
+        $nonAdminOrgUser = $this->getNonAdminOrgUser();
+        $orgUser1 = $this->getAdminOrgUserNotOperatorAdminRole();
+        $orgUser2 = $this->getOperatorAdminOrgUser();
 
-        //the first operator admin
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
-
-        //administrator, but not operator administrator - skipped
-        $user3 = m::mock(OrganisationUser::class)->makePartial();
-        $user3->setIsAdministrator('Y');
-        $user3->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
-
-        //the second operator admin
-        $user4 = m::mock(OrganisationUser::class)->makePartial();
-        $user4->setIsAdministrator('Y');
-        $user4->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3, $user4]));
+        $entity->setOrganisationUsers(new ArrayCollection([$disabledOrgUser, $deletedOrgUser, $nonAdminOrgUser, $orgUser1, $orgUser2]));
 
         $this->assertFalse($entity->canDeleteOperatorAdmin());
     }
 
     /**
+     * disabled user ignored
      * first user not op admin, 2nd user is op admin, 3rd user doesn't need to be checked
      */
     public function testHasOperatorAdminTrue(): void
     {
         $entity = new Entity();
 
-        $user1 = m::mock(OrganisationUser::class)->makePartial();
-        $user1->setIsAdministrator('Y');
-        $user1->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+        $disabledOrgUser = $this->getDisabledOrgUser();
+        $deletedOrgUser = $this->getDeletedOrgUser();
+        $nonAdminOrgUser = $this->getNonAdminOrgUser();
+        $orgUser1 = $this->getOperatorAdminOrgUser();
+        $orgUser2 = $this->getAdminOrgUserRoleNotChecked();
 
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnTrue();
-
-        $user3 = m::mock(OrganisationUser::class)->makePartial();
-        $user3->setIsAdministrator('Y');
-        $user3->expects('getUser->isOperatorAdministrator')->never();
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2, $user3]));
+        $entity->setOrganisationUsers(new ArrayCollection([$disabledOrgUser, $deletedOrgUser, $nonAdminOrgUser, $orgUser1, $orgUser2]));
 
         $this->assertTrue($entity->hasOperatorAdmin());
     }
@@ -720,41 +678,15 @@ class OrganisationEntityTest extends EntityTester
     {
         $entity = new Entity();
 
-        $user1 = m::mock(OrganisationUser::class)->makePartial();
-        $user1->setIsAdministrator('Y');
-        $user1->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+        $disabledOrgUser = $this->getDisabledOrgUser();
+        $deletedOrgUser = $this->getDeletedOrgUser();
+        $nonAdminOrgUser = $this->getNonAdminOrgUser();
+        $orgUser1 = $this->getAdminOrgUserNotOperatorAdminRole();
+        $orgUser2 = $this->getAdminOrgUserNotOperatorAdminRole();
 
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-        $user2->expects('getUser->isOperatorAdministrator')->withNoArgs()->andReturnFalse();
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2]));
+        $entity->setOrganisationUsers(new ArrayCollection([$disabledOrgUser, $deletedOrgUser, $nonAdminOrgUser, $orgUser1, $orgUser2]));
 
         $this->assertFalse($entity->hasOperatorAdmin());
-    }
-
-    /**
-     *  test if org user not found due to soft delete
-     */
-    public function testGetAdminEmailAddressesWhenOrganisationUserNotFound()
-    {
-        $entity = new Entity();
-
-        $email1 = 'bar@foo.com';
-
-        $expectedEmails = [
-            0 => $email1
-        ];
-        $user1 = m::mock(OrganisationUser::class)->makePartial();
-        $user1->setIsAdministrator('Y');
-        $user1->shouldReceive('getUser')->once()->andThrow(EntityNotFoundException::class);
-        $user2 = m::mock(OrganisationUser::class)->makePartial();
-        $user2->setIsAdministrator('Y');
-        $user2->shouldReceive('getUser->getContactDetails->getEmailAddress')->once()->andReturn($email1);
-
-        $entity->setOrganisationUsers(new ArrayCollection([$user1, $user2]));
-
-        $this->assertEquals($expectedEmails, $entity->getAdminEmailAddresses());
     }
 
     /**
@@ -1090,5 +1022,88 @@ class OrganisationEntityTest extends EntityTester
             [LicenceEntity::LICENCE_STATUS_UNLICENSED, true],
             [LicenceEntity::LICENCE_STATUS_CANCELLED, false],
         ];
+    }
+
+    private function getDisabledOrgUser(): m\LegacyMockInterface
+    {
+        $disabledUser = m::mock(UserEntity::class);
+        $disabledUser->expects('getAccountDisabled')->withNoArgs()->andReturn('Y');
+        $disabledUser->expects('isOperatorAdministrator')->never();
+
+        $disabledOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $disabledOrgUser->setIsAdministrator('Y');
+        $disabledOrgUser->expects('getUser')->withNoArgs()->andReturn($disabledUser);
+
+        return $disabledOrgUser;
+    }
+
+    private function getDeletedOrgUser(): m\LegacyMockInterface
+    {
+        $deletedOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $deletedOrgUser->setIsAdministrator('Y');
+        $deletedOrgUser->expects('getUser')->withNoArgs()->andThrow(EntityNotFoundException::class);
+
+        return $deletedOrgUser;
+    }
+
+    private function getNonAdminOrgUser(): m\LegacyMockInterface
+    {
+        $nonAdminOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $nonAdminOrgUser->setIsAdministrator('N');
+        $nonAdminOrgUser->expects('getUser')->never();
+
+        return $nonAdminOrgUser;
+    }
+
+    private function getAdminOrgUserRoleNotChecked(): m\LegacyMockInterface
+    {
+        $user = m::mock(UserEntity::class);
+        $user->expects('getAccountDisabled')->withNoArgs()->andReturn('N');
+        $user->expects('isOperatorAdministrator')->never();
+
+        $adminOrgUserRoleNotChecked = m::mock(OrganisationUser::class)->makePartial();
+        $adminOrgUserRoleNotChecked->setIsAdministrator('Y');
+        $adminOrgUserRoleNotChecked->expects('getUser')->withNoArgs()->andReturn($user);
+
+        return $adminOrgUserRoleNotChecked;
+    }
+
+    private function getOperatorAdminOrgUser(): m\LegacyMockInterface
+    {
+        $user = m::mock(UserEntity::class);
+        $user->expects('getAccountDisabled')->withNoArgs()->andReturn('N');
+        $user->expects('isOperatorAdministrator')->withNoArgs()->andReturnTrue();
+
+        $operatorAdminOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $operatorAdminOrgUser->setIsAdministrator('Y');
+        $operatorAdminOrgUser->expects('getUser')->twice()->withNoArgs()->andReturn($user);
+
+        return $operatorAdminOrgUser;
+    }
+
+    private function getAdminOrgUserNotOperatorAdminRole(): m\LegacyMockInterface
+    {
+        $user = m::mock(UserEntity::class);
+        $user->expects('getAccountDisabled')->withNoArgs()->andReturn('N');
+        $user->expects('isOperatorAdministrator')->withNoArgs()->andReturnFalse();
+
+        $operatorAdminOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $operatorAdminOrgUser->setIsAdministrator('Y');
+        $operatorAdminOrgUser->expects('getUser')->twice()->withNoArgs()->andReturn($user);
+
+        return $operatorAdminOrgUser;
+    }
+
+    private function getAdminOrgUserWithEmail(string $email): m\LegacyMockInterface
+    {
+        $user = m::mock(UserEntity::class);
+        $user->expects('getAccountDisabled')->withNoArgs()->andReturn('N');
+        $user->expects('getContactDetails->getEmailAddress')->withNoArgs()->andReturn($email);
+
+        $operatorAdminOrgUser = m::mock(OrganisationUser::class)->makePartial();
+        $operatorAdminOrgUser->setIsAdministrator('Y');
+        $operatorAdminOrgUser->expects('getUser')->twice()->withNoArgs()->andReturn($user);
+
+        return $operatorAdminOrgUser;
     }
 }
