@@ -84,6 +84,11 @@ data "aws_ecr_repository" "this" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_ecr_repository" "liquibase" {
+
+  name = "vol-app/lquibase"
+}
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -250,8 +255,8 @@ module "service" {
     }
   }
   batch-liquibase = {
-    version    = var.cli_image_tag
-    repository = data.aws_ecr_repository.this["cli"].repository_url
+    version    = var.liquibase_image_tag
+    repository = data.aws_ecr_repository.liquibase.repository_url
 
     task_iam_role_statements = local.task_iam_role_statements
 
@@ -260,7 +265,7 @@ module "service" {
     jobs = [
       {
         name     = "liquibase-migration",
-        commands = ["batch:ch-vs-olcs-diffs"]
+        commands = ["command"]
       },
     ]
   }

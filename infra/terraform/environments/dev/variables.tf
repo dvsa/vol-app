@@ -22,3 +22,8 @@ variable "cli_image_tag" {
   type        = string
   description = "The tag of the cli image to deploy"
 }
+
+variable "liquibase_image_tag" {
+  type        = string
+  description = "The tag of the liquibase image to deploy"
+}
