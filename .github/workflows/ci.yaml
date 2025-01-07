@@ -84,6 +84,8 @@ jobs:
           dir_names: true
           files: |
             infra/docker/**
+          files_ignore: |
+            infra/docker/liquibase/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files

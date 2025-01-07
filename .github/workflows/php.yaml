@@ -28,6 +28,7 @@ jobs:
     defaults:
       run:
         working-directory: app/${{ inputs.project }}
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,6 +57,7 @@ jobs:
     name: Test
     needs:
       - warm-cache
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
     runs-on: ubuntu-latest
     defaults:
       run:
