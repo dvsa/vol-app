@@ -249,6 +249,21 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
+  batch-liquibase = {
+    version    = var.cli_image_tag
+    repository = data.aws_ecr_repository.this["cli"].repository_url
+
+    task_iam_role_statements = local.task_iam_role_statements
+
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
+
+    jobs = [
+      {
+        name     = "liquibase-migration",
+        commands = ["batch:ch-vs-olcs-diffs"]
+      },
+    ]
+  }
 
   batch = {
     version    = var.cli_image_tag

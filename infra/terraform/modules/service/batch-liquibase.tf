@@ -29,7 +29,7 @@ locals {
       environment = [
         {
           name  = "DB_HOST"
-          value = "olcsdb-rds.${var.environment}.olcs.dev-dvsacloud.uk"
+          value = "olcsdb-rds.${var.domain_name}"
         },
         {
           name  = "DB_NAME"
