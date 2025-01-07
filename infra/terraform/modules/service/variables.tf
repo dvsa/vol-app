@@ -80,7 +80,6 @@ variable "batch" {
 variable "batch-liquibase" {
   description = "Configuration for the batch process"
   type = object({
-    version     = string
     repository  = string
     subnet_ids  = list(string)
     secret_file = string

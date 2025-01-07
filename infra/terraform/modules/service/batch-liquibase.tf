@@ -59,7 +59,7 @@ module "batch-liquibase" {
     container_properties = jsonencode({
       command = job.commands
 
-      image = "${var.batch-liquibase.repository}:${var.batch-liquibase.version}"
+      image = "${var.batch-liquibase.repository}:latest"
 
       environment = [
         {

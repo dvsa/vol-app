@@ -255,7 +255,6 @@ module "service" {
     }
   }
   batch-liquibase = {
-    version    = var.liquibase_image_tag
     repository = data.aws_ecr_repository.liquibase.repository_url
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
