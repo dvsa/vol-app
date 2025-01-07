@@ -68,6 +68,7 @@ variable "batch" {
     }))
     jobs = list(object({
       name     = string
+      domain   = optional(string)
       commands = list(string)
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
