@@ -498,7 +498,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
      */
     public function getAdminEmailAddresses()
     {
-        $adminUsers = $this->getAdministratorUsers();
+        $adminUsers = $this->getAdminOrganisationUsers();
         $adminEmails = [];
 
         /** @var OrganisationUserEntity $orgUser */
@@ -514,24 +514,9 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
         return $adminEmails;
     }
 
-    /**
-     * Get Administrator Users
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAdministratorUsers()
-    {
-        $expr = Criteria::expr();
-        $criteria = Criteria::create();
-
-        $criteria->where($expr->eq('isAdministrator', 'Y'));
-
-        return $this->organisationUsers->matching($criteria);
-    }
-
     public function hasOperatorAdmin(): bool
     {
-        $administratorUsers = $this->getAdministratorUsers();
+        $administratorUsers = $this->getAdminOrganisationUsers();
 
         /** @var OrganisationUserEntity $orgUser */
         foreach ($administratorUsers as $orgUser) {
@@ -549,7 +534,7 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
     public function canDeleteOperatorAdmin(): bool
     {
         $numOperatorAdmins = 0;
-        $administratorUsers = $this->getAdministratorUsers();
+        $administratorUsers = $this->getAdminOrganisationUsers();
 
         /** @var OrganisationUserEntity $orgUser */
         foreach ($administratorUsers as $orgUser) {
