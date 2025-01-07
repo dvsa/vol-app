@@ -83,7 +83,7 @@ module "batch-liquibase" {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:DEVAPP${var.legacy_environment}-BASE-SM-APPLICATION-API:olcs_api_rds_password"
+          valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:${var.batch-liquibase.secret_file}:olcs_api_rds_password"
         },
       ]
 
