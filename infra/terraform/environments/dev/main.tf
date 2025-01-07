@@ -258,16 +258,9 @@ module "service" {
     version    = var.liquibase_image_tag
     repository = data.aws_ecr_repository.liquibase.repository_url
 
-    task_iam_role_statements = local.task_iam_role_statements
-
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
-    jobs = [
-      {
-        name     = "liquibase-migration",
-        commands = ["command"]
-      },
-    ]
+    secret_file = "DEVAPPDEV-BASE-SM-APPLICATION-API"
   }
 
   batch = {

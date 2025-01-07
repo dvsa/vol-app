@@ -14,9 +14,44 @@ locals {
       }
     }
   }
+}
 
-  jobs = { for job in var.batch.jobs : job.name => {
-    name                  = "vol-app-${var.environment}-${job.name}"
+module "batch-liquibase" {
+  source  = "terraform-aws-modules/batch/aws"
+  version = "~> 2.0"
+
+  instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
+  instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
+
+  service_iam_role_name        = "vol-app-${var.environment}-batch-service"
+  service_iam_role_description = "Service role for vol-app-${var.environment}-batch"
+
+  compute_environments = {
+    fargate = {
+      name_prefix = "vol-app-${var.environment}-fargate"
+
+      compute_resources = {
+        type               = "FARGATE"
+        max_vcpus          = 16
+        security_group_ids = var.services["api"]["security_group_ids"]
+        subnets            = var.batch-liquibase.subnet_ids
+      }
+    }
+  }
+
+  job_queues = {
+    default = {
+      name     = "vol-app-${var.environment}-liquibase"
+      state    = "ENABLED"
+      priority = 1
+      tags = {
+        JobQueue = "vol-app-${var.environment}-liquibase"
+      }
+    }
+  }
+
+  job_definitions = {
+    name                  = "vol-app-${var.environment}-liquibase"
     type                  = "container"
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
@@ -24,7 +59,7 @@ locals {
     container_properties = jsonencode({
       command = job.commands
 
-      image = "${var.batch.repository}:${var.batch.version}"
+      image = "${var.batch-liquibase.repository}:${var.batch-liquibase.version}"
 
       environment = [
         {
@@ -64,11 +99,11 @@ locals {
       resourceRequirements = [
         {
           type  = "VCPU",
-          value = tostring(job.cpu),
+          value = "1"
         },
         {
           type  = "MEMORY",
-          value = tostring(job.memory)
+          value = "2048"
         },
       ],
 
@@ -80,93 +115,14 @@ locals {
         options = {
           awslogs-group         = aws_cloudwatch_log_group.this.id
           awslogs-region        = "eu-west-1"
-          awslogs-stream-prefix = job.name
+          awslogs-stream-prefix = "vol-app-${var.environment}-liquibase"
         }
       }
     })
 
-    attempt_duration_seconds = job.timeout
+    attempt_duration_seconds = 300
     retry_strategy           = local.default_retry_policy
-  } }
-
-  schedules = {
-    for job in var.batch.jobs : job.name => {
-      description         = "Schedule for ${module.batch-liquibase.job_definitions[job.name].name}"
-      schedule_expression = job.schedule
-      arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
-      input = jsonencode({
-        "JobName" : module.batch-liquibase.job_definitions[job.name].name,
-        "JobQueue" : module.batch-liquibase.job_queues.default.arn,
-        "JobDefinition" : module.batch-liquibase.job_definitions[job.name].arn,
-        "ShareIdentifier" : "volapp",
-        "SchedulingPriorityOverride" : 1
-      })
-    }
-    if job.schedule != ""
   }
-}
-
-module "batch-liquibase" {
-  source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
-
-  instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
-  instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
-
-  service_iam_role_name        = "vol-app-${var.environment}-batch-service"
-  service_iam_role_description = "Service role for vol-app-${var.environment}-batch"
-
-  compute_environments = {
-    fargate = {
-      name_prefix = "vol-app-${var.environment}-fargate"
-
-      compute_resources = {
-        type               = "FARGATE"
-        max_vcpus          = 16
-        security_group_ids = var.services["api"]["security_group_ids"]
-        subnets            = var.batch.subnet_ids
-      }
-    }
-  }
-
-  job_queues = {
-    default = {
-      name     = "vol-app-${var.environment}-liquibase"
-      state    = "ENABLED"
-      priority = 1
-      tags = {
-        JobQueue = "vol-app-${var.environment}-liquibase"
-      }
-    }
-  }
-
-  job_definitions = local.jobs
-}
-
-module "eventbridge" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
-
-  create_bus = false
-
-  create_role              = true
-  role_name                = "vol-app-${var.environment}-batch-liquibase-scheduler"
-  attach_policy_statements = true
-  policy_statements = {
-    batch = {
-      effect = "Allow"
-      actions = [
-        "batch:SubmitJob"
-      ]
-      resources = concat(
-        [for job in module.batch-liquibase.job_definitions : job.arn],
-        [for job in module.batch-liquibase.job_queues : job.arn]
-      )
-    }
-  }
-
-  schedules = local.schedules
-
 }
 
 resource "aws_cloudwatch_log_group" "this" {

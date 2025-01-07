@@ -80,21 +80,9 @@ variable "batch" {
 variable "batch-liquibase" {
   description = "Configuration for the batch process"
   type = object({
-    version    = string
-    repository = string
-    subnet_ids = list(string)
-    task_iam_role_statements = list(object({
-      effect    = string
-      actions   = list(string)
-      resources = list(string)
-    }))
-    jobs = list(object({
-      name     = string
-      commands = list(string)
-      cpu      = optional(number, 1)
-      memory   = optional(number, 2048)
-      timeout  = optional(number, 300)
-      schedule = optional(string, "")
-    }))
+    version     = string
+    repository  = string
+    subnet_ids  = list(string)
+    secret_file = string
   })
 }
