@@ -39,7 +39,6 @@ module "batch-liquibase" {
     platform_capabilities = ["FARGATE"]
 
     container_properties = jsonencode({
-      command = job.commands
 
       image = "${var.batch-liquibase.repository}:latest"
 
