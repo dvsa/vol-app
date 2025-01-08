@@ -46,7 +46,7 @@ module "batch-liquibase" {
         environment = [
           {
             name  = "DB_HOST"
-            value = "olcsdb-rds.${var.domain_name}"
+            value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
           },
           {
             name  = "DB_NAME"
