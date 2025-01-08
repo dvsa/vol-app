@@ -86,7 +86,7 @@ data "aws_ecr_repository" "this" {
 
 data "aws_ecr_repository" "liquibase" {
 
-  name = "vol-app/lquibase"
+  name = "vol-app/liquibase"
 }
 
 data "aws_security_group" "this" {
