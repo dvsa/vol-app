@@ -113,7 +113,7 @@ module "batch-liquibase" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-group         = aws_cloudwatch_log_group.liquibase.id
           awslogs-region        = "eu-west-1"
           awslogs-stream-prefix = "vol-app-${var.environment}-liquibase"
         }
@@ -125,7 +125,7 @@ module "batch-liquibase" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "this" {
+resource "aws_cloudwatch_log_group" "liquibase" {
   name              = "/aws/batch/liquibase/${var.environment}"
   retention_in_days = 1
 }
