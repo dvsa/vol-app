@@ -128,7 +128,8 @@ final class DataGovUkExport extends AbstractDataExport
         /** @var Repository\Licence $repo */
         $repo = $this->getRepo('Licence');
         $dbalResult = $repo->internationalGoodsReport();
-        $csvContent = $this->singleCsvFromDbalResult($dbalResult, 'international_goods');
+        $csvPath = $this->singleCsvFromDbalResult($dbalResult, 'international_goods');
+        $csvContent = file_get_contents($csvPath);
 
         $document = $this->handleSideEffect(
             $this->generateInternationalGoodsDocumentCmd($csvContent)
@@ -141,7 +142,7 @@ final class DataGovUkExport extends AbstractDataExport
             $document->getId('document')
         );
 
-        $this->uploadToS3($csvContent);
+        $this->uploadToS3($csvPath);
 
         $email = $this->handleSideEffect($emailQueue);
         $this->result->merge($email);
