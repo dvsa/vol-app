@@ -1,21 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  default_retry_policy = {
-    attempts = 1
-    evaluate_on_exit = {
-      retry_error = {
-        action       = "RETRY"
-        on_exit_code = 1
-      }
-      exit_success = {
-        action       = "EXIT"
-        on_exit_code = 0
-      }
-    }
-  }
-}
-
 module "batch-liquibase" {
   source  = "terraform-aws-modules/batch/aws"
   version = "~> 2.0"
