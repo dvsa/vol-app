@@ -22,7 +22,7 @@ module "batch-liquibase" {
   }
 
   job_queues = {
-    default = {
+    liquibase = {
       name     = "vol-app-${var.environment}-liquibase"
       state    = "ENABLED"
       priority = 1
@@ -33,76 +33,78 @@ module "batch-liquibase" {
   }
 
   job_definitions = {
-    name                  = "vol-app-${var.environment}-liquibase"
-    type                  = "container"
-    propagate_tags        = true
-    platform_capabilities = ["FARGATE"]
+    liquibase = {
+      name                  = "vol-app-${var.environment}-liquibase"
+      type                  = "container"
+      propagate_tags        = true
+      platform_capabilities = ["FARGATE"]
 
-    container_properties = jsonencode({
+      container_properties = jsonencode({
 
-      image = "${var.batch-liquibase.repository}:latest"
+        image = "${var.batch-liquibase.repository}:latest"
 
-      environment = [
-        {
-          name  = "DB_HOST"
-          value = "olcsdb-rds.${var.domain_name}"
-        },
-        {
-          name  = "DB_NAME"
-          value = "OLCS_RDS_OLCSDB"
-        },
-        {
-          name  = "DB_USER"
-          value = "olcsapi"
-        },
-        {
-          name  = "DB_PORT"
-          value = "3306"
+        environment = [
+          {
+            name  = "DB_HOST"
+            value = "olcsdb-rds.${var.domain_name}"
+          },
+          {
+            name  = "DB_NAME"
+            value = "OLCS_RDS_OLCSDB"
+          },
+          {
+            name  = "DB_USER"
+            value = "olcsapi"
+          },
+          {
+            name  = "DB_PORT"
+            value = "3306"
+          }
+        ]
+
+        secrets = [
+          {
+            name      = "DB_PASSWORD"
+            valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:${var.batch-liquibase.secret_file}:olcs_api_rds_password"
+          },
+        ]
+
+        runtimePlatform = {
+          operatingSystemFamily = "LINUX",
+          cpuArchitecture       = "ARM64"
         }
-      ]
 
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:${var.batch-liquibase.secret_file}:olcs_api_rds_password"
+        fargatePlatformConfiguration = {
+          platformVersion = "LATEST"
         },
-      ]
 
-      runtimePlatform = {
-        operatingSystemFamily = "LINUX",
-        cpuArchitecture       = "ARM64"
-      }
+        resourceRequirements = [
+          {
+            type  = "VCPU",
+            value = "1"
+          },
+          {
+            type  = "MEMORY",
+            value = "2048"
+          },
+        ],
 
-      fargatePlatformConfiguration = {
-        platformVersion = "LATEST"
-      },
+        executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+        jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
-      resourceRequirements = [
-        {
-          type  = "VCPU",
-          value = "1"
-        },
-        {
-          type  = "MEMORY",
-          value = "2048"
-        },
-      ],
-
-      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
-      jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.liquibase.id
-          awslogs-region        = "eu-west-1"
-          awslogs-stream-prefix = "vol-app-${var.environment}-liquibase"
+        logConfiguration = {
+          logDriver = "awslogs"
+          options = {
+            awslogs-group         = aws_cloudwatch_log_group.liquibase.id
+            awslogs-region        = "eu-west-1"
+            awslogs-stream-prefix = "vol-app-${var.environment}-liquibase"
+          }
         }
-      }
-    })
+      })
 
-    attempt_duration_seconds = 300
-    retry_strategy           = local.default_retry_policy
+      attempt_duration_seconds = 300
+      retry_strategy           = local.default_retry_policy
+    }
   }
 }
 
