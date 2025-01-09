@@ -528,7 +528,3 @@ resource "null_resource" "deployed_versions" {
     deployed_assets_version      = var.assets_version
   }
 }
-
-resource "test_bucket" "this" {
-  bucket_name = "devapp-olcs-pri-olcs-autotest-s3"
-}
