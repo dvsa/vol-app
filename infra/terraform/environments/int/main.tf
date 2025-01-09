@@ -493,3 +493,5 @@ resource "null_resource" "deployed_versions" {
     deployed_assets_version      = var.assets_version
   }
 }
+
+#adding comment to test CI workflow
