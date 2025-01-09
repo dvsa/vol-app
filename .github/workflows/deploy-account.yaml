@@ -98,7 +98,7 @@ jobs:
       - name: Plan
         if: ${{ !inputs.apply }}
         id: plan
-        run: terraform plan -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
+        run: terraform plan -parallelism=80 -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
       - name: Get plan changes
         if: ${{ !inputs.apply }}
@@ -200,7 +200,7 @@ jobs:
       - name: Apply
         id: apply
         if: ${{ inputs.apply }}
-        run: terraform apply -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
+        run: terraform apply -parallelism=80 -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Set outputs
         if: ${{ always() && !cancelled() && !failure() }}
