@@ -22,3 +22,4 @@ variable "cli_image_tag" {
   type        = string
   description = "The tag of the cli image to deploy"
 }
+
