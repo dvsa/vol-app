@@ -184,7 +184,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
-        run: terraform plan ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
+        run: terraform plan -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
       - name: Get plan changes
         if: ${{ !inputs.apply }}
@@ -296,7 +296,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
-        run: terraform apply ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
+        run: terraform apply -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Delete workspace
         if: ${{ inputs.apply && inputs.destroy && inputs.workspace }}
