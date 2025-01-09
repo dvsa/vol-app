@@ -11,11 +11,6 @@ use Doctrine\Common\Collections\Collection as CollectionInterface;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
 
-/**
- * Class MsiResponse
- * @package Dvsa\Olcs\Api\Service\Nr
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class MsiResponse
 {
     public const AUTHORITY_TRU = 'Transport Regulation Unit';
@@ -24,7 +19,9 @@ class MsiResponse
     /**
      * @var string $responseDateTime
      */
-    private $responseDateTime;
+    private string $responseDateTime = '';
+
+    private string $timeoutDateTime = '';
 
     /**
      * @var String
@@ -43,40 +40,33 @@ class MsiResponse
      *
      * @return MsiResponse
      */
-    public function __construct(private readonly XmlNodeBuilder $xmlBuilder)
+    public function __construct(private readonly XmlNodeBuilder $xmlBuilder, private readonly string $erruVersion)
     {
     }
 
-    /**
-     * Gets xml node builder
-     *
-     * @return XmlNodeBuilder
-     */
-    public function getXmlBuilder()
+    public function getXmlBuilder(): XmlNodeBuilder
     {
         return $this->xmlBuilder;
     }
 
-    /**
-     * Gets the response date and time
-     *
-     * @return mixed
-     */
-    public function getResponseDateTime()
+    public function getResponseDateTime(): string
     {
         return $this->responseDateTime;
     }
 
-    /**
-     * Sets the response date and time
-     *
-     * @param string $responseDateTime response date and time
-     *
-     * @return void
-     */
-    public function setResponseDateTime($responseDateTime)
+    public function setResponseDateTime(string $responseDateTime): void
     {
         $this->responseDateTime = $responseDateTime;
+    }
+
+    public function setTimeoutDateTime(string $timeoutDateTime): void
+    {
+        $this->timeoutDateTime = $timeoutDateTime;
+    }
+
+    public function getTimeoutDateTime(): string
+    {
+        return $this->timeoutDateTime;
     }
 
     /**
@@ -126,12 +116,9 @@ class MsiResponse
     /**
      * Creates the Msi response, returns xml string
      *
-     * @param CasesEntity $case the case
-     *
-     * @return string
      * @throws ForbiddenException
      */
-    public function create(CasesEntity $case)
+    public function create(CasesEntity $case): string
     {
         if (!$case->canSendMsiResponse()) {
             throw new ForbiddenException('Unable to send Msi Response');
@@ -139,7 +126,8 @@ class MsiResponse
 
         $this->setTechnicalId($this->generateGuid());
         $dateTime = new DateTimeExtended();
-        $this->setResponseDateTime($dateTime->format(\DateTime::ISO8601));
+        $this->setResponseDateTime($dateTime->format(\DateTime::ATOM));
+        $this->setTimeoutDateTime($dateTime->add(new \DateInterval('PT10S'))->format(\DateTime::ATOM));
 
         if ($case->getLicence() === null) {
             $this->setAuthority(self::AUTHORITY_TRU);
@@ -160,12 +148,8 @@ class MsiResponse
 
     /**
      * Fetches array of header information for the XML
-     *
-     * @param ErruRequestEntity $erruRequest erru request
-     *
-     * @return array
      */
-    private function getHeader(ErruRequestEntity $erruRequest)
+    private function getHeader(ErruRequestEntity $erruRequest): array
     {
         //if member state was GB, we need to make this UK
         $memberStateCode = $erruRequest->getMemberStateCode()->getId();
@@ -174,52 +158,54 @@ class MsiResponse
         return [
             'name' => 'Header',
             'attributes' => [
+                'version' => $this->erruVersion,
                 'technicalId' => $this->getTechnicalId(),
                 'workflowId' => $erruRequest->getWorkflowId(),
                 'sentAt' => $this->getResponseDateTime(),
-                'from' => 'UK'
+                'timeoutValue' => $this->timeoutDateTime,
+                'from' => 'UK',
+                'to' => $filteredMemberStateCode
             ],
-            'nodes' => [
-                0 => [
-                    'name' => 'To',
-                    'nodes' => [
-                        0 => [
-                            'name' => 'MemberState',
-                            'attributes' => [
-                                'code' => $filteredMemberStateCode
-                            ]
-                        ]
-                    ]
-                ]
-            ]
         ];
     }
 
     /**
      * Fetches array of information for the xml body
-     *
-     * @param CasesEntity       $cases       case entity
-     * @param ErruRequestEntity $erruRequest erru request entity
-     *
-     * @return array
      */
-    private function getBody(CasesEntity $cases, ErruRequestEntity $erruRequest)
+    private function getBody(CasesEntity $cases, ErruRequestEntity $erruRequest): array
     {
         return [
             'name' => 'Body',
             'attributes' => [
                 'businessCaseId' => $erruRequest->getNotificationNumber(),
                 'originatingAuthority' => $erruRequest->getOriginatingAuthority(),
-                'licensingAuthority' => $this->getAuthority(),
-                'responseDateTime' => $this->getResponseDateTime()
+                'respondingAuthority' => $this->getAuthority(),
+                'statusCode' => 'OK',
             ],
             'nodes' => [
                 0 => [
                     'name' => 'TransportUndertaking',
                     'attributes' => [
-                        'name' => $erruRequest->getTransportUndertakingName()
+                        'transportUndertakingName' => $erruRequest->getTransportUndertakingName(),
+                        'communityLicenceNumber' => $erruRequest->getCommunityLicenceNumber(),
+                        'communityLicenceStatus' => $erruRequest->getCommunityLicenceStatus()->getDescription(),
+                        'numberOfVehicles' => $erruRequest->getTotAuthVehicles(),
                     ],
-                    'nodes' => $this->formatPenalties($cases->getSeriousInfringements())
+                    'nodes' => [
+                        0 => [
+                            'name' => 'TransportUndertakingAddress',
+                            'attributes' => [
+                                'address' => 'address',
+                                'postcode' => 'postcode',
+                                'city' => 'city',
+                                'country' => 'UK',
+                            ],
+                        ],
+                    ],
+                ],
+                1 => [
+                    'name'=> 'PenaltiesImposed',
+                    'nodes' => $this->formatPenalties($cases->getSeriousInfringements()),
                 ]
             ]
         ];
@@ -227,12 +213,8 @@ class MsiResponse
 
     /**
      * Formats penalty information into something usable by xml node builder
-     *
-     * @param CollectionInterface $seriousInfringements collection of serious infringements
-     *
-     * @return array
      */
-    private function formatPenalties(CollectionInterface $seriousInfringements)
+    private function formatPenalties(CollectionInterface $seriousInfringements): array
     {
         $formattedPenalties = [];
 
@@ -249,10 +231,10 @@ class MsiResponse
                 $newPenalty['penaltyTypeImposed'] = $penalty->getSiPenaltyType()->getId();
 
                 if ($penalty->getImposed() === 'N') {
-                    $newPenalty['isImposed'] = 'No';
+                    $newPenalty['isImposed'] = 'false';
                     $newPenalty['reasonNotImposed'] = $penalty->getReasonNotImposed();
                 } else {
-                    $newPenalty['isImposed'] = 'Yes';
+                    $newPenalty['isImposed'] = 'true';
                 }
 
                 $startDate = $penalty->getStartDate();
@@ -276,12 +258,7 @@ class MsiResponse
         return $formattedPenalties;
     }
 
-    /**
-     * Generate a GUID
-     *
-     * @return string
-     */
-    private function generateGuid()
+    private function generateGuid(): string
     {
         // com_create_guid is unavailable on our environments
         return sprintf(

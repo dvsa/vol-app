@@ -85,6 +85,15 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     protected $lastModifiedBy;
 
     /**
+     * Penalty requested identifier (nullable only due to pre existing data))
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="penalty_requested_identifier", nullable=true)
+     */
+    protected $penaltyRequestedIdentifier;
+
+    /**
      * Olbs key
      *
      * @var int
@@ -116,6 +125,19 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      * @ORM\JoinColumn(name="si_penalty_requested_type_id", referencedColumnName="id", nullable=false)
      */
     protected $siPenaltyRequestedType;
+
+    /**
+     * Penalties that have been applied
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenalty",
+     *     mappedBy="erruPenaltyRequested",
+     *     cascade={"persist"}
+     * )
+     */
+    protected $appliedPenalties;
 
     /**
      * Version
@@ -245,6 +267,30 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
     public function getOlbsKey()
     {
         return $this->olbsKey;
+    }
+
+    public function setPenaltyRequestedIdentifier($penaltyRequestedIdentifier)
+    {
+        $this->penaltyRequestedIdentifier = $penaltyRequestedIdentifier;
+
+        return $this;
+    }
+
+    public function getPenaltyRequestedIdentifier()
+    {
+        return $this->penaltyRequestedIdentifier;
+    }
+
+    public function getAppliedPenalties()
+    {
+        return $this->appliedPenalties;
+    }
+
+    public function setAppliedPenalties($appliedPenalties)
+    {
+        $this->appliedPenalties = $appliedPenalties;
+
+        return $this;
     }
 
     /**

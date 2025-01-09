@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
+use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Mockery as m;
@@ -39,11 +42,6 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXml as ComplianceEpisodeXmlMapping;
 
-/**
- * ComplianceEpisodeTest
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -77,6 +75,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
             CasesEntity::LICENCE_CASE_TYPE,
             ErruRequestEntity::DEFAULT_CASE_TYPE,
             CasesEntity::ERRU_DEFAULT_CASE_CATEGORY,
+            CommunityLic::STATUS_ACTIVE,
             'pen_erru_imposed_executed_yes'
         ];
 
@@ -112,6 +111,9 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $vrm = 'ABC123';
         $transportUndertakingName = 'transport undertaking';
         $memberStateCode = 'PL';
+        $checkDate = '2015-12-24';
+        $communityLicenceNumber = 'UKGB/OB1234567/00001';
+        $totAuthVehicles = 10;
 
         //imposed erru
         $siPenaltyImposedType = 102;
@@ -122,6 +124,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $executedRefData = 'pen_erru_imposed_executed_yes';
 
         $imposedErru = [
+            'penaltyImposedIdentifier' => 1111,
             'finalDecisionDate' => $finalDecisionDate,
             'siPenaltyImposedType' => $siPenaltyImposedType,
             'startDate' => $startDate,
@@ -130,6 +133,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         ];
 
         $filteredImposedErru = [
+            'penaltyImposedIdentifier' => 1111,
             'finalDecisionDate' => new \DateTime($finalDecisionDate . ' 00:00:00'),
             'siPenaltyImposedType' => $siPenaltyImposedType,
             'startDate' => new \DateTime($startDate . ' 00:00:00'),
@@ -142,19 +146,18 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $duration = 12;
 
         $requestedErru = [
+            'penaltyRequestedIdentifier' => 2222,
             'siPenaltyRequestedType' => $siPenaltyRequestedType,
             'duration' => $duration
         ];
 
         //serious infringement
         $infringementDate = '2015-12-25';
-        $checkDate = '2015-12-24';
         $siCategoryType = 101;
 
         $si = [
             'infringementDate' => $infringementDate,
             'siCategoryType' => $siCategoryType,
-            'checkDate' => $checkDate,
             'imposedErrus' => [
                 0 => $imposedErru
             ],
@@ -166,7 +169,6 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $filteredSi = [
             'infringementDate' => new \DateTime($infringementDate . ' 00:00:00'),
             'siCategoryType' => $siCategoryType,
-            'checkDate' => new \DateTime($checkDate . ' 00:00:00'),
             'imposedErrus' => [
                 0 => $filteredImposedErru
             ],
@@ -183,7 +185,9 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
             'notificationNumber' => $notificationNumber,
             'originatingAuthority' => $originatingAuthority,
             'licenceNumber' => $licenceNumber,
+            'communityLicenceNumber' => $communityLicenceNumber,
             'vrm' => $vrm,
+            'checkDate' => $checkDate,
             'transportUndertakingName' => $transportUndertakingName,
             'si' => [
                 0 => $si
@@ -195,60 +199,54 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
 
         $licenceEntity = m::mock(LicenceEntity::class);
         $licenceEntity->shouldReceive('getId')->times(2)->andReturn($licenceId);
+        $licenceEntity->expects('getTotAuthVehicles')->withNoArgs()->andReturn($totAuthVehicles);
 
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
             ->andReturn($licenceEntity);
 
         $countryEntity = m::mock(CountryEntity::class);
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andReturn($countryEntity);
 
         $siCategoryTypeEntity = m::mock(SiCategoryTypeEntity::class);
 
         $this->repoMap['SiCategoryType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siCategoryType)
             ->andReturn($siCategoryTypeEntity);
 
         $siCategoryEntity = m::mock(SiCategoryEntity::class);
 
         $this->repoMap['SiCategory']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with(SiCategoryEntity::ERRU_DEFAULT_CATEGORY)
             ->andReturn($siCategoryEntity);
 
         $siPenaltyImposedTypeEntity = m::mock(SiPenaltyImposedTypeEntity::class);
 
         $this->repoMap['SiPenaltyImposedType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siPenaltyImposedType)
             ->andReturn($siPenaltyImposedTypeEntity);
 
         $siPenaltyRequestedTypeEntity = m::mock(SiPenaltyRequestedTypeEntity::class);
 
         $this->repoMap['SiPenaltyRequestedType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siPenaltyRequestedType)
             ->andReturn($siPenaltyRequestedTypeEntity);
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(false);
 
-        $this->repoMap['Cases']->shouldReceive('save')->once()->with(m::type(CasesEntity::class));
+        $this->repoMap['Cases']->expects('save')->with(m::type(CasesEntity::class));
 
         $taskResult = new Result();
         $taskResult->addId('task', 88);
@@ -293,8 +291,11 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->fetchDocumentAndXml($command, $xmlString, $documentId);
 
         $licenceNumber = 'OB1234567';
+        $communityLicenceNumber = 'UKGB/OB1234567/00001';
+        $totAuthVehicles = 10;
         $workflowId = '0ffefb6b-6344-4a60-9a53-4381c32f98d9';
         $siCategoryType = 101;
+        $checkDate = '2015-12-24';
 
         //imposed erru
         $siPenaltyImposedType = 102;
@@ -329,20 +330,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->validSiInput($si, $filteredSi);
 
         $this->repoMap['SiCategoryType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siCategoryType)
             ->andThrow(NotFoundException::class);
 
         $this->repoMap['SiPenaltyImposedType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siPenaltyImposedType)
             ->andThrow(NotFoundException::class);
 
         $this->repoMap['SiPenaltyRequestedType']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($siPenaltyRequestedType)
             ->andThrow(NotFoundException::class);
 
@@ -350,6 +348,8 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
 
         $erruData = [
             'licenceNumber' => $licenceNumber,
+            'communityLicenceNumber' => $communityLicenceNumber,
+            'checkDate' => $checkDate,
             'workflowId' => $workflowId,
             'memberStateCode' => $memberStateCode,
             'originatingAuthority' => 'originating authority',
@@ -364,22 +364,22 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->validInitialInput($xmlString, $xmlData, $erruData, new \DOMDocument());
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(false);
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andReturn(m::mock(CountryEntity::class));
 
+        $licence = m::mock(LicenceEntity::class);
+        $licence->expects('getTotAuthVehicles')->withNoArgs()->andReturn($totAuthVehicles);
+
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
-            ->andReturn(m::mock(LicenceEntity::class));
+            ->andReturn($licence);
 
         $this->handleErrors();
 
@@ -426,20 +426,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $licenceError = 'licence not found error';
 
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
             ->andThrow(NotFoundException::class, $licenceError);
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andReturn(m::mock(CountryEntity::class));
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(false);
 
@@ -481,20 +478,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->validInitialInput($xmlString, $xmlData, $erruData, new \DOMDocument());
 
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
             ->andReturn(m::mock(LicenceEntity::class));
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andThrow(NotFoundException::class);
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(false);
 
@@ -537,20 +531,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->validInitialInput($xmlString, $xmlData, $erruData, new \DOMDocument());
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(true);
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andReturn(m::mock(CountryEntity::class));
 
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
             ->andReturn(m::mock(LicenceEntity::class));
 
@@ -580,13 +571,18 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->fetchDocumentAndXml($command, $xmlString, $documentId);
 
         $licenceNumber = 'OB1234567';
+        $communityLicenceNumber = 'UKGB/OB1234567/00001';
+        $totAuthVehicles = 10;
         $workflowId = '0ffefb6b-6344-4a60-9a53-4381c32f98d9';
+        $checkDate = '2015-12-24';
         $si = ['si'];
 
         $xmlData = ['array of pre-filtered xml data'];
 
         $erruData = [
             'licenceNumber' => $licenceNumber,
+            'communityLicenceNumber' => $communityLicenceNumber,
+            'checkDate' => $checkDate,
             'workflowId' => $workflowId,
             'memberStateCode' => $memberStateCode,
             'originatingAuthority' => 'originating authority',
@@ -601,32 +597,30 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->validInitialInput($xmlString, $xmlData, $erruData, new \DOMDocument());
 
         $this->repoMap['ErruRequest']
-            ->shouldReceive('existsByWorkflowId')
-            ->once()
+            ->expects('existsByWorkflowId')
             ->with($workflowId)
             ->andReturn(false);
 
         $this->repoMap['Country']
-            ->shouldReceive('fetchById')
-            ->once()
+            ->expects('fetchById')
             ->with($memberStateCode)
             ->andReturn(m::mock(CountryEntity::class));
 
+        $licence = m::mock(LicenceEntity::class);
+        $licence->expects('getTotAuthVehicles')->withNoArgs()->andReturn($totAuthVehicles);
+
         $this->repoMap['Licence']
-            ->shouldReceive('fetchByLicNoWithoutAdditionalData')
-            ->once()
+            ->expects('fetchByLicNoWithoutAdditionalData')
             ->with($licenceNumber)
-            ->andReturn(m::mock(LicenceEntity::class));
+            ->andReturn($licence);
 
         $this->mockedSmServices['SeriousInfringementInput']
-            ->shouldReceive('setValue')
-            ->once()
+            ->expects('setValue')
             ->with($si)
             ->andReturnSelf();
 
         $this->mockedSmServices['SeriousInfringementInput']
-            ->shouldReceive('isValid')
-            ->once()
+            ->expects('isValid')
             ->with([])
             ->andReturn(false);
 
@@ -634,7 +628,6 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices['SeriousInfringementInput']
             ->shouldReceive('getMessages')
-            ->once()
             ->andReturn($inputFilterErrors);
 
         $this->handleErrors();
@@ -658,22 +651,19 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->fetchDocumentAndXml($command, $xmlString, $documentId);
 
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('setValue')
+            ->expects('setValue')
             ->with($xmlString)
-            ->once()
             ->andReturnSelf();
 
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('isValid')
+            ->expects('isValid')
             ->with([])
-            ->once()
             ->andReturn(false);
 
         $inputFilterErrors = ['message 1', 'message2'];
 
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('getMessages')
-            ->once()
+            ->expects('getMessages')
             ->andReturn($inputFilterErrors);
 
         $this->handleErrors();
@@ -704,22 +694,19 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $this->mapXmlFile($xmlData, $xmlDomDocument);
 
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('setValue')
-            ->once()
+            ->expects('setValue')
             ->with($xmlData)
             ->andReturnSelf();
 
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('isValid')
-            ->once()
+            ->expects('isValid')
             ->with([])
             ->andReturn(false);
 
         $inputFilterErrors = ['message 1', 'message2'];
 
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('getMessages')
-            ->once()
+            ->expects('getMessages')
             ->andReturn($inputFilterErrors);
 
         $this->handleErrors();
@@ -739,8 +726,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $erruFailureId = 12345;
 
         $this->repoMap['ErruRequestFailure']
-            ->shouldReceive('save')
-            ->once()
+            ->expects('save')
             ->with(m::type(ErruRequestFailure::class))
             ->andReturnUsing(
                 function (ErruRequestFailure $erruRequestFailure) use (&$savedErruRequestFailure) {
@@ -771,16 +757,14 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         $documentEntity->shouldReceive('getId')->times($documentIdTimes)->andReturn($documentId);
 
         $this->repoMap['Document']
-            ->shouldReceive('fetchUsingId')
-            ->once()
+            ->expects('fetchUsingId')
             ->with($command)->andReturn($documentEntity);
 
         $xmlFile = m::mock(File::class);
         $xmlFile->shouldReceive('getContent')->once()->andReturn($xmlString);
 
         $this->mockedSmServices['FileUploader']
-            ->shouldReceive('download')
-            ->once()
+            ->expects('download')
             ->with($docIdentifier)
             ->andReturn($xmlFile);
     }
@@ -806,20 +790,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     private function validXml($xmlString, $xmlDomDocument)
     {
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('setValue')
-            ->once()
+            ->expects('setValue')
             ->with($xmlString)
             ->andReturnSelf();
 
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('isValid')
-            ->once()
+            ->expects('isValid')
             ->with([])
             ->andReturn(true);
 
         $this->mockedSmServices['ComplianceXmlStructure']
-            ->shouldReceive('getValue')
-            ->once()
+            ->expects('getValue')
             ->andReturn($xmlDomDocument);
     }
 
@@ -832,20 +813,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     private function validComplianceEpisodeInput($erruData, $xmlData)
     {
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('setValue')
-            ->once()
+            ->expects('setValue')
             ->with($xmlData)
             ->andReturnSelf();
 
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('isValid')
-            ->once()
+            ->expects('isValid')
             ->with([])
             ->andReturn(true);
 
         $this->mockedSmServices['ComplianceEpisodeInput']
-            ->shouldReceive('getValue')
-            ->once()
+            ->expects('getValue')
             ->andReturn($erruData);
     }
 
@@ -856,20 +834,17 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     private function validSiInput($si, $filteredSi)
     {
         $this->mockedSmServices['SeriousInfringementInput']
-            ->shouldReceive('setValue')
-            ->once()
+            ->expects('setValue')
             ->with($si)
             ->andReturnSelf();
 
         $this->mockedSmServices['SeriousInfringementInput']
-            ->shouldReceive('isValid')
-            ->once()
+            ->expects('isValid')
             ->with([])
             ->andReturn(true);
 
         $this->mockedSmServices['SeriousInfringementInput']
-            ->shouldReceive('getValue')
-            ->once()
+            ->expects('getValue')
             ->andReturn($filteredSi);
     }
 

@@ -104,6 +104,15 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     protected $lastModifiedBy;
 
     /**
+     * Penalty imposed identifier (nullable for now due to existing data, doesn't need to be going forward)
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="penalty_imposed_identifier", nullable=true)
+     */
+    protected $penaltyImposedIdentifier;
+
+    /**
      * Olbs key
      *
      * @var int
@@ -335,6 +344,18 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     public function getOlbsKey()
     {
         return $this->olbsKey;
+    }
+
+    public function setPenaltyImposedIdentifier($penaltyImposedIdentifier)
+    {
+        $this->penaltyImposedIdentifier = $penaltyImposedIdentifier;
+
+        return $this;
+    }
+
+    public function getPenaltyImposedIdentifier()
+    {
+        return $this->penaltyImposedIdentifier;
     }
 
     /**

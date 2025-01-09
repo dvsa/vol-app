@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
@@ -106,7 +107,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Msi type
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var RefData
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
      * @ORM\JoinColumn(name="msi_type", referencedColumnName="id", nullable=false)
@@ -214,6 +215,34 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @ORM\Column(type="string", name="workflow_id", length=36, nullable=false)
      */
     protected $workflowId;
+
+    /**
+     * Community licence number
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="community_licence_number", length=32, nullable=false, options={"default": "unknown"}))
+     */
+    protected $communityLicenceNumber;
+
+    /**
+     * Community licence status (nullable due to legacy data)
+     *
+     * @var RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="community_licence_status", referencedColumnName="id", nullable=true)
+     */
+    protected $communityLicenceStatus;
+
+    /**
+     * Number of vehicles authorised on the licence
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=false, options={"default": 0})
+     */
+    protected $totAuthVehicles;
 
     /**
      * Set the case
@@ -338,7 +367,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Set the msi type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $msiType entity being set as the value
+     * @param RefData $msiType entity being set as the value
      *
      * @return ErruRequest
      */
@@ -352,7 +381,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the msi type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * @return RefData
      */
     public function getMsiType()
     {
@@ -604,5 +633,38 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     public function getWorkflowId()
     {
         return $this->workflowId;
+    }
+
+    public function getCommunityLicenceNumber(): ?string
+    {
+        return $this->communityLicenceNumber;
+    }
+
+    public function setCommunityLicenceNumber(string $communityLicenceNumber): ErruRequest
+    {
+        $this->communityLicenceNumber = $communityLicenceNumber;
+        return $this;
+    }
+
+    public function getCommunityLicenceStatus(): ?RefData
+    {
+        return $this->communityLicenceStatus;
+    }
+
+    public function setCommunityLicenceStatus(RefData $communityLicenceStatus): ErruRequest
+    {
+        $this->communityLicenceStatus = $communityLicenceStatus;
+        return $this;
+    }
+
+    public function getTotAuthVehicles(): int|string
+    {
+        return $this->totAuthVehicles;
+    }
+
+    public function setTotAuthVehicles(int|string $totAuthVehicles): ErruRequest
+    {
+        $this->totAuthVehicles = $totAuthVehicles;
+        return $this;
     }
 }
