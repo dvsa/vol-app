@@ -254,17 +254,15 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
   }
-  batch-liquibase = {
-    repository = data.aws_ecr_repository.liquibase.repository_url
-
-    subnet_ids = data.aws_subnets.this["BATCH"].ids
-
-    secret_file = "DEVAPPDEV-BASE-SM-APPLICATION-API"
-  }
 
   batch = {
-    version    = var.cli_image_tag
-    repository = data.aws_ecr_repository.this["cli"].repository_url
+
+    cli_version = var.cli_image_tag
+
+    cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
+    search_repository    = data.aws_ecr_repository.liquibase.repository_url
+    liquibase_repository = data.aws_ecr_repository.liquibase.repository_url
+    api_secret_file      = "DEVAPPDEV-BASE-SM-APPLICATION-API"
 
     task_iam_role_statements = local.task_iam_role_statements
 
@@ -514,6 +512,15 @@ module "service" {
         commands = ["queue:transxchange-consumer"],
         timeout  = 90,
         schedule = "cron(0/2 * * * ? *)",
+      },
+      {
+        name  = "liquibase-migrations",
+        type  = "liquibase",
+        queue = "liquibase"
+      },
+      {
+        name = "search",
+        type = "search"
       },
     ]
   }
