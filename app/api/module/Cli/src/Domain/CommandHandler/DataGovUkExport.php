@@ -144,6 +144,8 @@ final class DataGovUkExport extends AbstractDataExport
 
         $this->uploadToS3($csvPath);
 
+        unlink($csvPath);
+
         $email = $this->handleSideEffect($emailQueue);
         $this->result->merge($email);
 
