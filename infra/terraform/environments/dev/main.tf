@@ -84,6 +84,11 @@ data "aws_ecr_repository" "this" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_ecr_repository" "liquibase" {
+
+  name = "vol-app/liquibase"
+}
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -248,6 +253,13 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
     }
+  }
+  batch-liquibase = {
+    repository = data.aws_ecr_repository.liquibase.repository_url
+
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
+
+    secret_file = "DEVAPPDEV-BASE-SM-APPLICATION-API"
   }
 
   batch = {

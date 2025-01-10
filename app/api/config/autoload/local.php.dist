@@ -163,18 +163,19 @@ return [
   ],
   'nr' => [
     // @to-do currently waiting on the actual nr address
-    'inr_service' => [
-      'uri' => 'http://testServiceAddress',
-      'options' => [
-        'curloptions' => [
-          CURLOPT_CAINFO => 'atoscert.pem',
-          CURLOPT_SSLKEY => 'client_key.pem',
-        ]
-      ]
-    ],
-    'repute_url' => [
-      'uri' => null,
-    ],
+     'inr_service' => [
+            'uri' => 'http://testServiceAddress',
+            'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
+                'client_id' => '', //param
+                'client_secret' => '', // secret
+                'token_url' => '', //param
+                'scope' => '', //param
+                'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+            ]
+          ],
+        'repute_url' => [
+          'uri' => null,
+      ],
   ],
   'print' => [
     'server' => 'print.localdev:631'

@@ -84,6 +84,11 @@ data "aws_ecr_repository" "this" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_ecr_repository" "liquibase" {
+
+  name = "vol-app/liquibase"
+}
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -256,6 +261,13 @@ module "service" {
     }
   }
 
+  batch-liquibase = {
+    repository = data.aws_ecr_repository.liquibase.repository_url
+
+    subnet_ids = data.aws_subnets.this["BATCH"].ids
+
+    secret_file = "APPPP-BASE-SM-APPLICATION-API"
+  }
   batch = {
     version    = var.cli_image_tag
     repository = data.aws_ecr_repository.this["cli"].repository_url
