@@ -26,7 +26,7 @@ class Workshop extends AbstractQueryHandler
         $queryLicenceId = $query->getLicence();
         $queryAppId = $query->getApplication();
 
-        if ($queryLicenceId !== null && $queryLicenceId !== $workshop->getLicence()->getId()) {
+        if (($queryLicenceId !== null && $queryLicenceId != $workshop->getLicence()->getId())) {
             throw new BadRequestException(self::ERR_LICENCE_MISMATCH);
         }
 
