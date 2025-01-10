@@ -1493,7 +1493,7 @@ class LicenceEntityTest extends EntityTester
         $app2 = new Application($licence, $this->getRefData(Application::APPLICATION_STATUS_UNDER_CONSIDERATION), 0);
         $app2->setIsVariation(false);
         $app2->setId(2);
-        $licence->setApplications(new \Doctrine\Common\Collections\ArrayCollection([$app1, $app2]));
+        $licence->setApplications(new ArrayCollection([$app1, $app2]));
 
         $this->assertEquals(1, $licence->getVariations()[0]->getId());
     }
@@ -1507,9 +1507,40 @@ class LicenceEntityTest extends EntityTester
         $app2 = new Application($licence, $this->getRefData(Application::APPLICATION_STATUS_UNDER_CONSIDERATION), 0);
         $app2->setIsVariation(true);
         $app2->setId(2);
-        $licence->setApplications(new \Doctrine\Common\Collections\ArrayCollection([$app1, $app2]));
+        $licence->setApplications(new ArrayCollection([$app1, $app2]));
 
         $this->assertEquals(1, $licence->getNewApplications()[0]->getId());
+    }
+
+    public function testIsRelatedToApplicationTrue(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+        $appId = 999;
+
+        $app1 = m::mock(Application::class);
+        $app1->expects('getId')->withNoArgs()->andReturn(888);
+
+        $app2 = m::mock(Application::class);
+        $app2->expects('getId')->withNoArgs()->andReturn($appId);
+
+        $licence->setApplications(new ArrayCollection([$app1, $app2]));
+
+        $this->assertTrue($licence->isRelatedToApplication($appId));
+    }
+
+    public function testIsRelatedToApplicationFalse(): void
+    {
+        $licence = $this->instantiate(Entity::class);
+
+        $app1 = m::mock(Application::class);
+        $app1->expects('getId')->withNoArgs()->andReturn(888);
+
+        $app2 = m::mock(Application::class);
+        $app2->expects('getId')->withNoArgs()->andReturn(777);
+
+        $licence->setApplications(new ArrayCollection([$app1, $app2]));
+
+        $this->assertFalse($licence->isRelatedToApplication(999));
     }
 
     protected function getRefData($id)
