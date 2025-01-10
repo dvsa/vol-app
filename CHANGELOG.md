@@ -1,5 +1,29 @@
 # Changelog
 
+## [5.13.0](https://github.com/dvsa/vol-app/compare/v5.12.1...v5.13.0) (2025-01-10)
+
+
+### Features
+
+* 5954 liquibase batch job definition ([#537](https://github.com/dvsa/vol-app/issues/537)) ([30c76cb](https://github.com/dvsa/vol-app/commit/30c76cbe8a52e4508aee10eca67663ff50b27826))
+* add prerlease check before prod deploy, split regression into selfserve/internal steps ([#534](https://github.com/dvsa/vol-app/issues/534)) ([fee2674](https://github.com/dvsa/vol-app/commit/fee26745cf8a61b061e47d4a2413e778aad0272f))
+* **api:** adding OAuth2 setup for INR calls ([#533](https://github.com/dvsa/vol-app/issues/533)) ([5985b43](https://github.com/dvsa/vol-app/commit/5985b43dd8b561f4a67dabfdf428397b56958045))
+* RFC on proposed release-please config changes, to support RC releases up to PREP ([#524](https://github.com/dvsa/vol-app/issues/524)) ([30e09c6](https://github.com/dvsa/vol-app/commit/30e09c653c3265eeb9bacbcead9393d8b1792ca8))
+
+
+### Bug Fixes
+
+* change extra places where spellchecker language not defaulting to en_GB VOL-5907 ([#532](https://github.com/dvsa/vol-app/issues/532)) ([34e2c7f](https://github.com/dvsa/vol-app/commit/34e2c7fe54f77c863355e2049d91119672c91652))
+* fixes path string being added to CSV uploaded/emailed to dft ([#538](https://github.com/dvsa/vol-app/issues/538)) ([4972164](https://github.com/dvsa/vol-app/commit/497216480b93e31ca938a44244b886e107d3e8b7))
+* operator admin checks now account for disabled users VOL-5959 ([#528](https://github.com/dvsa/vol-app/issues/528)) ([b1096ab](https://github.com/dvsa/vol-app/commit/b1096abef2d4b20905c029eadb46a0772b77dddc))
+* penalty info now displayed for erru cases VOL-5976 ([#536](https://github.com/dvsa/vol-app/issues/536)) ([bc8ecf3](https://github.com/dvsa/vol-app/commit/bc8ecf3b821e2a1de3057cc106b93e5ba1e065b1))
+* remove &lt;/p&gt; being added to end of usernames ([#521](https://github.com/dvsa/vol-app/issues/521)) ([635cefe](https://github.com/dvsa/vol-app/commit/635cefea83f7f84cc64ec3d40b584e9c58968a88))
+* remove conditionals ([#541](https://github.com/dvsa/vol-app/issues/541)) ([3f931e8](https://github.com/dvsa/vol-app/commit/3f931e879139b4d3a44a9ff09c7f000ab6b654e0))
+* secret arn ([#539](https://github.com/dvsa/vol-app/issues/539)) ([8121f82](https://github.com/dvsa/vol-app/commit/8121f8248342b5fe220dab0b1a5445828c04f4e4))
+* snyk scanning and errors fixed ([#523](https://github.com/dvsa/vol-app/issues/523)) ([b698d12](https://github.com/dvsa/vol-app/commit/b698d12bb1f14734ecbededf4fb6a1e15c36a129))
+* validation added when loading safety inspectors VOL-5982 ([#542](https://github.com/dvsa/vol-app/issues/542)) ([2df7d1a](https://github.com/dvsa/vol-app/commit/2df7d1aa128cb29aa634bf86937b2b25f482bdb4))
+* vol 5955 operators no admin role toggle off ([#531](https://github.com/dvsa/vol-app/issues/531)) ([bc869e2](https://github.com/dvsa/vol-app/commit/bc869e2dc1f6b15ab0be577b9712ec9521ccecf9))
+
 ## [5.12.1](https://github.com/dvsa/vol-app/compare/v5.12.0...v5.12.1) (2024-12-18)
 
 
