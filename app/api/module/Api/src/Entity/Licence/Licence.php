@@ -1024,6 +1024,18 @@ class Licence extends AbstractLicence implements ContextProviderInterface, Organ
     }
 
     /**
+     * Check whether an application is related to the licence
+     */
+    public function isRelatedToApplication(int $applicationId)
+    {
+        $applications = $this->getApplications()->filter(
+            fn($element) => $element->getId() === $applicationId
+        );
+
+        return !$applications->isEmpty();
+    }
+
+    /**
      * Return Conditions and Undertakings that are added via Licence. Used in submissions.
      *
      * @return \Doctrine\Common\Collections\Collection
