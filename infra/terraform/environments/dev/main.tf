@@ -3,6 +3,8 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
+  supporting_service_names = ["search", "liquibase"]
+
   task_iam_role_statements = [
     {
       effect = "Allow"
@@ -84,9 +86,10 @@ data "aws_ecr_repository" "this" {
   name = "vol-app/${each.key}"
 }
 
-data "aws_ecr_repository" "liquibase" {
+data "aws_ecr_repository" "sservice" {
+  for_each = toset(local.supporting_service_names)
 
-  name = "vol-app/liquibase"
+  name = "vol-app/${each.key}"
 }
 
 data "aws_security_group" "this" {
@@ -260,8 +263,8 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.search.repository_url
-    liquibase_repository = data.aws_ecr_repository.liquibase.repository_url
+    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
+    liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
     task_iam_role_statements = local.task_iam_role_statements
