@@ -260,9 +260,9 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.liquibase.repository_url
+    search_repository    = data.aws_ecr_repository.search.repository_url
     liquibase_repository = data.aws_ecr_repository.liquibase.repository_url
-    api_secret_file      = "DEVAPPDEV-BASE-SM-APPLICATION-API"
+    api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
     task_iam_role_statements = local.task_iam_role_statements
 
