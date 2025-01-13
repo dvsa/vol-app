@@ -74,7 +74,7 @@ class TinyMCE_SpellChecker_Engine {
 		header("Pragma: no-cache");
 
 		$method = self::getParam("method", "spellcheck");
-		$lang = self::getParam("lang", "en_GB");
+		$lang = self::getParam("lang", "en_US");
 		$text = self::getParam("text");
 
 		if ($method == "spellcheck") {
