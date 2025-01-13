@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.13.1](https://github.com/dvsa/vol-app/compare/v5.13.0...v5.13.1) (2025-01-13)
+
+
+### Miscellaneous Chores
+
+* release 5.13.1 ([#546](https://github.com/dvsa/vol-app/issues/546)) ([294488c](https://github.com/dvsa/vol-app/commit/294488c6a80d638a5efd0df5baf2d4f284420bd7))
+
 ## [5.13.0](https://github.com/dvsa/vol-app/compare/v5.12.1...v5.13.0) (2025-01-10)
 
 
