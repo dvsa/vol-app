@@ -96,7 +96,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:${var.batch.api_secret_file}:olcs_api_rds_password"
+          valueFrom = "${var.batch.api_secret_file}:olcs_api_rds_password"
         },
       ]
     }
