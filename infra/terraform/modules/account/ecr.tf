@@ -10,6 +10,8 @@ module "ecr" {
 
   repository_name = "vol-app/${each.key}"
 
+  repository_image_tag_mutability = (each.key == "liquibase" ? "MUTABLE" : "IMMUTABLE")
+
   repository_read_access_arns = concat(
     [
       module.github[0].oidc_readonly_role_arn,
