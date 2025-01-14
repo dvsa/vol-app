@@ -19,11 +19,6 @@ locals {
     default = {
       image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
-      command = concat([
-        "/var/www/html/vendor/bin/laminas",
-        "--container=/var/www/html/config/container-cli.php"
-      ], job.commands)
-
       environment = [
         {
           name  = "ENVIRONMENT_NAME"
@@ -39,8 +34,6 @@ locals {
     }
     liquibase = {
       image = "${var.batch.liquibase_repository}:latest"
-
-      command = ""
 
       environment = [
         {
@@ -71,8 +64,6 @@ locals {
 
     search = {
       image = "${var.batch.search_repository}:latest"
-
-      command = ""
 
       environment = [
         {
@@ -111,6 +102,11 @@ locals {
     container_properties = jsonencode(concat(
       [local.job_types[getenv("job.type", "default")]],
       [{
+
+        command = (job.type == null ? concat([
+          "/var/www/html/vendor/bin/laminas",
+          "--container=/var/www/html/config/container-cli.php"
+        ], job.commands) : job.commands)
 
         runtimePlatform = {
           operatingSystemFamily = "LINUX",
