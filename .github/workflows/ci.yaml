@@ -17,7 +17,6 @@ jobs:
 
   security-docker:
     name: Security
-    continue-on-error: true
     uses: ./.github/workflows/security-docker.yaml
     continue-on-error: true
     permissions:
