@@ -16,6 +16,15 @@ on:
         options:
           - nonprod
           - prod
+      environment:
+        description: "Environment to target"
+        type: choice
+        options:
+          - dev
+          - int
+          - prep
+          - prod
+        required: true
       dry_run:
         description: "Run in dry-run mode (show pending changes only)"
         required: true
@@ -47,6 +56,9 @@ on:
       account:
         type: string
         required: true
+      environment:
+        type: string
+        required: true
       ref:
         type: string
         required: false
@@ -57,17 +69,27 @@ on:
         type: string
         required: false
         default: "main"
+      dry_run:
+        type: boolean
+        required: false
+        default: false
 env:
   REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
-  AWS_OIDC_ROLE: ${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+  AWS_OIDC_ROLE: ${{ inputs.account == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+  BATCH_QUEUE: ${{
+    inputs.environment == 'dev'  && 'LQBASE_QUEUE_DEV'  ||
+    inputs.environment == 'int'  && 'LQBASE_QUEUE_INT'  ||
+    inputs.environment == 'prep' && 'LQBASE_QUEUE_PREP' ||
+    inputs.environment == 'prod' && 'LQBASE_QUEUE_PROD'
+    }}
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || github.event.inputs.ref }}
+          ref: ${{ inputs.ref }}
 
       - name: Generate GitHub App Token
         id: generate-token
@@ -83,7 +105,7 @@ jobs:
         with:
           repository: dvsa/olcs-etl
           path: infra/docker/liquibase/changelog
-          ref: ${{ inputs.etl_ref || 'main' }}
+          ref: ${{ inputs.etl_ref }}
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Set up Docker Buildx
@@ -108,14 +130,14 @@ jobs:
           context: ./infra/docker/liquibase
           push: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
           tags: |
-            ${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version || github.event.inputs.version }}
+            ${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version}}
             ${{ env.REGISTRY }}/vol-app/liquibase:latest
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
   submit-batch-job:
     needs: build
     if: |
-      (inputs.push || (github.event_name == 'workflow_dispatch' && github.event.inputs.submit_job == 'true'))
+      (inputs.push || (github.event_name == 'workflow_dispatch' && inputs.submit_job == 'true'))
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
@@ -126,12 +148,11 @@ jobs:
       - name: Submit AWS Batch job
         run: |
           aws batch submit-job \
-            --job-name "liquibase-migration-${{ inputs.version || github.event.inputs.version }}" \
-            --job-queue "${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_BATCH_JOB_QUEUE || vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}" \
-            --job-definition "${{ (inputs.account || github.event.inputs.account) == 'prod' && vars.ACCOUNT_PROD_BATCH_LIQUIBASE_JOB_DEFINITION || vars.ACCOUNT_NONPROD_BATCH_LIQUIBASE_JOB_DEFINITION }}" \
+            --job-name "liquibase-migration-${{ github.run_id }}-${{ github.run_attempt }}" \
+            --job-queue "${{ vars[env.BATCH_QUEUE] }}" \
+            --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
             --container-overrides "{
-              \"image\": \"${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version || github.event.inputs.version }}\",
               \"environment\": [
-                {\"name\": \"DRY_RUN\", \"value\": \"${{ github.event.inputs.dry_run || 'false' }}\"}
+                {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
               ]
             }"
