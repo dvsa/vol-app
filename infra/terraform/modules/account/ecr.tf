@@ -1,5 +1,5 @@
 locals {
-  repositories = var.create_ecr_resources ? ["api", "cli", "selfserve", "internal", "liquibase"] : []
+  repositories = var.create_ecr_resources ? ["api", "cli", "selfserve", "internal", "liquibase", "search"] : []
 }
 
 module "ecr" {
@@ -23,6 +23,8 @@ module "ecr" {
     ],
     var.ecr_read_write_access_arns
   )
+
+  repository_image_tag_mutability = (each.key == "liquibase" ? "MUTABLE" : "IMMUTABLE")
 
   create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
