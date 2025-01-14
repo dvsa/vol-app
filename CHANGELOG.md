@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.13.2](https://github.com/dvsa/vol-app/compare/v5.13.1...v5.13.2) (2025-01-14)
+
+
+### Bug Fixes
+
+* liquibase job queue and definition tweaks ([#549](https://github.com/dvsa/vol-app/issues/549)) ([4e78843](https://github.com/dvsa/vol-app/commit/4e788437e05e2ba13e926d71a4b4134bc663765c))
+
 ## [5.13.1](https://github.com/dvsa/vol-app/compare/v5.13.0...v5.13.1) (2025-01-13)
 
 
