@@ -26,7 +26,7 @@ locals {
         },
         {
           name  = "APP_VERSION"
-          value = var.batch.version
+          value = var.batch.cli_version
         },
       ]
 
