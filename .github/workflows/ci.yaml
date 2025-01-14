@@ -36,7 +36,7 @@ jobs:
       # Docs
       should-build-docs: ${{ steps.changed-website-files.outputs.any_modified == 'true' || null }}
       # App
-      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' || null }}
+      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' || steps.changed-docker-files.outputs.any_modified == 'true' || null }}
       should-build-api: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/api') || null }}
       should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/selfserve') || null }}
       should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/internal') || null }}
@@ -200,11 +200,7 @@ jobs:
 
   app:
     name: App
-    if: >
-      needs.orchestrator.outputs.should-build-app ||
-      needs.orchestrator.outputs.should-build-api-docker ||
-      needs.orchestrator.outputs.should-build-selfserve-docker ||
-      needs.orchestrator.outputs.should-build-internal-docker
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
@@ -232,27 +228,13 @@ jobs:
 
   docker:
     name: Docker
-    if: >
-      always() && 
-      !cancelled() && 
-      needs.orchestrator.outputs.should-build-docker && 
-      needs.security-app.result != 'failure'  && 
-      needs.security-terraform.result != 'failure'  && 
-      needs.orchestrator.result != 'failure'  && 
-      needs.docs.result != 'failure'  && 
-      needs.cdn.result != 'failure'  && 
-      needs.app.result != 'failure'  && 
-      needs.get-version.result != 'failure'
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
-      - security-app
-      - security-terraform
       - orchestrator
-      - docs
-      - cdn
-      - app
       - get-version
+      - app
     strategy:
       fail-fast: false
       matrix:
@@ -355,7 +337,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
+      search-version: ${{ needs.get-version.outputs.search }}
     permissions:
       contents: read
       id-token: write
