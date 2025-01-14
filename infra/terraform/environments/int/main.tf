@@ -268,8 +268,6 @@ module "service" {
 
     task_iam_role_statements = local.task_iam_role_statements
 
-    task_iam_role_statements = local.task_iam_role_statements
-
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
     jobs = [
