@@ -517,7 +517,7 @@ module "service" {
         schedule = "cron(0/2 * * * ? *)",
       },
       {
-        name  = "liquibase-migrations",
+        name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
       },
