@@ -13,7 +13,8 @@ When adding or modifying parameters in Laminas config files:
 1. Developer identifies need for new parameter
 2. Developer MUST:
     - Create a branch in `vol-terraform` repository
-    - Add parameter values to appropriate files in `/etc/`
+    - Determine if the parameter will be the same across multiple environments or change individually per environment  
+    - Add parameter values to appropriate files in `/etc/` - group for common, environment ones for individual 
 3. Developer MUST create two linked PRs:
     - `vol-terraform` PR with parameter additions
     - `vol-app` PR with application changes to config
