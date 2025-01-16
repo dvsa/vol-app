@@ -18,7 +18,6 @@ jobs:
   security-docker:
     name: Security
     uses: ./.github/workflows/security-docker.yaml
-    continue-on-error: true
     permissions:
       contents: read
       security-events: write
@@ -229,13 +228,27 @@ jobs:
 
   docker:
     name: Docker
-    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
+    if: >
+      always() && 
+      !cancelled() && 
+      needs.orchestrator.outputs.should-build-docker && 
+      needs.security-app.result != 'failure'  && 
+      needs.security-terraform.result != 'failure'  && 
+      needs.orchestrator.result != 'failure'  && 
+      needs.docs.result != 'failure'  && 
+      needs.cdn.result != 'failure'  && 
+      needs.app.result != 'failure'  && 
+      needs.get-version.result != 'failure'
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
+      - security-app
+      - security-terraform
       - orchestrator
-      - get-version
+      - docs
+      - cdn
       - app
+      - get-version
     strategy:
       fail-fast: false
       matrix:
