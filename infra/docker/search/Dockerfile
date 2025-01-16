@@ -8,6 +8,4 @@ COPY config/ /usr/share/logstash/config/
 COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 COPY build.sh /usr/share/logstash/build.sh
 
-USER root
-
 CMD ["/usr/share/logstash/entrypoint.sh"]
