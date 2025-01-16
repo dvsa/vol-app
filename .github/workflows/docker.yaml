@@ -57,7 +57,7 @@ jobs:
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
       - uses: actions/download-artifact@v4
-        if: ${{ inputs.app-artefact-name != 'search' }}
+        if: ${{ inputs.app-artefact-name != '' }}
         with:
           name: ${{ inputs.app-artefact-name }}
           path: infra/docker/${{ inputs.project }}
