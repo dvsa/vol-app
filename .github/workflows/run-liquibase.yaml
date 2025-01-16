@@ -85,6 +85,8 @@ env:
     }}
 jobs:
   build:
+    outputs:
+      image_tag: ${{ steps.build-details.outputs.image_tag }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -108,6 +110,11 @@ jobs:
           ref: ${{ inputs.etl_ref }}
           token: ${{ steps.generate-token.outputs.token }}
 
+      - name: Generate unique image tag
+        id: tag
+        run: |
+          echo "image_tag=${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -129,12 +136,18 @@ jobs:
         with:
           context: ./infra/docker/liquibase
           push: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
-          tags: |
-            ${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version}}
-            ${{ env.REGISTRY }}/vol-app/liquibase:latest
+          tags: ${{ steps.tag.outputs.image_tag }}
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
+
+      - name: Set build details
+        id: build-details
+        run: echo "image_tag=${{ steps.tag.outputs.image_tag }}" >> $GITHUB_OUTPUT
+
   submit-batch-job:
+    outputs:
+      job_id: ${{ steps.submit-job.outputs.job_id }}
+      job_status: ${{ steps.check-status.outputs.status }}
     needs: build
     if: |
       (inputs.push || (github.event_name == 'workflow_dispatch' && inputs.submit_job == 'true'))
@@ -146,13 +159,34 @@ jobs:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Submit AWS Batch job
+        id: submit-job
         run: |
-          aws batch submit-job \
-            --job-name "liquibase-migration-${{ github.run_id }}-${{ github.run_attempt }}" \
-            --job-queue "${{ vars[env.BATCH_QUEUE] }}" \
-            --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
-            --container-overrides "{
-              \"environment\": [
-                {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
-              ]
-            }"
+          JOB_ID=$(aws batch submit-job \
+          --job-name "liquibase-migration-${{ github.run_id }}-${{ github.run_attempt }}" \
+          --job-queue "${{ vars[env.BATCH_QUEUE] }}" \
+          --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
+          --container-overrides "{
+           \"environment\": [
+             {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
+           ]
+          }" \
+          --query 'jobId' \
+          --output text)
+          echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
+
+      - name: Wait for job completion
+        id: check-status
+        timeout-minutes: 30
+        run: |
+          while true; do
+            STATUS=$(aws batch describe-jobs --jobs ${{ steps.submit-job.outputs.job_id }} --query 'jobs[0].status' --output text)
+            if [[ "$STATUS" == "SUCCEEDED" || "$STATUS" == "FAILED" ]]; then
+              echo "status=$STATUS" >> $GITHUB_OUTPUT
+              if [[ "$STATUS" == "FAILED" ]]; then
+                exit 1
+              fi
+              break
+            fi
+            echo "Job status: $STATUS"
+            sleep 30
+          done
