@@ -36,7 +36,7 @@ jobs:
       # Docs
       should-build-docs: ${{ steps.changed-website-files.outputs.any_modified == 'true' || null }}
       # App
-      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' || steps.changed-docker-files.outputs.any_modified == 'true' || null }}
+      should-build-app: ${{ steps.changed-app-files.outputs.any_modified == 'true' }}
       should-build-api: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/api') || null }}
       should-build-selfserve: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/selfserve') || null }}
       should-build-internal: ${{ contains(steps.changed-app-files.outputs.all_modified_files, 'app/internal') || null }}
