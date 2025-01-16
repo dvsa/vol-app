@@ -1,5 +1,7 @@
 FROM ghcr.io/dvsa/dvsa-docker-images/logstash/8.16.0/batch:0 AS search
 
+FROM search AS production
+
 # Delete default configuration
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
