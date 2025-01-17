@@ -291,7 +291,7 @@ jobs:
     needs:
       - release-please
       - get-version
-    uses: ./.github/workflows/run-liquibase-migrations.yaml
+    uses: ./.github/workflows/run-liquibase.yaml
     with:
       version: ${{ needs.get-version.outputs.api }}
       push: true
@@ -361,7 +361,7 @@ jobs:
       - get-version
       - terraform_env_dev
       - test_dev
-    uses: ./.github/workflows/run-liquibase-migrations.yaml
+    uses: ./.github/workflows/run-liquibase.yaml
     with:
       version: ${{ needs.get-version.outputs.api }}
       push: true
@@ -516,7 +516,7 @@ jobs:
       - terraform_env_int
       - test_int_internal
       - test_int_selfserve
-    uses: ./.github/workflows/run-liquibase-migrations.yaml
+    uses: ./.github/workflows/run-liquibase.yaml
     with:
       version: ${{ needs.get-version.outputs.api }}
       push: true
@@ -611,7 +611,7 @@ jobs:
       - terraform_env_prep
       - test_prep_internal
       - test_prep_selfserve
-    uses: ./.github/workflows/run-liquibase-migrations.yaml
+    uses: ./.github/workflows/run-liquibase.yaml
     with:
       version: ${{ needs.get-version.outputs.api }}
       push: true
