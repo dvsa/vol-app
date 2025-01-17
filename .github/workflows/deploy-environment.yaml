@@ -32,6 +32,10 @@ on:
         description: "Internal image tag"
         type: string
         required: true
+      search-image-tag:
+        description: "Search image tag"
+        type: string
+        required: true
       assets-version:
         description: "Assets version"
         type: string
@@ -70,6 +74,9 @@ on:
       internal-image-tag:
         type: string
         required: true
+      search-image-tag:
+        type: string
+        required: true
       assets-version:
         type: string
         required: true
@@ -101,6 +108,9 @@ on:
       previous_internal_image_tag:
         description: "Previous Internal image tag"
         value: ${{ jobs.deploy.outputs.previous_internal_image_tag }}
+      previous_search_image_tag:
+        description: "Previous Search image tag"
+        value: ${{ jobs.deploy.outputs.previous_search_image_tag }}
       previous_assets_version:
         description: "Previous Assets version"
         value: ${{ jobs.deploy.outputs.previous_assets_version }}
@@ -128,6 +138,7 @@ jobs:
       previous_cli_image_tag: ${{ steps.get_current_versions.outputs.cli_image_tag }}
       previous_selfserve_image_tag: ${{ steps.get_current_versions.outputs.selfserve_image_tag }}
       previous_internal_image_tag: ${{ steps.get_current_versions.outputs.internal_image_tag }}
+      previous_search_image_tag: ${{ steps.get_current_versions.outputs.search_image_tag }}
       previous_assets_version: ${{ steps.get_current_versions.outputs.assets_version }}
     env:
       WORKING_DIR: infra/terraform/environments/${{ inputs.environment }}
@@ -183,6 +194,7 @@ jobs:
           TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
+          TF_VAR_search_image_tag: ${{ inputs.search-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform plan -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 
@@ -254,6 +266,7 @@ jobs:
             **CLI version:** ${{ inputs.cli-image-tag }}
             **Selfserve version:** ${{ inputs.selfserve-image-tag }}
             **Internal version:** ${{ inputs.internal-image-tag }}
+            **search version:** ${{ inputs.search-image-tag }}
 
             ### Plan summary
 
@@ -295,6 +308,7 @@ jobs:
           TF_VAR_cli_image_tag: ${{ inputs.cli-image-tag }}
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
+          TF_VAR_search_image_tag: ${{ inputs.search-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform apply -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
@@ -312,6 +326,7 @@ jobs:
           echo "- CLI: ${{ inputs.cli-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Selfserve: ${{ inputs.selfserve-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Internal: ${{ inputs.internal-image-tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Search: ${{ inputs.search-image-tag }}" >> $GITHUB_STEP_SUMMARY
           echo "- Assets: ${{ inputs.assets-version }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Set outputs
