@@ -45,6 +45,7 @@ jobs:
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-search-docker: ${{ needs.release-please.outputs.release_created || steps.changed-search-docker-files.outputs.any_modified == 'true' || steps.changed-search-files.outputs.any_modified == 'true' || null }}
       # Terraform account
       should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
@@ -93,6 +94,11 @@ jobs:
         with:
           files: |
             infra/docker/internal/**
+      - uses: tj-actions/changed-files@v45
+        id: changed-seaerch-docker-files
+        with:
+          files: |
+            infra/docker/seaerch/**
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
         with:
@@ -144,6 +150,7 @@ jobs:
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
+      search: ${{ steps.search-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -168,6 +175,10 @@ jobs:
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/cdn
+      - id: search-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: infra/docker/search
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
@@ -176,6 +187,7 @@ jobs:
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Search**: \`${{ steps.search-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   cdn-nonprod:
     name: CDN
@@ -239,11 +251,13 @@ jobs:
           - cli
           - selfserve
           - internal
+          - search
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-and-push-search-docker && 'ignored' || 'search' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}

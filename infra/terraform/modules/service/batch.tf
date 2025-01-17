@@ -15,19 +15,9 @@ locals {
     }
   }
 
-  jobs = { for job in var.batch.jobs : job.name => {
-    name                  = "vol-app-${var.environment}-${job.name}"
-    type                  = "container"
-    propagate_tags        = true
-    platform_capabilities = ["FARGATE"]
-
-    container_properties = jsonencode({
-      command = concat([
-        "/var/www/html/vendor/bin/laminas",
-        "--container=/var/www/html/config/container-cli.php"
-      ], job.commands)
-
-      image = "${var.batch.repository}:${var.batch.version}"
+  job_types = {
+    default = {
+      image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
       environment = [
         {
@@ -36,42 +26,121 @@ locals {
         },
         {
           name  = "APP_VERSION"
-          value = var.batch.version
+          value = var.batch.cli_version
         },
-      ],
+      ]
 
-      runtimePlatform = {
-        operatingSystemFamily = "LINUX",
-        cpuArchitecture       = "ARM64"
-      }
+      secrets = []
+    }
+    liquibase = {
+      image = "${var.batch.liquibase_repository}:latest"
 
-      fargatePlatformConfiguration = {
-        platformVersion = "LATEST"
-      },
-
-      resourceRequirements = [
+      environment = [
         {
-          type  = "VCPU",
-          value = tostring(job.cpu),
+          name  = "DB_HOST"
+          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
         },
         {
-          type  = "MEMORY",
-          value = tostring(job.memory)
+          name  = "DB_NAME"
+          value = "OLCS_RDS_OLCSDB"
         },
-      ],
-
-      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
-      jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.id
-          awslogs-region        = "eu-west-1"
-          awslogs-stream-prefix = job.name
+        {
+          name  = "DB_USER"
+          value = "olcsapi"
+        },
+        {
+          name  = "DB_PORT"
+          value = "3306"
         }
-      }
-    })
+      ]
+
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "arn:aws:secretsmanager:eu-west-1:${data.aws_caller_identity.current.account_id}:secret:${var.batch.api_secret_file}:olcs_api_rds_password"
+        },
+      ]
+    }
+
+    search = {
+      image = "${var.batch.search_repository}:latest"
+
+      environment = [
+        {
+          name  = "DB_HOST"
+          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
+          name  = "DB_USER"
+          value = "olcsapi"
+        },
+        {
+          name  = "DB_PORT"
+          value = "3306"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${var.batch.api_secret_file}:olcs_api_rds_password"
+        },
+      ]
+    }
+  }
+
+  jobs = { for job in var.batch.jobs : job.name => {
+    name                  = "vol-app-${var.environment}-${job.name}"
+    type                  = "container"
+    propagate_tags        = true
+    platform_capabilities = ["FARGATE"]
+
+    container_properties = jsonencode(concat(
+      [local.job_types[getenv("job.type", "default")]],
+      [{
+
+        command = (job.type == null ? concat([
+          "/var/www/html/vendor/bin/laminas",
+          "--container=/var/www/html/config/container-cli.php"
+        ], job.commands) : job.commands)
+
+        runtimePlatform = {
+          operatingSystemFamily = "LINUX",
+          cpuArchitecture       = "ARM64"
+        }
+
+        fargatePlatformConfiguration = {
+          platformVersion = "LATEST"
+        },
+
+        resourceRequirements = [
+          {
+            type  = "VCPU",
+            value = tostring(job.cpu),
+          },
+          {
+            type  = "MEMORY",
+            value = tostring(job.memory)
+          },
+        ],
+
+        executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+        jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
+
+        logConfiguration = {
+          logDriver = "awslogs"
+          options = {
+            awslogs-group         = aws_cloudwatch_log_group.this.id
+            awslogs-region        = "eu-west-1"
+            awslogs-stream-prefix = job.name
+          }
+        }
+      }]
+    ))
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
@@ -84,7 +153,7 @@ locals {
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
         "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : module.batch.job_queues.default.arn,
+        "JobQueue" : module.batch.job_queues[getenv("job.queue", "default")].arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
@@ -128,7 +197,15 @@ module "batch" {
       tags = {
         JobQueue = "vol-app-${var.environment}-default"
       }
-    }
+    },
+    liquibase = {
+      name     = "vol-app-${var.environment}-liquibase"
+      state    = "ENABLED"
+      priority = 1
+      tags = {
+        JobQueue = "vol-app-${var.environment}-liquibase"
+      }
+    },
   }
 
   job_definitions = local.jobs
