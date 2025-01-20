@@ -302,6 +302,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_dev:
     name: Environment (dev)
@@ -371,6 +373,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_int:
     name: Environment (int)
@@ -525,6 +529,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_prep:
     name: Environment (prep)
@@ -619,6 +625,8 @@ jobs:
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_prod:
     name: Environment (prod)

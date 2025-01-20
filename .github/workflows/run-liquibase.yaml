@@ -73,6 +73,9 @@ on:
         type: boolean
         required: false
         default: false
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY:
+        required: true
 env:
   REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
