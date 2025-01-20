@@ -174,7 +174,6 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["API"].arn
-      lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = "api.*"
     }
 
@@ -215,7 +214,6 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
-      lb_arn                    = data.aws_lb.this["IUWEB"].arn
       listener_rule_host_header = "iuweb.*"
     }
 
@@ -256,7 +254,6 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
-      lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
     }
 
@@ -303,45 +300,42 @@ module "service" {
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
-    alert_emails = [
-      "olcs-dev@otc.gov.uk"
-    ]
-
     jobs = [
       {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
-      {
-        name     = "clean-up-variations",
-        commands = ["batch:clean-up-variations"],
-        timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
-      },
-      {
-        name     = "cns",
-        commands = ["batch:cns"],
-        timeout  = 43200,
-        schedule = "cron(30 13 ? * 1 *)",
-      },
-      {
-        name     = "create-psv-licence-surrender-task",
-        commands = ["batch:create-psv-licence-surrender-task"],
-        timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
-      },
-      {
-        name     = "psv-operator-list-export",
-        commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
-        timeout  = 43200,
-        schedule = "cron(00 13 ? * 1 *)",
-      },
-      {
-        name     = "international-goods-export",
-        commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
-        timeout  = 43200,
-        schedule = "cron(00 13 ? * 1 *)",
-      },
+      # Environments are not up at this time
+      # {
+      #   name     = "clean-up-variations",
+      #   commands = ["batch:clean-up-variations"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 * * ? *)",
+      # },
+      # {
+      #   name     = "cns",
+      #   commands = ["batch:cns"],
+      #   timeout  = 43200,
+      #   schedule = "cron(30 18 ? * 1 *)",
+      # },
+      # {
+      #   name     = "create-psv-licence-surrender-task",
+      #   commands = ["batch:create-psv-licence-surrender-task"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 * * ? *)",
+      # },
+      # {
+      #   name     = "psv-operator-list-export",
+      #   commands = ["batch:data-gov-uk-export", "-v", "--report-name=psv-operator-list", "--path=/tmp/"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 ? * 1 *)",
+      # },
+      # {
+      #   name     = "international-goods-export",
+      #   commands = ["batch:data-gov-uk-export", "-v", "--report-name=international-goods", "--path=/tmp/"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 ? * 1 *)",
+      # },
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
@@ -362,30 +356,31 @@ module "service" {
         name     = "database-maintenance",
         commands = ["batch:database-maintenance"],
       },
-      {
-        name     = "digital-continuation-reminders",
-        commands = ["batch:digital-continuation-reminders"],
-        timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
-      },
-      {
-        name     = "duplicate-vehicle-warning",
-        commands = ["batch:duplicate-vehicle-warning"],
-        timeout  = 43200,
-        schedule = "cron(30 13 ? * 2-6 *)",
-      },
-      {
-        name     = "enqueue-ch-compare",
-        commands = ["batch:enqueue-ch-compare"],
-        timeout  = 1800,
-        schedule = "cron(0 13 ? * 3 *)",
-      },
-      {
-        name     = "expire-bus-registration",
-        commands = ["batch:expire-bus-registration"],
-        timeout  = 43200,
-        schedule = "cron(05 13 * * ? *)",
-      },
+      # Environments are not up at this time
+      # {
+      #   name     = "digital-continuation-reminders",
+      #   commands = ["batch:digital-continuation-reminders"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 * * ? *)",
+      # },
+      # {
+      #   name     = "duplicate-vehicle-warning",
+      #   commands = ["batch:duplicate-vehicle-warning"],
+      #   timeout  = 43200,
+      #   schedule = "cron(30 21 ? * 2-6 *)",
+      # },
+      # {
+      #   name     = "enqueue-ch-compare",
+      #   commands = ["batch:enqueue-ch-compare"],
+      #   timeout  = 1800,
+      #   schedule = "cron(0 21 ? * 3 *)",
+      # },
+      # {
+      #   name     = "expire-bus-registration",
+      #   commands = ["batch:expire-bus-registration"],
+      #   timeout  = 43200,
+      #   schedule = "cron(05 0 * * ? *)",
+      # },
       {
         name     = "flag-urgent-tasks",
         commands = ["batch:flag-urgent-tasks"],
@@ -396,24 +391,25 @@ module "service" {
         name     = "import-users-from-csv",
         commands = ["batch:import-users-from-csv"],
       },
-      {
-        name     = "inspection-request-email",
-        commands = ["batch:inspection-request-email"],
-        timeout  = 1800,
-        schedule = "cron(0 13 * * ? *)",
-      },
-      {
-        name     = "interim-end-date-enforcement",
-        commands = ["batch:interim-end-date-enforcement"],
-        timeout  = 43200,
-        schedule = "cron(00 13 * * ? *)",
-      },
-      {
-        name     = "last-tm-letter",
-        commands = ["batch:last-tm-letter"],
-        timeout  = 43200,
-        schedule = "cron(30 13 * * ? *)",
-      },
+      # Environments are not up at this time
+      # {
+      #   name     = "inspection-request-email",
+      #   commands = ["batch:inspection-request-email"],
+      #   timeout  = 1800,
+      #   schedule = "cron(0 00-04 * * ? *)",
+      # },
+      # {
+      #   name     = "interim-end-date-enforcement",
+      #   commands = ["batch:interim-end-date-enforcement"],
+      #   timeout  = 43200,
+      #   schedule = "cron(00 02 * * ? *)",
+      # },
+      # {
+      #   name     = "last-tm-letter",
+      #   commands = ["batch:last-tm-letter"],
+      #   timeout  = 43200,
+      #   schedule = "cron(30 06 * * ? *)",
+      # },
       {
         name     = "licence-status-rules",
         commands = ["batch:licence-status-rules"],
@@ -428,7 +424,7 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = "cron(45 13 * * ? *)",
+        schedule = "cron(45 01 * * ? *)",
       },
       {
         name     = "process-ntu",
@@ -436,12 +432,13 @@ module "service" {
         timeout  = 43200,
         schedule = "cron(0 18 ? * 2-6 *)",
       },
-      {
-        name     = "remove-read-audit",
-        commands = ["batch:remove-read-audit"],
-        timeout  = 43200,
-        schedule = "cron(0 13 ? * 1 *)",
-      },
+      # Environments are not up at this time
+      # {
+      #   name     = "remove-read-audit",
+      #   commands = ["batch:remove-read-audit"],
+      #   timeout  = 43200,
+      #   schedule = "cron(0 22 ? * 1 *)",
+      # },
       {
         name     = "resolve-payments",
         commands = ["batch:resolve-payments"],
@@ -456,18 +453,19 @@ module "service" {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
-      {
-        name     = "close-expired-windows",
-        commands = ["permits:close-expired-windows"],
-        timeout  = 43200,
-        schedule = "cron(45 13 * * ? *)",
-      },
-      {
-        name     = "mark-expired-permits",
-        commands = ["permits:mark-expired-permits"],
-        timeout  = 43200,
-        schedule = "cron(15 13 * * ? *)",
-      },
+      # Environments are not up at this time
+      # {
+      #   name     = "close-expired-windows",
+      #   commands = ["permits:close-expired-windows"],
+      #   timeout  = 43200,
+      #   schedule = "cron(45 00 * * ? *)",
+      # },
+      # {
+      #   name     = "mark-expired-permits",
+      #   commands = ["permits:mark-expired-permits"],
+      #   timeout  = 43200,
+      #   schedule = "cron(15 06 * * ? *)",
+      # },
       {
         name     = "process-queue-general",
         commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate"],
