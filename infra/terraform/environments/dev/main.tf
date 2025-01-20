@@ -276,7 +276,7 @@ module "service" {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
-      # Environments are not up at this time
+      # Environment is not up at this time
       # {
       #   name     = "clean-up-variations",
       #   commands = ["batch:clean-up-variations"],
@@ -327,7 +327,7 @@ module "service" {
         name     = "database-maintenance",
         commands = ["batch:database-maintenance"],
       },
-      # Environments are not up at this time
+      # Environment is not up at this time
       # {
       #   name     = "digital-continuation-reminders",
       #   commands = ["batch:digital-continuation-reminders"],
@@ -362,7 +362,7 @@ module "service" {
         name     = "import-users-from-csv",
         commands = ["batch:import-users-from-csv"],
       },
-      # Environments are not up at this time
+      # Environment is not up at this time
       # {
       #   name     = "inspection-request-email",
       #   commands = ["batch:inspection-request-email"],
@@ -403,7 +403,7 @@ module "service" {
         timeout  = 43200,
         schedule = "cron(0 18 ? * 2-6 *)",
       },
-      # Environments are not up at this time
+      # Environment is not up at this time
       # {
       #   name     = "remove-read-audit",
       #   commands = ["batch:remove-read-audit"],
@@ -424,7 +424,7 @@ module "service" {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
-      # Environments are not up at this time
+      # Environment is not up at this time
       # {
       #   name     = "close-expired-windows",
       #   commands = ["permits:close-expired-windows"],
