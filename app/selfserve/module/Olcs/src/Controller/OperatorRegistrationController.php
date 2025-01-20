@@ -50,8 +50,18 @@ class OperatorRegistrationController extends AbstractController
                         'pageTitle' => 'user-registration.page.check-email.title'
                     ]);
                 }
+                $result = $response->getResult();
 
-                $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
+                if (!empty($result['messages'])) {
+                    $form->setMessages(
+                        [
+                            'main' => $result['messages'],
+                        ]
+                    );
+                } else {
+                    $this->flashMessengerHelper->addErrorMessage('unknown-error');
+                }
+
             }
         }
         return $this->prepareView('olcs/user-registration/index', [
@@ -80,6 +90,7 @@ class OperatorRegistrationController extends AbstractController
     {
         $view = new ViewModel($variables);
         $view->setTemplate($template);
+
 
         if (isset($variables['pageTitle'])) {
             $this->placeholder()->setPlaceholder('pageTitle', $variables['pageTitle']);
