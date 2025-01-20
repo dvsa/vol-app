@@ -88,6 +88,7 @@ env:
     }}
 jobs:
   build:
+    environment: ${{ inputs.environment }}
     outputs:
       image_tag: ${{ steps.build-details.outputs.image_tag }}
     runs-on: ubuntu-latest
@@ -173,6 +174,8 @@ jobs:
              {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
            ]
           }" \
+          --scheduling-priority-override 1 \
+          --share-identifier "liquibase-migrations" \
           --query 'jobId' \
           --output text)
           echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
