@@ -91,7 +91,6 @@ class OperatorRegistrationController extends AbstractController
         $view = new ViewModel($variables);
         $view->setTemplate($template);
 
-
         if (isset($variables['pageTitle'])) {
             $this->placeholder()->setPlaceholder('pageTitle', $variables['pageTitle']);
         }
