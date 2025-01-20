@@ -656,6 +656,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
