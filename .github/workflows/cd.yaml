@@ -298,11 +298,12 @@ jobs:
       account: nonprod
       environment: dev
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_dev:
     name: Environment (dev)
@@ -329,6 +330,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -368,11 +370,12 @@ jobs:
       account: nonprod
       environment: int
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_int:
     name: Environment (int)
@@ -399,6 +402,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -463,6 +467,7 @@ jobs:
       selfserve-image-tag: ${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}
       internal-image-tag: ${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env_int.outputs.previous_assets_version }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
     permissions:
       contents: read
       id-token: write
@@ -523,11 +528,12 @@ jobs:
       account: prod
       environment: prep
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.tag_name }}
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_prep:
     name: Environment (prep)
@@ -554,6 +560,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -618,11 +625,12 @@ jobs:
       account: prod
       environment: prod
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.tag_name }}
     permissions:
       contents: read
       id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   terraform_env_prod:
     name: Environment (prod)
@@ -656,6 +664,7 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
+      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
