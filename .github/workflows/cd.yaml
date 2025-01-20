@@ -298,7 +298,6 @@ jobs:
       account: nonprod
       environment: dev
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
     permissions:
       contents: read
@@ -368,7 +367,6 @@ jobs:
       account: nonprod
       environment: int
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
     permissions:
       contents: read
@@ -523,7 +521,6 @@ jobs:
       account: prod
       environment: prep
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.tag_name }}
     permissions:
       contents: read
@@ -618,7 +615,6 @@ jobs:
       account: prod
       environment: prod
       dry_run: false
-      submit_job: true
       etl_ref: ${{ needs.release-please.outputs.tag_name }}
     permissions:
       contents: read
