@@ -291,6 +291,8 @@ jobs:
     needs:
       - release-please
       - get-version
+      - terraform-account-nonprod
+      - docker
     uses: ./.github/workflows/run-liquibase.yaml
     with:
       version: ${{ needs.get-version.outputs.api }}
