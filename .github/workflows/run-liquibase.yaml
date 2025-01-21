@@ -175,7 +175,7 @@ jobs:
            ]
           }" \
           --scheduling-priority-override 1 \
-          --share-identifier "liquibase-migrations" \
+          --share-identifier "volapp" \
           --query 'jobId' \
           --output text)
           echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
