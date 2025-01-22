@@ -668,6 +668,11 @@ jobs:
       internal-image-tag: ${{ needs.terraform_env_prep.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env_prep.outputs.previous_assets_version }}
       search-image-tag: ${{ needs.get-version.outputs.search }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
 
   liquibase-prod:
     name: Database Migrations (prod)
