@@ -630,7 +630,7 @@ jobs:
     name: Run Internal Regression Tests on PREP
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
     needs:
-      - terraform_env_prep
+      - test_prep_smoke
     uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
     with:
       platform_env: prep
