@@ -11,3 +11,4 @@ COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 COPY build.sh /usr/share/logstash/build.sh
 
 CMD ["/usr/share/logstash/entrypoint.sh"]
+# deploy
