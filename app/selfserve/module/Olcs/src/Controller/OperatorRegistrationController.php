@@ -55,12 +55,12 @@ class OperatorRegistrationController extends AbstractController
                 if (!empty($result['messages'])) {
                     $form->setMessages(
                         [
-                            'main' => $result['messages'],
+                            'fields' => $result['messages'],
                         ]
                     );
-                } else {
-                    $this->flashMessengerHelper->addErrorMessage('unknown-error');
                 }
+
+                $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
 
             }
         }
