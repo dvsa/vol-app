@@ -40,7 +40,7 @@ jobs:
       # Assets
       should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_modified == 'true' || null }}
       # Docker
-      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || null}}
+      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-search-docker-files.outputs.any_modified == 'true' || null}}
       should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
