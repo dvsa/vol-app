@@ -95,10 +95,10 @@ jobs:
           files: |
             infra/docker/internal/**
       - uses: tj-actions/changed-files@v45
-        id: changed-seaerch-docker-files
+        id: changed-search-docker-files
         with:
           files: |
-            infra/docker/seaerch/**
+            infra/docker/search/**
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
         with:
