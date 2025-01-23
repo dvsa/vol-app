@@ -11,4 +11,4 @@ COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 COPY build.sh /usr/share/logstash/build.sh
 
 CMD ["/usr/share/logstash/entrypoint.sh"]
-# build 2025-01-23-0920
+# build 2025-01-23-1330
