@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_secretsmanager_secret" "application_api" {
+  name = "DEVAPPDA-BASE-SM-APPLICATION-API"
+}
+
 locals {
   default_retry_policy = {
     attempts = 1
@@ -57,7 +61,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "${var.batch.api_secret_file}:olcs_api_rds_password::"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password:::"
         },
       ]
     }
@@ -87,7 +91,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "${var.batch.api_secret_file}:olcs_api_rds_password::"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password:::"
         },
       ]
     }
