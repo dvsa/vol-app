@@ -50,8 +50,18 @@ class OperatorRegistrationController extends AbstractController
                         'pageTitle' => 'user-registration.page.check-email.title'
                     ]);
                 }
+                $result = $response->getResult();
+
+                if (!empty($result['messages'])) {
+                    $form->setMessages(
+                        [
+                            'fields' => $result['messages'],
+                        ]
+                    );
+                }
 
                 $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
+
             }
         }
         return $this->prepareView('olcs/user-registration/index', [
