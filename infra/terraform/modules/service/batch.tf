@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "application_api" {
-  name = "DEVAPPDA-BASE-SM-APPLICATION-API"
+  name = "DEVAPP${var.legacy_environment}-BASE-SM-APPLICATION-API"
 }
 
 locals {
