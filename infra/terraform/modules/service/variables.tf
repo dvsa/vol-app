@@ -72,7 +72,7 @@ variable "batch" {
     jobs = list(object({
       name     = string
       type     = optional(string, "default")
-      queue    = optional(string)
+      queue    = optional(string, "default")
       commands = optional(list(string))
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
