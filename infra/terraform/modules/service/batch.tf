@@ -161,7 +161,7 @@ locals {
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
         "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : module.batch.job_queues[getenv("job.queue", "default")].arn,
+        "JobQueue" : lookup(module.batch.job_queues, job.queue, default).arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
