@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -30,11 +32,13 @@ class SiPenaltyErruRequestedEntityTest extends EntityTester
         $si = m::mock(SeriousInfringement::class);
         $siPenaltyRequestedType = m::mock(SiPenaltyRequestedType::class);
         $duration = 30;
+        $penaltyRequestedIdentifier = 888;
 
-        $entity = new Entity($si, $siPenaltyRequestedType, $duration);
+        $entity = new Entity($si, $siPenaltyRequestedType, $duration, $penaltyRequestedIdentifier);
 
         $this->assertEquals($si, $entity->getSeriousInfringement());
         $this->assertEquals($siPenaltyRequestedType, $entity->getSiPenaltyRequestedType());
         $this->assertEquals($duration, $entity->getDuration());
+        $this->assertEquals($penaltyRequestedIdentifier, $entity->getPenaltyRequestedIdentifier());
     }
 }

@@ -6,7 +6,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
@@ -35,7 +35,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
@@ -90,6 +90,16 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
+
+    /**
+     * The corresponding penalty that was requested (nullable for now due to existing data)
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", fetch="LAZY", inversedBy="appliedPenalties")
+     * @ORM\JoinColumn(name="si_penalty_erru_requested_id", referencedColumnName="id", nullable=true)
+     */
+    protected $erruPenaltyRequested;
 
     /**
      * Olbs key
@@ -404,6 +414,18 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
         }
 
         return $this->startDate;
+    }
+
+    public function setErruPenaltyRequested($erruPenaltyRequested)
+    {
+        $this->erruPenaltyRequested = $erruPenaltyRequested;
+
+        return $this;
+    }
+
+    public function getErruPenaltyRequested()
+    {
+        return $this->erruPenaltyRequested;
     }
 
     /**

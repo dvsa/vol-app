@@ -29,7 +29,6 @@ class SiDates extends AbstractFilter
             $value['imposedErrus'][$key]['finalDecisionDate'] = $this->createDate($dates['finalDecisionDate']);
         }
 
-        $value['checkDate'] = $this->createDate($value['checkDate']);
         $value['infringementDate'] = $this->createDate($value['infringementDate']);
 
         return $value;

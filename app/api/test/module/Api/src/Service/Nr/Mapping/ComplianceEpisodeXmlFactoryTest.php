@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\Mapping;
 
 use Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXml;
@@ -11,12 +13,13 @@ use Psr\Container\ContainerInterface;
 
 class ComplianceEpisodeXmlFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'nr' => [
                 'compliance_episode' => [
-                    'xmlNs' => 'xml ns info'
+                    'xmlNs' => 'xml ns info',
+                    'erruVersion' => "3.1",
                 ]
             ]
         ];
@@ -35,10 +38,10 @@ class ComplianceEpisodeXmlFactoryTest extends TestCase
         $this->assertInstanceOf(ComplianceEpisodeXml::class, $service);
     }
 
-    public function testInvokeMissingConfig()
+    public function testInvokeMissingConfig(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Missing INR service config');
+        $this->expectExceptionMessage('Missing xmlNs for INR config');
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('config')->andReturn([]);

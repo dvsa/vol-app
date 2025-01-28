@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -34,13 +36,15 @@ class SiPenaltyErruImposedEntityTest extends EntityTester
         $startDate = new \DateTime('2015-12-24');
         $endDate = new \DateTime('2015-12-25');
         $finalDecisionDate = new \DateTime('2015-12-26');
+        $penaltyImposedIdentifier = 999;
 
-        $entity = new Entity($si, $siPenaltyImposedType, $executed, $startDate, $endDate, $finalDecisionDate);
+        $entity = new Entity($si, $siPenaltyImposedType, $executed, $startDate, $endDate, $finalDecisionDate, $penaltyImposedIdentifier);
 
         $this->assertEquals($siPenaltyImposedType, $entity->getSiPenaltyImposedType());
         $this->assertEquals($executed, $entity->getExecuted());
         $this->assertEquals($startDate, $entity->getStartDate());
         $this->assertEquals($endDate, $entity->getEndDate());
         $this->assertEquals($finalDecisionDate, $entity->getFinalDecisionDate());
+        $this->assertEquals($penaltyImposedIdentifier, $entity->getPenaltyImposedIdentifier());
     }
 }

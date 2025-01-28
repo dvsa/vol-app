@@ -22,7 +22,7 @@ class LicenceNumber extends AbstractFilter
      */
     public function filter($value)
     {
-        //licence number defaults to the the initial value
+        //licence number defaults to the initial value
         $value['licenceNumber'] = $value['communityLicenceNumber'];
 
         //see if we can split into three parts, as per a community licence number

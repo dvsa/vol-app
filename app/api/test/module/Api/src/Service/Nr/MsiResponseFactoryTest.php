@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr;
 
 use Dvsa\Olcs\Api\Service\Nr\MsiResponse;
@@ -9,19 +11,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
 use Psr\Container\ContainerInterface;
 
-/**
- * Class MsiResponseFactoryTest
- * @package Dvsa\OlcsTest\Api\Service\Nr
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class MsiResponseFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $config = [
             'nr' => [
                 'compliance_episode' => [
-                    'xmlNs' => 'xml ns'
+                    'xmlNs' => 'xml ns',
+                    'erruVersion' => "3.4",
                 ],
             ],
         ];
@@ -36,7 +34,7 @@ class MsiResponseFactoryTest extends TestCase
         $this->assertInstanceOf(XmlNodeBuilder::class, $service->getXmlBuilder());
     }
 
-    public function testInvokeMissingConfig()
+    public function testInvokeMissingConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No config specified for xml ns');

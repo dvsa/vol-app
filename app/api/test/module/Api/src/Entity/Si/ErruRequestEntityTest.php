@@ -39,12 +39,18 @@ class ErruRequestEntityTest extends EntityTester
         $vrm = 'vrm';
         $notificationNumber = '0ffefb6b-6344-4a60-9a53-4381c32f98d9';
         $workflowId = '20776dc3-5fe7-42d5-b554-09ad12fa25c4';
+        $communityLicenceStatus = m::mock(RefData::class);
+        $communityLicenceNumber = 'UKGB/OB1234567/00000';
+        $totAuthVehicles = 10;
 
         $entity = new Entity(
             $case,
             $msiType,
             $memberStateCode,
             $requestDocument,
+            $communityLicenceStatus,
+            $communityLicenceNumber,
+            $totAuthVehicles,
             $originatingAuthority,
             $transportUndertakingName,
             $vrm,
@@ -61,6 +67,9 @@ class ErruRequestEntityTest extends EntityTester
         $this->assertEquals($vrm, $entity->getVrm());
         $this->assertEquals($notificationNumber, $entity->getNotificationNumber());
         $this->assertEquals($workflowId, $entity->getWorkflowId());
+        $this->assertEquals($totAuthVehicles, $entity->getTotAuthVehicles());
+        $this->assertEquals($communityLicenceStatus, $entity->getCommunityLicenceStatus());
+        $this->assertEquals($communityLicenceNumber, $entity->getCommunityLicenceNumber());
     }
 
     /**

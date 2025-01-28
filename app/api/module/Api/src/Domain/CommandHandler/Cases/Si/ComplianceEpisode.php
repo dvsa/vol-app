@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Process Si Compliance Episode
- */
-
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,8 +8,8 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
+use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
-use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure;
 use Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXml;
 use Dvsa\Olcs\Api\Service\InputFilter\Input as InputFilter;
@@ -45,10 +41,6 @@ use Dvsa\Olcs\Api\Domain\UploaderAwareTrait;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Psr\Container\ContainerInterface;
 
-/**
- * Process Si Compliance Episode
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class ComplianceEpisode extends AbstractCommandHandler implements TransactionedInterface, UploaderAwareInterface
 {
     use UploaderAwareTrait;
@@ -173,7 +165,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         $parsedXmlData = $this->xmlMapping->mapData($xmlDomDocument);
 
         //extract the data we need from the dom document, on failure return a result object containing the errors
-        if (!$erruData = $this->validateInput('complianceEpisode', $parsedXmlData, [])) {
+        if (!$erruData = $this->validateInput('complianceEpisode', $parsedXmlData)) {
             return $this->result;
         }
 
@@ -185,10 +177,13 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         //generate a case object
         $case = $this->generateCase($erruData, $this->requestDocument);
 
+        $checkDate = new \DateTime($erruData['checkDate']);
+        $checkDate->setTime(0, 0);
+
         //there can be more than one serious infringement per request
         foreach ($erruData['si'] as $si) {
             //format/validate si data, on failure return a result object containing the errors
-            if (!$si = $this->validateInput('seriousInfringement', $si, [])) {
+            if (!$si = $this->validateInput('seriousInfringement', $si)) {
                 return $this->result;
             }
 
@@ -202,7 +197,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
                 return $this->result;
             }
 
-            $case->getSeriousInfringements()->add($this->getSi($case, $si));
+            $case->getSeriousInfringements()->add($this->getSi($case, $si, $checkDate));
         }
 
         $this->getRepo()->save($case);
@@ -219,19 +214,11 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $this->result;
     }
 
-    /**
-     * Gets a serious infringement entity
-     *
-     * @param CaseEntity $case case entity
-     * @param array      $si   array of serious infringement information
-     *
-     * @return SiEntity
-     */
-    private function getSi(CaseEntity $case, array $si)
+    private function getSi(CaseEntity $case, array $si, \DateTime $checkDate): SiEntity
     {
         $siEntity = new SiEntity(
             $case,
-            $si['checkDate'],
+            $checkDate,
             $si['infringementDate'],
             $this->getRepo('SiCategory')->fetchById(SiCategoryEntity::ERRU_DEFAULT_CATEGORY),
             $this->siCategoryType[$si['siCategoryType']]
@@ -243,15 +230,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $siEntity;
     }
 
-    /**
-     * Returns an array collection of imposed errus
-     *
-     * @param SiEntity $si           serious infringement entity
-     * @param array    $imposedErrus array of imposed errus
-     *
-     * @return ArrayCollection
-     */
-    private function getImposedErruCollection(SiEntity $si, $imposedErrus)
+    private function getImposedErruCollection(SiEntity $si, array $imposedErrus): ArrayCollection
     {
         $imposedErruCollection = new ArrayCollection();
 
@@ -262,7 +241,8 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
                 $this->imposedPen['executed'][$imposedErru['executed']],
                 $imposedErru['startDate'],
                 $imposedErru['endDate'],
-                $imposedErru['finalDecisionDate']
+                $imposedErru['finalDecisionDate'],
+                $imposedErru['penaltyImposedIdentifier']
             );
 
             $imposedErruCollection->add($imposedEntity);
@@ -271,35 +251,26 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $imposedErruCollection;
     }
 
-    /**
-     * Returns an array collection of requested errus
-     *
-     * @param SiEntity $si             serious infringement entity
-     * @param array    $requestedErrus array of requested errus
-     *
-     * @return ArrayCollection
-     */
-    private function getRequestedErruCollection(SiEntity $si, $requestedErrus)
+    private function getRequestedErruCollection(SiEntity $si, array $requestedErrus): ArrayCollection
     {
         $requestedErruCollection = new ArrayCollection();
 
         foreach ($requestedErrus as $requestedErru) {
             $penalty = $this->requestedPen['siPenaltyRequestedType'][$requestedErru['siPenaltyRequestedType']];
-            $requestedErruCollection->add(new PenaltyRequestedEntity($si, $penalty, $requestedErru['duration']));
+            $requestedErruCollection->add(
+                new PenaltyRequestedEntity(
+                    $si,
+                    $penalty,
+                    $requestedErru['duration'],
+                    $requestedErru['penaltyRequestedIdentifier']
+                )
+            );
         }
 
         return $requestedErruCollection;
     }
 
-    /**
-     * Builds the case entity
-     *
-     * @param array    $erruData        array of erru data
-     * @param Document $requestDocument request document entity
-     *
-     * @return CaseEntity
-     */
-    private function generateCase(array $erruData, Document $requestDocument)
+    private function generateCase(array $erruData, Document $requestDocument): CaseEntity
     {
         $case = new CaseEntity(
             new \DateTime(),
@@ -318,7 +289,8 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
             $requestDocument,
             $erruData['originatingAuthority'],
             $erruData['transportUndertakingName'],
-            $erruData['vrm']
+            $erruData['vrm'],
+            $erruData['communityLicenceNumber'],
         );
 
         $case->setErruRequest($erruRequest);
@@ -326,30 +298,22 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $case;
     }
 
-    /**
-     * Builds the ErruRequest entity
-     *
-     * @param CaseEntity $case                     case entity
-     * @param Document   $requestDocument          request document entity
-     * @param string     $originatingAuthority     originating authority
-     * @param string     $transportUndertakingName transport undertaking name
-     * @param string     $vrm                      vrm
-     *
-     * @return ErruRequestEntity
-     * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
-     */
     private function getErruRequest(
         CaseEntity $case,
         Document $requestDocument,
-        $originatingAuthority,
-        $transportUndertakingName,
-        $vrm
-    ) {
+        string $originatingAuthority,
+        string $transportUndertakingName,
+        string $vrm,
+        string $communityLicenceNumber
+    ): ErruRequestEntity {
         return new ErruRequestEntity(
             $case,
             $this->getRepo()->getRefdataReference(ErruRequestEntity::DEFAULT_CASE_TYPE),
             $this->commonData['memberState'],
             $requestDocument,
+            $this->getRepo()->getRefdataReference(CommunityLic::STATUS_ACTIVE),
+            $communityLicenceNumber,
+            $this->commonData['totAuthVehicles'],
             $originatingAuthority,
             $transportUndertakingName,
             $vrm,
@@ -358,12 +322,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         );
     }
 
-    /**
-     * Gets a list of case categories
-     *
-     * @return ArrayCollection
-     */
-    private function getCaseCategories()
+    private function getCaseCategories(): ArrayCollection
     {
         return new ArrayCollection([$this->getRepo()->getRefdataReference(CaseEntity::ERRU_DEFAULT_CASE_CATEGORY)]);
     }
@@ -371,12 +330,8 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
     /**
      * Gets doctrine category type data for each serious infringement, if we've already retrieved the data previously,
      * we don't do so again
-     *
-     * @param int $categoryType category type id
-     *
-     * @return void
      */
-    private function addDoctrineCategoryTypeData($categoryType)
+    private function addDoctrineCategoryTypeData(int $categoryType): void
     {
         if (!isset($this->siCategoryType[$categoryType])) {
             try {
@@ -392,13 +347,8 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
     /**
      * Gets doctrine penalty data for each serious infringement, if we've already retrieved the data previously,
      * we don't do so again
-     *
-     * @param array $imposedErruData   imposed erru data
-     * @param array $requestedErruData requested erru data
-     *
-     * @return void
      */
-    private function addDoctrinePenaltyData(array $imposedErruData, array $requestedErruData)
+    private function addDoctrinePenaltyData(array $imposedErruData, array $requestedErruData): void
     {
         /**
          * @var SiPenaltyRequestedTypeRepo $imposedRepo
@@ -454,7 +404,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
      * @throws Exception
      * @return array
      */
-    private function getCommonData(array $erruData)
+    private function getCommonData(array $erruData): array|false
     {
         /**
          * @var ErruRequestRepo $erruRequestRepo
@@ -488,9 +438,10 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
 
         $this->commonData = [
             'licence' => $licence,
+            'totAuthVehicles' => $licence->getTotAuthVehicles(),
             'memberState' => $memberState,
             'notificationNumber' => $erruData['notificationNumber'],
-            'workflowId' => $erruData['workflowId']
+            'workflowId' => $erruData['workflowId'],
         ];
 
         return $this->commonData;
@@ -504,7 +455,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
      *
      * @return bool
      */
-    private function handleErrors($input, $errors)
+    private function handleErrors($input, array $errors): false
     {
         $this->errors = $errors;
         $this->result->setFlag('hasErrors', true);
@@ -546,14 +497,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $this->$inputFilter->getValue();
     }
 
-    /**
-     * Creates a task
-     *
-     * @param CaseEntity $case case entity
-     *
-     * @return CreateTaskCmd
-     */
-    private function createTaskCmd($case)
+    private function createTaskCmd(CaseEntity $case): CreateTaskCmd
     {
         $data = [
             'category' => CategoryEntity::CATEGORY_COMPLIANCE,
@@ -569,15 +513,9 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
     }
 
     /**
-     * Updates the document record with case and licence ids
-     *
-     * @param DocumentEntity $document document entity
-     * @param CaseEntity     $case     case entity
-     * @param Licence        $licence  licence entity
-     *
-     * @return UpdateDocLinksCmd
+     * Command to update the document record with case and licence ids
      */
-    private function createUpdateDocLinksCmd(DocumentEntity $document, CaseEntity $case, LicenceEntity $licence)
+    private function createUpdateDocLinksCmd(DocumentEntity $document, CaseEntity $case, LicenceEntity $licence): UpdateDocLinksCmd
     {
         $data = [
             'id' => $document->getId(),
@@ -590,22 +528,16 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
 
     /**
      * Returns a queue command to send the error email
-     *
-     * @param int $id the erru request failure id
-     *
-     * @return CreateQueueCmd
      */
-    private function createErrorEmailCmd($id)
+    private function createErrorEmailCmd(int $id): CreateQueueCmd
     {
         return $this->emailQueue(SendErrorEmailCmd::class, ['id' => $id], $id);
     }
 
     /**
      * Returns the current list of errors
-     *
-     * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
