@@ -73,6 +73,10 @@ on:
         type: boolean
         required: false
         default: false
+      submit_job:
+        type: boolean
+        required: false
+        default: false
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY:
         required: true
@@ -154,7 +158,7 @@ jobs:
       job_status: ${{ steps.check-status.outputs.status }}
     needs: build
     if: |
-      (inputs.push || (github.event_name == 'workflow_dispatch' && inputs.submit_job == 'true'))
+      (inputs.push || inputs.submit_job || (github.event_name == 'workflow_dispatch' && inputs.submit_job == 'true'))
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
