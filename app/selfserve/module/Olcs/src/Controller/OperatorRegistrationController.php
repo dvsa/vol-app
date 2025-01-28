@@ -58,9 +58,9 @@ class OperatorRegistrationController extends AbstractController
                             'fields' => $result['messages'],
                         ]
                     );
+                } else {
+                    $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
                 }
-
-                $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
 
             }
         }
