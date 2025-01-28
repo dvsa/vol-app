@@ -286,34 +286,13 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  liquibase-dev:
-    name: Liquibase Migrations (dev)
-    needs:
-      - release-please
-      - get-version
-      - docker
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      version: ${{ needs.get-version.outputs.api }}
-      push: true
-      account: nonprod
-      environment: dev
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
   terraform_env_dev:
     name: Environment (dev)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
-      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success') &&
-      (needs.liquibase-dev.result == 'success' && needs.liquibase-dev.outputs.job_status == 'SUCCEEDED')
+      (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success')
     concurrency:
       group: terraform-environment-dev
     needs:
@@ -322,7 +301,6 @@ jobs:
       - docker
       - cdn-nonprod
       - terraform-account-nonprod
-      - liquibase-dev
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: dev
@@ -339,11 +317,34 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  liquibase-dev:
+    name: Liquibase Migrations (dev)
+    needs:
+      - release-please
+      - get-version
+      - docker
+      - terraform_env_dev
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      version: ${{ needs.get-version.outputs.api }}
+      push: true
+      submit_job: true
+      account: nonprod
+      environment: dev
+      dry_run: false
+      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
   test_dev:
     name: Run Tests on DEV
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
     needs:
       - terraform_env_dev
+      - liquibase-dev
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
@@ -357,36 +358,13 @@ jobs:
       id-token: write
       checks: write
 
-  liquibase-int:
-    name: Database Migrations (int)
-    needs:
-      - release-please
-      - get-version
-      - terraform_env_dev
-      - test_dev
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      version: ${{ needs.get-version.outputs.api }}
-      push: true
-      account: nonprod
-      environment: int
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
   terraform_env_int:
     name: Environment (int)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.terraform_env_dev.result == 'success' &&
-      needs.liquibase-int.result == 'success' &&
-      needs.liquibase-int.outputs.job_status == 'SUCCEEDED'
+      needs.terraform_env_dev.result == 'success'
     concurrency:
       group: terraform-environment-int
     needs:
@@ -394,7 +372,6 @@ jobs:
       - orchestrator
       - terraform_env_dev
       - test_dev
-      - liquibase-int
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: int
@@ -411,11 +388,34 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  liquibase-int:
+    name: Database Migrations (int)
+    needs:
+      - release-please
+      - get-version
+      - test_dev
+      - terraform_env_int
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      version: ${{ needs.get-version.outputs.api }}
+      push: false
+      submit_job: true
+      account: nonprod
+      environment: int
+      dry_run: false
+      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
   test_int_smoke:
     name: Run Smoke Tests on INT
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
     needs:
       - terraform_env_int
+      - liquibase-int
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
@@ -534,39 +534,13 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  liquibase-prep:
-    name: Database Migrations (prep)
-    if: ${{ needs.release-please.outputs.release_created }}
-    needs:
-      - release-please
-      - get-version
-      - terraform_env_int
-      - test_int_smoke
-      - test_int_internal
-      - test_int_selfserve
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      version: ${{ needs.get-version.outputs.api }}
-      push: true
-      account: prod
-      environment: prep
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
   terraform_env_prep:
     name: Environment (prep)
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.release-please.outputs.release_created &&
-      needs.liquibase-prep.result == 'success' &&
-      needs.liquibase-prep.outputs.job_status == 'SUCCEEDED'
+      needs.release-please.outputs.release_created
     concurrency:
       group: terraform-environment-prep
     needs:
@@ -574,7 +548,6 @@ jobs:
       - get-version
       - orchestrator
       - terraform-account-prod
-      - liquibase-prep
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prep
@@ -591,11 +564,38 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  liquibase-prep:
+    name: Database Migrations (prep)
+    if: ${{ needs.release-please.outputs.release_created }}
+    needs:
+      - release-please
+      - get-version
+      - terraform_env_int
+      - test_int_smoke
+      - test_int_internal
+      - test_int_selfserve
+      - terraform_env_prep
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      version: ${{ needs.get-version.outputs.api }}
+      push: false
+      submit_job: true
+      account: prod
+      environment: prep
+      dry_run: false
+      etl_ref: ${{ needs.release-please.outputs.tag_name }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
   test_prep_smoke:
     name: Run Smoke Tests on PREP
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
     needs:
       - terraform_env_prep
+      - liquibase-dev
     uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@main
     with:
       platform_env: prep
@@ -635,33 +635,6 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  liquibase-prod:
-    name: Database Migrations (prod)
-    if: |
-      always() &&
-      !cancelled() &&
-      !failure() &&
-      needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-')
-    needs:
-      - release-please
-      - get-version
-      - terraform_env_prep
-      - test_prep_smoke
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      version: ${{ needs.get-version.outputs.api }}
-      push: true
-      account: prod
-      environment: prod
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
   terraform_env_prod:
     name: Environment (prod)
     if: |
@@ -673,9 +646,7 @@ jobs:
       !contains(needs.get-version.outputs.cli, '-') &&
       !contains(needs.get-version.outputs.selfserve, '-') &&
       !contains(needs.get-version.outputs.internal, '-') &&
-      !contains(needs.get-version.outputs.assets, '-') &&
-      needs.liquibase-prod.result == 'success' &&
-      needs.liquibase-prod.outputs.job_status == 'SUCCEEDED'
+      !contains(needs.get-version.outputs.assets, '-')
     concurrency:
       group: terraform-environment-prod
     needs:
@@ -684,7 +655,6 @@ jobs:
       - orchestrator
       - terraform_env_prep
       - test_prep_smoke
-      - liquibase-prod
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prod
@@ -700,3 +670,31 @@ jobs:
       id-token: write
       pull-requests: write
     secrets: inherit
+
+  liquibase-prod:
+    name: Database Migrations (prod)
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      needs.release-please.outputs.release_created &&
+      !contains(needs.get-version.outputs.api, '-')
+    needs:
+      - release-please
+      - get-version
+      - terraform_env_prod
+      - terraform_env_prod
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      version: ${{ needs.get-version.outputs.api }}
+      push: false
+      submit_job: true
+      account: prod
+      environment: prod
+      dry_run: false
+      etl_ref: ${{ needs.release-please.outputs.tag_name }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}

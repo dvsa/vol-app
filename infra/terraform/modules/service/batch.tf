@@ -103,48 +103,52 @@ locals {
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
 
-    container_properties = jsonencode(concat(
-      [local.job_types[getenv("job.type", "default")]],
-      [{
+    container_properties = jsonencode({
 
-        command = (job.type == null ? concat([
-          "/var/www/html/vendor/bin/laminas",
-          "--container=/var/www/html/config/container-cli.php"
-        ], job.commands) : job.commands)
+      command = (job.type == null ? concat([
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php"
+      ], job.commands) : job.commands)
 
-        runtimePlatform = {
-          operatingSystemFamily = "LINUX",
-          cpuArchitecture       = "ARM64"
-        }
+      image = lookup(local.job_types, job.type, local.job_types.default).image
 
-        fargatePlatformConfiguration = {
-          platformVersion = "LATEST"
+      environment = lookup(local.job_types, job.type, local.job_types.default).environment
+
+      secrets = lookup(local.job_types, job.type, local.job_types.default).secrets
+
+      runtimePlatform = {
+        operatingSystemFamily = "LINUX",
+        cpuArchitecture       = "ARM64"
+      }
+
+      fargatePlatformConfiguration = {
+        platformVersion = "LATEST"
+      },
+
+      resourceRequirements = [
+        {
+          type  = "VCPU",
+          value = tostring(job.cpu),
         },
+        {
+          type  = "MEMORY",
+          value = tostring(job.memory)
+        },
+      ],
 
-        resourceRequirements = [
-          {
-            type  = "VCPU",
-            value = tostring(job.cpu),
-          },
-          {
-            type  = "MEMORY",
-            value = tostring(job.memory)
-          },
-        ],
+      executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
+      jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
 
-        executionRoleArn = module.ecs_service["api"].task_exec_iam_role_arn
-        jobRoleArn       = module.ecs_service["api"].tasks_iam_role_arn
-
-        logConfiguration = {
-          logDriver = "awslogs"
-          options = {
-            awslogs-group         = aws_cloudwatch_log_group.this.id
-            awslogs-region        = "eu-west-1"
-            awslogs-stream-prefix = job.name
-          }
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-region        = "eu-west-1"
+          awslogs-stream-prefix = job.name
         }
-      }]
-    ))
+      }
+      }
+    )
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
@@ -157,7 +161,7 @@ locals {
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
         "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : module.batch.job_queues[getenv("job.queue", "default")].arn,
+        "JobQueue" : lookup(module.batch.job_queues, job.queue, module.batch.job_queues.default).arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
