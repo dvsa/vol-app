@@ -320,9 +320,6 @@ jobs:
   liquibase-dev:
     name: Liquibase Migrations (dev)
     needs:
-      - release-please
-      - get-version
-      - docker
       - terraform_env_dev
     uses: ./.github/workflows/run-liquibase.yaml
     with:
@@ -391,9 +388,6 @@ jobs:
   liquibase-int:
     name: Database Migrations (int)
     needs:
-      - release-please
-      - get-version
-      - test_dev
       - terraform_env_int
     uses: ./.github/workflows/run-liquibase.yaml
     with:
@@ -568,12 +562,6 @@ jobs:
     name: Database Migrations (prep)
     if: ${{ needs.release-please.outputs.release_created }}
     needs:
-      - release-please
-      - get-version
-      - terraform_env_int
-      - test_int_smoke
-      - test_int_internal
-      - test_int_selfserve
       - terraform_env_prep
     uses: ./.github/workflows/run-liquibase.yaml
     with:
@@ -595,7 +583,7 @@ jobs:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
     needs:
       - terraform_env_prep
-      - liquibase-dev
+      - liquibase-prep
     uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@main
     with:
       platform_env: prep
@@ -680,9 +668,6 @@ jobs:
       needs.release-please.outputs.release_created &&
       !contains(needs.get-version.outputs.api, '-')
     needs:
-      - release-please
-      - get-version
-      - terraform_env_prod
       - terraform_env_prod
     uses: ./.github/workflows/run-liquibase.yaml
     with:
