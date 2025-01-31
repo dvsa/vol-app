@@ -105,7 +105,7 @@ locals {
 
     container_properties = jsonencode({
 
-      command = (job.type == null ? concat([
+      command = (job.type == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
         "--container=/var/www/html/config/container-cli.php"
       ], job.commands) : job.commands)
