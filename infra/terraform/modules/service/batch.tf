@@ -169,6 +169,22 @@ locals {
     }
     if job.schedule != ""
   }
+
+  widgets = { for job in var.batch.jobs : job.name => {
+    "height" : 6,
+    "width" : 24,
+    "y" : 0,
+    "x" : 0,
+    "type" : "log",
+    "properties" : {
+      "query" : "SOURCE '/aws/batch/vol-app-${var.environment}-${job.name}' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
+      "region" : "eu-west-1",
+      "title" : "${job.name}",
+      "stacked" : false,
+      "view" : "table"
+    }
+    }
+  }
 }
 
 module "batch" {
@@ -343,21 +359,6 @@ resource "aws_cloudwatch_dashboard" "dashboard" {
   dashboard_name = "batch-vol-app-${var.environment}"
 
   dashboard_body = jsonencode({
-    widgets = [{
-
-      "height" : 6,
-      "width" : 24,
-      "y" : 0,
-      "x" : 0,
-      "type" : "log",
-      "properties" : {
-        "query" : "SOURCE '/aws/batch/vol-app-dev' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
-        "region" : "eu-west-1",
-        "title" : "vol-app-dev-test",
-        "stacked" : false,
-        "view" : "table"
-      }
-      }
-    ]
+    widgets = [locals.widgets]
   })
 }
