@@ -108,7 +108,6 @@ class SendErruErrors extends AbstractCommandHandler implements EmailAwareInterfa
         $originatingAuthority =
             ($input['originatingAuthority'] ?? self::MISSING_INPUT);
         $sentAt = self::MISSING_INPUT;
-        $notificationDate = self::MISSING_INPUT;
 
         if (isset($input['sentAt'])) {
             //providing we have a date, we know the format is OK as it has been enforced by the XML schema
@@ -116,18 +115,11 @@ class SendErruErrors extends AbstractCommandHandler implements EmailAwareInterfa
             $sentAt = $sentDateTime->format(self::BODY_DATE_FORMAT);
         }
 
-        if (isset($input['notificationDateTime'])) {
-            //providing we have a date, we know the format is OK as it has been enforced by the XML schema
-            $notificationDateTime = new \DateTime($input['notificationDateTime']);
-            $notificationDate = $notificationDateTime->format(self::BODY_DATE_FORMAT);
-        }
-
         return [
             'sentAt' => $sentAt,
             'notificationNumber' => $notificationNumber,
             'memberState' => $memberStateCode,
             'originatingAuthority' => $originatingAuthority,
-            'notificationDateTime' => $notificationDate,
             'errorMessages' => $errors,
             'filename' => $filename
         ];

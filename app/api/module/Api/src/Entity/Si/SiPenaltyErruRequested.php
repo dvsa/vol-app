@@ -22,10 +22,12 @@ class SiPenaltyErruRequested extends AbstractSiPenaltyErruRequested
     public function __construct(
         SeriousInfringement $seriousInfringement,
         SiPenaltyRequestedType $siPenaltyRequestedType,
-        $duration
+        int $duration,
+        int $penaltyRequestedIdentifier
     ) {
         $this->seriousInfringement = $seriousInfringement;
         $this->siPenaltyRequestedType = $siPenaltyRequestedType;
         $this->duration = $duration;
+        $this->penaltyRequestedIdentifier = $penaltyRequestedIdentifier;
     }
 }

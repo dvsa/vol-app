@@ -8,11 +8,6 @@ use Olcs\XmlTools\Xml\Specification\Recursion;
 use Olcs\XmlTools\Xml\Specification\RecursionAttribute;
 use Olcs\XmlTools\Xml\Specification\RecursionValue;
 
-/**
- * Class ComplianceEpisodeXml
- * @package Dvsa\Olcs\Api\Service\Nr\Mapping
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class ComplianceEpisodeXml
 {
     protected $nsPrefix;
@@ -43,14 +38,7 @@ class ComplianceEpisodeXml
         return $this->mapXmlFile->filter($domDocument);
     }
 
-    /**
-     * calculate the ns prefix
-     *
-     * @param \DOMDocument $domDocument dom document
-     *
-     * @return string|null
-     */
-    private function calculateNsPrefix(\DOMDocument $domDocument)
+    private function calculateNsPrefix(\DOMDocument $domDocument): ?string
     {
         $nsPrefix = $domDocument->documentElement->lookupPrefix($this->xmlNs);
         $this->nsPrefix = ($nsPrefix !== null ? $nsPrefix . ':' : null);
@@ -60,10 +48,8 @@ class ComplianceEpisodeXml
 
     /**
      * Gets information to create the serious infringement
-     *
-     * @return array
      */
-    protected function getSeriousInfringement()
+    protected function getSeriousInfringement(): array
     {
         return [
             $this->nsPrefix . 'Header' => [
@@ -74,13 +60,23 @@ class ComplianceEpisodeXml
             $this->nsPrefix . 'Body' => [
                 new NodeAttribute('notificationNumber', 'businessCaseId'),
                 new NodeAttribute('originatingAuthority', 'originatingAuthority'),
-                new NodeAttribute('notificationDateTime', 'notificationDateTime'),
                 new Recursion(
                     $this->nsPrefix . 'TransportUndertaking',
                     [
                         new NodeAttribute('communityLicenceNumber', 'communityLicenceNumber'),
-                        new NodeAttribute('vrm', 'vehicleRegNumber'),
-                        new NodeAttribute('transportUndertakingName', 'name'),
+                        new NodeAttribute('transportUndertakingName', 'transportUndertakingName'),
+                        new Recursion(
+                            $this->nsPrefix . 'Vehicle',
+                            [
+                                new NodeAttribute('vrm', 'vehicleRegistrationNumber')
+                            ]
+                        ),
+                        new Recursion(
+                            $this->nsPrefix . 'CheckSummary',
+                            [
+                                new NodeAttribute('checkDate', 'dateOfCheck')
+                            ]
+                        ),
                         $this->getSi()
                     ]
                 )
@@ -88,19 +84,23 @@ class ComplianceEpisodeXml
         ];
     }
 
-    /**
-     * Gets Si information
-     *
-     * @return RecursionValue
-     */
-    protected function getSi()
+    private function getSi(): RecursionValue
     {
         $spec = [
             new NodeAttribute(['infringementDate'], 'dateOfInfringement'),
             new NodeAttribute(['siCategoryType'], 'infringementType'),
-            new NodeAttribute(['checkDate'], 'dateOfCheck'),
-            $this->getPenaltiesImposed(),
-            $this->getPenaltiesRequested()
+            new Recursion(
+                $this->nsPrefix . 'PenaltiesImposed',
+                [
+                    $this->getPenaltiesImposed(),
+                ],
+            ),
+            new Recursion(
+                $this->nsPrefix . 'PenaltiesRequested',
+                [
+                    $this->getPenaltiesRequested(),
+                ],
+            ),
         ];
 
         return new RecursionValue(
@@ -109,14 +109,10 @@ class ComplianceEpisodeXml
         );
     }
 
-    /**
-     * Gets imposed penalty data
-     *
-     * @return RecursionValue
-     */
-    protected function getPenaltiesImposed()
+    private function getPenaltiesImposed(): RecursionValue
     {
         $spec = [
+            new NodeAttribute('penaltyImposedIdentifier', 'penaltyImposedIdentifier'),
             new NodeAttribute('finalDecisionDate', 'finalDecisionDate'),
             new NodeAttribute('siPenaltyImposedType', 'penaltyTypeImposed'),
             new NodeAttribute('startDate', 'startDate'),
@@ -130,14 +126,10 @@ class ComplianceEpisodeXml
         );
     }
 
-    /**
-     * Gets requested penalty data
-     *
-     * @return RecursionValue
-     */
-    protected function getPenaltiesRequested()
+    private function getPenaltiesRequested(): RecursionValue
     {
         $spec = [
+            new NodeAttribute('penaltyRequestedIdentifier', 'penaltyRequestedIdentifier'),
             new NodeAttribute('siPenaltyRequestedType', 'penaltyTypeRequested'),
             new NodeAttribute('duration', 'duration'),
         ];

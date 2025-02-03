@@ -18,12 +18,14 @@ class XmlStructureInputFactoryTest extends TestCase
     {
         $xmlExclude = ['strings'];
         $maxSchemaErrors = 10;
-        $xmlNs = 'https://webgate.ec.testa.eu/erru/1.0';
+        $xmlNs = 'https://webgate.ec.testa.eu/move-hub/erru/';
+        $erruVersion = '3.1';
 
         $config = [
             'nr' => [
                 'compliance_episode' => [
-                    'xmlNs' => $xmlNs
+                    'xmlNs' => $xmlNs,
+                    'erruVersion' => $erruVersion,
                 ],
                 'max_schema_errors' => $maxSchemaErrors
             ],
@@ -31,7 +33,7 @@ class XmlStructureInputFactoryTest extends TestCase
         ];
 
         $mockXsdValidator = m::mock(\Laminas\Validator\AbstractValidator::class);
-        $mockXsdValidator->shouldReceive('setXsd')->once()->with($xmlNs);
+        $mockXsdValidator->shouldReceive('setXsd')->once()->with($xmlNs . $erruVersion);
         $mockXsdValidator->shouldReceive('setMaxErrors')->once()->with($maxSchemaErrors);
         $mockXsdValidator->shouldReceive('setXmlMessageExclude')->once()->with($xmlExclude);
 
