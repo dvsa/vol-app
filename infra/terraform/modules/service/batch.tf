@@ -219,6 +219,32 @@ module "batch" {
   job_definitions = local.jobs
 }
 
+module "eventbridge" {
+  source  = "terraform-aws-modules/eventbridge/aws"
+  version = "~> 3.7"
+
+  create_bus = false
+
+  create_role              = true
+  role_name                = "vol-app-${var.environment}-batch-scheduler"
+  attach_policy_statements = true
+  policy_statements = {
+    batch = {
+      effect = "Allow"
+      actions = [
+        "batch:SubmitJob"
+      ]
+      resources = concat(
+        [for job in module.batch.job_definitions : job.arn],
+        [for job in module.batch.job_queues : job.arn]
+      )
+    }
+  }
+
+  schedules = local.schedules
+
+}
+
 
   create_bus = false
 
