@@ -319,6 +319,7 @@ jobs:
 
   liquibase-dev:
     name: Liquibase Migrations (dev)
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
     needs:
       - terraform_env_dev
     uses: ./.github/workflows/run-liquibase.yaml
