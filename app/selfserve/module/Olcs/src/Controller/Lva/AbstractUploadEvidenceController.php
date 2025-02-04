@@ -87,6 +87,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
+                    $this->addSuccessMessage('Your document upload was successful');
                     return $this->redirect()->toRoute(
                         'lva-' . $this->lva . '/submission-summary',
                         ['application' => $this->getIdentifier()]

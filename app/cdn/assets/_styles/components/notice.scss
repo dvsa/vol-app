@@ -2,10 +2,8 @@
  * Notices
  */
 
-@if $app == 'selfserve' {
-
+@if $app == "selfserve" {
   %notice {
-    width: 100%;
     padding: 15px 15px 13px;
     color: $white;
     position: relative;
@@ -23,7 +21,6 @@
 
   // Block
   .notice {
-
     // Elements
     // @todo update to BEM syntax
     &-container {
@@ -53,8 +50,8 @@
       background: $green;
       padding-left: 40px;
       &:before {
-        @include svg('selfserve-tick');
-        content: '';
+        @include svg("selfserve-tick");
+        content: "";
       }
     }
     &--danger {
@@ -62,18 +59,16 @@
       background: $mellow-red;
       padding-left: 40px;
       &:before {
-        @include svg('selfserve-cross');
-        content: '';
+        @include svg("selfserve-cross");
+        content: "";
       }
     }
-
   }
-
 }
 
 @mixin notice($color) {
-  $background : desaturate(lighten($color, 50%), 10%);
-  $border     : desaturate(lighten($color, 30%), 10%);
+  $background: desaturate(lighten($color, 50%), 10%);
+  $border: desaturate(lighten($color, 30%), 10%);
 
   @extend %notice;
 
@@ -82,11 +77,11 @@
   color: $color;
 }
 
-@if $app == 'internal' {
-  $notice--success : #3C763D;
-  $notice--warning : #8A6D3B;
-  $notice--info    : #31708F;
-  $notice--danger  : #A94442;
+@if $app == "internal" {
+  $notice--success: #3c763d;
+  $notice--warning: #8a6d3b;
+  $notice--info: #31708f;
+  $notice--danger: #a94442;
 
   %notice {
     border-radius: 2px;
@@ -111,7 +106,7 @@
     width: 95%;
     margin: 0 2.5%;
     z-index: 2;
-    @media (min-width:640px) {
+    @media (min-width: 640px) {
       left: 50%;
       width: 100%;
       margin-left: -250px;
