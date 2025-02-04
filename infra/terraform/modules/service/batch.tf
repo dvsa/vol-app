@@ -364,6 +364,6 @@ resource "aws_cloudwatch_dashboard" "dashboard" {
   dashboard_name = "batch-vol-app-${var.environment}"
 
   dashboard_body = jsonencode({
-    widgets = [local.widgets]
+    widgets = local.widgets
   })
 }
