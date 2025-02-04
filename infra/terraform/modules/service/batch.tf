@@ -219,9 +219,6 @@ module "batch" {
   job_definitions = local.jobs
 }
 
-module "eventbridge" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
 
   create_bus = false
 
