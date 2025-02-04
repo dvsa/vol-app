@@ -170,21 +170,26 @@ locals {
     if job.schedule != ""
   }
 
-  widgets = { for job in var.batch.jobs : job.name => {
-    "height" : 6,
-    "width" : 24,
-    "y" : 0,
-    "x" : 0,
-    "type" : "log",
-    "properties" : {
-      "query" : "SOURCE '/aws/batch/vol-app-${var.environment}-${job.name}' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
-      "region" : "eu-west-1",
-      "title" : "${job.name}",
-      "stacked" : false,
-      "view" : "table"
+  widgets = [
+    for job in var.batch.jobs : {
+      height = 6
+      width  = 24
+      y      = 0
+      x      = 0
+      type   = "log"
+      properties = {
+        query   = <<-EOT
+                SOURCE '/aws/batch/vol-app-${var.environment}-${job.name}' | fields @timestamp, @message, @logStream, @log
+                | sort @timestamp desc
+                | limit 10000
+              EOT
+        region  = "eu-west-1"
+        stacked = false
+        title   = job.name
+        view    = "table"
+      }
     }
-    }
-  }
+  ]
 }
 
 module "batch" {
