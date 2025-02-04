@@ -69,38 +69,12 @@ module "cloudwatch_log-metric-filter" {
   metric_transformation_name      = each.value.name
 }
 
-resource "aws_cloudwatch_dashboard" "dashboard" {
+resource "aws_cloudwatch_dashboard" "this" {
   dashboard_name = "batch-vol-app-${var.environment}"
 
   dashboard_body = jsonencode({
     widgets = local.dashboard_widgets
   })
-}
-
-module "eventbridge" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
-
-  create_bus = false
-
-  create_role              = true
-  role_name                = "vol-app-${var.environment}-batch-scheduler"
-  attach_policy_statements = true
-  policy_statements = {
-    batch = {
-      effect = "Allow"
-      actions = [
-        "batch:SubmitJob"
-      ]
-      resources = concat(
-        [for job in module.batch.job_definitions : job.arn],
-        [for job in module.batch.job_queues : job.arn]
-      )
-    }
-  }
-
-  schedules = local.schedules
-
 }
 
 module "eventbridge_sns" {
@@ -135,6 +109,10 @@ module "eventbridge_sns" {
       {
         name = "batch-fail-event"
         arn  = module.sns_batch_failure.topic_arn
+      },
+      {
+        arn  = aws_cloudwatch_log_group.failures.arn
+        name = "batch-failures-log-group"
       }
     ]
   }
@@ -188,4 +166,9 @@ module "sns_batch_failure" {
 
   }
 
+}
+
+resource "aws_cloudwatch_log_group" "failures" {
+  name              = "/aws/batch/vol-app-${var.environment}-failures"
+  retention_in_days = 1
 }
