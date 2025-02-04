@@ -37,7 +37,7 @@ locals {
       secrets = []
     }
     liquibase = {
-      image = "${var.batch.liquibase_repository}:latest"
+      image = "${var.batch.liquibase_repository}:${var.batch.liquibase_version}"
 
       environment = [
         {
