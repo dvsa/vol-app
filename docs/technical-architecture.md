@@ -207,9 +207,7 @@
 2. **Metrics:**
 
     - Authentication success/failure rates
-    - Token refresh statistics
     - API performance metrics
-    - SLA monitoring
 
 3. **Tracing:**
     - Request tracing with auth context
@@ -222,7 +220,6 @@
 1. **Deployment:**
 
     - CI/CD pipelines
-    - Blue/green deployments
     - Rollback capabilities
     - Configuration management
 
@@ -237,7 +234,6 @@
 ### Production Environment
 
 -   High availability configuration
--   Multi-AZ deployment
 -   Enhanced security controls
 -   Production-grade resources
 
@@ -246,35 +242,3 @@
 -   Development environment
 -   Integration testing
 -   Pre-production validation
--   Reduced resource allocation
-
-## Technical Constraints
-
-1. **Performance Requirements:**
-
-    - Response time < 200ms for API calls
-    - Page load time < 2s
-    - Search results < 500ms
-    - Token acquisition < 100ms
-
-2. **Scalability Limits:**
-
-    - Database connections per instance
-    - Cache memory allocation
-    - Container resource limits
-    - API rate limiting
-
-3. **Authentication Constraints:**
-
-    - Token expiration times
-    - Refresh token lifecycle
-    - MFA timeout settings
-    - Session duration limits
-
-4. **Technology Constraints:**
-    - PHP version compatibility
-    - Browser support requirements
-    - Mobile responsiveness
-    - Accessibility standards
-
-This technical architecture provides a robust, scalable, and maintainable platform for the Vehicle Operator Licensing application, with comprehensive authentication mechanisms and well-defined integration points.
