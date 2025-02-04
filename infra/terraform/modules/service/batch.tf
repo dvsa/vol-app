@@ -349,7 +349,7 @@ module "sns_batch_failure" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  for_each = var.batch.jobs
+  for_each = { for job in var.batch.jobs : job.name => job }
 
   name              = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
   retention_in_days = 1
