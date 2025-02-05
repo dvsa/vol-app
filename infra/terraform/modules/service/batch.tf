@@ -37,7 +37,7 @@ locals {
       secrets = []
     }
     liquibase = {
-      image = "${var.batch.liquibase_repository}:${var.batch.liquibase_version}"
+      image = "${var.batch.liquibase_repository}:latest"
 
       environment = [
         {
@@ -244,8 +244,6 @@ module "eventbridge" {
   schedules = local.schedules
 
 }
-
-
 
 resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
