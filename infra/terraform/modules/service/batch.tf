@@ -245,8 +245,6 @@ module "eventbridge" {
 
 }
 
-
-
 resource "aws_cloudwatch_log_group" "this" {
   for_each = { for job in var.batch.jobs : job.name => job }
 
