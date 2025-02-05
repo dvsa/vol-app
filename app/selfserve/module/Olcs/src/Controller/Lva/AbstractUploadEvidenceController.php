@@ -93,7 +93,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
-                    dd($this->getData());
                     $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
                     $this->addSuccessMessage($message);
                     return $this->redirect()->toRoute(
