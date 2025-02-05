@@ -19,6 +19,7 @@
 | <a name="module_acm"></a> [acm](#module\_acm) | terraform-aws-modules/acm/aws | ~> 5.0 |
 | <a name="module_batch"></a> [batch](#module\_batch) | terraform-aws-modules/batch/aws | ~> 2.0 |
 | <a name="module_cloudfront"></a> [cloudfront](#module\_cloudfront) | terraform-aws-modules/cloudfront/aws | ~> 3.4 |
+| <a name="module_cloudwatch_log-metric-filter"></a> [cloudwatch\_log-metric-filter](#module\_cloudwatch\_log-metric-filter) | terraform-aws-modules/cloudwatch/aws//modules/log-metric-filter | 5.7.0 |
 | <a name="module_ecs_cluster"></a> [ecs\_cluster](#module\_ecs\_cluster) | terraform-aws-modules/ecs/aws//modules/cluster | ~> 5.10 |
 | <a name="module_ecs_service"></a> [ecs\_service](#module\_ecs\_service) | terraform-aws-modules/ecs/aws//modules/service | ~> 5.10 |
 | <a name="module_eventbridge"></a> [eventbridge](#module\_eventbridge) | terraform-aws-modules/eventbridge/aws | ~> 3.7 |
@@ -33,6 +34,8 @@
 | Name | Type |
 |------|------|
 | [aws_cloudfront_function.rewrite_uri](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_function) | resource |
+| [aws_cloudwatch_dashboard.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_dashboard) | resource |
+| [aws_cloudwatch_log_group.failures](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_cloudwatch_log_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_lb_listener_rule.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener_rule) | resource |
 | [aws_lb_target_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group) | resource |
@@ -49,7 +52,7 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assets_version"></a> [assets\_version](#input\_assets\_version) | The version of the assets | `string` | n/a | yes |
-| <a name="input_batch"></a> [batch](#input\_batch) | Configuration for the batch process | <pre>object({<br/>    cli_version          = string<br/>    cli_repository       = string<br/>    search_repository    = string<br/>    liquibase_repository = string<br/>    api_secret_file      = string<br/>    subnet_ids           = list(string)<br/>    task_iam_role_statements = list(object({<br/>      effect    = string<br/>      actions   = list(string)<br/>      resources = list(string)<br/>    }))<br/>    jobs = list(object({<br/>      name     = string<br/>      type     = optional(string, "default")<br/>      queue    = optional(string, "default")<br/>      commands = optional(list(string))<br/>      cpu      = optional(number, 1)<br/>      memory   = optional(number, 2048)<br/>      timeout  = optional(number, 300)<br/>      schedule = optional(string, "")<br/>    }))<br/>  })</pre> | n/a | yes |
+| <a name="input_batch"></a> [batch](#input\_batch) | Configuration for the batch process | <pre>object({<br/>    cli_version          = string<br/>    cli_repository       = string<br/>    search_repository    = string<br/>    liquibase_repository = string<br/>    liquibase_version    = string<br/>    api_secret_file      = string<br/>    subnet_ids           = list(string)<br/>    task_iam_role_statements = list(object({<br/>      effect    = string<br/>      actions   = list(string)<br/>      resources = list(string)<br/>    }))<br/>    jobs = list(object({<br/>      name     = string<br/>      type     = optional(string, "default")<br/>      queue    = optional(string, "default")<br/>      commands = optional(list(string))<br/>      cpu      = optional(number, 1)<br/>      memory   = optional(number, 2048)<br/>      timeout  = optional(number, 300)<br/>      schedule = optional(string, "")<br/>    }))<br/>  })</pre> | n/a | yes |
 | <a name="input_domain_name"></a> [domain\_name](#input\_domain\_name) | The domain name for the environment | `string` | n/a | yes |
 | <a name="input_elasticache_url"></a> [elasticache\_url](#input\_elasticache\_url) | The URL of the Elasticache cluster | `string` | n/a | yes |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment to deploy to | `string` | n/a | yes |

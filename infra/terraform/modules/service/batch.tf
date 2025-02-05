@@ -37,7 +37,7 @@ locals {
       secrets = []
     }
     liquibase = {
-      image = "${var.batch.liquibase_repository}:latest"
+      image = "${var.batch.liquibase_repository}:${var.batch.liquibase_version}"
 
       environment = [
         {
@@ -105,7 +105,7 @@ locals {
 
     container_properties = jsonencode({
 
-      command = (job.type == null ? concat([
+      command = (job.type == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
         "--container=/var/www/html/config/container-cli.php"
       ], job.commands) : job.commands)
@@ -142,7 +142,7 @@ locals {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-group         = aws_cloudwatch_log_group.this[job.name].id
           awslogs-region        = "eu-west-1"
           awslogs-stream-prefix = job.name
         }
@@ -245,94 +245,11 @@ module "eventbridge" {
 
 }
 
-module "eventbridge_sns" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
 
-  create_bus  = false
-  create_role = true
-  role_name   = "vol-app-${var.environment}-batch-failures"
-
-  rules = {
-    "vol-app-${var.environment}-batch-failure-event" = {
-      description = "Capture failed Batch Events sent to SNS"
-      event_pattern = jsonencode({
-        "source" : ["aws.batch"],
-        "detail-type" : ["Batch Job State Change"],
-        "detail" : {
-          "status" : [
-            "FAILED"
-          ],
-          "jobName" : [{
-            "wildcard" : "vol-app-${var.environment}-*"
-          }]
-        }
-      })
-      enabled = true
-    }
-  }
-
-  targets = {
-    "vol-app-${var.environment}-batch-failure-event" = [
-      {
-        name = "batch-fail-event"
-        arn  = module.sns_batch_failure.topic_arn
-      }
-    ]
-  }
-
-}
-
-module "sns_batch_failure" {
-  source  = "terraform-aws-modules/sns/aws"
-  version = "~> 6.1"
-
-  name            = "vol-app-${var.environment}-batch-failure-topic"
-  use_name_prefix = true
-  display_name    = "vol-app-${var.environment}-batch-event-failed"
-
-  create_topic_policy         = true
-  enable_default_topic_policy = true
-  topic_policy_statements = {
-    pub = {
-      actions = ["sns:Publish"]
-      principals = [{
-        type = "AWS"
-        identifiers = [
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        ]
-      }]
-    },
-
-    sub = {
-      actions = [
-        "sns:Publish",
-        "sns:Subscribe",
-        "sns:Receive",
-      ]
-
-      principals = [{
-        type        = "Service"
-        identifiers = ["events.amazonaws.com"]
-      }]
-    }
-  }
-  /*
-  subscriptions = {
-    "vol-app-${var.environment}-batch-failure-email" = {
-      protocol = "email"
-      endpoint = ""
-    }
-  */
-
-  tags = {
-    "Name" = "vol-app-${var.environment}-aws-sns-batch-failure"
-
-  }
-
-}
 
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/batch/vol-app-${var.environment}"
+  for_each = { for job in var.batch.jobs : job.name => job }
+
+  name              = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
   retention_in_days = 1
 }
