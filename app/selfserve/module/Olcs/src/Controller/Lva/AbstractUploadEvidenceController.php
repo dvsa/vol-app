@@ -96,6 +96,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                         $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
                         $this->addSuccessMessage($message);
                     }
+
                     return $this->redirect()->toRoute(
                         'lva-' . $this->lva . '/submission-summary',
                         ['application' => $this->getIdentifier()]
