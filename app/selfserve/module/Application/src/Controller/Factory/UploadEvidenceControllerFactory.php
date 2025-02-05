@@ -6,6 +6,7 @@ use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Application\Controller\UploadEvidenceController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Psr\Container\ContainerInterface;
@@ -22,6 +23,7 @@ class UploadEvidenceControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UploadEvidenceController
     {
+        $translationHelper = $container->get(TranslationHelperService::class);
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -35,7 +37,8 @@ class UploadEvidenceControllerFactory implements FactoryInterface
             $formHelper,
             $restrictionHelper,
             $stringHelper,
-            $uploadHelper
+            $uploadHelper,
+            $translationHelper
         );
     }
 }
