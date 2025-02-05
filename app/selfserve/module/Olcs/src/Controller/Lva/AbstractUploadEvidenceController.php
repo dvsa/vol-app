@@ -361,8 +361,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     /**
      * Has any evidence been uploaded
-     *
-     * @param array $data
      */
     function hasEvidence($data): bool
     {
