@@ -5,10 +5,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: "Version tag for the container"
-        required: true
-        type: string
       account:
         description: "Target AWS account"
         required: true
@@ -47,9 +43,6 @@ on:
         default: false
   workflow_call:
     inputs:
-      version:
-        type: string
-        required: true
       push:
         type: boolean
         required: true
@@ -95,6 +88,8 @@ jobs:
     environment: ${{ inputs.environment }}
     outputs:
       image_tag: ${{ steps.build-details.outputs.image_tag }}
+      etl_sha: ${{ steps.etl-sha.outputs.sha }}
+      etl_ref: ${{ inputs.etl_ref }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -118,39 +113,50 @@ jobs:
           ref: ${{ inputs.etl_ref }}
           token: ${{ steps.generate-token.outputs.token }}
 
-      - name: Generate unique image tag
-        id: tag
-        run: |
-          echo "image_tag=${{ env.REGISTRY }}/vol-app/liquibase:${{ inputs.version }}-${{ github.run_number }}" >> $GITHUB_OUTPUT
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Configure AWS credentials
-        if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to ECR
-        if: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
 
+      - name: Get ETL SHA
+        id: etl-sha
+        working-directory: infra/docker/liquibase/changelog
+        run: |
+          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "image_tag=${REGISTRY}/vol-app/liquibase:$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Check if image exists
+        id: check-image
+        run: |
+          if aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag=${{ steps.etl-sha.outputs.sha }} 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check-image.outputs.exists != 'true'
+        uses: docker/setup-buildx-action@v3
+
       - name: Build and push
+        if: steps.check-image.outputs.exists != 'true' && (inputs.push || github.event_name == 'workflow_dispatch')
         uses: docker/build-push-action@v6
         with:
           context: ./infra/docker/liquibase
-          push: ${{ inputs.push || github.event_name == 'workflow_dispatch' }}
-          tags: ${{ steps.tag.outputs.image_tag }}
+          push: true
+          tags: ${{ steps.etl-sha.outputs.image_tag }}
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
 
       - name: Set build details
         id: build-details
-        run: echo "image_tag=${{ steps.tag.outputs.image_tag }}" >> $GITHUB_OUTPUT
+        run: echo "image_tag=${{ steps.etl-sha.outputs.image_tag }}" >> $GITHUB_OUTPUT
 
   submit-batch-job:
     outputs:
@@ -176,7 +182,8 @@ jobs:
           --container-overrides "{
            \"environment\": [
              {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
-           ]
+           ],
+          \"image\": \"${{ needs.build.outputs.image_tag }}\"
           }" \
           --scheduling-priority-override 1 \
           --share-identifier "volapp" \
