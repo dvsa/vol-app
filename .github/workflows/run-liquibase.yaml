@@ -150,7 +150,10 @@ jobs:
         with:
           context: ./infra/docker/liquibase
           push: true
-          tags: ${{ steps.etl-sha.outputs.image_tag }}
+          tags: |
+            ${{ steps.etl-sha.outputs.image_tag }}
+            ${{ env.REGISTRY }}/vol-app/liquibase:latest
+
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
 
