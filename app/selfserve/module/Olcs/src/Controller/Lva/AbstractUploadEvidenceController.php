@@ -364,9 +364,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * Has any evidence been uploaded
      *
      * @param array $data
-     * @return bool
      */
-    function hasEvidence($data)
+    function hasEvidence($data): bool
     {
         // Check if "financialEvidence" exists and its "fileCount" array is not empty
         if (!empty($data['financialEvidence']['files']['fileCount'])) {
