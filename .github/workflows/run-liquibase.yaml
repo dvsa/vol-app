@@ -185,8 +185,7 @@ jobs:
           --container-overrides "{
            \"environment\": [
              {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
-           ],
-          \"image\": \"${{ needs.build.outputs.image_tag }}\"
+           ]
           }" \
           --scheduling-priority-override 1 \
           --share-identifier "volapp" \
