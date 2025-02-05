@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -24,12 +25,14 @@ class UploadEvidenceControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
+        $translationHelper = $container->get(TranslationHelperService::class);
 
         return new UploadEvidenceController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
-            $uploadHelper
+            $uploadHelper,
+            $translationHelper
         );
     }
 }
