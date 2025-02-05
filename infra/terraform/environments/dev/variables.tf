@@ -23,7 +23,4 @@ variable "cli_image_tag" {
   description = "The tag of the cli image to deploy"
 }
 
-variable "liquibase_version" {
-  type        = string
-  description = "The version tag for the liquibase container"
-}
+
