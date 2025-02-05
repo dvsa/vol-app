@@ -6,6 +6,7 @@ use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractUploadEvidenceController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
@@ -34,13 +35,15 @@ class UploadEvidenceController extends AbstractUploadEvidenceController
         FormHelperService $formHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected StringHelperService $stringHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        TranslationHelperService $translationHelper,
     ) {
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
-            $uploadHelper
+            $uploadHelper,
+            $translationHelper
         );
     }
 }

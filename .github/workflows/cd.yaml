@@ -324,7 +324,6 @@ jobs:
       - terraform_env_dev
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      version: ${{ needs.get-version.outputs.api }}
       push: true
       submit_job: true
       account: nonprod
@@ -392,7 +391,6 @@ jobs:
       - terraform_env_int
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      version: ${{ needs.get-version.outputs.api }}
       push: false
       submit_job: true
       account: nonprod
@@ -566,7 +564,6 @@ jobs:
       - terraform_env_prep
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      version: ${{ needs.get-version.outputs.api }}
       push: false
       submit_job: true
       account: prod
@@ -672,7 +669,6 @@ jobs:
       - terraform_env_prod
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      version: ${{ needs.get-version.outputs.api }}
       push: false
       submit_job: true
       account: prod

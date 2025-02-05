@@ -8,6 +8,7 @@ use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
@@ -27,6 +28,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     protected $operatingCentreId;
 
+    protected TranslationHelperService $translationHelper;
+
     /**
      * Data from API
      * @var array
@@ -45,19 +48,22 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @param AuthorizationService $authService
      * @param FormHelperService $formHelper
      * @param FileUploadHelperService $uploadHelper
+     * @param TranslationHelperService $translationHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        TranslationHelperService $translationHelper
     ) {
         $this->uploadHelper = $uploadHelper;
         $this->startTime = (new DateTimeImmutable())->format(DateTimeInterface::ATOM);
-
+        $this->translationHelper = $translationHelper;
         parent::__construct(
             $niTextTranslationUtil,
-            $authService
+            $authService,
+            $translationHelper
         );
     }
 
@@ -87,6 +93,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
+                    $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
+                    $this->addSuccessMessage($message);
                     return $this->redirect()->toRoute(
                         'lva-' . $this->lva . '/submission-summary',
                         ['application' => $this->getIdentifier()]
