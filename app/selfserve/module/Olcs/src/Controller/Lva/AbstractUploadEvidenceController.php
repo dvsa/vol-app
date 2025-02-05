@@ -63,7 +63,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
-            $translationHelper
         );
     }
 
