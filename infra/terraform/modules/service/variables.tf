@@ -62,7 +62,6 @@ variable "batch" {
     cli_repository       = string
     search_repository    = string
     liquibase_repository = string
-    liquibase_version    = string
     api_secret_file      = string
     subnet_ids           = list(string)
     task_iam_role_statements = list(object({
