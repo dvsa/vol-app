@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
+use Olcs\Logging\Log\Logger;
 
 /**
  * External Abstract Upload Evidence Controller
@@ -365,8 +366,12 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     private function hasEvidence(array $data): bool
     {
-        // Check if financialEvidence "fileCount" is NOT empty
-        if (!empty($data['financialEvidence']['files']['fileCount'])) {
+        Logger::crit('Financial Evidence array', $data['financialEvidence']);
+        Logger::crit('Operating Centre array', $data['operatingCentres']);
+        Logger::crit('Supporting Evidence array', $data['supportingEvidence']);
+
+        // Check if financialEvidence exists and "fileCount" or "list" is not empty
+        if (isset($data['financialEvidence']['files']) && !empty($data['financialEvidence']['files']['list'])) {
             return true;
         }
 
