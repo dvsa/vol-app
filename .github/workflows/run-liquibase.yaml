@@ -150,6 +150,7 @@ jobs:
         with:
           context: ./infra/docker/liquibase
           push: true
+          platforms: linux/arm64
           tags: |
             ${{ steps.etl-sha.outputs.image_tag }}
             ${{ env.REGISTRY }}/vol-app/liquibase:latest
@@ -185,8 +186,7 @@ jobs:
           --container-overrides "{
            \"environment\": [
              {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
-           ],
-          \"image\": \"${{ needs.build.outputs.image_tag }}\"
+           ]
           }" \
           --scheduling-priority-override 1 \
           --share-identifier "volapp" \
