@@ -370,7 +370,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             return true;
         }
 
-        // Check if supportingEvidence exists and "fileCount" or "list" is empty
+        // Check if supportingEvidence exists and "fileCount" or "list" is not empty
         if (isset($data['supportingEvidence']['files']) && !empty($data['supportingEvidence']['files']['list'])) {
             return true;
         }
