@@ -150,6 +150,7 @@ jobs:
         with:
           context: ./infra/docker/liquibase
           push: true
+          platforms: linux/arm64
           tags: |
             ${{ steps.etl-sha.outputs.image_tag }}
             ${{ env.REGISTRY }}/vol-app/liquibase:latest
