@@ -54,7 +54,7 @@ module "cloudwatch_log-metric-filter" {
   log_group_name                  = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
   metric_transformation_namespace = "vol-app-${var.environment}-batch-errors"
   metric_transformation_value     = "1"
-  metric_transformation_name      = "ErrorCount"
+  metric_transformation_name      = each.value.name
 }
 
 resource "aws_cloudwatch_dashboard" "this" {
