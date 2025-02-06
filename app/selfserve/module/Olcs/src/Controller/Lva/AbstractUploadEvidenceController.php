@@ -63,7 +63,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
-            $translationHelper
         );
     }
 
@@ -88,13 +87,14 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     ['id' => $this->getIdentifier()]
                 );
                 $dtoData['financialEvidence'] = $this->shouldShowFinancialEvidence();
-
                 $result = $this->handleCommand(
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
-                    $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
-                    $this->addSuccessMessage($message);
+                    if ($this->hasEvidence($form->getData())) {
+                        $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
+                        $this->addSuccessMessage($message);
+                    }
                     return $this->redirect()->toRoute(
                         'lva-' . $this->lva . '/submission-summary',
                         ['application' => $this->getIdentifier()]
@@ -357,5 +357,29 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $this->application = $this->getApplicationData($this->getIdentifier());
         }
         return $this->application['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
+    }
+
+    /**
+     * Has any evidence been uploaded
+     */
+    function hasEvidence($data): bool
+    {
+        // Check if "financialEvidence" exists and its "fileCount" array is not empty
+        if (!empty($data['financialEvidence']['files']['fileCount'])) {
+            return true;
+        }
+
+        // Check if "operatingCentres" exists and is not empty
+        if (!empty($data['operatingCentres'])) {
+            return true;
+        }
+
+        // Check if "supportingEvidence" exists and its list array is not empty
+        if (!empty($data['supportingEvidence']['files']['list'])) {
+            return true;
+        }
+
+        // If all conditions fail, return false
+        return false;
     }
 }
