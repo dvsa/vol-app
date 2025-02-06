@@ -15,7 +15,6 @@ use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
-use Olcs\Logging\Log\Logger;
 
 /**
  * External Abstract Upload Evidence Controller
@@ -363,30 +362,27 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     /**
      * Has any evidence been uploaded
-     *
-     * @param array $data
      */
-    function hasEvidence($data): bool
+    private function hasEvidence(array $data): bool
     {
-        Logger::crit('Financial Evidence array', $data['financialEvidence']);
-        Logger::crit('Operating Centre array', $data['operatingCentres']);
-        Logger::crit('Supporting Evidence array', $data['supportingEvidence']);
-        // Check if "financialEvidence" exists and its "fileCount" array is not empty
+        // Check if financialEvidence "fileCount" is NOT empty
         if (!empty($data['financialEvidence']['files']['fileCount'])) {
             return true;
         }
 
-        // Check if "operatingCentres" exists and is not empty
+        // Check if supportingEvidence exists and "fileCount" or "list" is empty
+        if (isset($data['supportingEvidence']['files']) && !empty($data['supportingEvidence']['files']['list'])) {
+            return true;
+        }
+
+        // Check if any operating centre has a valid "fileCount"
         if (!empty($data['operatingCentres'])) {
-            return true;
+            foreach ($data['operatingCentres'] as $centre) {
+                if (!empty($centre['file']['fileCount'])) {
+                    return true;
+                }
+            }
         }
-
-        // Check if "supportingEvidence" exists and its list array is not empty
-        if (!empty($data['supportingEvidence']['files']['list'])) {
-            return true;
-        }
-
-        // If all conditions fail, return false
         return false;
     }
 }
