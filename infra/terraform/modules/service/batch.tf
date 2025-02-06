@@ -61,7 +61,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
         },
       ]
     }
@@ -91,7 +91,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password:::"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
         },
       ]
     }
