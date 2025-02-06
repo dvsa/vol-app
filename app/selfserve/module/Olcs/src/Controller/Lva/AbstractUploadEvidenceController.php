@@ -91,7 +91,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
-                    if ($this->hasEvidence($form->getData())) {
+                    if ($this->hasEvidenceBeenUploaded($form->getData())) {
                         $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
                         $this->addSuccessMessage($message);
                     }
@@ -359,22 +359,24 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         return $this->application['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
     }
 
-    /**
-     * Has any evidence been uploaded
-     */
-    function hasEvidence($data): bool
+    private function hasEvidenceBeenUploaded(array $data): bool
     {
-        // Check if "financialEvidence" exists and its "fileCount" array is not empty
-        if (!empty($data['financialEvidence']['files']['fileCount'])) {
+        // Check if "financialEvidence" exists and file list is not empty
+        if (!empty($data['financialEvidence']['files']['list'])) {
             return true;
         }
 
-        // Check if "operatingCentres" exists and is not empty
+        // We don't have a file upload list, so check each operating centre for "adPlacedIn" value.
+        // Form validation will have ensured this is field is present when a file is uploaded
         if (!empty($data['operatingCentres'])) {
-            return true;
+            foreach($data['operatingCentres'] as $operatingCentre) {
+                if (!empty($operatingCentre['adPlacedIn'])) {
+                    return true;
+                }
+            }
         }
 
-        // Check if "supportingEvidence" exists and its list array is not empty
+        // Check if "supportingEvidence" exists and file list is not empty
         if (!empty($data['supportingEvidence']['files']['list'])) {
             return true;
         }
