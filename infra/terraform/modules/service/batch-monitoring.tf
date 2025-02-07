@@ -10,16 +10,28 @@ locals {
       "type" : "metric",
       "properties" : {
         "metrics" : [
-          ["AWS/Events", "TriggeredRules", "RuleName", "batch-fail-sns-rule"]
+          ["AWS/Events", "TriggeredRules", "RuleName", "vol-app-${var.environment}-batch-failure-event-rule"]
         ],
         "view" : "timeSeries",
         "stacked" : false,
         "region" : "eu-west-1",
-        "start" : "-PT168H",
-        "end" : "P0D",
         "stat" : "Sum",
         "period" : 300,
         "title" : "Batch failures"
+      }
+    },
+    {
+      "type" : "log",
+      "x" : 6,
+      "y" : 6,
+      "width" : 18,
+      "height" : 6,
+      "properties" : {
+        "query" : "SOURCE '/aws/batch/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
+        "region" : "eu-west-1",
+        "stacked" : false,
+        "view" : "table",
+        "title" : "Batch failure logs"
       }
     }
     ],
@@ -93,7 +105,7 @@ module "eventbridge_sns" {
   }
 
   targets = {
-    "vol-app-${var.environment}-batch-failure-event" = [
+    failures = [
       {
         name = "batch-fail-event"
         arn  = module.sns_batch_failure.topic_arn
