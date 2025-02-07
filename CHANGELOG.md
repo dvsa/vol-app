@@ -1,5 +1,56 @@
 # Changelog
 
+## [5.14.0](https://github.com/dvsa/vol-app/compare/v5.13.1...v5.14.0) (2025-02-06)
+
+
+### Features
+
+* 5910 - updated dev job schedules ([#561](https://github.com/dvsa/vol-app/issues/561)) ([0dec628](https://github.com/dvsa/vol-app/commit/0dec628250b885cffd22612522bfaf09ffa5a24e))
+* 5912 batch cloudwatch dashboard - initial ([#595](https://github.com/dvsa/vol-app/issues/595)) ([2c4f12c](https://github.com/dvsa/vol-app/commit/2c4f12cafa8bf9dde69058cd41d9aa43bb309062))
+* 5912 improved monitoring dashboard with additional metrics ([#599](https://github.com/dvsa/vol-app/issues/599)) ([6b76648](https://github.com/dvsa/vol-app/commit/6b76648c7fc80477915ed5bf25f8998719358c57))
+* 5950 build logstash container image pipeline ([#548](https://github.com/dvsa/vol-app/issues/548)) ([6e9ab18](https://github.com/dvsa/vol-app/commit/6e9ab186afa29cd9aefe1fd67d5a77c72fb1d68a))
+* better approach to versioning etl containers and only building where necessary ([#601](https://github.com/dvsa/vol-app/issues/601)) ([65c8bda](https://github.com/dvsa/vol-app/commit/65c8bda6dca88c1912098c34e98d65f4a5277874))
+* compatibility with erru schema 3.4 VOL-5817 ([#576](https://github.com/dvsa/vol-app/issues/576)) ([acd73b1](https://github.com/dvsa/vol-app/commit/acd73b106c68fc26491a713fec9cdb03ffa66b64))
+* integrate liquibase runs into CD pipeline ([#553](https://github.com/dvsa/vol-app/issues/553)) ([f434069](https://github.com/dvsa/vol-app/commit/f4340694be60936ade2e0e1545068ae62dd473db))
+* run smoke on int first ([#569](https://github.com/dvsa/vol-app/issues/569)) ([e13da65](https://github.com/dvsa/vol-app/commit/e13da657b77b381fd6634dc0aaa018cdee1778bd))
+* show success banner on document upload ([#600](https://github.com/dvsa/vol-app/issues/600)) ([0519317](https://github.com/dvsa/vol-app/commit/0519317e429deb415d2083123809113174cbea1f))
+* show success banner on document upload ([#608](https://github.com/dvsa/vol-app/issues/608)) ([d380a03](https://github.com/dvsa/vol-app/commit/d380a032954be151f6166feea855cf594b45450f))
+* sort liquibase tags ([#606](https://github.com/dvsa/vol-app/issues/606)) ([5d63f45](https://github.com/dvsa/vol-app/commit/5d63f450d6127629c7845282ca6e88f834cb74b5))
+
+
+### Bug Fixes
+
+* 5588 containers missing tag fix ([#557](https://github.com/dvsa/vol-app/issues/557)) ([08e8d0b](https://github.com/dvsa/vol-app/commit/08e8d0b05c8071932396cb220a396c7c208794b0))
+* 5588 missing tag ([#559](https://github.com/dvsa/vol-app/issues/559)) ([8359512](https://github.com/dvsa/vol-app/commit/8359512d0b004c1213d24b4613fe311d3bea6890))
+* 5912 batch dashboard widget formatting ([#596](https://github.com/dvsa/vol-app/issues/596)) ([f838316](https://github.com/dvsa/vol-app/commit/f8383167e905520195981becd19fd231033e995a))
+* 5912 metric filter name ([#605](https://github.com/dvsa/vol-app/issues/605)) ([57dbe1a](https://github.com/dvsa/vol-app/commit/57dbe1ad34652f4227f4136a444fd4801bd3ffbd))
+* add permissions and secrets for prep rollback ([#571](https://github.com/dvsa/vol-app/issues/571)) ([34342d6](https://github.com/dvsa/vol-app/commit/34342d67752292d3f562bf1021035d6e5acb5f69))
+* add tf to liquibase step dependencies ([#584](https://github.com/dvsa/vol-app/issues/584)) ([87334b1](https://github.com/dvsa/vol-app/commit/87334b11c576f46f94e7af5e07dbce7c1340ba1e))
+* adding check to build-push docker ([#568](https://github.com/dvsa/vol-app/issues/568)) ([e73ab41](https://github.com/dvsa/vol-app/commit/e73ab41943dd8434d411cedf3640129fc4f8b90a))
+* another formatting fix ([#598](https://github.com/dvsa/vol-app/issues/598)) ([fb76131](https://github.com/dvsa/vol-app/commit/fb76131c8c7b77043c34067c8664ae4d5433c1e4))
+* batch tf issues ([#585](https://github.com/dvsa/vol-app/issues/585)) ([71922e9](https://github.com/dvsa/vol-app/commit/71922e9807c3299d8320e3bbb0457766f0a5ceec))
+* better liquibase tagging strategy ([#603](https://github.com/dvsa/vol-app/issues/603)) ([c2157c4](https://github.com/dvsa/vol-app/commit/c2157c450c00a319b325706487810294a5be4099))
+* change now secret arn is constructed to fix error seen when runn… ([#575](https://github.com/dvsa/vol-app/issues/575)) ([b596851](https://github.com/dvsa/vol-app/commit/b596851cc65939b36888fa76bf913d0b2b4d27be))
+* error handling for registration ([#558](https://github.com/dvsa/vol-app/issues/558)) ([3ff5ad4](https://github.com/dvsa/vol-app/commit/3ff5ad4b1f0c5eda135c1e11a54c1c28b4e5f024))
+* error handling for SS registration ([#586](https://github.com/dvsa/vol-app/issues/586)) ([db95037](https://github.com/dvsa/vol-app/commit/db950373bd803364579482dba894aa09d1a6b689))
+* fix arn format for db secret ([#612](https://github.com/dvsa/vol-app/issues/612)) ([7963b32](https://github.com/dvsa/vol-app/commit/7963b32724983cd17f9567305671b1089d1c284a))
+* fix db arn value in batch job definition ([#610](https://github.com/dvsa/vol-app/issues/610)) ([975e4fc](https://github.com/dvsa/vol-app/commit/975e4fc54f9b14b318004add4069902dde2a89b0))
+* formatting of tm birth date on application overview ([#591](https://github.com/dvsa/vol-app/issues/591)) ([f14a88a](https://github.com/dvsa/vol-app/commit/f14a88a7fdf569b2c59eb31972ee7e4b1caec02c))
+* incorrect secret arn ([#564](https://github.com/dvsa/vol-app/issues/564)) ([6117b4c](https://github.com/dvsa/vol-app/commit/6117b4c4a7c3043ec50223fe4ba8ffbb1fe7c9d1))
+* liquibase job queue and definition tweaks ([#549](https://github.com/dvsa/vol-app/issues/549)) ([4e78843](https://github.com/dvsa/vol-app/commit/4e788437e05e2ba13e926d71a4b4134bc663765c))
+* liquibase step dependencies ([#565](https://github.com/dvsa/vol-app/issues/565)) ([90f8dd9](https://github.com/dvsa/vol-app/commit/90f8dd91d1d5349a21d7ce4bae2719a1c884f4e6))
+* only build liquibase once per run - submit batch for subsequent 3 ([#587](https://github.com/dvsa/vol-app/issues/587)) ([4f32ef7](https://github.com/dvsa/vol-app/commit/4f32ef75e0b05c72fa0cdac048971b1ae76895cd))
+* pass repo secret to called workflow ([#560](https://github.com/dvsa/vol-app/issues/560)) ([e2709c6](https://github.com/dvsa/vol-app/commit/e2709c6a6cb897c3c0e163f8f8dc7af9b8136f0c))
+* remove param being passed to workflow_call that was only valid for workflow_dispatch ([#556](https://github.com/dvsa/vol-app/issues/556)) ([e0f8202](https://github.com/dvsa/vol-app/commit/e0f8202c7775b30b1e12d645fba7295d9a4dce40))
+* set job command default option ([#592](https://github.com/dvsa/vol-app/issues/592)) ([223ea40](https://github.com/dvsa/vol-app/commit/223ea40c11a453f1e1e9bf67c65b1f9f58962596))
+* set share identifier to volapp as advised ([#563](https://github.com/dvsa/vol-app/issues/563)) ([b5fdc14](https://github.com/dvsa/vol-app/commit/b5fdc1440b6cf76912e7fb3f7231b6d0f5355c8e))
+* specify scheduling params for liquibase batch job ([#562](https://github.com/dvsa/vol-app/issues/562)) ([3d05d72](https://github.com/dvsa/vol-app/commit/3d05d72c2f42f6612c5ef2ca1ae3dbf0a3f3abdd))
+* spelling ([#567](https://github.com/dvsa/vol-app/issues/567)) ([b4f0d58](https://github.com/dvsa/vol-app/commit/b4f0d5871d9e4a5dca605bcb48a4a36a1878eb2f))
+* test deployment ([#566](https://github.com/dvsa/vol-app/issues/566)) ([0d53702](https://github.com/dvsa/vol-app/commit/0d53702712be26ab32b2f5d1d947045c86954878))
+* try stop liquibase being skipped despite terraform-env-dev completing ([7963b32](https://github.com/dvsa/vol-app/commit/7963b32724983cd17f9567305671b1089d1c284a))
+* try stop liquibase being skipped despite terraform-env-dev completing ([#594](https://github.com/dvsa/vol-app/issues/594)) ([f542788](https://github.com/dvsa/vol-app/commit/f5427887243f159b883c048db34a85e1b079187b))
+* typo in called workflow filename ([#554](https://github.com/dvsa/vol-app/issues/554)) ([327b833](https://github.com/dvsa/vol-app/commit/327b833a27b708856d4845c2d927522078e3d42f))
+
 ## [5.13.1](https://github.com/dvsa/vol-app/compare/v5.13.0...v5.13.1) (2025-01-13)
 
 
