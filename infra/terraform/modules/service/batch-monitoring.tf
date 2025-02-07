@@ -27,7 +27,7 @@ locals {
       "width" : 18,
       "height" : 6,
       "properties" : {
-        "query" : "SOURCE '/aws/batch/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
+        "query" : "SOURCE '/aws/events/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
         "region" : "eu-west-1",
         "stacked" : false,
         "view" : "table",
@@ -169,6 +169,6 @@ module "sns_batch_failure" {
 }
 
 resource "aws_cloudwatch_log_group" "failures" {
-  name              = "/aws/batch/vol-app-${var.environment}-failures"
+  name              = "/aws/events/vol-app-${var.environment}-failures"
   retention_in_days = 1
 }
