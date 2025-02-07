@@ -90,7 +90,7 @@ jobs:
       image_tag: ${{ steps.build-details.outputs.image_tag }}
       etl_sha: ${{ steps.etl-sha.outputs.sha }}
       etl_ref: ${{ inputs.etl_ref }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
         with:
