@@ -105,7 +105,7 @@ module "eventbridge_sns" {
   }
 
   targets = {
-    failures = [
+    "vol-app-${var.environment}-batch-failure-event" = [
       {
         name = "batch-fail-event"
         arn  = module.sns_batch_failure.topic_arn
