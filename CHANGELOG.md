@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.14.1](https://github.com/dvsa/vol-app/compare/v5.14.0...v5.14.1) (2025-02-07)
+
+
+### Bug Fixes
+
+* check for uploaded supporting evidence now works correctly ([#615](https://github.com/dvsa/vol-app/issues/615)) ([ab92844](https://github.com/dvsa/vol-app/commit/ab92844d56bbf9f09b5b5085d1a9519775a59721))
+
 ## [5.14.0](https://github.com/dvsa/vol-app/compare/v5.13.1...v5.14.0) (2025-02-06)
 
 
