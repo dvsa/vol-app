@@ -15,11 +15,11 @@ ignore:
   'SNYK-PHP-TWIGTWIG-8349790':
     - '*':
         reason: Upgrade planned in VOL-5894
-        expires: 2025-01-18T02:01:00.000Z
+        expires: 2025-02-18T02:01:00.000Z
         created: 2024-11-07T02:01:00.000Z
   'SNYK-PHP-TWIGTWIG-8349791':
     - '*':
         reason: Upgrade planned in VOL-5894
-        expires: 2025-01-18T02:01:00.000Z
+        expires: 2025-02-18T02:01:00.000Z
         created: 2024-11-07T02:01:00.000Z
 patch: {}
