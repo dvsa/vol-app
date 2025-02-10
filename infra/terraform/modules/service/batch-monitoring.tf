@@ -22,7 +22,7 @@ locals {
     },
     {
       "type" : "log",
-      "x" : 6,
+      "x" : 12,
       "y" : 6,
       "width" : 18,
       "height" : 6,
@@ -32,6 +32,24 @@ locals {
         "stacked" : false,
         "view" : "table",
         "title" : "Batch failure logs"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 6,
+      "y" : 6,
+      "width" : 18,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : [
+          for job in var.batch.jobs : [
+            "AWS/Logs", "IncomingLogEvents", "LogGroupName", "/aws/batch/vol-app-${var.environment}-${job.name}"
+          ]
+        ],
+        "region" : "eu-west-1",
+        "title" : "Batch Failure Count by Job"
       }
     }
     ],
