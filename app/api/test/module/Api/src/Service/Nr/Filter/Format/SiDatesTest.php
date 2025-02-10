@@ -1,33 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Nr\Filter\Format\SiDates;
 use PHPUnit\Framework\TestCase as TestCase;
 
-/**
- * Class SiDatesTest
- * @package Dvsa\OlcsTest\Api\Service\NrFilter\Format
- */
 class SiDatesTest extends TestCase
 {
     /**
-     * Tests the filter
-     *
      * @dataProvider filterProvider
-     * @param $inputPenaltyDates
-     * @param $expectedPenaltyDates
      */
-    public function testFilter($inputPenaltyDates, $expectedPenaltyDates)
+    public function testFilter(array $inputPenaltyDates, array $expectedPenaltyDates): void
     {
 
         $input = [
-            'checkDate' => '2015-12-23',
             'infringementDate' => '2015-12-24',
             'imposedErrus' => [0 => $inputPenaltyDates]
         ];
         $expectedOutput = [
-            'checkDate' => new \DateTime('2015-12-23 00:00:00'),
             'infringementDate' => new \DateTime('2015-12-24 00:00:00'),
             'imposedErrus' => [0 => $expectedPenaltyDates]
         ];
@@ -39,7 +31,7 @@ class SiDatesTest extends TestCase
     /**
      * data provider for testFilterProvider
      */
-    public function filterProvider()
+    public function filterProvider(): array
     {
         return [
             [

@@ -27,9 +27,17 @@ class ComplianceEpisodeXmlFactory implements FactoryInterface
     {
         $config = $container->get('config');
         if (!isset($config['nr']['compliance_episode']['xmlNs'])) {
-            throw new \RuntimeException('Missing INR service config');
+            throw new \RuntimeException('Missing xmlNs for INR config');
         }
+
+        if (!isset($config['nr']['compliance_episode']['erruVersion'])) {
+            throw new \RuntimeException('Missing erruVersion for INR config');
+        }
+
+        $ns = $config['nr']['compliance_episode']['xmlNs'];
+        $erruVersion = $config['nr']['compliance_episode']['erruVersion'];
+
         $mapXmlFile = $container->get('FilterManager')->get(MapXmlFile::class);
-        return new ComplianceEpisodeXml($mapXmlFile, $config['nr']['compliance_episode']['xmlNs']);
+        return new ComplianceEpisodeXml($mapXmlFile, $ns . $erruVersion);
     }
 }

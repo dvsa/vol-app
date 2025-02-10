@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NotifyCheckResult_Response xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4">
+  <Header version="3.4" technicalId="d0ae5498-339a-49ad-bcaa-65c1f03f6307"
+          workflowId="e933f62c-ceae-4833-b022-c4f69e2211ef" sentAt="2016-02-07T10:04:00Z"
+          timeoutValue="2016-02-07T10:04:10Z" from="UK" to="IE"/>
+  <Body businessCaseId="Notification of Check Result Example" originatingAuthority="UK Competent Authority"
+        respondingAuthority="IE Competent Authority" statusCode="OK">
+    <TransportUndertaking transportUndertakingName="International Rescue" communityLicenceNumber="CL-IR-000001-001"
+                          communityLicenceStatus="Active" numberOfVehicles="7">
+      <TransportUndertakingAddress address="Tracy Villa" postCode="SP1" city="Tracy Island" country="UK"/>
+    </TransportUndertaking>
+    <PenaltiesImposed>
+      <PenaltyImposed penaltyRequestedIdentifier="1" authorityImposingPenalty="DVSA" isImposed="false"
+                      penaltyTypeImposed="101" reason="Further sanction not required"/>
+    </PenaltiesImposed>
+  </Body>
+</NotifyCheckResult_Response>

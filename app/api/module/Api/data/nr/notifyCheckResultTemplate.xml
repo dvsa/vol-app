@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NotifyCheckResult_Request xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           xsi:schemaLocation="https://webgate.ec.testa.eu/move-hub/erru/3.4">
+  <Header version="3.4" technicalId="d68f9675-72f4-486a-b5b2-c798b361af52"
+          workflowId="20776dc3-5fe7-42d5-b554-09ad12fa25c4" sentAt="2014-02-20T16:22:09Z"
+          timeoutValue="2016-01-01T00:00:20Z" from="PL" to="UK"/>
+  <Body businessCaseId="0ffefb6b-6344-4a60-9a53-4381c32f98d9" originatingAuthority="Driver &amp; Vehicle Agency"
+        requestPurpose="Control" requestSource="RSI">
+    <TransportUndertaking transportUndertakingName="TEST USER (SELF SERVICE)(12345)" communityLicenceNumber="UKGB/OB1234567/00000">
+      <Vehicle vehicleRegistrationNumber="aBc123" vehicleRegistrationCountry="UK"/>
+      <CheckSummary checkResult="Fail" dateOfCheck="2014-02-20"/>
+      <SeriousInfringement dateOfInfringement="2014-02-20" category="MSI" infringementType="101" appealPossible="true">
+        <PenaltiesImposed>
+          <PenaltyImposed penaltyImposedIdentifier="1" finalDecisionDate="2014-02-20" penaltyTypeImposed="101" startDate="2014-03-14" endDate="2014-09-17" isExecuted="Yes" />
+          <PenaltyImposed penaltyImposedIdentifier="2" finalDecisionDate="2014-06-25" penaltyTypeImposed="102" isExecuted="No" notExecutedReason="Penalty/Infringement annulled after appeal" />
+        </PenaltiesImposed>
+        <PenaltiesRequested>
+          <PenaltyRequested penaltyRequestedIdentifier="1" penaltyTypeRequested="301" duration="12" />
+          <PenaltyRequested penaltyRequestedIdentifier="2" penaltyTypeRequested="302" duration="30" />
+        </PenaltiesRequested>
+      </SeriousInfringement>
+      <SeriousInfringement dateOfInfringement="2014-03-21" category="MSI" infringementType="201" appealPossible="false">
+        <PenaltiesImposed>
+          <PenaltyImposed penaltyImposedIdentifier="3" finalDecisionDate="2014-03-21" penaltyTypeImposed="202" startDate="2014-04-15" endDate="2014-10-18" isExecuted="No" notExecutedReason="Penalty/Infringement annulled after appeal" />
+          <PenaltyImposed penaltyImposedIdentifier="4" finalDecisionDate="2014-07-26" penaltyTypeImposed="203" isExecuted="Yes" />
+        </PenaltiesImposed>
+        <PenaltiesRequested>
+          <PenaltyRequested penaltyRequestedIdentifier="3" penaltyTypeRequested="305" duration="18" />
+          <PenaltyRequested penaltyRequestedIdentifier="4" penaltyTypeRequested="306" duration="24" />
+        </PenaltiesRequested>
+      </SeriousInfringement>
+    </TransportUndertaking>
+  </Body>
+</NotifyCheckResult_Request>

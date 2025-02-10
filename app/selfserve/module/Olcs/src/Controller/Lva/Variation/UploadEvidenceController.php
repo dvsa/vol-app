@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractUploadEvidenceController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
@@ -27,13 +28,15 @@ class UploadEvidenceController extends AbstractUploadEvidenceController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
-            $uploadHelper
+            $uploadHelper,
+            $translationHelper
         );
     }
 }

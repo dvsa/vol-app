@@ -8,6 +8,7 @@ use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
@@ -27,6 +28,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     protected $operatingCentreId;
 
+    protected TranslationHelperService $translationHelper;
+
     /**
      * Data from API
      * @var array
@@ -45,19 +48,21 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @param AuthorizationService $authService
      * @param FormHelperService $formHelper
      * @param FileUploadHelperService $uploadHelper
+     * @param TranslationHelperService $translationHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        TranslationHelperService $translationHelper
     ) {
         $this->uploadHelper = $uploadHelper;
         $this->startTime = (new DateTimeImmutable())->format(DateTimeInterface::ATOM);
-
+        $this->translationHelper = $translationHelper;
         parent::__construct(
             $niTextTranslationUtil,
-            $authService
+            $authService,
         );
     }
 
@@ -82,11 +87,14 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     ['id' => $this->getIdentifier()]
                 );
                 $dtoData['financialEvidence'] = $this->shouldShowFinancialEvidence();
-
                 $result = $this->handleCommand(
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
                 if ($result->isOk()) {
+                    if ($this->hasEvidenceBeenUploaded($form->getData())) {
+                        $message = $this->translationHelper->translate('lva-financial-evidence-upload-now.success');
+                        $this->addSuccessMessage($message);
+                    }
                     return $this->redirect()->toRoute(
                         'lva-' . $this->lva . '/submission-summary',
                         ['application' => $this->getIdentifier()]
@@ -349,5 +357,31 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $this->application = $this->getApplicationData($this->getIdentifier());
         }
         return $this->application['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
+    }
+
+    private function hasEvidenceBeenUploaded(array $data): bool
+    {
+        // Check if "financialEvidence" exists and file list is not empty
+        if (!empty($data['financialEvidence']['files']['list'])) {
+            return true;
+        }
+
+        // We don't have a file upload list, so check each operating centre for "adPlacedIn" value.
+        // Form validation will have ensured this is field is present when a file is uploaded
+        if (!empty($data['operatingCentres'])) {
+            foreach($data['operatingCentres'] as $operatingCentre) {
+                if (!empty($operatingCentre['adPlacedIn'])) {
+                    return true;
+                }
+            }
+        }
+
+        // Check if "supportingEvidence" exists and file list is not empty
+        if (!empty($data['supportingEvidence']['files']['list'])) {
+            return true;
+        }
+
+        // If all conditions fail, return false
+        return false;
     }
 }

@@ -27,7 +27,8 @@ class SiPenaltyErruImposed extends AbstractSiPenaltyErruImposed
         RefData $executed,
         \DateTime $startDate,
         \DateTime $endDate,
-        \DateTime $finalDecisionDate
+        \DateTime $finalDecisionDate,
+        int $penaltyImposedIdentifier
     ) {
         $this->seriousInfringement = $seriousInfringement;
         $this->siPenaltyImposedType = $siPenaltyImposedType;
@@ -35,5 +36,6 @@ class SiPenaltyErruImposed extends AbstractSiPenaltyErruImposed
         $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->finalDecisionDate = $finalDecisionDate;
+        $this->penaltyImposedIdentifier = $penaltyImposedIdentifier;
     }
 }

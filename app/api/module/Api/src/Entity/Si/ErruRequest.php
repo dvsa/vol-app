@@ -48,6 +48,9 @@ class ErruRequest extends AbstractErruRequest
         RefData $msiType,
         CountryEntity $memberStateCode,
         DocumentEntity $requestDocument,
+        RefData $communityLicenceStatus,
+        string $communityLicenceNumber,
+        $totAuthVehicles,
         $originatingAuthority,
         $transportUndertakingName,
         $vrm,
@@ -58,6 +61,9 @@ class ErruRequest extends AbstractErruRequest
         $this->msiType = $msiType;
         $this->memberStateCode = $memberStateCode;
         $this->requestDocument = $requestDocument;
+        $this->communityLicenceStatus = $communityLicenceStatus;
+        $this->communityLicenceNumber = $communityLicenceNumber;
+        $this->totAuthVehicles = $totAuthVehicles;
         $this->originatingAuthority = $originatingAuthority;
         $this->transportUndertakingName = $transportUndertakingName;
         $this->vrm = $vrm;

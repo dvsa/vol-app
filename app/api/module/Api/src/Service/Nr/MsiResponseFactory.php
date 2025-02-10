@@ -6,13 +6,10 @@ use Olcs\XmlTools\Xml\XmlNodeBuilder;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
-/**
- * Class MsiResponseFactory
- * @package Dvsa\Olcs\Api\Service\Nr
- */
 class MsiResponseFactory implements FactoryInterface
 {
     public const XML_NS_MSG = 'No config specified for xml ns';
+    public const XML_VERSION_MSG = 'No config specified for erru version';
 
     /**
      * invoke method
@@ -30,7 +27,15 @@ class MsiResponseFactory implements FactoryInterface
         if (!isset($config['nr']['compliance_episode']['xmlNs'])) {
             throw new \RuntimeException(self::XML_NS_MSG);
         }
-        $xmlBuilder = new XmlNodeBuilder('MS2ERRU_Infringement_Res', $config['nr']['compliance_episode']['xmlNs'], []);
-        return new MsiResponse($xmlBuilder);
+
+        if (!isset($config['nr']['compliance_episode']['erruVersion'])) {
+            throw new \RuntimeException(self::XML_VERSION_MSG);
+        }
+
+        $ns = $config['nr']['compliance_episode']['xmlNs'];
+        $erruVersion = $config['nr']['compliance_episode']['erruVersion'];
+
+        $xmlBuilder = new XmlNodeBuilder('NotifyCheckResult_Response', $ns . $erruVersion, []);
+        return new MsiResponse($xmlBuilder, $erruVersion);
     }
 }

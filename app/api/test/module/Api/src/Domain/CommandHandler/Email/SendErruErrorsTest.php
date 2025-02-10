@@ -56,21 +56,16 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
         $documentId = 5678;
 
         $sentAt = '2014-02-20T16:22:09Z';
-        $notificationDate = '2014-02-20T16:20:12Z';
 
         $sentDateTime = new \DateTime($sentAt);
         $formattedSentAt = $sentDateTime->format(SendErruErrors::BODY_DATE_FORMAT);
         $subjectSentAt = $sentDateTime->format(SendErruErrors::SUBJECT_DATE_FORMAT);
-
-        $notificationDateTime = new \DateTime($notificationDate);
-        $formattedNotificationDate = $notificationDateTime->format(SendErruErrors::BODY_DATE_FORMAT);
 
         $inputData = [
             'notificationNumber' => $notificationNumber,
             'memberStateCode' => $memberStateCode,
             'originatingAuthority' => $originatingAuthority,
             'sentAt' => $sentAt,
-            'notificationDateTime' => $notificationDate
         ];
         $inputJson = Json::encode($inputData);
 
@@ -103,7 +98,6 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
                 'notificationNumber' => $notificationNumber,
                 'memberState' => $memberStateCode,
                 'originatingAuthority' => $originatingAuthority,
-                'notificationDateTime' => $formattedNotificationDate,
                 'errorMessages' => $errors,
                 'filename' => $filename
             ],
@@ -165,7 +159,6 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
                 'notificationNumber' => SendErruErrors::MISSING_INPUT,
                 'memberState' => SendErruErrors::MISSING_INPUT,
                 'originatingAuthority' => SendErruErrors::MISSING_INPUT,
-                'notificationDateTime' => SendErruErrors::MISSING_INPUT,
                 'errorMessages' => $errors,
                 'filename' => $filename
             ],

@@ -1157,7 +1157,7 @@ return [
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.5/TransXChange_registration.xsd',
         'http://naptan.dft.gov.uk/transxchange/publisher/schema/3.1.2/TransXChangePublisherService.xsd' =>
             __DIR__ . '/../data/ebsr/xsd/TransXChange_schema_2.4/TransXChangePublisherService_2_4.xsd',
-        'https://webgate.ec.testa.eu/erru/1.0' => __DIR__ . '/../data/nr/xsd/ERRU2MS_Infringement_Req.xsd'
+        'https://webgate.ec.testa.eu/move-hub/erru/3.4' => __DIR__ . '/../data/nr/xsd/NotifyCheckResult_Request.xsd'
     ],
     'validators' => [
         'invokables' => [

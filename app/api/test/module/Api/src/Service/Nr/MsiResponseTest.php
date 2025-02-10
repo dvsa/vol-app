@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
@@ -14,35 +17,23 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
 
-/**
- * Class MsiResponseTest
- * @package Dvsa\OlcsTest\Api\Service\Nr
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class MsiResponseTest extends MockeryTestCase
 {
-    public function testCreateThrowsException()
+    public function testCreateThrowsException(): void
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $cases = m::mock(CasesEntity::class);
-        $cases->shouldReceive('canSendMsiResponse')->once()->andReturn(false);
+        $cases->expects('canSendMsiResponse')->withNoArgs()->andReturnFalse();
 
-        $sut = new MsiResponse(m::mock(XmlNodeBuilder::class));
+        $sut = new MsiResponse(m::mock(XmlNodeBuilder::class), "3.4");
         $sut->create($cases);
     }
 
     /**
-     * Tests create
-     *
-     * @param $licence
-     * @param $authority
-     * @param $memberStateCode
-     * @param $filteredMemberStateCode
-     *
      * @dataProvider createDataProvider
      */
-    public function testCreate($licence, $authority, $memberStateCode, $filteredMemberStateCode)
+    public function testCreate(?string $licence, string $authority, string $memberStateCode, string $filteredMemberStateCode): void
     {
         $siPenaltyTypeId1 = 101;
         $siPenaltyTypeId2 = 102;
@@ -53,19 +44,23 @@ class MsiResponseTest extends MockeryTestCase
         $startDate = '2015-01-31';
         $endDate = '2015-05-16';
         $workflowId = "FB4F5CE2-4D38-4AB8-8185-03947C939393";
+        $communityLicenceNumber = 'GBUK/OB1234567/00001';
+        $totAuthVehicles = 10;
+        $communityLicenceStatus = 'Active';
+        $schemaVersion = '3.4';
 
         $penalty1 = m::mock(SiPenaltyEntity::class)->makePartial();
-        $penalty1->shouldReceive('getSiPenaltyType->getId')->once()->andReturn($siPenaltyTypeId1);
-        $penalty1->shouldReceive('getStartDate')->once()->andReturn(null);
-        $penalty1->shouldReceive('getEndDate')->once()->andReturn(null);
-        $penalty1->shouldReceive('getImposed')->once()->andReturn('N');
-        $penalty1->shouldReceive('getReasonNotImposed')->once()->andReturn($reasonNotImposed);
+        $penalty1->expects('getSiPenaltyType->getId')->withNoArgs()->andReturn($siPenaltyTypeId1);
+        $penalty1->expects('getStartDate')->withNoArgs()->andReturnNull();
+        $penalty1->expects('getEndDate')->withNoArgs()->andReturnNull();
+        $penalty1->expects('getImposed')->withNoArgs()->andReturn('N');
+        $penalty1->expects('getReasonNotImposed')->withNoArgs()->andReturn($reasonNotImposed);
 
         $penalty2 = m::mock(SiPenaltyEntity::class);
         $penalty2->shouldReceive('getSiPenaltyType->getId')->once()->andReturn($siPenaltyTypeId2);
-        $penalty2->shouldReceive('getStartDate')->once()->andReturn($startDate);
-        $penalty2->shouldReceive('getEndDate')->once()->andReturn($endDate);
-        $penalty2->shouldReceive('getImposed')->once()->andReturn('Y');
+        $penalty2->expects('getStartDate')->withNoArgs()->andReturn($startDate);
+        $penalty2->expects('getEndDate')->withNoArgs()->andReturn($endDate);
+        $penalty2->expects('getImposed')->withNoArgs()->andReturn('Y');
         $penalty2->shouldReceive('getReasonNotImposed')->never();
 
         $appliedPenalties = new PersistentCollection(
@@ -75,51 +70,44 @@ class MsiResponseTest extends MockeryTestCase
         );
 
         $seriousInfringement = m::mock(SiEntity::class);
-        $seriousInfringement->shouldReceive('getAppliedPenalties')->once()->andReturn($appliedPenalties);
+        $seriousInfringement->expects('getAppliedPenalties')->withNoArgs()->andReturn($appliedPenalties);
 
         $seriousInfringements = new ArrayCollection([$seriousInfringement]);
 
         $erruRequest = m::mock(ErruRequestEntity::class);
-        $erruRequest->shouldReceive('getNotificationNumber')->once()->andReturn($notificationNumber);
-        $erruRequest->shouldReceive('getWorkflowId')->once()->andReturn($workflowId);
-        $erruRequest->shouldReceive('getMemberStateCode->getId')->once()->andReturn($memberStateCode);
-        $erruRequest->shouldReceive('getTransportUndertakingName')->once()->andReturn($erruTransportUndertaking);
-        $erruRequest->shouldReceive('getOriginatingAuthority')->once()->andReturn($erruOriginatingAuthority);
+        $erruRequest->expects('getNotificationNumber')->withNoArgs()->andReturn($notificationNumber);
+        $erruRequest->expects('getWorkflowId')->withNoArgs()->andReturn($workflowId);
+        $erruRequest->expects('getMemberStateCode->getId')->withNoArgs()->andReturn($memberStateCode);
+        $erruRequest->expects('getTransportUndertakingName')->withNoArgs()->andReturn($erruTransportUndertaking);
+        $erruRequest->expects('getOriginatingAuthority')->withNoArgs()->andReturn($erruOriginatingAuthority);
+        $erruRequest->expects('getCommunityLicenceNumber')->withNoArgs()->andReturn($communityLicenceNumber);
+        $erruRequest->expects('getTotAuthVehicles')->withNoArgs()->andReturn($totAuthVehicles);
+        $erruRequest->expects('getCommunityLicenceStatus->getDescription')->withNoArgs()->andReturn($communityLicenceStatus);
 
         $cases = m::mock(CasesEntity::class);
-        $cases->shouldReceive('canSendMsiResponse')->once()->andReturn(true);
-        $cases->shouldReceive('getSeriousInfringements')->once()->andReturn($seriousInfringements);
-        $cases->shouldReceive('getLicence')->once()->andReturn($licence);
-        $cases->shouldReceive('getErruRequest')->once()->andReturn($erruRequest);
+        $cases->expects('canSendMsiResponse')->withNoArgs()->andReturnTrue();
+        $cases->expects('getSeriousInfringements')->withNoArgs()->andReturn($seriousInfringements);
+        $cases->expects('getLicence')->withNoArgs()->andReturn($licence);
+        $cases->expects('getErruRequest')->withNoArgs()->andReturn($erruRequest);
 
         $expectedXmlResponse = 'xml';
         $xmlNodeBuilder = m::mock(XmlNodeBuilder::class)->makePartial();
-        $xmlNodeBuilder->shouldReceive('buildTemplate')->once()->andReturn($expectedXmlResponse);
+        $xmlNodeBuilder->expects('buildTemplate')->withNoArgs()->andReturn($expectedXmlResponse);
 
-        $sut = new MsiResponse($xmlNodeBuilder);
+        $sut = new MsiResponse($xmlNodeBuilder, $schemaVersion);
         $actualXmlResponse = $sut->create($cases);
 
         $header = [
             'name' => 'Header',
             'attributes' => [
+                'version' => $schemaVersion,
                 'technicalId' => $sut->getTechnicalId(),
                 'workflowId' => $workflowId,
                 'sentAt' => $sut->getResponseDateTime(),
-                'from' => 'UK'
+                'timeoutValue' => $sut->getTimeoutDateTime(),
+                'from' => 'UK',
+                'to' => $filteredMemberStateCode
             ],
-            'nodes' => [
-                0 => [
-                    'name' => 'To',
-                    'nodes' => [
-                        0 => [
-                            'name' => 'MemberState',
-                            'attributes' => [
-                                'code' => $filteredMemberStateCode
-                            ]
-                        ]
-                    ]
-                ]
-            ]
         ];
 
         $body = [
@@ -127,23 +115,40 @@ class MsiResponseTest extends MockeryTestCase
             'attributes' => [
                 'businessCaseId' => $notificationNumber,
                 'originatingAuthority' => $erruOriginatingAuthority,
-                'licensingAuthority' => $authority,
-                'responseDateTime' => $sut->getResponseDateTime()
+                'respondingAuthority' => $authority,
+                'statusCode' => 'OK',
             ],
             'nodes' => [
                 0 => [
                     'name' => 'TransportUndertaking',
                     'attributes' => [
-                        'name' => $erruTransportUndertaking
+                        'transportUndertakingName' => $erruTransportUndertaking,
+                        'communityLicenceNumber' => $communityLicenceNumber,
+                        'communityLicenceStatus' => $communityLicenceStatus,
+                        'numberOfVehicles' => $totAuthVehicles,
                     ],
+                    'nodes' => [
+                        0 => [
+                            'name' => 'TransportUndertakingAddress',
+                            'attributes' => [
+                                'address' => 'address',
+                                'postcode' => 'postcode',
+                                'city' => 'city',
+                                'country' => 'UK',
+                            ],
+                        ],
+                    ],
+                ],
+                1 => [
+                    'name' => 'PenaltiesImposed',
                     'nodes' => [
                         0 => [
                             'name' => 'PenaltyImposed',
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId1,
-                                'isImposed' => 'No',
-                                'reasonNotImposed' => $reasonNotImposed
+                                'isImposed' => 'false',
+                                'reasonNotImposed' => $reasonNotImposed,
                             ]
                         ],
                         1 => [
@@ -151,14 +156,14 @@ class MsiResponseTest extends MockeryTestCase
                             'attributes' => [
                                 'authorityImposingPenalty' => $authority,
                                 'penaltyTypeImposed' => $siPenaltyTypeId2,
-                                'isImposed' => 'Yes',
+                                'isImposed' => 'true',
                                 'startDate' => $startDate,
-                                'endDate' => $endDate
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                'endDate' => $endDate,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
 
         $expectedXmlData = [
@@ -175,7 +180,7 @@ class MsiResponseTest extends MockeryTestCase
      *
      * @return array
      */
-    public function createDataProvider()
+    public function createDataProvider(): array
     {
         return [
             [null, MsiResponse::AUTHORITY_TRU, 'GB', 'UK'],

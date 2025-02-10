@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_secretsmanager_secret" "application_api" {
+  name = "DEVAPP${var.legacy_environment}-BASE-SM-APPLICATION-API"
+}
+
 locals {
   default_retry_policy = {
     attempts = 1
@@ -15,19 +19,9 @@ locals {
     }
   }
 
-  jobs = { for job in var.batch.jobs : job.name => {
-    name                  = "vol-app-${var.environment}-${job.name}"
-    type                  = "container"
-    propagate_tags        = true
-    platform_capabilities = ["FARGATE"]
-
-    container_properties = jsonencode({
-      command = concat([
-        "/var/www/html/vendor/bin/laminas",
-        "--container=/var/www/html/config/container-cli.php"
-      ], job.commands)
-
-      image = "${var.batch.repository}:${var.batch.version}"
+  job_types = {
+    default = {
+      image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
       environment = [
         {
@@ -36,9 +30,91 @@ locals {
         },
         {
           name  = "APP_VERSION"
-          value = var.batch.version
+          value = var.batch.cli_version
         },
-      ],
+      ]
+
+      secrets = []
+    }
+    liquibase = {
+      image = "${var.batch.liquibase_repository}:latest"
+
+      environment = [
+        {
+          name  = "DB_HOST"
+          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
+          name  = "DB_USER"
+          value = "olcsapi"
+        },
+        {
+          name  = "DB_PORT"
+          value = "3306"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+      ]
+    }
+
+    search = {
+      image = "${var.batch.search_repository}:latest"
+
+      environment = [
+        {
+          name  = "DB_HOST"
+          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DB_NAME"
+          value = "OLCS_RDS_OLCSDB"
+        },
+        {
+          name  = "DB_USER"
+          value = "olcsapi"
+        },
+        {
+          name  = "DB_PORT"
+          value = "3306"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+        },
+      ]
+    }
+  }
+
+  jobs = { for job in var.batch.jobs : job.name => {
+    name                  = "vol-app-${var.environment}-${job.name}"
+    type                  = "container"
+    propagate_tags        = true
+    platform_capabilities = ["FARGATE"]
+
+    container_properties = jsonencode({
+
+      command = (job.type == "default" ? concat([
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php"
+      ], job.commands) : job.commands)
+
+      image = lookup(local.job_types, job.type, local.job_types.default).image
+
+      environment = lookup(local.job_types, job.type, local.job_types.default).environment
+
+      secrets = lookup(local.job_types, job.type, local.job_types.default).secrets
 
       runtimePlatform = {
         operatingSystemFamily = "LINUX",
@@ -66,12 +142,13 @@ locals {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = aws_cloudwatch_log_group.this.id
+          awslogs-group         = aws_cloudwatch_log_group.this[job.name].id
           awslogs-region        = "eu-west-1"
           awslogs-stream-prefix = job.name
         }
       }
-    })
+      }
+    )
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy
@@ -84,7 +161,7 @@ locals {
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
         "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : module.batch.job_queues.default.arn,
+        "JobQueue" : lookup(module.batch.job_queues, job.queue, module.batch.job_queues.default).arn,
         "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
@@ -128,7 +205,15 @@ module "batch" {
       tags = {
         JobQueue = "vol-app-${var.environment}-default"
       }
-    }
+    },
+    liquibase = {
+      name     = "vol-app-${var.environment}-liquibase"
+      state    = "ENABLED"
+      priority = 1
+      tags = {
+        JobQueue = "vol-app-${var.environment}-liquibase"
+      }
+    },
   }
 
   job_definitions = local.jobs
@@ -160,94 +245,9 @@ module "eventbridge" {
 
 }
 
-module "eventbridge_sns" {
-  source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
-
-  create_bus  = false
-  create_role = true
-  role_name   = "vol-app-${var.environment}-batch-failures"
-
-  rules = {
-    "vol-app-${var.environment}-batch-failure-event" = {
-      description = "Capture failed Batch Events sent to SNS"
-      event_pattern = jsonencode({
-        "source" : ["aws.batch"],
-        "detail-type" : ["Batch Job State Change"],
-        "detail" : {
-          "status" : [
-            "FAILED"
-          ],
-          "jobName" : [{
-            "wildcard" : "vol-app-${var.environment}-*"
-          }]
-        }
-      })
-      enabled = true
-    }
-  }
-
-  targets = {
-    "vol-app-${var.environment}-batch-failure-event" = [
-      {
-        name = "batch-fail-event"
-        arn  = module.sns_batch_failure.topic_arn
-      }
-    ]
-  }
-
-}
-
-module "sns_batch_failure" {
-  source  = "terraform-aws-modules/sns/aws"
-  version = "~> 6.1"
-
-  name            = "vol-app-${var.environment}-batch-failure-topic"
-  use_name_prefix = true
-  display_name    = "vol-app-${var.environment}-batch-event-failed"
-
-  create_topic_policy         = true
-  enable_default_topic_policy = true
-  topic_policy_statements = {
-    pub = {
-      actions = ["sns:Publish"]
-      principals = [{
-        type = "AWS"
-        identifiers = [
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-        ]
-      }]
-    },
-
-    sub = {
-      actions = [
-        "sns:Publish",
-        "sns:Subscribe",
-        "sns:Receive",
-      ]
-
-      principals = [{
-        type        = "Service"
-        identifiers = ["events.amazonaws.com"]
-      }]
-    }
-  }
-  /*
-  subscriptions = {
-    "vol-app-${var.environment}-batch-failure-email" = {
-      protocol = "email"
-      endpoint = ""
-    }
-  */
-
-  tags = {
-    "Name" = "vol-app-${var.environment}-aws-sns-batch-failure"
-
-  }
-
-}
-
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/aws/batch/vol-app-${var.environment}"
+  for_each = { for job in var.batch.jobs : job.name => job }
+
+  name              = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
   retention_in_days = 1
 }

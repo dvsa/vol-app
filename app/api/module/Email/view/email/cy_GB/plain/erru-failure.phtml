@@ -8,14 +8,13 @@ ID achos busnes: <?php echo $this->notificationNumber; ?>
 Wedi'i anfon am: <?php echo $this->sentAt; ?>
 Oddi wrth MS: <?php echo $this->memberState; ?>
 Awdurdod Gwreiddiol: <?php echo $this->originatingAuthority; ?>
-Dyddiad/amser cydnabod: <?php echo $this->notificationDateTime; ?>
 
 Nesgeseuon gwall:
 
-<?php 
-foreach ($this->errorMessages as $message) { 
-    echo '*' . $message. "\n"; 
-} 
+<?php
+foreach ($this->errorMessages as $message) {
+    echo '*' . $message. "\n";
+}
 ?>
 
 (Gweler y ffeil gysylltiedig: <?php echo $this->filename; ?>)

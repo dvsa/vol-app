@@ -90,7 +90,8 @@ return [
     'nr' => [
         'max_schema_errors' => 10, //maximum number of xml schema problems to return (prevents massive error messages)
         'compliance_episode' => [
-            'xmlNs' => 'https://webgate.ec.testa.eu/erru/1.0',
+            'xmlNs' => 'https://webgate.ec.testa.eu/move-hub/erru/',
+            'erruVersion' => "3.4",
         ],
     ]
 ];

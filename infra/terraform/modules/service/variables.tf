@@ -58,9 +58,12 @@ variable "services" {
 variable "batch" {
   description = "Configuration for the batch process"
   type = object({
-    version    = string
-    repository = string
-    subnet_ids = list(string)
+    cli_version          = string
+    cli_repository       = string
+    search_repository    = string
+    liquibase_repository = string
+    api_secret_file      = string
+    subnet_ids           = list(string)
     task_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)
@@ -68,20 +71,13 @@ variable "batch" {
     }))
     jobs = list(object({
       name     = string
-      commands = list(string)
+      type     = optional(string, "default")
+      queue    = optional(string, "default")
+      commands = optional(list(string))
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
       schedule = optional(string, "")
     }))
-  })
-}
-
-variable "batch-liquibase" {
-  description = "Configuration for the batch process"
-  type = object({
-    repository  = string
-    subnet_ids  = list(string)
-    secret_file = string
   })
 }
