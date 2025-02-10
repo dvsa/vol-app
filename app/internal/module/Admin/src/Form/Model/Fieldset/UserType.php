@@ -214,6 +214,30 @@ class UserType
      * @Form\Type("DynamicSelect")
      * @Form\Required(true)
      * @Form\Attributes({"id":"role","placeholder":"","required":false})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "isLastOperatorAdmin",
+     *          "context_values": {"1"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "\Common\Validator\MustRemainOperatorAdmin"},
+     *          }
+     *      }
+     * })
      */
     public $role = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $isLastOperatorAdmin = null;
+
+    /**
+     * @Form\Options({"label":"Last operator admin?"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"lastOperatorAdminText", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\ReadonlyElement")
+     */
+    public $lastOperatorAdminText = null;
 }

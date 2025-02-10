@@ -1,10 +1,6 @@
 <?php
 
-/**
- * UserTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\User;
 
@@ -13,18 +9,13 @@ use Dvsa\Olcs\Api\Domain\Repository\User as Repo;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistory as EventHistoryEntity;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 use Dvsa\Olcs\Api\Entity\User\Permission as PermissionEntity;
-use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
+use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Rbac\JWTIdentityProvider;
 use Dvsa\Olcs\Transfer\Query\User\User as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * UserTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class UserTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -48,7 +39,7 @@ class UserTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['QUERY']);
 
@@ -58,11 +49,12 @@ class UserTest extends QueryHandlerTestCase
             ->andReturn(true);
 
         $userId = 100;
-        $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class);
+        $mockUser = m::mock(User::class);
         $mockUser->shouldReceive('getId')->andReturn($userId);
         $mockUser->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);
         $mockUser->shouldReceive('getUserType')->once()->andReturn('internal');
         $mockUser->shouldReceive('getLastLoginAt')->once()->andReturn('2016-12-06T16:12:46+0000');
+        $mockUser->expects('isLastOperatorAdmin')->withNoArgs()->andReturnTrue();
 
         $this->repoMap['User']->shouldReceive('fetchUsingId')->with($query)->andReturn($mockUser);
 
@@ -86,6 +78,7 @@ class UserTest extends QueryHandlerTestCase
         $this->assertSame(
             [
                 'foo' => 'bar',
+                'isLastOperatorAdmin' => true,
                 'userType' => 'internal',
                 'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
                 'lockedOn' => null,
@@ -95,7 +88,7 @@ class UserTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithNoLastLoginTime()
+    public function testHandleQueryWithNoLastLoginTime(): void
     {
         $query = Query::create(['QUERY']);
 
@@ -105,12 +98,13 @@ class UserTest extends QueryHandlerTestCase
             ->andReturn(true);
 
         $userId = 100;
-        $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class);
+        $mockUser = m::mock(User::class);
         $mockUser->shouldReceive('getId')->andReturn($userId);
         $mockUser->shouldReceive('getPid')->andReturn('pid');
         $mockUser->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);
         $mockUser->shouldReceive('getUserType')->once()->andReturn('internal');
         $mockUser->shouldReceive('getLastLoginAt')->once()->andReturnNull();
+        $mockUser->expects('isLastOperatorAdmin')->withNoArgs()->andReturnFalse();
 
         $this->repoMap['User']->shouldReceive('fetchUsingId')->with($query)->andReturn($mockUser);
 
@@ -134,6 +128,7 @@ class UserTest extends QueryHandlerTestCase
         $this->assertSame(
             [
                 'foo' => 'bar',
+                'isLastOperatorAdmin' => false,
                 'userType' => 'internal',
                 'lastLoggedInOn' => null,
                 'lockedOn' => null,
@@ -143,7 +138,7 @@ class UserTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWithoutPasswordResetEvent()
+    public function testHandleQueryWithoutPasswordResetEvent(): void
     {
         $query = Query::create(['QUERY']);
 
@@ -153,12 +148,13 @@ class UserTest extends QueryHandlerTestCase
             ->andReturn(true);
 
         $userId = 100;
-        $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class);
+        $mockUser = m::mock(User::class);
         $mockUser->shouldReceive('getId')->andReturn($userId);
         $mockUser->shouldReceive('getPid')->andReturn('pid');
         $mockUser->shouldReceive('serialize')->once()->andReturn(['foo' => 'bar']);
         $mockUser->shouldReceive('getUserType')->once()->andReturn('internal');
         $mockUser->shouldReceive('getLastLoginAt')->once()->andReturnNull();
+        $mockUser->expects('isLastOperatorAdmin')->withNoArgs()->andReturnFalse();
 
         $this->repoMap['User']->shouldReceive('fetchUsingId')->with($query)->andReturn($mockUser);
 
@@ -179,6 +175,7 @@ class UserTest extends QueryHandlerTestCase
         $this->assertSame(
             [
                 'foo' => 'bar',
+                'isLastOperatorAdmin' => false,
                 'userType' => 'internal',
                 'lastLoggedInOn' => null,
                 'lockedOn' => null,

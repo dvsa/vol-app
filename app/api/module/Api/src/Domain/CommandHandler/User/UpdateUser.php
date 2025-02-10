@@ -49,6 +49,7 @@ final class UpdateUser extends AbstractUserCommandHandler implements
     use CacheAwareTrait;
     use ConfigAwareTrait;
 
+    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
     public const RESET_PASSWORD_BY_POST = 'post';
     public const RESET_PASSWORD_BY_EMAIL = 'email';
 
@@ -103,6 +104,7 @@ final class UpdateUser extends AbstractUserCommandHandler implements
         $user = $this->getRepo()->fetchById($command->getId(), AbstractQuery::HYDRATE_OBJECT, $command->getVersion());
         $previousEmailAddress = $user->getContactDetails() ? $user->getContactDetails()->getEmailAddress() : null;
         $previouslyDisabled = $user->isDisabled();
+        $previousLastOperatorAdmin = $user->isLastOperatorAdmin();
 
         // validate roles
         $this->validateRoles($data['roles'], $user->getRoles()->toArray());
@@ -110,6 +112,11 @@ final class UpdateUser extends AbstractUserCommandHandler implements
         $user->update(
             $this->getRepo()->populateRefDataReference($data)
         );
+
+        //make sure the last operator administrator hasn't lost this role
+        if ($previousLastOperatorAdmin && !$user->isOperatorAdministrator()) {
+            throw new ForbiddenException(self::ADMIN_ROLE_ERROR);
+        }
 
         if ($user->getContactDetails() instanceof ContactDetails) {
             // update existing contact details

@@ -16,6 +16,9 @@ class User implements MapperInterface
 {
     use MapperTraits\PhoneFieldsTrait;
 
+    public const IS_LAST_OP_ADMIN = 'Yes (there must always be at least one operator administrator account)';
+    public const IS_NOT_LAST_OP_ADMIN = 'No';
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -61,6 +64,8 @@ class User implements MapperInterface
 
             $formData['userType']['id'] = $data['id'];
             $formData['userType']['userType'] = $data['userType'];
+            $formData['userType']['isLastOperatorAdmin'] = $data['isLastOperatorAdmin'];
+            $formData['userType']['lastOperatorAdminText'] = $data['isLastOperatorAdmin'] ? self::IS_LAST_OP_ADMIN  : self::IS_NOT_LAST_OP_ADMIN;
 
             // get the first role from the list (it should be only one)
             $formData['userType']['role']
