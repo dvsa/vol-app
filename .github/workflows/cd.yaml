@@ -387,6 +387,7 @@ jobs:
 
   liquibase-int:
     name: Database Migrations (int)
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
     needs:
       - terraform_env_int
     uses: ./.github/workflows/run-liquibase.yaml
@@ -559,7 +560,7 @@ jobs:
 
   liquibase-prep:
     name: Database Migrations (prep)
-    if: ${{ needs.release-please.outputs.release_created }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' && needs.release-please.outputs.release_created }}
     needs:
       - terraform_env_prep
     uses: ./.github/workflows/run-liquibase.yaml
