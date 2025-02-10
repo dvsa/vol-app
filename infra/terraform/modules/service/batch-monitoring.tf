@@ -22,16 +22,34 @@ locals {
     },
     {
       "type" : "log",
+      "x" : 12,
+      "y" : 6,
+      "width" : 18,
+      "height" : 6,
+      "properties" : {
+        "query" : "SOURCE '/aws/events/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
+        "region" : "eu-west-1",
+        "stacked" : false,
+        "view" : "table",
+        "title" : "Batch failure logs"
+      }
+    },
+    {
+      "type" : "metric",
       "x" : 6,
       "y" : 6,
       "width" : 18,
       "height" : 6,
       "properties" : {
-        "query" : "SOURCE '/aws/batch/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
-        "region" : "eu-west-1",
+        "view" : "timeSeries",
         "stacked" : false,
-        "view" : "table",
-        "title" : "Batch failure logs"
+        "metrics" : [
+          for job in var.batch.jobs : [
+            "AWS/Logs", "IncomingLogEvents", "LogGroupName", "/aws/batch/vol-app-${var.environment}-${job.name}"
+          ]
+        ],
+        "region" : "eu-west-1",
+        "title" : "Batch Failure Count by Job"
       }
     }
     ],
@@ -169,6 +187,6 @@ module "sns_batch_failure" {
 }
 
 resource "aws_cloudwatch_log_group" "failures" {
-  name              = "/aws/batch/vol-app-${var.environment}-failures"
+  name              = "/aws/events/vol-app-${var.environment}-failures"
   retention_in_days = 1
 }
