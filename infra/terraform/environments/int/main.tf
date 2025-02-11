@@ -481,6 +481,15 @@ module "service" {
         commands = ["queue:transxchange-consumer"],
         timeout  = 90,
       },
+      {
+        name  = "liquibase",
+        type  = "liquibase",
+        queue = "liquibase"
+      },
+      {
+        name = "search",
+        type = "search"
+      },
     ]
   }
 }
