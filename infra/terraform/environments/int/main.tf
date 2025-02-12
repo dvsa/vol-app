@@ -157,8 +157,6 @@ module "service" {
 
   elasticache_url = "tcp://cache.qa.olcs.dev-dvsacloud.uk:6379"
 
-  load_balancer_arn = data.aws_lb
-
   services = {
     "api" = {
       cpu    = 2048
@@ -176,6 +174,7 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["API"].arn
+      lb_arn                    = data.aws_lb_listener.this["API"].arn
       listener_rule_host_header = "api.*"
     }
 
@@ -216,6 +215,7 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
+      lb_arn                    = data.aws_lb_listener.this["IUWEB"].arn
       listener_rule_host_header = "iuweb.*"
     }
 
@@ -256,6 +256,7 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
+      lb_arn                    = data.aws_lb_listener.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
     }
   }

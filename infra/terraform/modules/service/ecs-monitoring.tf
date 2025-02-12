@@ -2,9 +2,13 @@ locals {
 
   region = "eu-west-1"
 
-  formatted_load_balancer = "app/${split("/", var.load_balancer_arn)[7]}/${split("/", var.load_balancer_arn)[8]}"
-
-  dashboard_widgets = [
+  lb_details = {
+    for service, details in var.services : service => {
+      lb_arn  = "/app/${split("/", details.lb_arn)[3]}/${split("/", details.lb_arn)[4]}"
+      lb_name = "${split("/", details.lb_arn)[4]}"
+    }
+  }
+  dashboard_widgets = concat([
 
     {
       "height" : 5,
@@ -224,72 +228,76 @@ locals {
         "stacked" : false,
         "stat" : "Average"
       }
-    },
-    {
-      "type" : "metric",
-      "x" : 0,
-      "y" : 10,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "metrics" : [
-          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", local.formatted_load_balancer]
-        ],
-        "region" : local.region,
-        "title" : "ActiveConnectionCount"
-      }
-    },
-    {
-      "type" : "metric",
-      "x" : 0,
-      "y" : 16,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : local.region,
-        "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", local.formatted_load_balancer]
-        ],
-        "title" : "HTTPCode_ELB_4XX_Count"
-      }
-    },
-    {
-      "type" : "metric",
-      "x" : 12,
-      "y" : 16,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : "eu-west-1",
-        "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", local.formatted_load_balancer]
-        ],
-        "title" : "HTTPCode_ELB_5XX_Count"
-      }
-    },
-    {
-      "type" : "metric",
-      "x" : 12,
-      "y" : 10,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : "eu-west-1",
-        "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", local.formatted_load_balancer]
-        ],
-        "title" : "RequestCount"
-      }
     }
-  ]
+    ],
+    [for lb in local.lb_details : {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : [
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn]
+        ],
+        "region" : local.region,
+        "title" : "${lb.lb_name} - ActiveConnectionCount"
+      }
+      }
+    ],
+    [for lb in local.lb_details : {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 16,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : local.region,
+        "metrics" : [
+          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn]
+        ],
+        "title" : "${lb.lb_name} - HTTPCode_ELB_4XX_Count"
+      }
+      }
+    ],
+    [for lb in local.lb_details : {
+      "type" : "metric",
+      "x" : 12,
+      "y" : 16,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : "eu-west-1",
+        "metrics" : [
+          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn]
+        ],
+        "title" : "${lb.lb_name} - HTTPCode_ELB_5XX_Count"
+      }
+      }
+    ],
+    [for lb in local.lb_details : {
+      "type" : "metric",
+      "x" : 12,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : "eu-west-1",
+        "metrics" : [
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn]
+        ],
+        "title" : "${lb.lb_name} - RequestCount"
+      }
+      }
+  ])
 }
 
 resource "aws_cloudwatch_dashboard" "services" {
