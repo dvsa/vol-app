@@ -218,7 +218,7 @@ module "service" {
       ]
 
       lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
-      lb_arn                    = data.aws.this["IUWEB"].arn
+      lb_arn                    = data.aws_lb.this["IUWEB"].arn
       listener_rule_host_header = "iuweb.*"
     }
 
