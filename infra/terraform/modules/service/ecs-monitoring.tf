@@ -235,7 +235,7 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "metrics" : [
-          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", locals.formatted_load_balancer]
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", local.formatted_load_balancer]
         ],
         "region" : local.region,
         "title" : "ActiveConnectionCount"
@@ -252,7 +252,7 @@ locals {
         "stacked" : false,
         "region" : local.region,
         "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", locals.formatted_load_balancer]
+          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", local.formatted_load_balancer]
         ],
         "title" : "HTTPCode_ELB_4XX_Count"
       }
@@ -268,7 +268,7 @@ locals {
         "stacked" : false,
         "region" : "eu-west-1",
         "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", locals.formatted_load_balancer]
+          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", local.formatted_load_balancer]
         ],
         "title" : "HTTPCode_ELB_5XX_Count"
       }
@@ -284,7 +284,7 @@ locals {
         "stacked" : false,
         "region" : "eu-west-1",
         "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", locals.formatted_load_balancer]
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", local.formatted_load_balancer]
         ],
         "title" : "RequestCount"
       }
