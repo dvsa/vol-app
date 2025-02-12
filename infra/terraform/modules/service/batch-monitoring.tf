@@ -1,6 +1,6 @@
 locals {
 
-  dashboard_widgets = concat([
+  batch_dashboard_widgets = concat([
 
     {
       "height" : 6,
@@ -14,7 +14,7 @@ locals {
         ],
         "view" : "timeSeries",
         "stacked" : false,
-        "region" : "eu-west-1",
+        "region" : local.region,
         "stat" : "Sum",
         "period" : 300,
         "title" : "Batch failures"
@@ -28,7 +28,7 @@ locals {
       "height" : 6,
       "properties" : {
         "query" : "SOURCE '/aws/events/vol-app-${var.environment}-failures' | fields @timestamp, @message, @logStream, @log\n| sort @timestamp desc\n| limit 10000",
-        "region" : "eu-west-1",
+        "region" : local.region,
         "stacked" : false,
         "view" : "table",
         "title" : "Batch failure logs"
@@ -48,7 +48,7 @@ locals {
             "AWS/Logs", "IncomingLogEvents", "LogGroupName", "/aws/batch/vol-app-${var.environment}-${job.name}"
           ]
         ],
-        "region" : "eu-west-1",
+        "region" : local.region,
         "title" : "Batch Failure Count by Job"
       }
     }
@@ -66,7 +66,7 @@ locals {
                 | sort @timestamp desc
                 | limit 10000
               EOT
-          region  = "eu-west-1"
+          region  = local.region
           stacked = false
           title   = "${job.name}-logs"
           view    = "table"
@@ -91,7 +91,7 @@ resource "aws_cloudwatch_dashboard" "this" {
   dashboard_name = "batch-vol-app-${var.environment}"
 
   dashboard_body = jsonencode({
-    widgets = local.dashboard_widgets
+    widgets = local.batch_dashboard_widgets
   })
 }
 

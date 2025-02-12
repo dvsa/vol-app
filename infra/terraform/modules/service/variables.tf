@@ -28,6 +28,11 @@ variable "elasticache_url" {
   description = "The URL of the Elasticache cluster"
 }
 
+variable "load_balancer_arn" {
+  type        = string
+  description = "The ARN of the load balancer"
+}
+
 variable "services" {
   type = map(object({
     version    = string

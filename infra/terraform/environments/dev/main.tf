@@ -157,6 +157,8 @@ module "service" {
 
   elasticache_url = "tcp://cache.dev.olcs.dev-dvsacloud.uk:6379"
 
+  load_balancer_arn = data.aws_lb
+
   services = {
     "api" = {
       cpu    = 2048
