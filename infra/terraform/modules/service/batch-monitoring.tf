@@ -122,6 +122,27 @@ module "eventbridge_sns" {
     }
   }
 
+  attach_policy_json = true
+  policy_json = {
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Principal" : {
+          "Service" : [
+            "events.amazonaws.com",
+            "delivery.logs.amazonaws.com"
+          ]
+        },
+        "Resource" : "${aws_cloudwatch_log_group.failures.arn}",
+      }
+    ]
+  }
+
   targets = {
     "vol-app-${var.environment}-batch-failure-event" = [
       {
