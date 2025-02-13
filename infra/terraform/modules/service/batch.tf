@@ -155,14 +155,14 @@ locals {
   } }
 
   schedules = {
-    for job in module.batch.job_definitions[job.name] : job.name => {
-      description         = "Schedule for ${job.name}"
+    for job in var.batch.jobs : "${var.environment}-{job.name}" => {
+      description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
-        "JobName" : job.name,
+        "JobName" : module.batch.job_definitions[job.name].name,
         "JobQueue" : lookup(module.batch.job_queues, job.queue, module.batch.job_queues.default).arn,
-        "JobDefinition" : job.arn,
+        "JobDefinition" : module.batch.job_definitions[job.name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
       })
