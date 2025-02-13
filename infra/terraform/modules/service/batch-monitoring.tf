@@ -122,6 +122,9 @@ module "eventbridge_sns" {
     }
   }
 
+  attach_cloudwatch_policy = true
+  cloudwatch_target_arns   = [aws_cloudwatch_log_group.failures.arn]
+
   targets = {
     "vol-app-${var.environment}-batch-failure-event" = [
       {
