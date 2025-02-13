@@ -233,15 +233,15 @@ jobs:
   docker:
     name: Docker
     if: >
-      always() && 
-      !cancelled() && 
-      needs.orchestrator.outputs.should-build-docker && 
-      needs.security-app.result != 'failure'  && 
-      needs.security-terraform.result != 'failure'  && 
-      needs.orchestrator.result != 'failure'  && 
-      needs.docs.result != 'failure'  && 
-      needs.cdn.result != 'failure'  && 
-      needs.app.result != 'failure'  && 
+      always() &&
+      !cancelled() &&
+      needs.orchestrator.outputs.should-build-docker &&
+      needs.security-app.result != 'failure'  &&
+      needs.security-terraform.result != 'failure'  &&
+      needs.orchestrator.result != 'failure'  &&
+      needs.docs.result != 'failure'  &&
+      needs.cdn.result != 'failure'  &&
+      needs.app.result != 'failure'  &&
       needs.get-version.result != 'failure'
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
@@ -291,6 +291,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: infra/terraform
+      - uses: hashicorp/setup-terraform@v3
       - run: terraform fmt -check -no-color -recursive
       - uses: actions/cache@v4
         name: Cache plugin dir
