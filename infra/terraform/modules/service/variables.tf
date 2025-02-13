@@ -27,7 +27,6 @@ variable "elasticache_url" {
   type        = string
   description = "The URL of the Elasticache cluster"
 }
-
 variable "services" {
   type = map(object({
     version    = string
@@ -40,6 +39,7 @@ variable "services" {
       resources = list(string)
     }))
     add_cdn_url_to_env = optional(bool, false)
+    lb_arn             = string
     lb_listener_arn    = string
     // The reason for this was to enable the parallel running of ECS and EC2 services.
     // This boolean will control the flow of traffic. If `true`, traffic will go to ECS. If `false`, traffic will go to EC2.
