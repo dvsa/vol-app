@@ -274,7 +274,7 @@ locals {
         "metrics" : flatten([for lb in local.lb_details : [
           ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
         ]]),
-        "title" : "${lb.lb_name} - HTTPCode_ELB_4XX_Count"
+        "title" : "ALB 4XX Count"
       }
     },
     {
@@ -290,7 +290,7 @@ locals {
         "metrics" : flatten([for lb in local.lb_details : [
           ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
         ]]),
-        "title" : "${lb.lb_name} - HTTPCode_ELB_5XX_Count"
+        "title" : "ALB 5XX Count"
       }
     },
     {
@@ -306,7 +306,7 @@ locals {
         "metrics" : flatten([for lb in local.lb_details : [
           ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
         ]]),
-        "title" : "${lb.lb_name} - RequestCount"
+        "title" : "RequestCount"
       }
     }
   ]
