@@ -64,7 +64,7 @@ variable "batch" {
     liquibase_repository = string
     api_secret_file      = string
     subnet_ids           = list(string)
-    alert_email          = string
+    alert_emails         = optional(list(string))
     task_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)
