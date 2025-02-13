@@ -5,7 +5,7 @@ locals {
   lb_details = {
     for service, details in var.services : service => {
       lb_arn  = "/app/${split("/", details.lb_arn)[2]}/${split("/", details.lb_arn)[3]}"
-      lb_name = "${split("/", details.lb_arn)[2]}"
+      lb_name = split("/", details.lb_arn)[2]
     }
   }
   dashboard_widgets = concat([

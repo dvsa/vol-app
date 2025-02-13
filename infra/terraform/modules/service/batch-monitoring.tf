@@ -49,7 +49,7 @@ locals {
           ]
         ],
         "region" : local.region,
-        "title" : "Batch Failure Count by Job"
+        "title" : "Batch Error Count by Job"
       }
     }
     ],
