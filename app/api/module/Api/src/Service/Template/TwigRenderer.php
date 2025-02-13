@@ -6,38 +6,24 @@ use Twig\Environment;
 
 class TwigRenderer
 {
-    /**
-     * Create service instance
-     *
-     *
-     * @return TwigRenderer
-     */
     public function __construct(private readonly Environment $twig)
     {
     }
 
     /**
      * Render the template with the specified path using the supplied variables
-     *
-     * @param string $templatePath
-     *
-     * @return string
      */
-    public function render($templatePath, array $variables)
+    public function render(string $templatePath, array $variables): string
     {
         return $this->twig->render($templatePath, $variables);
     }
 
     /**
      * Render the template within the supplied string using the supplied variables
-     *
-     * @param string $templateString
-     *
-     * @return string
      */
-    public function renderString($templateString, array $variables)
+    public function renderString(string $templateString, array $variables): string
     {
         $template = $this->twig->createTemplate($templateString);
-        return $template->render($variables);
+        return $this->twig->render($template, $variables);
     }
 }
