@@ -155,7 +155,7 @@ locals {
   } }
 
   schedules = {
-    for job in var.batch.jobs : "${var.environment}-{job.name}" => {
+    for job in var.batch.jobs : "${var.environment}-${job.name}" => {
       description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
       schedule_expression = job.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
