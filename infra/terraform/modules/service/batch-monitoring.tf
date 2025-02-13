@@ -73,12 +73,13 @@ locals {
         }
       }
   ])
-  subscriptions = { for address in var.batch.alert_emails : address => {
-    "vol-app-${var.environment}-batch-failure-email-${address}" = {
-      protocol = "email"
-      endpoint = address
+
+  subscriptions = { for address in var.batch.alert_emails : "vol-app-${var.environment}-batch-failure-email-${split("@", address)[0]}" => {
+    protocol = "email"
+    endpoint = address
     }
-  } }
+  }
+
 }
 
 module "cloudwatch_log-metric-filter" {
@@ -182,6 +183,7 @@ module "sns_batch_failure" {
   }
 
   subscriptions = local.subscriptions
+
   tags = {
     "Name" = "vol-app-${var.environment}-aws-sns-batch-failure"
 
