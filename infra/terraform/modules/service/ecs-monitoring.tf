@@ -238,11 +238,27 @@ locals {
       "properties" : {
         "view" : "timeSeries",
         "stacked" : false,
-        "title" : "ActiveConnectionCount",
-        "region" : local.region,
         "metrics" : flatten([for lb in local.lb_details : [
-          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn, { "region" : "eu-west-1", "label" : "${lb.lb_name}" }]
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
         ]]),
+        "region" : local.region,
+        "title" : "ActiveConnectionCount"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn]
+        ]]),
+        "region" : local.region,
+        "title" : "ActiveConnectionCount"
       }
     },
     {
@@ -255,10 +271,10 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "region" : local.region,
-        "title" : "ALB 4XX Count",
         "metrics" : flatten([for lb in local.lb_details : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn, { "region" : "eu-west-1", "label" : "${lb.lb_name}" }]
-        ]])
+          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn]
+        ]]),
+        "title" : "ALB 4XX Count"
       }
     },
     {
@@ -271,10 +287,10 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "region" : "eu-west-1",
-        "title" : "ALB 5XX Count"
         "metrics" : flatten([for lb in local.lb_details : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn, { "region" : "eu-west-1", "label" : "${lb.lb_name}" }]
-        ]])
+          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn]
+        ]]),
+        "title" : "ALB 5XX Count"
       }
     },
     {
@@ -287,10 +303,10 @@ locals {
         "view" : "timeSeries",
         "stacked" : false,
         "region" : "eu-west-1",
-        "title" : "RequestCount",
         "metrics" : flatten([for lb in local.lb_details : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn, { "region" : "eu-west-1", "label" : "${lb.lb_name}" }]
-        ]])
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn]
+        ]]),
+        "title" : "RequestCount"
       }
     }
   ]
