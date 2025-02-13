@@ -4,11 +4,11 @@ locals {
 
   lb_details = {
     for service, details in var.services : service => {
-      lb_arn  = "/app/${split("/", details.lb_arn)[2]}/${split("/", details.lb_arn)[3]}"
+      lb_arn  = "app/${split("/", details.lb_arn)[2]}/${split("/", details.lb_arn)[3]}"
       lb_name = split("/", details.lb_arn)[2]
     }
   }
-  dashboard_widgets = concat([
+  dashboard_widgets = [
 
     {
       "height" : 5,
@@ -228,76 +228,88 @@ locals {
         "stacked" : false,
         "stat" : "Average"
       }
+    },
+    {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
+        ]]),
+        "region" : local.region,
+        "title" : "ActiveConnectionCount"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
+        ]]),
+        "region" : local.region,
+        "title" : "ActiveConnectionCount"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 0,
+      "y" : 16,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : local.region,
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
+        ]]),
+        "title" : "ALB 4XX Count"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 12,
+      "y" : 16,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : "eu-west-1",
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
+        ]]),
+        "title" : "ALB 5XX Count"
+      }
+    },
+    {
+      "type" : "metric",
+      "x" : 12,
+      "y" : 10,
+      "width" : 12,
+      "height" : 6,
+      "properties" : {
+        "view" : "timeSeries",
+        "stacked" : false,
+        "region" : "eu-west-1",
+        "metrics" : flatten([for lb in local.lb_details : [
+          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn, { "label" = lb.lb_name }]
+        ]]),
+        "title" : "RequestCount"
+      }
     }
-    ],
-    [for lb in local.lb_details : {
-      "type" : "metric",
-      "x" : 0,
-      "y" : 10,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "metrics" : [
-          ["AWS/ApplicationELB", "ActiveConnectionCount", "LoadBalancer", lb.lb_arn]
-        ],
-        "region" : local.region,
-        "title" : "${lb.lb_name} - ActiveConnectionCount"
-      }
-      }
-    ],
-    [for lb in local.lb_details : {
-      "type" : "metric",
-      "x" : 0,
-      "y" : 16,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : local.region,
-        "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_4XX_Count", "LoadBalancer", lb.lb_arn]
-        ],
-        "title" : "${lb.lb_name} - HTTPCode_ELB_4XX_Count"
-      }
-      }
-    ],
-    [for lb in local.lb_details : {
-      "type" : "metric",
-      "x" : 12,
-      "y" : 16,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : "eu-west-1",
-        "metrics" : [
-          ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", lb.lb_arn]
-        ],
-        "title" : "${lb.lb_name} - HTTPCode_ELB_5XX_Count"
-      }
-      }
-    ],
-    [for lb in local.lb_details : {
-      "type" : "metric",
-      "x" : 12,
-      "y" : 10,
-      "width" : 12,
-      "height" : 6,
-      "properties" : {
-        "view" : "timeSeries",
-        "stacked" : false,
-        "region" : "eu-west-1",
-        "metrics" : [
-          ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", lb.lb_arn]
-        ],
-        "title" : "${lb.lb_name} - RequestCount"
-      }
-      }
-  ])
+  ]
 }
 
 resource "aws_cloudwatch_dashboard" "services" {
