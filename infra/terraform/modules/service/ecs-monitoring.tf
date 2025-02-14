@@ -241,15 +241,13 @@ locals {
         "title" : "ActiveConnectionCount",
         "region" : local.region,
         "metrics" : [for lb in local.lb_details : [
-          [
-            "AWS/ApplicationELB",
-            "ActiveConnectionCount",
-            "LoadBalancer",
-            lb.lb_arn,
-            {
-              "label" : lb.lb_name
-            }
-          ]
+          "AWS/ApplicationELB",
+          "ActiveConnectionCount",
+          "LoadBalancer",
+          lb.lb_arn,
+          {
+            "label" : lb.lb_name
+          }
         ]]
       }
     },
@@ -265,15 +263,13 @@ locals {
         "region" : local.region,
         "title" : "ALB 4XX Count",
         "metrics" : [for lb in local.lb_details : [
-          [
-            "AWS/ApplicationELB",
-            "HTTPCode_ELB_4XX_Count",
-            "LoadBalancer",
-            lb.lb_arn,
-            {
-              "label" : lb.lb_name
-            }
-          ]
+          "AWS/ApplicationELB",
+          "HTTPCode_ELB_4XX_Count",
+          "LoadBalancer",
+          lb.lb_arn,
+          {
+            "label" : lb.lb_name
+          }
         ]]
       }
     },
@@ -289,15 +285,13 @@ locals {
         "region" : "eu-west-1",
         "title" : "ALB 5XX Count"
         "metrics" : [for lb in local.lb_details : [
-          [
-            "AWS/ApplicationELB",
-            "HTTPCode_ELB_5XX_Count",
-            "LoadBalancer",
-            lb.lb_arn,
-            {
-              "label" : lb.lb_name
-            }
-          ]
+          "AWS/ApplicationELB",
+          "HTTPCode_ELB_5XX_Count",
+          "LoadBalancer",
+          lb.lb_arn,
+          {
+            "label" : lb.lb_name
+          }
         ]]
       }
     },
@@ -313,15 +307,13 @@ locals {
         "region" : "eu-west-1",
         "title" : "RequestCount",
         "metrics" : [for lb in local.lb_details : [
-          [
-            "AWS/ApplicationELB",
-            "RequestCount",
-            "LoadBalancer",
-            lb.lb_arn,
-            {
-              "label" : lb.lb_name
-            }
-          ]
+          "AWS/ApplicationELB",
+          "RequestCount",
+          "LoadBalancer",
+          lb.lb_arn,
+          {
+            "label" : lb.lb_name
+          }
         ]]
       }
     }
