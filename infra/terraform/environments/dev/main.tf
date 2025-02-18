@@ -531,6 +531,11 @@ module "service" {
         name = "search",
         type = "search"
       },
+      {
+        name      = "sas-mi-extract",
+        commands  = ["source /mnt/data/sas_mi_extract.sh"],
+        type      = "script",
+      },
     ]
   }
 }

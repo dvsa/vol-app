@@ -97,6 +97,23 @@ locals {
     }
   }
 
+    script = {
+      image = "${var.batch.cli_repository}:${var.batch.cli_version}"
+
+      environment = [
+        {
+          name  = "ENVIRONMENT_NAME"
+          value = var.legacy_environment
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.batch.cli_version
+        },
+      ]
+
+      secrets = []
+    }
+
   jobs = { for job in var.batch.jobs : job.name => {
     name                  = "vol-app-${var.environment}-${job.name}"
     type                  = "container"
