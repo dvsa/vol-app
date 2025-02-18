@@ -15,6 +15,7 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
+# Add extra scirpts for batch jobs  
 ADD ./scripts/ /mnt/data/scripts/
 
 # PHP config file
