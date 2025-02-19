@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Service\Nr\Filter;
 
+use Laminas\Filter\FilterPluginManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Dvsa\Olcs\Transfer\Filter\Vrm as TransferVrmFilter;
 use Psr\Container\ContainerInterface;
@@ -25,7 +26,7 @@ class VrmFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Vrm
     {
         $service = new Vrm();
-        $service->setVrmFilter($container->get(TransferVrmFilter::class));
+        $service->setVrmFilter($container->get(FilterPluginManager::class)->get(TransferVrmFilter::class));
         return $service;
     }
 }
