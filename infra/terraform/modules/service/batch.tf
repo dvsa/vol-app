@@ -110,16 +110,18 @@ locals {
           value = var.batch.cli_version
         },
         {
-          name = "REPORTS_BUCKET"
-          value = var.batch_reports_bucket
+          name  = "DB_HOST"
+          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
         },
-        {
-          name = "INTEGRATION_BUCKET"
-          value = var.batch_integration_bucket
-        },
+    
       ]
 
-      secrets = []
+      secrets = [
+        {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        }
+      ]  
     }
 
   jobs = { for job in var.batch.jobs : job.name => {
