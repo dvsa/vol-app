@@ -109,6 +109,14 @@ locals {
           name  = "APP_VERSION"
           value = var.batch.cli_version
         },
+        {
+          name = "REPORTS_BUCKET"
+          value = var.batch_reports_bucket
+        },
+        {
+          name = "INTEGRATION_BUCKET"
+          value = var.batch_integration_bucket
+        },
       ]
 
       secrets = []
