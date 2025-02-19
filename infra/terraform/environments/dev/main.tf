@@ -277,6 +277,10 @@ module "service" {
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
+    alert_emails = [
+      "olcs-dev@otc.gov.uk"
+    ]
+
     jobs = [
       {
         name     = "ch-vs-olcs-diffs",
