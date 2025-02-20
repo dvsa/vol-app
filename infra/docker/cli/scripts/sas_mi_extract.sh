@@ -9,14 +9,31 @@ READDB_HOST=${READDB_HOST}
 BATCH_DB_PASSWORD=${BATCH_DB_PASSWORD}
 ENVIRONMENT=${ENVIRONMENT_NAME}
 
-if [ENVIRONMENT == "DEV" || "INT"]; then
+case "${ENVIRONMENT}" in
+  "DEV")
     REPORTS_BUCKET="devapp-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
-    elif [ENVIRONMENT == "PREP" || "PROD"]; then
+    ;;
+  "INT")
+    REPORTS_BUCKET="devapp-olcs-pri-integration-reporting-s3"
+    INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
+    ;;
+  "PREP")
     REPORTS_BUCKET="app-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="app-mc-pri-integration-data-s3"
-fi
-       
+    ;;
+  "PROD")
+    REPORTS_BUCKET="app-olcs-pri-integration-reporting-s3"
+    INTEGRATION_BUCKET="app-mc-pri-integration-data-s3"
+    ;;
+  *)
+    echoerr "ERROR: Invalid environment specified"
+    exit 1
+    ;;
+esac
+
+echo $REPORTS_BUCKET
+
 
 mysqldump_bin=$(which mysqldump)
 mysql_bin=$(which mysql)
@@ -30,14 +47,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 cd /mnt/data/olcsdump
-sha256sum olcsdump-.dmp > /mnt/data/olcsdump//olcsdump-manifest.txt
-tar czf /mnt/data/olcsdump/olcsdump-.tar.gz olcsdump-.dmp olcsdump-manifest.txt
+sha256sum olcsdump-${DATE}.dmp > /mnt/data/olcsdump/olcsdump-manifest.txt
+tar czf /mnt/data/olcsdump/olcsdump-${DATEi}.tar.gz olcsdump-${DATE}.dmp olcsdump-manifest.txt
 if [ $? -ne 0 ]; then
     echoerr "ERROR: Failed to compress dumpfile"
     rm -f /mnt/data/olcsdump/olcsdump-${DATE}.dmp
     exit 1
 fi
-/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-.tar.gz s3://${REPORTS_BUCKET}/olcsdump/olcsdump-.tar.gz 
+/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-${DATE}.tar.gz s3://${REPORTS_BUCKET}/olcsdump/olcsdump-${DATE}.tar.gz
 if [ $? -ne 0 ]; then
     echoerr "ERROR: Upload to S3 bucket failed"
     exit 1
@@ -45,7 +62,7 @@ fi
 
 sleep 5
 
-/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-.tar.gz s3://${INTEGRATION_BUCKET}/olcsdump/olcsdump-.tar.gz 
+/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-.tar.gz s3://${INTEGRATION_BUCKET}/olcsdump/olcsdump-${DATE}.tar.gz
 if [ $? -ne 0 ]; then
     echoerr "ERROR: Upload to MC Integration S3 bucket for EDH failed"
     exit 1
