@@ -64,6 +64,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/arm64
 
       - name: Extract Docker metadata
         id: meta
@@ -123,6 +125,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Untag existing latest image in ECR
+        if: ${{ inputs.push }}
+        run: |
+          aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=latest
+
       - name: Push Docker image
         if: ${{ inputs.push }}
         uses: docker/build-push-action@v6
@@ -137,18 +144,18 @@ jobs:
           cache-from: type=gha,scope=${{ inputs.project }}
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
 
-      - name: Setup Notation CLI
-        if: ${{ inputs.push }}
-        uses: notaryproject/notation-action/setup@v1
-        with:
-          version: "1.1.0"
+      # - name: Setup Notation CLI
+      #   if: ${{ inputs.push }}
+      #   uses: notaryproject/notation-action/setup@v1
+      #   with:
+      #     version: "1.1.0"
 
-      - name: Sign artefact
-        if: ${{ inputs.push }}
-        uses: notaryproject/notation-action/sign@v1
-        with:
-          plugin_name: com.amazonaws.signer.notation.plugin
-          plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/arm64/plugin/latest/notation-aws-signer-plugin.zip
-          plugin_checksum: 423fb5f468518edde1c881d50714505dfdf05909bf83bbfddf2d32132caa68cd
-          key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
-          target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}:${{ inputs.version }}
+      # - name: Sign artefact
+      #   if: ${{ inputs.push }}
+      #   uses: notaryproject/notation-action/sign@v1
+      #   with:
+      #     plugin_name: com.amazonaws.signer.notation.plugin
+      #     plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/arm64/plugin/latest/notation-aws-signer-plugin.zip
+      #     plugin_checksum: 423fb5f468518edde1c881d50714505dfdf05909bf83bbfddf2d32132caa68cd
+      #     key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
+      #     target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}:${{ inputs.version }}
