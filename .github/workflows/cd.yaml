@@ -346,7 +346,7 @@ jobs:
     needs:
       - terraform_env_dev
       - liquibase-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@use-surefire-summary-with-percentage-pass-support
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
