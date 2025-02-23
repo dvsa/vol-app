@@ -1,20 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Template;
 
 use Dvsa\Olcs\Api\Service\Template\TwigRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Twig\Environment;
+use Twig\Template;
+use Twig\TemplateWrapper;
 
-/**
- * TwigRendererTest
- *
- * @author Jonathan Thomas <jonathan@opalise.co.uk>
- */
 class TwigRendererTest extends MockeryTestCase
 {
-    public function testRender()
+    public function testRender(): void
     {
         $databaseTemplatePath = 'en_GB/plain/send-ecmt-successful';
         $variables = [
@@ -25,7 +24,7 @@ class TwigRendererTest extends MockeryTestCase
         $renderedTemplate = 'var1 value test var2 value';
 
         $environment = m::mock(Environment::class);
-        $environment->shouldReceive('render')
+        $environment->expects('render')
             ->with($databaseTemplatePath, $variables)
             ->andReturn($renderedTemplate);
 
@@ -37,7 +36,7 @@ class TwigRendererTest extends MockeryTestCase
         );
     }
 
-    public function testRenderString()
+    public function testRenderString(): void
     {
         $templateString = '{{var1}} test {{var2}}';
         $variables = [
@@ -47,15 +46,15 @@ class TwigRendererTest extends MockeryTestCase
 
         $renderedTemplate = 'var1 value test var2 value';
 
-        $template = m::mock();
-        $template->shouldReceive('render')
-            ->with($variables)
-            ->andReturn($renderedTemplate);
-
         $environment = m::mock(Environment::class);
-        $environment->shouldReceive('createTemplate')
+        $template = new TemplateWrapper($environment, m::mock(Template::class)); //this class is marked final
+
+        $environment->expects('createTemplate')
             ->with($templateString)
             ->andReturn($template);
+        $environment->expects('render')
+            ->with($template, $variables)
+            ->andReturn($renderedTemplate);
 
         $twigRenderer = new TwigRenderer($environment);
 

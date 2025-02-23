@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "e010c679dbcc6135fe2148b6f99d5407",
+  "content-hash": "6b628f24cb034dc0bcc97dc4174a7ca5",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -5767,16 +5767,16 @@
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v7.9.0",
+      "version": "v7.9.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "c55bfb915f9bcef5367acde595f36253f6196dd2"
+        "reference": "10613e449afccdedf71899f7e3c03f156ee7750d"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/c55bfb915f9bcef5367acde595f36253f6196dd2",
-        "reference": "c55bfb915f9bcef5367acde595f36253f6196dd2",
+        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/10613e449afccdedf71899f7e3c03f156ee7750d",
+        "reference": "10613e449afccdedf71899f7e3c03f156ee7750d",
         "shasum": ""
       },
       "require": {
@@ -5818,9 +5818,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Transfer",
       "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.9.0"
+        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.9.1"
       },
-      "time": "2024-12-13T12:17:41+00:00"
+      "time": "2025-02-17T17:02:30+00:00"
     },
     {
       "name": "olcs/olcs-utils",
@@ -9184,38 +9184,38 @@
     },
     {
       "name": "twig/twig",
-      "version": "v2.16.1",
+      "version": "v3.19.0",
       "source": {
         "type": "git",
         "url": "https://github.com/twigphp/Twig.git",
-        "reference": "19185947ec75d433a3ac650af32fc05649b95ee1"
+        "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/twigphp/Twig/zipball/19185947ec75d433a3ac650af32fc05649b95ee1",
-        "reference": "19185947ec75d433a3ac650af32fc05649b95ee1",
+        "url": "https://api.github.com/repos/twigphp/Twig/zipball/d4f8c2b86374f08efc859323dbcd95c590f7124e",
+        "reference": "d4f8c2b86374f08efc859323dbcd95c590f7124e",
         "shasum": ""
       },
       "require": {
-        "php": ">=7.1.3",
+        "php": ">=8.0.2",
+        "symfony/deprecation-contracts": "^2.5|^3",
         "symfony/polyfill-ctype": "^1.8",
         "symfony/polyfill-mbstring": "^1.3",
-        "symfony/polyfill-php72": "^1.8"
+        "symfony/polyfill-php81": "^1.29"
       },
       "require-dev": {
-        "psr/container": "^1.0",
-        "symfony/phpunit-bridge": "^5.4.9|^6.3"
+        "phpstan/phpstan": "^2.0",
+        "psr/container": "^1.0|^2.0",
+        "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
       },
       "type": "library",
-      "extra": {
-        "branch-alias": {
-          "dev-master": "2.16-dev"
-        }
-      },
       "autoload": {
-        "psr-0": {
-          "Twig_": "lib/"
-        },
+        "files": [
+          "src/Resources/core.php",
+          "src/Resources/debug.php",
+          "src/Resources/escaper.php",
+          "src/Resources/string_loader.php"
+        ],
         "psr-4": {
           "Twig\\": "src/"
         }
@@ -9244,7 +9244,7 @@
       "keywords": ["templating"],
       "support": {
         "issues": "https://github.com/twigphp/Twig/issues",
-        "source": "https://github.com/twigphp/Twig/tree/v2.16.1"
+        "source": "https://github.com/twigphp/Twig/tree/v3.19.0"
       },
       "funding": [
         {
@@ -9256,7 +9256,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2024-09-09T17:53:56+00:00"
+      "time": "2025-01-29T07:06:14+00:00"
     },
     {
       "name": "webimpress/safe-writer",
@@ -11825,7 +11825,7 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": [],
+  "stability-flags": {},
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
@@ -11836,7 +11836,7 @@
     "ext-redis": "*",
     "ext-pdo": "*"
   },
-  "platform-dev": [],
+  "platform-dev": {},
   "platform-overrides": {
     "ext-redis": "4.3"
   },
