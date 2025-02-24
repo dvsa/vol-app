@@ -95,7 +95,7 @@ locals {
         },
       ]
     }
-  
+
     script = {
       image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
@@ -119,7 +119,7 @@ locals {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
         }
-      ]  
+      ]
     }
   }
 
