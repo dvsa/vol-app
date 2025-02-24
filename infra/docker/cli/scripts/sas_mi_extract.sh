@@ -19,8 +19,8 @@ case "${ENVIRONMENT}" in
     INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
     ;;
   "PREP")
-    REPORTS_BUCKET="app-olcs-pri-integration-reporting-s3"
-    INTEGRATION_BUCKET="app-mc-pri-integration-data-s3"
+    REPORTS_BUCKET="apppp-olcs-pri-integration-reporting-s3"
+    INTEGRATION_BUCKET="apppp-mc-pri-integration-data-s3"
     ;;
   "PROD")
     REPORTS_BUCKET="app-olcs-pri-integration-reporting-s3"
@@ -31,9 +31,6 @@ case "${ENVIRONMENT}" in
     exit 1
     ;;
 esac
-
-echo $REPORTS_BUCKET
-
 
 mysqldump_bin=$(which mysqldump)
 mysql_bin=$(which mysql)
