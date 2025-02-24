@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase", "script"]
+  supporting_service_names = ["search", "liquibase"]
 
   task_iam_role_statements = [
     {
@@ -534,7 +534,7 @@ module "service" {
       {
         name     = "sas-mi-extract",
         commands = ["source /mnt/data/sas_mi_extract.sh"],
-        type     = "script",
+        type     = "script"
       },
     ]
   }
