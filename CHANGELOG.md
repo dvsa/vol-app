@@ -1,5 +1,39 @@
 # Changelog
 
+## [5.14.2-rc1](https://github.com/dvsa/vol-app/compare/v5.14.1...v5.14.2-rc1) (2025-02-24)
+
+
+### Features
+
+* 5908 added ecs dashboard ([#633](https://github.com/dvsa/vol-app/issues/633)) ([c1f1d05](https://github.com/dvsa/vol-app/commit/c1f1d05ebd3a78ec75b0f456535a485cfb8f5850))
+* 5912 batch dashboard - failed job count graph ([#624](https://github.com/dvsa/vol-app/issues/624)) ([82f20bd](https://github.com/dvsa/vol-app/commit/82f20bd0faf670a6f207ead0bf80b189044eb83b))
+* add prerelase helper scripts ([#665](https://github.com/dvsa/vol-app/issues/665)) ([4022748](https://github.com/dvsa/vol-app/commit/402274836ca0cd72b41dffbca56e3aa4f02ab2f8))
+* compatibility with twig version 3 ([#635](https://github.com/dvsa/vol-app/issues/635)) ([9e1eaa4](https://github.com/dvsa/vol-app/commit/9e1eaa40e46af01e4b94f7f53fd1baa6af19cb8c))
+* internal users can't delete/modify last operator admin VOL-5918 VOL-4718 ([#628](https://github.com/dvsa/vol-app/issues/628)) ([4b7d88f](https://github.com/dvsa/vol-app/commit/4b7d88faf575071f937c0e0d6f34bddd18512358))
+* use native arm runners for docker builds for performance and avoid segfault error ([#618](https://github.com/dvsa/vol-app/issues/618)) ([ee4eb6a](https://github.com/dvsa/vol-app/commit/ee4eb6a3e1f10b4d33bfbabea4f6278d7201100c))
+
+
+### Bug Fixes
+
+* 5908 fix metrics ([#642](https://github.com/dvsa/vol-app/issues/642)) ([bd4d06d](https://github.com/dvsa/vol-app/commit/bd4d06ddcfadfe6a4096bb17d0c9bc900d146820))
+* 5908 service dashboard final ([#646](https://github.com/dvsa/vol-app/issues/646)) ([27bf866](https://github.com/dvsa/vol-app/commit/27bf8667d1b98114490d4b7408493eb76b7d4c17))
+* 5908 service dashboard metric object ([#644](https://github.com/dvsa/vol-app/issues/644)) ([0ea981b](https://github.com/dvsa/vol-app/commit/0ea981b1a5be324b4a8a4c0e19c9dd101d773efe))
+* 5908 service dashboard metrics again ([#645](https://github.com/dvsa/vol-app/issues/645)) ([418a8d4](https://github.com/dvsa/vol-app/commit/418a8d488cc26f6d6a040bf033921877fe0b92e7))
+* 5912 batch dashboard target name ([#622](https://github.com/dvsa/vol-app/issues/622)) ([1b2dc11](https://github.com/dvsa/vol-app/commit/1b2dc11740700ded6501b8d736fb4e327aa73708))
+* add schedule to int queue jobs ([#637](https://github.com/dvsa/vol-app/issues/637)) ([c425a15](https://github.com/dvsa/vol-app/commit/c425a15ba5a0d3bee56f1ef93c8c884c9b4abfdb))
+* add schedule to int queue jobs ([#643](https://github.com/dvsa/vol-app/issues/643)) ([187c5a9](https://github.com/dvsa/vol-app/commit/187c5a92a9920c6114776fed6a01ece911e78190))
+* batch failures log group policy ([#641](https://github.com/dvsa/vol-app/issues/641)) ([a59da34](https://github.com/dvsa/vol-app/commit/a59da34bee508fe7ad3185334f81963353b1c4d0))
+* batch schedule per env names ([#638](https://github.com/dvsa/vol-app/issues/638)) ([4b3e6e2](https://github.com/dvsa/vol-app/commit/4b3e6e24e577127850af41bdcce6e55d9c9fa1d1))
+* re add schedules ([#649](https://github.com/dvsa/vol-app/issues/649)) ([ab17c87](https://github.com/dvsa/vol-app/commit/ab17c87d2a33031a49fa67d3c51b28994867e13d))
+* remove documentation ([#656](https://github.com/dvsa/vol-app/issues/656)) ([0985eb2](https://github.com/dvsa/vol-app/commit/0985eb2fac4cbc32b39ca655c0da6656eb98db05))
+* transfer VRM filter now loaded correctly from filter manager VOL-5975 ([#647](https://github.com/dvsa/vol-app/issues/647)) ([35a6b92](https://github.com/dvsa/vol-app/commit/35a6b92b11e5281b7b96a51874981c86a54f98f2))
+* try creating EBSR sub-tmp folder if not exists ([#650](https://github.com/dvsa/vol-app/issues/650)) ([bcaacdb](https://github.com/dvsa/vol-app/commit/bcaacdbd132b9debcf7104d9e316a911929e47b0))
+
+
+### Miscellaneous Chores
+
+* release v5.14.2-rc1 ([8914d27](https://github.com/dvsa/vol-app/commit/8914d270b62f10f833bbf1e0afadada0d05044c2))
+
 ## [5.14.1](https://github.com/dvsa/vol-app/compare/v5.14.0...v5.14.1) (2025-02-07)
 
 
