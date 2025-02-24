@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["search", "liquibase", "script"]
 
   task_iam_role_statements = [
     {

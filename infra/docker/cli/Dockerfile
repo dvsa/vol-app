@@ -16,7 +16,7 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-install pdo_mysql opcache intl
 
 # Add extra scirpts for batch jobs  
-ADD ./scripts/ /mnt/data/scripts/
+COPY ./scripts/ /mnt/data/scripts/
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
