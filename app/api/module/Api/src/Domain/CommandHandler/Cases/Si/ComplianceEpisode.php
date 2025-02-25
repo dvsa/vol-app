@@ -503,7 +503,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
             'category' => CategoryEntity::CATEGORY_COMPLIANCE,
             'subCategory' => CategoryEntity::TASK_SUB_CATEGORY_NR,
             'description' => 'ERRU case has been automatically created',
-            'actionDate' => date('Y-m-d', strtotime('+7 days')),
+            'actionDate' => date('Y-m-d'),
             'urgent' => 'Y',
             'case' => $case->getId(),
             'licence' => $case->getLicence()->getId(),

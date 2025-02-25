@@ -133,7 +133,8 @@ locals {
 
       command = (job.type == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
-        "--container=/var/www/html/config/container-cli.php"
+        "--container=/var/www/html/config/container-cli.php",
+        "-v"
       ], job.commands) : job.commands)
 
       image = lookup(local.job_types, job.type, local.job_types.default).image
