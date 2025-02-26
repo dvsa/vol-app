@@ -10,12 +10,6 @@ usage() {
     echo Usage: generate-conf.sh [options];
     echo;
     echo "-c <file>       : bash file containing config";
-    echo "-e <hostname>   : Elasticsearch server hostname";
-    echo "-h <dbname>     : Database host";
-    echo "-u <dbuser>     : Database user";
-    echo "-p <dbpassword> : Database password";
-    echo "-m <dbname>     : Database name";
-    echo "-d <dirpath>    : Directory for configuration files to be saved to";
     echo "-i <index>      : Generate config for named index. Config files will be generated as '<INDEX_NAME>.conf'"
     echo
     exit;
@@ -30,31 +24,13 @@ log() {
     fi
 }
 
-while getopts "c:e:h:u:p:m:d:i:" opt; do
+while getopts "c:i:" opt; do
   case $opt in
     c)
         if [ ! -f $OPTARG ]; then
           usage "Config file $OPTARG doesn't exist";
         fi
         source $OPTARG
-      ;;
-    e)
-        ELASTIC_HOST=$OPTARG
-      ;;
-    h)
-        DBHOST=$OPTARG
-      ;;
-    u)
-        DBUSER=$OPTARG
-      ;;
-    p)
-        DBPASSWORD=$OPTARG
-      ;;
-    m)
-        DBNAME=$OPTARG
-      ;;
-    d)
-        DIRPATH=$OPTARG
       ;;
     i)
         INDEXES=(${INDEXES[@]} "${OPTARG}")
