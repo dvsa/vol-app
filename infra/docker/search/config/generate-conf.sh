@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 usage() {
     if [ -n "$1" ]; then
@@ -110,7 +110,7 @@ fi
 
 newVersion=$(date +%s) #timestamp
 
-JDBC_LIBRARY=$(basename "`ls /opt/dvsa/olcs/mysql-connector*.jar`")
+JDBC_LIBRARY=$(basename "`ls /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar`")
 log "Replace placeholders in logstash config file(s)"
 for INDEX in "${INDEXES[@]}"; do
   CONFFILE="${INDEX}.conf"
