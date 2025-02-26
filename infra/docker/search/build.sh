@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 typeset -i errorcount
 let errorcount=0
