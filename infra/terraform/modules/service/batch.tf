@@ -105,6 +105,14 @@ locals {
           value = var.legacy_environment
         },
         {
+          name  = "DOMAIN_NAME"
+          value = var.domain_name
+        },
+        {
+          name  = "PROXY"
+          value = "proxy.${var.environment}.olcs.${var.domain_name}"
+        },
+        {
           name  = "APP_VERSION"
           value = var.batch.cli_version
         },
