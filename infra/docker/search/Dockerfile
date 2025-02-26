@@ -12,8 +12,8 @@ COPY mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysq
 # Delete default configuration
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
+# copy configuration
 COPY config/ /usr/share/logstash/config/
-
 COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 COPY build.sh /usr/share/logstash/build.sh
 
@@ -24,4 +24,3 @@ RUN chmod -R 755 /usr/share/logstash/*
 USER logstash
 
 CMD ["/usr/share/logstash/entrypoint.sh"]
-# build 2025-01-23-1536
