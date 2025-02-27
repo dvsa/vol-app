@@ -46,7 +46,7 @@ module "ecr" {
         rulePriority = 20,
         description  = "Keep last 5 non-release images",
         selection = {
-          tagStatus   = "any",
+          tagStatus   = "tagged",
           countType   = "imageCountMoreThan",
           countNumber = 5
         },
