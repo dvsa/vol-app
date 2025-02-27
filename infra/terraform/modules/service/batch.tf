@@ -96,7 +96,7 @@ locals {
       ]
     }
 
-    script = {
+    scripts = {
       image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
       environment = [
@@ -126,7 +126,11 @@ locals {
         {
           name      = "BATCH_DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
-        }
+        },
+        {
+          name      = "PRODTODEV_ASSUME_ROLE_ID"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
+        },
       ]
     }
   }

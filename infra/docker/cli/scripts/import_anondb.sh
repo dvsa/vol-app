@@ -6,7 +6,9 @@
 export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
 export NO_PROXY=169.254.169.254
-nonprod_assume_external_id=<%= @nonprod_assume_external_id %>
+nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
+domain=${DOMAIN}
+
 
 
 
@@ -25,9 +27,9 @@ function log_msg {
 }
 
 log_msg "Downloading latest version of anondb from S3"
-source .s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "${nonprod_assume_external_id}"
+source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "${nonprod_assume_external_id}"
 
-anondb_dump_dir="<%= @anondb_dump_dir %>"
+anondb_dump_dir="/mnt/data/anondump"
 anondb_archive_latest=`/usr/local/bin/aws s3 ls s3://devapp-olcs-pri-olcs-deploy-s3/anondata/olcs-db-anon-prod --recursive | sort | tail -n 1 | awk '{print $4}'`
 anondb_archive_filename="olcs-db-anon-latest-import.sql.gz"
 
@@ -37,8 +39,8 @@ if [ $? -ne 0 ]; then
  exit 1
 fi
 
-log_msg "Importing ${anondb_archive_filename} into olcsanondb-rds.<%= @domain %>"
-zcat $anondb_dump_dir/$anondb_archive_filename | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' | mysql --defaults-file=/usr/local/conf/anonrds.conf -holcsanondb-rds.<%= @domain %> -umaster
+log_msg "Importing ${anondb_archive_filename} into olcsanondb-rds.olcs.${domain}"
+zcat $anondb_dump_dir/$anondb_archive_filename | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' | mysql --defaults-file=/usr/local/conf/anonrds.conf -holcsanondb-rds.olcsanondb-rds.olcs.${domain} -umaster
 if [ $? -ne 0 ]; then
  log_err "Restore of latest anondb dump to anondb failed"
  exit 1

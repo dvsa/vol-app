@@ -4,10 +4,13 @@
 # It sends a dump of the anonymized database to a non-prod S3 bucket, as well as creating a snapshot for use in non-production environments
 # Anonymised database tables for use in local development environments are also dumped and stored in a non-prod S3 bucket
 
-export http_proxy=http://<%= @proxy %>
-export https_proxy=http://<%= @proxy %>
+export http_proxy=http://${PROXY}
+export https_proxy=http://${PROXY}
 export NO_PROXY=169.254.169.254
-nonprod_assume_external_id=<%= @nonprod_assume_external_id %>
+nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
+readdb=${READDB_HOST}
+domain=${DOMAIN}
+env=${ENVIRONMENT_NAME}
 
 token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 ec2_avail_zone=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/availability-zone)
@@ -69,12 +72,12 @@ function cleanup {
 
 DATE=$(date +"%Y-%m-%d")
 snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
-db_instance_id="<%= @olcs_readdb_id %>"
-restored_db_instance_id="<%= @olcs_anondb_id %>"
+db_instance_id=${readdb}
+restored_db_instance_id="olcsanondb-rds.olcs.$domain-temp"
 env_id=$(echo "$db_instance_id"|cut -d- -f1)
 olcsreaddb_snapshot_id="$env_id-olcs-rds-olcsreaddb-$snapshot_timestamp"
-anondb_snapshot_id="olcs-db-anon-<%= @env %>-$DATE"
-anondb_dump_dir="<%= @anondb_dump_dir %>"
+anondb_snapshot_id="olcs-db-anon-$env-$DATE"
+anondb_dump_dir="/mnt/data/anondump"
 anondb_tables="template template_test_data translation_key translation_key_text replacement public_holiday fee_type doc_template system_parameter feature_toggle financial_standing_rate"
 
 cleanup_items=()
@@ -263,7 +266,7 @@ log_msg "restoreSnapshot permissions successfully added for non-production accou
 
 mysqldump_bin=$(which mysqldump)
 log_msg "Dumping ${db_instance_endpoint} database"
-$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --routines --triggers --set-gtid-purged=OFF --add-drop-database --databases OLCS_RDS_OLCSDB | gzip > $anondb_dump_dir/olcs-db-anon-<%= @env %>-$DATE.sql.gz
+$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --routines --triggers --set-gtid-purged=OFF --add-drop-database --databases OLCS_RDS_OLCSDB | gzip > $anondb_dump_dir/olcs-db-anon-$env-$DATE.sql.gz
 if [ $? -ne 0 ]; then
   log_err "Unable to dump anonymised database."
   rm -rf $anondb_dump_dir/temp
@@ -273,50 +276,50 @@ fi
 
 mysql_bin=$(which mysql)
 log_msg "Dumping ${db_instance_endpoint} table names"
-$mysql_bin -h$db_instance_endpoint -umaster -p$rds_master_pass OLCS_RDS_OLCSDB -e 'SHOW TABLES;' | sed '/`OLCS_RDS_OLCSDB`/d' > $anondb_dump_dir/olcs-dbtables-anon-<%= @env %>-$DATE.txt
+$mysql_bin -h$db_instance_endpoint -umaster -p$rds_master_pass OLCS_RDS_OLCSDB -e 'SHOW TABLES;' | sed '/`OLCS_RDS_OLCSDB`/d' > $anondb_dump_dir/olcs-dbtables-anon-$env-$DATE.txt
 if [ $? -ne 0 ]; then
   log_err "Unable to dump table names."
-  rm -f $anondb_dump_dir/olcs-db*anon-<%= @env %>-$DATE.*
+  rm -f $anondb_dump_dir/olcs-db*anon-$env-$DATE.*
   rm -rf $anondb_dump_dir/temp
   cleanup
   exit 1
 fi
 
 log_msg "Dumping ${db_instance_endpoint} tables"
-$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --skip-triggers --skip-routines --set-gtid-purged=OFF --force OLCS_RDS_OLCSDB $anondb_tables | sed 's/`OLCS_RDS_OLCSDB`[.]//g' > $anondb_dump_dir/olcs-db-localdev-anon-<%= @env %>-$DATE.sql
+$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --skip-triggers --skip-routines --set-gtid-purged=OFF --force OLCS_RDS_OLCSDB $anondb_tables | sed 's/`OLCS_RDS_OLCSDB`[.]//g' > $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 if [ $? -ne 0 ]; then
   log_err "Unable to dump tables"
-  rm -f $anondb_dump_dir/olcs-db*anon-<%= @env %>-$DATE.*
+  rm -f $anondb_dump_dir/olcs-db*anon-$env-$DATE.*
   rm -rf $anondb_dump_dir/temp
   cleanup
   exit 1
 fi
 
 log_msg "Capturing necessary records from ${db_instance_endpoint} document table for extract"
-$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --skip-triggers --skip-routines --set-gtid-purged=OFF --force --single-transaction --where="id IN (SELECT document_id FROM doc_template)" OLCS_RDS_OLCSDB document | sed 's/`OLCS_RDS_OLCSDB`[.]//g' >> $anondb_dump_dir/olcs-db-localdev-anon-<%= @env %>-$DATE.sql
+$mysqldump_bin -h$db_instance_endpoint -umaster -p$rds_master_pass --skip-triggers --skip-routines --set-gtid-purged=OFF --force --single-transaction --where="id IN (SELECT document_id FROM doc_template)" OLCS_RDS_OLCSDB document | sed 's/`OLCS_RDS_OLCSDB`[.]//g' >> $anondb_dump_dir/olcs-db-localdev-anon-$env-$DATE.sql
 if [ $? -ne 0 ]; then
   log_err "Unable to dump document table"
-  rm -f $anondb_dump_dir/olcs-db*anon-<%= @env %>-$DATE.*
+  rm -f $anondb_dump_dir/olcs-db*anon-$env-$DATE.*
   rm -rf $anondb_dump_dir/temp
   cleanup
   exit 1
 fi
 
 source ./s3assume.sh "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole" "${nonprod_assume_external_id}"
-log_msg "Uploading ${anondb_dump_dir}/olcs-db-anon-<%= @env %>-${DATE}.sql.gz / \
-  ${anondb_dump_dir}/olcs-dbtables-anon-<%= @env %>-$DATE.txt / \
-  ${anondb_dump_dir}/olcs-db-localdev-anon-<%= @env %>-${DATE}.sql to s3://devapp-olcs-pri-olcs-deploy-s3"
-gzip $anondb_dump_dir//olcs-db-localdev-anon-<%= @env %>-${DATE}.sql
-/usr/bin/find $anondb_dump_dir -name "olcs-db*anon-<%= @env %>-${DATE}.*" -type f -exec /usr/local/bin/aws s3 cp {} s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \; 1>/dev/null
+log_msg "Uploading ${anondb_dump_dir}/olcs-db-anon-$env-${DATE}.sql.gz / \
+  ${anondb_dump_dir}/olcs-dbtables-anon-$env-$DATE.txt / \
+  ${anondb_dump_dir}/olcs-db-localdev-anon-$env-${DATE}.sql to s3://devapp-olcs-pri-olcs-deploy-s3"
+gzip $anondb_dump_dir//olcs-db-localdev-anon-$env-${DATE}.sql
+/usr/bin/find $anondb_dump_dir -name "olcs-db*anon-$env-${DATE}.*" -type f -exec /usr/local/bin/aws s3 cp {} s3://devapp-olcs-pri-olcs-deploy-s3/anondata/ \; 1>/dev/null
 if [ $? -ne 0 ]; then
   log_err "Unable to upload to s3://devapp-olcs-pri-olcs-deploy-s3"
-  rm -f $anondb_dump_dir/olcs-db*anon-<%= @env %>-$DATE.*
+  rm -f $anondb_dump_dir/olcs-db*anon-$env-$DATE.*
   rm -rf $anondb_dump_dir/temp
   cleanup
   exit 1
 fi
 
-cleanup_items+=("dumpfile:${anondb_dump_dir}/olcs-db*anon-<%= @env %>-${DATE}.*")
+cleanup_items+=("dumpfile:${anondb_dump_dir}/olcs-db*anon-$env-${DATE}.*")
 ####### CLEANUP
 # If successul, no longer any need to remove anon db snapshot
 cleanup_items=("${cleanup_items[@]/snapshot:${anondb_snapshot_id}}")
