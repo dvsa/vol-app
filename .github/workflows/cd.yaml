@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - prerelease
 
 concurrency:
   group: ${{ github.workflow }}
@@ -23,10 +24,31 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
-      - uses: googleapis/release-please-action@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Configure Release-Please for Branch
+        run: |
+          if [[ "${{ github.ref_name }}" == "prerelease" ]]; then
+            echo "Configuring for pre-releases..."
+            cp prerelease-config.json release-please-config.json
+          fi
+
+      - name: Run Release-Please
         id: release
+        uses: googleapis/release-please-action@v4
         with:
           target-branch: ${{ github.ref_name }}
+
+      - name: Cleanup
+        if: always()
+        run: |
+          if [[ "${{ github.ref_name }}" == "prerelease" ]]; then
+            git checkout -- release-please-config.json || true
+          fi
 
   orchestrator:
     name: Orchestrator
@@ -346,7 +368,7 @@ jobs:
     needs:
       - terraform_env_dev
       - liquibase-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@use-surefire-summary-with-percentage-pass-support
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: dev
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
