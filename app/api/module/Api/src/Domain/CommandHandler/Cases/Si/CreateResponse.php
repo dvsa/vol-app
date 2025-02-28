@@ -8,27 +8,20 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
-use Dvsa\Olcs\Api\Domain\QueueAwareTrait;
+use Dvsa\Olcs\Api\Domain\Command\Cases\Si\SendResponse as SendResponseCmd;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
-use Dvsa\Olcs\Api\Entity\Queue\Queue;
-use Dvsa\Olcs\Api\Entity\Si\ErruRequest;
 use Dvsa\Olcs\Api\Service\Nr\MsiResponse as MsiResponseService;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateResponse as CreateErruResponseCmd;
 use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
 use Psr\Container\ContainerInterface;
 
-/**
- * CreateResponse
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 final class CreateResponse extends AbstractCommandHandler implements AuthAwareInterface, TransactionedInterface
 {
     use AuthAwareTrait;
-    use QueueAwareTrait;
 
     public const RESPONSE_DOCUMENT_DESCRIPTION = 'ERRU MSI response for business case ID: %s';
+    public const MSG_RESPONSE_CREATED = 'Msi Response created';
 
     protected $repoServiceName = 'Cases';
 
@@ -43,7 +36,7 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
     protected $msiResponseService;
 
     /**
-     * Create the erru response
+     * Create the erru response, then trigger side effect to send it
      *
      * @param CommandInterface $command the command
      *
@@ -73,19 +66,18 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
         $erruRequest->queueErruResponse(
             $this->getCurrentUser(),
             new \DateTime($this->msiResponseService->getResponseDateTime()),
-            $responseDocument,
-            $this->getRepo()->getRefdataReference(ErruRequest::QUEUED_CASE_TYPE)
+            $responseDocument
         );
 
+        $requestId = $erruRequest->getId();
         $this->getRepo('ErruRequest')->save($erruRequest);
 
-        $requestId = $erruRequest->getId();
-        $queueCmd = $this->createQueue($requestId, Queue::TYPE_SEND_MSI_RESPONSE, ['id' => $requestId]);
-        $result->merge($this->handleSideEffect($queueCmd));
-
-        $result->addMessage('Msi Response queued');
+        $result->addMessage(self::MSG_RESPONSE_CREATED);
         $result->addId('case', $case->getId());
-        $result->addId('erruRequest', $erruRequest->getId());
+        $result->addId('erruRequest', $requestId);
+
+        $sendResponseCmd = SendResponseCmd::create(['id' => $requestId]);
+        $result->merge($this->handleSideEffect($sendResponseCmd));
 
         return $result;
     }

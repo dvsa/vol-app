@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
+use Dvsa\Olcs\Api\Domain\Command\Cases\Si\SendResponse;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -15,17 +18,11 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
-use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Api\Service\Nr\MsiResponse as MsiResponseService;
 use LmcRbacMvc\Service\AuthorizationService;
 use LmcRbacMvc\Identity\IdentityInterface;
 use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
 
-/**
- * CreateResponseTest
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class CreateResponseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -40,21 +37,16 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
             AuthorizationService::class => m::mock(AuthorizationService::class)
         ];
 
-        $this->refData = [
-            ErruRequestEntity::QUEUED_CASE_TYPE
-        ];
-
         parent::setUp();
     }
 
     /**
      * Tests creation and queuing of the Msi response
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $responseDate = '2015-12-25 00:00:00';
         $xml = 'xml string';
-        $userId = 111;
         $caseId = 333;
         $licenceId = 444;
         $documentId = 555;
@@ -63,11 +55,11 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
         $notificationNumber = 'notification number guid';
 
         $user = m::mock(UserEntity::class);
-        $user->shouldReceive('getId')->andReturn($userId);
 
         $responseDocument = m::mock(DocumentEntity::class);
 
-        $documentResult = new Result();
+        $documentMessage = 'document message';
+        $documentResult = $this->sideEffectResult($documentMessage);
         $documentResult->addId('document', $documentId);
 
         $documentData = [
@@ -83,52 +75,53 @@ class CreateResponseTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(UploadCmd::class, $documentData, $documentResult);
 
         $erruRequest = m::mock(ErruRequestEntity::class);
-        $erruRequest
-            ->shouldReceive('queueErruResponse')
-            ->once()
-            ->with(
-                $user,
-                m::type(\DateTime::class),
-                $responseDocument,
-                $this->refData[ErruRequestEntity::QUEUED_CASE_TYPE]
-            );
-        $erruRequest->shouldReceive('getNotificationNumber')->once()->andReturn($notificationNumber);
-        $erruRequest->shouldReceive('getId')->andReturn($erruRequestId);
+
+        $erruRequest->expects('queueErruResponse')
+            ->with($user, m::type(\DateTime::class), $responseDocument)
+            ->andReturnNull();
+        $erruRequest->expects('getNotificationNumber')->withNoArgs()->andReturn($notificationNumber);
+        $erruRequest->expects('getId')->withNoArgs()->andReturn($erruRequestId);
 
         $case = m::mock(CasesEntity::class);
-        $case->shouldReceive('getId')->times(2)->andReturn($caseId);
-        $case->shouldReceive('getErruRequest')->once()->andReturn($erruRequest);
+        $case->shouldReceive('getId')->withNoArgs()->times(2)->andReturn($caseId);
+        $case->expects('getErruRequest')->withNoArgs()->andReturn($erruRequest);
         $case->shouldReceive('getLicence->getId')->once()->andReturn($licenceId);
 
-        $this->repoMap['Cases']->shouldReceive('fetchById')->once()->with($caseId)->andReturn($case);
-        $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
-        $this->repoMap['Document']->shouldReceive('fetchById')->once()->with($documentId)->andReturn($responseDocument);
+        $this->repoMap['Cases']->expects('fetchById')->with($caseId)->andReturn($case);
+        $this->repoMap['ErruRequest']->expects('save')->with(m::type(ErruRequestEntity::class));
+        $this->repoMap['Document']->expects('fetchById')->with($documentId)->andReturn($responseDocument);
 
         $rbacIdentity = m::mock(IdentityInterface::class);
-        $rbacIdentity->shouldReceive('getUser')->andReturn($user);
+        $rbacIdentity->expects('getUser')->withNoArgs()->andReturn($user);
 
         $this->mockedSmServices[AuthorizationService::class]
-            ->shouldReceive('getIdentity->getUser')
-            ->andReturn($user);
+            ->expects('getIdentity')
+            ->withNoArgs()
+            ->andReturn($rbacIdentity);
 
         $this->mockedSmServices[MsiResponseService::class]
-            ->shouldReceive('getResponseDateTime')
-            ->once()
+            ->expects('getResponseDateTime')
+            ->withNoArgs()
             ->andReturn($responseDate);
 
         $this->mockedSmServices[MsiResponseService::class]
-            ->shouldReceive('create')
-            ->once()
+            ->expects('create')
             ->with($case)
             ->andReturn($xml);
 
-        $this->expectedQueueSideEffect(
-            $erruRequestId,
-            QueueEntity::TYPE_SEND_MSI_RESPONSE,
-            ['id' => $erruRequestId]
+        $msiSentMessage = 'sent message';
+
+        $this->expectedSideEffect(
+            SendResponse::class,
+            ['id' => $erruRequestId],
+            $this->sideEffectResult($msiSentMessage)
         );
 
         $result = $this->sut->handleCommand($command);
+        $messages = $result->getMessages();
         $this->assertInstanceOf(Result::class, $result);
+        $this->assertContains(CreateResponse::MSG_RESPONSE_CREATED, $messages);
+        $this->assertContains($msiSentMessage, $messages);
+        $this->assertContains($documentMessage, $messages);
     }
 }

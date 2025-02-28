@@ -31,7 +31,6 @@ use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 class ErruRequest extends AbstractErruRequest
 {
     public const DEFAULT_CASE_TYPE = 'erru_case_t_msinre'; //MSI with no response entered
-    public const QUEUED_CASE_TYPE = 'erru_case_t_msirnys'; //MSI with response queued
     public const FAILED_CASE_TYPE = 'erru_case_t_msirsf'; //MSI with response failure
     public const SENT_CASE_TYPE = 'erru_case_t_msirs'; //MSI with no response sent
     /**
@@ -73,10 +72,8 @@ class ErruRequest extends AbstractErruRequest
 
     /**
      * Returns whether the erru request is allowed to be modified (have si added and responses sent)
-     *
-     * @return bool
      */
-    public function canModify()
+    public function canModify(): bool
     {
         return $this->msiType->getId() === self::DEFAULT_CASE_TYPE;
     }
@@ -87,12 +84,10 @@ class ErruRequest extends AbstractErruRequest
     public function queueErruResponse(
         UserEntity $user,
         \DateTime $responseDateTime,
-        DocumentEntity $responseDocument,
-        RefData $msiType
-    ) {
+        DocumentEntity $responseDocument
+    ): void {
         $this->setResponseUser($user);
         $this->setResponseTime($responseDateTime);
         $this->setResponseDocument($responseDocument);
-        $this->setMsiType($msiType);
     }
 }

@@ -211,8 +211,6 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\DiscPrinting\CreatePsvVehicleList::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
-            Dvsa\Olcs\Cli\Service\Queue\Consumer\Nr\SendMsiResponse::class
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\UpdateTmNysiisName::class
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\GenericFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\Licence\ProcessContinuationNotSought::class
@@ -283,8 +281,6 @@ return [
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\DiscPrinting\CreateGoodsVehicleList::class,
             Queue::TYPE_CREATE_PSV_VEHICLE_LIST
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\DiscPrinting\CreatePsvVehicleList::class,
-            Queue::TYPE_SEND_MSI_RESPONSE
-                => Dvsa\Olcs\Cli\Service\Queue\Consumer\Nr\SendMsiResponse::class,
             Queue::TYPE_UPDATE_NYSIIS_TM_NAME
                 => Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\UpdateTmNysiisName::class,
             Queue::TYPE_CNS
