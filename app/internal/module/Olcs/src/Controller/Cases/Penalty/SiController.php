@@ -145,7 +145,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
             CreateResponseCmd::class,
             'Send response',
             'Are you sure you want to send the response?',
-            'Response created and queued for sending'
+            'Response sent'
         );
     }
 }

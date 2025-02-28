@@ -44,7 +44,6 @@ class Queue extends AbstractQueue
     public const TYPE_EBSR_REQUEST_MAP = 'que_typ_ebsr_request_map';
     public const TYPE_EBSR_PACK = 'que_typ_ebsr_pack';
     public const TYPE_EBSR_PACK_FAILED = 'que_typ_ebsr_pack_failed';
-    public const TYPE_SEND_MSI_RESPONSE = 'que_typ_msi_response';
     public const TYPE_EMAIL = 'que_typ_email';
     public const TYPE_PRINT = 'que_typ_print';
     public const TYPE_DISC_PRINTING_PRINT = 'que_typ_disc_printing_print';
@@ -82,7 +81,6 @@ class Queue extends AbstractQueue
         self::TYPE_EBSR_REQUEST_MAP,
         self::TYPE_EBSR_PACK,
         self::TYPE_EBSR_PACK_FAILED,
-        self::TYPE_SEND_MSI_RESPONSE,
         self::TYPE_EMAIL,
         self::TYPE_PRINT,
         self::TYPE_DISC_PRINTING,
