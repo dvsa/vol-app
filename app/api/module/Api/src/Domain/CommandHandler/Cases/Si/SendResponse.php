@@ -50,7 +50,7 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
 
         //here is where we would expect the response from national register.
         try {
-            $responseCode = $this->inrClient->makeRequest($xmlFile->getContent());
+            $responseCode = $this->inrClient->makeRequestReturnStatusCode($xmlFile->getContent());
         } catch (AdapterRuntimeException $e) {
             $this->updateStatus($erruRequest, ErruRequestEntity::FAILED_CASE_TYPE);
             throw new InrClientException('There was an error sending the INR response ' . $e->getMessage());
