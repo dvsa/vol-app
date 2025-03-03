@@ -5,6 +5,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si\Applied;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\Applied\Update as UpdatePenalty;
 use Dvsa\Olcs\Api\Domain\Repository\SiPenalty as SiPenaltyRepo;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType as ErruRequestTypeEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -28,6 +29,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->references = [
             SiPenaltyTypeEntity::class => [
                 999 => m::mock(SiPenaltyTypeEntity::class)
+            ],
+            ErruRequestTypeEntity::class => [
+                888 => m::mock(ErruRequestTypeEntity::class)
             ]
         ];
 
@@ -37,6 +41,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand()
     {
         $siPenaltyType = 999;
+        $erruRequested = 888;
         $penaltyId = 111;
         $startDate = '2015-12-25';
         $endDate = '2015-12-26';
@@ -50,7 +55,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
                 'imposed' => $imposed,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'imposedReason' => $imposedReason
+                'imposedReason' => $imposedReason,
+                'erruPenaltyRequested' => $erruRequested
             ]
         );
 
