@@ -1,14 +1,7 @@
 <?php
 
-/**
- * Generator
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication;
 
-use Doctrine\Common\Collections\Criteria;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGenerator;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices;
@@ -20,14 +13,7 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\Tra
 use Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\TransportManagerDeclarationReviewService;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\TransportManagerSignatureReviewService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Laminas\Filter\Word\UnderscoreToCamelCase;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Generator
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class Generator extends AbstractGenerator
 {
     /**

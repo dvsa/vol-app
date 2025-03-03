@@ -8,6 +8,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Tm\CheckRepute;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
@@ -444,6 +445,26 @@ class TransportManagerController extends AbstractController implements Transport
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
+    }
+
+    public function checkReputeAction()
+    {
+        $params = ['id' => $this->params()->fromRoute('transportManager')];
+        $command = CheckRepute::create($params);
+        $response = $this->handleCommand($command);
+
+        if ($response->isOk()) {
+            $this->flashMessengerHelper->addSuccessMessage('Repute check has been started');
+        } else {
+            $this->flashMessengerHelper->addErrorMessage('Error sending repute check');
+        }
+
+        return $this->redirectToRouteAjax(
+            'transport-manager/details',
+            [
+                'transportManager' => $this->params()->fromRoute('transportManager')
+            ]
+        );
     }
 
     /**

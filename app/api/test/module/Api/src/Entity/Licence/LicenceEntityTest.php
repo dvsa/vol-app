@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
 use Dvsa\Olcs\Api\Entity\Cases\Complaint as ComplaintEntity;
 use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Continuation;
 use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
@@ -3507,5 +3508,63 @@ class LicenceEntityTest extends EntityTester
             [RefData::APP_VEHICLE_TYPE_MIXED, 1, true],
             [RefData::APP_VEHICLE_TYPE_LGV, 1, false],
         ];
+    }
+
+    /**
+     * Checks when all addresses are populated, the correspondence address gets preference
+     */
+    public function testGetContactAddressCorrespondence(): void
+    {
+        $correspondenceCd = m::mock(ContactDetails::class);
+        $establishmentCd = m::mock(ContactDetails::class);
+        $tmCd = m::mock(ContactDetails::class);
+
+        $licence = $this->getLicenceWithContactDetails($correspondenceCd, $establishmentCd, $tmCd);
+        $this->assertEquals($correspondenceCd, $licence->getContactAddress());
+    }
+
+    /**
+     * Checks establishment address gets priority over transport consultant
+     */
+    public function testGetContactAddressEstablishment(): void
+    {
+        $establishmentCd = m::mock(ContactDetails::class);
+        $tmCd = m::mock(ContactDetails::class);
+
+        $licence = $this->getLicenceWithContactDetails(null, $establishmentCd, $tmCd);
+        $this->assertEquals($establishmentCd, $licence->getContactAddress());
+    }
+
+    /**
+     * Checks transport consultant address used if no other addresses
+     */
+    public function testGetContactAddressConsultant(): void
+    {
+        $tmCd = m::mock(ContactDetails::class);
+
+        $licence = $this->getLicenceWithContactDetails(null, null, $tmCd);
+        $this->assertEquals($tmCd, $licence->getContactAddress());
+    }
+
+    /**
+     * Checks null returned when no addresses present
+     */
+    public function testGetContactAddressNull(): void
+    {
+        $licence = $this->getLicenceWithContactDetails(null, null, null);
+        $this->assertNull($licence->getContactAddress());
+    }
+
+    private function getLicenceWithContactDetails(
+        ?m\MockInterface $correspondenceCd,
+        ?m\MockInterface $establishmentCd,
+        ?m\MockInterface $tmCd
+    ): Entity {
+        $licence = $this->instantiate(Entity::class);
+        $licence->setCorrespondenceCd($correspondenceCd);
+        $licence->setEstablishmentCd($establishmentCd);
+        $licence->setTransportConsultantCd($tmCd);
+
+        return $licence;
     }
 }

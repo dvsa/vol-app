@@ -368,9 +368,6 @@ return [
     TransferQuery\TmEmployment\GetSingle::class => QueryHandler\TmEmployment\GetSingle::class,
     TransferQuery\TmEmployment\GetList::class => QueryHandler\TmEmployment\GetList::class,
 
-    // National Register
-    TransferQuery\Nr\ReputeUrl::class => QueryHandler\Nr\ReputeUrl::class,
-
     // Bus Reg History View
     TransferQuery\Bus\HistoryList::class => QueryHandler\Bus\HistoryList::class,
 
