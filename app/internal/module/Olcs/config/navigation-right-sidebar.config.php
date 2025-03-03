@@ -522,8 +522,8 @@ return [
                         [
                             'id' => 'transport-manager-quick-actions-check-repute',
                             'label' => 'Check repute',
-                            'uri' => '/', //set by the listener on page load
-                            'target' => '_blank',
+                            'route' => 'transport-manager/check-repute',
+                            'use_route_match' => true,
                             'visible' => false
                         ],
                         [
