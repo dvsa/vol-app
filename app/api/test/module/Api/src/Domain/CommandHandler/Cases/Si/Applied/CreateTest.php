@@ -6,7 +6,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\Applied\Create as CreatePenalty
 use Dvsa\Olcs\Api\Domain\Repository\SeriousInfringement as SiRepo;
 use Dvsa\Olcs\Api\Domain\Repository\SiPenalty as SiPenaltyRepo;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
-use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType as ErruRequestTypeEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEntity;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
@@ -34,8 +34,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
             SiPenaltyTypeEntity::class => [
                 999 => m::mock(SiPenaltyTypeEntity::class)
             ],
-            ErruRequestTypeEntity::class => [
-                888 => m::mock(ErruRequestTypeEntity::class)
+            SiPenaltyErruRequestedEntity::class => [
+                888 => m::mock(SiPenaltyErruRequestedEntity::class)
             ]
 
         ];

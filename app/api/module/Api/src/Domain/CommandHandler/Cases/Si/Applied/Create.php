@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
-use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType as SiPenaltyRequestedTypeEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEntity;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreatePenaltyCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
@@ -46,7 +46,7 @@ final class Create extends AbstractCommandHandler
         }
 
         $siPenaltyType = $this->getRepo()->getReference(SiPenaltyTypeEntity::class, $command->getSiPenaltyType());
-        $siRequestedErru = $this->getRepo()->getReference(SiPenaltyRequestedTypeEntity::class, $command->getErruPenaltyRequested());
+        $siRequestedErru = $this->getRepo()->getReference(SiPenaltyErruRequestedEntity::class, $command->getErruPenaltyRequested());
         $startDate
             = ($command->getStartDate() !== null)
                 ? \DateTime::createFromFormat(self::DATE_FORMAT, $command->getStartDate()) : null;

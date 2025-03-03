@@ -5,7 +5,7 @@ namespace Dvsa\Olcs\Api\Entity\Si;
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
-use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType as SiPenaltyRequestedTypeEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEntity;
 
 /**
  * SiPenalty Entity
@@ -30,7 +30,7 @@ class SiPenalty extends AbstractSiPenalty
     public function __construct(
         SiEntity $seriousInfringement,
         SiPenaltyTypeEntity $siPenaltyType,
-        SiPenaltyRequestedTypeEntity $requestedErru,
+        SiPenaltyErruRequestedEntity $requestedErru,
         $imposed,
         \DateTime $startDate = null,
         \DateTime $endDate = null,
@@ -42,11 +42,11 @@ class SiPenalty extends AbstractSiPenalty
 
     /**
      * @param string $imposed
-     * @param string $reasonNotImposed
+     * @param string $reasonNotImposedz
      */
     public function update(
         SiPenaltyTypeEntity $siPenaltyType,
-        SiPenaltyRequestedTypeEntity $requestedErru,
+        SiPenaltyErruRequestedEntity $requestedErru,
         $imposed,
         \DateTime $startDate = null,
         \DateTime $endDate = null,
