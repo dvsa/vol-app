@@ -44,7 +44,8 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     protected $defaultData = [
         'case' => AddFormDefaultData::FROM_ROUTE,
         'si' => AddFormDefaultData::FROM_ROUTE,
-        'id' => AddFormDefaultData::FROM_ROUTE
+        'id' => AddFormDefaultData::FROM_ROUTE,
+        'erruPenaltyRequested' => []
     ];
 
     /**
@@ -157,5 +158,39 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         }
 
         return $response->getResult();
+    }
+
+    public function alterFormForAdd($form, $initialData)
+    {
+
+        $optionData = [];
+
+        foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
+            $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
+        }
+
+        $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
+
+        return $form;
+
+
+
+    }
+
+    public function alterFormForEdit($form, $initialData)
+    {
+
+        $optionData = [];
+
+        foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
+            $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
+        }
+
+        $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
+
+        return $form;
+
+
+
     }
 }

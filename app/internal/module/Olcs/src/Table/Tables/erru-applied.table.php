@@ -49,6 +49,10 @@ return [
             'formatter' => fn($data) => $data['siPenaltyType']['id'] . ' - ' . $data['siPenaltyType']['description'],
         ],
         [
+            'title' => 'Requested Identifier',
+            'formatter' => fn($data) => $data['erruPenaltyRequested']['penaltyRequestedIdentifier'],
+        ],
+        [
             'title' => 'Start date',
             'formatter' => function ($data, $column) {
                 /**
