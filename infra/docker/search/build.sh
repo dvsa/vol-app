@@ -85,104 +85,6 @@ logWarning() {
     fi
 }
 
-function stopService()
-{
-    typeset -i retryCount=0
-    typeset -i sleepTime=20
-    typeset -i retryLimit=6
-
-    serviceName="$1"
-
-    if [[ $2 =~ ^[0-9]+$ ]] ; then
-        let sleepTime=$((10#$2))
-    fi
-
-    if [[ $3 =~ ^[0-9]+$ ]] ; then
-        let retryLimit=$((10#$3))
-    fi
-
-    while true
-    do
-        response=$(/usr/bin/systemctl --quiet status ${serviceName})
-        ret=$?
-
-        if [[ $ret == 3 ]]; then
-            logInfo "The [${serviceName}] service is already stopped." ${syslogEnabled}
-            return 0
-        else
-            logInfo "Stopping [${serviceName}] service." ${syslogEnabled}
-            response=$(/usr/bin/systemctl --quiet --job-mode=fail stop ${serviceName})
-            ret=$?
-
-            if [[ $ret != 0 ]]; then
-                let retryCount=$((retryCount + 1))
-                logInfo "Failed to stop the [${serviceName}] service on attempt [${retryCount}] - error code [${ret}]." ${syslogEnabled}
-
-                if (( ${retryCount} < ${retryLimit} )); then
-                    logInfo "Backing off for [${sleepTime}] seconds." ${syslogEnabled}
-                    sleep ${sleepTime}
-                else
-                    logError "Failed to stop the [${serviceName}] service after [${retryCount}] attempts." ${syslogEnabled}
-                    return 1
-                fi
-            else
-                logInfo "Successfully stopped the [${serviceName}] service." ${syslogEnabled}
-                return 0
-            fi
-        fi
-        blankline
-    done
-}
-
-function startService()
-{
-    typeset -i retryCount=0
-    typeset -i sleepTime=20
-    typeset -i retryLimit=6
-    
-    serviceName="$1"
-
-    if [[ $2 =~ ^[0-9]+$ ]] ; then
-        let sleepTime=$((10#$2))
-    fi
-
-    if [[ $3 =~ ^[0-9]+$ ]] ; then
-        let retryLimit=$((10#$3))
-    fi
-
-    while true
-    do
-        response=$(/usr/bin/systemctl --quiet status ${serviceName})
-        ret=$?
-
-        if [[ $ret == 0 ]]; then
-            logInfo "The [${serviceName}] service is already started." ${syslogEnabled}
-            return 0
-        else
-            logInfo "Starting [${serviceName}] service." ${syslogEnabled}
-            response=$(/usr/bin/systemctl --quiet --job-mode=fail start ${serviceName})
-            ret=$?
-
-            if [[ $ret != 0 ]]; then
-                let retryCount=$((retryCount + 1))
-                logInfo "Failed to start the [${serviceName}] service on attempt [${retryCount}] - error code [${ret}]." ${syslogEnabled}
-    
-                if (( ${retryCount} < ${retryLimit} )); then
-                    logInfo "Backing off for [${sleepTime}] seconds." ${syslogEnabled}
-                    sleep ${sleepTime}
-                else
-                    logError "Failed to start the [${serviceName}] service after [${retryCount}] attempts." ${syslogEnabled}
-                    return 1
-                fi
-            else
-                logInfo "Successfully started the [${serviceName}] service." ${syslogEnabled}
-                return 0
-            fi
-        fi
-        blankline
-    done
-}
-
 function removeLastrun()
 {
     logInfo "Removing last run file [${1}." ${2}
@@ -296,7 +198,7 @@ function purgeOldAliases()
 
 delay=70 # seconds
 newVersion=$(date +%Y%m%d%H%M%S) #timestamp
-confDir='/etc/logstash/conf.d'
+confDir='/usr/share/logstash/config/'
 processInParallel=false
 syslogEnabled=true
 promoteNewIndex=false
@@ -429,8 +331,7 @@ if [ $processInParallel = true ]; then
         doubleline
         exit $errorcount
     fi
-
-    for index in "${INDEXES[@]}"
+   for index in "${INDEXES[@]}"
     do
     
         logInfo "Updating config file for [${index}] index and new version [${index}_v${newVersion}]." ${syslogEnabled}
