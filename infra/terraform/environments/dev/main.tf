@@ -550,6 +550,11 @@ module "service" {
         commands = ["source /mnt/data/populate_anondb.sh"],
         type     = "scripts"
       },
+      {
+        name     = "ni-compliance",
+        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
+        type     = "scripts"
+      },
     ]
   }
 }
