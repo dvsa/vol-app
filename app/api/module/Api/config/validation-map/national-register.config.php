@@ -5,9 +5,6 @@ use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
 
 return [
-    // Queries
-    QueryHandler\Nr\ReputeUrl::class => Misc\IsInternalUser::class,
-
     /**
      * This is for ATOS to call when they verify whether a licence exists prior to sending erru requests
      */
@@ -20,7 +17,7 @@ return [
     CommandHandler\Cases\Si\ComplianceEpisodeDocument::class => Misc\IsAnonymousUser::class,
 
     /**
-     * Create response xml and send to ATOS
+     * Create response xml and send to INR
      */
     CommandHandler\Cases\Si\CreateResponse::class => Misc\IsInternalUser::class,
     CommandHandler\Cases\Si\SendResponse::class => Misc\IsInternalUser::class,

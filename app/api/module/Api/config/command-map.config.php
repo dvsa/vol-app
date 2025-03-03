@@ -932,6 +932,7 @@ return [
     TransferCommand\OrganisationPerson\DeleteList::class => CommandHandler\OrganisationPerson\DeleteList::class,
 
     // Transfer - TransportManager
+    TransferCommand\Tm\CheckRepute::class => CommandHandler\Tm\CheckReputeFactory::class,
     TransferCommand\Tm\Create::class => CommandHandler\Tm\Create::class,
     TransferCommand\Tm\CreateNewUser::class => CommandHandler\Tm\CreateNewUserFactory::class,
     TransferCommand\Tm\Update::class => CommandHandler\Tm\Update::class,
