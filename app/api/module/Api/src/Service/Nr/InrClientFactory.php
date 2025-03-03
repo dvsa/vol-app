@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Service\Nr;
 
 use Dvsa\Olcs\Api\Service\AccessToken\Provider;
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
+use Laminas\Http\Request;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Http\Client as RestClient;
 use Psr\Container\ContainerInterface;
 
-/**
- * Class InrClientFactory
- * @package Dvsa\Olcs\Api\Service\Nr
- */
 class InrClientFactory implements FactoryInterface
 {
     /**
@@ -41,6 +40,7 @@ class InrClientFactory implements FactoryInterface
         $httpClient->setAdapter($config['nr']['inr_service']['adapter']);
         $httpClient->getAdapter()->setOptions($config['nr']['inr_service']['options']);
         $httpClient->setHeaders($headers);
+        $httpClient->setMethod(Request::METHOD_POST);
         $wrapper = new ClientAdapterLoggingWrapper();
         $wrapper->wrapAdapter($httpClient);
         return new InrClient($httpClient);

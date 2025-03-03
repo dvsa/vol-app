@@ -1,117 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Service\Nr;
 
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
-use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime as DateTimeExtended;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
 use Doctrine\Common\Collections\Collection as CollectionInterface;
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
-use Olcs\XmlTools\Xml\XmlNodeBuilder;
 
-class MsiResponse
+class MsiResponse extends AbstractXmlRequest
 {
     public const AUTHORITY_TRU = 'Transport Regulation Unit';
     public const AUTHORITY_TC = 'Traffic Commissioner';
-
-    /**
-     * @var string $responseDateTime
-     */
-    private string $responseDateTime = '';
-
-    private string $timeoutDateTime = '';
-
-    /**
-     * @var String
-     */
-    private $technicalId;
-
-    /**
-     * @var String
-     */
-    private $authority;
-
-    /**
-     * MsiResponse constructor
-     *
-     * @param XmlNodeBuilder $xmlBuilder xml node builder
-     *
-     * @return MsiResponse
-     */
-    public function __construct(private readonly XmlNodeBuilder $xmlBuilder, private readonly string $erruVersion)
-    {
-    }
-
-    public function getXmlBuilder(): XmlNodeBuilder
-    {
-        return $this->xmlBuilder;
-    }
-
-    public function getResponseDateTime(): string
-    {
-        return $this->responseDateTime;
-    }
-
-    public function setResponseDateTime(string $responseDateTime): void
-    {
-        $this->responseDateTime = $responseDateTime;
-    }
-
-    public function setTimeoutDateTime(string $timeoutDateTime): void
-    {
-        $this->timeoutDateTime = $timeoutDateTime;
-    }
-
-    public function getTimeoutDateTime(): string
-    {
-        return $this->timeoutDateTime;
-    }
-
-    /**
-     * Gets the technical id
-     *
-     * @return String
-     */
-    public function getTechnicalId()
-    {
-        return $this->technicalId;
-    }
-
-    /**
-     * Sets the technical id
-     *
-     * @param String $technicalId technical id
-     *
-     * @return void
-     */
-    public function setTechnicalId($technicalId)
-    {
-        $this->technicalId = $technicalId;
-    }
-
-    /**
-     * Gets the originating authority
-     *
-     * @return String
-     */
-    public function getAuthority()
-    {
-        return $this->authority;
-    }
-
-    /**
-     * Sets the originating authority
-     *
-     * @param String $authority originating authority
-     *
-     * @return void
-     */
-    public function setAuthority($authority)
-    {
-        $this->authority = $authority;
-    }
 
     /**
      * Creates the Msi response, returns xml string
@@ -124,22 +29,21 @@ class MsiResponse
             throw new ForbiddenException('Unable to send Msi Response');
         }
 
-        $this->setTechnicalId($this->generateGuid());
-        $dateTime = new DateTimeExtended();
-        $this->setResponseDateTime($dateTime->format(\DateTime::ATOM));
-        $this->setTimeoutDateTime($dateTime->add(new \DateInterval('PT10S'))->format(\DateTime::ATOM));
+        $licence = $case->getLicence();
 
-        if ($case->getLicence() === null) {
-            $this->setAuthority(self::AUTHORITY_TRU);
+        if ($licence instanceof Licence) {
+            $contactDetails = $licence->getContactAddress();
+            $this->authority = self::AUTHORITY_TC;
         } else {
-            $this->setAuthority(self::AUTHORITY_TC);
+            $contactDetails = null;
+            $this->authority = self::AUTHORITY_TRU;
         }
 
         $erruRequest = $case->getErruRequest();
 
         $xmlData = [
-            'Header' => $this->getHeader($erruRequest),
-            'Body' => $this->getBody($case, $erruRequest)
+            'Header' => $this->getHeader($erruRequest->getWorkflowId(), $erruRequest->getMemberStateCode()->getId()),
+            'Body' => $this->getBody($case, $erruRequest, $contactDetails)
         ];
 
         $this->xmlBuilder->setData($xmlData);
@@ -147,39 +51,30 @@ class MsiResponse
     }
 
     /**
-     * Fetches array of header information for the XML
-     */
-    private function getHeader(ErruRequestEntity $erruRequest): array
-    {
-        //if member state was GB, we need to make this UK
-        $memberStateCode = $erruRequest->getMemberStateCode()->getId();
-        $filteredMemberStateCode = ($memberStateCode === 'GB' ? 'UK' : $memberStateCode);
-
-        return [
-            'name' => 'Header',
-            'attributes' => [
-                'version' => $this->erruVersion,
-                'technicalId' => $this->getTechnicalId(),
-                'workflowId' => $erruRequest->getWorkflowId(),
-                'sentAt' => $this->getResponseDateTime(),
-                'timeoutValue' => $this->timeoutDateTime,
-                'from' => 'UK',
-                'to' => $filteredMemberStateCode
-            ],
-        ];
-    }
-
-    /**
      * Fetches array of information for the xml body
      */
-    private function getBody(CasesEntity $cases, ErruRequestEntity $erruRequest): array
+    private function getBody(CasesEntity $cases, ErruRequestEntity $erruRequest, ?ContactDetails $contactDetails): array
     {
+        $address = 'unknown';
+        $postCode = 'unknown';
+        $city = 'unknown';
+        $country = 'UK';
+
+        if ($contactDetails instanceof ContactDetails) {
+            $addressInfo = $contactDetails->getAddress()->toArray();
+
+            $address = $addressInfo['addressLine1'] ?? 'unknown';
+            $postCode = $addressInfo['postcode'] ?? 'unknown';
+            $city = $addressInfo['town'] ?? 'unknown';
+            $country = $addressInfo['country'] ?? 'UK';
+        }
+
         return [
             'name' => 'Body',
             'attributes' => [
                 'businessCaseId' => $erruRequest->getNotificationNumber(),
                 'originatingAuthority' => $erruRequest->getOriginatingAuthority(),
-                'respondingAuthority' => $this->getAuthority(),
+                'respondingAuthority' => $this->authority,
                 'statusCode' => 'OK',
             ],
             'nodes' => [
@@ -195,10 +90,10 @@ class MsiResponse
                         0 => [
                             'name' => 'TransportUndertakingAddress',
                             'attributes' => [
-                                'address' => 'address',
-                                'postcode' => 'postcode',
-                                'city' => 'city',
-                                'country' => 'UK',
+                                'address' => $address,
+                                'postCode' => $postCode,
+                                'city' => $city,
+                                'country' => $country,
                             ],
                         ],
                     ],
@@ -227,12 +122,13 @@ class MsiResponse
 
             foreach ($penalties as $penalty) {
                 $newPenalty = [];
-                $newPenalty['authorityImposingPenalty'] = $this->getAuthority();
+                $newPenalty['authorityImposingPenalty'] = $this->authority;
                 $newPenalty['penaltyTypeImposed'] = $penalty->getSiPenaltyType()->getId();
+                $newPenalty['penaltyImposedIdentifier'] = $penalty->getErruPenaltyRequested()->getPenaltyRequestedIdentifier();
 
                 if ($penalty->getImposed() === 'N') {
                     $newPenalty['isImposed'] = 'false';
-                    $newPenalty['reasonNotImposed'] = $penalty->getReasonNotImposed();
+                    $newPenalty['reason'] = $penalty->getReasonNotImposed();
                 } else {
                     $newPenalty['isImposed'] = 'true';
                 }
@@ -256,21 +152,5 @@ class MsiResponse
         }
 
         return $formattedPenalties;
-    }
-
-    private function generateGuid(): string
-    {
-        // com_create_guid is unavailable on our environments
-        return sprintf(
-            '%04X%04X-%04X-%04X-%04X-%04X%04X%04X',
-            mt_rand(0, 65535),
-            mt_rand(0, 65535),
-            mt_rand(0, 65535),
-            mt_rand(16384, 20479),
-            mt_rand(32768, 49151),
-            mt_rand(0, 65535),
-            mt_rand(0, 65535),
-            mt_rand(0, 65535)
-        );
     }
 }

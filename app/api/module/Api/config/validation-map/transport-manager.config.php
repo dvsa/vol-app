@@ -39,6 +39,8 @@ return [
     CommandHandler\TransportManagerApplication\UpdateDetailsFactory::class => Misc\CanAccessTmaWithId::class,
     CommandHandler\Variation\TransportManagerDeleteDelta::class     => Misc\CanAccessApplicationWithId::class,
 
+    CommandHandler\Tm\CheckRepute::class => Misc\IsInternalEdit::class,
+    CommandHandler\Tm\CheckReputeFactory::class => Misc\IsInternalEdit::class,
     CommandHandler\Tm\CreateNewUser::class                          => Misc\CanAccessApplicationWithApplication::class,
     CommandHandler\Tm\CreateNewUserFactory::class                   => Misc\CanAccessApplicationWithApplication::class,
     CommandHandler\Tm\UpdateNysiisName::class                       => Misc\IsSystemUser::class,
