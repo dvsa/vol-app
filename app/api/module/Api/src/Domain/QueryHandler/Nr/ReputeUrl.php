@@ -37,9 +37,9 @@ class ReputeUrl extends AbstractQueryHandler implements NationalRegisterAwareInt
         /* @var $transportManager TransportManagerEntity */
         $transportManager = $repo->fetchUsingId($query);
 
-        if (!$transportManager->hasReputeCheckData()) {
+        //if (!$transportManager->hasReputeCheckData()) {
             return ['reputeUrl' => null];
-        }
+        //}
 
         $person = $transportManager->getHomeCd()->getPerson();
 
