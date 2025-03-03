@@ -2,7 +2,7 @@
 
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
-use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as Entity;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement;
@@ -30,7 +30,7 @@ class SiPenaltyEntityTest extends EntityTester
     {
         $si = m::mock(SeriousInfringement::class);
         $penaltyType = m::mock(SiPenaltyType::class);
-        $erruRequested = m::mock(SiPenaltyRequestedType::class);
+        $erruRequested = m::mock(SiPenaltyErruRequested::class);
         $startDate = new \DateTime('2015-12-25');
         $endDate = new \DateTime('2015-12-26');
         $imposed = 'Y';
