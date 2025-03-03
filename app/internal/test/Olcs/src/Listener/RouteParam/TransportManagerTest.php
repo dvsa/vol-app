@@ -1,7 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Helper\Placeholder\Container;
+use Laminas\View\HelperPluginManager;
+use LmcRbacMvc\Service\AuthorizationService;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -15,12 +21,11 @@ use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\Uri as PageUri;
 use Laminas\Navigation\Page\Mvc as PageMvc;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TmQry;
-use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeQry;
 use Common\RefData;
 
 class TransportManagerTest extends MockeryTestCase
 {
-    public function testAttach()
+    public function testAttach(): void
     {
         $sut = new TransportManager();
 
@@ -34,10 +39,9 @@ class TransportManagerTest extends MockeryTestCase
     }
 
     /**
-     * Tests onTransportManager
-     * @dataProvider onTransportManagerProvider
+     * @dataProvider dpInternalEditProvider
      */
-    public function testOnTransportManager($reputeUrl)
+    public function testOnTransportManager(bool $isInternalEdit): void
     {
         $tmId = 1;
 
@@ -75,7 +79,6 @@ class TransportManagerTest extends MockeryTestCase
 
         $mockCheckRepute = m::mock(PageUri::class);
         $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
-        $mockCheckRepute->shouldReceive('setUri')->with($reputeUrl);
 
         $mockDetailsReview = m::mock(PageMvc::class);
         $mockDetailsReview->shouldReceive('setVisible')->with(true);
@@ -84,7 +87,8 @@ class TransportManagerTest extends MockeryTestCase
         $sidebarNav->shouldReceive('findById')
             ->with('transport_manager_details_review')
             ->andReturn($mockDetailsReview);
-        $sidebarNav->shouldReceive('findById')
+        $sidebarNav->expects('findById')
+            ->times($isInternalEdit ? 1 : 0)
             ->with('transport-manager-quick-actions-check-repute')
             ->andReturn($mockCheckRepute);
         $sidebarNav->shouldReceive('findById')
@@ -120,20 +124,20 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $this->setupGetTransportManager($sut, $tm, $reputeUrl);
+        $this->setupGetTransportManager($sut, $isInternalEdit, $tm);
 
-        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
+        $mockContainer = m::mock(Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
+        $mockPlaceholder = m::mock(Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
@@ -143,7 +147,10 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    public function testOnTransportManagerNotMerged()
+    /**
+     * @dataProvider dpInternalEditProvider
+     */
+    public function testOnTransportManagerNotMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
         $context = [
@@ -165,6 +172,9 @@ class TransportManagerTest extends MockeryTestCase
         $pageTitle = '<a class="govuk-link" href="' . $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
+        $mockCheckRepute = m::mock(PageUri::class);
+        $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
+
         $sut = new TransportManager();
 
         $mockUrl = m::mock('stdClass');
@@ -182,26 +192,31 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $this->setupGetTransportManager($sut, $tm);
+        $this->setupGetTransportManager($sut, $isInternalEdit, $tm);
 
-        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
+        $mockContainer = m::mock(Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
+        $mockPlaceholder = m::mock(Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
 
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setSidebarNavigation($sidebarNav);
+
+        $sidebarNav->expects('findById')
+            ->times($isInternalEdit ? 1 : 0)
+            ->with('transport-manager-quick-actions-check-repute')
+            ->andReturn($mockCheckRepute);
 
         $sidebarNav->shouldReceive('findById')
             ->with('transport-manager-quick-actions-unmerge')
@@ -228,7 +243,11 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    public function testOnTransportManagerMerged()
+
+    /**
+     * @dataProvider dpInternalEditProvider
+     */
+    public function testOnTransportManagerMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
         $context = [
@@ -250,6 +269,9 @@ class TransportManagerTest extends MockeryTestCase
         $pageTitle = '<a class="govuk-link" href="' . $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
+        $mockCheckRepute = m::mock(PageUri::class);
+        $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
+
         $sut = new TransportManager();
 
         $mockUrl = m::mock('stdClass');
@@ -267,20 +289,25 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $this->setupGetTransportManager($sut, $tm);
+        $sidebarNav->expects('findById')
+            ->times($isInternalEdit ? 1 : 0)
+            ->with('transport-manager-quick-actions-check-repute')
+            ->andReturn($mockCheckRepute);
 
-        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
+        $this->setupGetTransportManager($sut, $isInternalEdit, $tm);
+
+        $mockContainer = m::mock(Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
+        $mockPlaceholder = m::mock(Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
@@ -305,21 +332,18 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    private function setupGetTransportManager(TransportManager $sut, array $tmData = [], $reputeUrl = null)
+    private function setupGetTransportManager(TransportManager $sut, bool $isInternalEdit, array $tmData): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
         $mockTmResponse = m::mock();
-        $mockNrResponse = m::mock();
-        $mockAuthService = m::mock();
-        if ($reputeUrl) {
-            $mockAuthService
-                ->shouldReceive('isGranted')
-                ->with(RefData::PERMISSION_INTERNAL_EDIT)
-                ->andReturn(true)
-                ->once()
-                ->getMock();
-        }
+        $mockAuthService = m::mock(AuthorizationService::class);
+
+        $mockAuthService
+            ->expects('isGranted')
+            ->with(RefData::PERMISSION_INTERNAL_EDIT)
+            ->andReturn($isInternalEdit)
+            ->getMock();
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->with(m::type(TmQry::class))->once()->andReturnUsing(
             function ($dto) {
@@ -329,56 +353,39 @@ class TransportManagerTest extends MockeryTestCase
             }
         );
 
-        $mockAnnotationBuilder->shouldReceive('createQuery')->with(m::type(ReputeQry::class))->once()->andReturnUsing(
-            function ($dto) {
-                $this->assertInstanceOf(ReputeQry::class, $dto);
-                $this->assertSame(1, $dto->getId());
-                return 'NR QUERY';
-            }
-        );
-
         $mockQueryService->shouldReceive('send')->with('TM QUERY')->once()->andReturn($mockTmResponse);
-        $mockQueryService->shouldReceive('send')->with('NR QUERY')->once()->andReturn($mockNrResponse);
 
         $mockTmResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
         $mockTmResponse->shouldReceive('getResult')->with()->once()->andReturn($tmData);
-        $mockNrResponse->shouldReceive('isOk')->once()->andReturn(true);
-        $mockNrResponse->shouldReceive('getResult')->once()->andReturn(['reputeUrl' => $reputeUrl]);
 
         $sut->setAnnotationBuilder($mockAnnotationBuilder);
         $sut->setQueryService($mockQueryService);
         $sut->setAuthService($mockAuthService);
     }
 
-    /**
-     * data provider for testOnTransportManager
-     */
-    public function onTransportManagerProvider()
+    public function dpInternalEditProvider(): array
     {
         return [
-            ['http://www.example.com'],
-            [null]
+            [true],
+            [false],
         ];
     }
 
-    /**
-     * Tests create service
-     */
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
         $mockAuthService = m::mock();
 
         $sidebarNav = m::mock(Navigation::class);
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
-        $mockSl->shouldReceive('get')->with(\LmcRbacMvc\Service\AuthorizationService::class)->andReturn($mockAuthService);
+        $mockSl->shouldReceive('get')->with(AuthorizationService::class)->andReturn($mockAuthService);
 
         $sut = new TransportManager();
         $service = $sut->__invoke($mockSl, TransportManager::class);

@@ -350,17 +350,12 @@ return [
     ],
     'nr' => [
         'inr_service' => [
-            'uri' => '',
             'oauth2' => [
                 'client_id' => '',
                 'client_secret' => '',
                 'token_url' => '',
                 'scope' => '',
-                'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
             ]
-        ],
-        'repute_url' => [
-            'uri' => ''
         ],
     ],
     'data-gov-uk-export' => [
