@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Nr;
 
 use Dvsa\Olcs\Api\Service\AccessToken\Provider;
@@ -37,8 +39,6 @@ class InrClientFactoryTest extends TestCase
                     'options' => [],
                     'oauth2' => $oauth2
                 ],
-
-
             ]
         ];
 
@@ -47,7 +47,6 @@ class InrClientFactoryTest extends TestCase
 
         $mockTokenProvider = m::mock(Provider::class)
             ->expects('getToken')->andReturn('token')->getMock();
-
 
         $mockSl = m::mock(ContainerInterface::class);
 
@@ -64,12 +63,10 @@ class InrClientFactoryTest extends TestCase
         $wrapper = $restClient->getAdapter();
         $curl = $wrapper->getAdapter();
 
-
         $this->assertInstanceOf(InrClientInterface::class, $service);
         $this->assertInstanceOf(RestClient::class, $restClient);
         $this->assertInstanceOf(ClientAdapterLoggingWrapper::class, $wrapper);
         $this->assertInstanceOf(Curl::class, $curl);
         $this->assertEquals('Bearer token', $restClient->getHeader('Authorization'));
-
     }
 }
