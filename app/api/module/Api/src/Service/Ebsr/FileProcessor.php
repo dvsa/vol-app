@@ -61,7 +61,11 @@ class FileProcessor implements FileProcessorInterface
         $targetDir = $this->tmpDir . $this->subDirPath;
 
         if (!$this->fileSystem->exists($targetDir)) {
-            throw new \RuntimeException('The specified tmp directory does not exist');
+            try {
+                $this->fileSystem->mkdir($targetDir);
+            } catch (\Exception $e) {
+                throw new \RuntimeException('Unable to create the tmp directory: ' . $e->getMessage());
+            }
         }
 
         $file = $this->fileUploader->download($identifier);

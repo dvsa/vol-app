@@ -98,7 +98,7 @@ class ByConversation extends AbstractQueryHandler implements ToggleRequiredInter
             function (&$message) use ($readRoles) {
                 $message['userMessageReads'] = array_filter(
                     $message['userMessageReads'],
-                    fn($umr) => count(array_filter($umr['user']['roles'], fn($r) => in_array($r['role'], $readRoles))) > 0,
+                    fn($umr) => !empty($umr['user']) ? count(array_filter($umr['user']['roles'], fn($r) => in_array($r['role'], $readRoles))) > 0 : false,
                 );
 
                 usort($message['userMessageReads'], fn($a, $b) => $a['createdOn'] <=> $b['createdOn']);

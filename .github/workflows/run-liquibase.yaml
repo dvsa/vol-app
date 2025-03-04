@@ -87,7 +87,7 @@ jobs:
   build:
     environment: ${{ inputs.environment }}
     outputs:
-      image_tag: ${{ steps.build-details.outputs.image_tag }}
+      image_tag: ${{ steps.etl-sha.outputs.image_tag }}
       etl_sha: ${{ steps.etl-sha.outputs.sha }}
       etl_ref: ${{ inputs.etl_ref }}
     runs-on: ubuntu-24.04-arm
@@ -112,6 +112,24 @@ jobs:
           path: infra/docker/liquibase/changelog
           ref: ${{ inputs.etl_ref }}
           token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Check ETL tag existence
+        if: inputs.etl_ref != 'main'
+        id: check-tag
+        run: |
+          TAG_EXISTS=$(gh api repos/dvsa/olcs-etl/git/refs/tags/${{ inputs.etl_ref }} --silent && echo 'true' || echo 'false')
+          echo "exists=$TAG_EXISTS" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+      - name: Create ETL tag
+        if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
+        run: |
+          cd infra/docker/liquibase/changelog
+          git tag ${{ inputs.etl_ref }}
+          git push origin ${{ inputs.etl_ref }}
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -157,10 +175,6 @@ jobs:
 
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
-
-      - name: Set build details
-        id: build-details
-        run: echo "image_tag=${{ steps.etl-sha.outputs.image_tag }}" >> $GITHUB_OUTPUT
 
   submit-batch-job:
     outputs:

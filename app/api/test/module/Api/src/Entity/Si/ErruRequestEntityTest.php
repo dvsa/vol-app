@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Entity\Doc\Document;
@@ -28,7 +30,7 @@ class ErruRequestEntityTest extends EntityTester
     /**
      * Tests creation of erru requests
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $case = m::mock(CaseEntity::class);
         $msiType = m::mock(RefData::class);
@@ -72,36 +74,26 @@ class ErruRequestEntityTest extends EntityTester
         $this->assertEquals($communityLicenceNumber, $entity->getCommunityLicenceNumber());
     }
 
-    /**
-     * tests queueErruResponse
-     */
-    public function testQueueErruResponse()
+    public function testQueueErruResponse(): void
     {
         $user = m::mock(UserEntity::class);
         $date = new \DateTime();
         $document = m::mock(Document::class);
-        $msiType = m::mock(RefData::class);
 
         /** @var Entity $entity */
         $entity = m::mock(Entity::class)->makePartial();
 
-        $entity->queueErruResponse($user, $date, $document, $msiType);
+        $entity->queueErruResponse($user, $date, $document);
 
         $this->assertEquals($user, $entity->getResponseUser());
         $this->assertEquals($date, $entity->getResponseTime());
         $this->assertEquals($document, $entity->getResponseDocument());
-        $this->assertEquals($msiType, $entity->getMsiType());
     }
 
     /**
-     * Tests canModify
-     *
      * @dataProvider canModifyProvider
-     *
-     * @param string $msiStatus
-     * @param bool $isNew
      */
-    public function testCanModify($msiStatus, $isNew)
+    public function testCanModify(string $msiStatus, bool $isNew): void
     {
         $msiType = m::mock(RefData::class);
         $msiType->shouldReceive('getId')->once()->andReturn($msiStatus);
@@ -115,11 +107,10 @@ class ErruRequestEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function canModifyProvider()
+    public function canModifyProvider(): array
     {
         return [
             [Entity::FAILED_CASE_TYPE, false],
-            [Entity::QUEUED_CASE_TYPE, false],
             [Entity::SENT_CASE_TYPE, false],
             [Entity::DEFAULT_CASE_TYPE, true]
         ];
