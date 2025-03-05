@@ -6,7 +6,6 @@ use Dvsa\Olcs\Api\Service\AccessToken\Provider;
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Http\Client as RestClient;
-use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
 /**
