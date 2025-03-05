@@ -34,7 +34,7 @@ final class Si extends AbstractQueryHandler
                 'memberStateCode',
                 'siCategory',
                 'siCategoryType',
-                'appliedPenalties' => ['siPenaltyType', 'seriousInfringement'],
+                'appliedPenalties' => ['siPenaltyType', 'seriousInfringement', 'erruPenaltyRequested'],
                 'imposedErrus' => ['executed', 'siPenaltyImposedType'],
                 'requestedErrus' => ['siPenaltyRequestedType'],
                 'case' => [

@@ -5,7 +5,7 @@ namespace Olcs\Controller\Cases\Penalty;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Common\Service\Table\TableBuilderFactory;
+use Laminas\Form\Form;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
@@ -157,5 +157,35 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Alters the form by setting value options for the erruPenaltyRequested field.
+     */
+    private function alterForm($form): Form
+    {
+        $optionData = [];
+        foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
+            $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
+        }
+        $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
+
+        return $form;
+    }
+
+    /**
+     * Alters the form for adding a new penalty.
+     */
+    public function alterFormForAdd($form, $initialData): Form
+    {
+        return $this->alterForm($form);
+    }
+
+    /**
+     * Alters the form for editing an existing penalty.
+     */
+    public function alterFormForEdit($form, $initialData): Form
+    {
+        return $this->alterForm($form);
     }
 }

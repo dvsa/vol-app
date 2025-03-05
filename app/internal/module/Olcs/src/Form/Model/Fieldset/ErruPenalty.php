@@ -21,6 +21,17 @@ class ErruPenalty extends CaseBase
      */
     public $siPenaltyType;
 
+
+    /**
+     * @Form\Options({
+     *     "label": "Requested Penalty",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $erruPenaltyRequested;
+
     /**
      * @Form\Attributes({"id":"startDate"})
      * @Form\Options({

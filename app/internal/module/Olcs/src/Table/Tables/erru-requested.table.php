@@ -14,6 +14,10 @@ return [
             'formatter' => fn($data) => $data['siPenaltyRequestedType']['id'] . ' - ' . $data['siPenaltyRequestedType']['description'],
         ],
         [
+            'title' => 'Requested Identifier',
+            'formatter' => fn($data) => $data['penaltyRequestedIdentifier'],
+        ],
+        [
             'title' => 'Duration',
             'name' => 'duration',
         ],
