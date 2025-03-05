@@ -598,7 +598,7 @@ return [
         => CommandHandler\Cases\ConditionUndertaking\DeleteConditionUndertakingS4::class,
 
     // Domain - Si, Erru
-    Command\Cases\Si\SendResponse::class => CommandHandler\Cases\Si\SendResponse::class,
+    Command\Cases\Si\SendResponse::class => CommandHandler\Cases\Si\SendResponseFactory::class,
     Command\Cases\Si\ComplianceEpisode::class => CommandHandler\Cases\Si\ComplianceEpisode::class,
 
     // Domain - Schedule41

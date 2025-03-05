@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
+use Dvsa\Olcs\Api\Domain\Exception\InrClientException;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -10,25 +13,22 @@ use Dvsa\Olcs\Api\Domain\Command\Cases\Si\SendResponse as SendResponseCmd;
 use Dvsa\Olcs\Api\Domain\Repository\ErruRequest as ErruRequestRepo;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
 use Dvsa\Olcs\Api\Service\Nr\InrClient;
-use Dvsa\Olcs\Api\Service\Nr\InrClientInterface;
 use Laminas\Http\Client\Adapter\Exception\RuntimeException as AdapterRuntimeException;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 
-/**
- * SendResponseTest
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class SendResponseTest extends AbstractCommandHandlerTestCase
 {
+    private readonly m\MockInterface $inrService;
+
     public function setUp(): void
     {
-        $this->sut = new SendResponse();
+        $this->inrService = m::mock(InrClient::class);
+
+        $this->sut = new SendResponse($this->inrService);
         $this->mockRepo('ErruRequest', ErruRequestRepo::class);
 
         $this->mockedSmServices = [
-            InrClientInterface::class => m::mock(InrClient::class),
             'FileUploader' => m::mock(ContentStoreFileUploader::class)
         ];
 
@@ -70,15 +70,13 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('fetchUsingId')->once()->with($command)->andReturn($erruRequest);
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
-        $this->mockedSmServices[InrClientInterface::class]
-            ->shouldReceive('makeRequest')
-            ->once()
+        $this->inrService
+            ->expects('makeRequest')
             ->with($xml)
             ->andReturn(202);
 
-        $this->mockedSmServices[InrClientInterface::class]
-            ->shouldReceive('close')
-            ->once()
+        $this->inrService
+            ->expects('close')
             ->withNoArgs();
 
         $result = $this->sut->handleCommand($command);
@@ -101,7 +99,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
      */
     public function testHandleCommandInvalidResponseCode()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\InrClientException::class);
+        $this->expectException(InrClientException::class);
         $this->expectExceptionMessage('INR Http response code was 400');
 
         $xml = 'xml string';
@@ -128,15 +126,13 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('fetchUsingId')->once()->with($command)->andReturn($erruRequest);
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
-        $this->mockedSmServices[InrClientInterface::class]
-            ->shouldReceive('makeRequest')
-            ->once()
+        $this->inrService
+            ->expects('makeRequest')
             ->with($xml)
             ->andReturn(400);
 
-        $this->mockedSmServices[InrClientInterface::class]
-            ->shouldReceive('close')
-            ->once()
+        $this->inrService
+            ->expects('close')
             ->withNoArgs();
 
         $this->sut->handleCommand($command);
@@ -147,7 +143,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
      */
     public function testHandleCommandAdapterException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\InrClientException::class);
+        $this->expectException(InrClientException::class);
         $this->expectExceptionMessage('There was an error sending the INR response adapter exception message');
 
         $xml = 'xml string';
@@ -174,9 +170,8 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('fetchUsingId')->once()->with($command)->andReturn($erruRequest);
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
-        $this->mockedSmServices[InrClientInterface::class]
-            ->shouldReceive('makeRequest')
-            ->once()
+        $this->inrService
+            ->expects('makeRequest')
             ->with($xml)
             ->andThrow(AdapterRuntimeException::class, 'adapter exception message');
 

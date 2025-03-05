@@ -6,31 +6,13 @@ use Laminas\Http\Client as RestClient;
 use Laminas\Http\Request;
 use Olcs\Logging\Log\Logger;
 
-/**
- * Class InrClient
- * @package Dvsa\Olcs\Api\Service\Nr
- */
 class InrClient implements InrClientInterface
 {
-    /**
-     * Contructor, expects Laminas rest client
-     *
-     * @param RestClient $restClient Laminas rest client
-     *
-     * @return void
-     */
-    public function __construct(protected $restClient)
+    public function __construct(protected RestClient $restClient)
     {
     }
 
-    /**
-     * Makes a request to INR with penalty information
-     *
-     * @param String $xml the xml string being sent
-     *
-     * @return String
-     */
-    public function makeRequest($xml)
+    public function makeRequest(string $xml): int
     {
         $this->restClient->setEncType('text/xml');
         $this->restClient->getRequest()->setMethod(Request::METHOD_POST);
@@ -45,22 +27,15 @@ class InrClient implements InrClientInterface
         return $response->getStatusCode();
     }
 
-    /**
-     * Get the rest client
-     *
-     * @return RestClient
-     */
-    public function getRestClient()
+    public function getRestClient(): RestClient
     {
         return $this->restClient;
     }
 
     /**
      * close connection to INR
-     *
-     * @return void
      */
-    public function close()
+    public function close(): void
     {
         $this->restClient->getAdapter()->close();
     }
