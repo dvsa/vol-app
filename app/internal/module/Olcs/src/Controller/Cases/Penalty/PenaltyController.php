@@ -162,15 +162,12 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     /**
      * Alters the form by setting value options for the erruPenaltyRequested field.
      */
-    private function alterForm($form, $initialData, $isEdit = false): Form
+    private function alterForm($form): Form
     {
         $optionData = [];
-
         foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
-            //dd($this->getPenaltyData()['requestedErrus']);
             $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
         }
-
         $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
 
         return $form;
@@ -181,7 +178,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      */
     public function alterFormForAdd($form, $initialData): Form
     {
-        return $this->alterForm($form, $initialData, false);
+        return $this->alterForm($form);
     }
 
     /**
@@ -189,6 +186,6 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      */
     public function alterFormForEdit($form, $initialData): Form
     {
-        return $this->alterForm($form, $initialData, true);
+        return $this->alterForm($form);
     }
 }

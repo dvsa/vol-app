@@ -22,35 +22,26 @@ use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEnti
  */
 class SiPenalty extends AbstractSiPenalty
 {
-    /**
-     * SiPenalty constructor.
-     * @param string $imposed
-     * @param string $reasonNotImposed
-     */
     public function __construct(
         SiEntity $seriousInfringement,
         SiPenaltyTypeEntity $siPenaltyType,
         SiPenaltyErruRequestedEntity $requestedErru,
-        $imposed,
+        string $imposed,
         \DateTime $startDate = null,
         \DateTime $endDate = null,
-        $reasonNotImposed = null
+        string $reasonNotImposed = null
     ) {
         $this->seriousInfringement = $seriousInfringement;
         $this->update($siPenaltyType, $requestedErru, $imposed, $startDate, $endDate, $reasonNotImposed);
     }
 
-    /**
-     * @param string $imposed
-     * @param string $reasonNotImposedz
-     */
     public function update(
         SiPenaltyTypeEntity $siPenaltyType,
         SiPenaltyErruRequestedEntity $requestedErru,
-        $imposed,
+        string $imposed,
         \DateTime $startDate = null,
         \DateTime $endDate = null,
-        $reasonNotImposed = null
+        string $reasonNotImposed = null
     ) {
         $this->siPenaltyType = $siPenaltyType;
         $this->imposed = $imposed;
