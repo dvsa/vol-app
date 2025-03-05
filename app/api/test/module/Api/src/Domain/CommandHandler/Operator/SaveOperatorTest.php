@@ -217,6 +217,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
         static::assertEquals(1, $result->getIds()['organisation']);
         static::assertEquals('Organisation created successfully', $result->getMessages()[0]);
+        $this->assertTrue($savedOrganisation->getIsMessagingFileUploadEnabled());
     }
 
     public function testHandleCommandUpdatePartnershipOrOther()

@@ -170,6 +170,7 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('name', $savedLicence->getOrganisation()->getName());
         $this->assertEquals(OrganisationEntity::ORG_TYPE_OTHER, $savedLicence->getOrganisation()->getType()->getId());
         $this->assertTrue($savedLicence->getOrganisation()->isUnlicensed());
+        $this->assertTrue($savedLicence->getOrganisation()->getIsMessagingFileUploadEnabled());
 
         // assert licence record properties
         $this->assertTrue($savedLicence->isPsv());
