@@ -47,6 +47,7 @@ final class SaveOperator extends AbstractCommandHandler implements Transactioned
         } else {
             /** @var OrganisationEntity $organisation */
             $organisation = new OrganisationEntity();
+            $organisation->setIsMessagingFileUploadEnabled(true);
             $message = 'Organisation created successfully';
         }
         $this->updateOrganisation($command, $organisation);

@@ -152,6 +152,7 @@ final class RegisterUserSelfserve extends AbstractUserCommandHandler implements
         );
         $organisation->setName($data['organisationName']);
         $organisation->setAllowEmail('Y');
+        $organisation->setIsMessagingFileUploadEnabled(true);
 
         // save
         $this->getRepo('Organisation')->save($organisation);

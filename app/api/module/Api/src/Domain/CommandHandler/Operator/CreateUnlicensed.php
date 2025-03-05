@@ -84,7 +84,8 @@ final class CreateUnlicensed extends AbstractCommandHandler
         $organisation
             ->setName($command->getName())
             ->setIsUnlicensed(true)
-            ->setType($this->getRepo()->getRefdataReference(OrganisationEntity::ORG_TYPE_OTHER));
+            ->setType($this->getRepo()->getRefdataReference(OrganisationEntity::ORG_TYPE_OTHER))
+            ->setIsMessagingFileUploadEnabled(true);
 
         return $organisation;
     }
