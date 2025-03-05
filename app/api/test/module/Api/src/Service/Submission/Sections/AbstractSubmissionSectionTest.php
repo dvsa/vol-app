@@ -896,6 +896,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         $entity = new SiPenalty(
             m::mock(SeriousInfringement::class)->makePartial(),
             $this->generateSiPenaltyType(533),
+            $this->generateRequestedErru(),
             'imposed',
             new \DateTime('2013-06-31'),
             new \DateTime('2013-08-31'),

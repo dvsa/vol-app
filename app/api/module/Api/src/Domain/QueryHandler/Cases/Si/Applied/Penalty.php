@@ -15,6 +15,6 @@ final class Penalty extends AbstractQueryHandler
 
     public function handleQuery(QueryInterface $query)
     {
-        return $this->result($this->getRepo()->fetchUsingId($query), ['siPenaltyType']);
+        return $this->result($this->getRepo()->fetchUsingId($query), ['siPenaltyType', 'erruPenaltyRequested']);
     }
 }

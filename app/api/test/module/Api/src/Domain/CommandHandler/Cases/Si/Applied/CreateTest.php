@@ -6,7 +6,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si\Applied\Create as CreatePenalty
 use Dvsa\Olcs\Api\Domain\Repository\SeriousInfringement as SiRepo;
 use Dvsa\Olcs\Api\Domain\Repository\SiPenalty as SiPenaltyRepo;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
-use Dvsa\Olcs\Api\Entity\Si\ErruRequest as ErruRequestEntity;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEntity;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as SiEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
@@ -33,7 +33,11 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->references = [
             SiPenaltyTypeEntity::class => [
                 999 => m::mock(SiPenaltyTypeEntity::class)
+            ],
+            SiPenaltyErruRequestedEntity::class => [
+                888 => m::mock(SiPenaltyErruRequestedEntity::class)
             ]
+
         ];
 
         parent::initReferences();
@@ -44,6 +48,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $siPenaltyType = 999;
         $siId = 333;
         $penaltyId = 111;
+        $erruRequested = 888;
         $startDate = '2015-12-25';
         $endDate = '2015-12-26';
         $imposed = 'Y';
@@ -56,7 +61,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
                 'imposed' => $imposed,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'imposedReason' => $imposedReason
+                'imposedReason' => $imposedReason,
+                'erruPenaltyRequested' => $erruRequested
             ]
         );
 
