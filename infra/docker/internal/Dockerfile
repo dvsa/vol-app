@@ -11,9 +11,10 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && docker-php-ext-enable redis igbinary \
   && apk del pcre-dev $PHPIZE_DEPS
 
-RUN apk add --no-cache icu-dev \
+RUN apk add --no-cache icu-dev libzip-dev \
   && docker-php-ext-configure intl \
-  && docker-php-ext-install pdo_mysql opcache intl
+  && docker-php-ext-configure zip \
+  && docker-php-ext-install pdo_mysql opcache intl zip
 
 COPY /clamav/clamd.conf /etc/clamav/clamd.conf
 COPY /clamav/freshclam.conf /etc/clamav/freshclam.conf
