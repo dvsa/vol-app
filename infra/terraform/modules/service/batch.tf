@@ -105,12 +105,20 @@ locals {
           value = var.legacy_environment
         },
         {
-          name  = "DOMAIN_NAME"
-          value = var.domain_name
+          name  = "FULL_DOMAIN"
+          value = "${var.environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DOMAIN"
+          value = var.domain
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"=
         },
         {
           name  = "PROXY"
-          value = "proxy.${var.environment}.olcs.${var.domain_name}"
+          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
         },
         {
           name  = "APP_VERSION"

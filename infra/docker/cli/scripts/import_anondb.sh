@@ -3,14 +3,11 @@
 # This script obtains the latest copy of the anonymised production database from an S3 bucket and imports it into the APP anondb instance
 
 
-export http_proxy=http://${PROXY}
-export https_proxy=http://${PROXY}
+export http_proxy=http://${PROXY}:3128
+export https_proxy=http://${PROXY}:3128
 export NO_PROXY=169.254.169.254
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 domain=${DOMAIN}
-
-
-
 
 token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 ec2_avail_zone=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/availability-zone)
@@ -40,7 +37,7 @@ if [ $? -ne 0 ]; then
 fi
 
 log_msg "Importing ${anondb_archive_filename} into olcsanondb-rds.olcs.${domain}"
-zcat $anondb_dump_dir/$anondb_archive_filename | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' | mysql --defaults-file=/usr/local/conf/anonrds.conf -holcsanondb-rds.olcsanondb-rds.olcs.${domain} -umaster
+zcat $anondb_dump_dir/$anondb_archive_filename | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' | mysql --defaults-file=/usr/local/conf/anonrds.conf -holcsanondb-rds.${domain} -umaster
 if [ $? -ne 0 ]; then
  log_err "Restore of latest anondb dump to anondb failed"
  exit 1

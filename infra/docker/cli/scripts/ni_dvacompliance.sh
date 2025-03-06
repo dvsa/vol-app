@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export http_proxy=http://${PROXY}
-export https_proxy=http://${PROXY}
+export http_proxy=http://${PROXY}:3128
+export https_proxy=http://${PROXY}:3128
 export NO_PROXY=169.254.169.254
 
 READDB_HOST=${READDB_HOST}

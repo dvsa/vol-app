@@ -4,12 +4,12 @@
 # It sends a dump of the anonymized database to a non-prod S3 bucket, as well as creating a snapshot for use in non-production environments
 # Anonymised database tables for use in local development environments are also dumped and stored in a non-prod S3 bucket
 
-export http_proxy=http://${PROXY}
-export https_proxy=http://${PROXY}
+export http_proxy=http://${PROXY}:3128
+export https_proxy=http://${PROXY}:3128
 export NO_PROXY=169.254.169.254
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
 readdb=${READDB_HOST}
-domain=${DOMAIN}
+domain=${FULL_DOMAIN}
 env=${ENVIRONMENT_NAME}
 
 token=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
@@ -73,7 +73,7 @@ function cleanup {
 DATE=$(date +"%Y-%m-%d")
 snapshot_timestamp=$(date +"%Y-%m-%d-%H-%M-%S")
 db_instance_id=${readdb}
-restored_db_instance_id="olcsanondb-rds.olcs.$domain-temp"
+restored_db_instance_id="olcsanondb-rds.$domain-temp"
 env_id=$(echo "$db_instance_id"|cut -d- -f1)
 olcsreaddb_snapshot_id="$env_id-olcs-rds-olcsreaddb-$snapshot_timestamp"
 anondb_snapshot_id="olcs-db-anon-$env-$DATE"
