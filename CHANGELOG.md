@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.15.0-rc1](https://github.com/dvsa/vol-app/compare/v5.14.2-rc1...v5.15.0-rc1) (2025-03-06)
+
+
+### Features
+
+* add zip ext as some filters used require it ([e38c619](https://github.com/dvsa/vol-app/commit/e38c619a1dfe0eb7559dba473cbab6795c7d8642))
+
 ## [5.14.2-rc1](https://github.com/dvsa/vol-app/compare/v5.14.1...v5.14.2-rc1) (2025-02-24)
 
 
