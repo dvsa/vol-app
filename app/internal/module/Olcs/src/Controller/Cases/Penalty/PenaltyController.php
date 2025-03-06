@@ -20,6 +20,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\GenericFields;
 use Olcs\Form\Model\Form\ErruPenalty;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Logging\Log\Logger;
 
 class PenaltyController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
@@ -168,7 +169,12 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
             $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
         }
+        Logger::crit($this->getPenaltyData()['requestedErrus']);
+        Logger::crit($optionData);
+
+
         $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
+        Logger::crit($form->get('fields')->get('erruPenaltyRequested'));
 
         return $form;
     }

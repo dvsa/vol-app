@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Entity\Si\SiPenaltyType as SiPenaltyTypeEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as SiPenaltyErruRequestedEntity;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreatePenaltyCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Create Erru applied penalty
@@ -44,6 +45,7 @@ final class Create extends AbstractCommandHandler
         if (!$case->canAddSi()) {
             throw new Exception\ValidationException(['Invalid action for the case']);
         }
+        Logger::crit($command);
 
         $siPenaltyType = $this->getRepo()->getReference(SiPenaltyTypeEntity::class, $command->getSiPenaltyType());
         $siRequestedErru = $this->getRepo()->getReference(SiPenaltyErruRequestedEntity::class, $command->getErruPenaltyRequested());
