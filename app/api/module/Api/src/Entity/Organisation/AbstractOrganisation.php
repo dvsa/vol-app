@@ -194,9 +194,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      * @ORM\Column(type="boolean",
      *     name="is_messaging_file_upload_enabled",
      *     nullable=false,
-     *     options={"default": 0})
+     *     options={"default": 1})
      */
-    protected $isMessagingFileUploadEnabled = 0;
+    protected $isMessagingFileUploadEnabled = 1;
 
     /**
      * Is unlicensed
