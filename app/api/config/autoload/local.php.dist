@@ -161,22 +161,6 @@ return [
     // The cross account role that VOL will assume to access the output bucket and output SQS queue.
     'txc_consumer_role_arn' => 'arn:aws:iam::000000000000:role/txc-local-consumer-role',
   ],
-  'nr' => [
-    // @to-do currently waiting on the actual nr address
-     'inr_service' => [
-            'uri' => 'http://testServiceAddress',
-            'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
-                'client_id' => '', //param
-                'client_secret' => '', // secret
-                'token_url' => '', //param
-                'scope' => '', //param
-                'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
-            ]
-          ],
-        'repute_url' => [
-          'uri' => null,
-      ],
-  ],
   'print' => [
     'server' => 'print.localdev:631'
   ],
