@@ -95,6 +95,52 @@ locals {
         },
       ]
     }
+
+    scripts = {
+      image = "${var.batch.cli_repository}:${var.batch.cli_version}"
+
+      environment = [
+        {
+          name  = "ENVIRONMENT_NAME"
+          value = var.legacy_environment
+        },
+        {
+          name  = "FULL_DOMAIN"
+          value = "${var.environment}.olcs.${var.domain_name}"
+        },
+        {
+          name  = "DOMAIN"
+          value = var.domain
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"=
+        },
+        {
+          name  = "PROXY"
+          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
+        },
+        {
+          name  = "APP_VERSION"
+          value = var.batch.cli_version
+        },
+        {
+          name  = "READDB_HOST"
+          value = "olcsreaddb-rds.${var.environment}.olcs.${var.domain_name}"
+        },
+      ]
+
+      secrets = [
+        {
+          name      = "BATCH_DB_PASSWORD"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_batch_rds_password::"
+        },
+        {
+          name      = "PRODTODEV_ASSUME_ROLE_ID"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:nonprod_assume_external_id::"
+        },
+      ]
+    }
   }
 
   jobs = { for job in var.batch.jobs : job.name => {
