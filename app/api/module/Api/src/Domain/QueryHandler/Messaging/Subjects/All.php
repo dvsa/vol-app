@@ -24,7 +24,7 @@ class All extends AbstractQueryHandler implements ToggleRequiredInterface
         $subjects = $this->getSubjectRepository()->fetchList($query, Query::HYDRATE_OBJECT);
 
         return [
-            'result' => $this->resultList($subjects),
+            'result' => $this->resultList($subjects, ['category', 'subCategory']),
             'count' => count($subjects),
         ];
     }
