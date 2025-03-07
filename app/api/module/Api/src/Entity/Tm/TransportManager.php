@@ -362,11 +362,9 @@ class TransportManager extends AbstractTransportManager implements
     }
 
     /**
-     * Returns whether the entity has all the necessary date for a repute check
-     *
-     * return bool
+     * Does the entity have all address data for a repute check
      */
-    public function hasReputeCheckData()
+    public function hasReputeCheckAddress(): bool
     {
         // mandatory fields
         $fields = [
@@ -384,12 +382,12 @@ class TransportManager extends AbstractTransportManager implements
             }
         }
 
-        //qualifications array collection
-        if ($this->qualifications->isEmpty()) {
-            return false;
-        }
-
         return true;
+    }
+
+    public function hasQualifications(): bool
+    {
+        return !$this->qualifications->isEmpty();
     }
 
     /**
