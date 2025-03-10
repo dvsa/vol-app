@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission;
@@ -446,7 +448,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testCanDeleteThrowsException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->canDelete();
@@ -470,7 +472,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testUpdateStopsThrowsCanEditExceptionForLatestVariation()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateStops(null, null, null, null, null, null, null, null, null);
@@ -483,7 +485,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testUpdateQualitySchemesThrowsCanEditExceptionForLatestVariation()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateQualitySchemes(null, null, null, null, null);
@@ -494,14 +496,13 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests updateServiceDetails throws exception correctly
      */
-    public function testUpdateServiceDetailsThrowsCanEditExceptionForLatestVariation()
+    public function testUpdateServiceDetailsThrowsCanEditExceptionForLatestVariation(): void
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
+        $busNoticePeriod = m::mock(BusNoticePeriodEntity::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
-        $this->entity->updateServiceDetails(null, null, null, null, null, null, null, null, null, null);
-
-        return true;
+        $this->entity->updateServiceDetails(null, null, null, null, null, null, null, null, null, $busNoticePeriod);
     }
 
     /**
@@ -509,7 +510,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testUpdateTaAuthorityThrowsCanEditExceptionForLatestVariation()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateTaAuthority(null);
@@ -607,18 +608,16 @@ class BusRegEntityTest extends EntityTester
         return true;
     }
 
-    /**
-     * Tests updateServiceDetails
-     */
-    public function testUpdateServiceDetails()
+    public function testUpdateServiceDetails(): void
     {
-        $serviceNo = 12345;
+        $serviceNo = '12345';
         $startPoint = 'start point';
         $finishPoint = 'finish point';
         $via = 'via';
         $otherDetails = 'other details';
         $receivedDate = '2016-12-25';
         $effectiveDate = '2016-12-26';
+        $applicationCompleteDate = '2016-12-27';
         $endDate = '2017-01-01';
 
         $busNoticePeriod = new BusNoticePeriodEntity();
@@ -635,6 +634,7 @@ class BusRegEntityTest extends EntityTester
             $receivedDate,
             $effectiveDate,
             $endDate,
+            $applicationCompleteDate,
             $busNoticePeriod
         );
 
@@ -646,6 +646,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($receivedDate, $this->entity->getReceivedDate());
         $this->assertEquals($effectiveDate, $this->entity->getEffectiveDate());
         $this->assertEquals($endDate, $this->entity->getEndDate());
+        $this->assertEquals($applicationCompleteDate, $this->entity->getApplicationCompleteDate());
         $this->assertEquals($busNoticePeriod, $this->entity->getBusNoticePeriod());
     }
 
@@ -861,7 +862,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testUpdateServiceRegisterThrowsExceptionForLatestVariation()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanEditIsFalseDueToVariation();
         $this->entity->updateServiceRegister(null, null, null, null, null, null, null, null, null);
@@ -929,7 +930,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testResetStatusThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
         $this->entity->resetStatus(null);
@@ -963,7 +964,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testCancelByAdminThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
@@ -1018,7 +1019,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testWithdrawThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
@@ -1077,7 +1078,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testRefuseThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
@@ -1304,7 +1305,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testRefuseByShortNoticeThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
@@ -1345,7 +1346,7 @@ class BusRegEntityTest extends EntityTester
      */
     public function testGrantThrowsCanMakeDecisionException()
     {
-        $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
+        $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
 
@@ -1539,6 +1540,7 @@ class BusRegEntityTest extends EntityTester
         $this->entity->setApplicationSigned('Y');
         $this->entity->setEffectiveDate('any value');
         $this->entity->setReceivedDate('any value');
+        $this->entity->setApplicationCompleteDate(new \DateTime('2024-12-25'));
         $this->entity->setServiceNo('any value');
         $this->entity->setStartPoint('any value');
         $this->entity->setFinishPoint('any value');
@@ -1709,17 +1711,37 @@ class BusRegEntityTest extends EntityTester
         // nonGrantable - Rule: Other - isShortNotice: N - Fee: none
         // receivedDate empty
         $this->entity->setReceivedDate(null);
-        $this->assertEquals(false, $this->entity->isGrantable());
+        $this->assertFalse($this->entity->isGrantable());
     }
 
-    public function testIsGrantableWithoutServiceNo()
+    public function testIsGrantableWithoutApplicationCompleteDate(): void
     {
         $this->getAssertionsForIsGrantable();
 
-        // nonGrantable - Rule: Other - isShortNotice: N - Fee: none
-        // serviceNo empty
-        $this->entity->setServiceNo(null);
-        $this->assertEquals(false, $this->entity->isGrantable());
+        // nonGrantable due to missing application complete date
+        $this->entity->setApplicationCompleteDate(null);
+        $this->assertFalse($this->entity->isGrantable());
+    }
+
+    /**
+     * @dataProvider dpTestIsGrantableServiceNo
+     */
+    public function testIsGrantableServiceNo(?string $serviceNo, bool $expectedResult): void
+    {
+        $this->getAssertionsForIsGrantable();
+
+        $this->entity->setServiceNo($serviceNo);
+        $this->assertEquals($expectedResult, $this->entity->isGrantable());
+    }
+
+    public function dpTestIsGrantableServiceNo(): array
+    {
+        return [
+            ['serviceNo' => null, 'expectedResult' => false],
+            ['serviceNo' => '', 'expectedResult' => false],
+            ['serviceNo' => '0', 'expectedResult' => true],
+            ['serviceNo' => '1239a', 'expectedResult' => true],
+        ];
     }
 
     public function testIsGrantableWithoutStartPoint()
@@ -3068,79 +3090,6 @@ class BusRegEntityTest extends EntityTester
             Entity::STATUS_CNS,
             Entity::STATUS_CANCELLED,
             Entity::STATUS_EXPIRED,
-        ];
-    }
-
-    /**
-     * @param $effectiveDate
-     * @param $receivedDate
-     * @param $serviceNo
-     * @param $start
-     * @param $finish
-     * @param $expected
-     *
-     * @dataProvider dpTestIsGrantableBasedOnRequiredFields
-     */
-    public function testIsGrantableBasedOnRequiredFields(
-        $effectiveDate,
-        $receivedDate,
-        $serviceNo,
-        $start,
-        $finish,
-        $expected
-    ) {
-        $this->entity->setTimetableAcceptable('Y');
-        $this->entity->setMapSupplied('Y');
-        $this->entity->setTrcConditionChecked('Y');
-        $this->entity->setCopiedToLaPte('Y');
-        $this->entity->setLaShortNote('Y');
-        $this->entity->setApplicationSigned('Y');
-        $this->entity->addBusServiceTypes('service type');
-        $this->entity->addTrafficAreas('traffic area');
-        $this->entity->addLocalAuthoritys('local authority');
-
-        $this->entity->setEffectiveDate($effectiveDate);
-        $this->entity->setReceivedDate($receivedDate);
-        $this->entity->setServiceNo($serviceNo);
-        $this->entity->setStartPoint($start);
-        $this->entity->setFinishPoint($finish);
-
-        $busNoticePeriod = new BusNoticePeriodEntity();
-        $busNoticePeriod->setId(BusNoticePeriodEntity::NOTICE_PERIOD_OTHER);
-        $this->entity->setBusNoticePeriod($busNoticePeriod);
-
-        $this->entity->setStatus(new RefDataEntity(Entity::STATUS_NEW));
-
-        $this->assertSame($expected, $this->entity->isGrantable());
-    }
-
-    public function dpTestIsGrantableBasedOnRequiredFields()
-    {
-        return [
-            'case_01' => [
-                'effectiveDate' => '2016-12-25',
-                'receivedDate' => '2016-12-25',
-                'serviceNo' => '',
-                'start' => 'Leeds',
-                'finish' => 'London',
-                'expected' => false
-            ],
-            'case_02' => [
-                'effectiveDate' => '2016-12-25',
-                'receivedDate' => '2016-12-25',
-                'serviceNo' => '0',
-                'start' => 'Leeds',
-                'finish' => 'London',
-                'expected' => true
-            ],
-            'case_03' => [
-                'effectiveDate' => '2016-12-25',
-                'receivedDate' => '2016-12-25',
-                'serviceNo' => '1239a',
-                'start' => 'Leeds',
-                'finish' => 'London',
-                'expected' => true
-            ]
         ];
     }
 }
