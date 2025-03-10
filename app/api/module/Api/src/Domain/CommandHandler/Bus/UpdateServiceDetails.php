@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Update Service Details
- */
-
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Bus;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -19,9 +15,6 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceDetailsC
 use Dvsa\Olcs\Api\Domain\Command\Bus\CreateBusFee as CmdCreateBusFee;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 
-/**
- * Update Service Details
- */
 final class UpdateServiceDetails extends AbstractCommandHandler implements TransactionedInterface
 {
     protected $repoServiceName = 'Bus';
@@ -58,6 +51,7 @@ final class UpdateServiceDetails extends AbstractCommandHandler implements Trans
             $command->getReceivedDate(),
             $command->getEffectiveDate(),
             $command->getEndDate(),
+            $command->getApplicationCompleteDate(),
             $this->getRepo()->getReference(BusNoticePeriodEntity::class, $command->getBusNoticePeriod())
         );
 

@@ -1,8 +1,6 @@
 <?php
 
-/**
- * Update Service Details Test
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus;
 
@@ -20,9 +18,6 @@ use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 
-/**
- * Update Service DetailsTest
- */
 class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -47,9 +42,8 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
      * First date is included for completeness
      *
      * @dataProvider createFeeProvider
-     * @param bool $createFee
      */
-    public function testHandleCommand($createFee)
+    public function testHandleCommand(bool $createFee): void
     {
         $busRegId = 99;
         $serviceNumber = 12345;
@@ -59,6 +53,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
         $otherDetails = 'other details';
         $effectiveDate = '2020-12-25';
         $receivedDate = '2019-12-25';
+        $applicationCompleteDate = '2020-06-25';
         $endDate = '2021-12-25';
         $busNoticePeriod = 2;
         $otherServices = [
@@ -107,6 +102,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
                 'receivedDate' => $receivedDate,
                 'effectiveDate' => $effectiveDate,
                 'endDate' => $endDate,
+                'applicationCompleteDate' => $applicationCompleteDate,
                 'busNoticePeriod' => $busNoticePeriod,
                 'otherServices' => $otherServices,
                 'busServiceTypes' => $busServiceTypes,
@@ -178,6 +174,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
                 $receivedDate,
                 $effectiveDate,
                 $endDate,
+                $applicationCompleteDate,
                 $this->references[BusNoticePeriodEntity::class][$busNoticePeriod]
             );
         $busReg->expects('getId')->withNoArgs()->andReturn($busRegId);
@@ -207,10 +204,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    /**
-     * return array
-     */
-    public function createFeeProvider()
+    public function createFeeProvider(): array
     {
         return [
             [true],

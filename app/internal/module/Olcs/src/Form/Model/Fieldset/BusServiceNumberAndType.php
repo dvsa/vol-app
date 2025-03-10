@@ -151,6 +151,22 @@ class BusServiceNumberAndType extends BusRegDetails
     public $endDate = null;
 
     /**
+     * @Form\Attributes({"id":"applicationCompleteDate"})
+     * @Form\Options({
+     *     "label": "Application complete date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Flags({"priority": -100})
+     */
+    public $applicationCompleteDate = null;
+
+    /**
      * @Form\Attributes({"id":"busNoticePeriod","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Rules",
