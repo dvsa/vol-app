@@ -139,6 +139,15 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     protected $endDate;
 
     /**
+     * Application complete date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="application_complete_date", nullable=true)
+     */
+    protected $applicationCompleteDate;
+
+    /**
      * Finish point
      *
      * @var string
@@ -1042,6 +1051,26 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
         }
 
         return $this->endDate;
+    }
+
+    public function setApplicationCompleteDate(?\DateTime $applicationCompleteDate): AbstractBusReg
+    {
+        $this->applicationCompleteDate = $applicationCompleteDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the end date
+     * If $asDateTime true will always return a \DateTime (or null) never a string datetime
+     */
+    public function getApplicationCompleteDate(bool $asDateTime = false): \DateTime|string
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->applicationCompleteDate);
+        }
+
+        return $this->applicationCompleteDate;
     }
 
     /**
