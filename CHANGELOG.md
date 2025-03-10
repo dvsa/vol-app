@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.15.1-rc1](https://github.com/dvsa/vol-app/compare/v5.15.0-rc1...v5.15.1-rc1) (2025-03-10)
+
+
+### Bug Fixes
+
+* update .gitignore for release please pr ([dab7272](https://github.com/dvsa/vol-app/commit/dab72722dc80b602c9cc7d1632366af621589e11))
+
 ## [5.15.0-rc1](https://github.com/dvsa/vol-app/compare/v5.14.2-rc1...v5.15.0-rc1) (2025-03-06)
 
 
