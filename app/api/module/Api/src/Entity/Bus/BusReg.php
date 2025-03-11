@@ -116,6 +116,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
         'receivedDate' => null,
         'effectiveDate' => null,
         'endDate' => null,
+        'applicationCompleteDate' => null,
         // These will be set to yes explicitly by the TXC processor, default it to no for the internal app
         'isTxcApp' => 'N',
         'ebsrRefresh' => 'N'
