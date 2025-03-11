@@ -15,6 +15,9 @@ RUN apk add --no-cache icu-dev \
   && docker-php-ext-configure intl \
   && docker-php-ext-install pdo_mysql opcache intl
 
+# Add extra scirpts for batch jobs  
+COPY ./scripts/ /mnt/data/scripts/
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
@@ -36,7 +39,9 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas
+  && chmod +x /var/www/html/vendor/bin/laminas \ 
+  # Ensure scripts are executable
+  && chmod +x /mnt/data/scripts/*.sh
 
 USER www-data
 

@@ -116,6 +116,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
         'receivedDate' => null,
         'effectiveDate' => null,
         'endDate' => null,
+        'applicationCompleteDate' => null,
         // These will be set to yes explicitly by the TXC processor, default it to no for the internal app
         'isTxcApp' => 'N',
         'ebsrRefresh' => 'N'
@@ -575,32 +576,18 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
         return true;
     }
 
-    /**
-     * Update service details
-     *
-     * @param string                $serviceNo       Service no
-     * @param string                $startPoint      Start point
-     * @param string                $finishPoint     Finish point
-     * @param string                $via             Via
-     * @param string                $otherDetails    Other details
-     * @param string                $receivedDate    Received date
-     * @param string                $effectiveDate   Effective date
-     * @param string                $endDate         End date
-     * @param BusNoticePeriodEntity $busNoticePeriod Bus notice period
-     *
-     * @return bool
-     */
     public function updateServiceDetails(
-        $serviceNo,
-        $startPoint,
-        $finishPoint,
-        $via,
-        $otherDetails,
-        $receivedDate,
-        $effectiveDate,
-        $endDate,
-        $busNoticePeriod
-    ) {
+        ?string $serviceNo,
+        ?string $startPoint,
+        ?string $finishPoint,
+        ?string $via,
+        ?string $otherDetails,
+        ?string $receivedDate,
+        ?string $effectiveDate,
+        ?string $endDate,
+        ?string $applicationCompleteDate,
+        BusNoticePeriodEntity $busNoticePeriod
+    ): true {
         $this->canEdit();
 
         $this->serviceNo = $serviceNo;
@@ -613,6 +600,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
         $this->receivedDate = $receivedDate;
         $this->effectiveDate = $effectiveDate;
         $this->endDate = $endDate;
+        $this->applicationCompleteDate = $applicationCompleteDate;
         $this->populateShortNotice();
 
         return true;
@@ -843,6 +831,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
 
         // mandatory fields which can't be empty
         $nonEmptyFields = [
+            'applicationCompleteDate',
             'effectiveDate',
             'receivedDate',
             'serviceNo',

@@ -535,6 +535,26 @@ module "service" {
         name = "search",
         type = "search"
       },
+      {
+        name     = "sas-mi-extract",
+        commands = ["source /mnt/data/sas_mi_extract.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "import-anondb",
+        commands = ["source /mnt/data/import_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "populate-anondb",
+        commands = ["source /mnt/data/populate_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "ni-compliance",
+        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
+        type     = "scripts"
+      },
     ]
   }
 }
