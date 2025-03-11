@@ -128,17 +128,6 @@ class DecisionController extends AbstractInternalController implements CaseContr
      */
     protected function alterFormForAdd(LaminasForm $form, $formData)
     {
-        // see vol-5890 - will link suggested improvement ticket in comments when raised.
-        $options = $form->get('fields')
-            ->get('actionTypes')
-            ->getValueOptions();
-
-        unset($options['sub_st_dec_part_agree']);
-
-        $form->get('fields')
-            ->get('actionTypes')
-            ->setValueOptions($options);
-
         return $this->alterForm($form, !empty($formData['id']) ? $formData['id'] : '');
     }
 
@@ -165,6 +154,17 @@ class DecisionController extends AbstractInternalController implements CaseContr
      */
     private function alterForm(LaminasForm $form, $id)
     {
+        /** @todo https://dvsa.atlassian.net/browse/VOL-5901 */
+        $options = $form->get('fields')
+            ->get('actionTypes')
+            ->getValueOptions();
+
+        unset($options['sub_st_dec_part_agree']);
+
+        $form->get('fields')
+            ->get('actionTypes')
+            ->setValueOptions($options);
+
         $form->get('fields')->get('comment')->setAttribute('id', $id . time());
         return $form;
     }
