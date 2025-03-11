@@ -2,7 +2,6 @@
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
-use Dvsa\Olcs\Api\Domain\Validation\Handlers as Handler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
 
 return [
@@ -23,5 +22,7 @@ return [
     /**
      * Create response xml and send to ATOS
      */
-    CommandHandler\Cases\Si\CreateResponse::class => Misc\IsInternalUser::class
+    CommandHandler\Cases\Si\CreateResponse::class => Misc\IsInternalUser::class,
+    CommandHandler\Cases\Si\SendResponse::class => Misc\IsInternalUser::class,
+    CommandHandler\Cases\Si\SendResponseFactory::class => Misc\IsInternalUser::class,
 ];
