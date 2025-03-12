@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.15.2-rc1](https://github.com/dvsa/vol-app/compare/v5.15.1-rc1...v5.15.2-rc1) (2025-03-12)
+
+
+### Bug Fixes
+
+* trigger bump ([#695](https://github.com/dvsa/vol-app/issues/695)) ([240daca](https://github.com/dvsa/vol-app/commit/240daca125d834b7f63896e0572fa3c2b7d8869d))
+
 ## [5.15.1-rc1](https://github.com/dvsa/vol-app/compare/v5.15.0-rc1...v5.15.1-rc1) (2025-03-10)
 
 
