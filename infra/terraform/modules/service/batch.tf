@@ -1,10 +1,12 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "application_api" {
-  name = "DEVAPP${var.legacy_environment}-BASE-SM-APPLICATION-API"
+  name = "${local.account_prefix}APP${var.legacy_environment}-BASE-SM-APPLICATION-API"
 }
 
 locals {
+
+  account_prefix = var.legacy_environment == "DEV" || var.legacy_environment == "QA" ? "DEV" : ""
   default_retry_policy = {
     attempts = 1
     evaluate_on_exit = {
@@ -110,11 +112,11 @@ locals {
         },
         {
           name  = "DOMAIN"
-          value = var.domain
+          value = var.domain_name
         },
         {
           name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"=
+          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
         },
         {
           name  = "PROXY"
