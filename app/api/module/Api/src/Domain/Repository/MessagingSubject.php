@@ -15,7 +15,7 @@ class MessagingSubject extends AbstractRepository
     */
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
-        if (method_exists($query, 'onlyActive') && $query->getOnlyActive()) {
+        if (method_exists($query, 'getOnlyActive') && $query->getOnlyActive()) {
             $qb->Where($qb->expr()->eq($this->alias . '.isActive',':isActive'))
                 ->setParameter('isActive', 1);
         }
