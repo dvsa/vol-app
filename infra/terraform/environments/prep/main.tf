@@ -278,6 +278,10 @@ module "service" {
 
     subnet_ids = data.aws_subnets.this["BATCH"].ids
 
+    alert_emails = [
+      "dvsa.tss-support+prep_olcs_jobs@bjss.com"
+    ]
+
     jobs = [
       {
         name     = "ch-vs-olcs-diffs",
