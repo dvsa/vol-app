@@ -515,6 +515,131 @@ jobs:
       pull-requests: write
     secrets: inherit
 
+  push-to-prod-ecr:
+    name: Push Docker Images to PROD ECR
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      needs.release-please.outputs.release_created &&
+      needs.test_int_smoke.result == 'success' &&
+      needs.test_int_selfserve.result == 'success' &&
+      needs.test_int_internal.result == 'success'
+    runs-on: ubuntu-latest
+    needs:
+      - release-please
+      - get-version
+      - test_int_smoke
+      - test_int_selfserve
+      - test_int_internal
+    env:
+      NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+      PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
+      AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: api
+            repo: vol-app
+          - project: cli
+            repo: vol-app
+          - project: selfserve
+            repo: vol-app
+          - project: internal
+            repo: vol-app
+          - project: liquibase
+            repo: vol-app
+          - project: search
+            repo: vol-app
+          - project: vft
+            repo: vol-qa
+    steps:
+      - name: Configure AWS credentials for NONPROD
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to NONPROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.NONPROD_REGISTRY }}
+
+      - name: Determine image tag
+        id: image-tag
+        run: |
+          # Set the image tag based on the project
+          if [ "${{ matrix.project }}" == "api" ]; then
+            echo "tag=${{ needs.get-version.outputs.api }}" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.project }}" == "cli" ]; then
+            echo "tag=${{ needs.get-version.outputs.cli }}" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.project }}" == "selfserve" ]; then
+            echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.project }}" == "internal" ]; then
+            echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.project }}" == "search" ]; then
+            echo "tag=${{ needs.get-version.outputs.search }}" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.project }}" == "liquibase" ]; then
+            # For liquibase, use the latest tag
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Pull image from NONPROD ECR
+        run: |
+          if [ "${{ matrix.project }}" == "vft" ]; then
+            # For vft, always use latest tag
+            echo "Pulling image from NONPROD ECR: ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+            docker pull ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+            
+            # Tag for local reference
+            docker tag ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest local-image:latest
+          else
+            echo "Pulling image from NONPROD ECR: ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
+            docker pull ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
+            
+            # Tag for local reference
+            docker tag ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }} local-image:${{ steps.image-tag.outputs.tag }}
+          fi
+
+      - name: Configure AWS credentials for PROD
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to PROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.PROD_REGISTRY }}
+
+      - name: Push image to PROD ECR
+        run: |
+          if [ "${{ matrix.project }}" == "vft" ]; then
+            # For vft, always use latest tag
+            echo "Tagging image for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+            docker tag local-image:latest ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+            
+            echo "Pushing image to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+            docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+          else
+            # Tag the local image for PROD ECR
+            echo "Tagging image for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
+            docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
+            
+            echo "Pushing image to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
+            docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
+            
+            # Also push as latest if not liquibase (which already uses latest)
+            if [ "${{ matrix.project }}" != "liquibase" ]; then
+              echo "Tagging image as latest for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+              docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+              
+              echo "Pushing latest tag to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+              docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+            fi
+          fi
+
   cdn-prod:
     name: CDN
     if: ${{ needs.orchestrator.outputs.should-build-assets && needs.release-please.outputs.release_created }}
@@ -568,6 +693,7 @@ jobs:
       - get-version
       - orchestrator
       - terraform-account-prod
+      - push-to-prod-ecr
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: prep
