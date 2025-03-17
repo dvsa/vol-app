@@ -4,6 +4,8 @@ FROM search AS production
 
 USER root
 
+RUN apt-get update && apt-get install -y python3
+
 RUN /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc
 
 # copy lib database jdbc jars
