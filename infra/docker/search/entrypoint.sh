@@ -15,14 +15,16 @@ do
     # Add to pipelines.yaml
     echo -e "- pipeline.id: $i\n  path.config: \"/usr/share/logstash/pipline/${i}.conf\"" >> "/usr/share/logstash/pipeline/pipelines.yml"
 
-    # build indexes
-    /usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh -d 60 -l $i
 done
 
+# build indexes
+#/usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh
+
 # Start logstash
-#/usr/local/bin/docker-entrypoint
+/usr/local/bin/docker-entrypoint
+
 # keep container running
-tail -f /dev/null
+#tail -f /dev/null
     
 
 
