@@ -256,6 +256,35 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
     }
+
+    "search" = {
+      cpu    = 2048
+      memory = 4096
+
+      version    = "latest"
+      repository = data.aws_ecr_repository.sservice["search"].repository_url
+
+      listener_rule_enable = false
+      add_search_env_info  = true
+
+      task_iam_role_statements = [
+        {
+          effect = "Allow"
+          actions = [
+            "secretsmanager:GetSecretValue"
+          ]
+          resources = [
+            data.aws_secretsmanager_secret.this["api"].arn
+          ]
+        }
+      ]
+
+      subnet_ids = data.aws_subnets.this["api"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["api"].id
+      ]
+    }
   }
 
   batch = {
