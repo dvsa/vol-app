@@ -31,12 +31,12 @@ module "ecr" {
     rules = [
       {
         rulePriority = 10,
-        description  = "Keep last 5 release images",
+        description  = "Keep last 20 release images",
         selection = {
           tagStatus      = "tagged",
           tagPatternList = ["*.*.*"],
           countType      = "imageCountMoreThan",
-          countNumber    = 5
+          countNumber    = 20
         },
         action = {
           type = "expire"
@@ -44,12 +44,12 @@ module "ecr" {
       },
       {
         rulePriority = 20,
-        description  = "Keep last 5 non-release images",
+        description  = "Keep last 20 non-release images",
         selection = {
           tagStatus      = "tagged",
           tagPatternList = ["*"],
           countType      = "imageCountMoreThan",
-          countNumber    = 5
+          countNumber    = 20
         },
         action = {
           type = "expire"
