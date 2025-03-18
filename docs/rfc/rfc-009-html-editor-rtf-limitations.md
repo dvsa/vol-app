@@ -107,7 +107,7 @@ The current approach of using RTF templates with Microsoft Word editing via WebD
 
 The current RTF and Word-based approach presents significant limitations that cannot be overcome without a fundamental change in technology approach. Moving to an HTML/JSON-based solution with in-browser editing will:
 
-1. Eliminate dependencies on specific client software
+1. Eliminate dependencies on specific client software configuration
 2. Provide structured content that can be easily reported on and analyzed
 3. Enable better content reusability and standardization
 4. Position the system for future AI integration and automation
