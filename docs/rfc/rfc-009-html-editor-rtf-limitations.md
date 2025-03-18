@@ -13,7 +13,7 @@ The current approach of using RTF templates with Microsoft Word editing via WebD
 -   **Microsoft Word Requirement**: The current system depends on caseworkers having Microsoft Word installed on their machines
 -   **Version Compatibility Issues**: Different versions of Word handle WebDAV connections and RTF formatting differently
 -   **Licensing Costs**: Requires maintaining Microsoft Office licenses for all users that must edit documents
--   **Installation Management**: IT departments must ensure proper installation and configuration across all workstations.
+-   **Installation Management**: IT departments must ensure proper installation and configuration across all workstations. Including security policy alterations, and Windows registry edits to allow the Open-Edit-Save WebDAV workflow to operate correctly.
 
 #### WebDAV Implementation Challenges
 
