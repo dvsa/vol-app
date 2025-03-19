@@ -279,10 +279,10 @@ module "service" {
         }
       ]
 
-      subnet_ids = data.aws_subnets.this["api"].ids
+      subnet_ids = data.aws_subnets.this["API"].ids
 
       security_group_ids = [
-        data.aws_security_group.this["api"].id
+        data.aws_security_group.this["API"].id
       ]
     }
   }
