@@ -4,10 +4,11 @@ locals {
 
   lb_details = {
     for service, details in var.services : service => {
-      lb_arn  = "app/${split("/", details.lb_arn)[2]}/${split("/", details.lb_arn)[3]}"
-      lb_name = split("/", details.lb_arn)[2]
-    }
+      lb_arn  = details.lb_arn != null && details.lb_arn != "" ? "app/${split("/", details.lb_arn)[2]}/${split("/", details.lb_arn)[3]}" : null
+      lb_name = details.lb_arn != null && details.lb_arn != "" ? split("/", details.lb_arn)[2] : null
+    } if details.lb_arn != null && details.lb_arn != ""
   }
+
   dashboard_widgets = [
 
     {
