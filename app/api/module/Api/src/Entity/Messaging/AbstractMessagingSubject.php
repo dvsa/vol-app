@@ -109,6 +109,32 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      */
     protected $version = 1;
 
+
+    /**
+     * Is active
+     *
+     * @ORM\Column(type="smallint", name="is_active", nullable=false, options={"default": 1})
+     */
+    protected $isActive;
+
+    /**
+     * Set the is active
+     */
+    public function setIsActive($isActive): MessagingSubject
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get the is active
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+
     /**
      * Set the category
      *
