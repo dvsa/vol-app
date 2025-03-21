@@ -157,8 +157,6 @@ module "service" {
 
   elasticache_url = "tcp://cache.dev.olcs.dev-dvsacloud.uk:6379"
 
-
-
   services = {
     "api" = {
       cpu    = 2048
@@ -174,7 +172,6 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.this["API"].id
       ]
-
 
       lb_listener_arn           = data.aws_lb_listener.this["API"].arn
       lb_arn                    = data.aws_lb.this["API"].arn
@@ -261,6 +258,35 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
+    }
+
+    "search" = {
+      cpu    = 2048
+      memory = 4096
+
+      version    = "latest"
+      repository = data.aws_ecr_repository.sservice["search"].repository_url
+
+      listener_rule_enable = false
+      add_search_env_info  = true
+
+      task_iam_role_statements = [
+        {
+          effect = "Allow"
+          actions = [
+            "secretsmanager:GetSecretValue"
+          ]
+          resources = [
+            data.aws_secretsmanager_secret.this["api"].arn
+          ]
+        }
+      ]
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["API"].id
+      ]
     }
   }
 

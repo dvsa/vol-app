@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 typeset -i errorcount
 let errorcount=0
@@ -13,10 +13,6 @@ usage() {
     echo "Usage:  build.sh [options]"
     echo;
     echo "        -c <file>     : bash file containing config"
-    echo "        -l            : Promote new index, assign it the alias and delete the old index"
-    echo "        -d <seconds>  : Number of seconds delay when checking if rivers are complete"
-    echo "        -i <index>    : Rebuild named index - multiple '-i <name>' clauses may be specified"
-    echo "        -p            : Rebuild indexes in parallel rather than sequentially"
     echo "        -s            : Suppress syslog output."
     echo
     exit;
@@ -83,104 +79,6 @@ logWarning() {
     if [ "$2" == "true" ]; then
         logger -i -p user.warning -t ESbuild -- "WARNING:$1"
     fi
-}
-
-function stopService()
-{
-    typeset -i retryCount=0
-    typeset -i sleepTime=20
-    typeset -i retryLimit=6
-
-    serviceName="$1"
-
-    if [[ $2 =~ ^[0-9]+$ ]] ; then
-        let sleepTime=$((10#$2))
-    fi
-
-    if [[ $3 =~ ^[0-9]+$ ]] ; then
-        let retryLimit=$((10#$3))
-    fi
-
-    while true
-    do
-        response=$(/usr/bin/systemctl --quiet status ${serviceName})
-        ret=$?
-
-        if [[ $ret == 3 ]]; then
-            logInfo "The [${serviceName}] service is already stopped." ${syslogEnabled}
-            return 0
-        else
-            logInfo "Stopping [${serviceName}] service." ${syslogEnabled}
-            response=$(/usr/bin/systemctl --quiet --job-mode=fail stop ${serviceName})
-            ret=$?
-
-            if [[ $ret != 0 ]]; then
-                let retryCount=$((retryCount + 1))
-                logInfo "Failed to stop the [${serviceName}] service on attempt [${retryCount}] - error code [${ret}]." ${syslogEnabled}
-
-                if (( ${retryCount} < ${retryLimit} )); then
-                    logInfo "Backing off for [${sleepTime}] seconds." ${syslogEnabled}
-                    sleep ${sleepTime}
-                else
-                    logError "Failed to stop the [${serviceName}] service after [${retryCount}] attempts." ${syslogEnabled}
-                    return 1
-                fi
-            else
-                logInfo "Successfully stopped the [${serviceName}] service." ${syslogEnabled}
-                return 0
-            fi
-        fi
-        blankline
-    done
-}
-
-function startService()
-{
-    typeset -i retryCount=0
-    typeset -i sleepTime=20
-    typeset -i retryLimit=6
-    
-    serviceName="$1"
-
-    if [[ $2 =~ ^[0-9]+$ ]] ; then
-        let sleepTime=$((10#$2))
-    fi
-
-    if [[ $3 =~ ^[0-9]+$ ]] ; then
-        let retryLimit=$((10#$3))
-    fi
-
-    while true
-    do
-        response=$(/usr/bin/systemctl --quiet status ${serviceName})
-        ret=$?
-
-        if [[ $ret == 0 ]]; then
-            logInfo "The [${serviceName}] service is already started." ${syslogEnabled}
-            return 0
-        else
-            logInfo "Starting [${serviceName}] service." ${syslogEnabled}
-            response=$(/usr/bin/systemctl --quiet --job-mode=fail start ${serviceName})
-            ret=$?
-
-            if [[ $ret != 0 ]]; then
-                let retryCount=$((retryCount + 1))
-                logInfo "Failed to start the [${serviceName}] service on attempt [${retryCount}] - error code [${ret}]." ${syslogEnabled}
-    
-                if (( ${retryCount} < ${retryLimit} )); then
-                    logInfo "Backing off for [${sleepTime}] seconds." ${syslogEnabled}
-                    sleep ${sleepTime}
-                else
-                    logError "Failed to start the [${serviceName}] service after [${retryCount}] attempts." ${syslogEnabled}
-                    return 1
-                fi
-            else
-                logInfo "Successfully started the [${serviceName}] service." ${syslogEnabled}
-                return 0
-            fi
-        fi
-        blankline
-    done
 }
 
 function removeLastrun()
@@ -296,22 +194,11 @@ function purgeOldAliases()
 
 delay=70 # seconds
 newVersion=$(date +%Y%m%d%H%M%S) #timestamp
-confDir='/etc/logstash/conf.d'
-processInParallel=false
+confDir='/usr/share/logstash/config/'
 syslogEnabled=true
-promoteNewIndex=false
-awsAccount=$(uname -n | cut -d'.' -f4)
+promoteNewIndex=true
+awsAccount=$(uname -n | cut -d'.' -f4) # this needs passing in
 
-
-#
-# Determine if this is the first run after the SEARCHDATA instance start, 
-# in which case, no lastrun files will be present in /etc/logstash/lastrun
-#
-
-lastrunCount=$(ls /etc/logstash/lastrun | grep ".*\.lastrun" | wc -l )
-if [[ "$lastrunCount" == "0" ]]; then
-    processInParallel=true
-fi
 
 while getopts "c:d:n:i:lps" opt; do
   case $opt in
@@ -321,23 +208,8 @@ while getopts "c:d:n:i:lps" opt; do
         fi
         source $OPTARG
       ;;
-    l)
-        promoteNewIndex=true
-      ;;
-    p)
-        processInParallel=true
-      ;;
     s)
         syslogEnabled=false
-      ;;
-    d)
-        delay=$OPTARG
-      ;;
-    n)
-        newVersion=$OPTARG
-      ;;
-    i)
-        INDEXES=(${INDEXES[@]} "${OPTARG}")
       ;;
     \?)
       usage "Invalid option: -$OPTARG";
@@ -354,11 +226,8 @@ then
     exit;
 fi
 
+INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
 
-if [ -z "${INDEXES}" ]
-then
-    INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
-fi
 
 
 lockFile=$(readlink -m build.lock)
@@ -395,154 +264,66 @@ fi
 blankline
 
 #BUILD ALL IN PARALLEL
-if [ $processInParallel = true ]; then 
-    # BEGINNING  OF OPERATIONS SPECIFIC TO THE BUILD IN PARALLEL OPTION
     
-    logInfo "DELETING MATCHING INDEXES WITHOUT AN ALIAS." ${syslogEnabled}
-    blankline
-
-    for index in "${INDEXES[@]}"
-    do
-        purgeOldAliases ${index} 30 6 ${syslogEnabled} ${ELASTIC_HOST}
-        ret=$?
-        if [[ $ret != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-        fi
-    done
-    
-    singleline
-    logInfo "CREATING NEW INDEXES" ${syslogEnabled}
-    blankline
-
-    logInfo "Stopping Logstash service prior to config file updates." ${syslogEnabled}
-    stopService "logstash" 30 6
-    ret=$?
-    if [[ $ret != 0 ]]; then
-        let errorcount=$((errorcount + 1))
-        removeLockfile "${lockFile}" ${syslogEnabled}
-        if [[ $? != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-        fi
-        
-        logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-        blankline
-        doubleline
-        exit $errorcount
-    fi
-
-    for index in "${INDEXES[@]}"
-    do
-    
-        logInfo "Updating config file for [${index}] index and new version [${index}_v${newVersion}]." ${syslogEnabled}
-
-        sed "s/index => \"${index}_v[0-9]*\"/index => \"${index}_v${newVersion}\"/" -i $confDir/$index.conf
-
-        removeLastrun "/etc/logstash/lastrun/${index}.lastrun"  ${syslogEnabled}
-        if [[ $? != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-            removeLockfile "${lockFile}" ${syslogEnabled}
-            if [[ $? != 0 ]]; then
-                let errorcount=$((errorcount + 1))
-            fi
-        
-            logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-            blankline
-            doubleline
-            exit $errorcount
-        fi
-        
-    done
-    
-    logInfo "Starting Logstash service after config file updates.." ${syslogEnabled}
-
-    startService "logstash" 30 6 
-    ret=$?
-    if [[ $ret != 0 ]]; then
-        let errorcount=$((errorcount + 1))
-        removeLockfile "${lockFile}" ${syslogEnabled}
-        if [[ $? != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-        fi
-        
-        logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-        blankline
-        doubleline
-        exit $errorcount
-    fi
-
-    # END OF OPERATIONS SPECIFIC TO THE BUILD IN PARALLEL OPTION
-fi
+logInfo "DELETING MATCHING INDEXES WITHOUT AN ALIAS." ${syslogEnabled}
+blankline
 
 for index in "${INDEXES[@]}"
 do
-    if [ $processInParallel != true ]; then 
-        # BEGINNING OF OPERATIONS SPECIFIC TO THE BUILD SEQUENTIALLY OPTION
-        singleline
-        logInfo "DELETING MATCHING INDEXES WITHOUT AN ALIAS" ${syslogEnabled}
-        blankline
-     
-        purgeOldAliases ${index} 30 6 ${syslogEnabled} ${ELASTIC_HOST}
-        ret=$?
-        if [[ $ret != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-        fi
+    purgeOldAliases ${index} 30 6 ${syslogEnabled} ${ELASTIC_HOST}
+    ret=$?
+    if [[ $ret != 0 ]]; then
+        let errorcount=$((errorcount + 1))
+    fi
+done
+    
+singleline
+logInfo "CREATING NEW INDEXES" ${syslogEnabled}
+blankline
 
-        blankline
-        singleline
-        logInfo "CREATING NEW INDEX [${index}]" ${syslogEnabled}
-        blankline
-        logInfo "Updating config file for [${index}] index and new version [${index}_v${newVersion}]." ${syslogEnabled}
-        logInfo "Stopping Logstash service prior to config file updates." ${syslogEnabled}
-        stopService "logstash" 30 6 
-        ret=$?
-        if [[ $ret != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-            
-            if [[ $? != 0 ]]; then
-                let errorcount=$((errorcount + 1))
-            fi
-        
-            logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-            blankline
-            doubleline
-            exit $errorcount
-        fi
+for index in "${INDEXES[@]}"
+do
+    
+    logInfo "Updating config file for [${index}] index and new version [${index}_v${newVersion}]." ${syslogEnabled}
 
-        sed "s/index => \"${index}_v[0-9]*\"/index => \"${index}_v${newVersion}\"/" -i $confDir/$index.conf
+    sed "s/index => \"${index}_v[0-9]*\"/index => \"${index}_v${newVersion}\"/" -i $confDir/$index.conf
 
-        removeLastrun "/etc/logstash/lastrun/${index}.lastrun"  ${syslogEnabled}
+    removeLastrun "/etc/logstash/lastrun/${index}.lastrun"  ${syslogEnabled}
+    if [[ $? != 0 ]]; then
+        let errorcount=$((errorcount + 1))
+        removeLockfile "${lockFile}" ${syslogEnabled}
         if [[ $? != 0 ]]; then
             let errorcount=$((errorcount + 1))
-            removeLockfile "${lockFile}" ${syslogEnabled}
-            if [[ $? != 0 ]]; then
-                let errorcount=$((errorcount + 1))
-            fi
-        
-            logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-            blankline
-            doubleline
-            exit $errorcount
         fi
         
-        logInfo "Starting Logstash service." ${syslogEnabled}
-        startService "logstash" 30 6 
-        ret=$?
-        if [[ $ret != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-            removeLockfile "${lockFile}" ${syslogEnabled}
-            if [[ $? != 0 ]]; then
-                let errorcount=$((errorcount + 1))
-            fi
-        
-            logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-            blankline
-            doubleline
-            exit $errorcount
-        fi
-    
-        # END OF OPERATIONS SPECIFIC TO THE BUILD SEQUENTIALLY OPTION
+        logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
+        blankline
+        doubleline
+        exit $errorcount
     fi
+        
+done
+    
+logInfo "Starting Logstash service after config file updates.." ${syslogEnabled}
 
+startService "logstash" 30 6 
+ret=$?
+if [[ $ret != 0 ]]; then
+    let errorcount=$((errorcount + 1))
+    removeLockfile "${lockFile}" ${syslogEnabled}
+    if [[ $? != 0 ]]; then
+        let errorcount=$((errorcount + 1))
+    fi
+        
+    logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
+    blankline
+    doubleline
+    exit $errorcount
+fi
+
+
+for index in "${INDEXES[@]}"
+do
     logInfo "Populate Index [${index}]." ${syslogEnabled}
 
     lastSize=0

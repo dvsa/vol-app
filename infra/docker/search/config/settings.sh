@@ -1,6 +1,8 @@
+#!/bin/bash -e
+
 ELASTIC_HOST=elasticsearch-dev.olcs.mgt.mtpdvsa
-DBHOST=etl-dev.olcs.mgt.mtpdvsa
-DBNAME=olcsetl
-DBUSER=olcsetl-user
-DBPASSWORD=password
+DBHOST="$DB_HOST"
+DBNAME="$DB_NAME"
+DBUSER="$DB_USER"
+DBPASSWORD="$DB_PASSWORD"
 LOGSTASH_PATH=/etc/logstash/
