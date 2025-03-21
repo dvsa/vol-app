@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.17.0](https://github.com/dvsa/vol-app/compare/v5.16.0...v5.17.0) (2025-03-21)
+
+
+### Features
+
+* 5950 containers search - testing search service ([#713](https://github.com/dvsa/vol-app/issues/713)) ([d7f5a94](https://github.com/dvsa/vol-app/commit/d7f5a947363e9a79a16323bb3bf418cc3a15bfbe))
+* push the container images proven by dev/int vfts to prod ECR repo ([#708](https://github.com/dvsa/vol-app/issues/708)) ([75e744e](https://github.com/dvsa/vol-app/commit/75e744e2be910fb822bd46218b4a0603b957713b))
+
+
+### Bug Fixes
+
+* add prep job alert email ([#709](https://github.com/dvsa/vol-app/issues/709)) ([24d4bbb](https://github.com/dvsa/vol-app/commit/24d4bbb7e7f9f714de6b13022ceb7c1aa7d11484))
+* increase lifecycle policy to prevent images being overwritten so quickly ([#711](https://github.com/dvsa/vol-app/issues/711)) ([e04dd82](https://github.com/dvsa/vol-app/commit/e04dd82ab28e8c4f3fb86bc1a2d6699f7f6cd4f9))
+
 ## [5.16.0](https://github.com/dvsa/vol-app/compare/v5.14.1...v5.16.0) (2025-03-13)
 
 
