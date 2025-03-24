@@ -4,7 +4,7 @@ FROM search AS production
 
 USER root
 
-RUN apt-get update && apt-get install --no-install-recommends -y python3=3.8 && \
+RUN apt-get update && apt-get install --no-install-recommends -y python3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
