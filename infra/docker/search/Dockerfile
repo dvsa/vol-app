@@ -25,7 +25,7 @@ COPY build.sh /usr/share/logstash/build.sh
 
 COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 
-RUN chown -R logstash:root /usr/share/logstash
+RUN chown -R logstash:root /usr/share/logstash/*
 
 RUN chmod -R 755 /usr/share/logstash/*
 
