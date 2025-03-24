@@ -6,9 +6,8 @@ USER root
 
 RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc
+    rm -rf /var/lib/apt/lists/* && \
+    /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc
 
 # copy lib database jdbc jars
 COPY mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
