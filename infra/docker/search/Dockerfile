@@ -30,3 +30,5 @@ RUN chown -R logstash:root /usr/share/logstash/* && \
 USER logstash
 
 CMD ["/usr/share/logstash/entrypoint.sh"]
+
+#Deploy 26-03-2025
