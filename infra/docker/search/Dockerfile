@@ -9,24 +9,27 @@ RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && 
     rm -rf /var/lib/apt/lists/* && \
     /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc
 
-USER logstash
-
 # copy lib database jdbc jars
-COPY --chown=logstash mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
+COPY mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
 
 # Delete default configuration
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
 
 # Copy configuration
-COPY --chown=logstash --chmod=755 config/ /usr/share/logstash/config/
+COPY config/ /usr/share/logstash/config/
 
 # copy scripts
-COPY --chown=logstash --chmod=755 py /usr/share/logstash/py
-COPY --chown=logstash --chmod=755 build.sh /usr/share/logstash/build.sh
+COPY py /usr/share/logstash/py
+COPY build.sh /usr/share/logstash/build.sh
 
-COPY --chown=logstash --chmod=755 entrypoint.sh /usr/share/logstash/entrypoint.sh
+COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["/usr/share/logstash/entrypoint.sh"]
+RUN chown -R logstash:logstash /usr/share/logstash/* && \
+    chmod -R 755 /usr/share/logstash/* && \
+    chmod +x /usr/share/logstash/entrypoint.sh
+
+USER logstash
+
+ENTRYPOINT ["sh", "/usr/share/logstash/entrypoint.sh"]
 
 #Deploy 26-03-2025
