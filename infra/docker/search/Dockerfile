@@ -24,11 +24,11 @@ COPY build.sh /usr/share/logstash/build.sh
 
 COPY entrypoint.sh /usr/share/logstash/entrypoint.sh
 
-RUN chown -R logstash:root /usr/share/logstash/* && \
+RUN chown -R logstash:logstash /usr/share/logstash/* && \
     chmod -R 755 /usr/share/logstash/*
 
 USER logstash
 
-CMD ["/usr/share/logstash/entrypoint.sh"]
+ENTRYPOINT ["/usr/share/logstash/entrypoint.sh"]
 
 #Deploy 26-03-2025
