@@ -21,7 +21,7 @@ done
 #/usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh
 
 # Start logstash
- exec logstash
+exec logstash
 
 # keep container running
 #tail -f /dev/null
