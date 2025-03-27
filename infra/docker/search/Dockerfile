@@ -25,5 +25,3 @@ COPY --chown=logstash --chmod=755 py /usr/share/logstash/py
 COPY --chown=logstash --chmod=755 build.sh /usr/share/logstash/build.sh
 
 COPY --chown=logstash --chmod=755 entrypoint.sh /usr/local/bin/docker-entrypoint
-
-#Deploy 26-03-2025
