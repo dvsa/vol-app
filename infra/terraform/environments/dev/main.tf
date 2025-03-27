@@ -264,7 +264,7 @@ module "service" {
       cpu    = 2048
       memory = 4096
 
-      version    = "latest"
+      version    = var.search_image_tag
       repository = data.aws_ecr_repository.sservice["search"].repository_url
 
       listener_rule_enable = false
