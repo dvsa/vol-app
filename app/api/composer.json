@@ -92,9 +92,6 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
-    "platform": {
-      "ext-redis": "4.3"
-    },
     "allow-plugins": {
       "bamarni/composer-bin-plugin": true
     }
