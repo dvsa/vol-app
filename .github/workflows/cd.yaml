@@ -528,7 +528,7 @@ jobs:
       needs.test_int_smoke.result == 'success' &&
       needs.test_int_selfserve.result == 'success' &&
       needs.test_int_internal.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-arm64
     needs:
       - release-please
       - get-version
