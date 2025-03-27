@@ -22,9 +22,9 @@ filter {
 
 output {
     elasticsearch {
-        hosts => ["<ES_HOST>:443"]
-        ssl => true
-        ssl_certificate_verification => false
+        hosts => ["<ELASTIC_HOST>:443"]
+        ssl_enabled => true
+        ssl_verification_mode => "full"
         index => "<INDEX_NAME>_v<INDEX_VERSION>"
         document_id => "%{doc_id}"
         template => "<BASEDIR>/templates/<INDEX_NAME>.json"

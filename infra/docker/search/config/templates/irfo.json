@@ -1,0 +1,120 @@
+{
+  "template": "irfo*",
+  "mappings": {
+    "properties": {
+      "org_id": {
+        "type": "keyword"
+      },
+      "org_name": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "companies"
+      },
+      "org_name_wildcard": {
+        "type": "keyword",
+        "normalizer": "lowerasciinormalizer"
+      },
+      "org_type_desc": {
+        "type": "keyword"
+      },
+      "organisation_trading_names": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "pipe_sep"
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 0,
+    "refresh_interval": "30s",
+    "analysis": {
+      "char_filter": {
+        "spaces_removed_pattern": {
+          "type": "pattern_replace",
+          "pattern": "\\s",
+          "replacement": ""
+        }
+      },
+      "analyzer": {
+        "companies": {
+          "tokenizer": "standard",
+          "filter": ["my_stopwords", "word_delimiter", "lowercase"]
+        },
+        "lowercase": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": ["lowercase"]
+        },
+        "pipe_sep": {
+          "type": "custom",
+          "tokenizer": "pipe",
+          "filter": ["lowercase"]
+        }
+      },
+      "tokenizer": {
+        "pipe": {
+          "type": "pattern",
+          "pattern": "|"
+        }
+      },
+      "normalizer": {
+        "lowerasciinormalizer": {
+          "type": "custom",
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
+      "filter": {
+        "word_delimiter": {
+          "type": "word_delimiter",
+          "preserve_original": "true"
+        },
+        "my_stopwords": {
+          "type": "stop",
+          "stopwords": [
+            "a",
+            "an",
+            "and",
+            "&",
+            "are",
+            "as",
+            "at",
+            "be",
+            "but",
+            "by",
+            "for",
+            "if",
+            "in",
+            "into",
+            "is",
+            "it",
+            "no",
+            "not",
+            "of",
+            "on",
+            "or",
+            "such",
+            "that",
+            "the",
+            "their",
+            "then",
+            "there",
+            "these",
+            "they",
+            "this",
+            "to",
+            "was",
+            "will",
+            "with",
+            "limited",
+            "ltd",
+            "plc",
+            "inc",
+            "incorporated",
+            "llp"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Consult vol-puppet/puppet/modules/profile/manifests/olcs/searchdatav6.pp for original build steps
 
@@ -13,7 +13,7 @@ do
     /usr/share/logstash/config/generate-conf.sh -c /usr/share/logstash/config/settings.sh -i $i 
     
     # Add to pipelines.yaml
-    echo -e "- pipeline.id: $i\n  path.config: \"/usr/share/logstash/pipline/${i}.conf\"" >> "/usr/share/logstash/pipeline/pipelines.yml"
+    echo -e "- pipeline.id: $i\n  path.config: \"/usr/share/logstash/pipline/${i}.conf\"" >> "/usr/share/logstash/config/pipelines.yml"
 
 done
 

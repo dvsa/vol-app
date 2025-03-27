@@ -1,0 +1,185 @@
+{
+  "template": "person*",
+  "mappings": {
+    "properties": {
+      "person_id": {
+        "type": "keyword"
+      },
+      "org_id": {
+        "type": "keyword"
+      },
+      "lic_id": {
+        "type": "keyword"
+      },
+      "tm_id": {
+        "type": "keyword"
+      },
+      "contact_type": {
+        "type": "keyword"
+      },
+      "person_forename": {
+        "type": "text",
+        "fielddata": true
+      },
+      "person_forename_wildcard": {
+        "type": "keyword"
+      },
+      "person_family_name": {
+        "type": "text",
+        "fielddata": true
+      },
+      "person_fullname": {
+        "type": "text",
+        "fielddata": true
+      },
+      "person_family_name_wildcard": {
+        "type": "keyword"
+      },
+      "person_birth_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "person_other_name": {
+        "type": "keyword"
+      },
+      "person_other_name_wildcard": {
+        "type": "keyword"
+      },
+      "person_birth_place": {
+        "type": "text",
+        "fielddata": true
+      },
+      "person_title": {
+        "type": "text",
+        "fielddata": true
+      },
+      "person_deleted": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "person_created_on": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "org_name": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "companies"
+      },
+      "org_type": {
+        "type": "keyword"
+      },
+      "lic_no": {
+        "type": "text",
+        "fielddata": true
+      },
+      "lic_status": {
+        "type": "keyword"
+      },
+      "lic_status_desc": {
+        "type": "keyword"
+      },
+      "lic_type_desc": {
+        "type": "keyword"
+      },
+      "traffic_area": {
+        "type": "keyword"
+      },
+      "ta_code": {
+        "type": "keyword"
+      },
+      "tm_status_desc": {
+        "type": "keyword"
+      },
+      "found_as": {
+        "type": "keyword"
+      },
+      "date_added": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "date_removed": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "disqualified": {
+        "type": "keyword"
+      },
+      "case_id": {
+        "type": "keyword"
+      },
+      "goods_or_psv_desc": {
+        "type": "keyword"
+      },
+      "found_type": {
+        "type": "keyword"
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 0,
+    "refresh_interval": "30s",
+    "analysis": {
+      "filter": {
+        "spaces_removed_pattern": {
+          "type": "pattern_replace",
+          "pattern": "\\s",
+          "replacement": ""
+        }
+      },
+      "analyzer": {
+        "companies": {
+          "type": "standard",
+          "stopwords": [
+            "a",
+            "an",
+            "and",
+            "&",
+            "are",
+            "as",
+            "at",
+            "be",
+            "but",
+            "by",
+            "for",
+            "if",
+            "in",
+            "into",
+            "is",
+            "it",
+            "no",
+            "not",
+            "of",
+            "on",
+            "or",
+            "such",
+            "that",
+            "the",
+            "their",
+            "then",
+            "there",
+            "these",
+            "they",
+            "this",
+            "to",
+            "was",
+            "will",
+            "with",
+            "limited",
+            "ltd",
+            "plc",
+            "inc",
+            "incorporated",
+            "llp"
+          ]
+        },
+        "lowercase": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": ["lowercase"]
+        }
+      }
+    }
+  }
+}

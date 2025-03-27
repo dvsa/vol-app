@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-ELASTIC_HOST=elasticsearch-dev.olcs.mgt.mtpdvsa
+ELASTIC_HOST="$ELASTIC_HOST"
 DBHOST="$DB_HOST"
 DBNAME="$DB_NAME"
 DBUSER="$DB_USER"

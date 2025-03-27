@@ -66,7 +66,7 @@ jobs:
       # Assets
       should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_modified == 'true' || null }}
       # Docker
-      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-search-docker-files.outputs.any_modified == 'true' || null}}
+      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || null}}
       should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
@@ -262,7 +262,7 @@ jobs:
 
   docker:
     name: Docker
-    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-and-push-search-docker) }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
@@ -517,6 +517,9 @@ jobs:
 
   push-to-prod-ecr:
     name: Push Docker Images to PROD ECR
+    permissions:
+      contents: read
+      id-token: write
     if: |
       always() &&
       !cancelled() &&
@@ -591,13 +594,13 @@ jobs:
             # For vft, always use latest tag
             echo "Pulling image from NONPROD ECR: ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
             docker pull ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
-            
+
             # Tag for local reference
             docker tag ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest local-image:latest
           else
             echo "Pulling image from NONPROD ECR: ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
             docker pull ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
-            
+
             # Tag for local reference
             docker tag ${NONPROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }} local-image:${{ steps.image-tag.outputs.tag }}
           fi
@@ -619,22 +622,22 @@ jobs:
             # For vft, always use latest tag
             echo "Tagging image for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
             docker tag local-image:latest ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
-            
+
             echo "Pushing image to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
             docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
           else
             # Tag the local image for PROD ECR
             echo "Tagging image for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
             docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
-            
+
             echo "Pushing image to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
             docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
-            
+
             # Also push as latest if not liquibase (which already uses latest)
             if [ "${{ matrix.project }}" != "liquibase" ]; then
               echo "Tagging image as latest for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
               docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
-              
+
               echo "Pushing latest tag to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
               docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
             fi

@@ -1,0 +1,170 @@
+{
+  "template": "user*",
+  "mappings": {
+    "properties": {
+      "user_id": {
+        "type": "keyword"
+      },
+      "role_id": {
+        "type": "keyword"
+      },
+      "org_id": {
+        "type": "keyword"
+      },
+      "login_id": {
+        "type": "text",
+        "fielddata": true
+      },
+      "con_det_id": {
+        "type": "keyword"
+      },
+      "identity_pid": {
+        "type": "keyword"
+      },
+      "team_id": {
+        "type": "keyword"
+      },
+      "email_address": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "urls-links-emails"
+      },
+      "forename": {
+        "type": "text",
+        "fielddata": true
+      },
+      "family_name": {
+        "type": "text",
+        "fielddata": true
+      },
+      "full_name": {
+        "type": "text",
+        "fielddata": true
+      },
+      "team_name": {
+        "type": "keyword"
+      },
+      "org_name": {
+        "type": "keyword"
+      },
+      "org_name_wildcard": {
+        "type": "keyword"
+      },
+      "lic_nos": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "comma_sep"
+      },
+      "user_type": {
+        "type": "keyword"
+      },
+      "role": {
+        "type": "keyword"
+      },
+      "description": {
+        "type": "keyword"
+      },
+      "partner_name": {
+        "type": "keyword"
+      },
+      "la_name": {
+        "type": "keyword"
+      },
+      "deleted_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "entity": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "companies"
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 0,
+    "refresh_interval": "30s",
+    "analysis": {
+      "char_filter": {
+        "spaces_removed_pattern": {
+          "type": "pattern_replace",
+          "pattern": "\\s",
+          "replacement": ""
+        }
+      },
+      "analyzer": {
+        "companies": {
+          "type": "standard",
+          "stopwords": [
+            "a",
+            "an",
+            "and",
+            "&",
+            "are",
+            "as",
+            "at",
+            "be",
+            "but",
+            "by",
+            "for",
+            "if",
+            "in",
+            "into",
+            "is",
+            "it",
+            "no",
+            "not",
+            "of",
+            "on",
+            "or",
+            "such",
+            "that",
+            "the",
+            "their",
+            "then",
+            "there",
+            "these",
+            "they",
+            "this",
+            "to",
+            "was",
+            "will",
+            "with",
+            "limited",
+            "ltd",
+            "plc",
+            "inc",
+            "incorporated",
+            "llp"
+          ]
+        },
+        "names": {
+          "tokenizer": "standard",
+          "filter": ["standard", "lowercase"]
+        },
+        "urls-links-emails": {
+          "type": "custom",
+          "tokenizer": "uax_url_email",
+          "filter": ["lowercase"]
+        },
+        "lowercase": {
+          "type": "custom",
+          "tokenizer": "keyword",
+          "filter": ["lowercase"]
+        },
+        "comma_sep": {
+          "type": "custom",
+          "tokenizer": "comma",
+          "filter": ["lowercase"]
+        }
+      },
+      "tokenizer": {
+        "comma": {
+          "type": "pattern",
+          "pattern": ", "
+        }
+      }
+    }
+  }
+}
