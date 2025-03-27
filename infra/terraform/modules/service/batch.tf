@@ -73,8 +73,12 @@ locals {
 
       environment = [
         {
+          name  = "ELASTIC_HOST"
+          value = "searchv6.${var.legacy_environment}.olcs.${var.domain_name}"
+        },
+        {
           name  = "DB_HOST"
-          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
         },
         {
           name  = "DB_NAME"
@@ -82,7 +86,7 @@ locals {
         },
         {
           name  = "DB_USER"
-          value = "olcsapi"
+          value = "olcssearch"
         },
         {
           name  = "DB_PORT"
@@ -93,7 +97,7 @@ locals {
       secrets = [
         {
           name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
+          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_search_rds_password::"
         },
       ]
     }
