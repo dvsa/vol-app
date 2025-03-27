@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Consult vol-puppet/puppet/modules/profile/manifests/olcs/searchdatav6.pp for original build steps
 
