@@ -11,9 +11,10 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && apk del pcre-dev $PHPIZE_DEPS
 
 # Install icu-dev, intl, pdo_mysql, opcache
-RUN apk add --no-cache icu-dev \
+RUN apk add --no-cache icu-dev libzip-dev \
   && docker-php-ext-configure intl \
-  && docker-php-ext-install pdo_mysql opcache intl
+  && docker-php-ext-configure zip \
+  && docker-php-ext-install pdo_mysql opcache intl zip
 
 # Add extra scirpts for batch jobs  
 COPY ./scripts/ /mnt/data/scripts/
