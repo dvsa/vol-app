@@ -4,6 +4,7 @@ namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Repository\Document;
 use Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\DeleteDocument;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -15,6 +16,7 @@ use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\System\SlaTargetDate as SlaTargetDateEntity;
 use Dvsa\Olcs\Api\Domain\Repository\SlaTargetDate;
+use Dvsa\Olcs\Api\Entity\User\User;
 
 /**
  * Delete Document Test
@@ -31,7 +33,8 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('SlaTargetDate', SlaTargetDate::class);
 
         $this->mockedSmServices = [
-            'FileUploader' => m::mock()
+            'FileUploader' => m::mock(),
+            AuthorizationService::class => m::mock(AuthorizationService::class)
         ];
 
         parent::setUp();
@@ -52,7 +55,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     public function testHandleCommand()
     {
         $documentId = 123;
-        $command = Cmd::create(['id' => $documentId]);
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => false]);
 
         /** @var Entity $document */
         $document = m::mock(Entity::class)->makePartial();
@@ -117,7 +120,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     {
         $ebsrSubId = 123345;
         $documentId = 123;
-        $command = Cmd::create(['id' => 123]);
+        $command = Cmd::create(['id' => 123, 'unlinkLicence' => false]);
 
         /** @var EbsrSubmissionEntity $ebsrSubmission */
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class)->makePartial();
@@ -150,6 +153,125 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
             ->once();
 
         $this->expectedSideEffect(DeleteSubmissionCmd::class, ['id' => $ebsrSubId], new Result());
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [],
+            'messages' => [
+                'File removed',
+                'Document deleted'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * Tests handleCommand with unlinkLicence set to true
+     */
+    public function testHandleCommandWithUnlinkLicence()
+    {
+        $documentId = 123;
+        $userId = 456;
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => true]);
+
+        $user = m::mock(User::class);
+        $user->shouldReceive('getId')->andReturn($userId);
+
+        $createdByUser = m::mock(User::class);
+        $createdByUser->shouldReceive('getId')->andReturn($userId);
+
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser')
+            ->andReturn($user);
+
+        $document = m::mock(Entity::class)->makePartial();
+        $document->setIdentifier('ABC');
+        $document->setId($documentId);
+        $document->shouldReceive('getCreatedBy')->andReturn($createdByUser);
+        $document->shouldReceive('setLicence')->with(null)->once();
+
+        $this->mockedSmServices['FileUploader']->shouldReceive('remove')
+            ->once()
+            ->with('ABC');
+
+        $this->repoMap['Document']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($document)
+            ->shouldReceive('save')
+            ->with($document)
+            ->once()
+            ->shouldReceive('delete')
+            ->with($document);
+
+        $this->repoMap['CorrespondenceInbox']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
+
+        $this->repoMap['SlaTargetDate']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [],
+            'messages' => [
+                'File removed',
+                'Document deleted'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * Tests handleCommand with unlinkLicence set to true but different user
+     */
+    public function testHandleCommandWithUnlinkLicenceDifferentUser()
+    {
+        $documentId = 123;
+        $currentUserId = 456;
+        $createdByUserId = 789; // Different user ID
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => true]);
+
+        $user = m::mock(User::class);
+        $user->shouldReceive('getId')->andReturn($currentUserId);
+
+        $createdByUser = m::mock(User::class);
+        $createdByUser->shouldReceive('getId')->andReturn($createdByUserId);
+
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser')
+            ->andReturn($user);
+
+        $document = m::mock(Entity::class)->makePartial();
+        $document->setIdentifier('ABC');
+        $document->setId($documentId);
+        $document->shouldReceive('getCreatedBy')->andReturn($createdByUser);
+
+        $this->mockedSmServices['FileUploader']->shouldReceive('remove')
+            ->once()
+            ->with('ABC');
+
+        $this->repoMap['Document']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($document)
+            ->shouldReceive('delete')
+            ->with($document);
+
+        $this->repoMap['CorrespondenceInbox']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
+
+        $this->repoMap['SlaTargetDate']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
 
         $result = $this->sut->handleCommand($command);
 

@@ -80,7 +80,7 @@ final class DeleteDocument extends AbstractCommandHandler implements AuthAwareIn
         // keep this deletion from showing on the change history page for the licence vol-5967
         // Needed due to the mysql trigger that updates the change history table
         if(
-            $command->getUnlinkLicence === true
+            $command->getUnlinkLicence() === true
             && $document->getCreatedBy()->getId() === $this->getCurrentUser()->getId()
         ) {
             $document->setLicence(null);
