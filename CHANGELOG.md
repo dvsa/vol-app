@@ -1,5 +1,29 @@
 # Changelog
 
+## [5.17.0](https://github.com/dvsa/vol-app/compare/v5.16.0...v5.17.0) (2025-03-28)
+
+
+### Features
+
+* 5950 containers search - testing search service ([#713](https://github.com/dvsa/vol-app/issues/713)) ([d7f5a94](https://github.com/dvsa/vol-app/commit/d7f5a947363e9a79a16323bb3bf418cc3a15bfbe))
+* add search image tagging ([#733](https://github.com/dvsa/vol-app/issues/733)) ([da332e8](https://github.com/dvsa/vol-app/commit/da332e8326a08fa3ec809819c39547114b145e49))
+* push the container images proven by dev/int vfts to prod ECR repo ([#708](https://github.com/dvsa/vol-app/issues/708)) ([75e744e](https://github.com/dvsa/vol-app/commit/75e744e2be910fb822bd46218b4a0603b957713b))
+* updated gitignore ([#716](https://github.com/dvsa/vol-app/issues/716)) ([1a23040](https://github.com/dvsa/vol-app/commit/1a23040d73807d6a0f5251a8450e0a248fddba0f))
+
+
+### Bug Fixes
+
+* add prep job alert email ([#709](https://github.com/dvsa/vol-app/issues/709)) ([24d4bbb](https://github.com/dvsa/vol-app/commit/24d4bbb7e7f9f714de6b13022ceb7c1aa7d11484))
+* add required permissions block for OIDC assumption ([#721](https://github.com/dvsa/vol-app/issues/721)) ([6982574](https://github.com/dvsa/vol-app/commit/698257468e62091f0182bfeab95531353712527b))
+* cd workflow ([#728](https://github.com/dvsa/vol-app/issues/728)) ([c38d12c](https://github.com/dvsa/vol-app/commit/c38d12c0d98c843c0bfd3342c400d1ee67461a6f))
+* increase lifecycle policy to prevent images being overwritten so quickly ([#711](https://github.com/dvsa/vol-app/issues/711)) ([e04dd82](https://github.com/dvsa/vol-app/commit/e04dd82ab28e8c4f3fb86bc1a2d6699f7f6cd4f9))
+* more testing search permissions ([#731](https://github.com/dvsa/vol-app/issues/731)) ([618632e](https://github.com/dvsa/vol-app/commit/618632eca3fc58eb4683b406a56f660a96496db7))
+* run push to prod on ecr on arm64 runner so it grabs/pushes the right containers ([#738](https://github.com/dvsa/vol-app/issues/738)) ([d706787](https://github.com/dvsa/vol-app/commit/d7067878b60b608c9b285ce64cb2915fb14850d6))
+* search perms ([#730](https://github.com/dvsa/vol-app/issues/730)) ([b27af9e](https://github.com/dvsa/vol-app/commit/b27af9e3b6f7087ee5a1de37fc9b91ebc98355cf))
+* tweak to supress linting error in CD pipeline ([#726](https://github.com/dvsa/vol-app/issues/726)) ([8cbd79e](https://github.com/dvsa/vol-app/commit/8cbd79e1da465865fd7e3de2d4c7027f7c055a1f))
+* update dockerfile ([#729](https://github.com/dvsa/vol-app/issues/729)) ([fd5a968](https://github.com/dvsa/vol-app/commit/fd5a9687f9a535c8d863dce9410e96fcb258ce60))
+* updated gitignore ([#727](https://github.com/dvsa/vol-app/issues/727)) ([10ba70e](https://github.com/dvsa/vol-app/commit/10ba70ea360b69491cafe6bd625946fd11e173b6))
+
 ## [5.16.0](https://github.com/dvsa/vol-app/compare/v5.14.1...v5.16.0) (2025-03-13)
 
 
