@@ -21,7 +21,7 @@ filter {
 }
 
 output {
-    elasticsearch {
+    opensearch {
         hosts => ["<ELASTIC_HOST>:443"]
         ssl_enabled => true
         ssl_verification_mode => "full"
