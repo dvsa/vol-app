@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
+use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
+use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -18,8 +20,10 @@ use Psr\Container\ContainerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-final class DeleteDocument extends AbstractCommandHandler implements TransactionedInterface
+final class DeleteDocument extends AbstractCommandHandler implements AuthAwareInterface, TransactionedInterface
 {
+    use AuthAwareTrait;
+
     protected $repoServiceName = 'Document';
 
     protected $extraRepos = ['CorrespondenceInbox','SlaTargetDate'];
@@ -70,6 +74,17 @@ final class DeleteDocument extends AbstractCommandHandler implements Transaction
         $slaTargetDates = $slaTargetDateRepo->fetchByDocumentId($document->getId());
         foreach ($slaTargetDates as $slaTargetDate) {
             $this->getRepo('SlaTargetDate')->delete($slaTargetDate);
+        }
+
+        // If unlink flag was set, and the document was created by the current user, unlink the licence to
+        // keep this deletion from showing on the change history page for the licence vol-5967
+        // Needed due to the mysql trigger that updates the change history table
+        if(
+            $command->getUnlinkLicence() === true
+            && $document->getCreatedBy()->getId() === $this->getCurrentUser()->getId()
+        ) {
+            $document->setLicence(null);
+            $this->getRepo()->save($document);
         }
 
         $this->getRepo()->delete($document);

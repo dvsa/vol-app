@@ -102,7 +102,7 @@ class ProposeToRevoke extends AbstractCommandHandler implements AuthAwareInterfa
         ];
 
         $this->result->merge($this->handleSideEffect(GenerateAndStore::create($commandData)));
-        $this->result->merge($this->handleSideEffect(DeleteDocument::create(['id' => $documentID])));
+        $this->result->merge($this->handleSideEffect(DeleteDocument::create(['id' => $documentID, 'unlinkLicence' => true])));
     }
 
     private function printLetters(): void
