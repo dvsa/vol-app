@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.19.4-rc5](https://github.com/dvsa/vol-app/compare/v5.19.3-rc5...v5.19.4-rc5) (2025-03-31)
+
+
+### Bug Fixes
+
+* update app file for rp bump ([#748](https://github.com/dvsa/vol-app/issues/748)) ([764a6a4](https://github.com/dvsa/vol-app/commit/764a6a4a48f46d94c36126ee0a8fa0b48c1852cb))
+
 ## [5.19.3-rc5](https://github.com/dvsa/vol-app/compare/v5.19.3-rc5...v5.19.3-rc5) (2025-03-28)
 
 
