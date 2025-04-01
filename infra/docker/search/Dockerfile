@@ -7,7 +7,8 @@ USER root
 RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc
+    /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc && \
+    /usr/share/logstash/bin/logstash-plugin install logstash-output-opensearch
 
 USER logstash
 
