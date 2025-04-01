@@ -616,6 +616,11 @@ jobs:
         with:
           registry: ${{ env.PROD_REGISTRY }}
 
+      - name: Remove existing latest tag from PROD ECR
+        run: |
+          echo "Removing existing latest tag from PROD ECR if it exists"
+          aws ecr batch-delete-image --repository-name ${{ matrix.repo }}/${{ matrix.project }} --image-ids imageTag=latest || true
+
       - name: Push image to PROD ECR
         run: |
           if [ "${{ matrix.project }}" == "vft" ]; then
