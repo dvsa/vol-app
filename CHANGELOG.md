@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.0-rc5](https://github.com/dvsa/vol-app/compare/v5.19.4-rc5...v5.20.0-rc5) (2025-04-01)
+
+
+### Features
+
+* untag-prod-ecr-latests-before-push ([#751](https://github.com/dvsa/vol-app/issues/751)) ([da8072e](https://github.com/dvsa/vol-app/commit/da8072e12ea6e3ab12349da55b35219e77fc4106))
+
 ## [5.19.4-rc5](https://github.com/dvsa/vol-app/compare/v5.19.3-rc5...v5.19.4-rc5) (2025-03-31)
 
 
