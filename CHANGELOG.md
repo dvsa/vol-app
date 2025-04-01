@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.1-rc5](https://github.com/dvsa/vol-app/compare/v5.20.0-rc5...v5.20.1-rc5) (2025-04-01)
+
+
+### Bug Fixes
+
+* bring change from main into cd.yaml and trigger a build ([#754](https://github.com/dvsa/vol-app/issues/754)) ([f1cf020](https://github.com/dvsa/vol-app/commit/f1cf0208818f1dc41204442d5a90de2f465f66b5))
+
 ## [5.20.0-rc5](https://github.com/dvsa/vol-app/compare/v5.19.4-rc5...v5.20.0-rc5) (2025-04-01)
 
 
