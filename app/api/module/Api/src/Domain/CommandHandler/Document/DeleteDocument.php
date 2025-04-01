@@ -84,6 +84,7 @@ final class DeleteDocument extends AbstractCommandHandler implements AuthAwareIn
             && $document->getCreatedBy()->getId() === $this->getCurrentUser()->getId()
         ) {
             $document->setLicence(null);
+            $document->setApplication(null);
             $this->getRepo()->save($document);
         }
 
