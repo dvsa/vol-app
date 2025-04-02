@@ -8,6 +8,11 @@ variable "legacy_environment" {
   description = "The legacy environment to deploy use"
 }
 
+variable "domain_env" {
+  type        = string
+  description = "The domain environment to deploy use"
+}
+
 variable "domain_name" {
   type        = string
   description = "The domain name for the environment"

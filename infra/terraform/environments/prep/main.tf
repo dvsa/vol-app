@@ -150,6 +150,8 @@ module "service" {
 
   legacy_environment = "PP"
 
+  domain_env = "pre"
+
   domain_name    = "dvsacloud.uk"
   assets_version = var.assets_version
 
