@@ -44,7 +44,7 @@ locals {
       environment = [
         {
           name  = "DB_HOST"
-          value = "olcsdb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+          value = "olcsdb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DB_NAME"
@@ -74,11 +74,11 @@ locals {
       environment = [
         {
           name  = "ELASTIC_HOST"
-          value = "searchv6.${var.legacy_environment}.olcs.${var.domain_name}"
+          value = "searchv6.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DB_HOST"
-          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DB_NAME"
@@ -120,7 +120,7 @@ locals {
         },
         {
           name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.legacy_environment}.olcs.${var.domain_name}"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "PROXY"
