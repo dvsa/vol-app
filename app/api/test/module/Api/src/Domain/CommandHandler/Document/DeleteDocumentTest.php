@@ -191,6 +191,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $document->setId($documentId);
         $document->shouldReceive('getCreatedBy')->andReturn($createdByUser);
         $document->shouldReceive('setLicence')->with(null)->once();
+        $document->shouldReceive('setApplication')->with(null)->once();
 
         $this->mockedSmServices['FileUploader']->shouldReceive('remove')
             ->once()
