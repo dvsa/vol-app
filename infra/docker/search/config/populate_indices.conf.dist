@@ -23,6 +23,10 @@ filter {
 output {
     opensearch {
         hosts => ["<ELASTIC_HOST>:443"]
+        auth_type => {    
+            type => "aws_iam" 
+            region => "eu-west-1"
+        }
         index => "<INDEX_NAME>_v<INDEX_VERSION>"
         document_id => "%{doc_id}"
         template => "<BASEDIR>/templates/<INDEX_NAME>.json"
