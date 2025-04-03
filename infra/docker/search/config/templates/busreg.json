@@ -1,65 +1,69 @@
 {
   "template": "busreg*",
   "mappings": {
-    "busreg": {
-      "properties": {
-        "busreg_id": {
-          "type": "keyword"
-        },
-        "service_no": {
-          "type": "keyword"
-        },
-        "service_no_analysed": {
-          "type": "text",
-          "analyzer": "pipe_sep"
-        },
-        "reg_no": {
-          "type": "text"
-        },
-        "lic_id": {
-          "type": "keyword"
-        },
-        "lic_no": {
-          "type": "text"
-        },
-        "lic_status": {
-          "type": "keyword"
-        },
-        "org_name": {
-          "type": "text",
-          "analyzer": "companies"
-        },
-        "org_id": {
-          "type": "keyword"
-        },
-        "org_name_wildcard": {
-          "type": "keyword"
-        },
-        "start_point": {
-          "type": "text"
-        },
-        "finish_point": {
-          "type": "text"
-        },
-        "date_1st_reg": {
-          "type": "date",
-          "format": "yyyy-MM-dd"
-        },
-        "bus_reg_status": {
-          "type": "keyword"
-        },
-        "traffic_area": {
-          "type": "keyword"
-        },
-        "ta_code": {
-          "type": "keyword"
-        },
-        "route_no": {
-          "type": "keyword"
-        },
-        "variation_no": {
-          "type": "keyword"
-        }
+    "properties": {
+      "busreg_id": {
+        "type": "keyword"
+      },
+      "service_no": {
+        "type": "keyword"
+      },
+      "service_no_analysed": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "pipe_sep"
+      },
+      "reg_no": {
+        "type": "text",
+        "fielddata": true
+      },
+      "lic_id": {
+        "type": "keyword"
+      },
+      "lic_no": {
+        "type": "text",
+        "fielddata": true
+      },
+      "lic_status": {
+        "type": "keyword"
+      },
+      "org_name": {
+        "type": "text",
+        "fielddata": true,
+        "analyzer": "companies"
+      },
+      "org_id": {
+        "type": "keyword"
+      },
+      "org_name_wildcard": {
+        "type": "keyword"
+      },
+      "start_point": {
+        "type": "text",
+        "fielddata": true
+      },
+      "finish_point": {
+        "type": "text",
+        "fielddata": true
+      },
+      "date_1st_reg": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "bus_reg_status": {
+        "type": "keyword"
+      },
+      "traffic_area": {
+        "type": "keyword"
+      },
+      "ta_code": {
+        "type": "keyword"
+      },
+      "route_no": {
+        "type": "keyword"
+      },
+      "variation_no": {
+        "type": "keyword"
       }
     }
   },
