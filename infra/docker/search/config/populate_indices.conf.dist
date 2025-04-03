@@ -22,7 +22,7 @@ filter {
 
 output {
     opensearch {
-        hosts => ["<ELASTIC_HOST>:443"]
+        hosts => ["https://<ELASTIC_HOST>:443"]
         auth_type => {    
             type => "aws_iam" 
             region => "eu-west-1"
@@ -33,5 +33,7 @@ output {
         manage_template => true
         template_overwrite => true
         template_name => "<INDEX_NAME>"
+        ecs_compatibility => disabled
+        debug => true
     }
 }
