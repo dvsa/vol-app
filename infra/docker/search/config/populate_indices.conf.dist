@@ -8,7 +8,7 @@ input {
         schedule => "* * * * *"
         statement => "CALL sp_elastic_<INDEX_NAME>(:sql_last_value)"
         type => "<INDEX_NAME>"
-        last_run_metadata_path => "<LOGSTASH_PATH>/lastrun/<INDEX_NAME>.lastrun"
+        last_run_metadata_path => "<BASEDIR>/lastrun/<INDEX_NAME>.lastrun"
     }
 }
 
@@ -23,14 +23,11 @@ filter {
 output {
     opensearch {
         hosts => ["<ELASTIC_HOST>:443"]
-        ssl_enabled => true
-        ssl_verification_mode => "full"
         index => "<INDEX_NAME>_v<INDEX_VERSION>"
         document_id => "%{doc_id}"
         template => "<BASEDIR>/templates/<INDEX_NAME>.json"
         manage_template => true
         template_overwrite => true
         template_name => "<INDEX_NAME>"
-        ilm_enabled => false
     }
 }
