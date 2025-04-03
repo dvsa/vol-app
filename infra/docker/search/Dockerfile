@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && 
 USER logstash
 
 # copy lib database jdbc jars
-COPY --chown=logstash mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
+COPY --chown=logstash --chmod=755 mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
 
 # Delete default configuration
 RUN rm -f /usr/share/logstash/pipeline/logstash.conf
