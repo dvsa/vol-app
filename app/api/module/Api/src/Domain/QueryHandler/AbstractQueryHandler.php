@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\HandlerEnabledTrait;
 use Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger;
-use Dvsa\Olcs\Api\Domain\NationalRegisterAwareInterface;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryInterface;
 use Dvsa\Olcs\Api\Domain\ToggleAwareInterface;
 use Dvsa\Olcs\Api\Domain\ToggleRequiredInterface;
@@ -263,10 +262,6 @@ abstract class AbstractQueryHandler implements QueryHandlerInterface, FactoryInt
 
         if ($this instanceof \Dvsa\Olcs\Api\Domain\CpmsAwareInterface) {
             $this->setCpmsService($mainServiceLocator->get('CpmsHelperService'));
-        }
-
-        if ($this instanceof NationalRegisterAwareInterface) {
-            $this->setNationalRegisterConfig($mainServiceLocator->get('config')['nr']);
         }
 
         if ($this instanceof CacheAwareInterface) {
