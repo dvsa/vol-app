@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.6-rc10](https://github.com/dvsa/vol-app/compare/v5.20.6-rc9...v5.20.6-rc10) (2025-04-04)
+
+
+### Miscellaneous Chores
+
+* release 5.20.6-rc10 ([#778](https://github.com/dvsa/vol-app/issues/778)) ([38f9b17](https://github.com/dvsa/vol-app/commit/38f9b1755d62d172d960085b9cef6f7d47567ad4))
+
 ## [5.20.6-rc9](https://github.com/dvsa/vol-app/compare/v5.20.6-rc7...v5.20.6-rc9) (2025-04-03)
 
 
