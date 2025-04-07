@@ -70,7 +70,15 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'transport_managers' => 'hasUpdatedTransportManagers',
         'vehicles' => 'hasUpdatedVehicles',
         'vehicles_psv' => 'hasUpdatedVehicles',
-        'vehicles_declarations' => 'hasUpdatedVehicleDeclarations',
+        'vehicles_size' => 'hasSavedSection',
+        'psv_operate_large' => 'hasSavedSection',
+        'psv_operate_small' => 'hasSavedSection',
+        'psv_small_part_written' => 'hasSavedSection',
+        'psv_small_conditions' => 'hasSavedSection',
+        'psv_documentary_evidence_small' => 'hasSavedSection',
+        'psv_documentary_evidence_large' => 'hasSavedSection',
+        'psv_operate_novelty' => 'hasSavedSection',
+        'psv_main_occupation_undertakings' => 'hasSavedSection',
         'discs' => 'hasSavedSection',
         'community_licences' => 'hasSavedSection',
         'safety' => 'hasUpdatedSafetySection',
@@ -326,26 +334,6 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
     protected function hasUpdatedVehicles()
     {
         return ($this->application->getLicenceVehicles()->count() > 0);
-    }
-
-    /**
-     * If we have updated vehicle declarations
-     *
-     * @return boolean
-     */
-    protected function hasUpdatedVehicleDeclarations()
-    {
-        $fields = [
-            'PsvOperateSmallVhl',
-            'PsvSmallVhlNotes',
-            'PsvSmallVhlConfirmation',
-            'PsvNoSmallVhlConfirmation',
-            'PsvLimousines',
-            'PsvNoLimousineConfirmation',
-            'PsvOnlyLimousinesConfirmation'
-        ];
-
-        return $this->hasCompletedFields($fields);
     }
 
     /**
@@ -624,7 +612,8 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
                 'financial_evidence',
                 'transport_managers',
                 'financial_history',
-                'convictions_penalties'
+                'convictions_penalties',
+                'vehicles_size',
             ];
 
             foreach ($relatedSections as $section) {
@@ -677,9 +666,9 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
                 $this->markSectionRequired('discs');
             }
 
-            // If the vehicles declaration section is unchanged and any of the tot auth vehicle columns has increased
-            if ($this->isUnchanged('vehicles_declarations') && $this->application->hasAuthChanged()) {
-                $this->markSectionRequired('vehicles_declarations');
+            // If the vehicles size section is unchanged and any of the tot auth vehicle columns has increased
+            if ($this->isUnchanged('vehicles_size') && $this->application->hasAuthChanged()) {
+                $this->markSectionRequired('vehicles_size');
             }
         }
 
