@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
@@ -86,6 +87,15 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
 
         $hasConditions = $licence->hasApprovedUnfulfilledConditions();
 
+        $vehicleSizes = null;
+
+        if ($entity instanceof Application) {
+            $vehicleSizeRefData = $entity->getPsvWhichVehicleSizes();
+            if ($vehicleSizeRefData instanceof RefData) {
+                $vehicleSizes = $vehicleSizeRefData->getId();
+            }
+        }
+
         $goodsOrPsv = null;
         if ($entity->getGoodsOrPsv() !== null) {
             $goodsOrPsv = $entity->getGoodsOrPsv()->getId();
@@ -107,6 +117,7 @@ class SectionAccessService implements FactoryInterface, AuthAwareInterface
             $goodsOrPsv,
             $licenceType,
             $vehicleType,
+            $vehicleSizes,
             $hasConditions ? 'hasConditions' : 'noConditions'
         ];
 

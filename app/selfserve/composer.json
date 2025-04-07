@@ -27,10 +27,10 @@
     "laminas/laminas-validator": "^2.25",
     "laminas/laminas-view": "^2.11",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "olcs/olcs-auth": "^8.0",
-    "olcs/olcs-common": "^7.18.1",
+    "olcs/olcs-auth": "dev-VOL-5882",
+    "olcs/olcs-common": "dev-VOL-5882",
     "olcs/olcs-logging": "^7.2",
-    "olcs/olcs-transfer": "^7.12.1",
+    "olcs/olcs-transfer": "dev-VOL-5882",
     "olcs/olcs-utils": "^6.0.0",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.300"

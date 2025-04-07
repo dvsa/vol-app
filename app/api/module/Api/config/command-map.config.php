@@ -59,6 +59,14 @@ return [
     TransferCommand\Application\DeletePsvVehicle::class => CommandHandler\Application\DeletePsvVehicle::class,
     TransferCommand\Application\CreateVehicleListDocument::class
         => CommandHandler\Application\CreateVehicleListDocument::class,
+    TransferCommand\Application\UpdateVehicleSize::class =>
+        CommandHandler\Application\UpdateVehicleSize::class,
+    TransferCommand\Application\UpdateSmallVehicleConditionsAndUndertaking::class =>
+        CommandHandler\Application\UpdateSmallVehicleConditionsAndUndertaking::class,
+    TransferCommand\Application\UpdateVehicleOperatingSmall::class =>
+        CommandHandler\Application\UpdateVehicleOperatingSmall::class,
+    TransferCommand\Application\UpdateVehicleNinePassengers::class =>
+        CommandHandler\Application\UpdateVehicleNinePassengers::class,
     TransferCommand\Application\UpdateVehicleDeclaration::class =>
         CommandHandler\Application\UpdateVehicleDeclaration::class,
     TransferCommand\Application\WithdrawApplication::class => CommandHandler\Application\WithdrawApplication::class,
@@ -708,6 +716,8 @@ return [
         => AppCompCommandHandler\UpdateConditionsUndertakingsStatus::class,
     AppCompCommand\UpdateVehiclesDeclarationsStatus::class
         => AppCompCommandHandler\UpdateVehiclesDeclarationsStatus::class,
+    AppCompCommand\UpdateVehiclesSizeStatus::class
+    => AppCompCommandHandler\UpdateVehiclesSizeStatus::class,
     AppCompCommand\UpdateVehiclesPsvStatus::class => AppCompCommandHandler\UpdateVehiclesPsvStatus::class,
     AppCompCommand\UpdateTransportManagersStatus::class => AppCompCommandHandler\UpdateTransportManagersStatus::class,
     AppCompCommand\UpdateTaxiPhvStatus::class => AppCompCommandHandler\UpdateTaxiPhvStatus::class,

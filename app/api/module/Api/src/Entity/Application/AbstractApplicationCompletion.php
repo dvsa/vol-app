@@ -261,6 +261,15 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      *
      * @var int
      *
+     * @ORM\Column(type="smallint", name="vehicles_size_status", nullable=true)
+     */
+    protected $vehiclesSizeStatus;
+
+    /**
+     * Vehicles declarations status
+     *
+     * @var int
+     *
      * @ORM\Column(type="smallint", name="vehicles_declarations_status", nullable=true)
      */
     protected $vehiclesDeclarationsStatus;
@@ -843,6 +852,18 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     public function getUndertakingsStatus()
     {
         return $this->undertakingsStatus;
+    }
+
+    public function setVehiclesSizeStatus(?int $vehiclesSizeStatus): ApplicationCompletion
+    {
+        $this->vehiclesSizeStatus = $vehiclesSizeStatus;
+
+        return $this;
+    }
+
+    public function getVehiclesSizeStatus(): ?int
+    {
+        return $this->vehiclesSizeStatus;
     }
 
     /**

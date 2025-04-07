@@ -2115,6 +2115,25 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         return ($publicationLinks->count() > 0);
     }
 
+    public function updatePsvVehicleSize(RefData $vehicleSize): self
+    {
+        $this->psvWhichVehicleSizes = $vehicleSize;
+        $size = $vehicleSize->getId();
+
+        switch($size) {
+            case self::PSV_VEHICLE_SIZE_SMALL:
+                $this->psvOperateSmallVhl = 'Y';
+                break;
+            case self::PSV_VEHICLE_SIZE_MEDIUM_LARGE:
+                $this->psvOperateSmallVhl = 'N';
+                break;
+            default:
+                $this->psvOperateSmallVhl = null;
+        }
+
+        return $this;
+    }
+
     /**
      * Is the PSV Size set to Small
      *
