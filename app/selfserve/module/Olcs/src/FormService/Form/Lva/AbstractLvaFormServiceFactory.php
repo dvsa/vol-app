@@ -92,6 +92,15 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-application-people' => ApplicationPeople::class,
         'lva-application-financial_evidence' => ApplicationFinancialEvidence::class,
         'lva-application-vehicles_declarations' => ApplicationVehiclesDeclarations::class,
+        'lva-application-vehicles_declarations_vehicles_size' => ApplicationVehiclesDeclarationsSize::class,
+        'lva-application-vehicles_declarations_psv_operate_small' => ApplicationVehiclesDeclarationsSmall::class,
+        'lva-application-vehicles_declarations_psv_operate_large' => ApplicationVehiclesDeclarationsLarge::class,
+        'lva-application-vehicles_declarations_psv_operate_novelty' => ApplicationVehiclesDeclarationsPsvOperateNovelty::class,
+        'lva-application-vehicles_declarations_psv_small_part_written' => ApplicationVehiclesDeclarationsWritten::class,
+        'lva-application-vehicles_declarations_psv_documentary_evidence_small' => ApplicationVehiclesDeclarationsEvidenceSmall::class,
+        'lva-application-vehicles_declarations_psv_documentary_evidence_large' => ApplicationVehiclesDeclarationsEvidenceLarge::class,
+        'lva-application-vehicles_declarations_psv_main_occupation_undertakings' => ApplicationVehiclesDeclarationsMainUndertakings::class,
+        'lva-application-vehicles_declarations_psv_small_conditions' => ApplicationVehiclesDeclarationsSmallConditions::class,
         'lva-application-safety' => ApplicationSafety::class,
         'lva-application-financial_history' => ApplicationFinancialHistory::class,
         'lva-application-licence_history' => ApplicationLicenceHistory::class,
@@ -251,6 +260,24 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 return new ApplicationFinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations']:
                 return new ApplicationVehiclesDeclarations($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_vehicles_size']:
+                return new ApplicationVehiclesDeclarationsSize($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_small']:
+                return new ApplicationVehiclesDeclarationsSmall($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_small_conditions']:
+                return new ApplicationVehiclesDeclarationsSmallConditions($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_large']:
+                return new ApplicationVehiclesDeclarationsLarge($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_novelty']:
+                return new ApplicationVehiclesDeclarationsPsvOperateNovelty($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_documentary_evidence_large']:
+                return new ApplicationVehiclesDeclarationsEvidenceLarge($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_documentary_evidence_small']:
+                return new ApplicationVehiclesDeclarationsEvidenceSmall($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_small_part_written']:
+                return new ApplicationVehiclesDeclarationsWritten($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_main_occupation_undertakings']:
+                return new ApplicationVehiclesDeclarationsMainUndertakings($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-safety']:
                 return new ApplicationSafety($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-financial_history']:
