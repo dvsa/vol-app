@@ -236,6 +236,25 @@ return [
                         ],
                     ],
                 ],
+                'vehicles_size' => [
+                    'type' => \Common\Util\LvaRoute::class,
+                    'options' => [
+                        'route' => 'vehicles-sizes[/]',
+                        'defaults' => [
+                            'controller' => 'Application/VehiclesSize',
+                            'action' => 'index',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => \Laminas\Router\Http\Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
                 'vehicles_declarations' => [
                     'type' => \Common\Util\LvaRoute::class,
                     'options' => [

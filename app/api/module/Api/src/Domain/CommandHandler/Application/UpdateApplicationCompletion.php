@@ -53,6 +53,7 @@ final class UpdateApplicationCompletion extends AbstractCommandHandler implement
         'undertakings',
         'vehiclesDeclarations',
         'vehiclesPsv',
+        'vehiclesSize',
         'vehicles',
         'declarationsInternal',
     ];
