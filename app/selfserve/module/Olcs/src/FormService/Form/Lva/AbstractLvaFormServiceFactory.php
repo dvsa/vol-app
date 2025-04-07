@@ -92,6 +92,10 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-application-people' => ApplicationPeople::class,
         'lva-application-financial_evidence' => ApplicationFinancialEvidence::class,
         'lva-application-vehicles_declarations' => ApplicationVehiclesDeclarations::class,
+        'lva-application-vehicles_declarations_size' => ApplicationVehiclesDeclarationsSize::class,
+        'lva-application-vehicles_declarations_small' => ApplicationVehiclesDeclarationsSmall::class,
+        'lva-application-vehicles_declarations_large' => ApplicationVehiclesDeclarationsLarge::class,
+        'lva-application-vehicles_declarations_both' => ApplicationVehiclesDeclarationsBoth::class,
         'lva-application-safety' => ApplicationSafety::class,
         'lva-application-financial_history' => ApplicationFinancialHistory::class,
         'lva-application-licence_history' => ApplicationLicenceHistory::class,
@@ -251,6 +255,14 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 return new ApplicationFinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations']:
                 return new ApplicationVehiclesDeclarations($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_size']:
+                return new ApplicationVehiclesDeclarationsSize($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_small']:
+                return new ApplicationVehiclesDeclarationsSmall($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_large']:
+                return new ApplicationVehiclesDeclarationsLarge($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_both']:
+                return new ApplicationVehiclesDeclarationsBoth($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-safety']:
                 return new ApplicationSafety($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-financial_history']:

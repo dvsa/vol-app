@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Section Config
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\Olcs\Api\Service\Lva;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -14,19 +8,9 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Laminas\Filter\Word\UnderscoreToCamelCase;
 
-/**
- * Section Config
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class SectionConfig
 {
-    /**
-     * Holds the section config
-     *
-     * @var array
-     */
-    private $sections = [
+    private array $sections = [
         'type_of_licence' => [],
         'business_type' => [
             'prerequisite' => [
@@ -119,9 +103,25 @@ class SectionConfig
                 ]
             ]
         ],
-        'vehicles_declarations' => [
+        'vehicles_size' => [
             'prerequisite' => [
-                'operating_centres'
+                'business_type',
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                ],
+            ],
+        ],
+        'vehicles_size_nine' => [
+            'prerequisite' => [
+                'vehicles_size',
             ],
             'restricted' => [
                 [
@@ -131,7 +131,140 @@ class SectionConfig
                         Licence::LICENCE_TYPE_RESTRICTED,
                         Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                         Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
-                    ]
+                    ],
+                    Application::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                ],
+            ],
+        ],
+        'operating_small_vehicles' => [
+            'prerequisite' => [
+                'vehicles_size',
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    Application::PSV_VEHICLE_SIZE_BOTH,
+                ],
+            ],
+        ],
+        'written_explanation_small_part' => [
+            'prerequisite' => [
+                'operating_small_vehicles',
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    Application::PSV_VEHICLE_SIZE_BOTH,
+                    'isEnglandWales',
+                    'isNotOperatingSmallVehicles',
+                ],
+            ],
+        ],
+        'small_vehicles_condition_undertakings' => [
+            'prerequisite' => [
+                'vehicles_size',
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    [
+                        Application::PSV_VEHICLE_SIZE_SMALL,
+                        [
+                            Application::PSV_VEHICLE_SIZE_BOTH,
+                            'isScotland',
+                        ],
+                        [
+                            Application::PSV_VEHICLE_SIZE_BOTH,
+                            'isEnglandWales',
+                            'isOperatingSmallVehicles',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'documentary_evidence_small_vehicles' => [
+            'prerequisite' => [
+                'vehicles_size'
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    [
+                        Application::PSV_VEHICLE_SIZE_SMALL,
+                        [
+                            Application::PSV_VEHICLE_SIZE_BOTH,
+                            'isScotland',
+                        ],
+                        [
+                            Application::PSV_VEHICLE_SIZE_BOTH,
+                            'isEnglandWales',
+                            'isOperatingSmallVehicles',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'documentary_evidence_main_occupation' => [
+            'prerequisite' => [
+                'vehicles_size'
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    [
+                        Application::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                        Application::PSV_VEHICLE_SIZE_BOTH,
+                    ],
+                ],
+            ],
+        ],
+        'main_occupation_undertakings' => [
+            'prerequisite' => [
+                'vehicles_size'
+            ],
+            'restricted' => [
+                [
+                    'application',
+                    Licence::LICENCE_CATEGORY_PSV,
+                    [
+                        Licence::LICENCE_TYPE_RESTRICTED,
+                        Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                        Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    ],
+                    [
+                        Application::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                        Application::PSV_VEHICLE_SIZE_BOTH
+                    ],
                 ]
             ]
         ],
@@ -292,7 +425,7 @@ class SectionConfig
         ]
     ];
 
-    protected $init = false;
+    protected bool $init = false;
 
     /**
      * @var ApplicationCompletion
@@ -346,17 +479,15 @@ class SectionConfig
         return ($status != Application::VARIATION_STATUS_UNCHANGED);
     }
 
-    public function setVariationCompletion(ApplicationCompletion $completion)
+    public function setVariationCompletion(ApplicationCompletion $completion): void
     {
         $this->completion = $completion;
     }
 
     /**
      * Return all sections
-     *
-     * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         $this->initSections();
 
@@ -365,10 +496,8 @@ class SectionConfig
 
     /**
      * Return all section references
-     *
-     * @return array
      */
-    public function getAllReferences()
+    public function getAllReferences(): array
     {
         return array_keys($this->sections);
     }

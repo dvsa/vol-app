@@ -22,6 +22,7 @@ return [
     CommandHandler\Application\DeletePsvVehicle::class          => AppHandler\ModifyList::class,
     CommandHandler\Application\UpdateGoodsVehicle::class        => AppHandler\Modify::class,
     CommandHandler\Application\UpdatePsvVehicles::class         => CanAccessApplicationWithId::class,
+    CommandHandler\Application\UpdateVehicleSize::class         => CanAccessApplicationWithId::class,
     CommandHandler\Application\UpdateVehicleDeclaration::class  => CanAccessApplicationWithId::class,
     CommandHandler\Application\UpdateVehicles::class            => CanAccessApplicationWithId::class,
 
