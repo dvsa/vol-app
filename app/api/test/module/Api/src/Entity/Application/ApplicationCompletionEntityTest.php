@@ -98,4 +98,28 @@ class ApplicationCompletionEntityTest extends EntityTester
 
         $this->assertTrue($ac->isComplete($required));
     }
+
+    public function testClearVehicleSizeSections()
+    {
+        $entity = $this->instantiate(Entity::class);
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateLargeStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateSmallStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallConditionsStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvMainOccupationUndertakingsStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallPartWrittenStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateNoveltyStatus());
+
+        $entity->clearVehicleSizeSections();
+
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateLargeStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateSmallStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallConditionsStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvMainOccupationUndertakingsStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallPartWrittenStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateNoveltyStatus());
+    }
 }

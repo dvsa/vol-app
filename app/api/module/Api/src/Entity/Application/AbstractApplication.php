@@ -580,6 +580,20 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $psvOccupationRecordsConfirmation;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_total_vehicle_small", nullable=true)
+     */
+    protected $psvTotalVehicleSmall;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_total_vehicle_large", nullable=true)
+     */
+    protected $psvTotalVehicleLarge;
+
+    /**
      * Psv which vehicle sizes
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
@@ -3840,6 +3854,28 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     public function setPsvOccupationRecordsConfirmation(?string $psvOccupationRecordsConfirmation): AbstractApplication
     {
         $this->psvOccupationRecordsConfirmation = $psvOccupationRecordsConfirmation;
+        return $this;
+    }
+
+    public function getPsvTotalVehicleSmall()
+    {
+        return $this->psvTotalVehicleSmall;
+    }
+
+    public function setPsvTotalVehicleSmall($psvTotalVehicleSmall): AbstractApplication
+    {
+        $this->psvTotalVehicleSmall = $psvTotalVehicleSmall;
+        return $this;
+    }
+
+    public function getPsvTotalVehicleLarge()
+    {
+        return $this->psvTotalVehicleLarge;
+    }
+
+    public function setPsvTotalVehicleLarge($psvTotalVehicleLarge): AbstractApplication
+    {
+        $this->psvTotalVehicleLarge = $psvTotalVehicleLarge;
         return $this;
     }
 }

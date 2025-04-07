@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -59,7 +60,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        protected $navigation
+        protected $navigation,
+        protected FileUploadHelperService $uploadHelper
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -70,7 +72,7 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $formServiceManager,
             $scriptFactory,
             $dataHelper,
-            $flashMessengerHelper
+            $uploadHelper
         );
     }
 }

@@ -68,6 +68,7 @@ return [
     // Application
     TransferQuery\Application\Application::class => QueryHandler\Application\Application::class,
     TransferQuery\Application\Completion::class => QueryHandler\Application\Completion::class,
+    TransferQuery\Application\Documents::class => QueryHandler\Application\Documents::class,
     TransferQuery\Application\FinancialHistory::class => QueryHandler\Application\FinancialHistory::class,
     TransferQuery\Application\FinancialEvidence::class => QueryHandler\Application\FinancialEvidence::class,
     TransferQuery\Application\PreviousConvictions::class => QueryHandler\Application\PreviousConvictions::class,
