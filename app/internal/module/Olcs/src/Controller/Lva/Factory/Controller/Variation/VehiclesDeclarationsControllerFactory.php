@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -24,7 +25,6 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VehiclesDeclarationsController
     {
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -34,6 +34,7 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $navigation = $container->get('navigation');
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new VehiclesDeclarationsController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
             $dataHelper,
             $stringHelper,
             $navigation,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $uploadHelper
         );
     }
 }

@@ -1,16 +1,18 @@
 <?php
 
+use Common\Util\LvaRoute;
 use Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
+use Olcs\Controller\Lva\Application\VehiclesDeclarationsController as ApplicationVehiclesDeclarationsController;
+use Olcs\Controller\Lva\Variation\VehiclesDeclarationsController as VariationVehiclesDeclarationsController;
 use Olcs\Controller\Operator\OperatorBusinessDetailsController;
 use Olcs\Controller\TaskController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 use Olcs\Controller\Operator\OperatorFeesController;
 use Olcs\Controller\Operator\OperatorProcessingTasksController;
-use Olcs\Controller\TransportManager\Processing\HistoryController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
@@ -2399,6 +2401,96 @@ $routes['lva-licence']['child_routes'] = array_merge(
 $routes['lva-variation']['child_routes'] = array_merge(
     $routes['lva-variation']['child_routes'],
     [
+        'vehicles_size' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'vehicles-size[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'size',
+                ],
+            ],
+        ],
+        'psv_operate_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-large[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'operateLarge',
+                ],
+            ],
+        ],
+        'psv_operate_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-small[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'operateSmall',
+                ],
+            ],
+        ],
+        'psv_small_part_written' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-part-written[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'writtenExplanation',
+                ],
+            ],
+        ],
+        'psv_small_conditions' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-conditions[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'smallConditions',
+                ],
+            ],
+        ],
+        'psv_operate_novelty' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-novelty[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'novelty',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-small[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'smallEvidence',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-large[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'largeEvidence',
+                ],
+            ],
+        ],
+        'psv_main_occupation_undertakings' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-main-occupation-undertakings[/]',
+                'defaults' => [
+                    'controller' => VariationVehiclesDeclarationsController::class,
+                    'action' => 'mainOccupation',
+                ],
+            ],
+        ],
         'review' => [
             'type' => 'segment',
             'options' => [
@@ -2548,6 +2640,96 @@ $routes['lva-variation']['child_routes'] = array_merge(
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
     [
+        'vehicles_size' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'vehicles-size[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'size',
+                ],
+            ],
+        ],
+        'psv_operate_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-large[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'operateLarge',
+                ],
+            ],
+        ],
+        'psv_operate_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-small[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'operateSmall',
+                ],
+            ],
+        ],
+        'psv_small_part_written' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-part-written[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'writtenExplanation',
+                ],
+            ],
+        ],
+        'psv_small_conditions' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-conditions[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'smallConditions',
+                ],
+            ],
+        ],
+        'psv_operate_novelty' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-novelty[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'novelty',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-small[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'smallEvidence',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-large[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'largeEvidence',
+                ],
+            ],
+        ],
+        'psv_main_occupation_undertakings' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-main-occupation-undertakings[/]',
+                'defaults' => [
+                    'controller' => ApplicationVehiclesDeclarationsController::class,
+                    'action' => 'mainOccupation',
+                ],
+            ],
+        ],
         'review' => [
             'type' => 'segment',
             'options' => [

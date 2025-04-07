@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
+use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\AbstractUpdateStatus;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Domain\Util\SlaCalculator;
@@ -2113,6 +2114,157 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         );
 
         return ($publicationLinks->count() > 0);
+    }
+
+    /**
+     * @see AbstractUpdateStatus
+     *
+     * accepts a string from the old application completion code which uses the database,
+     * and returns whether the given section is completed.
+     *
+     * This is intended as a step towards removing the application_completion database tables entirely
+     */
+    public function isSectionCompleted(string $applicationSection): bool
+    {
+        return match ($applicationSection) {
+            'VehiclesSize' => $this->psvWhichVehicleSizes !== null,
+            'PsvOperateLarge' => $this->psvNoSmallVhlConfirmation !== null,
+            'PsvOperateSmall' => $this->psvOperateSmallVhl !== null,
+            'PsvOperateNovelty' => $this->psvNoveltyVehiclesCompleted(),
+            'PsvSmallConditions' => $this->psvSmallVhlConfirmation !== null,
+            'PsvMainOccupationUndertakings' => $this->isMainOccupationUndertakingsSectionCompleted(),
+            'PsvSmallPartWritten' => $this->isWrittenEvidenceSectionCompleted(),
+            'PsvDocumentaryEvidenceSmall' => $this->smallVehicleEvidenceUploaded !== null,
+            'PsvDocumentaryEvidenceLarge' => $this->occupationEvidenceUploaded !== null,
+            default => throw new \RuntimeException('There is no validation for this section: ' . $applicationSection),
+        };
+    }
+
+    public function updatePsvVehicleSize(RefData $vehicleSize): self
+    {
+        $size = $vehicleSize->getId();
+
+        if ($this->psvWhichVehicleSizes !== null) {
+            $existingSize = $this->psvWhichVehicleSizes->getId();
+
+            if ($existingSize !== $size) {
+                $this->updateFollowingVehicleSizeChange();
+            }
+        }
+
+        $this->psvWhichVehicleSizes = $vehicleSize;
+
+        switch($size) {
+            case self::PSV_VEHICLE_SIZE_SMALL:
+                $this->psvOperateSmallVhl = 'Y';
+                break;
+            case self::PSV_VEHICLE_SIZE_MEDIUM_LARGE:
+                $this->psvOperateSmallVhl = 'N';
+                break;
+            default:
+                $this->psvOperateSmallVhl = null;
+        }
+
+        return $this;
+    }
+
+    /**
+     * if the vehicle size has changed, reset the following fields
+     */
+    public function updateFollowingVehicleSizeChange(): self
+    {
+        $this->psvOccupationRecordsConfirmation = null;
+        $this->psvIncomeRecordsConfirmation = null;
+        $this->psvSmallVhlNotes = null;
+        $this->psvTotalVehicleSmall = null;
+        $this->psvTotalVehicleLarge = null;
+        $this->psvNoSmallVhlConfirmation = null;
+        $this->psvSmallVhlConfirmation = null;
+        $this->psvOnlyLimousinesConfirmation = null;
+        $this->psvNoLimousineConfirmation = null;
+        $this->psvLimousines = null;
+        $this->smallVehicleEvidenceUploaded = null;
+        $this->occupationEvidenceUploaded = null;
+
+        $newCompletionStatus = $this->isVariation()
+            ? ApplicationCompletion::STATUS_VARIATION_REQUIRES_ATTENTION
+            : ApplicationCompletion::STATUS_NOT_STARTED;
+
+        $this->applicationCompletion->clearVehicleSizeSections($newCompletionStatus);
+        return $this;
+    }
+
+    public function psvNoveltyVehiclesCompleted(): bool
+    {
+        //must have at least answered yes or no
+        if ($this->psvLimousines === null) {
+            return false;
+        }
+
+        if ($this->psvLimousines === 'Y') {
+            //for small vehicles we don't always ask further questions
+            if ($this->psvWhichVehicleSizes instanceof RefData
+                && $this->psvWhichVehicleSizes->getId() === self::PSV_VEHICLE_SIZE_SMALL
+            ) {
+                return true;
+            }
+
+            if ($this->psvOnlyLimousinesConfirmation !== null) {
+                return true;
+            }
+        }
+
+        if ($this->psvLimousines === 'N' && $this->psvNoLimousineConfirmation !== null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updatePsvNoveltyVehicles(
+        string $usingLimousines,
+        ?string $psvNoLimousineConfirmation,
+        ?string $psvOnlyLimousineConfirmation
+    ): self {
+        $this->psvLimousines = $usingLimousines;
+        $this->psvNoLimousineConfirmation = $psvNoLimousineConfirmation;
+        $this->psvOnlyLimousinesConfirmation = $psvOnlyLimousineConfirmation;
+
+        return $this;
+    }
+
+    public function isMainOccupationUndertakingsSectionCompleted(): bool
+    {
+        return $this->psvOccupationRecordsConfirmation !== null && $this->psvIncomeRecordsConfirmation !== null;
+    }
+
+    public function updateMainOccupationUndertakings(
+        string $psvOccupationRecordsConfirmation,
+        string $psvIncomeRecordsConfirmation
+    ): self {
+        $this->psvOccupationRecordsConfirmation = $psvOccupationRecordsConfirmation;
+        $this->psvIncomeRecordsConfirmation = $psvIncomeRecordsConfirmation;
+
+        return $this;
+    }
+
+    public function isWrittenEvidenceSectionCompleted(): bool
+    {
+        return $this->psvSmallVhlNotes !== null
+            && $this->psvTotalVehicleSmall !== null
+            && $this->psvTotalVehicleLarge !== null;
+    }
+
+    public function updateWrittenEvidence(
+        string $psvSmallVhlNotes,
+        int $psvTotalVehicleSmall,
+        int $psvTotalVehicleLarge
+    ): self {
+        $this->psvSmallVhlNotes = $psvSmallVhlNotes;
+        $this->psvTotalVehicleSmall = $psvTotalVehicleSmall;
+        $this->psvTotalVehicleLarge = $psvTotalVehicleLarge;
+
+        return $this;
     }
 
     /**

@@ -38,6 +38,7 @@ return [
     QueryHandler\Application\Completion::class => CanAccessApplicationWithId::class,
     QueryHandler\Application\Declaration::class => CanAccessApplicationWithId::class,
     QueryHandler\Application\DeclarationUndertakings::class => CanAccessApplicationWithId::class,
+    QueryHandler\Application\Documents::class => CanAccessApplicationWithId::class,
     QueryHandler\Application\FinancialEvidence::class => CanAccessApplicationWithId::class,
     QueryHandler\Application\FinancialHistory::class => CanAccessApplicationWithId::class,
     QueryHandler\Application\Review::class => CanAccessApplicationWithId::class,

@@ -71,8 +71,24 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
         'lva-variation-convictions_penalties' => ConvictionsPenalties::class,
         'lva-application-convictions_penalties' => ConvictionsPenalties::class,
 
-        'lva-variation-vehicles_declarations' => VehiclesDeclarations::class,
-        'lva-application-vehicles_declarations' => VehiclesDeclarations::class,
+        'lva-application-vehicles_declarations_vehicles_size' => VehiclesDeclarationsSize::class,
+        'lva-application-vehicles_declarations_psv_operate_small' => VehiclesDeclarationsSmall::class,
+        'lva-application-vehicles_declarations_psv_operate_large' => VehiclesDeclarationsLarge::class,
+        'lva-application-vehicles_declarations_psv_operate_novelty' => ApplicationVehiclesDeclarationsPsvOperateNovelty::class,
+        'lva-application-vehicles_declarations_psv_small_part_written' => VehiclesDeclarationsWritten::class,
+        'lva-application-vehicles_declarations_psv_documentary_evidence_small' => VehiclesDeclarationsEvidenceSmall::class,
+        'lva-application-vehicles_declarations_psv_documentary_evidence_large' => VehiclesDeclarationsEvidenceLarge::class,
+        'lva-application-vehicles_declarations_psv_main_occupation_undertakings' => VehiclesDeclarationsMainUndertakings::class,
+        'lva-application-vehicles_declarations_psv_small_conditions' => VehiclesDeclarationsSmallConditions::class,
+        'lva-variation-vehicles_declarations_vehicles_size' => VehiclesDeclarationsSize::class,
+        'lva-variation-vehicles_declarations_psv_operate_small' => VehiclesDeclarationsSmall::class,
+        'lva-variation-vehicles_declarations_psv_operate_large' => VehiclesDeclarationsLarge::class,
+        'lva-variation-vehicles_declarations_psv_operate_novelty' => VariationVehiclesDeclarationsPsvOperateNovelty::class,
+        'lva-variation-vehicles_declarations_psv_small_part_written' => VehiclesDeclarationsWritten::class,
+        'lva-variation-vehicles_declarations_psv_documentary_evidence_small' => VehiclesDeclarationsEvidenceSmall::class,
+        'lva-variation-vehicles_declarations_psv_documentary_evidence_large' => VehiclesDeclarationsEvidenceLarge::class,
+        'lva-variation-vehicles_declarations_psv_main_occupation_undertakings' => VehiclesDeclarationsMainUndertakings::class,
+        'lva-variation-vehicles_declarations_psv_small_conditions' => VehiclesDeclarationsSmallConditions::class,
 
         'lva-licence-vehicles_psv' => LicencePsvVehicles::class,
         'lva-application-vehicles_psv' => ApplicationPsvVehicles::class,
@@ -193,7 +209,42 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
                 $validatorPluginManager = $serviceLocator->get('ValidatorManager');
                 return new VariationFinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
-
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_documentary_evidence_small']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_documentary_evidence_small']:
+                $authService = $serviceLocator->get(AuthorizationService::class);
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                $urlHelper = $serviceLocator->get(UrlHelperService::class);
+                $validatorPluginManager = $serviceLocator->get('ValidatorManager');
+                return new VehiclesDeclarationsEvidenceSmall($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_documentary_evidence_large']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_documentary_evidence_large']:
+                $authService = $serviceLocator->get(AuthorizationService::class);
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                $urlHelper = $serviceLocator->get(UrlHelperService::class);
+                $validatorPluginManager = $serviceLocator->get('ValidatorManager');
+                return new VehiclesDeclarationsEvidenceLarge($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_vehicles_size']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_vehicles_size']:
+                return new VehiclesDeclarationsSize($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_small']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_operate_small']:
+                return new VehiclesDeclarationsSmall($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_small_conditions']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_small_conditions']:
+                return new VehiclesDeclarationsSmallConditions($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_large']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_operate_large']:
+                return new VehiclesDeclarationsLarge($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_operate_novelty']:
+                return new ApplicationVehiclesDeclarationsPsvOperateNovelty($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_operate_novelty']:
+                return new VariationVehiclesDeclarationsPsvOperateNovelty($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_small_part_written']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_small_part_written']:
+                return new VehiclesDeclarationsWritten($formHelper);
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations_psv_main_occupation_undertakings']:
+            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations_psv_main_occupation_undertakings']:
+                return new VehiclesDeclarationsMainUndertakings($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-undertakings']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-undertakings']:
                 return new Undertakings($formHelper);
@@ -206,10 +257,6 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $translator = $serviceLocator->get(TranslationHelperService::class);
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
                 return new ConvictionsPenalties($formHelper, $translator, $urlHelper);
-
-            case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations']:
-            case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-vehicles_declarations']:
-                return new VehiclesDeclarations($formHelper);
 
             case self::FORM_SERVICE_CLASS_ALIASES['lva-licence-vehicles_psv']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
