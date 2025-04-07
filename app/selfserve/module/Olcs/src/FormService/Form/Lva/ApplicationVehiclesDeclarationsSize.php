@@ -1,18 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\VehiclesDeclarations;
+use Common\FormService\Form\Lva\VehiclesDeclarationsSize;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
-/**
- * Application vehicles declarations
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-class ApplicationVehiclesDeclarations extends VehiclesDeclarations
+class ApplicationVehiclesDeclarationsSize extends VehiclesDeclarationsSize
 {
     use ButtonsAlterations;
 

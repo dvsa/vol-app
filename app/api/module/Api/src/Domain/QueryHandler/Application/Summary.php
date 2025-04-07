@@ -22,6 +22,8 @@ class Summary extends AbstractQueryHandler
     public const ACTION_APPROVE_TM = 'APPROVE_TM';
 
     public const MISSING_EVIDENCE_OC = 'MISSING_EVIDENCE_OC';
+    public const MISSING_EVIDENCE_PSV_SMALL = 'MISSING_EVIDENCE_PSV_SMALL';
+    public const MISSING_EVIDENCE_PSV_MAIN_OCCUPATION = 'MISSING_EVIDENCE_PSV_MAIN_OCCUPATION';
     public const MISSING_EVIDENCE_FINANCIAL = 'markup-financial-standing-proof';
 
     protected $repoServiceName = 'Application';
@@ -157,6 +159,14 @@ class Summary extends AbstractQueryHandler
 
         if ($application->canAddFinancialEvidence()) {
             $evidence[] = self::MISSING_EVIDENCE_FINANCIAL;
+        }
+
+        if ($application->canAddPsvSmallEvidence()) {
+            $evidence[] = self::MISSING_EVIDENCE_PSV_SMALL;
+        }
+
+        if ($application->canAddPsvLargeEvidence()) {
+            $evidence[] = self::MISSING_EVIDENCE_PSV_MAIN_OCCUPATION;
         }
 
         return $evidence;

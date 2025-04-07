@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\VehiclesDeclarations as CommonVehiclesDeclarations;
+use Common\FormService\Form\Lva\VehiclesDeclarationsNovelty;
 use Common\Service\Helper\FormHelperService;
+use Laminas\Form\Form;
+use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
-/**
- * Vehicles Declarations Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
-class VehiclesDeclarations extends CommonVehiclesDeclarations
+class ApplicationVehiclesDeclarationsPsvOperateNovelty extends VehiclesDeclarationsNovelty
 {
+    use ButtonsAlterations;
+
     protected FormHelperService $formHelper;
 
     public function __construct(FormHelperService $formHelper)
@@ -22,14 +23,14 @@ class VehiclesDeclarations extends CommonVehiclesDeclarations
     /**
      * Make form alterations
      *
-     * @param \Laminas\Form\Form $form
-     * @return \Laminas\Form\Form
+     * @param Form $form form
+     *
+     * @return Form
      */
     protected function alterForm($form)
     {
         parent::alterForm($form);
-
-        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        $this->alterButtons($form);
 
         return $form;
     }
