@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -28,6 +29,7 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $dataHelper = $container->get(DataHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new VehiclesDeclarationsController(
             $niTextTranslationUtil,
@@ -35,7 +37,8 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
             $formHelper,
             $formServiceManager,
             $scriptFactory,
-            $dataHelper
+            $dataHelper,
+            $uploadHelper,
         );
     }
 }
