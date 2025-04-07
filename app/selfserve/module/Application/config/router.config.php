@@ -1,9 +1,13 @@
 <?php
 
+use Common\Util\LvaRoute;
+use Dvsa\Olcs\Application\Controller\VehiclesDeclarationsController;
+use Laminas\Router\Http\Segment;
+
 return [
     'routes' => [
         'create_application' => [
-            'type' => \Laminas\Router\Http\Segment::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/application/create[/]',
                 'defaults' => [
@@ -14,7 +18,7 @@ return [
             ],
         ],
         'lva-application' => [
-            'type' => \Laminas\Router\Http\Segment::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/application/:application[/]',
                 'constraints' => [
@@ -28,7 +32,7 @@ return [
             'may_terminate' => true,
             'child_routes' => [
                 'type_of_licence' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'type-of-licence[/]',
                         'defaults' => [
@@ -39,7 +43,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -47,7 +51,7 @@ return [
                     ],
                 ],
                 'business_type' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'business-type[/]',
                         'defaults' => [
@@ -58,7 +62,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -66,7 +70,7 @@ return [
                     ],
                 ],
                 'business_details' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'business-details[/]',
                         'defaults' => [
@@ -77,7 +81,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -85,7 +89,7 @@ return [
                     ],
                 ],
                 'addresses' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'addresses[/]',
                         'defaults' => [
@@ -96,7 +100,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -104,7 +108,7 @@ return [
                     ],
                 ],
                 'people' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'people[/]',
                         'defaults' => [
@@ -115,7 +119,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -123,7 +127,7 @@ return [
                     ],
                 ],
                 'taxi_phv' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'taxi-phv[/]',
                         'defaults' => [
@@ -134,7 +138,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -142,7 +146,7 @@ return [
                     ],
                 ],
                 'operating_centres' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'operating-centres[/]',
                         'defaults' => [
@@ -153,7 +157,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -161,7 +165,7 @@ return [
                     ],
                 ],
                 'financial_evidence' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'financial-evidence[/]',
                         'defaults' => [
@@ -172,7 +176,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -180,7 +184,7 @@ return [
                     ],
                 ],
                 'transport_managers' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'transport-managers[/]',
                         'defaults' => [
@@ -191,7 +195,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -199,7 +203,7 @@ return [
                     ],
                 ],
                 'vehicles' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'vehicles[/]',
                         'defaults' => [
@@ -210,7 +214,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -218,7 +222,7 @@ return [
                     ],
                 ],
                 'vehicles_psv' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'vehicles-psv[/]',
                         'defaults' => [
@@ -229,26 +233,178 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
                         ],
                     ],
                 ],
-                'vehicles_declarations' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                'vehicles_size' => [
+                    'type' => LvaRoute::class,
                     'options' => [
-                        'route' => 'vehicles-declarations[/]',
+                        'route' => 'vehicles-size[/]',
                         'defaults' => [
-                            'controller' => 'Application/VehiclesDeclarations',
-                            'action' => 'index',
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'size',
                         ],
                     ],
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_operate_large' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-operate-large[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'operateLarge',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_operate_small' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-operate-small[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'operateSmall',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_small_part_written' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-small-part-written[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'writtenExplanation',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_small_conditions' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-small-conditions[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'smallConditions',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_operate_novelty' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-operate-novelty[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'novelty',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_documentary_evidence_small' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-documentary-evidence-small[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'smallEvidence',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_documentary_evidence_large' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-documentary-evidence-large[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'largeEvidence',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':action[/:child_id][/]',
+                            ],
+                        ],
+                    ],
+                ],
+                'psv_main_occupation_undertakings' => [
+                    'type' => LvaRoute::class,
+                    'options' => [
+                        'route' => 'psv-main-occupation-undertakings[/]',
+                        'defaults' => [
+                            'controller' => VehiclesDeclarationsController::class,
+                            'action' => 'mainOccupation',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'action' => [
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -256,7 +412,7 @@ return [
                     ],
                 ],
                 'trailers' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'trailers[/]',
                         'defaults' => [
@@ -267,7 +423,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -275,7 +431,7 @@ return [
                     ],
                 ],
                 'discs' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'discs[/]',
                         'defaults' => [
@@ -286,7 +442,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -294,7 +450,7 @@ return [
                     ],
                 ],
                 'community_licences' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'community-licences[/]',
                         'defaults' => [
@@ -305,7 +461,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -313,7 +469,7 @@ return [
                     ],
                 ],
                 'safety' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'safety[/]',
                         'defaults' => [
@@ -324,7 +480,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -332,7 +488,7 @@ return [
                     ],
                 ],
                 'conditions_undertakings' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'conditions-undertakings[/]',
                         'defaults' => [
@@ -343,7 +499,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -351,7 +507,7 @@ return [
                     ],
                 ],
                 'financial_history' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'financial-history[/]',
                         'defaults' => [
@@ -362,7 +518,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -370,7 +526,7 @@ return [
                     ],
                 ],
                 'licence_history' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'licence-history[/]',
                         'defaults' => [
@@ -381,7 +537,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -389,7 +545,7 @@ return [
                     ],
                 ],
                 'convictions_penalties' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'convictions-penalties[/]',
                         'defaults' => [
@@ -400,7 +556,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -408,7 +564,7 @@ return [
                     ],
                 ],
                 'undertakings' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'undertakings[/]',
                         'defaults' => [
@@ -419,7 +575,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -427,7 +583,7 @@ return [
                     ],
                 ],
                 'declarations_internal' => [
-                    'type' => \Common\Util\LvaRoute::class,
+                    'type' => LvaRoute::class,
                     'options' => [
                         'route' => 'declarations-internal[/]',
                         'defaults' => [
@@ -438,7 +594,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -446,7 +602,7 @@ return [
                     ],
                 ],
                 'review' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'review[/]',
                         'defaults' => [
@@ -456,7 +612,7 @@ return [
                     ],
                 ],
                 'declaration' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'declaration[/]',
                         'defaults' => [
@@ -466,7 +622,7 @@ return [
                     ],
                 ],
                 'pay-and-submit' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'pay-and-submit[/:redirect-back][/]',
                         'defaults' => [
@@ -480,7 +636,7 @@ return [
                     ],
                 ],
                 'payment' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
                         'defaults' => [
@@ -493,7 +649,7 @@ return [
                     ],
                 ],
                 'submission-summary' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'submission-summary[/]',
                         'defaults' => [
@@ -503,7 +659,7 @@ return [
                     ],
                 ],
                 'upload-evidence' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'upload-evidence[/]',
                         'defaults' => [
@@ -513,7 +669,7 @@ return [
                     ],
                 ],
                 'summary' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'summary[/:reference][/]',
                         'constraints' => [
@@ -526,7 +682,7 @@ return [
                     ],
                 ],
                 'result' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'result[/]',
                         'defaults' => [
@@ -537,7 +693,7 @@ return [
                     ],
                 ],
                 'cancel' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'cancel[/]',
                         'defaults' => [
@@ -547,7 +703,7 @@ return [
                     ],
                 ],
                 'withdraw' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'withdraw[/]',
                         'defaults' => [
@@ -557,7 +713,7 @@ return [
                     ],
                 ],
                 'transport_manager_details' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'transport-managers/details/:child_id[/]',
                         'constraints' => [
@@ -572,7 +728,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:grand_child_id][/]',
                                 'constraints' => ['grand_child_id' => '[0-9\\,]+',],
@@ -581,7 +737,7 @@ return [
                     ],
                 ],
                 'transport_manager_check_answer' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'transport-managers/check-answer/:child_id[/]',
                         'constraints' => [
@@ -596,7 +752,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Router\Http\Segment::class,
+                            'type' => Segment::class,
                             'options' => [
                                 'route' => ':action[/:grand_child_id][/]',
                                 'constraints' => ['grand_child_id' => '[0-9\\,]+',],
@@ -605,7 +761,7 @@ return [
                     ],
                 ],
                 'transport_manager_tm_declaration' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'transport-managers/tm-declaration/:child_id[/]',
                         'constraints' => [
@@ -620,7 +776,7 @@ return [
                     'may_terminate' => true,
                 ],
                 'transport_manager_operator_declaration' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'transport-managers/operator-declaration/:child_id[/]',
                         'constraints' => [
@@ -635,7 +791,7 @@ return [
                     'may_terminate' => true,
                 ],
                 'transport_manager_confirmation' => [
-                    'type' => \Laminas\Router\Http\Segment::class,
+                    'type' => Segment::class,
                     'options' => [
                         'route' => 'transport-managers/confirmation/:child_id[/]',
                         'constraints' => [

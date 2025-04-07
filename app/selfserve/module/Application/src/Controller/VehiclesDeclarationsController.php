@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Application\Controller;
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -43,7 +44,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
         protected RestrictionHelperService $restrictionHelper,
-        protected StringHelperService $stringHelper
+        protected StringHelperService $stringHelper,
+        protected FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -51,7 +53,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $formHelper,
             $formServiceManager,
             $scriptFactory,
-            $dataHelper
+            $dataHelper,
+            $uploadHelper
         );
     }
 }
