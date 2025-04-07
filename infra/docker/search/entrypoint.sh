@@ -17,9 +17,8 @@ do
 
 done
 
-# build indexes
-#/usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh
-
+#  build indexes
+/usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh 
 # Start logstash
 exec logstash
 
