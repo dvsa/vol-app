@@ -5,6 +5,8 @@ namespace Dvsa\Olcs\Application\Controller;
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -13,11 +15,6 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * External Application Vehicles Declarations Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsController
 {
     use ApplicationControllerTrait;
@@ -25,25 +22,16 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     protected $lva = 'application';
     protected string $location  = 'external';
 
-    /**
-     * @param NiTextTranslation $niTextTranslationUtil
-     * @param AuthorizationService $authService
-     * @param FormHelperService $formHelper
-     * @param FormServiceManager $formServiceManager
-     * @param ScriptFactory $scriptFactory
-     * @param DataHelperService $dataHelper
-     * @param RestrictionHelperService $restrictionHelper
-     * @param StringHelperService $stringHelper
-     */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        DataHelperService $dataHelper,
         protected RestrictionHelperService $restrictionHelper,
-        protected StringHelperService $stringHelper
+        protected StringHelperService $stringHelper,
+        protected FileUploadHelperService $uploadHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -51,7 +39,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $formHelper,
             $formServiceManager,
             $scriptFactory,
-            $dataHelper
+            $uploadHelper,
+            $flashMessengerHelper,
         );
     }
 }

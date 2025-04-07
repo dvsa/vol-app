@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -8,8 +10,8 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
 /**
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion
+ * @covers \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion
+ * @covers \Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion
  */
 class ApplicationCompletionEntityTest extends EntityTester
 {
@@ -97,5 +99,29 @@ class ApplicationCompletionEntityTest extends EntityTester
         $ac->setBusinessTypeStatus(Entity::STATUS_COMPLETE);
 
         $this->assertTrue($ac->isComplete($required));
+    }
+
+    public function testClearVehiclesSizeSectionsForApplication()
+    {
+        $entity = $this->instantiate(Entity::class);
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateLargeStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateSmallStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallConditionsStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvMainOccupationUndertakingsStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallPartWrittenStatus());
+        $this->assertNotSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateNoveltyStatus());
+
+        $entity->clearVehiclesSizeSectionsForApplication();
+
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateLargeStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateSmallStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallConditionsStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvMainOccupationUndertakingsStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvSmallPartWrittenStatus());
+        $this->assertSame(Entity::STATUS_NOT_STARTED, $entity->getPsvOperateNoveltyStatus());
     }
 }

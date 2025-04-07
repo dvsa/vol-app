@@ -617,13 +617,11 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UNCHANGED,
                     'Discs' =>  UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Discs' =>  UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 ],
                 'N',
@@ -636,7 +634,6 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 ],
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
@@ -685,36 +682,6 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
                 [
                     'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                     'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'Y',
-                []
-            ],
-            'Changed Vehicles Declarations' => [
-                'vehiclesDeclarations',
-                $this->getApplicationState1(),
-                $this->getLicenceState1(),
-                [
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
-            ],
-            'Unchanged Vehicles Declarations' => [
-                'vehiclesDeclarations',
-                $this->getApplicationState2(),
-                $this->getLicenceState2(),
-                [
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'VehiclesDeclarations' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
                 ],
                 'Y',
                 []

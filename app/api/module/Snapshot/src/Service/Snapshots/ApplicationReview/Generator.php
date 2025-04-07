@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Application Review
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview;
 
 use Doctrine\Common\Collections\Criteria;
@@ -20,11 +14,6 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Psr\Container\ContainerInterface;
 use Laminas\Filter\Word\UnderscoreToCamelCase;
 
-/**
- * Application Review
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class Generator extends AbstractGenerator
 {
     protected $defaultBundle = [
@@ -167,11 +156,6 @@ class Generator extends AbstractGenerator
                 ]
             ]
         ],
-        'vehicles_declarations' => [
-            'licence' => [
-                'trafficArea'
-            ]
-        ]
     ];
 
     protected $variationBundles = [
@@ -283,7 +267,8 @@ class Generator extends AbstractGenerator
                 'sections' => $sections,
                 'isGoods' => $application->isGoods(),
                 'isSpecialRestricted' => $application->isSpecialRestricted(),
-                'isInternal' => $isInternal
+                'isInternal' => $isInternal,
+                'isOperatingSmallPsvAsPartOfLarge' => $application->isOperatingSmallPsvAsPartOfLarge(),
             ]
         );
 
