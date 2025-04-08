@@ -26,7 +26,7 @@
     "laminas/laminas-stdlib": "^3.0",
     "laminas/laminas-validator": "^2.25",
     "laminas/laminas-view": "^2.11",
-    "lm-commons/lmc-rbac-mvc": "^3.3",
+    "lm-commons/lmc-rbac-mvc": "3.5",
     "olcs/olcs-auth": "^8.0",
     "olcs/olcs-common": "^7.18.1",
     "olcs/olcs-logging": "^7.2",

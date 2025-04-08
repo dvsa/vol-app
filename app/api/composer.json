@@ -37,7 +37,7 @@
     "symfony/finder": "^5",
     "symfony/lock": "^5",
     "twig/twig": "^3.14.1",
-    "lm-commons/lmc-rbac-mvc": "^3.3",
+    "lm-commons/lmc-rbac-mvc": "3.5",
     "laminas/laminas-mail": "^2.16",
     "laminas/laminas-mvc": "^3.3",
     "laminas/laminas-mvc-i18n": "^1.4",
