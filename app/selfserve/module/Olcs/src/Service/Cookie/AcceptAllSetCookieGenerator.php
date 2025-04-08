@@ -21,11 +21,11 @@ class AcceptAllSetCookieGenerator
      *
      * @return SetCookie
      */
-    public function generate()
+    public function generate(?bool $state = true)
     {
         return $this->preferencesSetCookieGenerator->generate(
             $this->preferencesFactory->create(
-                array_fill_keys(Preferences::KEYS, true)
+                array_fill_keys(Preferences::KEYS, $state)
             )
         );
     }

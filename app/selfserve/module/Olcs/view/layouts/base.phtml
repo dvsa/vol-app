@@ -81,78 +81,94 @@ $isLoggedIn = $currentUser->isLoggedIn();
   </script>
   <script data-queueit-c='dvsavol' type='text/javascript' src='//static.queue-it.net/script/queueconfigloader.min.js'></script>
 
-  <?php
-  if ($cookieBannerMode != '') {
-  ?>
 
-  <div id="global-cookie-message" class="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet>
-
-  <?php
-  if ($cookieBannerMode == 'banner') {
-  ?>
-
-    <form>
-      <div class="gem-c-cookie-banner__wrapper govuk-width-container">
-        <div class="govuk-grid-row">
-          <div class=" govuk-grid-column-two-thirds">
-            <div class="gem-c-cookie-banner__message">
-              <span class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('cookie-banner.tell-us')); ?></span>
-              <p class="govuk-body">
-              <?php
-
-                  $blurb = sprintf(
+  <?php if ($cookieBannerMode != ''):;?>
+    <div class="govuk-cookie-banner" data-nosnippet role="region" aria-label="Cookies on <?php echo $this->escapeHtml($this->translate('service.name')); ?>">
+      <?php if ($cookieBannerMode == 'banner'): ?>
+        <form>
+          <div class="govuk-cookie-banner__message govuk-width-container">
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-two-thirds">
+                <h2 class="govuk-cookie-banner__heading govuk-heading-m">
+                  <?php echo $this->escapeHtml($this->translate('cookie-banner.tell-us')); ?>
+                </h2>
+                <div class="govuk-cookie-banner__content">
+                  <p class="govuk-body">
+                    <?php
+                    echo sprintf(
                       $this->translate('cookie-banner.blurb'),
                       $this->url('cookies/settings')
-                  );
-
-                  echo($blurb);
-
-              ?>
-              </p>
-            </div>
-            <div class="gem-c-cookie-banner__buttons">
-              <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
-                  <button class="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted"><?php echo $this->escapeHtml($this->translate('cookie-banner.accept-all')); ?></button>
+                    );
+                    ?>
+                  </p>
+                </div>
               </div>
-              <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-settings govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
-                  <a class="gem-c-button govuk-button gem-c-button--inline" role="button" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked" href="<?php echo $this->url('cookies/settings');?>"><?php echo $this->escapeHtml($this->translate('cookie-banner.set-prefs')); ?></a>
+            </div>
+
+            <div class="govuk-button-group">
+              <button value="true" type="submit" name="acceptAllCookies" class="govuk-button" data-module="govuk-button" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted">
+                <?php echo $this->escapeHtml($this->translate('cookie-banner.accept-all')); ?>
+              </button>
+
+              <button value="false" type="submit" name="rejectedCookies" class="govuk-button" data-module="govuk-button" data-reject-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner rejected">
+                <?php echo $this->escapeHtml($this->translate('cookie-banner.reject-all')); ?>
+              </button>
+
+              <a class="govuk-link" href="<?php echo $this->url('cookies/settings'); ?>" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked">
+                <?php echo $this->escapeHtml($this->translate('cookie-banner.set-prefs')); ?>
+              </a>
+            </div>
+          </div>
+        </form>
+
+      <?php elseif ($cookieBannerMode == 'confirmation'): ?>
+        <form>
+          <div class="govuk-cookie-banner__message govuk-width-container" tabindex="-1">
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-two-thirds">
+                <p class="govuk-body">
+                  <?php
+                  echo sprintf(
+                    $this->translate('cookie-confirmation.blurb'),
+                    $this->url('cookies/settings')
+                  );
+                  ?>
+                </p>
+                <button class="govuk-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner">
+                  <?php echo $this->escapeHtml($this->translate('cookie-confirmation.hide')); ?>
+                </button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <input type="hidden" name="acceptAllCookies" value="true">
-    </form>
+        </form>
+      <?php elseif ($cookieBannerMode == 'rejectedConfirmation'): ?>
+        <form>
+          <div class="govuk-cookie-banner__message govuk-width-container" role="alert">
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-two-thirds">
+                <div class="govuk-cookie-banner__content">
+                  <p class="govuk-body">
+                    <?php
+                    echo sprintf(
+                      $this->translate('cookie-rejected-confirmation.blurb'),
+                      $this->url('cookies/settings')
+                    );
+                    ?>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="govuk-button-group">
+              <button class="govuk-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner">
+                <?php echo $this->escapeHtml($this->translate('cookie-confirmation.hide')); ?>
+              </button>
+            </div>
+          </div>
+        </form>
+      <?php endif; ?>
 
-  <?php
-  } elseif ($cookieBannerMode == 'confirmation') {
-  ?>
-
-    <form>
-      <div class="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
-        <p class="gem-c-cookie-banner__confirmation-message">
-          <?php
-              $blurb = sprintf(
-                  $this->translate('cookie-confirmation.blurb'),
-                  $this->url('cookies/settings')
-              );
-
-              echo($blurb);
-          ?>
-        </p>
-        <button class="gem-c-cookie-banner__hide-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner"><?php echo $this->escapeHtml($this->translate('cookie-confirmation.hide')); ?></button>
-      </div>
-    </form>
-
-  <?php
-  }
-  ?>
-
-  </div>
-
-  <?php
-  }
-  ?>
+    </div>
+  <?php endif; ?>
 
   <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><?php echo $this->escapeHtml($this->translate('skip-content')); ?></a>
 
