@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.9-rc10](https://github.com/dvsa/vol-app/compare/v5.20.8-rc10...v5.20.9-rc10) (2025-04-08)
+
+
+### Bug Fixes
+
+* run vft again for tests ([#785](https://github.com/dvsa/vol-app/issues/785)) ([b83d111](https://github.com/dvsa/vol-app/commit/b83d1113a225e73262650ef8d43923c0f600bd99))
+
 ## [5.20.8-rc10](https://github.com/dvsa/vol-app/compare/v5.20.7-rc10...v5.20.8-rc10) (2025-04-08)
 
 
