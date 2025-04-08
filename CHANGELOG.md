@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.8-rc10](https://github.com/dvsa/vol-app/compare/v5.20.7-rc10...v5.20.8-rc10) (2025-04-08)
+
+
+### Bug Fixes
+
+* update .gitignore ([#782](https://github.com/dvsa/vol-app/issues/782)) ([fc76218](https://github.com/dvsa/vol-app/commit/fc76218e80f3c8cc2c1cc1ed5dc1f4d8287fda38))
+
 ## [5.20.7-rc10](https://github.com/dvsa/vol-app/compare/v5.20.6-rc10...v5.20.7-rc10) (2025-04-07)
 
 
