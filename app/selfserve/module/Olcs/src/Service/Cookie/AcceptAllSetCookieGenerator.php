@@ -18,10 +18,8 @@ class AcceptAllSetCookieGenerator
 
     /**
      * Return a SetCookie instance representing acceptance of all cookies
-     *
-     * @return SetCookie
      */
-    public function generate(?bool $state = true)
+    public function generate(bool $state = true): SetCookie
     {
         return $this->preferencesSetCookieGenerator->generate(
             $this->preferencesFactory->create(
