@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.11-rc11](https://github.com/dvsa/vol-app/compare/v5.20.10-rc11...v5.20.11-rc11) (2025-04-09)
+
+
+### Bug Fixes
+
+* lb host header prep ([#794](https://github.com/dvsa/vol-app/issues/794)) ([b693c2b](https://github.com/dvsa/vol-app/commit/b693c2b594ed3c7e48b25f655b1b7839bbee892f))
+
 ## [5.20.10-rc11](https://github.com/dvsa/vol-app/compare/v5.20.10-rc10...v5.20.10-rc11) (2025-04-09)
 
 
