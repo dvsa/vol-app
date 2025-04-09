@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.10-rc10](https://github.com/dvsa/vol-app/compare/v5.20.9-rc10...v5.20.10-rc10) (2025-04-09)
+
+
+### Bug Fixes
+
+* vft no proxy fix test trigger ([#787](https://github.com/dvsa/vol-app/issues/787)) ([32eb3f6](https://github.com/dvsa/vol-app/commit/32eb3f6d1895694f606e0f8e0be4cec7e346158c))
+
 ## [5.20.9-rc10](https://github.com/dvsa/vol-app/compare/v5.20.8-rc10...v5.20.9-rc10) (2025-04-08)
 
 
