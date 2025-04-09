@@ -22,6 +22,6 @@ const generateTerraformDocs = (filenames) => {
 
 export default {
   "*": ["prettier --ignore-unknown --write"],
-  "*.{tf,tfvars}": ["terraform fmt"],
+  "*.{tf,tfvars}": [""],
   "infra/terraform/modules/**/*": generateTerraformDocs,
 };
