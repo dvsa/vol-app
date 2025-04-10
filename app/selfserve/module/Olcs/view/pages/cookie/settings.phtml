@@ -3,52 +3,53 @@
 if ($success) {
 
 ?>
-
-<section class="gem-c-notice govuk-!-margin-bottom-8" aria-label="Notice" aria-live="polite" role="region">
-  <h2 class="gem-c-notice__title"><?php echo $this->translate('cookie-settings-saved-heading'); ?></h2>
-  <p><?php echo $this->translate('cookie-settings-saved-content'); ?></p>
-</section>
-
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+      <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+        <?php echo $this->translate('cookie-settings-saved-heading'); ?>
+      </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+      <p class="govuk-body"><?php echo $this->translate('cookie-settings-saved-content'); ?></p>
+    </div>
+  </div>
 <?php
 
 }
 
 ?>
 
-<div class="gem-c-title govuk-!-margin-top-8 govuk-!-margin-bottom-8">
-  <h1 class="gem-c-title__text ">
+<div class="govuk-!-padding-top-8">
+  <h1 class="govuk-heading-l">
     <?php echo $this->translate('cookie-settings-heading'); ?>
   </h1>
-</div>
-
-<div class="gem-c-govspeak govuk-govspeak " data-module="govspeak">
   <?php echo $this->translate('markup-cookie-settings-intro'); ?>
 </div>
-<h2 class="gem-c-heading gem-c-heading--padding"><?php echo $this->translate('cookie-settings-cookie-settings-heading'); ?></h2>
-<div class="cookie-settings__form-wrapper">
+
+<h2 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-cookie-settings-heading'); ?></h2>
   <?php echo $this->translate('markup-cookie-settings-cookie-settings'); ?>
   <form data-module="cookie-settings" method="POST" id="olcs-cookie-settings" name="olcs-cookie-settings">
     <div class="govuk-form-group">
       <fieldset class="govuk-fieldset" aria-describedby="hint-aed44408">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-        <h3 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-measure-website-use-heading'); ?></h3>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h3 class="govuk-heading-s"><?php echo $this->translate('cookie-settings-measure-website-use-heading'); ?></h3>
         </legend>
 
-        <div id="hint-aed44408" class="gem-c-hint govuk-hint govuk-!-margin-bottom-3">
+        <div id="hint-aed44408" class="govuk-body">
           <?php echo $this->translate('markup-cookie-settings-measure-website-use'); ?>
         </div>
-        <div class="govuk-radios govuk-radios--inline">
-          <div class="gem-c-radio govuk-radios__item">
-          <input type="radio" name="analytics" id="radio-fc9e63d9-0" value="true" class="govuk-radios__input"<?php if ($preferences['analytics']) { ?> checked="checked"<?php } ?>>
+        <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+          <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="radio-fc9e63d9-0" name="analytics" type="radio" value="true" <?php if ($preferences['analytics']) { ?> checked="checked"<?php } ?>>
 
-            <label for="radio-fc9e63d9-0" class="gem-c-label govuk-label govuk-radios__label">
+            <label for="radio-fc9e63d9-0" class="govuk-label govuk-radios__label">
               <span><?php echo $this->translate('cookie-settings-on'); ?></span>
             </label>
           </div>
-          <div class="gem-c-radio govuk-radios__item">
-            <input type="radio" name="analytics" id="radio-fc9e63d9-1" value="false" class="govuk-radios__input"<?php if (!$preferences['analytics']) { ?> checked="checked"<?php } ?>>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="radio-fc9e63d9-1" name="analytics" type="radio" value="false"<?php if (!$preferences['analytics']) { ?> checked="checked"<?php } ?>>
 
-            <label for="radio-fc9e63d9-1" class="gem-c-label govuk-label govuk-radios__label">
+            <label for="radio-fc9e63d9-1" class="govuk-label govuk-radios__label">
               <span><?php echo $this->translate('cookie-settings-off'); ?></span>
             </label>
           </div>
@@ -58,25 +59,25 @@ if ($success) {
     <!-- Cookies that remember your settings -->
     <div class="govuk-form-group">
       <fieldset class="govuk-fieldset" aria-describedby="hint-2a73cd62">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h3 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-remember-your-settings-heading'); ?></h3>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <h3 class="govuk-heading-s"><?php echo $this->translate('cookie-settings-remember-your-settings-heading'); ?></h3>
         </legend>
 
-        <div id="hint-2a73cd62" class="gem-c-hint govuk-hint govuk-!-margin-bottom-3">
+        <div id="hint-2a73cd62" class="govuk-body">
           <?php echo $this->translate('markup-cookie-settings-remember-your-settings'); ?>
         </div>
         <div class="govuk-radios govuk-radios--inline">
-          <div class="gem-c-radio govuk-radios__item">
-            <input type="radio" name="settings" id="radio-110c727c-0" value="true" class="govuk-radios__input"<?php if ($preferences['settings']) { ?> checked="checked"<?php } ?>>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="radio-110c727c-0" name="settings" type="radio" value="true" <?php if ($preferences['settings']) { ?> checked="checked"<?php } ?>>
 
-            <label for="radio-110c727c-0" class="gem-c-label govuk-label govuk-radios__label">
+            <label for="radio-110c727c-0" class="govuk-label govuk-radios__label">
               <span><?php echo $this->translate('cookie-settings-on'); ?></span>
             </label>
           </div>
-          <div class="gem-c-radio govuk-radios__item">
-            <input type="radio" name="settings" id="radio-110c727c-1" value="false" class="govuk-radios__input"<?php if (!$preferences['settings']) { ?> checked="checked"<?php } ?>>
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="radio-110c727c-1" name="settings"  type="radio" value="false" <?php if (!$preferences['settings']) { ?> checked="checked"<?php } ?>>
 
-            <label for="radio-110c727c-1" class="gem-c-label govuk-label govuk-radios__label">
+            <label for="radio-110c727c-1" class="govuk-label govuk-radios__label">
               <span><?php echo $this->translate('cookie-settings-off'); ?></span>
             </label>
           </div>
@@ -84,26 +85,27 @@ if ($success) {
       </fieldset>
     </div>
     <!-- Site security cookies -->
-    <div class="gem-c-govspeak govuk-govspeak " data-module="govspeak">
-      <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-security-heading'); ?> </h3>
+    <div class="govuk-body" >
+      <h3 class="govuk-heading-s"><?php echo $this->translate('cookie-settings-security-heading'); ?> </h3>
       <?php echo $this->translate('markup-cookie-settings-security-cookies'); ?>
     </div>
     <!-- Strictly necessary cookies -->
-    <div class="gem-c-govspeak govuk-govspeak govuk-!-margin-top-7  " data-module="govspeak">
-    <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-strictly-necessary-heading'); ?></h3>
+    <div class="govuk-body">
+      <h3 class="govuk-heading-s"><?php echo $this->translate('cookie-settings-strictly-necessary-heading'); ?></h3>
       <?php echo $this->translate('markup-cookie-settings-strictly-necessary'); ?>
     </div>
-    <button class="gem-c-button govuk-button" type="submit"><?php echo $this->translate('cookie-settings-save-changes'); ?></button>
+    <button type="submit" class="govuk-button" data-module="govuk-button">
+      <?php echo $this->translate('cookie-settings-save-changes'); ?>
+    </button>
     <input type="hidden" name="security" value="<?php echo $security; ?>">
   </form>
-</div>
 
-<div class="cookie-settings__gov-services">
-  <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-third-party-heading'); ?></h3>
+<div class="govuk-body">
+  <h2 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-third-party-heading'); ?></h2>
   <?php echo $this->translate('markup-cookie-settings-third-party'); ?>
 </div>
 
-  <div class="cookie-settings__gov-services">
-  <h3 class="govuk-heading-m" style="font-size: 24px !important"><?php echo $this->translate('cookie-settings-government-heading'); ?></h3>
+  <div class="govuk-body">
+    <h2 class="govuk-heading-m"><?php echo $this->translate('cookie-settings-government-heading'); ?></h2>
   <?php echo $this->translate('markup-cookie-settings-government'); ?>
 </div>

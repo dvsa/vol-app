@@ -58,40 +58,64 @@ class CookieBannerListener implements ListenerAggregateInterface
             return;
         }
 
+        $routeMatch = $e->getRouteMatch();
+        $params     = $routeMatch->getParams();
+
         if ($request->getQuery('acceptAllCookies') === 'true') {
-            $routeMatch = $e->getRouteMatch();
-            $redirectUrl = $this->urlHelper->fromRoute(
+            $this->handleCookieResponse(
+                $e,
                 $routeMatch->getMatchedRouteName(),
-                $routeMatch->getParams(),
-                [
-                    'query' => [
-                        'acceptedAllCookiesConfirmation' => 'true'
-                    ]
-                ]
-            );
-
-            $response = $e->getResponse();
-            $responseHeaders = $response->getHeaders();
-
-            $responseHeaders->addHeaderLine('Location', $redirectUrl);
-            $responseHeaders->addHeader(
+                $params,
+                ['acceptedAllCookiesConfirmation' => 'true'],
                 $this->acceptAllSetCookieGenerator->generate()
             );
-
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-
             return;
         }
 
-        $cookieBannerMode = '';
+        if ($request->getQuery('rejectedCookies') === 'false') {
+            $this->handleCookieResponse(
+                $e,
+                $routeMatch->getMatchedRouteName(),
+                $params,
+                ['rejectedAllCookiesConfirmation' => 'true'],
+                $this->acceptAllSetCookieGenerator->generate(false)
+            );
+            return;
+        }
 
+        // Determine which banner mode to show
+        $cookieBannerMode = '';
         if ($request->getQuery('acceptedAllCookiesConfirmation') === 'true') {
             $cookieBannerMode = 'confirmation';
+        } elseif ($request->getQuery('rejectedAllCookiesConfirmation') === 'true') {
+            $cookieBannerMode = 'rejectedConfirmation';
         } elseif ($this->bannerVisibilityProvider->shouldDisplay($e)) {
             $cookieBannerMode = 'banner';
         }
 
         $this->placeholder->getContainer('cookieBannerMode')->set($cookieBannerMode);
+    }
+
+    /**
+     * Handles redirect + cookie set logic for cookie preferences
+     */
+    private function handleCookieResponse(
+        MvcEvent $e,
+        string $routeName,
+        array $params,
+        array $queryParams,
+                 $setCookieHeader
+    ): void {
+        $redirectUrl = $this->urlHelper->fromRoute(
+            $routeName,
+            $params,
+            ['query' => $queryParams]
+        );
+
+        $response = $e->getResponse();
+        $response->getHeaders()->addHeaderLine('Location', $redirectUrl);
+        $response->getHeaders()->addHeader($setCookieHeader);
+        $response->setStatusCode(302);
+        $response->sendHeaders();
     }
 }

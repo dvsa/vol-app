@@ -28,44 +28,32 @@
 
 %h1,
 .h1 {
-  @include font-size(
-    font-size(9), font-size(8), font-size(5, true)
-  );
+  @include font-size(font-size(9), font-size(8), font-size(5, true));
 }
 
 %h2,
 .h2 {
-  @include font-size(
-    font-size(8), font-size(6), font-size(5, true)
-  );
+  @include font-size(font-size(8), font-size(6), font-size(5, true));
 }
 
 %h3,
 .h3 {
-  @include font-size(
-    font-size(6), font-size(5), font-size(4, true)
-  );
+  @include font-size(font-size(6), font-size(5), font-size(4, true));
 }
 
 %h4,
 .h4 {
-  @include font-size(
-    font-size(5), font-size(4), font-size(2, true)
-  );
+  @include font-size(font-size(5), font-size(4), font-size(2, true));
 }
 
 %h5,
 .h5 {
-  @include font-size(
-    font-size(4), font-size(2), font-size(1, true)
-  );
+  @include font-size(font-size(4), font-size(2), font-size(1, true));
 }
 
 %h6,
 .h6 {
-  @include font-size(
-    font-size(2), font-size(1), font-size(1, true)
-  );
+  @include font-size(font-size(2), font-size(1), font-size(1, true));
 }
 
 /**
@@ -123,7 +111,7 @@ h5 {
 p {
   @extend %paragraph;
   font-weight: 400;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }
 
 b,
@@ -162,9 +150,6 @@ p,
 ul,
 ol {
   margin-top: 0;
-  &:last-child {
-    margin-bottom: 0;
-  }
   &.compound {
     margin: 8px 0;
   }
@@ -188,14 +173,13 @@ ol {
  * Selfserve Theme
  */
 
-@if $app == 'selfserve' {
-
+@if $app == "selfserve" {
   .important {
     padding-left: 42px;
     position: relative;
     &:after {
-      @include svg('selfserve-important');
-      content: '';
+      @include svg("selfserve-important");
+      content: "";
       position: absolute;
       left: 0;
       top: 0;
@@ -207,22 +191,20 @@ ol {
     min-height: 34px;
     position: relative;
     &:after {
-      @include svg('selfserve-exclamation');
-      content: '';
+      @include svg("selfserve-exclamation");
+      content: "";
       position: absolute;
       left: 0;
       top: 0;
     }
   }
-
 }
 
 /**
  * Internal Theme
  */
 
-@if $app == 'internal' {
-
+@if $app == "internal" {
   .title {
     border-bottom: 1px solid $grey-2;
     margin-bottom: 12px;
@@ -234,9 +216,7 @@ ol {
   }
 
   h1 {
-    @include font-size(
-      font-size(6), font-size(5), font-size(4, true)
-    );
+    @include font-size(font-size(6), font-size(5), font-size(4, true));
     display: inline;
     padding-right: 0.25em;
   }
@@ -253,10 +233,8 @@ ol {
   h4 {
     margin-bottom: 0.4em;
   }
-
 }
 
 .no-margin {
   margin: 0;
 }
-
