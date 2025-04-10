@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.20.12-rc12](https://github.com/dvsa/vol-app/compare/v5.20.11-rc11...v5.20.12-rc12) (2025-04-10)
+
+
+### Bug Fixes
+
+* alb toggle for the prep environment ([7148a4b](https://github.com/dvsa/vol-app/commit/7148a4bc004a44104e947b91ae732d559f90f328))
+* alb toggle for the prep environment ([f9c8aef](https://github.com/dvsa/vol-app/commit/f9c8aefec4bab1debb7f7c26db5955e2f425925e))
+* lb host header prep ([#796](https://github.com/dvsa/vol-app/issues/796)) ([a03cfdd](https://github.com/dvsa/vol-app/commit/a03cfdd9028abe7e8502a2163921e54d828436ea))
+
+
+### Miscellaneous Chores
+
+* release 5.20.10-rc11 ([#793](https://github.com/dvsa/vol-app/issues/793)) ([d1b0231](https://github.com/dvsa/vol-app/commit/d1b0231741cc1564ccbee63404d7548908a1cffe))
+* release 5.20.12-rc12 ([#800](https://github.com/dvsa/vol-app/issues/800)) ([49ddfc6](https://github.com/dvsa/vol-app/commit/49ddfc6fbb9d8e6cb777beadad6843c1291d81b2))
+* release 5.20.5-rc6 ([136067a](https://github.com/dvsa/vol-app/commit/136067aee8c0c21fd486649da3a3ac15ce32d7e0))
+* release 5.20.6-rc9 ([#771](https://github.com/dvsa/vol-app/issues/771)) ([b4eaab8](https://github.com/dvsa/vol-app/commit/b4eaab8abce9f9e6316a41725c4610b265c8a17f))
+* release v5.14.2-rc1 ([c64f420](https://github.com/dvsa/vol-app/commit/c64f42086b087060de1a2d88b43754e57007578f))
+
 ## [5.20.11-rc11](https://github.com/dvsa/vol-app/compare/v5.20.10-rc11...v5.20.11-rc11) (2025-04-09)
 
 
