@@ -12,7 +12,7 @@
     "beberlei/doctrineextensions": "^1.0",
     "caseyamcl/guzzle_retry_middleware": "^2.7.1",
     "doctrine/doctrine-orm-module": "^5",
-    "doctrine/orm": "^2.19.5",
+    "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^2.0",
     "dvsa/laminas-config-cloud-parameters": "^1.0",
     "dvsa/php-govuk-account": "^3.0",
