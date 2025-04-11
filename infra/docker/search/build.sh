@@ -1,22 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash
 
 typeset -i errorcount
 let errorcount=0
-
-usage() {
-    if [ -n "$1" ]; then
-        echo;
-        echo "Error: $1"
-    fi
-
-    echo;
-    echo "Usage:  build.sh [options]"
-    echo;
-    echo "        -c <file>     : bash file containing config"
-    echo "        -s            : Suppress syslog output."
-    echo
-    exit;
-}
 
 blankline() {
     if [ "$logfile" == "" ]; then
@@ -81,46 +66,15 @@ logWarning() {
     fi
 }
 
-function removeLastrun()
-{
-    logInfo "Removing last run file [${1}." ${2}
-    # Note that the lastrun file may not be present
-    response=$(rm -f "${1}")
-    ret=$?
-    if [[  -f ${1} ]]; then
-        logError "Failed to remove last run file [${1}] - error code [${ret}]." ${2}
-        return 1
-    else
-        logInfo "Successfully removed last run file [${1}]." ${2}
-    fi
-
-    return 0
-}
-
-function removeLockfile()
-{
-    logInfo "Removing lock file [${1}]." ${syslogEnabled}
-
-    response=$(rm -f "${1}")
-    ret=$?
-    if [[  -f ${1} ]]; then
-        logError "Failed to remove the Process Lock File: [${1}] - error code [${ret}]." ${2}
-        return 1
-    else
-        logInfo "Lock File: [${1}] has been removed." ${2}
-        return 0
-    fi
-}
-
 function enableReplicas()
 {
     index="${1}" 
     newVersion="${2}"
     syslogEnabled="${3}"
-    awsAccount="${4}"
+    elasticHost="${4}"
 
-    if [[ "${awsAccount}" == "dev-dvsacloud" ]]; then 
-        logInfo "No need for replicas for [${index}_v${newVersion}] index in [${awsAccount}] account." ${syslogEnabled}
+    if [[ "${elastichost}" == *"dev-dvsacloud"* ]]; then 
+        logInfo "No need for replicas for [${index}_v${newVersion}] index in [${elastichost}] account." ${syslogEnabled}
         curl -s -XPUT "https://$ELASTIC_HOST/${index}_v${newVersion}/_settings" -H 'Content-Type: application/json' -d '{"index": {"number_of_replicas": 0,"auto_expand_replicas": false}}'
         return 0
     else
@@ -191,26 +145,19 @@ function purgeOldAliases()
     done
 }
 
-
 delay=70 # seconds
 newVersion=$(date +%Y%m%d%H%M%S) #timestamp
 confDir='/usr/share/logstash/config/'
-syslogEnabled=true
 promoteNewIndex=true
-awsAccount=$(uname -n | cut -d'.' -f4) # this needs passing in
+syslogEnabled=true
 
-
-while getopts "c:d:n:i:lps" opt; do
+while getopts "c:lps" opt; do
   case $opt in
     c)
         if [ ! -f $OPTARG ]; then
           usage "Config file $OPTARG doesn't exist";
         fi
-        source $OPTARG
-      ;;
-    s)
-        syslogEnabled=false
-      ;;
+        source $OPTARG    
     \?)
       usage "Invalid option: -$OPTARG";
       ;;
@@ -226,18 +173,10 @@ then
     exit;
 fi
 
-INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
-
-
-
-lockFile=$(readlink -m build.lock)
-if [ -f $lockFile ]; then
-    doubleline
-    logWarning "This script may already be running, if this is incorrect delete the lock file ${lockFile}." ${syslogEnabled}
-    doubleline
-    exit;
+if [ -z "${INDEXES}" ]
+then
+    INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
 fi
-touch $lockFile
 
 doubleline
 logInfo "ES REBUILD WITH THE FOLLOWING CONFIGURATION" ${syslogEnabled}
@@ -246,10 +185,7 @@ logInfo "ES Rebuild Config Path Dir: ${confDir}" ${syslogEnabled}
 logInfo "ES Rebuild Target indexes:  ${INDEXES[*]}" ${syslogEnabled}
 logInfo "ES Rebuild Delay:           ${delay}" ${syslogEnabled}
 logInfo "ES Rebuild New version:     ${newVersion}" ${syslogEnabled}
-logInfo "ES Rebuild Syslog Enabled:  ${syslogEnabled}" ${syslogEnabled}
 logInfo "ES Rebuild Promote Index:   ${promoteNewIndex}" ${syslogEnabled}
-logInfo "ES Rebuild Paralellised:    ${processInParallel}" ${syslogEnabled}
-
 blankline
 
 singleline
@@ -263,64 +199,33 @@ fi
 
 blankline
 
-#BUILD ALL IN PARALLEL
-    
-logInfo "DELETING MATCHING INDEXES WITHOUT AN ALIAS." ${syslogEnabled}
-blankline
-
 for index in "${INDEXES[@]}"
 do
+    singleline
+    logInfo "DELETING MATCHING INDEXES WITHOUT AN ALIAS" ${syslogEnabled}
+    blankline
+     
     purgeOldAliases ${index} 30 6 ${syslogEnabled} ${ELASTIC_HOST}
     ret=$?
     if [[ $ret != 0 ]]; then
         let errorcount=$((errorcount + 1))
     fi
-done
-    
-singleline
-logInfo "CREATING NEW INDEXES" ${syslogEnabled}
-blankline
 
-for index in "${INDEXES[@]}"
-do
-    
+    blankline
+    singleline
+    logInfo "CREATING NEW INDEX [${index}]" ${syslogEnabled}
+    blankline
     logInfo "Updating config file for [${index}] index and new version [${index}_v${newVersion}]." ${syslogEnabled}
 
     sed "s/index => \"${index}_v[0-9]*\"/index => \"${index}_v${newVersion}\"/" -i $confDir/$index.conf
 
-    removeLastrun "/etc/logstash/lastrun/${index}.lastrun"  ${syslogEnabled}
-    if [[ $? != 0 ]]; then
-        let errorcount=$((errorcount + 1))
-        removeLockfile "${lockFile}" ${syslogEnabled}
-        if [[ $? != 0 ]]; then
-            let errorcount=$((errorcount + 1))
-        fi
-        
-        logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-        blankline
-        doubleline
-        exit $errorcount
-    fi
-        
 done
-    
-logInfo "Starting Logstash service after config file updates.." ${syslogEnabled}
 
-startService "logstash" 30 6 
-ret=$?
-if [[ $ret != 0 ]]; then
-    let errorcount=$((errorcount + 1))
-    removeLockfile "${lockFile}" ${syslogEnabled}
-    if [[ $? != 0 ]]; then
-        let errorcount=$((errorcount + 1))
-    fi
-        
-    logError "Processing aborted due to a fatal error - [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-    blankline
-    doubleline
-    exit $errorcount
-fi
+# Start logstash in the background
+logstash &
 
+# Store the PID of the logstash process
+LOGSTASH_PID=$!
 
 for index in "${INDEXES[@]}"
 do
@@ -348,21 +253,17 @@ do
         lastSize=$size
     done
 
-    if [ "$promoteNewIndex" != "true" ]; then
-        logInfo "Alias [${index}] is not being moved to the new index [${index}_v${newVersion}]." ${syslogEnabled}
+    logInfo "Moving the alias [${index}] to the new index [${index}_v${newVersion}]." ${syslogEnabled}
+    modifyBody=$(curl -s -XGET https://$ELASTIC_HOST/_aliases?pretty | python3 ./py/modifyAliases.py $newVersion $index)
+    response=$(curl -XPOST -s "https://$ELASTIC_HOST/_aliases" -H 'Content-Type: application/json' -d "$modifyBody")
+    if [[ "${response}" != "{\"acknowledged\":true}" ]]; then
+        logError "Alias [${index}] not moved to [${index}_v${newVersion}] - error code is [${response}]." ${syslogEnabled}
+        let errorcount=$((errorcount + 1))
     else
-        logInfo "Moving the alias [${index}] to the new index [${index}_v${newVersion}]." ${syslogEnabled}
-        modifyBody=$(curl -s -XGET https://$ELASTIC_HOST/_aliases?pretty | python3 ./py/modifyAliases.py $newVersion $index)
-        response=$(curl -XPOST -s "https://$ELASTIC_HOST/_aliases" -H 'Content-Type: application/json' -d "$modifyBody")
-        if [[ "${response}" != "{\"acknowledged\":true}" ]]; then
-            logError "Alias [${index}] not moved to [${index}_v${newVersion}] - error code is [${response}]." ${syslogEnabled}
-            let errorcount=$((errorcount + 1))
-        else
-            logInfo "Successfully moved alias [${index}] to the new index [${index}_v${newVersion}]." ${syslogEnabled}
-        fi
+        logInfo "Successfully moved alias [${index}] to the new index [${index}_v${newVersion}]." ${syslogEnabled}
     fi
     
-    enableReplicas "${index}" "${newVersion}" "${syslogEnabled}" "${awsAccount}"
+    enableReplicas "${index}" "${newVersion}" "${syslogEnabled}" "${ELASTIC_HOST}"
     if [[ $? != 0 ]]; then
         logError "Failed to enable replicas for [${index}_v${newVersion}] - error code is [${response}]." ${syslogEnabled}
         let errorcount=$((errorcount + 1))
@@ -383,19 +284,11 @@ fi
 
 blankline
 
-removeLockfile "${lockFile}" ${syslogEnabled}
-if [[ $? != 0 ]]; then
-    let errorcount=$((errorcount + 1))
-fi
+# Kill the first logstash process
+kill $LOGSTASH_PID
 
-if [[ $errorcount != 0 ]]; then
-    logError "All processing completed but [${errorcount}] errors were detected - please check logs." ${syslogEnabled}
-    blankline
-    doubleline
-    exit $errorcount
-else
-    logInfo "All processing completed with no errors." ${syslogEnabled}
-    blankline
-    doubleline
-    exit 0
-fi
+# Wait for the logstash process to terminate
+wait $LOGSTASH_PID
+
+# Replace the current script with the new logstash process
+exec logstash
