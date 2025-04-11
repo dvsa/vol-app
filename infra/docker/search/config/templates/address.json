@@ -103,6 +103,7 @@
       }
     }
   },
+  "index_patterns": ["address-*"],
   "settings": {
     "index.lifecycle.name": "Rollover",
     "index.lifecycle.rollover_alias": "address",
