@@ -84,8 +84,6 @@ then
     INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
 fi
 
-newVersion=$(date +%s) #timestamp
-
 JDBC_LIBRARY=$(basename "`ls /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar`")
 log "Replace placeholders in logstash config file(s)"
 BASEDIR=$(dirname $(readlink -m $0))
@@ -98,7 +96,6 @@ for INDEX in "${INDEXES[@]}"; do
   sed "s/<DB_USER>/$DBUSER/" -i $DIRPATH/$CONFFILE
   sed "s/<DB_PASSWORD>/$DBPASSWORD/" -i $DIRPATH/$CONFFILE
   sed "s/<ELASTIC_HOST>/$ELASTIC_HOST/" -i $DIRPATH/$CONFFILE
-  sed "s/<INDEX_VERSION>/$newVersion/" -i $DIRPATH/$CONFFILE
   sed "s#<BASEDIR>#$BASEDIR#" -i $DIRPATH/$CONFFILE
   sed "s/<INDEX_NAME>/$INDEX/" -i $DIRPATH/$CONFFILE
   chmod 644 $DIRPATH/$CONFFILE
