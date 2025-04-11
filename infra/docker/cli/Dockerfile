@@ -11,11 +11,12 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && apk del pcre-dev $PHPIZE_DEPS
 
 # Install icu-dev, intl, pdo_mysql, opcache
-RUN apk add --no-cache icu-dev \
+RUN apk add --no-cache icu-dev libzip-dev \
   && docker-php-ext-configure intl \
-  && docker-php-ext-install pdo_mysql opcache intl
+  && docker-php-ext-configure zip \
+  && docker-php-ext-install pdo_mysql opcache intl zip
 
-# Add extra scirpts for batch jobs  
+# Add extra scirpts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
 
 # PHP config file
@@ -39,7 +40,7 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas \ 
+  && chmod +x /var/www/html/vendor/bin/laminas \
   # Ensure scripts are executable
   && chmod +x /mnt/data/scripts/*.sh
 
