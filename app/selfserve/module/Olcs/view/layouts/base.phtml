@@ -172,7 +172,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
 
   <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link"><?php echo $this->escapeHtml($this->translate('skip-content')); ?></a>
 
-  <header class="govuk-header" role="banner" data-module="govuk-header">
+  <header class="govuk-header govuk-header--full-width-border" data-module="govuk-header">
     <div class="govuk-header__container govuk-width-container">
       <div class="govuk-header__logo">
         <a href="/" class="govuk-header__link govuk-header__link--homepage">
@@ -190,47 +190,53 @@ $isLoggedIn = $currentUser->isLoggedIn();
           </svg>
         </a>
       </div>
-      <div class="govuk-header__content">
-        <a href="/" class="govuk-header__link govuk-header__service-name">
-          <?php
-              echo (!$isLoggedIn && ($this->placeholder('usePageTitleAsHeader')->getValue() === true))
-                  ? $this->pageTitle()
-                  : $this->translate('header-vehicle-operator-licensing');
-          ?>
-        </a>
-        <?php  if ($isLoggedIn): ?>
-        <nav aria-label="Menu" class="govuk-header__navigation">
-        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="<?php echo $this->escapeHtml($this->translate('show.or.hide.top.level.navigation')); ?>">
-            <?php echo $this->escapeHtml($this->translate('menu')); ?>
-        </button>
-          <?php
-              // get Home navigation
-              $navigation = $this->navigation('navigation')->getContainer()->findBy('id', 'home');
-
-              if ($currentUser->isLocalAuthority() || $currentUser->isPartner()) {
-                  // show Search
-                  $navigation->findOneById('selfserve-topnav-search')->setVisible(true);
-              }
-
-              /* @var \Laminas\View\Helper\Navigation\Menu $menu */
-              $menu = $this->navigation($navigation)->menu();
-
-              // We need to use a dedicated partial because the template requires classes to be set of the <a> tags
-              $menu->setPartial('partials/layout/top-level-navigation');
-              $menu->setMaxDepth(0);
-              $menu->setMinDepth(0);
-
-              echo $menu;
-
-              // This seems irrelevant, but it's very important as the partial is set elsewhere
-              $menu->setPartial(null);
-          ?>
-         </nav>
-        <?php endif; ?>
-      </div>
     </div>
   </header>
 
+  <section aria-label="Service information" class="govuk-service-navigation"
+           data-module="govuk-service-navigation">
+    <div class="govuk-width-container">
+      <div class="govuk-service-navigation__container">
+      <span class="govuk-service-navigation__service-name">
+        <a href="/" class="govuk-service-navigation__link">
+          <?php echo (!$isLoggedIn && ($this->placeholder('usePageTitleAsHeader')->getValue() === true))
+            ? $this->pageTitle()
+            : $this->translate('header-vehicle-operator-licensing');
+          ?>
+        </a>
+      </span>
+        <?php  if ($isLoggedIn): ?>
+          <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+            <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden>
+              <?php echo $this->escapeHtml($this->translate('menu')); ?>
+            </button>
+            <?php
+            // get Home navigation
+            $navigation = $this->navigation('navigation')->getContainer()->findBy('id', 'home');
+
+            if ($currentUser->isLocalAuthority() || $currentUser->isPartner()) {
+              // show Search
+              $navigation->findOneById('selfserve-topnav-search')->setVisible(true);
+            }
+
+            /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+            $menu = $this->navigation($navigation)->menu();
+
+            // We need to use a dedicated partial because the template requires classes to be set of the <a> tags
+            $menu->setPartial('partials/layout/top-level-navigation');
+            $menu->setMaxDepth(0);
+            $menu->setMinDepth(0);
+
+            echo $menu;
+
+            // This seems irrelevant, but it's very important as the partial is set elsewhere
+            $menu->setPartial(null);
+            ?>
+          </nav>
+        <?php endif; ?>
+      </div>
+    </div>
+  </section>
   <?php
   //  system info messages
   if (! $this->currentUser()->isLoggedIn()) :
