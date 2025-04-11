@@ -112,9 +112,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
                 <?php echo $this->escapeHtml($this->translate('cookie-banner.reject-all')); ?>
               </button>
 
-              <a class="govuk-link" href="<?php echo $this->url('cookies/settings'); ?>" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked">
-                <?php echo $this->escapeHtml($this->translate('cookie-banner.set-prefs')); ?>
-              </a>
+              <?php echo $this->link($this->url('cookies/settings'), $this->escapeHtml($this->translate('cookie-banner.set-prefs'))); ?>.
             </div>
           </div>
         </form>
