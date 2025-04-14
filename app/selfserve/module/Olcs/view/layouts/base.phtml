@@ -94,12 +94,10 @@ $isLoggedIn = $currentUser->isLoggedIn();
                 </h2>
                 <div class="govuk-cookie-banner__content">
                   <p class="govuk-body">
-                    <?php
-                    echo sprintf(
-                      $this->translate('cookie-banner.blurb'),
-                      $this->url('cookies/settings')
-                    );
-                    ?>
+                    <?php echo $this->escapeHtml($this->translate('cookie-banner-essential.blurb')); ?>
+                  </p>
+                  <p class="govuk-body">
+                    <?php echo $this->escapeHtml($this->translate('cookie-banner.blurb')); ?>
                   </p>
                 </div>
               </div>
@@ -114,9 +112,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
                 <?php echo $this->escapeHtml($this->translate('cookie-banner.reject-all')); ?>
               </button>
 
-              <a class="govuk-link" href="<?php echo $this->url('cookies/settings'); ?>" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked">
-                <?php echo $this->escapeHtml($this->translate('cookie-banner.set-prefs')); ?>
-              </a>
+              <?php echo $this->link($this->url('cookies/settings'), $this->escapeHtml($this->translate('cookie-banner.set-prefs'))); ?>.
             </div>
           </div>
         </form>
