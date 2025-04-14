@@ -262,34 +262,34 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
     #    This is commented out for now since it is failing builds and needs amendement
-    #    "search" = {
-    #      cpu    = 2048
-    #      memory = 4096
-    #
-    #      version    = var.search_image_tag
-    #      repository = data.aws_ecr_repository.sservice["search"].repository_url
-    #
-    #      listener_rule_enable = false
-    #      add_search_env_info  = true
-    #
-    #      task_iam_role_statements = [
-    #        {
-    #          effect = "Allow"
-    #          actions = [
-    #            "secretsmanager:GetSecretValue"
-    #          ]
-    #          resources = [
-    #            data.aws_secretsmanager_secret.this["api"].arn
-    #          ]
-    #        }
-    #      ]
-    #
-    #      subnet_ids = data.aws_subnets.this["API"].ids
-    #
-    #      security_group_ids = [
-    #        data.aws_security_group.this["API"].id
-    #      ]
-    #    }
+      "search" = {
+        cpu    = 2048
+        memory = 4096
+  
+        version    = var.search_image_tag
+        repository = data.aws_ecr_repository.sservice["search"].repository_url
+  
+        listener_rule_enable = false
+        add_search_env_info  = true
+  
+        task_iam_role_statements = [
+          {
+            effect = "Allow"
+            actions = [
+              "secretsmanager:GetSecretValue"
+            ]
+            resources = [
+              data.aws_secretsmanager_secret.this["api"].arn
+            ]
+          }
+        ]
+  
+        subnet_ids = data.aws_subnets.this["API"].ids
+  
+        security_group_ids = [
+          data.aws_security_group.this["API"].id
+        ]
+      }
   }
 
   batch = {
