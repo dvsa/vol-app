@@ -226,7 +226,7 @@ locals {
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
+  version = "~> 2.1.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
