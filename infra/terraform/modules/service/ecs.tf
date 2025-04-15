@@ -67,7 +67,7 @@ module "ecs_service" {
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
 
-  depends_on = [module.ecs_cluster]
+  depends_on = [module.ecs_cluster, aws_lb_listener_rule.this]
 
   tasks_iam_role_statements = var.services[each.key].task_iam_role_statements
 
