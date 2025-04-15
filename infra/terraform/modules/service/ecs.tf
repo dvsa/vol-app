@@ -138,6 +138,9 @@ module "ecs_service" {
       container_name   = each.key
       container_port   = 8080
     }
+    depends_on = [
+      aws_lb_listener_rule.this[each.key]
+    ]
   }
 
   create_security_group = false
