@@ -1,5 +1,58 @@
 # Changelog
 
+## [5.17.0](https://github.com/dvsa/vol-app/compare/v5.16.0...v5.17.0) (2025-04-23)
+
+
+### Features
+
+* 5950 containers search - testing search service ([#713](https://github.com/dvsa/vol-app/issues/713)) ([d7f5a94](https://github.com/dvsa/vol-app/commit/d7f5a947363e9a79a16323bb3bf418cc3a15bfbe))
+* add search image tagging ([#733](https://github.com/dvsa/vol-app/issues/733)) ([da332e8](https://github.com/dvsa/vol-app/commit/da332e8326a08fa3ec809819c39547114b145e49))
+* push the container images proven by dev/int vfts to prod ECR repo ([#708](https://github.com/dvsa/vol-app/issues/708)) ([75e744e](https://github.com/dvsa/vol-app/commit/75e744e2be910fb822bd46218b4a0603b957713b))
+* updated gitignore ([#716](https://github.com/dvsa/vol-app/issues/716)) ([1a23040](https://github.com/dvsa/vol-app/commit/1a23040d73807d6a0f5251a8450e0a248fddba0f))
+* updated GOV.UK header and nav to meet GDS standards ([#801](https://github.com/dvsa/vol-app/issues/801)) ([6e39b20](https://github.com/dvsa/vol-app/commit/6e39b2090a14b22f0a1e23cb89b04a7bf7f1e3d2))
+* updated govuk-frontend to version 5.9.0 fix deprecations ([#826](https://github.com/dvsa/vol-app/issues/826)) ([176c0c1](https://github.com/dvsa/vol-app/commit/176c0c170189d2ea22f8027e7679b6d4325a3545))
+* updated the cookie banner’s behaviour and appearance to meet GDS ([#784](https://github.com/dvsa/vol-app/issues/784)) ([78e7248](https://github.com/dvsa/vol-app/commit/78e7248570dc75e8313f1efb196769843b080af0))
+
+
+### Bug Fixes
+
+* add prep github env to oidc subjects ([#764](https://github.com/dvsa/vol-app/issues/764)) ([fc7491d](https://github.com/dvsa/vol-app/commit/fc7491d04c575193701b2a80a0d0bef2fa8c457c))
+* add prep job alert email ([#709](https://github.com/dvsa/vol-app/issues/709)) ([24d4bbb](https://github.com/dvsa/vol-app/commit/24d4bbb7e7f9f714de6b13022ceb7c1aa7d11484))
+* add required permissions block for OIDC assumption ([#721](https://github.com/dvsa/vol-app/issues/721)) ([6982574](https://github.com/dvsa/vol-app/commit/698257468e62091f0182bfeab95531353712527b))
+* add tf vars and outputs for prep rollback step to consume when needed ([#758](https://github.com/dvsa/vol-app/issues/758)) ([f523f0e](https://github.com/dvsa/vol-app/commit/f523f0eafa37c4df06d23b92ad764c88c02982d3))
+* added logstash debug mode ([#739](https://github.com/dvsa/vol-app/issues/739)) ([576aa18](https://github.com/dvsa/vol-app/commit/576aa18cbd30a713d32649e7c2e3ef781f5a6702))
+* alb target for prep ([#790](https://github.com/dvsa/vol-app/issues/790)) ([61d0cab](https://github.com/dvsa/vol-app/commit/61d0cab842be56f672c1f8499548fc864a5087a0))
+* also unlink applicaiton on user deleting upload while still on form ([#756](https://github.com/dvsa/vol-app/issues/756)) ([af7178e](https://github.com/dvsa/vol-app/commit/af7178ec2a7fd1bf75c76cc514a733ae06bf7522))
+* amend target group logic to register with load balancer ([#810](https://github.com/dvsa/vol-app/issues/810)) ([fffe9f0](https://github.com/dvsa/vol-app/commit/fffe9f02f3613521ae3c129acc8a247dae44c2d7))
+* another search fix ([#746](https://github.com/dvsa/vol-app/issues/746)) ([dbd7ad5](https://github.com/dvsa/vol-app/commit/dbd7ad59dd3e861b5e1238b1dd338df8468c44da))
+* cd workflow ([#728](https://github.com/dvsa/vol-app/issues/728)) ([c38d12c](https://github.com/dvsa/vol-app/commit/c38d12c0d98c843c0bfd3342c400d1ee67461a6f))
+* config path ([#770](https://github.com/dvsa/vol-app/issues/770)) ([248cfe5](https://github.com/dvsa/vol-app/commit/248cfe5d1e21dc3cc965709d9a7619ed747f3f35))
+* delete prod ecr :latest tags before pushing as repos are immutable ([#750](https://github.com/dvsa/vol-app/issues/750)) ([edded37](https://github.com/dvsa/vol-app/commit/edded37b8044d340fa6b7504e2b3afe22a22c373))
+* deleted document change history visibility issue vol-5967 ([#745](https://github.com/dvsa/vol-app/issues/745)) ([aaaeb72](https://github.com/dvsa/vol-app/commit/aaaeb72169a5752a730f42e1a0e21376fd098176))
+* iam auth ([#769](https://github.com/dvsa/vol-app/issues/769)) ([83439b2](https://github.com/dvsa/vol-app/commit/83439b20c45d942162f73e7d968a8712e7f1d512))
+* increase lifecycle policy to prevent images being overwritten so quickly ([#711](https://github.com/dvsa/vol-app/issues/711)) ([e04dd82](https://github.com/dvsa/vol-app/commit/e04dd82ab28e8c4f3fb86bc1a2d6699f7f6cd4f9))
+* modify opensearch output config ([#767](https://github.com/dvsa/vol-app/issues/767)) ([a3010a2](https://github.com/dvsa/vol-app/commit/a3010a22e798b4ba43bd085d9dcde00e3f429423))
+* more testing search permissions ([#731](https://github.com/dvsa/vol-app/issues/731)) ([618632e](https://github.com/dvsa/vol-app/commit/618632eca3fc58eb4683b406a56f660a96496db7))
+* open search plugin ([#753](https://github.com/dvsa/vol-app/issues/753)) ([cfbd436](https://github.com/dvsa/vol-app/commit/cfbd4364ed1af2917ec27456c8f94f4d6598a88f))
+* pre refs ([#761](https://github.com/dvsa/vol-app/issues/761)) ([7f7dec9](https://github.com/dvsa/vol-app/commit/7f7dec960e12a99e50e9c56e6ab0034bee19dd9b))
+* provide single SMTP mailer config for production envirohments running on ECS - leave old ec2 config as it was ([#803](https://github.com/dvsa/vol-app/issues/803)) ([8817af4](https://github.com/dvsa/vol-app/commit/8817af42c4adc54dec3a31fda382298a3554687f))
+* remove search as currently this is failing ([#814](https://github.com/dvsa/vol-app/issues/814)) ([1d40192](https://github.com/dvsa/vol-app/commit/1d401922232eab45b5cd375b916155777a51c188))
+* removed incorrect debug ([#774](https://github.com/dvsa/vol-app/issues/774)) ([11eb364](https://github.com/dvsa/vol-app/commit/11eb3649f7ecd44312d51e9b9d86bbc771c4b442))
+* resolve dependency issues without causing tuple errors ([#818](https://github.com/dvsa/vol-app/issues/818)) ([d99916c](https://github.com/dvsa/vol-app/commit/d99916c99a19b136a658646fa30f3bc849823a5f))
+* run push to prod on ecr on arm64 runner so it grabs/pushes the right containers ([#738](https://github.com/dvsa/vol-app/issues/738)) ([d706787](https://github.com/dvsa/vol-app/commit/d7067878b60b608c9b285ce64cb2915fb14850d6))
+* search busreg template and duplicates ([#776](https://github.com/dvsa/vol-app/issues/776)) ([43c7dd4](https://github.com/dvsa/vol-app/commit/43c7dd42a78265d8f97a0fea517ef6ee0dcfd9f0))
+* search perms ([#730](https://github.com/dvsa/vol-app/issues/730)) ([b27af9e](https://github.com/dvsa/vol-app/commit/b27af9e3b6f7087ee5a1de37fc9b91ebc98355cf))
+* set ecs compatibility ([#773](https://github.com/dvsa/vol-app/issues/773)) ([9a68c4c](https://github.com/dvsa/vol-app/commit/9a68c4c10fc0b014764afa277ed459e387ed0c20))
+* testing opensearch automated rollover ([#802](https://github.com/dvsa/vol-app/issues/802)) ([43ec000](https://github.com/dvsa/vol-app/commit/43ec0000d5a3b0487a49a21541864159907eb1e2))
+* testing search index policy ([#805](https://github.com/dvsa/vol-app/issues/805)) ([08f5afe](https://github.com/dvsa/vol-app/commit/08f5afe24eeffac3bf165c057a982528eb77d53c))
+* toggling listener_rule to true ([#821](https://github.com/dvsa/vol-app/issues/821)) ([5867a4b](https://github.com/dvsa/vol-app/commit/5867a4b3ba69b8731fae197b8ef9419bd1855d7d))
+* tweak to supress linting error in CD pipeline ([#726](https://github.com/dvsa/vol-app/issues/726)) ([8cbd79e](https://github.com/dvsa/vol-app/commit/8cbd79e1da465865fd7e3de2d4c7027f7c055a1f))
+* update dockerfile ([#729](https://github.com/dvsa/vol-app/issues/729)) ([fd5a968](https://github.com/dvsa/vol-app/commit/fd5a9687f9a535c8d863dce9410e96fcb258ce60))
+* update jdbc library path ([#775](https://github.com/dvsa/vol-app/issues/775)) ([4ff8c51](https://github.com/dvsa/vol-app/commit/4ff8c5129950c179b32c376b3312c630143727a3))
+* update prep jobs ([#757](https://github.com/dvsa/vol-app/issues/757)) ([ebf4762](https://github.com/dvsa/vol-app/commit/ebf476288921c5ac8976ff3f2a8f27189bef8289))
+* updated gitignore ([#727](https://github.com/dvsa/vol-app/issues/727)) ([10ba70e](https://github.com/dvsa/vol-app/commit/10ba70ea360b69491cafe6bd625946fd11e173b6))
+* updated the wording on cookies banner to meet GDS standards ([#804](https://github.com/dvsa/vol-app/issues/804)) ([244c8dd](https://github.com/dvsa/vol-app/commit/244c8ddaad71d3cd7b4e21c80aee05a3a8693f17))
+
 ## [5.16.0](https://github.com/dvsa/vol-app/compare/v5.14.1...v5.16.0) (2025-03-13)
 
 
