@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.16-rc16](https://github.com/dvsa/vol-app/compare/v5.20.15-rc16...v5.20.16-rc16) (2025-04-17)
+
+
+### Bug Fixes
+
+* update .gitignore for new rp pr ([#827](https://github.com/dvsa/vol-app/issues/827)) ([6beecda](https://github.com/dvsa/vol-app/commit/6beecda4f4cff849661500d217f92f7f26c99c9f))
+
 ## [5.20.15-rc16](https://github.com/dvsa/vol-app/compare/v5.20.14-rc16...v5.20.15-rc16) (2025-04-16)
 
 
