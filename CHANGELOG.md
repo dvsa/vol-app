@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.17-rc16](https://github.com/dvsa/vol-app/compare/v5.20.16-rc16...v5.20.17-rc16) (2025-04-24)
+
+
+### Bug Fixes
+
+* try new vft container ([#830](https://github.com/dvsa/vol-app/issues/830)) ([0f55283](https://github.com/dvsa/vol-app/commit/0f55283d8238f57e4d820d50ba60f5deeaebc32b))
+
 ## [5.20.16-rc16](https://github.com/dvsa/vol-app/compare/v5.20.15-rc16...v5.20.16-rc16) (2025-04-17)
 
 
