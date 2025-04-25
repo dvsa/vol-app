@@ -348,6 +348,7 @@ jobs:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
     needs:
       - terraform_env_dev
+      - get-version
     uses: ./.github/workflows/run-liquibase.yaml
     with:
       push: true
@@ -355,7 +356,7 @@ jobs:
       account: nonprod
       environment: dev
       dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
+      etl_ref: ${{ needs.release-please.outputs.release_created && needs.get-version.outputs.api || 'main' }}
     permissions:
       contents: read
       id-token: write
@@ -416,6 +417,7 @@ jobs:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
     needs:
       - terraform_env_int
+      - get-version
     uses: ./.github/workflows/run-liquibase.yaml
     with:
       push: false
@@ -423,7 +425,7 @@ jobs:
       account: nonprod
       environment: int
       dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
+      etl_ref: ${{ needs.release-please.outputs.release_created && needs.get-version.outputs.api || 'main' }}
     permissions:
       contents: read
       id-token: write
@@ -723,6 +725,7 @@ jobs:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' && needs.release-please.outputs.release_created }}
     needs:
       - terraform_env_prep
+      - get-version
     uses: ./.github/workflows/run-liquibase.yaml
     with:
       push: false
@@ -730,7 +733,7 @@ jobs:
       account: prod
       environment: prep
       dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
+      etl_ref: ${{ needs.get-version.outputs.api }}
     permissions:
       contents: read
       id-token: write
@@ -828,6 +831,7 @@ jobs:
       !contains(needs.get-version.outputs.api, '-')
     needs:
       - terraform_env_prod
+      - get-version
     uses: ./.github/workflows/run-liquibase.yaml
     with:
       push: false
@@ -835,7 +839,7 @@ jobs:
       account: prod
       environment: prod
       dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
+      etl_ref: ${{ needs.get-version.outputs.api }}
     permissions:
       contents: read
       id-token: write
