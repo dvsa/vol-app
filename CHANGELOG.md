@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.20.22-rc16](https://github.com/dvsa/vol-app/compare/v5.20.21-rc16...v5.20.22-rc16) (2025-04-30)
+
+
+### Bug Fixes
+
+* correct lb logic ([a9d6b35](https://github.com/dvsa/vol-app/commit/a9d6b3595e4f9e778d807501b10db4f19d29c607))
+* update .gitignore ([#842](https://github.com/dvsa/vol-app/issues/842)) ([5804838](https://github.com/dvsa/vol-app/commit/5804838f0d416e09af3290f9bbac2e54937317e8))
+
 ## [5.20.21-rc16](https://github.com/dvsa/vol-app/compare/v5.20.20-rc16...v5.20.21-rc16) (2025-04-30)
 
 
