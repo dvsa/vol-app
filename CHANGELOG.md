@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.20-rc16](https://github.com/dvsa/vol-app/compare/v5.20.19-rc16...v5.20.20-rc16) (2025-04-30)
+
+
+### Bug Fixes
+
+* update file for vft run ([#837](https://github.com/dvsa/vol-app/issues/837)) ([28a97d7](https://github.com/dvsa/vol-app/commit/28a97d7ab9aa06647c505a6fd7aebdb6eee6d7f6))
+
 ## [5.20.19-rc16](https://github.com/dvsa/vol-app/compare/v5.20.18-rc16...v5.20.19-rc16) (2025-04-29)
 
 
