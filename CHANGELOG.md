@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.23-rc16](https://github.com/dvsa/vol-app/compare/v5.20.22-rc16...v5.20.23-rc16) (2025-05-01)
+
+
+### Bug Fixes
+
+* revert pp/prep lb target cnanges ([#845](https://github.com/dvsa/vol-app/issues/845)) ([25df74c](https://github.com/dvsa/vol-app/commit/25df74cfbdf97e750b8b57532712acefbf6dcfb8))
+
 ## [5.20.22-rc16](https://github.com/dvsa/vol-app/compare/v5.20.21-rc16...v5.20.22-rc16) (2025-04-30)
 
 
