@@ -163,6 +163,20 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $financialEvidenceUploaded;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="occupation_evidence_uploaded", nullable=true)
+     */
+    protected $occupationEvidenceUploaded;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="small_vehicle_evidence_uploaded", nullable=true)
+     */
+    protected $smallVehicleEvidenceUploaded;
+
+    /**
      * Goods or psv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
@@ -550,6 +564,20 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      * @ORM\Column(type="string", name="psv_small_vhl_notes", length=4000, nullable=true)
      */
     protected $psvSmallVhlNotes;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="psv_income_records_confirmation", nullable=true)
+     */
+    protected $psvIncomeRecordsConfirmation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="psv_occupation_records_confirmation", nullable=true)
+     */
+    protected $psvOccupationRecordsConfirmation;
 
     /**
      * Psv which vehicle sizes
@@ -3768,6 +3796,50 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
             $this->transportManagers->removeElement($transportManagers);
         }
 
+        return $this;
+    }
+
+    public function getOccupationEvidenceUploaded()
+    {
+        return $this->occupationEvidenceUploaded;
+    }
+
+    public function setOccupationEvidenceUploaded($occupationEvidenceUploaded): AbstractApplication
+    {
+        $this->occupationEvidenceUploaded = $occupationEvidenceUploaded;
+        return $this;
+    }
+
+    public function getSmallVehicleEvidenceUploaded()
+    {
+        return $this->smallVehicleEvidenceUploaded;
+    }
+
+    public function setSmallVehicleEvidenceUploaded($smallVehicleEvidenceUploaded): AbstractApplication
+    {
+        $this->smallVehicleEvidenceUploaded = $smallVehicleEvidenceUploaded;
+        return $this;
+    }
+
+    public function getPsvIncomeRecordsConfirmation(): ?string
+    {
+        return $this->psvIncomeRecordsConfirmation;
+    }
+
+    public function setPsvIncomeRecordsConfirmation(?string $psvIncomeRecordsConfirmation): AbstractApplication
+    {
+        $this->psvIncomeRecordsConfirmation = $psvIncomeRecordsConfirmation;
+        return $this;
+    }
+
+    public function getPsvOccupationRecordsConfirmation(): ?string
+    {
+        return $this->psvOccupationRecordsConfirmation;
+    }
+
+    public function setPsvOccupationRecordsConfirmation(?string $psvOccupationRecordsConfirmation): AbstractApplication
+    {
+        $this->psvOccupationRecordsConfirmation = $psvOccupationRecordsConfirmation;
         return $this;
     }
 }
