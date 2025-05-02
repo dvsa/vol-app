@@ -190,6 +190,17 @@ $routes = [
             ]
         ]
     ],
+    'main-occupation-criteria-guidance' => [
+        'type' => 'segment',
+        'options' =>  [
+            'route' => '/main-occupation-criteria-guidance[/]',
+            'defaults' => [
+                'controller' => \Common\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => \Common\Controller\GuidesController::MAIN_OCCUPATION_CRITERIA_GUIDANCE,
+            ]
+        ]
+    ],
     //  search result page with filter and table of results
     'search' => [
         'type' => 'segment',
