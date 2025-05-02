@@ -132,7 +132,8 @@ module "ecs_service" {
       memory_reservation = 100
     }
   }
-  load_balancer = {
+
+  load_balancer = tostring(each.key) == "search" ? null : {
     service = {
       target_group_arn = aws_lb_target_group.this[each.key].arn
       container_name   = each.key
