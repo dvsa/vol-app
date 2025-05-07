@@ -4,7 +4,6 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericReceipt;
-use Common\Controller\Traits\StoredCardsTrait;
 use Common\Exception\BadRequestException;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
@@ -31,7 +30,6 @@ use LmcRbacMvc\Service\AuthorizationService;
 abstract class AbstractPaymentSubmissionController extends AbstractController
 {
     use GenericReceipt;
-    use StoredCardsTrait;
 
     protected const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
@@ -89,8 +87,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $dtoData = [
             'cpmsRedirectUrl' => $redirectUrl,
             'applicationId' => $applicationId,
-            'paymentMethod' => self::PAYMENT_METHOD,
-            'storedCardReference' => $this->params()->fromRoute('storedCardReference', null)
+            'paymentMethod' => self::PAYMENT_METHOD
         ];
         $dto = PayOutstandingFeesCmd::create($dtoData);
         $response = $this->handleCommand($dto);
@@ -283,24 +280,15 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
              * so we need to redirect to the index action which do all
              * the logic for the payment and app/var submission
              */
-            $storedCardReference =
-                ($this->getRequest()->getPost('storedCards')['card'] !== '0') ?
-                $this->getRequest()->getPost('storedCards')['card'] : false;
-
             $params = [
                 'action' => 'index',
                 $this->getIdentifierIndex() => $applicationId,
             ];
-            if ($storedCardReference) {
-                $params['storedCardReference'] = $storedCardReference;
-            }
             return $this->redirect()->toRoute('lva-' . $this->lva . '/payment', $params);
         }
 
         /* @var $form \Common\Form\Form */
         $form = $this->formHelper->createForm('FeePayment');
-        $firstFee = reset($fees);
-        $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
         return $this->getStoredCardsView($fees, $form);
     }

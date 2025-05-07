@@ -10,7 +10,6 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericReceipt;
-use Common\Controller\Traits\StoredCardsTrait;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Helper\FormHelperService;
@@ -36,7 +35,6 @@ use LmcRbacMvc\Service\AuthorizationService;
 class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait;
-    use StoredCardsTrait;
     use GenericReceipt;
 
     protected const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
@@ -113,13 +111,8 @@ class FeesController extends AbstractController
             if ($this->isButtonPressed('cancel') || $this->isButtonPressed('customCancel')) {
                 return $this->redirectToIndex();
             }
-            $storedCardReference = (is_array($this->getRequest()->getPost('storedCards')) &&
-                $this->getRequest()->getPost('storedCards')['card'] != '0') ?
-                $this->getRequest()->getPost('storedCards')['card'] :
-                false;
-
             $feeIds = explode(',', (string) $this->params('fee'));
-            return $this->payOutstandingFees($feeIds, $storedCardReference);
+            return $this->payOutstandingFees($feeIds);
         }
 
         $fees = $this->getFeesFromParams();
@@ -132,7 +125,6 @@ class FeesController extends AbstractController
         /* @var $form \Common\Form\Form */
         $form = $this->getForm();
         $firstFee = reset($fees);
-        $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
         if (count($fees) > 1) {
             $table = $this->tableFactory
@@ -303,11 +295,9 @@ class FeesController extends AbstractController
 
     /**
      * Calls command to initiate payment and then redirects
-     *
-     * @param string|false $storedCardReference A refernce to the stored card to use
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
-    protected function payOutstandingFees(array $feeIds, $storedCardReference = false)
+    protected function payOutstandingFees(array $feeIds)
     {
         $cpmsRedirectUrl = $this->urlHelper
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
@@ -315,7 +305,7 @@ class FeesController extends AbstractController
         $paymentMethod = self::PAYMENT_METHOD;
         $organisationId = $this->getCurrentOrganisationId();
 
-        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId', 'storedCardReference');
+        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId');
         $dto = PayOutstandingFees::create($dtoData);
 
         /** @var \Common\Service\Cqrs\Response $response */
