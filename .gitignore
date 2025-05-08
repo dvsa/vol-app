@@ -61,6 +61,9 @@ typings/
 .env
 .env.test
 
+# custom docker compose rules
+compose-custom.yaml
+
 # DynamoDB Local files
 .dynamodb/
 

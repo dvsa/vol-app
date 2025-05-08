@@ -1,0 +1,28 @@
+# This file can be used to work with "symlinked" VOL repos
+# Comment out lines as appropriate to your use case
+services:
+  api:
+    volumes:
+      - ./app/api:/var/www/html
+      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
+      - ../olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ../olcs-utils:/var/www/html/vendor/olcs/olcs-utils
+      - ../olcs-xmltools:/var/www/html/vendor/olcs/olcs-xmltools
+
+  selfserve:
+    volumes:
+      - ./app/selfserve:/var/www/html
+      - ../olcs-common:/var/www/html/vendor/olcs/olcs-common
+      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
+      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
+      - ../olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ../olcs-utils:/var/www/html/vendor/olcs/olcs-utils
+
+  internal:
+    volumes:
+      - ./app/internal:/var/www/html
+      - ../olcs-common:/var/www/html/vendor/olcs/olcs-common
+      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
+      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
+      - ../olcs-logging:/var/www/html/vendor/olcs/olcs-logging
+      - ../olcs-utils:/var/www/html/vendor/olcs/olcs-utils
