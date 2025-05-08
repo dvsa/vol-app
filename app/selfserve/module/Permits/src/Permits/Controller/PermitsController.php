@@ -3,7 +3,6 @@
 namespace Permits\Controller;
 
 use Common\Controller\Traits\GenericReceipt;
-use Common\Controller\Traits\StoredCardsTrait;
 use Common\RefData;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -24,7 +23,6 @@ class PermitsController extends AbstractSelfserveController
 {
     use ExternalControllerTrait;
     use GenericReceipt;
-    use StoredCardsTrait;
     use FlashMessengerTrait;
 
     protected $applicationsTableName = 'dashboard-permit-application';

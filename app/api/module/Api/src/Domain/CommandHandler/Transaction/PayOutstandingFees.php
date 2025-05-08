@@ -199,13 +199,6 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
                 $feesToPay,
                 $extraParams
             );
-        } elseif ($command->getStoredCardReference()) {
-            $response = $this->getCpmsService()->initiateStoredCardRequest(
-                $command->getCpmsRedirectUrl(),
-                $feesToPay,
-                $command->getStoredCardReference(),
-                $extraParams
-            );
         } else {
             $response = $this->getCpmsService()->initiateCardRequest(
                 $command->getCpmsRedirectUrl(),
