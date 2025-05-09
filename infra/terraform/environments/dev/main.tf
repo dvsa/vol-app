@@ -98,6 +98,10 @@ data "aws_security_group" "this" {
   name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
 
+data "aws_security_group" "search" {
+  name = "DEV/APP/DEV-OLCS-PRI-SEARCHDATAV6-SG"
+}
+
 data "aws_subnets" "this" {
   for_each = toset(setunion(local.legacy_service_names, ["BATCH"]))
 
@@ -286,7 +290,7 @@ module "service" {
       subnet_ids = data.aws_subnets.this["API"].ids
 
       security_group_ids = [
-        data.aws_security_group.this["API"].id
+        data.aws_security_group.search.id
       ]
     }
   }
