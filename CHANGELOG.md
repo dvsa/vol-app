@@ -1,5 +1,23 @@
 # Changelog
 
+## [5.18.0](https://github.com/dvsa/vol-app/compare/v5.17.0...v5.18.0) (2025-05-09)
+
+
+### Features
+
+* choice to develop using local copies of vol vendor repos VOL-6308 ([#856](https://github.com/dvsa/vol-app/issues/856)) ([74072ec](https://github.com/dvsa/vol-app/commit/74072ec7e9441ce21d04c46deeea26f1ce887796))
+* new route for main occupation criteria guidance page plus dependency bump ([#850](https://github.com/dvsa/vol-app/issues/850)) ([2c57977](https://github.com/dvsa/vol-app/commit/2c579770649ef9a0b5603ca447b8718d315f3499))
+* schema additions for new PSV restricted journey VOL-5882 ([#847](https://github.com/dvsa/vol-app/issues/847)) ([aaaadbd](https://github.com/dvsa/vol-app/commit/aaaadbd8ab484ec33c41a8947c30a6ed146d1d44))
+* search lb conditional ([#849](https://github.com/dvsa/vol-app/issues/849)) ([03a3788](https://github.com/dvsa/vol-app/commit/03a378803721efb67d65328b99c1fb96545105e7))
+* updated forms and removed stored cards logic ([#853](https://github.com/dvsa/vol-app/issues/853)) ([d15d632](https://github.com/dvsa/vol-app/commit/d15d6322505a926a9a75212d7266146d3d8af9b9))
+
+
+### Bug Fixes
+
+* re-add search ([#843](https://github.com/dvsa/vol-app/issues/843)) ([3ae5b2d](https://github.com/dvsa/vol-app/commit/3ae5b2d54e813fb663c400b3b490239da2679919))
+* template policy issues ([#854](https://github.com/dvsa/vol-app/issues/854)) ([d68f999](https://github.com/dvsa/vol-app/commit/d68f999c67d9b797bc3c95dbd11760f284738554))
+* use search security group ([#862](https://github.com/dvsa/vol-app/issues/862)) ([6b50bc1](https://github.com/dvsa/vol-app/commit/6b50bc10db9002fd8f542fc22d9dfe56c8538be2))
+
 ## [5.17.0](https://github.com/dvsa/vol-app/compare/v5.16.0...v5.17.0) (2025-04-23)
 
 
