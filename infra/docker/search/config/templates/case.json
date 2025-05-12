@@ -69,7 +69,9 @@
   },
   "index_patterns": ["case-*"],
   "aliases": {
-    "case": {}
+    "case": {
+      "is_write_index": true
+    }
   },
   "settings": {
     "number_of_shards": 3,
