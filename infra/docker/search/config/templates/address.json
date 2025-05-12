@@ -105,13 +105,14 @@
   },
   "index_patterns": ["address-*"],
   "aliases": {
-    "address-write": {}
+    "address-write": {
+      "is_write_index": true
+    }
   },
   "settings": {
     "max_ngram_diff": 10,
     "number_of_shards": 3,
     "number_of_replicas": 0,
-    "opendistro.index_state_management.policy_id": "Rollover",
     "index.lifecycle.rollover_alias": "address-write",
     "refresh_interval": "30s",
     "analysis": {
