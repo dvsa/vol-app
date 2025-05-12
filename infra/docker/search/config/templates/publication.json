@@ -80,7 +80,9 @@
   },
   "index_patterns": ["publication-*"],
   "aliases": {
-    "publication": {}
+    "publication": {
+      "is_write_index": true
+    }
   },
   "settings": {
     "number_of_shards": 3,
