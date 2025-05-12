@@ -36,6 +36,10 @@
       }
     }
   },
+  "index_patterns": ["psv_disc-*"],
+  "aliases": {
+    "psv_disc": {}
+  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
