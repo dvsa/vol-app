@@ -66,11 +66,13 @@
     }
   },
   "index_patterns": ["vehicle_removed-*"],
+  "aliases": {
+    "vehicle_removed": {}
+  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
-    "index.plugins.index_state_management.rollover_alias": "vehicle_removed",
     "analysis": {
       "char_filter": {
         "spaces_removed_pattern": {
