@@ -54,9 +54,7 @@
   },
   "index_patterns": ["application-*"],
   "aliases": {
-    "application": {
-      "is_write_index": true
-    }
+    "application": {}
   },
   "settings": {
     "number_of_shards": 3,

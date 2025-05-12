@@ -67,9 +67,7 @@
   },
   "index_patterns": ["vehicle_removed-*"],
   "aliases": {
-    "vehicle_removed": {
-      "is_write_index": true
-    }
+    "vehicle_removed": {}
   },
   "settings": {
     "number_of_shards": 3,

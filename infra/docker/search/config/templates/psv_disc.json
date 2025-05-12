@@ -38,9 +38,7 @@
   },
   "index_patterns": ["psv_disc-*"],
   "aliases": {
-    "psv_disc": {
-      "is_write_index": true
-    }
+    "psv_disc": {}
   },
   "settings": {
     "number_of_shards": 3,

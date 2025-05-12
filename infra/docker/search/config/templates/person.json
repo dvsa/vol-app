@@ -118,9 +118,7 @@
   },
   "index_patterns": ["person-*"],
   "aliases": {
-    "person": {
-      "is_write_index": true
-    }
+    "person": {}
   },
   "settings": {
     "number_of_shards": 3,

@@ -83,9 +83,7 @@
   },
   "index_patterns": ["user-*"],
   "aliases": {
-    "user": {
-      "is_write_index": true
-    }
+    "user": {}
   },
   "settings": {
     "number_of_shards": 3,
