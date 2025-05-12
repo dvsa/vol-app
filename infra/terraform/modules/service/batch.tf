@@ -91,6 +91,10 @@ locals {
         {
           name  = "DB_PORT"
           value = "3306"
+        },
+        {
+          name  = "LS_JAVA_OPTS" #java memory limit
+          value = "-Xms6g -Xmx6g"
         }
       ]
 
