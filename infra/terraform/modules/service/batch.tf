@@ -94,7 +94,7 @@ locals {
         },
         {
           name  = "LS_JAVA_OPTS" #java memory limit
-          value = "-Xms6g -Xmx6g"
+          value = "-Xms8g -Xmx8g"
         }
       ]
 
