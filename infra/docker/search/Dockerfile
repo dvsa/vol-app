@@ -16,7 +16,7 @@ USER logstash
 COPY --chown=logstash --chmod=755 mysql-connector-j-9.2.0.jar /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar
 
 # Delete default configuration
-RUN rm -f /usr/share/logstash/pipeline/logstash.conf && echo "" > /usr/share/logstash/config/pipelines.yml
+RUN rm -f /usr/share/logstash/pipeline/logstash.conf && echo "" > /usr/share/logstash/config/pipelines.yml && mkdir /usr/share/logstash/config/lastrun
 
 # Copy configuration
 COPY --chown=logstash --chmod=755 config/ /usr/share/logstash/config/
