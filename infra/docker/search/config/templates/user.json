@@ -81,6 +81,12 @@
       }
     }
   },
+  "index_patterns": ["user-*"],
+  "aliases": {
+    "user": {
+      "is_write_index": true
+    }
+  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
