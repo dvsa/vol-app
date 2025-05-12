@@ -266,8 +266,8 @@ module "service" {
       listener_rule_host_header = "ssweb.*"
     }
     "search" = {
-      cpu    = 2048
-      memory = 4096
+      cpu    = 4096
+      memory = 8192
 
       version    = var.search_image_tag
       repository = data.aws_ecr_repository.sservice["search"].repository_url
