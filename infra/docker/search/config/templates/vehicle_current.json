@@ -67,7 +67,9 @@
   },
   "index_patterns": ["vehicle_current-*"],
   "aliases": {
-    "vehicle_current": {}
+    "vehicle_current": {
+      "is_write_index": true
+    }
   },
   "settings": {
     "number_of_shards": 3,
