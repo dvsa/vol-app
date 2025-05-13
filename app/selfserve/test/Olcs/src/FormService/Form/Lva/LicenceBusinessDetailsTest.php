@@ -34,7 +34,8 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
         $form = m::mock();
         $params = [
             'orgId' => 111,
-            'orgType' => RefData::ORG_TYPE_LLP
+            'orgType' => RefData::ORG_TYPE_LLP,
+            'isLicenseApplicationPsv' => false
         ];
 
         // Mocks
