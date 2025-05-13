@@ -42,7 +42,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->mockAlterButtons($form, $this->fh);
         $params = [
             'orgType' => RefData::ORG_TYPE_LLP,
-            'hasInforceLicences' => false
+            'hasInforceLicences' => false,
+            'isLicenseApplicationPsv' => false
         ];
 
         // Mocks
@@ -69,7 +70,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->mockAlterButtons($form, $this->fh);
         $params = [
             'orgType' => RefData::ORG_TYPE_LLP,
-            'hasInforceLicences' => true
+            'hasInforceLicences' => true,
+            'isLicenseApplicationPsv' => false
         ];
 
         // Mocks
@@ -104,6 +106,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
             'orgType' => RefData::ORG_TYPE_LLP,
             'hasInforceLicences' => false,
             'hasOrganisationSubmittedLicenceApplication' => false,
+            'isLicenseApplicationPsv' => false
         ];
 
         // Mocks
@@ -138,6 +141,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
             'orgType' => RefData::ORG_TYPE_LLP,
             'hasInforceLicences' => false,
             'hasOrganisationSubmittedLicenceApplication' => true,
+            'isLicenseApplicationPsv' => false
         ];
 
         // Mocks
