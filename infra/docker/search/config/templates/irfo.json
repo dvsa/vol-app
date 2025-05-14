@@ -25,11 +25,6 @@
     }
   },
   "index_patterns": ["irfo-*"],
-  "aliases": {
-    "irfo": {
-      "is_write_index": true
-    }
-  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
