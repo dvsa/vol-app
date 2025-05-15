@@ -1,0 +1,40 @@
+{
+  "policy": {
+    "description": "A 24Hr rollover Policy",
+    "default_state": "hot",
+    "states": [
+      {
+        "name": "hot",
+        "actions": [],
+        "transitions": [
+          {
+            "state_name": "rollover",
+            "conditions": {
+              "min_index_age": "1h"
+            }
+          }
+        ]
+      },
+      {
+        "name": "rollover",
+        "actions": [
+          {
+            "rollover": {
+              "min_doc_count": 5
+            }
+          },
+          {
+            "delete": {}
+          }
+        ],
+        "transitions": []
+      }
+    ],
+    "ism_template": [
+      {
+        "index_patterns": ["*"],
+        "priority": 1
+      }
+    ]
+  }
+}
