@@ -16,7 +16,7 @@ data = json.load(sys.stdin)
 actions = []
 
 for alias in aliases:
-    actions.append({"add" : {"index" : alias +'_v'+ newVersion, "alias" : alias, "is_write_index": True}})
+    actions.append({"add" : {"index" : alias +'_v'+ newVersion, "alias" : alias}})
 
 for index in data:
     for alias in data[index]['aliases']:
