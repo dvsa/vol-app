@@ -86,6 +86,8 @@
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
+    "index.lifecycle.name": "Rollover",
+    "index.lifecycle.rollover_alias": "user",
     "analysis": {
       "char_filter": {
         "spaces_removed_pattern": {
