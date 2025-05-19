@@ -79,11 +79,6 @@
     }
   },
   "index_patterns": ["publication-*"],
-  "aliases": {
-    "publication": {
-      "is_write_index": true
-    }
-  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
@@ -92,9 +87,6 @@
       "index_state_management": {
         "rollover_alias": "publication"
       }
-    },
-    "aliases": {
-      "publication": {}
     },
     "analysis": {
       "char_filter": {
