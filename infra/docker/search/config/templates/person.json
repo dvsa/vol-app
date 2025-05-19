@@ -117,11 +117,23 @@
     }
   },
   "index_patterns": ["person-*"],
+  "aliases": {
+    "person": {
+      "is_write_index": true
+    }
+  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
-    "index.plugins.index_state_management.rollover_alias": "person",
+    "plugins": {
+      "index_state_management": {
+        "rollover_alias": "person"
+      }
+    },
+    "aliases": {
+      "person": {}
+    },
     "analysis": {
       "filter": {
         "spaces_removed_pattern": {

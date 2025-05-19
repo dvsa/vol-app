@@ -68,11 +68,23 @@
     }
   },
   "index_patterns": ["case-*"],
+  "aliases": {
+    "case": {
+      "is_write_index": true
+    }
+  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
-    "index.plugins.index_state_management.rollover_alias": "case",
+    "plugins": {
+      "index_state_management": {
+        "rollover_alias": "case"
+      }
+    },
+    "aliases": {
+      "case": {}
+    },
     "analysis": {
       "char_filter": {
         "spaces_removed_pattern": {
