@@ -66,11 +66,6 @@
     }
   },
   "index_patterns": ["vehicle_current-*"],
-  "aliases": {
-    "vehicle_current": {
-      "is_write_index": true
-    }
-  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
@@ -79,9 +74,6 @@
       "index_state_management": {
         "rollover_alias": "vehicle_current"
       }
-    },
-    "aliases": {
-      "vehicle_current": {}
     },
     "analysis": {
       "char_filter": {

@@ -68,11 +68,6 @@
     }
   },
   "index_patterns": ["case-*"],
-  "aliases": {
-    "case": {
-      "is_write_index": true
-    }
-  },
   "settings": {
     "number_of_shards": 3,
     "number_of_replicas": 0,
@@ -81,9 +76,6 @@
       "index_state_management": {
         "rollover_alias": "case"
       }
-    },
-    "aliases": {
-      "case": {}
     },
     "analysis": {
       "char_filter": {
