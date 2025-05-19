@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.24.26-rc24](https://github.com/dvsa/vol-app/compare/v5.24.25-rc24...v5.24.26-rc24) (2025-05-19)
+
+
+### Bug Fixes
+
+* udate .gitignore ([#875](https://github.com/dvsa/vol-app/issues/875)) ([aefbaf8](https://github.com/dvsa/vol-app/commit/aefbaf8560e90daf75e61030e3040d8abc77bb37))
+
 ## [5.24.25-rc24](https://github.com/dvsa/vol-app/compare/v5.24.24-rc24...v5.24.25-rc24) (2025-05-16)
 
 
