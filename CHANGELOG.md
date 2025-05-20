@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.24.27-rc24](https://github.com/dvsa/vol-app/compare/v5.24.26-rc24...v5.24.27-rc24) (2025-05-20)
+
+
+### Bug Fixes
+
+* test run 2005 ([#880](https://github.com/dvsa/vol-app/issues/880)) ([ff07fa1](https://github.com/dvsa/vol-app/commit/ff07fa14aa025910a8b59a366b2bc59d6d34fc1d))
+
 ## [5.24.26-rc24](https://github.com/dvsa/vol-app/compare/v5.24.25-rc24...v5.24.26-rc24) (2025-05-19)
 
 
