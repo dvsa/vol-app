@@ -134,13 +134,13 @@ module "ecs_service" {
   }
 
   load_balancer = (
-    each.key == "search" ? [] : [
+    each.value.listener_rule_enable ? [
       {
         target_group_arn = aws_lb_target_group.this[each.key].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ]
+    ] : []
   )
 
   create_security_group = false
