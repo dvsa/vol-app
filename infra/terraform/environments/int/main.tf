@@ -98,6 +98,10 @@ data "aws_security_group" "this" {
   name = "DEV/APP/QA-OLCS-PRI-${each.key}-SG"
 }
 
+data "aws_security_group" "search" {
+  name = "DEV/APP/QA-OLCS-PRI-SEARCHDATAV6-SG"
+}
+
 data "aws_subnets" "this" {
   for_each = toset(setunion(local.legacy_service_names, ["BATCH"]))
 
@@ -260,6 +264,34 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
+    },
+    "search" = {
+      cpu    = 4096
+      memory = 12288
+
+      version    = var.search_image_tag
+      repository = data.aws_ecr_repository.sservice["search"].repository_url
+
+      listener_rule_enable = false
+      add_search_env_info  = true
+
+      task_iam_role_statements = [
+        {
+          effect = "Allow"
+          actions = [
+            "secretsmanager:GetSecretValue"
+          ]
+          resources = [
+            data.aws_secretsmanager_secret.this["api"].arn
+          ]
+        }
+      ]
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.search.id
+      ]
     }
   }
   batch = {
