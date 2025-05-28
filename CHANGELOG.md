@@ -1,5 +1,34 @@
 # Changelog
 
+## [5.18.0](https://github.com/dvsa/vol-app/compare/v5.17.0...v5.18.0) (2025-05-19)
+
+
+### Features
+
+* choice to develop using local copies of vol vendor repos VOL-6308 ([#856](https://github.com/dvsa/vol-app/issues/856)) ([74072ec](https://github.com/dvsa/vol-app/commit/74072ec7e9441ce21d04c46deeea26f1ce887796))
+* new route for main occupation criteria guidance page plus dependency bump ([#850](https://github.com/dvsa/vol-app/issues/850)) ([2c57977](https://github.com/dvsa/vol-app/commit/2c579770649ef9a0b5603ca447b8718d315f3499))
+* schema additions for new PSV restricted journey VOL-5882 ([#847](https://github.com/dvsa/vol-app/issues/847)) ([aaaadbd](https://github.com/dvsa/vol-app/commit/aaaadbd8ab484ec33c41a8947c30a6ed146d1d44))
+* search lb conditional ([#849](https://github.com/dvsa/vol-app/issues/849)) ([03a3788](https://github.com/dvsa/vol-app/commit/03a378803721efb67d65328b99c1fb96545105e7))
+* updated forms and removed stored cards logic ([#853](https://github.com/dvsa/vol-app/issues/853)) ([d15d632](https://github.com/dvsa/vol-app/commit/d15d6322505a926a9a75212d7266146d3d8af9b9))
+* updated olcs-common for Ts&Cs change and remove defective query ([#878](https://github.com/dvsa/vol-app/issues/878)) ([579dd50](https://github.com/dvsa/vol-app/commit/579dd50d6d8b576fe221f11d5e7de067437a1497))
+
+
+### Bug Fixes
+
+* address search alias issues ([#877](https://github.com/dvsa/vol-app/issues/877)) ([e291e9b](https://github.com/dvsa/vol-app/commit/e291e9b3f9e453b74bf7d5717eea92f8a4234a4e))
+* create lastrun folder ([#864](https://github.com/dvsa/vol-app/issues/864)) ([e8b34f8](https://github.com/dvsa/vol-app/commit/e8b34f85c16e21d2d45873b7ae4a0400b41f133c))
+* further bumping memory ([#866](https://github.com/dvsa/vol-app/issues/866)) ([e0ec2b6](https://github.com/dvsa/vol-app/commit/e0ec2b608b1df504ed9cd0805e7807fa10fc4941))
+* possible rollover alias fix for search indicies ([#871](https://github.com/dvsa/vol-app/issues/871)) ([70088f2](https://github.com/dvsa/vol-app/commit/70088f23b905d8a94863e867152cd147196c6946))
+* re-add search ([#843](https://github.com/dvsa/vol-app/issues/843)) ([3ae5b2d](https://github.com/dvsa/vol-app/commit/3ae5b2d54e813fb663c400b3b490239da2679919))
+* remove duplicates ([#879](https://github.com/dvsa/vol-app/issues/879)) ([472a0a0](https://github.com/dvsa/vol-app/commit/472a0a0da245296ff2cb6fcddf9ec550af6a22c9))
+* remove unused write index ([#870](https://github.com/dvsa/vol-app/issues/870)) ([391d8b0](https://github.com/dvsa/vol-app/commit/391d8b0329e4ace26fc4aaee1b431da32c4e37c9))
+* template policy issues ([#854](https://github.com/dvsa/vol-app/issues/854)) ([d68f999](https://github.com/dvsa/vol-app/commit/d68f999c67d9b797bc3c95dbd11760f284738554))
+* testing rollover index policy ([#867](https://github.com/dvsa/vol-app/issues/867)) ([0bf0dda](https://github.com/dvsa/vol-app/commit/0bf0dda196339debee3cf3b95bc7027ce5ebdd49))
+* updated index templates  ([#868](https://github.com/dvsa/vol-app/issues/868)) ([37632e5](https://github.com/dvsa/vol-app/commit/37632e517dcb6756b4e30fb1805db2d7c4a876ce))
+* updated java memory limit ([#865](https://github.com/dvsa/vol-app/issues/865)) ([ee4d9f9](https://github.com/dvsa/vol-app/commit/ee4d9f9c0acda65c22377750c1a79d024e345bda))
+* updated search resources ([#863](https://github.com/dvsa/vol-app/issues/863)) ([b8b70cd](https://github.com/dvsa/vol-app/commit/b8b70cd5b36dc4cba79de8cdde3049286ccca8e4))
+* use search security group ([#862](https://github.com/dvsa/vol-app/issues/862)) ([6b50bc1](https://github.com/dvsa/vol-app/commit/6b50bc10db9002fd8f542fc22d9dfe56c8538be2))
+
 ## [5.17.0](https://github.com/dvsa/vol-app/compare/v5.16.0...v5.17.0) (2025-04-23)
 
 

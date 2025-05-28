@@ -1,0 +1,1 @@
+0 0 * * * /usr/share/logstash/config/reset_lastrun.sh >> /var/log/cron.log 2>&1

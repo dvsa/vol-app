@@ -72,7 +72,11 @@
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
-    "index.plugins.index_state_management.rollover_alias": "busreg",
+    "plugins": {
+      "index_state_management": {
+        "rollover_alias": "busreg"
+      }
+    },
     "analysis": {
       "char_filter": {
         "spaces_removed_pattern": {

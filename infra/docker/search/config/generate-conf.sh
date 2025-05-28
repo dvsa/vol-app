@@ -79,15 +79,12 @@ then
     DIRPATH="/usr/share/logstash/pipeline/"
 fi
 
-if [ -z "$INDEXES" ]
-then
-    INDEXES=( "irfo" "busreg" "case" "application" "user" "licence" "psv_disc" "address" "person" "vehicle_current" "publication"  "vehicle_removed" )
-fi
-
 JDBC_LIBRARY=$(basename "`ls /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar`")
 log "Replace placeholders in logstash config file(s)"
+
 BASEDIR=$(dirname $(readlink -m $0))
 for INDEX in "${INDEXES[@]}"; do
+  #create config
   CONFFILE="${INDEX}.conf"
   cp /usr/share/logstash/config/populate_indices.conf.dist $DIRPATH/$CONFFILE
   sed "s/<JDBC_LIBRARY>/$JDBC_LIBRARY/" -i $DIRPATH/$CONFFILE
