@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.18.1](https://github.com/dvsa/vol-app/compare/v5.18.0...v5.18.1) (2025-05-28)
+
+
+### Features
+
+* deploy int search ([#890](https://github.com/dvsa/vol-app/issues/890)) ([8ab0238](https://github.com/dvsa/vol-app/commit/8ab0238fc850c4402465c6a5ed7a877ca40c69f7))
+* using cron to rotate daily index ([#897](https://github.com/dvsa/vol-app/issues/897)) ([85bfcbd](https://github.com/dvsa/vol-app/commit/85bfcbd104631383eb774ab65ba5f10611eff53b))
+
+
+### Miscellaneous Chores
+
+* release 5.18.1 ([#899](https://github.com/dvsa/vol-app/issues/899)) ([5d443ba](https://github.com/dvsa/vol-app/commit/5d443bac30a99ee059eb2c67274c3501617da418))
+
 ## [5.18.0](https://github.com/dvsa/vol-app/compare/v5.17.0...v5.18.0) (2025-05-19)
 
 
