@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.18.2](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.18.2) (2025-05-30)
+
+
+### Bug Fixes
+
+* allow sameorigin frame embeds to fix Split Screen functionality ([#905](https://github.com/dvsa/vol-app/issues/905)) ([a450c4c](https://github.com/dvsa/vol-app/commit/a450c4cf3a8ba814fceb55b9bbc1f1bca2e9abf1))
+* resolve styling issues on some snapshots ([#901](https://github.com/dvsa/vol-app/issues/901)) ([9a56b8c](https://github.com/dvsa/vol-app/commit/9a56b8cc1312cec08b6dc3201f60cfe3329592cb))
+* specify nginx client max body to match php upload limit ([#902](https://github.com/dvsa/vol-app/issues/902)) ([71c0475](https://github.com/dvsa/vol-app/commit/71c0475fc35e6346a44e87fe60e9f80e969d8c31))
+
 ## [5.18.1](https://github.com/dvsa/vol-app/compare/v5.18.0...v5.18.1) (2025-05-28)
 
 
