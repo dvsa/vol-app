@@ -14,7 +14,7 @@ on:
         type: string
         required: false
       branch:
-        description: "Branch name for on-demand builds (will be prefixed with 'branch-')"
+        description: "Branch name for on-demand builds"
         type: string
         required: false
       push:
