@@ -14,7 +14,7 @@ on:
         type: string
         required: false
       branch:
-        description: "Branch name for on-demand builds"
+        description: "Branch name for on-demand builds (will be prefixed with 'branch-')"
         type: string
         required: false
       push:
@@ -28,6 +28,11 @@ on:
         type: string
         required: true
         default: main
+      push:
+        description: "Push to nonprod CDN"
+        type: boolean
+        default: true
+        required: false
 
 concurrency:
   group: assets-${{ inputs.account }}-${{ inputs.branch || 'version' }}
@@ -41,10 +46,11 @@ jobs:
         working-directory: app/cdn
     env:
       ASSET_BUCKET: "vol-app-assets"
-      # For branch builds always use nonprod accountm CD pipeline as normal to both
+      # For branch builds, always use nonprod account; for CD pipeline, use the specified account
       ACCOUNT_NUMBER: ${{ inputs.branch && vars.ACCOUNT_NONPROD || vars[inputs.account == 'prod' && 'ACCOUNT_PROD' || 'ACCOUNT_NONPROD'] }}
       AWS_OIDC_ROLE: ${{ inputs.branch && vars.ACCOUNT_NONPROD_TF_OIDC_ROLE || vars[inputs.account == 'prod' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
       AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+      # Determine the S3 path: use branch- prefix for branch builds, or version for CD pipeline
       S3_PATH: ${{ inputs.branch && format('branch-{0}', inputs.branch) || inputs.version }}
     steps:
       - uses: actions/checkout@v4
