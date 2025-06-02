@@ -78,6 +78,25 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
+    "cpu" : {
+      "policy_type" : "TargetTrackingScaling",
+      "target_tracking_scaling_policy_configuration" : {
+        "predefined_metric_specification" : {
+          "predefined_metric_type" : "ECSServiceAverageCPUUtilization"
+        }
+      }
+    },
+    "memory" : {
+      "policy_type" : "TargetTrackingScaling",
+      "target_tracking_scaling_policy_configuration" : {
+        "predefined_metric_specification" : {
+          "predefined_metric_type" : "ECSServiceAverageMemoryUtilization"
+        }
+      }
+    }
+  } : {}
+
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"

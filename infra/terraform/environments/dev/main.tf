@@ -269,6 +269,8 @@ module "service" {
       cpu    = 4096
       memory = 12288
 
+      enable_autoscaling_policies = false
+
       version    = var.search_image_tag
       repository = data.aws_ecr_repository.sservice["search"].repository_url
 
