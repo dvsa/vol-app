@@ -78,6 +78,8 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  autoscaling_policies = var.services.enable_autoscaling_policies ? null : {}
+
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"
