@@ -34,6 +34,10 @@ on:
         default: true
         required: false
 
+permissions:
+  contents: read
+  id-token: write
+
 concurrency:
   group: assets-${{ inputs.account }}-${{ inputs.branch || 'version' }}
 
