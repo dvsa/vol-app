@@ -45,7 +45,7 @@ variable "services" {
     }))
     add_cdn_url_to_env          = optional(bool, false)
     add_search_env_info         = optional(bool, false)
-    enable_autoscaling_policies = optional(bool)
+    enable_autoscaling_policies = optional(bool, true)
     lb_arn                      = optional(string)
     lb_listener_arn             = optional(string)
     // The reason for this was to enable the parallel running of ECS and EC2 services.
