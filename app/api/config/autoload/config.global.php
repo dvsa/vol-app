@@ -182,7 +182,7 @@ return [
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
-    'asset_path' => '/static/public',
+    'asset_path' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%assets_url%' : '/static/public'),
 
     // Companies house RESTful API
     'companies_house' => [

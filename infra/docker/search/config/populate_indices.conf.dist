@@ -27,7 +27,7 @@ output {
             type => "aws_iam" 
             region => "eu-west-1"
         }
-        index => "<INDEX_NAME>"
+        index => "<INDEX_NAME>-%{+yyyy.MM.dd}"
         document_id => "%{doc_id}"
         template => "<BASEDIR>/templates/<INDEX_NAME>.json"
         manage_template => true

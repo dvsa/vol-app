@@ -12,14 +12,34 @@ on:
         required: true
       version:
         type: string
-        required: true
+        required: false
+      branch:
+        description: "Branch name for on-demand builds"
+        type: string
+        required: false
       push:
         type: boolean
         default: false
         required: false
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name to build assets from"
+        type: string
+        required: true
+        default: main
+      push:
+        description: "Push to nonprod CDN"
+        type: boolean
+        default: true
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
 
 concurrency:
-  group: assets-${{ inputs.account }}
+  group: assets-${{ inputs.account }}-${{ inputs.branch || 'version' }}
 
 jobs:
   build:
@@ -30,15 +50,18 @@ jobs:
         working-directory: app/cdn
     env:
       ASSET_BUCKET: "vol-app-assets"
-      ACCOUNT_NUMBER: ${{ vars[inputs.account == 'prod' && 'ACCOUNT_PROD' || 'ACCOUNT_NONPROD'] }}
-      AWS_OIDC_ROLE: ${{ vars[inputs.account == 'prod' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
+      # For branch builds, always use nonprod account; for CD pipeline, use the specified account
+      ACCOUNT_NUMBER: ${{ inputs.branch && vars.ACCOUNT_NONPROD || vars[inputs.account == 'prod' && 'ACCOUNT_PROD' || 'ACCOUNT_NONPROD'] }}
+      AWS_OIDC_ROLE: ${{ inputs.branch && vars.ACCOUNT_NONPROD_TF_OIDC_ROLE || vars[inputs.account == 'prod' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
       AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+      # Determine the S3 path: use branch- prefix for branch builds, or version for CD pipeline
+      S3_PATH: ${{ inputs.branch && format('branch-{0}', inputs.branch) || inputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref || null }}
+          ref: ${{ inputs.ref || inputs.branch || null }}
           sparse-checkout: app/cdn
-          fetch-depth: ${{ !inputs.ref && 1 || 0 }}
+          fetch-depth: ${{ (!inputs.ref && !inputs.branch) && 1 || 0 }}
 
       - uses: actions/setup-node@v4
         with:
@@ -61,4 +84,11 @@ jobs:
 
       - name: Upload assets to CloudFront assets bucket
         if: ${{ inputs.push }}
-        run: aws s3 cp ./public s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ inputs.version }}/ --recursive
+        run: |
+          echo "Uploading assets to s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ env.S3_PATH }}/"
+          aws s3 cp ./public s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ env.S3_PATH }}/ --recursive
+
+      - name: Output S3 path
+        if: ${{ inputs.push }}
+        run: |
+          echo "Assets uploaded to: s3://${{ env.ACCOUNT_NUMBER }}-${{ env.ASSET_BUCKET }}/${{ env.S3_PATH }}/" >> $GITHUB_STEP_SUMMARY

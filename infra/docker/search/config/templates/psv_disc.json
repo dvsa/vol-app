@@ -41,11 +41,6 @@
     "number_of_shards": 3,
     "number_of_replicas": 0,
     "refresh_interval": "30s",
-    "plugins": {
-      "index_state_management": {
-        "rollover_alias": "psv_disc"
-      }
-    },
     "analysis": {
       "char_filter": {
         "spaces_removed_pattern": {

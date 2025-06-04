@@ -17,13 +17,13 @@ do
 
 done
 
-#  build indexes
-#/usr/share/logstash/build.sh -c /usr/share/logstash/config/settings.sh 
+# Start cron in background
+echo "Starting cron..."
+crontab -u logstash /usr/share/logstash/config/cron.txt
+cron
+
 # Start logstash
 exec logstash
-
-# keep container running
-#tail -f /dev/null
     
 
 

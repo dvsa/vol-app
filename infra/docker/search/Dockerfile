@@ -4,11 +4,12 @@ FROM search AS production
 
 USER root
 
-RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && \
+RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* cron=3.0pl1-136ubuntu1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc && \
-    /usr/share/logstash/bin/logstash-plugin install logstash-output-opensearch
+    /usr/share/logstash/bin/logstash-plugin install logstash-output-opensearch \
+    && chmod u+s /usr/sbin/cron
 
 USER logstash
 
@@ -21,8 +22,6 @@ RUN rm -f /usr/share/logstash/pipeline/logstash.conf && echo "" > /usr/share/log
 # Copy configuration
 COPY --chown=logstash --chmod=755 config/ /usr/share/logstash/config/
 
-# copy scripts
-COPY --chown=logstash --chmod=755 py /usr/share/logstash/py
-COPY --chown=logstash --chmod=755 build.sh /usr/share/logstash/build.sh
-
 COPY --chown=logstash --chmod=755 entrypoint.sh /usr/local/bin/docker-entrypoint
+
+
