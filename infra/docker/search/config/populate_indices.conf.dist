@@ -18,6 +18,9 @@ filter {
             "_id" => "doc_id"
         }
     }
+    ruby {
+        code => "event.set('@timestamp', Time.now.utc)"
+    }
 }
 
 output {
