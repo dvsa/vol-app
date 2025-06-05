@@ -15,7 +15,7 @@ class ServiceNo extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::RULES_ERROR => 'Unable to find a main service number, XML field "ServiceCode" must not be empty'
+        self::RULES_ERROR => 'Unable to find a main service number, XML field "LineName" must not be empty'
     ];
 
     /**
