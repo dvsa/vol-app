@@ -17,11 +17,6 @@ do
 
 done
 
-# Start cron in background
-echo "Starting cron..."
-crontab -u logstash /usr/share/logstash/config/cron.txt
-cron
-
 # Start logstash
 exec logstash
     

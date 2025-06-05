@@ -4,7 +4,7 @@ FROM search AS production
 
 USER root
 
-RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* cron=3.0pl1-136ubuntu1 && \
+RUN apt-get update && apt-get install --no-install-recommends -y python3=3.* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     /usr/share/logstash/bin/logstash-plugin install logstash-integration-jdbc && \
