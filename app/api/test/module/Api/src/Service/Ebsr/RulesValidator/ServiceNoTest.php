@@ -19,7 +19,7 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValid(mixed $serviceNo, $isValid)
     {
-        $value = ['serviceNo' => $serviceNo];
+        $value = ['lineNames' => [$serviceNo]];
 
         $sut = new ServiceNo();
         $this->assertEquals($isValid, $sut->isValid($value));
