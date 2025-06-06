@@ -1,7 +1,7 @@
 input {
     # Full refresh at midnight
     jdbc {
-        jdbc_driver_library => "/usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar"
+        jdbc_driver_library => "/usr/share/logstash/logstash-core/lib/jars/<JDBC_LIBRARY>"
         jdbc_driver_class => "com.mysql.cj.jdbc.Driver"
         jdbc_connection_string => "jdbc:mysql://<DB_HOST>:3306/<DB_NAME>?useSSL=false"
         jdbc_user => "<DB_USER>"
@@ -9,7 +9,7 @@ input {
         schedule => "0 0 * * *"  # Midnight
         statement => "CALL sp_elastic_<INDEX_NAME>()"  # Full load, no sql_last_value
         type => "daily_full_refresh-<INDEX_NAME>"
-  }
+    }
     jdbc {
         jdbc_driver_library => "/usr/share/logstash/logstash-core/lib/jars/<JDBC_LIBRARY>"
         jdbc_driver_class => "com.mysql.jdbc.Driver"
@@ -30,7 +30,7 @@ filter {
         }
     }
     ruby {
-        code => "event.set('@timestamp', LogStash::Timestamp.new(Time.now.utc))"
+        code => "event.set('@timestamp', LogStash::Timestamp.new(::Time.now.utc))"
     }
 }
 
