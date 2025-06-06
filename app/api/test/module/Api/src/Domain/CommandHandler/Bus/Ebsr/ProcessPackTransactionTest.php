@@ -136,6 +136,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $otherServiceNumber1 = '123';
         $otherServiceNumber2 = '456';
+        $mainServiceNumber = 'BUS001';
 
         $parsedEbsrData = [
             'licNo' => $parsedLicenceNumber,
@@ -154,7 +155,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
                 0 => $supportingDocName
             ],
             'map' => $supportingMapName,
-            'otherServiceNumbers' => [$otherServiceNumber1, $otherServiceNumber2],
+            'lineNames' => [$mainServiceNumber, $otherServiceNumber1, $otherServiceNumber2],
             'busShortNotice' => $busShortNotice
         ];
 
@@ -164,10 +165,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'naptanAuthorities' => $this->naptan($naptanCodes),
             'busNoticePeriod' => $this->references[BusNoticePeriodEntity::class][1],
             'localAuthoritys' => $this->localAuthorities($parsedLocalAuthorities, $trafficArea2, $trafficArea3),
-            'busServiceTypes' => $this->busServiceTypes($busServiceTypes)
+            'busServiceTypes' => $this->busServiceTypes($busServiceTypes),
+            'serviceNo' => $mainServiceNumber,
+            'otherServiceNumbers' => [$otherServiceNumber1, $otherServiceNumber2]
         ];
 
         $processedDataOutput = array_merge($parsedEbsrData, $extraProcessedEbsrData);
+        unset($processedDataOutput['lineNames']); // Remove lineNames as it gets transformed
         $busRegFromData = $processedDataOutput;
         unset($busRegFromData['documents']);
         unset($busRegFromData['variationNo']);
@@ -381,6 +385,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $otherServiceNumber1 = '123';
         $otherServiceNumber2 = '456';
+        $mainServiceNumber = 'BUS002';
 
         $busShortNotice = ['bus short notice'];
 
@@ -401,7 +406,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
                 0 => $supportingDocName
             ],
             'map' => $supportingMapName,
-            'otherServiceNumbers' => [$otherServiceNumber1, $otherServiceNumber2],
+            'lineNames' => [$mainServiceNumber, $otherServiceNumber1, $otherServiceNumber2],
             'busShortNotice' => $busShortNotice
         ];
 
@@ -411,10 +416,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'naptanAuthorities' => $this->naptan($naptanCodes),
             'busNoticePeriod' => $this->references[BusNoticePeriodEntity::class][1],
             'localAuthoritys' => $this->localAuthorities($parsedLocalAuthorities, $trafficArea2, $trafficArea3),
-            'busServiceTypes' => $this->busServiceTypes($busServiceTypes)
+            'busServiceTypes' => $this->busServiceTypes($busServiceTypes),
+            'serviceNo' => $mainServiceNumber,
+            'otherServiceNumbers' => [$otherServiceNumber1, $otherServiceNumber2]
         ];
 
         $processedDataOutput = array_merge($parsedEbsrData, $extraProcessedEbsrData);
+        unset($processedDataOutput['lineNames']); // Remove lineNames as it gets transformed
         $busRegFromData = $processedDataOutput;
         unset($busRegFromData['documents']);
         unset($busRegFromData['variationNo']);
@@ -597,7 +605,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'documents' => [
 
             ],
-            'otherServiceNumbers' => ['123', '456']
+            'lineNames' => ['BUS003', '123', '456']
         ];
 
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
@@ -663,10 +671,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'naptanAuthorities' => $this->naptan($naptanCodes),
             'busNoticePeriod' => $this->references[BusNoticePeriodEntity::class][1],
             'localAuthoritys' => $this->localAuthorities($parsedLocalAuthorities, $trafficArea2, $trafficArea3),
-            'busServiceTypes' => $this->busServiceTypes($busServiceTypes)
+            'busServiceTypes' => $this->busServiceTypes($busServiceTypes),
+            'serviceNo' => 'BUS003',
+            'otherServiceNumbers' => ['123', '456']
         ];
 
         $processedDataOutput = array_merge($parsedEbsrData, $extraProcessedEbsrData);
+        unset($processedDataOutput['lineNames']); // Remove lineNames as it gets transformed
         $processedContext = [
             'busReg' => null,
             'busRegNoExclusions' => null,
@@ -910,7 +921,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'documents' => [
 
             ],
-            'otherServiceNumbers' => ['123', '456']
+            'lineNames' => ['BUS004', '123', '456']
         ];
 
         $ebsrSubmission = $this->failedEbsrSubmission($ebsrSubId, $organisation, $document);
@@ -949,10 +960,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'naptanAuthorities' => $this->naptan($naptanCodes),
             'busNoticePeriod' => $this->references[BusNoticePeriodEntity::class][1],
             'localAuthoritys' => $this->localAuthorities($parsedLocalAuthorities, $trafficArea2, $trafficArea3),
-            'busServiceTypes' => $this->busServiceTypes($busServiceTypes)
+            'busServiceTypes' => $this->busServiceTypes($busServiceTypes),
+            'serviceNo' => 'BUS004',
+            'otherServiceNumbers' => ['123', '456']
         ];
 
         $processedDataInput = array_merge($parsedEbsrData, $extraProcessedEbsrData);
+        unset($processedDataInput['lineNames']); // Remove lineNames as it gets transformed
         $processedContext = [
             'busReg' => null,
             'busRegNoExclusions' => null,
@@ -1028,7 +1042,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'documents' => [
 
             ],
-            'otherServiceNumbers' => ['123', '456']
+            'lineNames' => ['BUS005', '123', '456']
         ];
 
         $ebsrSubmission = $this->failedEbsrSubmission($ebsrSubId, $organisation, $document);
@@ -1071,10 +1085,13 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             'naptanAuthorities' => $this->naptan($naptanCodes),
             'busNoticePeriod' => $this->references[BusNoticePeriodEntity::class][1],
             'localAuthoritys' => $this->localAuthorities($parsedLocalAuthorities, $trafficArea2, $trafficArea3),
-            'busServiceTypes' => $this->busServiceTypes($busServiceTypes)
+            'busServiceTypes' => $this->busServiceTypes($busServiceTypes),
+            'serviceNo' => 'BUS005',
+            'otherServiceNumbers' => ['123', '456']
         ];
 
         $processedDataOutput = array_merge($parsedEbsrData, $extraProcessedEbsrData);
+        unset($processedDataOutput['lineNames']); // Remove lineNames as it gets transformed
         $processedContext = [
             'busReg' => null,
             'busRegNoExclusions' => null,

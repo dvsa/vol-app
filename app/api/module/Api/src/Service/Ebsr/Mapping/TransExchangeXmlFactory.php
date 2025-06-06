@@ -87,8 +87,7 @@ class TransExchangeXmlFactory implements FactoryInterface
             'OperatingPeriod' => new Recursion($operatingPeriod),
             'StandardService' => new Recursion($standardService),
             'Description' => new NodeValue('otherDetails'),
-            'ServiceCode' => new NodeValue('serviceNo'),
-            'Lines' => new Recursion('Line', new Recursion('LineName', new MultiNodeValue('otherServiceNumbers'))),
+            'Lines' => new Recursion('Line', new Recursion('LineName', new MultiNodeValue('lineNames'))),
             'StopRequirements' => new Recursion($stopRequirements),
             'ServiceClassification' => new Recursion($serviceClassification),
             'SchematicMap' => new NodeValue('map')

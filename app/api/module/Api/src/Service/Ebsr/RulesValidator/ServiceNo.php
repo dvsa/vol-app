@@ -15,11 +15,11 @@ class ServiceNo extends AbstractValidator
      * @var array
      */
     protected $messageTemplates = [
-        self::RULES_ERROR => 'Unable to find a main service number, XML field "ServiceCode" must not be empty'
+        self::RULES_ERROR => 'Unable to find a main service number, XML field "LineName" must not be empty'
     ];
 
     /**
-     * Checks the serviceNo field is populated, serviceNo array key will always be present
+     * Checks the lineNames field is populated with at least one valid service number
      *
      * @param array $value input value
      *
@@ -27,10 +27,9 @@ class ServiceNo extends AbstractValidator
      */
     public function isValid($value)
     {
-        //with the current xml parser we'd only get empty string, but allow some flexibility for future
         $disallowed = ['', null, false];
 
-        if (in_array($value['serviceNo'], $disallowed, true)) {
+        if (in_array($value['lineNames'][0] ?? null, $disallowed, true)) {
             $this->error(self::RULES_ERROR);
             return false;
         }

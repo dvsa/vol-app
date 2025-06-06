@@ -495,6 +495,15 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
      */
     protected function getDoctrineInformation(array $ebsrData)
     {
+        // Split lineNames into serviceNo and otherServiceNumbers
+        if (!isset($ebsrData['lineNames']) || !is_array($ebsrData['lineNames']) || empty($ebsrData['lineNames'])) {
+            throw new Exception\ValidationException(['lineNames' => 'At least one LineName is required in the TransXChange file']);
+        }
+        
+        $ebsrData['serviceNo'] = $ebsrData['lineNames'][0];
+        $ebsrData['otherServiceNumbers'] = array_slice($ebsrData['lineNames'], 1) ?: [];
+        unset($ebsrData['lineNames']);
+
         $ebsrData['subsidised'] = $this->getRepo()->getRefdataReference($ebsrData['subsidised']);
         $ebsrData['naptanAuthorities'] = $this->processNaptan($ebsrData['naptan']);
         $ebsrData['localAuthoritys'] = $this->processLocalAuthority($ebsrData['localAuthorities']);
