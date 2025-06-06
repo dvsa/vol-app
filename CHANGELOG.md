@@ -1,5 +1,30 @@
 # Changelog
 
+## [5.19.0](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.19.0) (2025-06-06)
+
+
+### Features
+
+* interim workflow dispatch option for assets builds to allow testing assets from branch with build wrapper ([#906](https://github.com/dvsa/vol-app/issues/906)) ([31e4c27](https://github.com/dvsa/vol-app/commit/31e4c276be285ec6cb462851653bba68b05715ec))
+* toggle to disable scaling policies for ecs services ([#907](https://github.com/dvsa/vol-app/issues/907)) ([353c75f](https://github.com/dvsa/vol-app/commit/353c75fbeec39c30041d8fe24742bee322da2954))
+
+
+### Bug Fixes
+
+* add missing navigation id on service navigation, to fix javascript error VOL-6389 ([#915](https://github.com/dvsa/vol-app/issues/915)) ([6b1a891](https://github.com/dvsa/vol-app/commit/6b1a8913a5807fdc48d15ea88f920f785360beff))
+* add push option to assets workflow dispatch ([#909](https://github.com/dvsa/vol-app/issues/909)) ([25273be](https://github.com/dvsa/vol-app/commit/25273be0f1016fbcd3bb7c7b8ff8c1fbe3db4d48))
+* allow sameorigin frame embeds to fix Split Screen functionality ([#905](https://github.com/dvsa/vol-app/issues/905)) ([a450c4c](https://github.com/dvsa/vol-app/commit/a450c4cf3a8ba814fceb55b9bbc1f1bca2e9abf1))
+* correct syntax for daily timestamp ([#911](https://github.com/dvsa/vol-app/issues/911)) ([bf35daf](https://github.com/dvsa/vol-app/commit/bf35dafd00e97143ae3b55f5c6f1f6159a64b0fe))
+* disable target group if no listener rule enabled ([#892](https://github.com/dvsa/vol-app/issues/892)) ([ceb7e0b](https://github.com/dvsa/vol-app/commit/ceb7e0bef04f6e46cdacf04cba08c1f299f1f498))
+* remove plugin from template ([#904](https://github.com/dvsa/vol-app/issues/904)) ([89e4fad](https://github.com/dvsa/vol-app/commit/89e4faddeef0a2cb8124fa408720079865692704))
+* resolve styling issues on some snapshots ([#901](https://github.com/dvsa/vol-app/issues/901)) ([9a56b8c](https://github.com/dvsa/vol-app/commit/9a56b8cc1312cec08b6dc3201f60cfe3329592cb))
+* search config syntax ([#918](https://github.com/dvsa/vol-app/issues/918)) ([02652b5](https://github.com/dvsa/vol-app/commit/02652b5e30ca48f77581ff44932a946081e5ae20))
+* set timestamps to always be today ([#914](https://github.com/dvsa/vol-app/issues/914)) ([8f8b440](https://github.com/dvsa/vol-app/commit/8f8b44092e3e8e60b3ed3e046802e3ed0f3da637))
+* specify necessary permission for standalone dispatch ([#910](https://github.com/dvsa/vol-app/issues/910)) ([91849dd](https://github.com/dvsa/vol-app/commit/91849dd7d6fb573a930fe866dce9757507458f5c))
+* specify nginx client max body to match php upload limit ([#902](https://github.com/dvsa/vol-app/issues/902)) ([71c0475](https://github.com/dvsa/vol-app/commit/71c0475fc35e6346a44e87fe60e9f80e969d8c31))
+* switch lb rule for prep ([#913](https://github.com/dvsa/vol-app/issues/913)) ([cf3085b](https://github.com/dvsa/vol-app/commit/cf3085b31a632d45901f3da4fa2341ca48ad2630))
+* testing multiple input over cron ([#917](https://github.com/dvsa/vol-app/issues/917)) ([733d76c](https://github.com/dvsa/vol-app/commit/733d76c6c7611b0595834e986ed68478db0bfe08))
+
 ## [5.18.1](https://github.com/dvsa/vol-app/compare/v5.18.0...v5.18.1) (2025-05-28)
 
 
