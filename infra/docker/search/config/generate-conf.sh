@@ -83,6 +83,12 @@ then
     exit;
 fi
 
+if [ -z "$newVersion" ]
+then
+    usage "-n parameter must be set"
+    exit;
+fi
+
 if [ -z "$DIRPATH" ]
 then
     DIRPATH="/usr/share/logstash/pipeline/"
