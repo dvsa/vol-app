@@ -49,37 +49,37 @@ done
 
 if [ -z "$ELASTIC_HOST" ]
 then
-    usage "-e parameter must be set"
+    usage "elastic host must be set"
     exit;
 fi
 
 if [ -z "$DBHOST" ]
 then
-    usage "-h parameter must be set"
+    usage "db host parameter must be set"
     exit;
 fi
 
 if [ -z "$DBNAME" ]
 then
-    usage "-m parameter must be set"
+    usage "db name parameter must be set"
     exit;
 fi
 
 if [ -z "$DBUSER" ]
 then
-    usage "-u parameter must be set"
+    usage "db user parameter must be set"
     exit;
 fi
 
 if [ -z "$DBPASSWORD" ]
 then
-    usage "-p parameter must be set"
+    usage "db password parameter must be set"
     exit;
 fi
 
 if [ -z "$newVersion" ]
 then
-    usage "-n parameter must be set"
+    usage "version parameter must be set"
     exit;
 fi
 

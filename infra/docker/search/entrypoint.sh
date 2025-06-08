@@ -48,7 +48,7 @@ function purgeOldAliases()
     do
         echo "Deleting indexes matching [${index}] which have no alias." 
 
-        indexsWithoutAlias=$(curl -s -XGET https://${elasticHost}/_aliases | python3 .config/py/indexWithoutAlias.py ${index} })
+        indexsWithoutAlias=$(curl -s -XGET https://${elasticHost}/_aliases | python3 ./config/py/indexWithoutAlias.py ${index} })
 
         if [ ! -z $indexsWithoutAlias ]; then
             echo "Matching indexes without aliases are [${indexsWithoutAlias}]." 
@@ -114,13 +114,13 @@ do
     /usr/share/logstash/config/generate-conf.sh -c /usr/share/logstash/config/settings.sh -i $index -n ${newVersion}
     
     # Add to logstash pipeline
-    echo -e "- pipeline.id: $i\n  path.config: \"/usr/share/logstash/pipeline/${i}.conf\"" >> "/usr/share/logstash/config/pipelines.yml"
+    echo -e "- pipeline.id: $i\n  path./config: \"/usr/share/logstash/pipeline/${i}.conf\"" >> "/usr/share/logstash/config/pipelines.yml"
         
 done
     
 echo "Starting Logstash service in background" 
 
-logstash &
+logstash > /dev/null 2>&1 &
 SERVICE_PID=$!
 
 echo "POPULATING NEW INDEXES" 
@@ -134,7 +134,7 @@ do
         # wait X seconds before checking
         sleep $delay
 
-        size=$(curl -XGET -s "https://$ELASTIC_HOST/${index}_v${newVersion}/_stats" | python3 .config/py/getIndexSize.py)
+        size=$(curl -XGET -s "https://$ELASTIC_HOST/${index}_v${newVersion}/_stats" | python3 ./config/py/getIndexSize.py)
         echo "Loading data to [${index}_v${newVersion}] document count is $size" 
         if [ "$size" -lt 10 ]; then
             continue
@@ -152,7 +152,7 @@ do
     done
 
     echo "Moving the alias [${index}] to the new index [${index}_v${newVersion}]." 
-    modifyBody=$(curl -s -XGET https://$ELASTIC_HOST/_aliases?pretty | python3 .config/py/modifyAliases.py $newVersion $index)
+    modifyBody=$(curl -s -XGET https://$ELASTIC_HOST/_aliases?pretty | python3 ./config/py/modifyAliases.py $newVersion $index)
     response=$(curl -XPOST -s "https://$ELASTIC_HOST/_aliases" -H 'Content-Type: application/json' -d "$modifyBody")
     if [[ "${response}" != "{\"acknowledged\":true}" ]]; then
         echo "Alias [${index}] not moved to [${index}_v${newVersion}] - error code is [${response}]." 
