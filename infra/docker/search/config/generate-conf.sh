@@ -24,7 +24,7 @@ log() {
     fi
 }
 
-while getopts "c:i:n" opt; do
+while getopts "c:i:n:" opt; do
   case $opt in
     c)
         if [ ! -f $OPTARG ]; then
