@@ -10,8 +10,9 @@ usage() {
     echo Usage: generate-conf.sh [options];
     echo;
     echo "-c <file>       : bash file containing config";
-    echo "-i <index>      : Generate config for named index. Config files will be generated as '<INDEX_NAME>.conf'"
-    echo
+    echo "-i <index>      : Generate config for named index. Config files will be generated as '<INDEX_NAME>.conf'";
+    echo "-n <version>    : Set version for named index.";
+    echo;
     exit;
 }
 
@@ -24,7 +25,7 @@ log() {
     fi
 }
 
-while getopts "c:i:n" opt; do
+while getopts "c:i:n:" opt; do
   case $opt in
     c)
         if [ ! -f $OPTARG ]; then
