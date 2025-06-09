@@ -24,7 +24,7 @@ log() {
     fi
 }
 
-while getopts "c:i:" opt; do
+while getopts "c:i:n" opt; do
   case $opt in
     c)
         if [ ! -f $OPTARG ]; then
@@ -34,6 +34,9 @@ while getopts "c:i:" opt; do
       ;;
     i)
         INDEXES=(${INDEXES[@]} "${OPTARG}")
+      ;;
+    n)
+        newVersion=$OPTARG
       ;;
     \?)
       usage "Invalid option: -$OPTARG";
@@ -46,31 +49,37 @@ done
 
 if [ -z "$ELASTIC_HOST" ]
 then
-    usage "-e parameter must be set"
+    usage "elastic host must be set"
     exit;
 fi
 
 if [ -z "$DBHOST" ]
 then
-    usage "-h parameter must be set"
+    usage "db host parameter must be set"
     exit;
 fi
 
 if [ -z "$DBNAME" ]
 then
-    usage "-m parameter must be set"
+    usage "db name parameter must be set"
     exit;
 fi
 
 if [ -z "$DBUSER" ]
 then
-    usage "-u parameter must be set"
+    usage "db user parameter must be set"
     exit;
 fi
 
 if [ -z "$DBPASSWORD" ]
 then
-    usage "-p parameter must be set"
+    usage "db password parameter must be set"
+    exit;
+fi
+
+if [ -z "$newVersion" ]
+then
+    usage "version parameter must be set"
     exit;
 fi
 
@@ -78,6 +87,8 @@ if [ -z "$DIRPATH" ]
 then
     DIRPATH="/usr/share/logstash/pipeline/"
 fi
+
+
 
 JDBC_LIBRARY=$(basename "`ls /usr/share/logstash/logstash-core/lib/jars/mysql-connector-java.jar`")
 log "Replace placeholders in logstash config file(s)"
@@ -95,6 +106,7 @@ for INDEX in "${INDEXES[@]}"; do
   sed "s/<ELASTIC_HOST>/$ELASTIC_HOST/" -i $DIRPATH/$CONFFILE
   sed "s#<BASEDIR>#$BASEDIR#" -i $DIRPATH/$CONFFILE
   sed "s/<INDEX_NAME>/$INDEX/" -i $DIRPATH/$CONFFILE
+  sed "s/<INDEX_VERSION>/$newVersion/" -i $DIRPATH/$CONFFILE
   chmod 644 $DIRPATH/$CONFFILE
 done
 
