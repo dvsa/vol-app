@@ -16,7 +16,7 @@ You will need:
 
 - [Git](https://git-scm.com/) `git --version`
 - [Docker with Compose](https://docs.docker.com/manuals/) `docker -v`
-- [Node.js 20.19.2+](https://nodejs.org/en/) `node -v`
+- [Node.js ~22.16.0](https://nodejs.org/en/) `node -v`
 - [PHP 8.2](https://www.php.net/) `php -v`
 - [Composer](https://getcomposer.org/) `composer -V`
 - [AWS CLI](https://aws.amazon.com/cli/) `aws --version`
@@ -51,7 +51,7 @@ You will need:
 
 :::tip
 
-If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` for current LTS release 22.16.0.
+If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to automatically switch to Node.js 22.16.0 as specified in `.nvmrc`.
 
 :::
 
