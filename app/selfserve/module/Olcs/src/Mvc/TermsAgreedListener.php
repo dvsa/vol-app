@@ -6,7 +6,6 @@ namespace Olcs\Mvc;
 
 use Common\Rbac\JWTIdentityProvider;
 use Common\Service\Helper\UrlHelperService;
-use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -27,7 +26,7 @@ class TermsAgreedListener implements ListenerAggregateInterface
     ];
 
     public function __construct(
-        private readonly IdentityProviderInterface|JWTIdentityProvider $identityProvider,
+        private readonly JWTIdentityProvider $identityProvider,
         private readonly UrlHelperService $urlHelper
     )
     {
