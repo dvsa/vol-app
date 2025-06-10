@@ -122,7 +122,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --configuration=phpstan.neon --memory-limit=1048M
+        run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1048M
 
       - name: Run PHP CodeSniffer
         run: vendor/bin/phpcs --standard=PSR12 .
