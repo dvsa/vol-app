@@ -1,6 +1,9 @@
 parameters:
+  phpVersion: 80200
   level: 0
   paths:
     - module
     - public
     - config
+  excludePaths:
+    - module/GdsVerify
