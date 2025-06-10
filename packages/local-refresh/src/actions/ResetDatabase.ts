@@ -1,6 +1,6 @@
 import prompts from "prompts";
 import fs from "node:fs";
-import flatCache from "flat-cache";
+import * as flatCache from "flat-cache";
 import path from "node:path";
 import exec from "../exec";
 import chalk from "chalk";
@@ -11,7 +11,7 @@ import { GenericBar } from "cli-progress";
 
 const debug = createDebug("refresh:actions:ResetDatabase");
 
-const cache = flatCache.load("reset-database");
+const cache = flatCache.createFromFile("reset-database");
 
 enum DatabaseRefreshEnum {
   NONE,
@@ -64,7 +64,7 @@ export default class ResetDatabase implements ActionInterface {
       type: "text",
       name: "directory",
       message: "Enter the path to the ETL directory",
-      initial: cache.getKey("etlDirectory") || this.etlDirectory,
+      initial: (cache.get("etlDirectory") as string) || this.etlDirectory,
       validate: (value) =>
         fs.existsSync(path.isAbsolute(value) ? value : path.resolve(__dirname, "../../../../", value))
           ? true
@@ -77,7 +77,7 @@ export default class ResetDatabase implements ActionInterface {
 
     this.etlDirectory = path.isAbsolute(directory) ? directory : path.resolve(__dirname, "../../../../", directory);
 
-    cache.setKey("etlDirectory", this.etlDirectory);
+    cache.set("etlDirectory", this.etlDirectory);
     cache.save();
 
     debug(
