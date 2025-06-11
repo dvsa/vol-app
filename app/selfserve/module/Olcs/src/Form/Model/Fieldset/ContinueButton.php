@@ -21,4 +21,3 @@ class ContinueButton
      */
     public $submit;
 }
-

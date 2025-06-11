@@ -37,7 +37,8 @@ class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
             [
                 'operatorDetails' => $operatorDetails,
                 'consultantDetails' => []
-            ]);
+            ]
+        );
 
         $operatorResult = new Result();
         $operatorResult->addId('user', 100)->addMessage('User created successfully');

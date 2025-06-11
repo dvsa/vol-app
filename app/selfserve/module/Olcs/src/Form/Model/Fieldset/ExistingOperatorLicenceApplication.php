@@ -10,7 +10,6 @@ use Laminas\Form\Annotation as Form;
  */
 class ExistingOperatorLicenceApplication
 {
-
 /**
  *
  * @Form\Required(false)
@@ -23,7 +22,5 @@ class ExistingOperatorLicenceApplication
  * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
  * @Form\Validator({"name": "Laminas\Validator\StringLength", "options": {"min":"9","max": "9"}})
  */
-public $licenceNumber = null;
-
-
+    public $licenceNumber = null;
 }

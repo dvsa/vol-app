@@ -40,7 +40,8 @@ final class SendUserRegistered extends AbstractCommandHandler implements \Dvsa\O
         $message->setTranslateToWelsh($user->getTranslateToWelsh());
 
         $template = $this->toggleService->isEnabled(
-            FeatureToggle::TRANSPORT_CONSULTANT_ROLE)
+            FeatureToggle::TRANSPORT_CONSULTANT_ROLE
+        )
             ? 'user-registered-tc' : 'user-registered';
 
         $this->sendEmailTemplate(

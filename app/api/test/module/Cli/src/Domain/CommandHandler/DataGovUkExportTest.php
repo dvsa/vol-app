@@ -195,7 +195,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $expectMsg =
             'Fetching data for international goods list' .
-            'Creating CSV file: ' . $expectedFilePath . 'Uploaded file to S3: '.$expectedFileName;
+            'Creating CSV file: ' . $expectedFilePath . 'Uploaded file to S3: ' . $expectedFileName;
 
         $this->assertEquals(
             $expectMsg,
@@ -206,7 +206,6 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
     public function testPsvOperatorListOk()
     {
         $fileName = 'psv-operator-list.csv';
-
 
         $row1 = [
             'Licence number' => 'areaName1',
@@ -363,8 +362,8 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         //  call & check
         $actual = $this->sut->handleCommand($cmd);
 
-        $expectFile1 = $this->tmpPath. '/OLBSLicenceReport_areaName1.csv';
-        $expectFile2 = $this->tmpPath. '/OLBSLicenceReport_areaName2.csv';
+        $expectFile1 = $this->tmpPath . '/OLBSLicenceReport_areaName1.csv';
+        $expectFile2 = $this->tmpPath . '/OLBSLicenceReport_areaName2.csv';
 
         $expectMsg =
             'Fetching data from DB for Operator Licences' .
@@ -417,11 +416,11 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         //  call & check
         $actual = $this->sut->handleCommand($cmd);
 
-        $expectFile1 =  $this->tmpPath. '/Bus_RegisteredOnly_areaId1.csv';
+        $expectFile1 =  $this->tmpPath . '/Bus_RegisteredOnly_areaId1.csv';
 
         $expectMsg =
             'Fetching data from DB for Bus Registered Only' .
-            'Creating CSV file: ' . $expectFile1.'Uploaded file to S3: Bus_RegisteredOnly_areaId1.csv';
+            'Creating CSV file: ' . $expectFile1 . 'Uploaded file to S3: Bus_RegisteredOnly_areaId1.csv';
 
         static::assertEquals(
             $expectMsg,
@@ -466,7 +465,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $expectMsg =
             'Fetching data from DB for Bus Variation' .
-            'Creating CSV file: ' . $expectFile1.'Uploaded file to S3: Bus_Variation_areaId1.csv';
+            'Creating CSV file: ' . $expectFile1 . 'Uploaded file to S3: Bus_Variation_areaId1.csv';
 
         static::assertEquals(
             $expectMsg,

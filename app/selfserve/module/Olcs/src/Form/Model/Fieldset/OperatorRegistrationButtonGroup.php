@@ -21,4 +21,3 @@ class OperatorRegistrationButtonGroup
      */
     public $submit;
 }
-

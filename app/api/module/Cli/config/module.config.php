@@ -14,7 +14,6 @@ use Dvsa\Olcs\Cli\Command\Permits as PermitsCommands;
 use Dvsa\Olcs\Cli\Command\Queue as QueueCommands;
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
 
-
 $commonCommandDeps = [
     'CommandHandlerManager',
 ];

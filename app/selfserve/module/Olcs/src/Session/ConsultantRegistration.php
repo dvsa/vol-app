@@ -34,7 +34,7 @@ class ConsultantRegistration extends Container
         return $this->offsetGet(self::OPERATOR_LICENCE);
     }
 
-    public function setOperatorAdmin( bool $hasOperatorAdmin ): self
+    public function setOperatorAdmin(bool $hasOperatorAdmin): self
     {
         $this->offsetSet(self::OPERATOR_ADMIN, $hasOperatorAdmin);
         return $this;

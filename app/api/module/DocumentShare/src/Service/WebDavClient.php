@@ -30,7 +30,8 @@ class WebDavClient implements DocumentStoreInterface
     public function __construct(
         protected FilesystemInterface $filesystem,
         protected Logger $logger
-    ) {}
+    ) {
+    }
 
     /**
      * Read content from document store
