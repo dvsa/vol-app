@@ -52,7 +52,6 @@ class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
         $licence = m::mock(LicenceEntity::class);
         $licence->expects('getOrganisation')->andReturn($organisation);
 
-
         $this->repoMap['Licence']->expects('fetchByLicNoWithoutAdditionalData')->with($licNo)->andReturn($licence);
 
         $expectedResult = [

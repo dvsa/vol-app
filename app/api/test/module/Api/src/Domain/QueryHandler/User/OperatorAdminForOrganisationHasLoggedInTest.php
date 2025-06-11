@@ -13,6 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
+// phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
 class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -54,7 +55,6 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $repo->shouldReceive('fetchCount')
             ->with(m::type(ListDto::class))
             ->andReturn($fetchCountResult);
-
 
         $result = $this->sut->handleQuery($query);
         $this->assertArrayHasKey('operatorAdminHasLoggedIn', $result);
@@ -121,19 +121,22 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $this->expectExceptionMessage('Expected instance of: ' . Query::class);
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 
-        $instance = new class() extends \stdClass implements QueryInterface {
+        $instance = new class () extends \stdClass implements QueryInterface {
             public function exchangeArray(array $array)
             {
+                // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement exchangeArray() method.
             }
 
             public function getArrayCopy()
             {
+                // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement getArrayCopy() method.
             }
 
             public static function create(array $data)
             {
+                // phpcs:ignore Generic.Commenting.Todo.TaskFound
                 // TODO: Implement create() method.
             }
         };

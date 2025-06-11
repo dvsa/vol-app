@@ -256,7 +256,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         $savedUser = $this->commonHandleCommandTest();
 
         $this->assertEquals(UserEntity::USER_TYPE_OPERATOR, $savedUser->getUserType());
-
     }
 
     public function testHandleCommandThrowsIncorrectUserTypeException()

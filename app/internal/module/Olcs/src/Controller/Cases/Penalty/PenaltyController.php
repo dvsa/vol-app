@@ -166,7 +166,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     {
         $optionData = [];
         foreach ($this->getPenaltyData()['requestedErrus'] as $datum) {
-            $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'].' - '.$datum['siPenaltyRequestedType']['description'];
+            $optionData[$datum['id']] = $datum['siPenaltyRequestedType']['id'] . ' - ' . $datum['siPenaltyRequestedType']['description'];
         }
         $form->get('fields')->get('erruPenaltyRequested')->setValueOptions($optionData);
 

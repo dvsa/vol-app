@@ -369,7 +369,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         // We don't have a file upload list, so check each operating centre for "adPlacedIn" value.
         // Form validation will have ensured this is field is present when a file is uploaded
         if (!empty($data['operatingCentres'])) {
-            foreach($data['operatingCentres'] as $operatingCentre) {
+            foreach ($data['operatingCentres'] as $operatingCentre) {
                 if (!empty($operatingCentre['adPlacedIn'])) {
                     return true;
                 }

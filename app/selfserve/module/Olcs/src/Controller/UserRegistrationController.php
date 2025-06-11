@@ -26,17 +26,16 @@ use Olcs\Session\ConsultantRegistration;
 class UserRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation                     $niTextTranslationUtil,
-        AuthorizationService                  $authService,
-        protected FormHelperService           $formHelper,
-        protected ScriptFactory               $scriptFactory,
-        protected TranslationHelperService    $translationHelper,
-        protected UrlHelperService            $urlHelper,
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper         $formatDataMapper,
-        protected ConsultantRegistration      $consultantRegistrationSession
-    )
-    {
+        protected CreateAccountMapper $formatDataMapper,
+        protected ConsultantRegistration $consultantRegistrationSession
+    ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -47,9 +46,11 @@ class UserRegistrationController extends AbstractController
      */
     public function startAction()
     {
-        if ($this->handleQuery(
-            IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]])
-        )->getResult()['isEnabled']) {
+        if (
+            $this->handleQuery(
+                IsEnabledQry::create(['ids' => [FeatureToggle::TRANSPORT_CONSULTANT_ROLE]])
+            )->getResult()['isEnabled']
+        ) {
             // If the feature toggle is enabled, start the TC journey in new controller
             return $this->forward()->dispatch(ConsultantRegistrationController::class, ['action' => 'add', 'params' => $this->params()->fromQuery()]);
         } else {

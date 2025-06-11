@@ -573,7 +573,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
                     $this->roles->toArray()
                 )
             )
-            );
+        );
     }
 
     /**

@@ -19,16 +19,15 @@ use Olcs\Form\Model\Form\RegisterOperatorAccount;
 class OperatorRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation                     $niTextTranslationUtil,
-        AuthorizationService                  $authService,
-        protected FormHelperService           $formHelper,
-        protected ScriptFactory               $scriptFactory,
-        protected TranslationHelperService    $translationHelper,
-        protected UrlHelperService            $urlHelper,
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected CreateAccountMapper         $formatDataMapper
-    )
-    {
+        protected CreateAccountMapper $formatDataMapper
+    ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -61,7 +60,6 @@ class OperatorRegistrationController extends AbstractController
                 } else {
                     $this->flashMessengerHelper->addErrorMessage('There was an error registering your account. Please try again.');
                 }
-
             }
         }
         return $this->prepareView('olcs/user-registration/index', [

@@ -28,8 +28,7 @@ class TermsAgreedListener implements ListenerAggregateInterface
     public function __construct(
         private readonly JWTIdentityProvider $identityProvider,
         private readonly UrlHelperService $urlHelper
-    )
-    {
+    ) {
     }
 
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -50,7 +49,7 @@ class TermsAgreedListener implements ListenerAggregateInterface
             return;
         }
 
-        if (in_array($e->getRouteMatch()->getMatchedRouteName(), self::EXCLUDED_ROUTES )) {
+        if (in_array($e->getRouteMatch()->getMatchedRouteName(), self::EXCLUDED_ROUTES)) {
             return;
         }
 
@@ -60,7 +59,7 @@ class TermsAgreedListener implements ListenerAggregateInterface
             return;
         }
 
-        $redirectUrl = $this->urlHelper->fromRoute( self::ROUTE_WELCOME);
+        $redirectUrl = $this->urlHelper->fromRoute(self::ROUTE_WELCOME);
         $response = $e->getResponse();
         $responseHeaders = $response->getHeaders();
 

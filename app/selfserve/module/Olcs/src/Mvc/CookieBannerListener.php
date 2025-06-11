@@ -104,7 +104,7 @@ class CookieBannerListener implements ListenerAggregateInterface
         string $routeName,
         array $params,
         array $queryParams,
-                 $setCookieHeader
+        $setCookieHeader
     ): void {
         $redirectUrl = $this->urlHelper->fromRoute(
             $routeName,
