@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "VOL Application",
   "license": "MIT",
+  "engines": {
+    "node": "~22.16.0"
+  },
+  "engineStrict": true,
   "devDependencies": {
     "@commitlint/cli": "^19.0.3",
     "@commitlint/config-conventional": "^19.0.3",
