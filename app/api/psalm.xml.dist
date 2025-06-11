@@ -22,7 +22,7 @@
   <issueHandlers>
     <UndefinedConstant>
       <errorLevel type="suppress">
-        <referencedConstant name="Redis::SERIALIZER_IGBINARY" />
+        <file name="config/autoload/config.global.php" />
       </errorLevel>
     </UndefinedConstant>
   </issueHandlers>
