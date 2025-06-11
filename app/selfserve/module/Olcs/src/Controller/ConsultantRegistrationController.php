@@ -27,17 +27,16 @@ use Olcs\Session\ConsultantRegistration;
 class ConsultantRegistrationController extends AbstractController
 {
     public function __construct(
-        NiTextTranslation                     $niTextTranslationUtil,
-        AuthorizationService                  $authService,
-        protected FormHelperService           $formHelper,
-        protected ScriptFactory               $scriptFactory,
-        protected TranslationHelperService    $translationHelper,
-        protected UrlHelperService            $urlHelper,
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        protected FormHelperService $formHelper,
+        protected ScriptFactory $scriptFactory,
+        protected TranslationHelperService $translationHelper,
+        protected UrlHelperService $urlHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        protected ConsultantRegistration      $consultantRegistrationSession,
-        protected CreateAccountMapper         $formatDataMapper
-    )
-    {
+        protected ConsultantRegistration $consultantRegistrationSession,
+        protected CreateAccountMapper $formatDataMapper
+    ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -202,8 +201,7 @@ class ConsultantRegistrationController extends AbstractController
     private function registerConsultantAndOperator($consultantFormData)
     {
         $operatorData = $this->consultantRegistrationSession->getOperatorDetails();
-        if (!empty($this->consultantRegistrationSession->getExistingLicence()) && $this->consultantRegistrationSession->getOperatorAdmin())
-        {
+        if (!empty($this->consultantRegistrationSession->getExistingLicence()) && $this->consultantRegistrationSession->getOperatorAdmin()) {
             $operatorData['fields']['licenceNumber'] = $this->consultantRegistrationSession->getExistingLicence();
             $operatorData['fields']['isLicenceHolder'] = 'Y';
         }

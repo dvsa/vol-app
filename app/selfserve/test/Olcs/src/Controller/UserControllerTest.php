@@ -446,7 +446,6 @@ class UserControllerTest extends MockeryTestCase
         ]);
         $this->sut->shouldReceive('handleQuery')->with(m::type(TransferQry\FeatureToggle\IsEnabled::class))->andReturn($mockIsEnabledResponse);
 
-
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));

@@ -7,7 +7,7 @@ use Olcs\Session\ConsultantRegistration;
 
 class UniqueConsultantDetails extends AbstractValidator
 {
-    const NOT_UNIQUE = 'notUnique';
+    public const NOT_UNIQUE = 'notUnique';
 
     protected $messageTemplates = [
         self::NOT_UNIQUE => '%value% was used for the operator administrator account. You must use a different username and email for your consultant account.'

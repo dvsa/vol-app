@@ -8,9 +8,9 @@ use Laminas\View\Model\ViewModel;
 use PHPUnit\Framework\TestCase;
 use Olcs\Controller\ConsultantRegistrationController;
 use Mockery as m;
+
 class ConsultantRegistrationControllerTest extends TestCase
 {
-
     protected $sut;
 
     public function setUp(): void
@@ -20,7 +20,7 @@ class ConsultantRegistrationControllerTest extends TestCase
     }
 
 
-    public function testContactYourAdministratorAction() : void
+    public function testContactYourAdministratorAction(): void
     {
         // Arrange
         $expectedViewName = 'olcs/user-registration/contact-your-administrato';
@@ -33,8 +33,5 @@ class ConsultantRegistrationControllerTest extends TestCase
         $this->assertInstanceOf(ViewModel::class, $result);
         $this->assertEquals($expectedViewName, $result->getTemplate());
         $this->assertEmpty($result->getVariable('pageTitle'));
-
     }
-
-
 }

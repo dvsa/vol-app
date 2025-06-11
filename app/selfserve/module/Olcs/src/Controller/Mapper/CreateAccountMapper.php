@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Mapper;
 
 class CreateAccountMapper

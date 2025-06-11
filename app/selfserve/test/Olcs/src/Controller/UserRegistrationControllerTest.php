@@ -90,8 +90,6 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-
-
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
@@ -619,7 +617,6 @@ class UserRegistrationControllerTest extends TestCase
 
         $this->mockFormatSaveDataMapper->shouldReceive('formatSaveData')->once()->with($formattedPostData)->andReturn($formattedPostData);
         $this->mockFormatSaveDataMapper->shouldReceive('formatPostData')->once()->with($postData)->andReturn($formattedPostData);
-
 
         $view = $this->sut->addAction();
 
