@@ -14,12 +14,12 @@ You can use the pre-configured devcontainers in the `.devcontainer` directory to
 
 You will need:
 
--   [Git](https://git-scm.com/) `git --version`
--   [Docker with Compose](https://docs.docker.com/manuals/) `docker -v`
--   [Node.js 20](https://nodejs.org/en/) `node -v`
--   [PHP 8.2](https://www.php.net/) `php -v`
--   [Composer](https://getcomposer.org/) `composer -V`
--   [AWS CLI](https://aws.amazon.com/cli/) `aws --version`
+- [Git](https://git-scm.com/) `git --version`
+- [Docker with Compose](https://docs.docker.com/manuals/) `docker -v`
+- [Node.js ~22.16.0](https://nodejs.org/en/) `node -v`
+- [PHP 8.2](https://www.php.net/) `php -v`
+- [Composer](https://getcomposer.org/) `composer -V`
+- [AWS CLI](https://aws.amazon.com/cli/) `aws --version`
 
 ## Getting started
 
@@ -48,6 +48,12 @@ You will need:
     :::
 
 ## Running the app
+
+:::tip
+
+If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to automatically switch to Node.js 22.16.0 as specified in `.nvmrc`.
+
+:::
 
 1. Install the NPM dependencies in the root directory
 
@@ -103,8 +109,8 @@ All done!
 
 You can visit the application in your browser:
 
--   http://iuweb.local.olcs.dev-dvsacloud.uk
--   http://ssweb.local.olcs.dev-dvsacloud.uk
+- http://iuweb.local.olcs.dev-dvsacloud.uk
+- http://ssweb.local.olcs.dev-dvsacloud.uk
 
 Any email sent by the app can be viewed via: [Mailpit](http://mailpit.local.olcs.dev-dvsacloud.uk)
 

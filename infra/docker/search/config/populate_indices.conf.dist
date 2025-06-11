@@ -18,6 +18,9 @@ filter {
             "_id" => "doc_id"
         }
     }
+    ruby {
+        code => "event.set('@timestamp', LogStash::Timestamp.new(::Time.now.utc))"
+    }
 }
 
 output {
@@ -27,7 +30,7 @@ output {
             type => "aws_iam" 
             region => "eu-west-1"
         }
-        index => "<INDEX_NAME>-%{+yyyy.MM.dd}"
+        index => "<INDEX_NAME>_v<INDEX_VERSION>"
         document_id => "%{doc_id}"
         template => "<BASEDIR>/templates/<INDEX_NAME>.json"
         manage_template => true

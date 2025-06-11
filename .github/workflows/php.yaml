@@ -122,23 +122,17 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run PHPStan
-        uses: php-actions/phpstan@v3
-        with:
-          path: .
-          configuration: phpstan.neon
-          memory_limit: 256M
+        run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1048M
 
       - name: Run PHP CodeSniffer
-        uses: php-actions/phpcs@v1
-        with:
-          path: .
-          standard: PSR12
+        run: vendor/bin/phpcs --standard=PSR12 .
 
       - name: Run Psalm
         uses: docker://ghcr.io/psalm/psalm-github-actions
         with:
           security_analysis: true
           composer_require_dev: false
+          relative_dir: app/${{ inputs.project }}
 
   package:
     name: Package
