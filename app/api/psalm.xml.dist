@@ -18,4 +18,12 @@
       <file name=".phpstorm.meta.php" />
     </ignoreFiles>
   </projectFiles>
+  
+  <issueHandlers>
+    <UndefinedConstant>
+      <errorLevel type="suppress">
+        <referencedConstant name="Redis::SERIALIZER_IGBINARY" />
+      </errorLevel>
+    </UndefinedConstant>
+  </issueHandlers>
 </psalm>
