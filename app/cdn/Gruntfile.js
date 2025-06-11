@@ -172,38 +172,6 @@ var sass = require("sass");
        * https://github.com/gruntjs/grunt-contrib-copy
        */
       copy: {
-        prototype: {
-          files: [
-            {
-              expand: true,
-              cwd: "public/styleguides/selfserve/" + target + "/",
-              src: ["**/*.html"],
-              dest: "../prototypes/" + target + "/",
-            },
-            {
-              expand: true,
-              cwd: "public/js/",
-              src: ["selfserve.js", target + ".js"],
-              dest: "../prototypes/" + target + "/js/",
-            },
-            {
-              expand: true,
-              cwd: "public/styles/",
-              src: ["selfserve.css"],
-              dest: "../prototypes/" + target + "/styles/",
-            },
-            {
-              cwd: "public/images/",
-              src: ["**/*.{png,jpg,gif,svg,ico}"],
-              dest: "../prototypes/" + target + "/images/",
-            },
-            {
-              cwd: "public/fonts/",
-              src: ["**/*"],
-              dest: "../prototypes/" + target + "/fonts/",
-            },
-          ],
-        },
         images: {
           files: [
             {
@@ -249,17 +217,6 @@ var sass = require("sass");
       clean: {
         styleguide: {
           src: "public/styleguides/**/*.html",
-        },
-        prototype: {
-          options: {
-            force: true,
-          },
-          src: [
-            "../prototypes/<%= globalConfig.prototypeName %>/**/*.html",
-            "../prototypes/<%= globalConfig.prototypeName %>/**/*.css",
-            "../prototypes/<%= globalConfig.prototypeName %>/**/*.js",
-            "../prototypes/<%= globalConfig.prototypeName %>/**/*.png",
-          ],
         },
         images: {
           src: pubImages,
@@ -509,10 +466,6 @@ var sass = require("sass");
     grunt.registerTask("serve", ["compile:local", "browserSync", "watch"]);
 
     grunt.registerTask("images", ["clean:images", "copy:images", "svg_sprite"]);
-
-    // Create a prototype
-    // $ grunt prototype --target=prototypeName
-    grunt.registerTask("prototype", ["clean:prototype:" + target, "copy:prototype:" + target]);
 
     /**
      * Define a single Jenkins build task here for any relevant environments
