@@ -79,7 +79,7 @@ final class DeleteDocument extends AbstractCommandHandler implements AuthAwareIn
         // If unlink flag was set, and the document was created by the current user, unlink the licence to
         // keep this deletion from showing on the change history page for the licence vol-5967
         // Needed due to the mysql trigger that updates the change history table
-        if(
+        if (
             $command->getUnlinkLicence() === true
             && $document->getCreatedBy()->getId() === $this->getCurrentUser()->getId()
         ) {

@@ -204,7 +204,7 @@ class MsiResponse
                     ],
                 ],
                 1 => [
-                    'name'=> 'PenaltiesImposed',
+                    'name' => 'PenaltiesImposed',
                     'nodes' => $this->formatPenalties($cases->getSeriousInfringements()),
                 ]
             ]
