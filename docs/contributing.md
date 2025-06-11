@@ -48,6 +48,26 @@ Source: https://github.com/squizlabs/PHP_CodeSniffer
 How to install: _automatically installed by Composer_  
 How to run: `composer run-script phpcs`
 
+#### Local Static Analysis Tools
+
+Run the same static analysis tools used in CI locally before committing:
+
+:::info
+Requires Docker Compose stack to be running (`docker compose up -d`)
+:::
+
+```bash
+# Interactive mode - choose app and tool
+npm run lint
+
+# Run specific tools/apps
+npm run lint:api              # All tools on API
+npm run lint:phpstan          # PHPStan on all apps
+npm run phpcbf:selfserve      # Fix PHPCS issues in selfserve
+```
+
+Tools included: PHPStan, PHPCS, Psalm, and PHPCBF (auto-fixer).
+
 ### ![](./assets/languages/docker.svg) Docker
 
 #### Hadolint
