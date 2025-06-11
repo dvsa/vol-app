@@ -125,7 +125,7 @@ jobs:
         run: vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=1048M
 
       - name: Run PHP CodeSniffer
-        run: vendor/bin/phpcs --standard=PSR12 .
+        run: vendor/bin/phpcs --standard=phpcs.xml.dist
 
       - name: Run Psalm
         uses: docker://ghcr.io/psalm/psalm-github-actions
