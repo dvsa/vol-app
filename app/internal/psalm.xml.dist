@@ -15,4 +15,12 @@
         <directory name="vendor" />
     </ignoreFiles>
   </projectFiles>
+  
+  <issueHandlers>
+    <UndefinedConstant>
+      <errorLevel type="suppress">
+        <file name="config/autoload/config.global.php" />
+      </errorLevel>
+    </UndefinedConstant>
+  </issueHandlers>
 </psalm>
