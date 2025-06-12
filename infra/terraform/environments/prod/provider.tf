@@ -16,7 +16,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = "prod"
+      Environment = "prep"
       Repository  = "https://github.com/dvsa/vol-app"
     }
   }
