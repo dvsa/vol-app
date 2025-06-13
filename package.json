@@ -24,6 +24,17 @@
   ],
   "scripts": {
     "prepare": "husky",
-    "refresh": "npm run start --workspace @vol-app/local-refresh"
+    "refresh": "npm run start --workspace @vol-app/local-refresh",
+    "lint": "npm run start --workspace @vol-app/local-static-analysis",
+    "lint:api": "npm run start --workspace @vol-app/local-static-analysis -- --app=api",
+    "lint:selfserve": "npm run start --workspace @vol-app/local-static-analysis -- --app=selfserve",
+    "lint:internal": "npm run start --workspace @vol-app/local-static-analysis -- --app=internal",
+    "lint:phpstan": "npm run start --workspace @vol-app/local-static-analysis -- --tool=phpstan",
+    "lint:phpcs": "npm run start --workspace @vol-app/local-static-analysis -- --tool=phpcs",
+    "lint:psalm": "npm run start --workspace @vol-app/local-static-analysis -- --tool=psalm",
+    "phpcbf": "npm run start --workspace @vol-app/local-static-analysis -- --tool=phpcbf",
+    "phpcbf:api": "npm run start --workspace @vol-app/local-static-analysis -- --app=api --tool=phpcbf",
+    "phpcbf:selfserve": "npm run start --workspace @vol-app/local-static-analysis -- --app=selfserve --tool=phpcbf",
+    "phpcbf:internal": "npm run start --workspace @vol-app/local-static-analysis -- --app=internal --tool=phpcbf"
   }
 }

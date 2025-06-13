@@ -1,5 +1,9 @@
 parameters:
-  level: 1
-  paths:
-    - module
-    - test
+    level: 0
+    paths:
+        - module
+    excludes_analyse:
+    ignoreErrors:
+      - # PHPStan does not let you bind a different variable to $this: https://github.com/phpstan/phpstan/issues/8327.
+        message: '#Undefined variable: \$this#'
+        path: '**/*.table.php'

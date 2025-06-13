@@ -103,6 +103,12 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
     npm run refresh
     ```
 
+1. (Optional) Run static analysis tools to check code quality
+
+    ```bash
+    npm run lint
+    ```
+
 :::success
 
 All done!

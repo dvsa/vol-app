@@ -499,7 +499,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         if (!isset($ebsrData['lineNames']) || !is_array($ebsrData['lineNames']) || empty($ebsrData['lineNames'])) {
             throw new Exception\ValidationException(['lineNames' => 'At least one LineName is required in the TransXChange file']);
         }
-        
+
         $ebsrData['serviceNo'] = $ebsrData['lineNames'][0];
         $ebsrData['otherServiceNumbers'] = array_slice($ebsrData['lineNames'], 1) ?: [];
         unset($ebsrData['lineNames']);
