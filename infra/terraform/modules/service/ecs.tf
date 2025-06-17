@@ -108,14 +108,14 @@ module "ecs_service" {
       memory    = try(var.services[each.key].task_memory_limit, var.services[each.key].memory)
       essential = true
       image     = "${var.services[each.key].repository}:${var.services[each.key].version}"
-      port_mappings = [
+      port_mappings = try(var.services[each.key].listener_rule_enable, true) ? [
         {
           name          = "http"
           hostPort      = 8080
           containerPort = 8080
           protocol      = "tcp"
         }
-      ]
+      ] : []
 
       # Have to explicitly set the user to null to avoid the default user being set to root.
       user = null
@@ -149,6 +149,15 @@ module "ecs_service" {
       readonly_root_filesystem = false
 
       memory_reservation = 100
+
+      # Add health check specifically for queue-processor
+      healthcheck = each.key == "queue-processor" ? {
+        command     = ["CMD-SHELL", "/usr/local/bin/health-check.sh"]
+        interval    = 30
+        timeout     = 10
+        retries     = 3
+        startPeriod = 10
+      } : null
     }
   }
 

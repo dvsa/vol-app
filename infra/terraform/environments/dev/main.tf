@@ -1,5 +1,5 @@
 locals {
-  service_names = ["api", "selfserve", "internal", "cli"]
+  service_names = ["api", "selfserve", "internal", "cli", "queue-processor"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
@@ -116,7 +116,7 @@ data "aws_subnets" "this" {
 }
 
 data "aws_secretsmanager_secret" "this" {
-  for_each = toset(setsubtract(local.service_names, ["cli"]))
+  for_each = toset(setsubtract(local.service_names, ["cli", "queue-processor"]))
 
   name = "DEVAPPDEV-BASE-SM-APPLICATION-${upper(each.key)}"
 }
@@ -293,6 +293,25 @@ module "service" {
 
       security_group_ids = [
         data.aws_security_group.search.id
+      ]
+    }
+    "queue-processor" = {
+      cpu    = 1024
+      memory = 2048
+
+      enable_autoscaling_policies = false
+
+      version    = var.queue_processor_image_tag
+      repository = data.aws_ecr_repository.this["queue-processor"].repository_url
+
+      listener_rule_enable = false
+
+      task_iam_role_statements = local.task_iam_role_statements
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["API"].id
       ]
     }
   }
