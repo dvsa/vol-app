@@ -16,7 +16,7 @@ RUN apk add --no-cache icu-dev libzip-dev \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
 
-# Add extra scirpts for batch jobs
+# Add extra scripts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
 
 # Add queue processor health check script
