@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "eff7790bda73090e52694a67e78cc23f",
+  "content-hash": "adea44b755d0d76e3ae5816a82dd276d",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4356,16 +4356,16 @@
     },
     {
       "name": "olcs/olcs-utils",
-      "version": "v6.2.0",
+      "version": "v6.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-utils.git",
-        "reference": "a77275adfc582aceec7bb6798dc168ac99962c54"
+        "reference": "f327335495386d5591cb10221f86b7147e520cf6"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/a77275adfc582aceec7bb6798dc168ac99962c54",
-        "reference": "a77275adfc582aceec7bb6798dc168ac99962c54",
+        "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/f327335495386d5591cb10221f86b7147e520cf6",
+        "reference": "f327335495386d5591cb10221f86b7147e520cf6",
         "shasum": ""
       },
       "require": {
@@ -4376,7 +4376,7 @@
         "laminas/laminas-mvc-i18n": "^1.4",
         "laminas/laminas-servicemanager": "^3.3",
         "laminas/laminas-view": "^2.11",
-        "php": "^7.4 || ^8.0",
+        "php": "^8.2",
         "psr/container": "^1.1|^2.0"
       },
       "require-dev": {
@@ -4400,9 +4400,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Utils",
       "support": {
-        "source": "https://github.com/dvsa/olcs-utils/tree/v6.2.0"
+        "source": "https://github.com/dvsa/olcs-utils/tree/v6.3.0"
       },
-      "time": "2024-03-26T17:03:56+00:00"
+      "time": "2025-06-18T18:22:56+00:00"
     },
     {
       "name": "psr/cache",
@@ -7853,14 +7853,14 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": [],
+  "stability-flags": {},
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
     "php": "~8.2.0",
     "ext-redis": "*"
   },
-  "platform-dev": [],
+  "platform-dev": {},
   "platform-overrides": {
     "ext-redis": "4.3"
   },
