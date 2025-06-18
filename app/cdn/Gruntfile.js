@@ -45,12 +45,14 @@ var sass = require("sass");
         "assets/_js/init/common.js",
         "assets/_js/init/" + theme + ".js",
       ];
+
       if (theme === "internal") {
         files.push("node_modules/pace-progress/pace.min.js");
       }
       if (theme === "selfserve") {
         files.push("assets/vendor/custom-modernizr.js", "assets/vendor/cookie-manager.js");
       }
+
       return files;
     };
 
@@ -108,6 +110,7 @@ var sass = require("sass");
           },
         },
       },
+
       /**
        * Sass
        * https://github.com/sindresorhus/grunt-sass
@@ -182,9 +185,30 @@ var sass = require("sass");
             },
             {
               expand: true,
-              cwd: "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images/",
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/images/",
               src: ["**/*.{png,jpg,gif,svg,ico}"],
               dest: "public/assets/images/",
+            },
+            // Start of refresh assets
+            // https://github.com/alphagov/govuk-frontend/releases/tag/v5.10.0
+            //
+            // Copy govuk-frontend refresh assets, preserve /refresh/ prefix in destination to force cache busting
+            // when we use the new refreshed assets.
+            //
+            // Documentation states that:
+            // If you copy the font and image files into your application, you’ll need to copy the
+            // dist/govuk/assets/rebrand folder to <YOUR-APP>/assets/rebrand. If you use an automated task to copy
+            // the files, you may need to update your task to automatically copy our new folder.
+            //
+            // Future updates when /refresh is removed when it becomes the default, we revert/remove this.
+            // Significant time should have passed to force another cache bust.
+            //
+            // Retain the previous/current assets (non-rebrand) for backwards compatibility for VOL-Internal or Missed Assets on SS.
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images/",
+              src: ["**/*.{png,jpg,gif,svg,ico}"],
+              dest: "public/assets/rebrand/images/",
             },
           ],
         },
@@ -203,8 +227,18 @@ var sass = require("sass");
             {
               expand: true,
               cwd: "node_modules/govuk-frontend/dist/govuk/",
-              src: ["govuk-frontend.min.js"],
+              src: ["govuk-frontend.min.js", "govuk-frontend.min.js.map"],
               dest: "public/js/",
+            },
+          ],
+        },
+        manifests: {
+          files: [
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/",
+              src: ["**/manifest.json"],
+              dest: "public/assets/",
             },
           ],
         },
@@ -215,11 +249,23 @@ var sass = require("sass");
        * https://github.com/gruntjs/grunt-contrib-clean
        */
       clean: {
+        assets: {
+          src: "public/assets",
+        },
+        manifests: {
+          src: "public/assets/**/manifest.json",
+        },
         styleguide: {
           src: "public/styleguides/**/*.html",
         },
         images: {
-          src: pubImages,
+          src: [pubImages],
+        },
+        stylesheets: {
+          src: "public/styles",
+        },
+        scripts: {
+          src: "public/js",
         },
       },
 
@@ -435,6 +481,7 @@ var sass = require("sass");
     // Function to compile the app
     var compile = function (environment) {
       return [
+        "pre-clean", // Clean up any previous builds
         "babel",
         "images",
         "sass:" + environment,
@@ -442,8 +489,18 @@ var sass = require("sass");
         "uglify:" + environment,
         "copyfonts",
         "copy:govukJs",
+        "copy:manifests",
       ];
     };
+
+    grunt.registerTask("pre-clean", [
+      "clean:styleguide",
+      "clean:assets",
+      "clean:manifests",
+      "clean:images",
+      "clean:stylesheets",
+      "clean:scripts",
+    ]);
 
     grunt.registerTask("copyfonts", ["copy:fonts"]);
     // Compile the app using targeted environment
@@ -465,7 +522,7 @@ var sass = require("sass");
     // Serve the app for a development environment
     grunt.registerTask("serve", ["compile:local", "browserSync", "watch"]);
 
-    grunt.registerTask("images", ["clean:images", "copy:images", "svg_sprite"]);
+    grunt.registerTask("images", ["copy:images", "svg_sprite"]);
 
     /**
      * Define a single Jenkins build task here for any relevant environments
