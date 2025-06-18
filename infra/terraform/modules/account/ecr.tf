@@ -1,5 +1,5 @@
 locals {
-  repositories = var.create_ecr_resources ? ["api", "cli", "selfserve", "internal", "liquibase", "search", "queue-processor"] : []
+  repositories = var.create_ecr_resources ? ["api", "cli", "selfserve", "internal", "liquibase", "search"] : []
 }
 
 module "ecr" {

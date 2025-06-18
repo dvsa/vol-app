@@ -66,13 +66,12 @@ jobs:
       # Assets
       should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_modified == 'true' || null }}
       # Docker
-      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-queue-processor-docker-files.outputs.any_modified == 'true' || null}}
+      should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || null}}
       should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-search-docker: ${{ needs.release-please.outputs.release_created || steps.changed-search-docker-files.outputs.any_modified == 'true' || steps.changed-search-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-queue-processor-docker: ${{ needs.release-please.outputs.release_created || steps.changed-queue-processor-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       # Terraform account
       should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
@@ -127,11 +126,6 @@ jobs:
           files: |
             infra/docker/search/**
       - uses: tj-actions/changed-files@v45
-        id: changed-queue-processor-docker-files
-        with:
-          files: |
-            infra/docker/queue-processor/**
-      - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
         with:
           files: |
@@ -183,7 +177,6 @@ jobs:
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
       search: ${{ steps.search-version.outputs.version }}
-      queue-processor: ${{ steps.queue-processor-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -212,10 +205,6 @@ jobs:
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: infra/docker/search
-      - id: queue-processor-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
-        with:
-          project-path: app/api infra/docker/queue-processor
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
@@ -225,7 +214,6 @@ jobs:
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Search**: \`${{ steps.search-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Queue Processor**: \`${{ steps.queue-processor-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   cdn-nonprod:
     name: CDN
@@ -290,19 +278,17 @@ jobs:
           - selfserve
           - internal
           - search
-          - queue-processor
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-search-docker && 'ignored' || 'search' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-and-push-queue-processor-docker && 'ignored' || 'queue-processor' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
-      app-artefact-name: ${{ (matrix.project == 'cli' || matrix.project == 'queue-processor') && 'api' || matrix.project }}
+      app-artefact-name: ${{ matrix.project == 'cli' && 'api' || matrix.project }}
       push: true
     permissions:
       contents: read
@@ -350,7 +336,7 @@ jobs:
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
       search-image-tag: ${{ needs.get-version.outputs.search }}
-      queue-processor-image-tag: ${{ needs.get-version.outputs.queue-processor }}
+      queue-processor-image-tag: ${{ needs.get-version.outputs.cli }}
       apply: true
     permissions:
       contents: read

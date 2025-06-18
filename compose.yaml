@@ -45,9 +45,17 @@ services:
 
   queue-processor:
     build:
-      context: .
-      dockerfile: infra/docker/queue-processor/Dockerfile
+      context: infra/docker/cli
       target: development
+    entrypoint:
+      [
+        "php",
+        "-d",
+        "memory_limit=2048M",
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php",
+        "queue:scheduler",
+      ]
     volumes:
       - ./app/api:/var/www/html
     environment:

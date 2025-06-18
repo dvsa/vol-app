@@ -120,6 +120,14 @@ module "ecs_service" {
       # Have to explicitly set the user to null to avoid the default user being set to root.
       user = null
 
+      # Override entrypoint for queue-processor to use scheduler
+      entrypoint = each.key == "queue-processor" ? [
+        "php", "-d", "memory_limit=2048M",
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php",
+        "queue:scheduler"
+      ] : null
+
       environment = concat(
         [
           {

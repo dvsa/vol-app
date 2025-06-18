@@ -1,5 +1,5 @@
 locals {
-  service_names = ["api", "selfserve", "internal", "cli", "queue-processor"]
+  service_names = ["api", "selfserve", "internal", "cli"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
@@ -302,7 +302,7 @@ module "service" {
       enable_autoscaling_policies = false
 
       version    = var.queue_processor_image_tag
-      repository = data.aws_ecr_repository.this["queue-processor"].repository_url
+      repository = data.aws_ecr_repository.this["cli"].repository_url
 
       listener_rule_enable = false
 

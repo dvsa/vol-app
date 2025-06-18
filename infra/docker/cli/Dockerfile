@@ -19,6 +19,9 @@ RUN apk add --no-cache icu-dev libzip-dev \
 # Add extra scirpts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
 
+# Add queue processor health check script
+COPY ./queue-health-check.sh /usr/local/bin/health-check.sh
+
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
 
@@ -42,7 +45,9 @@ RUN chown -R root:www-data /var/www/html \
   # Ensure Laminas binary is executable for CLI jobs.
   && chmod +x /var/www/html/vendor/bin/laminas \
   # Ensure scripts are executable
-  && chmod +x /mnt/data/scripts/*.sh
+  && chmod +x /mnt/data/scripts/*.sh \
+  # Make health check script executable
+  && chmod +x /usr/local/bin/health-check.sh
 
 USER www-data
 
@@ -68,5 +73,9 @@ RUN \
   && echo "xdebug.mode=debug" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.client_host=host.docker.internal" >> ${PHP_INI_DIR}/conf.d/1000-php.ini \
   && echo "xdebug.start_with_request=yes" >> ${PHP_INI_DIR}/conf.d/1000-php.ini
+
+# Add health check script for development too
+COPY ./queue-health-check.sh /usr/local/bin/health-check.sh
+RUN chmod +x /usr/local/bin/health-check.sh
 
 USER www-data
