@@ -1718,7 +1718,6 @@ return [
             ]
         ]
     ],
-    'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'form_service_manager' => [
         'abstract_factories' => [
             LvaFormService\AbstractLvaFormServiceFactory::class,
