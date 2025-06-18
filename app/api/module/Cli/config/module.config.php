@@ -176,7 +176,9 @@ return [
         QueueCommands\ProcessInsolvencySQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
-        QueueCommands\SchedulerCommand::class => $commonCommandDeps,
+        QueueCommands\SchedulerCommand::class => array_merge($commonCommandDeps, [
+            'config',
+        ]),
     ],
     'cache' => [
         'adapter' => [

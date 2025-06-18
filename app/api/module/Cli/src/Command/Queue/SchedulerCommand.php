@@ -10,87 +10,30 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SchedulerCommand extends AbstractOlcsCommand
 {
     protected static $defaultName = 'queue:scheduler';
-
-    private array $schedules = [
-        [
-            'name' => 'process_queue_general',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => [
-                '--exclude', 'que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate'
-            ]
-        ],
-        [
-            'name' => 'process_queue_community_licences',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_create_com_lic']
-        ],
-        [
-            'name' => 'process_queue_disc_generation',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing']
-        ],
-        [
-            'name' => 'process_queue_print',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_print']
-        ],
-        [
-            'name' => 'process_queue_permit_generation',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_permit_generate']
-        ],
-        [
-            'name' => 'process_queue_ecmt_accept',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_accept_ecmt_scoring']
-        ],
-        [
-            'name' => 'process_queue_irhp_allocate',
-            'interval' => 90,
-            'command' => 'queue:process-queue',
-            'args' => ['--type', 'que_typ_run_ecmt_scoring']
-        ],
-        [
-            'name' => 'transxchange_consumer',
-            'interval' => 90,
-            'command' => 'queue:transxchange-consumer',
-            'local_enabled' => false,
-            'args' => []
-        ],
-        [
-            'name' => 'process_company_profile',
-            'interval' => 5,
-            'command' => 'queue:process-company-profile',
-            'local_enabled' => false,
-            'args' => []
-        ]
-    ];
-
+    
     private array $runningProcesses = [];
     private bool $shutdown = false;
-
-    public function __construct(CommandHandlerManager $commandHandlerManager)
-    {
+    private array $activeSchedules = [];
+    
+    public function __construct(
+        CommandHandlerManager $commandHandlerManager,
+        private array $config
+    ) {
         parent::__construct($commandHandlerManager);
     }
-
+    
     protected function configure(): void
     {
         $this->setDescription('Continuous queue processor scheduler');
     }
-
+    
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->output = $output;
 
-        $activeSchedules = $this->getActiveSchedules();
-        $this->output->writeln('<info>Starting queue scheduler with ' . count($activeSchedules) . ' schedules</info>');
+        // Get schedules from config and filter based on environment
+        $this->activeSchedules = $this->getActiveSchedules();
+        $this->output->writeln('<info>Starting queue scheduler with ' . count($this->activeSchedules) . ' schedules</info>');
 
         // Register signal handlers for graceful shutdown
         if (function_exists('pcntl_signal')) {
@@ -99,7 +42,7 @@ class SchedulerCommand extends AbstractOlcsCommand
         }
 
         $nextRuns = [];
-        foreach ($activeSchedules as $index => $schedule) {
+        foreach ($this->activeSchedules as $index => $schedule) {
             $nextRuns[$index] = $this->calculateNextRun($schedule['interval']);
             $this->output->writeln(sprintf(
                 '  - %s: every %d seconds (next: %s)',
@@ -116,7 +59,7 @@ class SchedulerCommand extends AbstractOlcsCommand
 
             $now = new \DateTime();
 
-            foreach ($activeSchedules as $index => $schedule) {
+            foreach ($this->activeSchedules as $index => $schedule) {
                 if ($now >= $nextRuns[$index]) {
                     $this->runScheduledJob($schedule);
                     $nextRuns[$index] = $this->calculateNextRun($schedule['interval']);
@@ -256,7 +199,7 @@ class SchedulerCommand extends AbstractOlcsCommand
         $health = [
             'timestamp' => time(),
             'running_jobs' => array_keys($this->runningProcesses),
-            'scheduled_jobs' => count($this->schedules),
+            'scheduled_jobs' => count($this->activeSchedules),
             'status' => 'healthy'
         ];
 
@@ -265,16 +208,19 @@ class SchedulerCommand extends AbstractOlcsCommand
 
     private function getActiveSchedules(): array
     {
+        $scheduleConfig = $this->config['queue_scheduler']['schedules'] ?? [];
         $environment = getenv('ENVIRONMENT_NAME') ?: 'local';
         $isLocal = strtolower($environment) === 'local';
 
         $activeSchedules = [];
-        foreach ($this->schedules as $schedule) {
+        foreach ($scheduleConfig as $name => $schedule) {
+            // Add the schedule name to the config
+            $schedule['name'] = $name;
+            
             // If local_enabled is not set, default to true (backwards compatibility)
             $localEnabled = $schedule['local_enabled'] ?? true;
 
             if ($isLocal && !$localEnabled) {
-                $this->output->writeln("<comment>Skipping '{$schedule['name']}' (disabled for local environment)</comment>");
                 continue;
             }
 
