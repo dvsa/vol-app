@@ -7,6 +7,8 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\EditorJsConversionTrait;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Submission\SubmissionAction;
@@ -18,8 +20,10 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 /**
  * Create SubmissionAction
  */
-final class CreateSubmissionAction extends AbstractCommandHandler
+final class CreateSubmissionAction extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
+    use EditorJsConversionTrait;
+    
     protected $repoServiceName = 'SubmissionAction';
 
     public function handleCommand(CommandInterface $command)
@@ -69,11 +73,13 @@ final class CreateSubmissionAction extends AbstractCommandHandler
             $command->getActionTypes()
         );
 
+        $commentText = $this->convertCommentForStorage($command->getComment());
+        
         $submissionAction = new SubmissionAction(
             $this->getRepo()->getReference(Submission::class, $command->getSubmission()),
             $command->getIsDecision(),
             $actionTypes,
-            $command->getComment()
+            $commentText
         );
 
         if ($command->getReasons() !== null) {

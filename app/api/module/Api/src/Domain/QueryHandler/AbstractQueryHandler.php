@@ -284,6 +284,7 @@ abstract class AbstractQueryHandler implements QueryHandlerInterface, FactoryInt
             $translator = $mainServiceLocator->get('translator');
             $this->setTranslator($translator);
         }
+
     }
 
     /**

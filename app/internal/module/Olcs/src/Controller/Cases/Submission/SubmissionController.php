@@ -47,11 +47,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     protected $sectionId;
 
-    /**
-     * @var array
-     */
-    protected $scriptFiles = ['tinymce/jquery.tinymce.min.js'];
-
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Address\Service\AddressServiceAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
 use Dvsa\Olcs\Api\Domain\Command\Cache\ClearForLicence;
 use Dvsa\Olcs\Api\Domain\Command\Cache\ClearForOrganisation;
 use Dvsa\Olcs\Api\Domain\Command\Cache\Generate;
@@ -229,6 +230,11 @@ abstract class AbstractCommandHandler implements CommandHandlerInterface, Factor
         if ($this instanceof SlaCalculatorAwareInterface) {
             $slaCalculator = $mainServiceLocator->get(SlaCalculatorInterface::class);
             $this->setSlaCalculator($slaCalculator);
+        }
+
+        if ($this instanceof EditorJsConverterAwareInterface) {
+            $converterService = $mainServiceLocator->get(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class);
+            $this->setConverterService($converterService);
         }
     }
 

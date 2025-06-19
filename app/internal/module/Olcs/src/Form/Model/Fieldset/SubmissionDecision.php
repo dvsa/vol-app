@@ -38,7 +38,7 @@ class SubmissionDecision extends Base
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
+     * @Form\Attributes({"id":"","class":"extra-long","name":"comment","required":true})
      * @Form\Options({
      *     "label": "Decision reason",
      *     "label_attributes": {
@@ -46,10 +46,8 @@ class SubmissionDecision extends Base
      *     },
      *     "column-size": "",
      * })
-     * @Form\Type("TextArea")
+     * @Form\Type("EditorJs")
      * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Filter("htmlpurifier")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5})
      */
     public $comment = null;
 
