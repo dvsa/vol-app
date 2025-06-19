@@ -53,9 +53,12 @@ return [
         ]
     ],
 
-    // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
-    'asset_path' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%assets_url%' : '/static/public'),
-    
+    'assets' => [
+        // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
+        'base_url' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%assets_url%' : '/static/public'),
+        'cache_busting_strategy' => '%assets_cache_busting_strategy%', // Options: 'none', 'release', 'timestamp'
+    ],
+
     'cookie-manager' => [
         'delete-undefined-cookies' => true,
         'user-preference-cookie-name' => 'cookie_policy',

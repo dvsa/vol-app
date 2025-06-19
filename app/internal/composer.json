@@ -33,7 +33,7 @@
     "olcs/olcs-common": "^7.18.1",
     "olcs/olcs-logging": "^7.2",
     "olcs/olcs-transfer": "^7.12.1",
-    "olcs/olcs-utils": "^6.0.0",
+    "olcs/olcs-utils": "^6.3.0",
     "saeven/zf3-purifier": "^1.1",
     "doctrine/doctrine-module": "^5",
     "laminas/laminas-serializer": "^2.5",

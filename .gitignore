@@ -75,3 +75,6 @@ compose-custom.yaml
 *.tfstate
 *.tfstate.backup
 *.tfstate.lock.info
+
+# Local refresh cache
+packages/local-refresh/.cache/

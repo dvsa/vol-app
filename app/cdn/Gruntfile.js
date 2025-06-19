@@ -1,6 +1,5 @@
-var sass = require('sass');
+var sass = require("sass");
 (function () {
-
   /**
    * Gruntfile.js
    *
@@ -10,12 +9,10 @@ var sass = require('sass');
    * note production uses Yarn
    */
 
-  'use strict';
+  "use strict";
 
   module.exports = function (grunt) {
-
-
-    var path = require('path');
+    var path = require("path");
     /**
      * Global Configuration
      *
@@ -24,62 +21,58 @@ var sass = require('sass');
      * to the 'globalConfig' variable.
      */
 
-      // Set any global grunt configuration
+    // Set any global grunt configuration
     var globalConfig = {};
 
     // Set development environment to determine asset minification
-    var env = grunt.option('env') || 'dev';
+    var env = grunt.option("env") || "dev";
 
     // Setup param to access via command line
-    var target = grunt.option('target');
+    var target = grunt.option("target");
 
     // Set the location for the public images directory
-    var pubImages = 'public/images';
+    var pubImages = "public/images";
 
     // Function to get all scripts for use with a given theme
     var scriptPaths = function (theme) {
       var files = [
-        'node_modules/jquery/dist/jquery.min.js',
-        'node_modules/chosen-npm/public/chosen.jquery.min.js',
-        'assets/_js/vendor/jquery.details.min.js',
-        'assets/_js/vendor/URI.min.js',
-        'assets/_js/components/*.js',
-        'assets/_js/' + theme + '/*.js',
-        'assets/_js/init/common.js',
-        'assets/_js/init/' + theme + '.js',
+        "node_modules/jquery/dist/jquery.min.js",
+        "node_modules/chosen-npm/public/chosen.jquery.min.js",
+        "assets/_js/vendor/jquery.details.min.js",
+        "assets/_js/vendor/URI.min.js",
+        "assets/_js/components/*.js",
+        "assets/_js/" + theme + "/*.js",
+        "assets/_js/init/common.js",
+        "assets/_js/init/" + theme + ".js",
       ];
-      if (theme === 'internal') {
-        files.push(
-          'node_modules/pace-progress/pace.min.js'
-        );
+
+      if (theme === "internal") {
+        files.push("node_modules/pace-progress/pace.min.js");
       }
-      ;
-      if (theme === 'selfserve') {
-        files.push(
-          'assets/vendor/custom-modernizr.js',
-          'assets/vendor/cookie-manager.js'
-        );
+      if (theme === "selfserve") {
+        files.push("assets/vendor/custom-modernizr.js", "assets/vendor/cookie-manager.js");
       }
+
       return files;
     };
 
     // Define the theme stylesheets
     var styles = {
-      'public/styles/print.css': 'assets/_styles/themes/print.scss',
-      'public/styles/selfserve.css': 'assets/_styles/themes/build-selfserve.scss',
-      'public/styles/internal.css': 'assets/_styles/themes/build-internal.scss'
+      "public/styles/print.css": "assets/_styles/themes/print.scss",
+      "public/styles/selfserve.css": "assets/_styles/themes/build-selfserve.scss",
+      "public/styles/internal.css": "assets/_styles/themes/build-internal.scss",
     };
 
     var localStyles = {
-      'public/styles/print.css': 'assets/_styles/themes/print.scss',
-      'public/styles/selfserve.css': 'assets/_styles/themes/selfserve.scss',
-      'public/styles/internal.css': 'assets/_styles/themes/internal.scss'
+      "public/styles/print.css": "assets/_styles/themes/print.scss",
+      "public/styles/selfserve.css": "assets/_styles/themes/selfserve.scss",
+      "public/styles/internal.css": "assets/_styles/themes/internal.scss",
     };
 
     // Define the main JS files for each theme, using the above function
     var scripts = {
-      'public/js/internal.js': scriptPaths('internal'),
-      'public/js/selfserve.js': scriptPaths('selfserve')
+      "public/js/internal.js": scriptPaths("internal"),
+      "public/js/selfserve.js": scriptPaths("selfserve"),
     };
 
     /**
@@ -102,22 +95,22 @@ var sass = require('sass');
      */
 
     grunt.initConfig({
-
       // Set any global configuration
       globalConfig: globalConfig,
 
       babel: {
         options: {
           sourceMap: true,
-          sourceType: 'unambiguous',
-          presets: ['@babel/preset-env']
+          sourceType: "unambiguous",
+          presets: ["@babel/preset-env"],
         },
         dist: {
           files: {
-            'assets/vendor/cookie-manager.js': 'node_modules/@dvsa/cookie-manager/cookie-manager.js'
-          }
-        }
+            "assets/vendor/cookie-manager.js": "node_modules/@dvsa/cookie-manager/cookie-manager.js",
+          },
+        },
       },
+
       /**
        * Sass
        * https://github.com/sindresorhus/grunt-sass
@@ -125,28 +118,28 @@ var sass = require('sass');
       sass: {
         local: {
           options: {
-            outputStyle: 'expanded',
+            outputStyle: "expanded",
             implementation: sass,
-            sourceMap: true
+            sourceMap: true,
           },
-          files: localStyles
+          files: localStyles,
         },
         dev: {
           options: {
-            outputStyle: 'expanded',
+            outputStyle: "expanded",
             implementation: sass,
-            sourceMap: true
+            sourceMap: true,
           },
-          files: styles
+          files: styles,
         },
         prod: {
           options: {
-            outputStyle: 'compressed',
+            outputStyle: "compressed",
             implementation: sass,
-            sourceMap: false
+            sourceMap: false,
           },
-          files: styles
-        }
+          files: styles,
+        },
       },
 
       /**
@@ -155,29 +148,26 @@ var sass = require('sass');
        */
       postcss: {
         options: {
-          processors: [
-            require('autoprefixer')
-          ]
+          processors: [require("autoprefixer")],
         },
         internal: {
           options: {
             map: {
               inline: false,
-              prev: 'public/styles/internal.css.map',
-            }
+              prev: "public/styles/internal.css.map",
+            },
           },
-          src: 'public/styles/internal.css'
-
+          src: "public/styles/internal.css",
         },
         selfserve: {
           options: {
             map: {
               inline: false,
-              prev: 'public/styles/selfserve.css.map',
-            }
+              prev: "public/styles/selfserve.css.map",
+            },
           },
-          src: 'public/styles/selfserve.css'
-        }
+          src: "public/styles/selfserve.css",
+        },
       },
 
       /**
@@ -185,115 +175,128 @@ var sass = require('sass');
        * https://github.com/gruntjs/grunt-contrib-copy
        */
       copy: {
-        prototype: {
-          files: [{
-            expand: true,
-            cwd: 'public/styleguides/selfserve/' + target + '/',
-            src: ['**/*.html'],
-            dest: '../prototypes/' + target + '/'
-          }, {
-            expand: true,
-            cwd: 'public/js/',
-            src: ['selfserve.js', target + '.js'],
-            dest: '../prototypes/' + target + '/js/'
-          }, {
-            expand: true,
-            cwd: 'public/styles/',
-            src: ['selfserve.css'],
-            dest: '../prototypes/' + target + '/styles/'
-          }, {
-            cwd: 'public/images/',
-            src: ['**/*.{png,jpg,gif,svg,ico}'],
-            dest: '../prototypes/' + target + '/images/'
-          }, {
-            cwd: 'public/fonts/',
-            src: ['**/*'],
-            dest: '../prototypes/' + target + '/fonts/'
-          }]
-        },
         images: {
-          files: [{
-            expand: true,
-            cwd: 'assets/_images/',
-            src: ['**/*.{png,jpg,gif,svg,ico}'],
-            dest: 'public/images/'
-          }, {
-            expand: true,
-            cwd: 'node_modules/govuk-frontend/dist/govuk/assets/images/',
-            src: ['**/*.{png,jpg,gif,svg,ico}'],
-            dest: 'public/assets/images/'
-          }]
+          files: [
+            {
+              expand: true,
+              cwd: "assets/_images/",
+              src: ["**/*.{png,jpg,gif,svg,ico}"],
+              dest: "public/images/",
+            },
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/images/",
+              src: ["**/*.{png,jpg,gif,svg,ico}"],
+              dest: "public/assets/images/",
+            },
+            // Start of refresh assets
+            // https://github.com/alphagov/govuk-frontend/releases/tag/v5.10.0
+            //
+            // Copy govuk-frontend refresh assets, preserve /refresh/ prefix in destination to force cache busting
+            // when we use the new refreshed assets.
+            //
+            // Documentation states that:
+            // If you copy the font and image files into your application, you’ll need to copy the
+            // dist/govuk/assets/rebrand folder to <YOUR-APP>/assets/rebrand. If you use an automated task to copy
+            // the files, you may need to update your task to automatically copy our new folder.
+            //
+            // Future updates when /refresh is removed when it becomes the default, we revert/remove this.
+            // Significant time should have passed to force another cache bust.
+            //
+            // Retain the previous/current assets (non-rebrand) for backwards compatibility for VOL-Internal or Missed Assets on SS.
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/rebrand/images/",
+              src: ["**/*.{png,jpg,gif,svg,ico}"],
+              dest: "public/assets/rebrand/images/",
+            },
+          ],
         },
         fonts: {
-          files: [{
-            expand: true,
-            cwd: 'node_modules/govuk-frontend/dist/govuk/assets/fonts/',
-            src: ['**/*.{woff2,woff,eot}'],
-            dest: 'public/assets/fonts/'
-          }]
+          files: [
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/fonts/",
+              src: ["**/*.{woff2,woff,eot}"],
+              dest: "public/assets/fonts/",
+            },
+          ],
         },
         govukJs: {
-          files: [{
-            expand: true,
-            cwd: 'node_modules/govuk-frontend/dist/govuk/',
-            src: ['govuk-frontend.min.js'],
-            dest: 'public/js/'
-          }]
-        }
+          files: [
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/",
+              src: ["govuk-frontend.min.js", "govuk-frontend.min.js.map"],
+              dest: "public/js/",
+            },
+          ],
+        },
+        manifests: {
+          files: [
+            {
+              expand: true,
+              cwd: "node_modules/govuk-frontend/dist/govuk/assets/",
+              src: ["**/manifest.json"],
+              dest: "public/assets/",
+            },
+          ],
+        },
       },
-
 
       /**
        * Clean
        * https://github.com/gruntjs/grunt-contrib-clean
        */
       clean: {
-        styleguide: {
-          src: 'public/styleguides/**/*.html'
+        assets: {
+          src: "public/assets",
         },
-        prototype: {
-          options: {
-            force: true
-          },
-          src: [
-            '../prototypes/<%= globalConfig.prototypeName %>/**/*.html',
-            '../prototypes/<%= globalConfig.prototypeName %>/**/*.css',
-            '../prototypes/<%= globalConfig.prototypeName %>/**/*.js',
-            '../prototypes/<%= globalConfig.prototypeName %>/**/*.png'
-          ]
+        manifests: {
+          src: "public/assets/**/manifest.json",
+        },
+        styleguide: {
+          src: "public/styleguides/**/*.html",
         },
         images: {
-          src: pubImages
-        }
+          src: [pubImages],
+        },
+        stylesheets: {
+          src: "public/styles",
+        },
+        scripts: {
+          src: "public/js",
+        },
       },
 
       svg_sprite: {
         dist: {
           // Target basics
           expand: true,
-          cwd: 'assets/_images/svg',
-          src: ['**/*.svg'],
-          transform: ['svgo'],
-          dest: 'public/images/svg',
+          cwd: "assets/_images/svg",
+          src: ["**/*.svg"],
+          transform: ["svgo"],
+          dest: "public/images/svg",
           // Target options
           options: {
             mode: {
-              css: { // Activate the «css» mode
-                'dest': '../../../public/styles',
-                'sprite': '../images/svg/icon-sprite.svg',
-                'bust': true,
-                'prefix': '.',
-                'dimensions': true,
-                'layout': 'vertical',
-                'render': {
-                  'scss': {
-                    'dest': path.resolve() + '/assets/_styles/core/icon-sprite.scss'
-                  }
+              css: {
+                // Activate the «css» mode
+                dest: "../../../public/styles",
+                sprite: "../images/svg/icon-sprite.svg",
+                bust: true,
+                prefix: ".",
+                dimensions: true,
+                layout: "vertical",
+                render: {
+                  scss: {
+                    dest: path.resolve() + "/assets/_styles/core/icon-sprite.scss",
+                  },
                 },
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
 
       /**
@@ -302,7 +305,7 @@ var sass = require('sass');
        */
       browserSync: {
         bsFiles: {
-          src: ['public/**/*.css', 'public/**/*.html']
+          src: ["public/**/*.css", "public/**/*.html"],
         },
         options: {
           port: 7001,
@@ -312,20 +315,20 @@ var sass = require('sass');
             clicks: true,
             scroll: true,
             links: true,
-            forms: true
+            forms: true,
           },
           watchTask: true,
           server: {
-            baseDir: './public',
+            baseDir: "./public",
             middleware: function (req, res, next) {
-              res.setHeader('Access-Control-Allow-Origin', '*');
-              res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-              res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-              res.setHeader('Access-Control-Allow-Credentials', true);
+              res.setHeader("Access-Control-Allow-Origin", "*");
+              res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
+              res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
+              res.setHeader("Access-Control-Allow-Credentials", true);
               next();
-            }
-          }
-        }
+            },
+          },
+        },
       },
 
       /**
@@ -338,36 +341,36 @@ var sass = require('sass');
             sourceMap: true,
             mangle: false,
             compress: false,
-            beautify: true
+            beautify: true,
           },
-          files: scripts
+          files: scripts,
         },
         dev: {
           options: {
             sourceMap: true,
             mangle: false,
             compress: false,
-            beautify: true
+            beautify: true,
           },
-          files: scripts
+          files: scripts,
         },
         prod: {
           options: {
             sourceMap: false,
             compress: {
-              pure_funcs: ['OLCS.logger']
+              pure_funcs: ["OLCS.logger"],
             },
           },
-          files: function () {
+          files: (function () {
             var result = {};
             for (var key in scripts) {
               result[key] = scripts[key].filter(function (file) {
-                return !file.includes('pace.min.js') && !file.includes('node_modules/pace-progress');
+                return !file.includes("pace.min.js") && !file.includes("node_modules/pace-progress");
               });
             }
             return result;
-          }()
-        }
+          })(),
+        },
       },
 
       /**
@@ -376,14 +379,14 @@ var sass = require('sass');
        */
       jshint: {
         options: {
-          jshintrc: '.jshintrc'
+          jshintrc: ".jshintrc",
         },
-        'static': ['assets/_js/**/*.js', '!assets/_js/**/vendor/*'],
+        static: ["assets/_js/**/*.js", "!assets/_js/**/vendor/*"],
         apps: [
-          '../olcs-common/Common/src/Common/assets/js/inline/**/*.js',
-          '../olcs-internal/module/*/assets/js/inline/**/*.js',
-          '../olcs-selfserve/module/*/assets/js/inline/**/*.js'
-        ]
+          "../olcs-common/Common/src/Common/assets/js/inline/**/*.js",
+          "../olcs-internal/module/*/assets/js/inline/**/*.js",
+          "../olcs-selfserve/module/*/assets/js/inline/**/*.js",
+        ],
       },
 
       /**
@@ -391,14 +394,10 @@ var sass = require('sass');
        * https://github.com/ahmednuaman/grunt-scss-lint
        */
       scsslint: {
-        allFiles: [
-          'assets/_styles/**/*.scss',
-          '!assets/_styles/vendor/**/*',
-          '!assets/_styles/core/icon-sprite.scss'
-        ],
+        allFiles: ["assets/_styles/**/*.scss", "!assets/_styles/vendor/**/*", "!assets/_styles/core/icon-sprite.scss"],
         options: {
-          config: '.scss-lint.yml'
-        }
+          config: ".scss-lint.yml",
+        },
       },
 
       /**
@@ -407,8 +406,8 @@ var sass = require('sass');
        */
       notify: {
         options: {
-          sucess: false
-        }
+          sucess: false,
+        },
       },
 
       /**
@@ -418,20 +417,20 @@ var sass = require('sass');
       watch: {
         options: {
           livereload: true,
-          spawn: false
+          spawn: false,
         },
         styles: {
-          files: ['assets/_styles/**/*.scss'],
-          tasks: ['sass:dev', 'postcss']
+          files: ["assets/_styles/**/*.scss"],
+          tasks: ["sass:dev", "postcss"],
         },
         scripts: {
-          files: ['assets/_js/**/*.js'],
-          tasks: ['jshint:static', 'uglify:dev']
+          files: ["assets/_js/**/*.js"],
+          tasks: ["jshint:static", "uglify:dev"],
         },
         images: {
-          files: ['assets/_images/**/*.svg'],
-          tasks: ['images', 'sass:dev', 'postcss']
-        }
+          files: ["assets/_images/**/*.svg"],
+          tasks: ["images", "sass:dev", "postcss"],
+        },
       },
 
       /**
@@ -443,19 +442,16 @@ var sass = require('sass');
        */
       localscreenshots: {
         options: {
-          path: 'styleguides/screenshots/' + target,
-          type: 'png',
+          path: "styleguides/screenshots/" + target,
+          type: "png",
           local: {
-            path: 'public',
-            port: 3000
+            path: "public",
+            port: 3000,
           },
-          viewport: [
-            '600x800', '768x1024', '1200x1024'
-          ],
+          viewport: ["600x800", "768x1024", "1200x1024"],
         },
-        src: ['public/styleguides/**/*.html']
+        src: ["public/styleguides/**/*.html"],
       },
-
     }); // initConfig
 
     grunt.loadNpmTasks("grunt-contrib-clean");
@@ -470,7 +466,7 @@ var sass = require('sass');
     grunt.loadNpmTasks("grunt-gh-pages");
     grunt.loadNpmTasks("grunt-notify");
     grunt.loadNpmTasks("grunt-scss-lint");
-    grunt.loadNpmTasks('@lodder/grunt-postcss');
+    grunt.loadNpmTasks("@lodder/grunt-postcss");
 
     /**
      * Register Grunt Tasks
@@ -480,70 +476,53 @@ var sass = require('sass');
      */
 
     // Default grunt task
-    grunt.registerTask('default', 'serve');
+    grunt.registerTask("default", "serve");
 
     // Function to compile the app
     var compile = function (environment) {
       return [
-        'babel',
-        'images',
-        'sass:' + environment,
-        'postcss',
-        'uglify:' + environment,
-        'copyfonts',
-        'copy:govukJs'
+        "pre-clean", // Clean up any previous builds
+        "babel",
+        "images",
+        "sass:" + environment,
+        "postcss",
+        "uglify:" + environment,
+        "copyfonts",
+        "copy:govukJs",
+        "copy:manifests",
       ];
     };
 
-    grunt.registerTask('copyfonts',
-      ['copy:fonts']
-    );
+    grunt.registerTask("pre-clean", [
+      "clean:styleguide",
+      "clean:assets",
+      "clean:manifests",
+      "clean:images",
+      "clean:stylesheets",
+      "clean:scripts",
+    ]);
+
+    grunt.registerTask("copyfonts", ["copy:fonts"]);
     // Compile the app using targeted environment
     // $ grunt compile --env=prod
-    grunt.registerTask('compile',
-      compile(env)
-    );
+    grunt.registerTask("compile", compile(env));
 
     // Compile the app for development environment
-    grunt.registerTask('compile:local',
-      compile('local')
-    );
+    grunt.registerTask("compile:local", compile("local"));
 
     // Compile the app for development environment
-    grunt.registerTask('compile:dev',
-      compile('dev')
-    );
+    grunt.registerTask("compile:dev", compile("dev"));
 
     // Compile the app for production environment
-    grunt.registerTask('compile:prod',
-      compile('prod')
-    );
+    grunt.registerTask("compile:prod", compile("prod"));
 
     // JS/SCSS Linting
-    grunt.registerTask('lint', [
-      'jshint:static',
-      'scsslint'
-    ]);
+    grunt.registerTask("lint", ["jshint:static", "scsslint"]);
 
     // Serve the app for a development environment
-    grunt.registerTask('serve', [
-      'compile:local',
-      'browserSync',
-      'watch'
-    ]);
+    grunt.registerTask("serve", ["compile:local", "browserSync", "watch"]);
 
-    grunt.registerTask('images', [
-      'clean:images',
-      'copy:images',
-      'svg_sprite'
-    ]);
-
-    // Create a prototype
-    // $ grunt prototype --target=prototypeName
-    grunt.registerTask('prototype', [
-      'clean:prototype:' + target,
-      'copy:prototype:' + target
-    ]);
+    grunt.registerTask("images", ["copy:images", "svg_sprite"]);
 
     /**
      * Define a single Jenkins build task here for any relevant environments
@@ -554,21 +533,12 @@ var sass = require('sass');
      * new stuff; instead we just add it to this task and we're done
      */
 
-    grunt.registerTask('build:staging', [
-      'jshint:static', 'compile:prod'
-    ]);
+    grunt.registerTask("build:staging", ["jshint:static", "compile:prod"]);
 
-    grunt.registerTask('build:demo', [
-      'compile:prod'
-    ]);
+    grunt.registerTask("build:demo", ["compile:prod"]);
 
-    grunt.registerTask('build:production', [
-      'jshint:static', 'compile:prod'
-    ]);
+    grunt.registerTask("build:production", ["jshint:static", "compile:prod"]);
 
-    grunt.registerTask('build:container', [
-      'compile:dev'
-    ]);
+    grunt.registerTask("build:container", ["compile:dev"]);
   };
-
 }).call(this);
