@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "d8fa8f9fa6e88fff210e17a1cb09a4da",
+  "content-hash": "79d59a97b77a37858e6cce20d1e0c1c8",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -141,6 +141,76 @@
         "source": "https://github.com/aws/aws-sdk-php/tree/3.306.6"
       },
       "time": "2024-05-14T18:05:44+00:00"
+    },
+    {
+      "name": "azjezz/psl",
+      "version": "3.3.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/azjezz/psl.git",
+        "reference": "78078f2c505473d2a28319ffe426b2a82ac76790"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/azjezz/psl/zipball/78078f2c505473d2a28319ffe426b2a82ac76790",
+        "reference": "78078f2c505473d2a28319ffe426b2a82ac76790",
+        "shasum": ""
+      },
+      "require": {
+        "ext-bcmath": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-sodium": "*",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "revolt/event-loop": "^1.0.6"
+      },
+      "require-dev": {
+        "carthage-software/mago": "~0.13.1",
+        "php-coveralls/php-coveralls": "^2.7.0",
+        "php-standard-library/psalm-plugin": "^2.3.0",
+        "phpbench/phpbench": "^1.2.15",
+        "phpunit/phpunit": "^9.6.18",
+        "roave/infection-static-analysis-plugin": "^1.36.0",
+        "vimeo/psalm": "^6.0.0"
+      },
+      "suggest": {
+        "php-standard-library/phpstan-extension": "PHPStan integration",
+        "php-standard-library/psalm-plugin": "Psalm integration"
+      },
+      "type": "library",
+      "extra": {
+        "thanks": {
+          "url": "https://github.com/hhvm/hsl",
+          "name": "hhvm/hsl"
+        }
+      },
+      "autoload": {
+        "files": ["src/bootstrap.php"],
+        "psr-4": {
+          "Psl\\": "src/Psl"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "azjezz",
+          "email": "azjezz@protonmail.com"
+        }
+      ],
+      "description": "PHP Standard Library",
+      "support": {
+        "issues": "https://github.com/azjezz/psl/issues",
+        "source": "https://github.com/azjezz/psl/tree/3.3.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/azjezz",
+          "type": "github"
+        }
+      ],
+      "time": "2025-03-03T00:07:00+00:00"
     },
     {
       "name": "beberlei/doctrineextensions",
@@ -355,6 +425,82 @@
         }
       ],
       "time": "2023-08-30T18:02:31+00:00"
+    },
+    {
+      "name": "cuyz/valinor",
+      "version": "1.16.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/CuyZ/Valinor.git",
+        "reference": "acbda7ff3c25e5749f1e04ed183b3795434264c0"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/CuyZ/Valinor/zipball/acbda7ff3c25e5749f1e04ed183b3795434264c0",
+        "reference": "acbda7ff3c25e5749f1e04ed183b3795434264c0",
+        "shasum": ""
+      },
+      "require": {
+        "composer-runtime-api": "^2.0",
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+        "psr/simple-cache": "^1.0 || ^2.0 || ^3.0"
+      },
+      "conflict": {
+        "phpstan/phpstan": "<1.0 || >= 3.0",
+        "vimeo/psalm": "<5.0 || >=7.0"
+      },
+      "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.4",
+        "infection/infection": "^0.27",
+        "marcocesarato/php-conventional-changelog": "^1.12",
+        "mikey179/vfsstream": "^1.6.10",
+        "phpbench/phpbench": "^1.3",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^10.5",
+        "rector/rector": "^2.0",
+        "vimeo/psalm": "^5.0"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "CuyZ\\Valinor\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Romain Canon",
+          "email": "romain.hydrocanon@gmail.com",
+          "homepage": "https://github.com/romm"
+        }
+      ],
+      "description": "Library that helps to map any input into a strongly-typed value object structure.",
+      "homepage": "https://github.com/CuyZ/Valinor",
+      "keywords": [
+        "array",
+        "conversion",
+        "hydrator",
+        "json",
+        "mapper",
+        "mapping",
+        "object",
+        "tree",
+        "yaml"
+      ],
+      "support": {
+        "issues": "https://github.com/CuyZ/Valinor/issues",
+        "source": "https://github.com/CuyZ/Valinor/tree/1.16.1"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/romm",
+          "type": "github"
+        }
+      ],
+      "time": "2025-05-19T13:46:02+00:00"
     },
     {
       "name": "doctrine/annotations",
@@ -6941,6 +7087,76 @@
       "time": "2023-11-16T16:16:50+00:00"
     },
     {
+      "name": "revolt/event-loop",
+      "version": "v1.0.7",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/revoltphp/event-loop.git",
+        "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/09bf1bf7f7f574453efe43044b06fafe12216eb3",
+        "reference": "09bf1bf7f7f574453efe43044b06fafe12216eb3",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.1"
+      },
+      "require-dev": {
+        "ext-json": "*",
+        "jetbrains/phpstorm-stubs": "^2019.3",
+        "phpunit/phpunit": "^9",
+        "psalm/phar": "^5.15"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-main": "1.x-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Revolt\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Aaron Piotrowski",
+          "email": "aaron@trowski.com"
+        },
+        {
+          "name": "Cees-Jan Kiewiet",
+          "email": "ceesjank@gmail.com"
+        },
+        {
+          "name": "Christian Lück",
+          "email": "christian@clue.engineering"
+        },
+        {
+          "name": "Niklas Keller",
+          "email": "me@kelunik.com"
+        }
+      ],
+      "description": "Rock-solid event loop for concurrent PHP applications.",
+      "keywords": [
+        "async",
+        "asynchronous",
+        "concurrency",
+        "event",
+        "event-loop",
+        "non-blocking",
+        "scheduler"
+      ],
+      "support": {
+        "issues": "https://github.com/revoltphp/event-loop/issues",
+        "source": "https://github.com/revoltphp/event-loop/tree/v1.0.7"
+      },
+      "time": "2025-01-25T19:27:39+00:00"
+    },
+    {
       "name": "ruflin/elastica",
       "version": "7.3.2",
       "source": {
@@ -7481,6 +7697,112 @@
         "source": "https://github.com/Saeven/Soflomo-Purifier/tree/1.1.0"
       },
       "time": "2022-01-31T15:07:45+00:00"
+    },
+    {
+      "name": "setono/editorjs-php",
+      "version": "v1.3.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Setono/editorjs-php.git",
+        "reference": "8571da5e5fe26fd2af83ac267fdfceef13f49fc5"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Setono/editorjs-php/zipball/8571da5e5fe26fd2af83ac267fdfceef13f49fc5",
+        "reference": "8571da5e5fe26fd2af83ac267fdfceef13f49fc5",
+        "shasum": ""
+      },
+      "require": {
+        "azjezz/psl": "^2.9 || ^3.2",
+        "cuyz/valinor": "^1.9",
+        "php": ">=8.1",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
+        "setono/html-element": "^1.0",
+        "symfony/options-resolver": "^4.4 || ^5.4 || ^6.0 || ^7.0"
+      },
+      "require-dev": {
+        "infection/infection": "^0.28.1",
+        "php-standard-library/psalm-plugin": "^2.3",
+        "phpunit/phpunit": "^9.6",
+        "psalm/plugin-phpunit": "^0.19.5",
+        "setono/code-quality-pack": "^2.6",
+        "shipmonk/composer-dependency-analyser": "^1.8.2"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Setono\\EditorJS\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Joachim Løvgaard",
+          "email": "joachim@loevgaard.dk"
+        }
+      ],
+      "description": "PHP library for handling data from the EditorJS",
+      "support": {
+        "issues": "https://github.com/Setono/editorjs-php/issues",
+        "source": "https://github.com/Setono/editorjs-php/tree/v1.3.0"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/Setono",
+          "type": "github"
+        }
+      ],
+      "time": "2025-05-11T08:33:56+00:00"
+    },
+    {
+      "name": "setono/html-element",
+      "version": "v1.0.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/Setono/html-element.git",
+        "reference": "54e3a17b82aa8fe95b0aca8592ef922e1dc4d897"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/Setono/html-element/zipball/54e3a17b82aa8fe95b0aca8592ef922e1dc4d897",
+        "reference": "54e3a17b82aa8fe95b0aca8592ef922e1dc4d897",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.1"
+      },
+      "require-dev": {
+        "infection/infection": "^0.27",
+        "phpunit/phpunit": "^9.6",
+        "psalm/plugin-phpunit": "^0.18",
+        "setono/code-quality-pack": "^2.7"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "1.0-dev"
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Setono\\HtmlElement\\": "src/"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Joachim Løvgaard",
+          "email": "joachim@loevgaard.dk"
+        }
+      ],
+      "description": "PHP library to generate HTML elements",
+      "support": {
+        "issues": "https://github.com/Setono/html-element/issues",
+        "source": "https://github.com/Setono/html-element/tree/v1.0.0"
+      },
+      "time": "2024-02-29T08:39:06+00:00"
     },
     {
       "name": "symfony/cache",
@@ -8221,6 +8543,65 @@
         }
       ],
       "time": "2024-04-18T08:26:06+00:00"
+    },
+    {
+      "name": "symfony/options-resolver",
+      "version": "v7.1.1",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/symfony/options-resolver.git",
+        "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/symfony/options-resolver/zipball/47aa818121ed3950acd2b58d1d37d08a94f9bf55",
+        "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55",
+        "shasum": ""
+      },
+      "require": {
+        "php": ">=8.2",
+        "symfony/deprecation-contracts": "^2.5|^3"
+      },
+      "type": "library",
+      "autoload": {
+        "psr-4": {
+          "Symfony\\Component\\OptionsResolver\\": ""
+        },
+        "exclude-from-classmap": ["/Tests/"]
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Fabien Potencier",
+          "email": "fabien@symfony.com"
+        },
+        {
+          "name": "Symfony Community",
+          "homepage": "https://symfony.com/contributors"
+        }
+      ],
+      "description": "Provides an improved replacement for the array_replace PHP function",
+      "homepage": "https://symfony.com",
+      "keywords": ["config", "configuration", "options"],
+      "support": {
+        "source": "https://github.com/symfony/options-resolver/tree/v7.1.1"
+      },
+      "funding": [
+        {
+          "url": "https://symfony.com/sponsor",
+          "type": "custom"
+        },
+        {
+          "url": "https://github.com/fabpot",
+          "type": "github"
+        },
+        {
+          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+          "type": "tidelift"
+        }
+      ],
+      "time": "2024-05-31T14:57:53+00:00"
     },
     {
       "name": "symfony/polyfill-ctype",
@@ -11544,65 +11925,6 @@
       "time": "2024-05-31T14:57:53+00:00"
     },
     {
-      "name": "symfony/options-resolver",
-      "version": "v7.1.1",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/symfony/options-resolver.git",
-        "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/symfony/options-resolver/zipball/47aa818121ed3950acd2b58d1d37d08a94f9bf55",
-        "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55",
-        "shasum": ""
-      },
-      "require": {
-        "php": ">=8.2",
-        "symfony/deprecation-contracts": "^2.5|^3"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "Symfony\\Component\\OptionsResolver\\": ""
-        },
-        "exclude-from-classmap": ["/Tests/"]
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": ["MIT"],
-      "authors": [
-        {
-          "name": "Fabien Potencier",
-          "email": "fabien@symfony.com"
-        },
-        {
-          "name": "Symfony Community",
-          "homepage": "https://symfony.com/contributors"
-        }
-      ],
-      "description": "Provides an improved replacement for the array_replace PHP function",
-      "homepage": "https://symfony.com",
-      "keywords": ["config", "configuration", "options"],
-      "support": {
-        "source": "https://github.com/symfony/options-resolver/tree/v7.1.1"
-      },
-      "funding": [
-        {
-          "url": "https://symfony.com/sponsor",
-          "type": "custom"
-        },
-        {
-          "url": "https://github.com/fabpot",
-          "type": "github"
-        },
-        {
-          "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-          "type": "tidelift"
-        }
-      ],
-      "time": "2024-05-31T14:57:53+00:00"
-    },
-    {
       "name": "symfony/translation",
       "version": "v6.4.8",
       "source": {
@@ -11882,7 +12204,7 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": [],
+  "stability-flags": {},
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
@@ -11893,7 +12215,7 @@
     "ext-redis": "*",
     "ext-pdo": "*"
   },
-  "platform-dev": [],
+  "platform-dev": {},
   "platform-overrides": {
     "ext-redis": "4.3"
   },

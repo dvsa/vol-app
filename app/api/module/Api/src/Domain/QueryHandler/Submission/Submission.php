@@ -3,14 +3,18 @@
 namespace Dvsa\Olcs\Api\Domain\QueryHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareTrait;
 use Dvsa\Olcs\Api\Entity\Submission\Submission as SubmissionEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
 /**
  * Submission
  */
-final class Submission extends AbstractQueryHandler
+final class Submission extends AbstractQueryHandler implements EditorJsConverterAwareInterface
 {
+    use EditorJsConverterAwareTrait;
+    
     protected $repoServiceName = 'Submission';
 
     /**
@@ -36,6 +40,20 @@ final class Submission extends AbstractQueryHandler
         /** @var SubmissionEntity $submission */
         $submission = $repo->fetchUsingId($query);
 
+        // Transform submission section comments from HTML to JSON
+        $transformedComments = [];
+        foreach ($submission->getSubmissionSectionComments() as $comment) {
+            $commentData = $comment->serialize(['submissionSection']);
+            if (isset($commentData['comment']) && !empty($commentData['comment'])) {
+                try {
+                    $commentData['comment'] = $this->getConverterService()->convertHtmlToJson($commentData['comment']);
+                } catch (\Exception $e) {
+                    // If conversion fails, leave as HTML
+                }
+            }
+            $transformedComments[] = $commentData;
+        }
+
         return $this->result(
             $submission,
             [
@@ -54,9 +72,6 @@ final class Submission extends AbstractQueryHandler
                     'category',
                     'subCategory'
                 ],
-                'submissionSectionComments' => [
-                    'submissionSection'
-                ],
                 'submissionActions' => [
                     'actionTypes',
                     'reasons',
@@ -72,7 +87,8 @@ final class Submission extends AbstractQueryHandler
                 'isClosed' => $submission->isClosed(),
                 'canReopen' => $submission->canReopen(),
                 'submissionTypeTitle' => $this->getSubmissionTypeTitle($submission),
-                'isNi' => $submission->isNi()
+                'isNi' => $submission->isNi(),
+                'submissionSectionComments' => $transformedComments
             ]
         );
     }

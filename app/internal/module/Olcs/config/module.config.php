@@ -641,6 +641,7 @@ return [
         'invokables' => [
             'piListData' => Olcs\View\Helper\PiListData::class,
             'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
+            'formEditorJs' => Olcs\Form\View\Helper\EditorJs::class,
             'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
             'SubmissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
             'surrenderDetails' => Olcs\View\Helper\SurrenderDetails::class,
@@ -778,7 +779,8 @@ return [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
             'SearchFilterFieldset' => \Olcs\Form\Element\SearchFilterFieldset::class,
-            'SearchDateRangeFieldset' => \Olcs\Form\Element\SearchDateRangeFieldset::class
+            'SearchDateRangeFieldset' => \Olcs\Form\Element\SearchDateRangeFieldset::class,
+            'EditorJs' => \Olcs\Form\Element\EditorJs::class
         ]
     ],
     'route_param_listeners' => [

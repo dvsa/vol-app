@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\HandlerEnabledTrait;
 use Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger;
@@ -283,6 +284,11 @@ abstract class AbstractQueryHandler implements QueryHandlerInterface, FactoryInt
         if ($this instanceof TranslatorAwareInterface) {
             $translator = $mainServiceLocator->get('translator');
             $this->setTranslator($translator);
+        }
+
+        if ($this instanceof EditorJsConverterAwareInterface) {
+            $converterService = $mainServiceLocator->get(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class);
+            $this->setConverterService($converterService);
         }
     }
 

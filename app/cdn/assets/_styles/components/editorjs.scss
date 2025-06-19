@@ -1,0 +1,126 @@
+/**
+ * EditorJS component styles
+ */
+
+.editorjs-container {
+  position: relative;
+  margin-bottom: 1em;
+}
+
+.editorjs-editor {
+  border: 2px solid #bfc1c3;
+  border-radius: 0;
+  padding: 1em;
+  min-height: 200px;
+  background: #fff;
+
+  &:focus-within {
+    outline: 3px solid #ffdd00;
+    outline-offset: 0;
+    border-color: #0b0c0c;
+  }
+}
+
+// EditorJS specific overrides
+.codex-editor {
+  // Remove default padding as we add our own
+  .codex-editor__redactor {
+    padding-bottom: 0 !important;
+  }
+
+  // Style the placeholder
+  .ce-paragraph[data-placeholder]:empty::before {
+    color: #6f777b;
+    font-weight: normal;
+  }
+
+  // Ensure proper spacing between blocks
+  .ce-block {
+    padding: 0.4em 0;
+  }
+
+  // Style toolbar
+  .ce-toolbar__plus,
+  .ce-toolbar__settings-btn {
+    color: #0b0c0c;
+
+    &:hover {
+      background-color: #f8f8f8;
+    }
+  }
+
+  // Style inline toolbar
+  .ce-inline-toolbar {
+    background: #fff;
+    border: 1px solid #bfc1c3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  // Style conversion toolbar
+  .ce-conversion-toolbar {
+    background: #fff;
+    border: 1px solid #bfc1c3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  // Ensure text formatting matches GOV.UK
+  .ce-paragraph {
+    line-height: 1.5;
+    margin: 0;
+
+    b,
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .ce-header {
+    line-height: 1.25;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  // List styling
+  .cdx-list {
+    margin: 0;
+    padding-left: 0;
+
+    &__item {
+      padding: 0.25em 0 0.25em 1.5em;
+      line-height: 1.5;
+    }
+
+    &--unordered {
+      list-style-type: disc;
+    }
+
+    &--ordered {
+      list-style-type: decimal;
+    }
+  }
+}
+
+// Fallback textarea styling
+.editorjs-fallback {
+  width: 100%;
+  min-height: 200px;
+  padding: 0.5em;
+  border: 2px solid #bfc1c3;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.5;
+
+  &:focus {
+    outline: 3px solid #ffdd00;
+    outline-offset: 0;
+    border-color: #0b0c0c;
+  }
+}
+
+// Error state
+.editorjs-container.error {
+  .editorjs-editor,
+  .editorjs-fallback {
+    border-color: #d4351c;
+  }
+}
