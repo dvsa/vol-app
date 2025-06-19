@@ -3,6 +3,7 @@
 /** @var \Common\View\Helper\CurrentUser $currentUser */
 $currentUser = $this->currentUser();
 $isLoggedIn = $currentUser->isLoggedIn();
+$cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
 
 ?>
 <?php echo $this->doctype(); ?>
@@ -11,6 +12,10 @@ $isLoggedIn = $currentUser->isLoggedIn();
 <head>
   <!-- Meta tags -->
   <meta charset="utf-8">
+  <?php if ($cookieBannerMode == 'confirmation'): ?>
+  <meta name="robots" content="noindex">
+  <?php endif ?>
+
   <?php
   echo $this->headMeta()
     ->appendName('viewport', 'width=device-width, initial-scale=1.0')
