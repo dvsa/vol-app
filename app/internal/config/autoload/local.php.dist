@@ -65,7 +65,7 @@ return [
     ],
 
     'assets' => [
-        'base_url' => 'http://cdn.local.olcs.dev-dvsacloud.uk'), // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
+        'base_url' => 'http://cdn.local.olcs.dev-dvsacloud.uk', // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
         'cache_busting_strategy' => 'timestamp', // Options: 'none', 'release', 'timestamp'
     ],
 
