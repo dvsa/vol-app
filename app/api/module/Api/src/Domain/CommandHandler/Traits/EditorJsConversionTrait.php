@@ -2,11 +2,18 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Traits;
 
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareTrait;
+
 /**
  * EditorJS conversion trait for command handlers
+ * 
+ * Combines the aware interface functionality with utility methods
  */
 trait EditorJsConversionTrait
 {
+    use EditorJsConverterAwareTrait;
+
     /**
      * Convert comment text from JSON to HTML if needed
      * 

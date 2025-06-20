@@ -120,7 +120,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     }
 
     /**
-     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple EditorJS instances)
      *
      * @param LaminasForm $form the form
      * @param int         $id   the id

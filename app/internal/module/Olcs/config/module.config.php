@@ -667,6 +667,7 @@ return [
         'element' => [
             'renderers' => [
                 SubmissionSections::class => 'formSubmissionSections',
+                \Olcs\Form\Element\EditorJs::class => 'formEditorJs',
             ],
         ],
     ],
@@ -705,6 +706,7 @@ return [
             Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class =>
                 Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class,
             \Olcs\Helper\ApplicationProcessingHelper::class => \Olcs\Helper\ApplicationProcessingHelper::class,
+            \Olcs\Service\EditorJs\HtmlConverter::class => \Olcs\Service\EditorJs\HtmlConverter::class,
             'Router' => Laminas\Router\Http\TreeRouteStack::class,
         ],
         'abstract_factories' => [
@@ -769,11 +771,14 @@ return [
         ]
     ],
     'form_elements' => [
+        'invokables' => [
+        ],
         'factories' => [
             'SubmissionSections' => SubmissionSectionsFactory::class,
             \Olcs\Form\Element\SearchFilterFieldset::class => SearchFilterFieldsetFactory::class,
             \Olcs\Form\Element\SearchDateRangeFieldset::class => SearchDateRangeFieldsetFactory::class,
             Olcs\Form\Element\SearchOrderFieldset::class => Olcs\Form\Element\SearchOrderFieldsetFactory::class,
+            \Olcs\Form\Element\EditorJs::class => \Olcs\Form\Element\EditorJsFactory::class,
         ],
         'aliases' => [
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',

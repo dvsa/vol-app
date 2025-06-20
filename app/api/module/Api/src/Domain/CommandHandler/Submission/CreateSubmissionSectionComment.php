@@ -19,7 +19,6 @@ use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 final class CreateSubmissionSectionComment extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
     use EditorJsConversionTrait;
-    use EditorJsConverterAwareTrait;
     
     public const ERR_COMMENT_EXISTS = 'Comment already exists';
 

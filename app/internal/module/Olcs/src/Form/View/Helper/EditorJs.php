@@ -46,7 +46,6 @@ class EditorJs extends AbstractHelper
             '<div class="editorjs-container" data-element-name="%s" data-required="%s">
                 <div id="%s" class="editorjs-editor"></div>
                 <input type="hidden" name="%s" value="%s" class="%s" %s />
-                <textarea class="editorjs-fallback" name="%s_fallback" style="display:none;" placeholder="Rich text editor not available - please enter your comment here">%s</textarea>
             </div>',
             htmlspecialchars($name, ENT_QUOTES),
             $required,
@@ -54,33 +53,10 @@ class EditorJs extends AbstractHelper
             htmlspecialchars($name, ENT_QUOTES),
             $escapedValue,
             htmlspecialchars($classes, ENT_QUOTES),
-            $required,
-            htmlspecialchars($name . '_fallback', ENT_QUOTES),
-            $escapedValue
+            $required
         );
 
-        // Add initialization script
-        $markup .= sprintf(
-            '<script type="text/javascript">
-                document.addEventListener("DOMContentLoaded", function() {
-                    if (typeof window.initializeEditorJs === "function") {
-                        window.initializeEditorJs("%s", "%s", %s);
-                    } else {
-                        console.warn("EditorJS initialization function not found");
-                        // Show fallback textarea
-                        var container = document.querySelector(\'[data-element-name="%s"]\');
-                        if (container) {
-                            container.querySelector(".editorjs-editor").style.display = "none";
-                            container.querySelector(".editorjs-fallback").style.display = "block";
-                        }
-                    }
-                });
-            </script>',
-            htmlspecialchars($id, ENT_QUOTES),
-            htmlspecialchars($name, ENT_QUOTES),
-            json_encode($escapedValue),
-            htmlspecialchars($name, ENT_QUOTES)
-        );
+        // No inline script needed - the OLCS.editorjs component handles initialization via render events
 
         return $markup;
     }

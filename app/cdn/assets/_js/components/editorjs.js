@@ -2,9 +2,10 @@
  * EditorJS component for OLCS submission comments
  *
  * Initializes EditorJS editors with JSON data from the API
+ * Follows OLCS component pattern for modal compatibility
  */
 
-(function (root) {
+OLCS.editorjs = (function (document, $, undefined) {
   "use strict";
 
   /**
@@ -24,7 +25,6 @@
     // Get DOM elements
     const editorContainer = document.getElementById(editorId);
     const hiddenInput = document.querySelector('input[name="' + inputName + '"]');
-    const fallbackTextarea = document.querySelector('textarea[name="' + inputName + '_fallback"]');
 
     if (!editorContainer || !hiddenInput) {
       console.error("EditorJS DOM elements not found");
@@ -72,10 +72,13 @@
     };
 
     if (initialValue && initialValue.trim()) {
+      console.log("EditorJS initializing with value:", initialValue);
       try {
         initialData = JSON.parse(initialValue);
+        console.log("EditorJS successfully parsed JSON:", initialData);
       } catch (e) {
         console.error("Failed to parse initial EditorJS data:", e);
+        console.log("Raw value that failed to parse:", JSON.stringify(initialValue));
         // If parsing fails, show fallback
         showFallbackTextarea(inputName);
         return;
@@ -107,11 +110,6 @@
       editor.isReady
         .then(function () {
           console.log("EditorJS ready for:", inputName);
-
-          // Hide fallback textarea since editor is working
-          if (fallbackTextarea) {
-            fallbackTextarea.style.display = "none";
-          }
 
           // Save initial state to hidden input
           editor.save().then(function (outputData) {
@@ -250,4 +248,55 @@
 
     return content;
   };
-})(this);
+  return function init() {
+    function setup() {
+      // Initialize all EditorJS containers on the page
+      $(".editorjs-container").each(function () {
+        var container = $(this);
+        var elementName = container.data("element-name");
+        var editor = container.find(".editorjs-editor");
+
+        if (editor.length && elementName) {
+          var editorId = editor.attr("id");
+          var hiddenInput = container.find('input[type="hidden"]');
+          var initialValue = hiddenInput.val() || "";
+
+          // Skip if already initialized (prevent duplicate editors)
+          if (container.data("editorjs-initialized")) {
+            return;
+          }
+
+          container.data("editorjs-initialized", true);
+          window.initializeEditorJs(editorId, elementName, initialValue);
+        }
+      });
+    }
+
+    // Initial setup for page load
+    setup();
+
+    // Re-setup on render events (for modals and AJAX content)
+    OLCS.eventEmitter.on("render", setup);
+
+    // Cleanup when modal closes
+    OLCS.eventEmitter.on("hide:modal", function () {
+      // Clean up EditorJS instances
+      if (window.editorJsInstances) {
+        Object.keys(window.editorJsInstances).forEach(function (name) {
+          try {
+            var editor = window.editorJsInstances[name];
+            if (editor && typeof editor.destroy === "function") {
+              editor.destroy();
+            }
+          } catch (e) {
+            console.warn("Error destroying EditorJS instance:", name, e);
+          }
+        });
+        window.editorJsInstances = {};
+      }
+
+      // Reset initialization flags
+      $(".editorjs-container").removeData("editorjs-initialized");
+    });
+  };
+})(document, window.jQuery);

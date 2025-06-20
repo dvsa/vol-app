@@ -12,17 +12,16 @@ use Laminas\Form\Annotation as Form;
 class SubmissionSectionEditComment extends Base
 {
     /**
-     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
+     * @Form\Attributes({"id":"","class":"extra-long","name":"comment"})
      * @Form\Options({
      *     "label": "",
      *     "label_attributes": {
      *         "class": ""
      *     }
      * })
-     * @Form\Type("TextArea")
+     * @Form\Type("EditorJs")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name":"htmlpurifier"})
      */
     public $comment = null;
 }

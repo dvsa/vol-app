@@ -23,7 +23,6 @@ use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmissionSectionComment as Dele
 final class UpdateSubmissionSectionComment extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
     use EditorJsConversionTrait;
-    use EditorJsConverterAwareTrait;
     
     protected $repoServiceName = 'SubmissionSectionComment';
 
