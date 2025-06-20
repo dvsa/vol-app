@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.19.1](https://github.com/dvsa/vol-app/compare/v5.19.0...v5.19.1) (2025-06-20)
+
+
+### Bug Fixes
+
+* limit provider ([#953](https://github.com/dvsa/vol-app/issues/953)) ([d7c0374](https://github.com/dvsa/vol-app/commit/d7c0374a5b3054555c37f4e283d5346f69c85287))
+* trigger-cd-20-july-1153 ([#951](https://github.com/dvsa/vol-app/issues/951)) ([242f22f](https://github.com/dvsa/vol-app/commit/242f22ff78d346799f2007f6e873f73b36ae2038))
+
 ## [5.19.0](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.19.0) (2025-06-19)
 
 
