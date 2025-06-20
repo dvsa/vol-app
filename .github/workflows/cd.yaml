@@ -336,6 +336,7 @@ jobs:
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
       search-image-tag: ${{ needs.get-version.outputs.search }}
+      queue-processor-image-tag: ${{ needs.get-version.outputs.cli }}
       apply: true
     permissions:
       contents: read
