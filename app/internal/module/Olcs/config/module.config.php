@@ -686,7 +686,6 @@ return [
     'local_scripts_path' => [
         __DIR__ . '/../assets/js/inline/'
     ],
-    'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'service_manager' => [
         'aliases' => [
             'RouteParamsListener' => \Olcs\Listener\RouteParams::class,

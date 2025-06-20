@@ -1,5 +1,39 @@
 # Changelog
 
+## [5.19.0](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.19.0) (2025-06-19)
+
+
+### Features
+
+* implement GovUK Refresh to SS & cache busting on SS and IU ([#888](https://github.com/dvsa/vol-app/issues/888)) ([21a8253](https://github.com/dvsa/vol-app/commit/21a8253408635a11a30b1996c684b51e2f1358c3))
+* interim workflow dispatch option for assets builds to allow testing assets from branch with build wrapper ([#906](https://github.com/dvsa/vol-app/issues/906)) ([31e4c27](https://github.com/dvsa/vol-app/commit/31e4c276be285ec6cb462851653bba68b05715ec))
+* toggle to disable scaling policies for ecs services ([#907](https://github.com/dvsa/vol-app/issues/907)) ([353c75f](https://github.com/dvsa/vol-app/commit/353c75fbeec39c30041d8fe24742bee322da2954))
+* use lineName instead of ServiceCode to populate VOL serviceNo ([#916](https://github.com/dvsa/vol-app/issues/916)) ([717944e](https://github.com/dvsa/vol-app/commit/717944e3944f1ab11c8bd26244f2b438ae7285f5))
+
+
+### Bug Fixes
+
+* add missing navigation id on service navigation, to fix javascript error VOL-6389 ([#915](https://github.com/dvsa/vol-app/issues/915)) ([6b1a891](https://github.com/dvsa/vol-app/commit/6b1a8913a5807fdc48d15ea88f920f785360beff))
+* add push option to assets workflow dispatch ([#909](https://github.com/dvsa/vol-app/issues/909)) ([25273be](https://github.com/dvsa/vol-app/commit/25273be0f1016fbcd3bb7c7b8ff8c1fbe3db4d48))
+* allow sameorigin frame embeds to fix Split Screen functionality ([#905](https://github.com/dvsa/vol-app/issues/905)) ([a450c4c](https://github.com/dvsa/vol-app/commit/a450c4cf3a8ba814fceb55b9bbc1f1bca2e9abf1))
+* change process queue timing ([#934](https://github.com/dvsa/vol-app/issues/934)) ([72ca2d4](https://github.com/dvsa/vol-app/commit/72ca2d45dadf0bb613a9e8bc3ec55965c03fac23))
+* cleaned up phpcs errors for green ci ([#927](https://github.com/dvsa/vol-app/issues/927)) ([e5e2bba](https://github.com/dvsa/vol-app/commit/e5e2bbae2822e96819752dd486b47f13d677e7d8))
+* correct syntax for daily timestamp ([#911](https://github.com/dvsa/vol-app/issues/911)) ([bf35daf](https://github.com/dvsa/vol-app/commit/bf35dafd00e97143ae3b55f5c6f1f6159a64b0fe))
+* disable listener rule prep ([#950](https://github.com/dvsa/vol-app/issues/950)) ([a2dce9d](https://github.com/dvsa/vol-app/commit/a2dce9d91637475df5ebfcb4d89224895f8fa7b6))
+* disable target group if no listener rule enabled ([#892](https://github.com/dvsa/vol-app/issues/892)) ([ceb7e0b](https://github.com/dvsa/vol-app/commit/ceb7e0bef04f6e46cdacf04cba08c1f299f1f498))
+* reindex script fixes ([#921](https://github.com/dvsa/vol-app/issues/921)) ([7e12c46](https://github.com/dvsa/vol-app/commit/7e12c46e10632421662d930bf772f9e0196e1568))
+* remove plugin from template ([#904](https://github.com/dvsa/vol-app/issues/904)) ([89e4fad](https://github.com/dvsa/vol-app/commit/89e4faddeef0a2cb8124fa408720079865692704))
+* resolve styling issues on some snapshots ([#901](https://github.com/dvsa/vol-app/issues/901)) ([9a56b8c](https://github.com/dvsa/vol-app/commit/9a56b8cc1312cec08b6dc3201f60cfe3329592cb))
+* search config syntax ([#918](https://github.com/dvsa/vol-app/issues/918)) ([02652b5](https://github.com/dvsa/vol-app/commit/02652b5e30ca48f77581ff44932a946081e5ae20))
+* set timestamps to always be today ([#914](https://github.com/dvsa/vol-app/issues/914)) ([8f8b440](https://github.com/dvsa/vol-app/commit/8f8b44092e3e8e60b3ed3e046802e3ed0f3da637))
+* specify necessary permission for standalone dispatch ([#910](https://github.com/dvsa/vol-app/issues/910)) ([91849dd](https://github.com/dvsa/vol-app/commit/91849dd7d6fb573a930fe866dce9757507458f5c))
+* specify nginx client max body to match php upload limit ([#902](https://github.com/dvsa/vol-app/issues/902)) ([71c0475](https://github.com/dvsa/vol-app/commit/71c0475fc35e6346a44e87fe60e9f80e969d8c31))
+* standardise Node.js requirements and resolve compatibility for local refresh ([#925](https://github.com/dvsa/vol-app/issues/925)) ([b93df0c](https://github.com/dvsa/vol-app/commit/b93df0cbd7b12284ff911aa31404a51a7f54a59b))
+* switch lb rule for prep ([#913](https://github.com/dvsa/vol-app/issues/913)) ([cf3085b](https://github.com/dvsa/vol-app/commit/cf3085b31a632d45901f3da4fa2341ca48ad2630))
+* switching to reindex script ([#920](https://github.com/dvsa/vol-app/issues/920)) ([2f2350d](https://github.com/dvsa/vol-app/commit/2f2350dcb3f715966adb70d4f7bdb7aa6fb82ec4))
+* testing multiple input over cron ([#917](https://github.com/dvsa/vol-app/issues/917)) ([733d76c](https://github.com/dvsa/vol-app/commit/733d76c6c7611b0595834e986ed68478db0bfe08))
+* tweaks for stan psalm vol app ci ([#924](https://github.com/dvsa/vol-app/issues/924)) ([12a327d](https://github.com/dvsa/vol-app/commit/12a327dcc7db4e3eaf942b28b26cbc0ff3e06f76))
+
 ## [5.18.1](https://github.com/dvsa/vol-app/compare/v5.18.0...v5.18.1) (2025-05-28)
 
 
