@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * Local overrides for queue scheduler configuration
+ * 
+ * Copy this file to queue-scheduler.local.php and modify as needed.
+ * Use this to override schedule settings for your local development environment.
+ */
+
+return [
+    'queue_scheduler' => [
+        'schedules' => [
+            // Example overrides:
+            
+            // Enable AWS-dependent jobs locally if you have credentials
+            // 'transxchange_consumer' => [
+            //     'local_enabled' => true,
+            // ],
+            // 'process_company_profile' => [
+            //     'local_enabled' => true,
+            // ],
+            
+            // Change intervals for testing
+            // 'process_queue_general' => [
+            //     'interval' => 60, // Run every minute instead of 90 seconds
+            // ],
+            
+            // Disable specific jobs locally
+            // 'process_queue_print' => [
+            //     'local_enabled' => false,
+            // ],
+        ],
+    ],
+];

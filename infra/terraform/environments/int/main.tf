@@ -116,7 +116,7 @@ data "aws_subnets" "this" {
 }
 
 data "aws_secretsmanager_secret" "this" {
-  for_each = toset(setsubtract(local.service_names, ["cli"]))
+  for_each = toset(setsubtract(local.service_names, ["cli", "queue-processor"]))
 
   name = "DEVAPPQA-BASE-SM-APPLICATION-${upper(each.key)}"
 }
@@ -293,6 +293,25 @@ module "service" {
 
       security_group_ids = [
         data.aws_security_group.search.id
+      ]
+    }
+    "queue-processor" = {
+      cpu    = 1024
+      memory = 2048
+
+      enable_autoscaling_policies = false
+
+      version    = var.queue_processor_image_tag
+      repository = data.aws_ecr_repository.this["cli"].repository_url
+
+      listener_rule_enable = false
+
+      task_iam_role_statements = local.task_iam_role_statements
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["API"].id
       ]
     }
   }
@@ -476,21 +495,21 @@ module "service" {
       },
       {
         name     = "process-queue-general",
-        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600",],
+        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600", ],
         timeout  = 610,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-community-licences",
         commands = ["queue:process-queue", "--type", "que_typ_create_com_lic"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-disc-generation",
         commands = ["queue:process-queue", "--type", "que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-disc-print",
@@ -502,19 +521,19 @@ module "service" {
         name     = "process-queue-ecmt-accept",
         commands = ["queue:process-queue", "--type", "que_typ_accept_ecmt_scoring"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-irhp-allocate",
         commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-permit-generation",
         commands = ["queue:process-queue", "--type", "que_typ_permit_generate"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-queue-permit-print",
@@ -526,7 +545,7 @@ module "service" {
         name     = "process-queue-print",
         commands = ["queue:process-queue", "--type", "que_typ_print"],
         timeout  = 90,
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
       },
       {
         name     = "process-company-profile",
@@ -555,7 +574,7 @@ module "service" {
       {
         name     = "transxchange-consumer",
         commands = ["queue:transxchange-consumer"],
-        schedule = "cron(0/2 8-17 * * ? *)",
+        schedule = "", # Disabled - now handled by ECS queue processor
         timeout  = 90,
       },
       {
