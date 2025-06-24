@@ -65,23 +65,14 @@ class EditorJs extends Textarea implements InputProviderInterface
      */
     public function setValue($value)
     {
-        // Debug logging
-        error_log('EditorJS setValue called with: ' . var_export($value, true));
-
         if ($value && is_string($value)) {
             // Try to parse as EditorJS JSON first
             if ($this->isValidEditorJsJson($value)) {
-                error_log('EditorJS: Value is already valid EditorJS JSON');
                 return parent::setValue($value);
             }
 
             // Not valid JSON - convert whatever it is (HTML or plain text)
-            error_log('EditorJS: Converting content to EditorJS JSON');
-            $originalValue = $value;
             $value = $this->convertToEditorJson($value);
-            error_log('EditorJS: Converted content to JSON');
-        } else {
-            error_log('EditorJS: Value is empty or not string, using as-is');
         }
 
         return parent::setValue($value);
@@ -96,7 +87,6 @@ class EditorJs extends Textarea implements InputProviderInterface
         try {
             return $this->htmlConverter->convertHtmlToJson($content);
         } catch (\Exception $e) {
-            error_log('EditorJS: Converter service failed, using fallback: ' . $e->getMessage());
             return $this->fallbackConversion($content);
         }
     }
@@ -104,7 +94,7 @@ class EditorJs extends Textarea implements InputProviderInterface
     /**
      * Check if string is valid EditorJS JSON
      */
-    protected function isValidEditorJsJson(string $string): bool
+    public function isValidEditorJsJson(string $string): bool
     {
         $data = json_decode($string, true);
 

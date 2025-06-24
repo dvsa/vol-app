@@ -26,7 +26,7 @@ OLCS.ready(function () {
 
   // Small script to append date to internal search result links
   // to ensure :visited styles reset each day
-  $('form[action*="search"] .table__wrapper')
+  $("form[action*='search'] .table__wrapper")
     .find("a")
     .each(function () {
       var date = new Date().toJSON().slice(0, 10);
@@ -38,7 +38,7 @@ OLCS.ready(function () {
   var path = location.pathname;
   if (path.indexOf("/admin/publication/pending") > -1) {
     var options = {
-      dataElSelector: '[data-heading="Document status"]',
+      dataElSelector: "[data-heading='Document status']",
       dataElValToCheck1: "New",
       dataElValToCheck2: "Generated",
       buttonSelector1: "#publish",

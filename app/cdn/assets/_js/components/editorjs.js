@@ -29,7 +29,7 @@ OLCS.editorjs = (function (document, $, undefined) {
 
     // Get DOM elements
     var editorContainer = document.getElementById(editorId);
-    var hiddenInput = document.querySelector('input[name="' + inputName + '"]');
+    var hiddenInput = document.querySelector("input[name='" + inputName + "']");
 
     if (!editorContainer || !hiddenInput) {
       if (typeof OLCS.logger !== "undefined") {
@@ -145,7 +145,7 @@ OLCS.editorjs = (function (document, $, undefined) {
 
         if (editor.length && elementName) {
           var editorId = editor.attr("id");
-          var hiddenInput = container.find('input[type="hidden"]');
+          var hiddenInput = container.find("input[type='hidden']");
           var initialValue = hiddenInput.val() || "";
 
           // Skip if already initialized (prevent duplicate editors)
