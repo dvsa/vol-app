@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 final class UpdateSubmissionAction extends AbstractCommandHandler implements TransactionedInterface, EditorJsConverterAwareInterface
 {
     use EditorJsConversionTrait;
-    
+
     protected $repoServiceName = 'SubmissionAction';
 
     public function handleCommand(CommandInterface $command)

@@ -5,6 +5,7 @@
  * Follows OLCS component pattern for modal compatibility
  */
 
+/* global EditorJS, Header, List, Paragraph */
 OLCS.editorjs = (function (document, $, undefined) {
   "use strict";
 
@@ -20,21 +21,25 @@ OLCS.editorjs = (function (document, $, undefined) {
   function initializeEditorJs(editorId, inputName, initialValue) {
     // Check if EditorJS is available
     if (typeof EditorJS === "undefined") {
-      console.error("EditorJS library not available");
+      if (typeof OLCS.logger !== "undefined") {
+        OLCS.logger("EditorJS library not available");
+      }
       return;
     }
 
     // Get DOM elements
-    const editorContainer = document.getElementById(editorId);
-    const hiddenInput = document.querySelector('input[name="' + inputName + '"]');
+    var editorContainer = document.getElementById(editorId);
+    var hiddenInput = document.querySelector('input[name="' + inputName + '"]');
 
     if (!editorContainer || !hiddenInput) {
-      console.error("EditorJS DOM elements not found:", { editorId: editorId, inputName: inputName });
+      if (typeof OLCS.logger !== "undefined") {
+        OLCS.logger("EditorJS DOM elements not found: " + editorId + ", " + inputName);
+      }
       return;
     }
 
     // Configure EditorJS tools
-    const tools = {};
+    var tools = {};
 
     // Add Header tool if available
     if (typeof Header !== "undefined") {
@@ -68,7 +73,7 @@ OLCS.editorjs = (function (document, $, undefined) {
     }
 
     // Parse initial data
-    let initialData = {
+    var initialData = {
       blocks: [],
       version: "2.28.2",
     };
@@ -77,14 +82,16 @@ OLCS.editorjs = (function (document, $, undefined) {
       try {
         initialData = JSON.parse(initialValue);
       } catch (e) {
-        console.error("Failed to parse initial EditorJS data:", e);
+        if (typeof OLCS.logger !== "undefined") {
+          OLCS.logger("Failed to parse initial EditorJS data: " + e.message);
+        }
         // Continue with empty data rather than failing
       }
     }
 
     try {
       // Initialize EditorJS
-      const editor = new EditorJS({
+      var editor = new EditorJS({
         holder: editorId,
         tools: tools,
         placeholder: "Enter your submission comment...",
@@ -98,7 +105,9 @@ OLCS.editorjs = (function (document, $, undefined) {
               hiddenInput.value = JSON.stringify(outputData);
             })
             .catch(function (error) {
-              console.error("EditorJS save failed:", error);
+              if (typeof OLCS.logger !== "undefined") {
+                OLCS.logger("EditorJS save failed: " + error.message);
+              }
             });
         },
       });
@@ -112,13 +121,17 @@ OLCS.editorjs = (function (document, $, undefined) {
           });
         })
         .catch(function (error) {
-          console.error("EditorJS initialization failed:", error);
+          if (typeof OLCS.logger !== "undefined") {
+            OLCS.logger("EditorJS initialization failed: " + error.message);
+          }
         });
 
       // Store editor instance for cleanup
       editorInstances[inputName] = editor;
     } catch (error) {
-      console.error("EditorJS creation failed:", error);
+      if (typeof OLCS.logger !== "undefined") {
+        OLCS.logger("EditorJS creation failed: " + error.message);
+      }
     }
   }
 
@@ -162,7 +175,9 @@ OLCS.editorjs = (function (document, $, undefined) {
             editor.destroy();
           }
         } catch (e) {
-          console.warn("Error destroying EditorJS instance:", name, e);
+          if (typeof OLCS.logger !== "undefined") {
+            OLCS.logger("Error destroying EditorJS instance: " + name + " - " + e.message);
+          }
         }
       });
       editorInstances = {};

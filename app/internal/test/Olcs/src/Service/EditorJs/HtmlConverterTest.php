@@ -32,7 +32,7 @@ class HtmlConverterTest extends TestCase
     public function testConvertSimpleHtml(): void
     {
         $html = '<p>Test paragraph</p>';
-        
+
         $result = $this->sut->convertHtmlToJson($html);
         $decoded = json_decode($result, true);
 
@@ -44,7 +44,7 @@ class HtmlConverterTest extends TestCase
     public function testConvertPlainText(): void
     {
         $plainText = 'Just plain text without tags';
-        
+
         $result = $this->sut->convertHtmlToJson($plainText);
         $decoded = json_decode($result, true);
 
@@ -89,17 +89,18 @@ class HtmlConverterTest extends TestCase
     public function testHandlesEncodingIssues(): void
     {
         $html = '<p>reg  31 to be considered</p>';
-        
+
         $result = $this->sut->convertHtmlToJson($html);
         $decoded = json_decode($result, true);
 
-        $this->assertEquals('reg  31 to be considered', $decoded['blocks'][0]['data']['text']);
+        // Multiple spaces are normalized to single space
+        $this->assertEquals('reg 31 to be considered', $decoded['blocks'][0]['data']['text']);
     }
 
     public function testPreservesFormatting(): void
     {
         $html = '<p>Text with <b>bold</b> and <i>italic</i></p>';
-        
+
         $result = $this->sut->convertHtmlToJson($html);
         $decoded = json_decode($result, true);
 

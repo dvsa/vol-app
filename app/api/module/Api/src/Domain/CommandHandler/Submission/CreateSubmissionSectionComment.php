@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 final class CreateSubmissionSectionComment extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
     use EditorJsConversionTrait;
-    
+
     public const ERR_COMMENT_EXISTS = 'Comment already exists';
 
     protected $repoServiceName = 'SubmissionSectionComment';

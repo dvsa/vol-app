@@ -21,12 +21,12 @@ class EditorJsTest extends TestCase
     protected function setUp(): void
     {
         $this->mockHtmlConverter = m::mock(HtmlConverter::class);
-        
+
         $mockServiceManager = m::mock(\Laminas\ServiceManager\ServiceManager::class);
         $mockServiceManager->shouldReceive('get')
             ->with(HtmlConverter::class)
             ->andReturn($this->mockHtmlConverter);
-        
+
         $factory = new EditorJsFactory();
         $this->sut = $factory($mockServiceManager, EditorJs::class);
     }

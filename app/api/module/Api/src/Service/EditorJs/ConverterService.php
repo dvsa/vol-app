@@ -10,7 +10,7 @@ use Setono\EditorJS\BlockRenderer\ParagraphBlockRenderer;
 
 /**
  * EditorJS Converter Service
- * 
+ *
  * Handles conversion from EditorJS JSON to HTML for database storage
  */
 class ConverterService
@@ -22,7 +22,7 @@ class ConverterService
     {
         $this->parser = new Parser();
         $this->renderer = new Renderer();
-        
+
         // Add block renderers for the types we support
         $this->renderer->add(new ParagraphBlockRenderer());
         $this->renderer->add(new HeaderBlockRenderer());
@@ -50,7 +50,7 @@ class ConverterService
 
     /**
      * Clean HTML output after conversion
-     * 
+     *
      * @throws \RuntimeException if HTMLPurifier is not available
      */
     private function cleanOutputHtml(string $html): string
@@ -59,9 +59,15 @@ class ConverterService
         if (!class_exists('\HTMLPurifier')) {
             throw new \RuntimeException('HTMLPurifier is required for secure HTML sanitization');
         }
-        
+
         $purifier = new \HTMLPurifier(\HTMLPurifier_Config::createDefault());
-        return $purifier->purify($html);
+        $cleanHtml = $purifier->purify($html);
+
+        // Remove empty paragraphs and other empty block elements
+        $cleanHtml = preg_replace('/<p[^>]*>\s*<\/p>/', '', $cleanHtml);
+        $cleanHtml = preg_replace('/<div[^>]*>\s*<\/div>/', '', $cleanHtml);
+
+        return trim($cleanHtml);
     }
 
 

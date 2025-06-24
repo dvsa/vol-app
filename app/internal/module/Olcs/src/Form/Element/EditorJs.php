@@ -8,7 +8,7 @@ use Olcs\Service\EditorJs\HtmlConverter;
 
 /**
  * EditorJS form element
- * 
+ *
  * Custom form element that renders an EditorJS editor instead of a standard textarea
  */
 class EditorJs extends Textarea implements InputProviderInterface
@@ -67,14 +67,14 @@ class EditorJs extends Textarea implements InputProviderInterface
     {
         // Debug logging
         error_log('EditorJS setValue called with: ' . var_export($value, true));
-        
+
         if ($value && is_string($value)) {
             // Try to parse as EditorJS JSON first
             if ($this->isValidEditorJsJson($value)) {
                 error_log('EditorJS: Value is already valid EditorJS JSON');
                 return parent::setValue($value);
             }
-            
+
             // Not valid JSON - convert whatever it is (HTML or plain text)
             error_log('EditorJS: Converting content to EditorJS JSON');
             $originalValue = $value;
@@ -83,7 +83,7 @@ class EditorJs extends Textarea implements InputProviderInterface
         } else {
             error_log('EditorJS: Value is empty or not string, using as-is');
         }
-        
+
         return parent::setValue($value);
     }
 
@@ -104,10 +104,10 @@ class EditorJs extends Textarea implements InputProviderInterface
     /**
      * Check if string is valid EditorJS JSON
      */
-    private function isValidEditorJsJson(string $string): bool
+    protected function isValidEditorJsJson(string $string): bool
     {
         $data = json_decode($string, true);
-        
+
         if (json_last_error() !== JSON_ERROR_NONE) {
             return false;
         }

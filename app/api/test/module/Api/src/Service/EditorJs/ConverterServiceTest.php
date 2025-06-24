@@ -33,7 +33,7 @@ class ConverterServiceTest extends TestCase
             'blocks' => [
                 [
                     'id' => 'test-id',
-                    'type' => 'paragraph', 
+                    'type' => 'paragraph',
                     'data' => ['text' => 'Test content']
                 ]
             ]
@@ -50,7 +50,7 @@ class ConverterServiceTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Failed to convert JSON to HTML');
-        
+
         $this->sut->convertJsonToHtml('invalid json syntax {{{');
     }
 
@@ -69,12 +69,12 @@ class ConverterServiceTest extends TestCase
             'blocks' => [
                 [
                     'id' => 'empty-id',
-                    'type' => 'paragraph', 
+                    'type' => 'paragraph',
                     'data' => ['text' => '']
                 ], // Empty paragraph
                 [
                     'id' => 'valid-id',
-                    'type' => 'paragraph', 
+                    'type' => 'paragraph',
                     'data' => ['text' => 'Valid content']
                 ]
             ]

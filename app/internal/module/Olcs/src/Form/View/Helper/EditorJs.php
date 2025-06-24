@@ -34,7 +34,7 @@ class EditorJs extends AbstractHelper
         $value = $element->getValue();
         $required = $element->getAttribute('required') ? 'required' : '';
         $classes = $element->getAttribute('class') ?? '';
-        
+
         // Add EditorJS specific classes
         $classes = trim($classes . ' editorjs-element');
 

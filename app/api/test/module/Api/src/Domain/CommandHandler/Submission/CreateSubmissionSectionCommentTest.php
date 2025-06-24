@@ -26,7 +26,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         $this->sut = new CreateSubmissionSectionComment();
 
         $this->mockRepo('SubmissionSectionComment', Repository\SubmissionSectionComment::class);
-        
+
         $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class] = m::mock(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class);
 
         parent::setUp();
@@ -54,7 +54,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         );
 
         $cmd = Cmd::create([]);
-        
+
         $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class]
             ->shouldReceive('convertJsonToHtml')
             ->andReturn('');
@@ -74,7 +74,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         ];
 
         $command = Cmd::create($data);
-        
+
         $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class]
             ->shouldReceive('convertJsonToHtml')
             ->with('testing')

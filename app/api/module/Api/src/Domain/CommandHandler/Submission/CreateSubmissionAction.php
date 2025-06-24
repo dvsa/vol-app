@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 final class CreateSubmissionAction extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
     use EditorJsConversionTrait;
-    
+
     protected $repoServiceName = 'SubmissionAction';
 
     public function handleCommand(CommandInterface $command)
@@ -74,7 +74,7 @@ final class CreateSubmissionAction extends AbstractCommandHandler implements Edi
         );
 
         $commentText = $this->convertCommentForStorage($command->getComment());
-        
+
         $submissionAction = new SubmissionAction(
             $this->getRepo()->getReference(Submission::class, $command->getSubmission()),
             $command->getIsDecision(),
