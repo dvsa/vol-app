@@ -43,10 +43,10 @@ class EditorJs extends AbstractHelper
 
         // Create the container and hidden input
         $markup = sprintf(
-            '<div class="editorjs-container" data-element-name="%s" data-required="%s">
-                <div id="%s" class="editorjs-editor"></div>
-                <input type="hidden" name="%s" value="%s" class="%s" %s />
-            </div>',
+            '<div class="editorjs-container" data-element-name="%s" data-required="%s">' .
+            '<div id="%s" class="editorjs-editor"></div>' .
+            '<input type="hidden" name="%s" value="%s" class="%s" %s />' .
+            '</div>',
             htmlspecialchars($name, ENT_QUOTES),
             $required,
             htmlspecialchars($id, ENT_QUOTES),

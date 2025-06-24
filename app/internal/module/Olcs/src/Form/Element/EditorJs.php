@@ -14,6 +14,11 @@ use Olcs\Service\EditorJs\HtmlConverter;
 class EditorJs extends Textarea implements InputProviderInterface
 {
     /**
+     * EditorJS version used for JSON structure
+     */
+    public const EDITORJS_VERSION = '2.28.2';
+
+    /**
      * @var HtmlConverter
      */
     private $htmlConverter;
@@ -42,6 +47,7 @@ class EditorJs extends Textarea implements InputProviderInterface
         return [
             'name' => $this->getName(),
             'required' => $this->getAttribute('required') ? true : false,
+            'allow_empty' => !$this->getAttribute('required'),
             'filters' => [
                 ['name' => 'StringTrim']
             ],
@@ -123,7 +129,7 @@ class EditorJs extends Textarea implements InputProviderInterface
         $textContent = trim($textContent);
 
         if (empty($textContent)) {
-            return json_encode(['blocks' => [], 'version' => '2.28.2']);
+            return json_encode(['blocks' => [], 'version' => self::EDITORJS_VERSION]);
         }
 
         return json_encode([
@@ -134,7 +140,7 @@ class EditorJs extends Textarea implements InputProviderInterface
                     'data' => ['text' => $textContent]
                 ]
             ],
-            'version' => '2.28.2'
+            'version' => self::EDITORJS_VERSION
         ], JSON_UNESCAPED_UNICODE);
     }
 

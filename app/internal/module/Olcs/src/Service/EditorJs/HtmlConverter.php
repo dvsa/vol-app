@@ -2,6 +2,8 @@
 
 namespace Olcs\Service\EditorJs;
 
+use Olcs\Form\Element\EditorJs;
+
 /**
  * Simple HTML to EditorJS JSON converter for app/internal
  *
@@ -20,7 +22,7 @@ class HtmlConverter
         if (empty($html)) {
             return json_encode([
                 'blocks' => [],
-                'version' => '2.28.2'
+                'version' => EditorJs::EDITORJS_VERSION
             ]);
         }
 
@@ -30,7 +32,7 @@ class HtmlConverter
         $editorData = [
             'time' => time() * 1000, // EditorJS expects milliseconds
             'blocks' => $blocks,
-            'version' => '2.28.2'
+            'version' => EditorJs::EDITORJS_VERSION
         ];
 
         return json_encode($editorData, JSON_UNESCAPED_UNICODE);
@@ -92,14 +94,12 @@ class HtmlConverter
             'â€™', // Smart apostrophe
             'â€œ', // Smart quote open
             'â€',  // Smart quote close
-            'â€"', // Em dash
-            'â€"'  // En dash
+            'â€"'  // Em/En dash
         ], [
             "'",
             '"',
             '"',
-            '—',
-            '–'
+            '—'
         ], $html);
 
         // Normalize multiple spaces and line breaks
