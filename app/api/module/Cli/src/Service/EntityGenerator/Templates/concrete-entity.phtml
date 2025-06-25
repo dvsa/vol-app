@@ -1,0 +1,18 @@
+<<?php /* Template Hack */ ?>?php
+
+declare(strict_types=1);
+
+namespace <?php echo $namespace; ?>;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * <?php echo $className; ?> Entity
+ *
+ * @ORM\Entity
+ * @ORM\Table(name="<?php echo $tableName; ?>")
+ */
+class <?php echo $className; ?> extends <?php echo $abstractClassName; ?>
+
+{
+}
