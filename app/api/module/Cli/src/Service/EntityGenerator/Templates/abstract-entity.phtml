@@ -1,0 +1,239 @@
+<<?php /* Template Hack */ ?>?php
+
+declare(strict_types=1);
+
+namespace <?php echo $namespace; ?>;
+
+use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
+use JsonSerializable;
+use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
+<?php if ($hasCollections): ?>
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
+<?php else: ?>
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+<?php endif; ?>
+<?php if ($hasCreatedOn): ?>
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
+<?php endif; ?>
+<?php if ($hasModifiedOn): ?>
+use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
+<?php endif; ?>
+<?php if ($softDeletable): ?>
+use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
+<?php endif; ?>
+use Doctrine\ORM\Mapping as ORM;
+<?php if ($hasCollections): ?>
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+<?php endif; ?>
+<?php if ($softDeletable): ?>
+use Gedmo\Mapping\Annotation as Gedmo;
+<?php endif; ?>
+<?php foreach ($imports as $import): ?>
+<?php if (!str_contains($import, 'Doctrine\ORM\Mapping')): ?>
+use <?php echo $import; ?>;
+<?php endif; ?>
+<?php endforeach; ?>
+
+/**
+ * <?php echo $className; ?> Abstract Entity
+ *
+ * Auto-Generated
+ *
+ * @ORM\MappedSuperclass
+<?php if ($hasCreatedOn || $hasModifiedOn): ?>
+ * @ORM\HasLifecycleCallbacks
+<?php endif; ?>
+<?php if ($softDeletable): ?>
+ * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
+<?php endif; ?>
+ * @ORM\Table(name="<?php echo $tableName; ?>"<?php
+if (!empty($indexes) || !empty($uniqueConstraints)): ?>,
+<?php if (!empty($indexes)): ?>
+ *    indexes={
+<?php foreach ($indexes as $key => $index): ?>
+ *        @ORM\Index(<?php echo $this->generateOptionsFromAttributes($index, 'indexes'); ?>)<?php echo ($key < (count($indexes) - 1) ? ',' : ''); ?>
+
+<?php endforeach; ?>
+ *    }<?php if (!empty($uniqueConstraints)): ?>,<?php endif; ?>
+
+<?php endif; ?>
+<?php if (!empty($uniqueConstraints)): ?>
+ *    uniqueConstraints={
+<?php foreach ($uniqueConstraints as $key => $constraint): ?>
+ *        @ORM\UniqueConstraint(<?php echo $this->generateOptionsFromAttributes($constraint, 'unique-constraints'); ?>)<?php echo ($key < (count($uniqueConstraints) - 1) ? ',' : ''); ?>
+
+<?php endforeach; ?>
+ *    }
+<?php endif; ?>
+<?php endif; ?>
+ * )
+ */
+abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable
+{
+    use BundleSerializableTrait;
+    use ProcessDateTrait;
+<?php if ($hasCollections): ?>
+    use ClearPropertiesWithCollectionsTrait;
+<?php else: ?>
+    use ClearPropertiesTrait;
+<?php endif; ?>
+<?php if ($hasCreatedOn): ?>
+    use CreatedOnTrait;
+<?php endif; ?>
+<?php if ($hasModifiedOn): ?>
+    use ModifiedOnTrait;
+<?php endif; ?>
+<?php if ($softDeletable): ?>
+    use SoftDeletableTrait;
+<?php endif; ?>
+
+<?php foreach ($fields as $field): ?>
+<?php if (!$methodGenerator->isPropertyFromTrait($field)): ?>
+    /**
+     * <?php echo $field['property']['docBlock']; ?>
+
+     *
+     * @var <?php echo $field['property']['type']; ?>
+
+     *
+     * <?php echo $field['annotation']; ?>
+
+     */
+    protected $<?php echo $field['property']['name']; ?><?php if ($field['property']['defaultValue'] !== 'null'): ?> = <?php echo $field['property']['defaultValue']; ?><?php endif; ?>;
+
+<?php endif; ?>
+<?php endforeach; ?>
+<?php if ($hasCollections): ?>
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+<?php foreach ($fields as $field): ?>
+<?php if ($methodGenerator->isCollectionField($field) && !$methodGenerator->isPropertyFromTrait($field)): ?>
+        $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> = new ArrayCollection();
+<?php endif; ?>
+<?php endforeach; ?>
+    }
+
+<?php endif; ?>
+<?php foreach ($fields as $field): ?>
+<?php if (!$methodGenerator->isPropertyFromTrait($field)): ?>
+
+    /**
+     * Set the <?php echo strtolower($methodGenerator->getReadableStringFromName($field['property']['name'] ?? $methodGenerator->formatPropertyName($field))); ?>
+
+     *
+<?php if ($methodGenerator->isCollectionField($field)): ?>
+     * @param \Doctrine\Common\Collections\ArrayCollection $<?php echo $methodGenerator->formatParamName($field); ?> collection being set as the value
+<?php elseif ($methodGenerator->isRelationshipField($field)): ?>
+     * @param \<?php echo $methodGenerator->getTargetEntity($field); ?> $<?php echo $methodGenerator->formatParamName($field); ?> entity being set as the value
+<?php else: ?>
+     * @param <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?> $<?php echo $methodGenerator->formatParamName($field); ?> new value being set
+<?php endif; ?>
+     *
+     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     */
+    public function set<?php echo ucfirst($field['property']['name'] ?? $methodGenerator->formatPropertyName($field)); ?>($<?php echo $methodGenerator->formatParamName($field); ?>)
+    {
+        $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> = $<?php echo $methodGenerator->formatParamName($field); ?>;
+
+        return $this;
+    }
+
+    /**
+     * Get the <?php echo strtolower($methodGenerator->getReadableStringFromName($field['property']['name'] ?? $methodGenerator->formatPropertyName($field))); ?>
+
+     *
+<?php if ($methodGenerator->isCollectionField($field)): ?>
+     * @return \Doctrine\Common\Collections\ArrayCollection
+<?php elseif ($methodGenerator->isRelationshipField($field)): ?>
+     * @return \<?php echo $methodGenerator->getTargetEntity($field); ?>
+<?php elseif ($methodGenerator->isDateTimeField($field)): ?>
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?>
+<?php else: ?>
+     * @return <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?>
+<?php endif; ?>
+<?php if ($methodGenerator->isDateTimeField($field)): ?>
+     */
+    public function get<?php echo ucfirst($field['property']['name'] ?? $methodGenerator->formatPropertyName($field)); ?>($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>);
+        }
+
+        return $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>;
+    }
+<?php else: ?>
+     */
+    public function get<?php echo ucfirst($field['property']['name'] ?? $methodGenerator->formatPropertyName($field)); ?>()
+    {
+        return $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>;
+    }
+<?php endif; ?>
+<?php if ($methodGenerator->isCollectionField($field)): ?>
+
+    /**
+     * Add a <?php echo strtolower($methodGenerator->getReadableStringFromName($field['property']['name'] ?? $methodGenerator->formatPropertyName($field))); ?>
+
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being added
+     *
+     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     */
+    public function add<?php echo ucfirst($field['property']['name'] ?? $methodGenerator->formatPropertyName($field)); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
+    {
+        if ($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> instanceof ArrayCollection) {
+            $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> = new ArrayCollection(
+                array_merge(
+                    $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->toArray(),
+                    $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->toArray()
+                )
+            );
+        } elseif (!$this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->contains($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)) {
+            $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->add($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a <?php echo strtolower($methodGenerator->getReadableStringFromName($field['property']['name'] ?? $methodGenerator->formatPropertyName($field))); ?>
+
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being removed
+     *
+     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     */
+    public function remove<?php echo ucfirst($field['property']['name'] ?? $methodGenerator->formatPropertyName($field)); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
+    {
+        if ($this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->contains($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)) {
+            $this-><?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>->removeElement($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>);
+        }
+
+        return $this;
+    }
+<?php endif; ?>
+<?php endif; ?>
+<?php endforeach; ?>
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
+    }
+}
