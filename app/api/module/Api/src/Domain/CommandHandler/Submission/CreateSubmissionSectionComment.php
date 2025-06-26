@@ -4,17 +4,22 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Submission\Submission;
 use Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\EditorJsConversionTrait;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 
 /**
  * Create SubmissionSectionComment
  */
-final class CreateSubmissionSectionComment extends AbstractCommandHandler
+final class CreateSubmissionSectionComment extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
+    use EditorJsConversionTrait;
+
     public const ERR_COMMENT_EXISTS = 'Comment already exists';
 
     protected $repoServiceName = 'SubmissionSectionComment';
@@ -47,7 +52,8 @@ final class CreateSubmissionSectionComment extends AbstractCommandHandler
         );
 
         if ($command->getComment() !== null) {
-            $comment->setComment($command->getComment());
+            $commentText = $this->convertCommentForStorage($command->getComment());
+            $comment->setComment($commentText);
         }
 
         //  same comment

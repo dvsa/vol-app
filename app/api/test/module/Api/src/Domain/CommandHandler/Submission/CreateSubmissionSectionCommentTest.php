@@ -27,6 +27,8 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 
         $this->mockRepo('SubmissionSectionComment', Repository\SubmissionSectionComment::class);
 
+        $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class] = m::mock(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class);
+
         parent::setUp();
     }
 
@@ -53,6 +55,10 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 
         $cmd = Cmd::create([]);
 
+        $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class]
+            ->shouldReceive('convertJsonToHtml')
+            ->andReturn('');
+
         $this->repoMap['SubmissionSectionComment']
             ->shouldReceive('isExist')->once()->with($cmd)->andReturn(true);
 
@@ -68,6 +74,11 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         ];
 
         $command = Cmd::create($data);
+
+        $this->mockedSmServices[\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class]
+            ->shouldReceive('convertJsonToHtml')
+            ->with('testing')
+            ->andReturn('testing');
 
         /** @var SubmissionSectionCommentEntity $savedSubmissionSectionComment */
         $savedSubmissionSectionComment = null;

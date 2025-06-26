@@ -145,7 +145,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     }
 
     /**
-     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances)
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple EditorJS instances)
      *
      * @param LaminasForm $form form
      * @param int         $id   id

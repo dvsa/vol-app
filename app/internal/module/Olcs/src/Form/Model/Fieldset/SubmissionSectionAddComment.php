@@ -24,17 +24,15 @@ class SubmissionSectionAddComment extends Base
     public $submissionSection = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
+     * @Form\Attributes({"id":"","class":"extra-long","name":"comment","required":true})
      * @Form\Options({
      *     "label": "",
      *     "label_attributes": {
      *         "class": ""
      *     }
      * })
-     * @Form\Type("TextArea")
+     * @Form\Type("EditorJs")
      * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Filter("htmlpurifier")
-     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5})
      */
     public $comment = null;
 }

@@ -159,7 +159,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     }
 
     /**
-     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple EditorJS instances)
      *
      * Alter form for Add
      *

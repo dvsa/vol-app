@@ -9,6 +9,8 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Submission;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\EditorJsConversionTrait;
 use Dvsa\Olcs\Api\Entity\Pi\Reason;
 use Dvsa\Olcs\Api\Entity\Submission\SubmissionAction;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -18,8 +20,10 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 /**
  * Update SubmissionAction
  */
-final class UpdateSubmissionAction extends AbstractCommandHandler implements TransactionedInterface
+final class UpdateSubmissionAction extends AbstractCommandHandler implements TransactionedInterface, EditorJsConverterAwareInterface
 {
+    use EditorJsConversionTrait;
+
     protected $repoServiceName = 'SubmissionAction';
 
     public function handleCommand(CommandInterface $command)
@@ -55,7 +59,8 @@ final class UpdateSubmissionAction extends AbstractCommandHandler implements Tra
             $command->getActionTypes()
         );
 
-        $submissionAction->update($actionTypes, $command->getComment());
+        $commentText = $this->convertCommentForStorage($command->getComment());
+        $submissionAction->update($actionTypes, $commentText);
 
         if ($command->getReasons() !== null) {
             $reasons = array_map(

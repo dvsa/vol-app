@@ -7,6 +7,9 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Submission;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareInterface;
+use Dvsa\Olcs\Api\Domain\EditorJsConverterAwareTrait;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\EditorJsConversionTrait;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment;
@@ -17,8 +20,10 @@ use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmissionSectionComment as Dele
 /**
  * Update SubmissionSectionComment
  */
-final class UpdateSubmissionSectionComment extends AbstractCommandHandler
+final class UpdateSubmissionSectionComment extends AbstractCommandHandler implements EditorJsConverterAwareInterface
 {
+    use EditorJsConversionTrait;
+
     protected $repoServiceName = 'SubmissionSectionComment';
 
     /**
@@ -47,7 +52,8 @@ final class UpdateSubmissionSectionComment extends AbstractCommandHandler
             $command->getVersion()
         );
 
-        $submissionSectionComment->setComment($command->getComment());
+        $commentText = $this->convertCommentForStorage($command->getComment());
+        $submissionSectionComment->setComment($commentText);
         $this->getRepo()->save($submissionSectionComment);
 
         $result->addId('submissionSectionComment', $submissionSectionComment->getId());
