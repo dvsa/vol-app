@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "79d59a97b77a37858e6cce20d1e0c1c8",
+  "content-hash": "43214e072e8169e87cd65e34bb23a8c8",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -6021,16 +6021,16 @@
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v7.15.0",
+      "version": "v7.16.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "111cf3a7a59fd4bd5078242ff8f773b2851303a3"
+        "reference": "f07f26a0365d87f6ee9fdd0125cd2be0192f79c7"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/111cf3a7a59fd4bd5078242ff8f773b2851303a3",
-        "reference": "111cf3a7a59fd4bd5078242ff8f773b2851303a3",
+        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/f07f26a0365d87f6ee9fdd0125cd2be0192f79c7",
+        "reference": "f07f26a0365d87f6ee9fdd0125cd2be0192f79c7",
         "shasum": ""
       },
       "require": {
@@ -6044,9 +6044,9 @@
         "laminas/laminas-router": "^3.9",
         "laminas/laminas-servicemanager": "^3.3",
         "laminas/laminas-stdlib": "^3.0",
-        "laminas/laminas-validator": "^2.11.1",
+        "laminas/laminas-validator": ">=2.30.0",
         "laminas/laminas-xml": "^1.4.0",
-        "php": "^8.1",
+        "php": "^8.2",
         "psr/container": "^1.1|^2"
       },
       "require-dev": {
@@ -6072,9 +6072,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Transfer",
       "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.15.0"
+        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.16.1"
       },
-      "time": "2025-06-03T10:01:51+00:00"
+      "time": "2025-06-27T09:32:00+00:00"
     },
     {
       "name": "olcs/olcs-utils",
