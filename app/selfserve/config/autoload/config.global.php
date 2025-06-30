@@ -12,10 +12,11 @@ $ecsVersion = getenv('APP_VERSION');
 $ec2Version = file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : null;
 
 return [
-    'version' => $isProduction ? null : [
+    'version' => [
         'environment' => $environment,
         'release' => ($ecsVersion ?: $ec2Version ?: 'LOCAL'),
         'description' => '%domain%',
+        'show_information_bar' => !$isProduction,
     ],
     'api_router' => [
         'routes' => [

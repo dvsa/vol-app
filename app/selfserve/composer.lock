@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "adea44b755d0d76e3ae5816a82dd276d",
+  "content-hash": "b849cb650197626673da0541e8267b99",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4113,16 +4113,16 @@
     },
     {
       "name": "olcs/olcs-auth",
-      "version": "v8.1.1",
+      "version": "v8.2.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-auth.git",
-        "reference": "df4e8a5c8a46f8d15484bef3a1459af19177b477"
+        "reference": "f7934779c3ecc1346a4edc41314dfc63b459b9ee"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/df4e8a5c8a46f8d15484bef3a1459af19177b477",
-        "reference": "df4e8a5c8a46f8d15484bef3a1459af19177b477",
+        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/f7934779c3ecc1346a4edc41314dfc63b459b9ee",
+        "reference": "f7934779c3ecc1346a4edc41314dfc63b459b9ee",
         "shasum": ""
       },
       "require": {
@@ -4136,7 +4136,7 @@
         "laminas/laminas-stdlib": "^3.0.0",
         "laminas/laminas-view": "^2.11",
         "lm-commons/lmc-rbac-mvc": "^3.3.1",
-        "olcs/olcs-common": "^7.1",
+        "olcs/olcs-common": "^8.0.0",
         "olcs/olcs-transfer": "^7.1",
         "php": "^8.0",
         "psr/container": "^1.1|^2"
@@ -4167,22 +4167,22 @@
       "license": ["MIT"],
       "description": "OLCS Authentication",
       "support": {
-        "source": "https://github.com/dvsa/olcs-auth/tree/v8.1.1"
+        "source": "https://github.com/dvsa/olcs-auth/tree/v8.2.0"
       },
-      "time": "2024-11-12T10:00:53+00:00"
+      "time": "2025-06-30T13:23:53+00:00"
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v7.23.1",
+      "version": "v8.0.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "8b0b8c079ecf267d7cac04902633157796c7d529"
+        "reference": "888e3260548071dac94c5816154a47d1c693ad37"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/8b0b8c079ecf267d7cac04902633157796c7d529",
-        "reference": "8b0b8c079ecf267d7cac04902633157796c7d529",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/888e3260548071dac94c5816154a47d1c693ad37",
+        "reference": "888e3260548071dac94c5816154a47d1c693ad37",
         "shasum": ""
       },
       "require": {
@@ -4241,9 +4241,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v7.23.1"
+        "source": "https://github.com/dvsa/olcs-common/tree/v8.0.0"
       },
-      "time": "2025-05-27T16:23:09+00:00"
+      "time": "2025-06-30T13:01:50+00:00"
     },
     {
       "name": "olcs/olcs-logging",
