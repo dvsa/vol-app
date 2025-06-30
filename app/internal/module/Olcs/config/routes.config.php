@@ -121,17 +121,20 @@ $feePrintReceiptRoute = [
     ],
 ];
 
-$routes = [
-    'dashboard' => [
-        'type' => 'Literal',
-        'options' => [
-            'route' => '/',
-            'defaults' => [
-                'controller' => Olcs\Controller\IndexController::class,
-                'action' => 'index',
-            ]
+$dashboardRoute = [
+    'type' => 'Literal',
+    'options' => [
+        'route' => '/',
+        'defaults' => [
+            'controller' => Olcs\Controller\IndexController::class,
+            'action' => 'index',
         ]
-    ],
+    ]
+];
+
+$routes = [
+    'index' => $dashboardRoute,
+    'dashboard' => $dashboardRoute,
     'search' => [
         'type' => 'segment',
         'options' => [
