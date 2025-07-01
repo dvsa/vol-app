@@ -120,6 +120,11 @@ class EntityGenerator implements EntityGeneratorInterface
                 );
             }
 
+            // Pass table metadata to handler if it's a RelationshipTypeHandler
+            if ($handler instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler) {
+                $handler->setCurrentTable($table);
+            }
+
             // Generate field data with EntityConfig integration
             $fieldData = [
                 'column' => $column,
@@ -171,10 +176,15 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         $property = $handler->generateProperty($column, $fieldConfig ? [$column->getName() => $fieldConfig] : []);
         
-        // Apply EntityConfig property name override if specified
-        $customPropertyName = $this->entityConfigService->getFieldNameForColumn($tableName, $column->getName());
-        if ($customPropertyName !== null) {
-            $property['name'] = $customPropertyName;
+        // Check for property name override in field config first (e.g., address table)
+        if ($fieldConfig && $fieldConfig->property !== null) {
+            $property['name'] = $fieldConfig->property;
+        } else {
+            // Otherwise check fieldNameForColumn mapping
+            $customPropertyName = $this->entityConfigService->getFieldNameForColumn($tableName, $column->getName());
+            if ($customPropertyName !== null) {
+                $property['name'] = $customPropertyName;
+            }
         }
 
         return $property;
@@ -229,11 +239,22 @@ class EntityGenerator implements EntityGeneratorInterface
                 ? '\\Doctrine\\Common\\Collections\\ArrayCollection'
                 : '\\Dvsa\\Olcs\\Api\\Entity\\' . $relationship['sourceEntity'];
             
+            // Generate annotations
+            $annotations = [$this->inverseRelationshipProcessor->generateInverseAnnotation($relationship)];
+            
+            // Add OrderBy annotation if specified
+            if (!empty($relationship['orderBy'])) {
+                $orderByAnnotation = $this->inverseRelationshipProcessor->generateOrderByAnnotation($relationship['orderBy']);
+                if ($orderByAnnotation) {
+                    $annotations[] = $orderByAnnotation;
+                }
+            }
+            
             $inverseField = [
                 'column' => null, // No direct column for inverse relationships
                 'handler' => null,
                 'fieldConfig' => null,
-                'annotation' => $this->inverseRelationshipProcessor->generateInverseAnnotation($relationship),
+                'annotation' => implode("\n     * ", $annotations),
                 'property' => [
                     'name' => $relationship['property'],
                     'type' => $propertyType,
@@ -307,6 +328,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'hasModifiedOn' => $this->hasField($fields, 'lastModifiedOn'),
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'imports' => $this->gatherImports($fields),
+            'repositoryClass' => $this->getRepositoryClass($table),
         ];
 
         return $this->templateRenderer->render('abstract-entity', $templateData);
@@ -317,11 +339,15 @@ class EntityGenerator implements EntityGeneratorInterface
      */
     private function generateConcreteEntity(EntityData $entityData, array $config): string
     {
+        $metadata = $entityData->getMetadata();
+        $table = $metadata['table'] ?? null;
+        
         $templateData = [
             'namespace' => $entityData->getNamespace(),
             'className' => $entityData->getClassName(),
             'abstractClassName' => $entityData->getAbstractClassName(),
             'tableName' => $entityData->getTableName(),
+            'repositoryClass' => $table ? $this->getRepositoryClass($table) : null,
         ];
 
         return $this->templateRenderer->render('concrete-entity', $templateData);
@@ -558,6 +584,7 @@ class EntityGenerator implements EntityGeneratorInterface
     private function gatherImports(array $fields): array
     {
         $imports = [];
+        $hasTranslatable = false;
         
         foreach ($fields as $field) {
             // Only gather imports from fields that have handlers
@@ -565,8 +592,50 @@ class EntityGenerator implements EntityGeneratorInterface
                 $handlerImports = $field['handler']->getRequiredImports();
                 $imports = array_merge($imports, $handlerImports);
             }
+            
+            // Check if field is translatable
+            if ($field['fieldConfig'] && $field['fieldConfig']->translatable) {
+                $hasTranslatable = true;
+            }
+        }
+
+        // Add Gedmo import if we have translatable fields
+        if ($hasTranslatable) {
+            $imports[] = 'Gedmo\Mapping\Annotation as Gedmo';
         }
 
         return array_unique($imports);
+    }
+
+    /**
+     * Get repository class from table comment
+     */
+    private function getRepositoryClass(TableMetadata $table): ?string
+    {
+        $comment = $table->getComment();
+        if (empty($comment)) {
+            return null;
+        }
+
+        // Look for @settings['repository'] in the comment
+        if (preg_match('/@settings\s*\[\s*[\'"]repository[\'"]\s*\]\s*=\s*[\'"]([^\'"\s]+)[\'"]/', $comment, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if table should be ignored based on comment
+     */
+    private function shouldIgnoreTableByComment(TableMetadata $table): bool
+    {
+        $comment = $table->getComment();
+        if (empty($comment)) {
+            return false;
+        }
+
+        // Look for @settings['ignore'] in the comment
+        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
     }
 }
