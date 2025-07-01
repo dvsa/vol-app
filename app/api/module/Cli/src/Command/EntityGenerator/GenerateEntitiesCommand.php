@@ -77,6 +77,15 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
         $includeTables = $this->parseTableList($input->getOption('include-tables'));
         $excludeTables = $this->parseTableList($input->getOption('exclude-tables'));
 
+        // Debug output
+        $io->note([
+            'Raw include-tables option: ' . var_export($input->getOption('include-tables'), true),
+            'Raw exclude-tables option: ' . var_export($input->getOption('exclude-tables'), true),
+            'Raw output-path option: ' . var_export($input->getOption('output-path'), true),
+            'Parsed include tables: ' . implode(', ', $includeTables),
+            'Parsed exclude tables: ' . implode(', ', $excludeTables),
+        ]);
+
         $command = new GenerateEntitiesDto([
             'outputPath' => $input->getOption('output-path'),
             'dryRun' => $input->getOption('dry-run'),

@@ -87,6 +87,24 @@ final readonly class EntityConfigService
     }
 
     /**
+     * Get metadata for a namespace (e.g., skipManyToMany)
+     */
+    public function getNamespaceMetadata(string $namespace): array
+    {
+        $mappingConfig = $this->getMappingConfig();
+        return $mappingConfig[$namespace]['metadata'] ?? [];
+    }
+
+    /**
+     * Check if ManyToMany relationships should be skipped for a namespace
+     */
+    public function shouldSkipManyToMany(string $namespace): bool
+    {
+        $metadata = $this->getNamespaceMetadata($namespace);
+        return $metadata['skipManyToMany'] ?? false;
+    }
+
+    /**
      * Check if table should be ignored
      */
     public function shouldIgnoreTable(string $tableName): bool

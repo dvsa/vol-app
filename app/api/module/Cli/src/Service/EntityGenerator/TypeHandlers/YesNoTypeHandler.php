@@ -67,7 +67,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add default value option
         if ($column->getDefault() !== null) {
-            $defaultValue = $column->getDefault();
+            $defaultValue = $this->generateDefaultValue($column->getDefault());
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -96,7 +96,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add default value option
         if ($column->getDefault() !== null) {
-            $defaultValue = $column->getDefault();
+            $defaultValue = $this->generateDefaultValue($column->getDefault());
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -116,7 +116,16 @@ class YesNoTypeHandler extends AbstractTypeHandler
         $comment = $this->generateComment($column, $config);
 
         // YesNo type typically stores Y/N but we want to initialize with 0/1
-        $defaultValue = $column->getDefault() ?? ($column->isNullable() ? 'null' : '0');
+        // Get the raw default value from the database
+        $rawDefault = $column->getDefault();
+        
+        // Generate the properly formatted default value for PHP code
+        if ($rawDefault !== null) {
+            // Database stores 0 or 1, so we just use that numeric value directly
+            $defaultValue = is_numeric($rawDefault) ? (string)$rawDefault : $this->generateDefaultValue($rawDefault);
+        } else {
+            $defaultValue = $column->isNullable() ? 'null' : '0';
+        }
 
         return [
             'name' => $propertyName,
