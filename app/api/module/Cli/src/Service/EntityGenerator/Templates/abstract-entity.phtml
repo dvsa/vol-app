@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 <?php endif; ?>
 <?php foreach ($imports as $import): ?>
-<?php if (!str_contains($import, 'Doctrine\ORM\Mapping')): ?>
+<?php if (!str_contains($import, 'Doctrine\ORM\Mapping') && !($softDeletable && str_contains($import, 'Gedmo\Mapping\Annotation'))): ?>
 use <?php echo $import; ?>;
 <?php endif; ?>
 <?php endforeach; ?>

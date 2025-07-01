@@ -41,10 +41,17 @@ class GenerateEntities extends AbstractCommandHandler
         // Filter tables based on include/exclude lists
         $tableNames = $this->filterTables($tableNames, $command);
         
-        // Get table metadata
+        // Get table metadata and filter out ignored tables
         $tables = [];
         foreach ($tableNames as $tableName) {
-            $tables[] = $this->schemaIntrospector->getTableMetadata($tableName);
+            $tableMetadata = $this->schemaIntrospector->getTableMetadata($tableName);
+            
+            // Skip tables with @settings['ignore'] in comment
+            if ($this->shouldIgnoreTable($tableMetadata)) {
+                continue;
+            }
+            
+            $tables[] = $tableMetadata;
         }
 
         // Get relationships (including ManyToMany from join tables)
@@ -127,6 +134,20 @@ class GenerateEntities extends AbstractCommandHandler
         }
 
         return array_values($tableNames);
+    }
+
+    /**
+     * Check if table should be ignored based on comment
+     */
+    private function shouldIgnoreTable($tableMetadata): bool
+    {
+        $comment = $tableMetadata->getComment();
+        if (empty($comment)) {
+            return false;
+        }
+
+        // Look for @settings['ignore'] in the comment
+        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
     }
 
     /**

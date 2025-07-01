@@ -40,6 +40,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
     {
         $type = $this->getDoctrineType($column);
         $options = [];
+        $annotations = [];
 
         // Add type
         $options[] = 'type="' . $type . '"';
@@ -61,7 +62,17 @@ class DefaultTypeHandler extends AbstractTypeHandler
 
         // Add default value as option
         if ($column->getDefault() !== null) {
-            $defaultValue = $this->generateDefaultValue($column->getDefault());
+            // Convert string default values to proper types for boolean columns
+            $default = $column->getDefault();
+            $doctrineType = $this->getDoctrineType($column);
+            
+            if ($doctrineType === 'boolean' && is_string($default)) {
+                // For boolean columns, use numeric values (0 or 1) for compatibility
+                $defaultValue = ($default === '1' || $default === 'true') ? '1' : '0';
+            } else {
+                $defaultValue = $this->generateDefaultValue($default);
+            }
+            
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -73,7 +84,18 @@ class DefaultTypeHandler extends AbstractTypeHandler
             }
         }
 
-        return '@ORM\Column(' . implode(', ', $options) . ')';
+        // Build the column annotation
+        $annotations[] = '@ORM\Column(' . implode(', ', $options) . ')';
+
+        // Check if field is translatable from EntityConfig
+        $columnConfig = $config[$column->getName()] ?? null;
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig && $columnConfig->translatable) {
+            $annotations[] = '@Gedmo\Translatable';
+        } elseif (is_array($columnConfig) && ($columnConfig['translatable'] ?? false)) {
+            $annotations[] = '@Gedmo\Translatable';
+        }
+
+        return implode("\n     * ", $annotations);
     }
 
     public function generateProperty(ColumnMetadata $column, array $config = []): array
@@ -147,7 +169,17 @@ class DefaultTypeHandler extends AbstractTypeHandler
     private function generatePropertyDefault(ColumnMetadata $column): string
     {
         if ($column->getDefault() !== null) {
-            return $this->generateDefaultValue($column->getDefault());
+            // Convert string default values to proper types for boolean columns
+            $default = $column->getDefault();
+            $phpType = $this->getPhpType($column);
+            $doctrineType = $this->getDoctrineType($column);
+            
+            if (($phpType === 'bool' || $doctrineType === 'boolean') && is_string($default)) {
+                // For boolean columns, use numeric values (0 or 1) for compatibility
+                return ($default === '1' || $default === 'true') ? '1' : '0';
+            }
+            
+            return $this->generateDefaultValue($default);
         }
 
         if ($column->isNullable()) {
@@ -160,7 +192,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
         return match ($phpType) {
             'int' => '0',
             'float' => '0.0',
-            'bool' => 'false',
+            'bool' => '0',  // Use numeric 0 for compatibility
             'string' => "''",
             'array' => '[]',
             default => 'null'

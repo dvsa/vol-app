@@ -5,12 +5,23 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 
 /**
  * Type handler for relationship columns (foreign keys)
  */
 class RelationshipTypeHandler extends AbstractTypeHandler
 {
+    private ?TableMetadata $currentTable = null;
+
+    /**
+     * Set the current table being processed
+     */
+    public function setCurrentTable(?TableMetadata $table): void
+    {
+        $this->currentTable = $table;
+    }
+
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
         // Check if this column is a foreign key
@@ -23,6 +34,10 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     {
         $targetEntity = $this->getTargetEntity($column, $config);
         $referencedColumn = $this->getReferencedColumn($column, $config);
+        
+        // Determine if this should be OneToOne based on unique constraint
+        $isOneToOne = $this->isOneToOneRelationship($column);
+        $relationType = $isOneToOne ? 'OneToOne' : 'ManyToOne';
         
         $options = [
             'targetEntity="' . $targetEntity . '"',
@@ -43,12 +58,62 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         if (!empty($cascadeOptions)) {
             $options[] = 'cascade={' . implode(', ', array_map(fn($c) => '"' . $c . '"', $cascadeOptions)) . '}';
         }
+        
+        // Check for orphanRemoval
+        $orphanRemoval = $this->getOrphanRemoval($column, $config);
+        if ($orphanRemoval) {
+            $options[] = 'orphanRemoval=true';
+        }
+        
+        // Check for indexBy
+        $indexBy = $this->getIndexBy($column, $config);
+        if ($indexBy !== null) {
+            $options[] = 'indexBy="' . $indexBy . '"';
+        }
 
-        return sprintf(
-            "@ORM\ManyToOne(%s)\n     * @ORM\JoinColumn(%s)",
-            implode(', ', $options),
-            implode(', ', $joinOptions)
-        );
+        $annotations = [sprintf(
+            "@ORM\%s(%s)",
+            $relationType,
+            implode(', ', $options)
+        )];
+        
+        $annotations[] = sprintf("@ORM\JoinColumn(%s)", implode(', ', $joinOptions));
+        
+        // Add OrderBy annotation if specified (only for collections)
+        if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
+            $orderBy = $this->getOrderBy($column, $config);
+            if (!empty($orderBy)) {
+                $orderByPairs = [];
+                foreach ($orderBy as $field => $direction) {
+                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper($direction));
+                }
+                $annotations[] = sprintf('@ORM\OrderBy({%s})', implode(', ', $orderByPairs));
+            }
+        }
+        
+        return implode("\n     * ", $annotations);
+    }
+
+    /**
+     * Check if this column should be a OneToOne relationship
+     */
+    private function isOneToOneRelationship(ColumnMetadata $column): bool
+    {
+        if ($this->currentTable === null) {
+            return false;
+        }
+
+        $columnName = $column->getName();
+        
+        // Check if this column is part of a unique constraint (excluding composite constraints)
+        foreach ($this->currentTable->getUniqueConstraints() as $constraint) {
+            $columns = $constraint['columns'] ?? [];
+            if (count($columns) === 1 && in_array($columnName, $columns)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function generateProperty(ColumnMetadata $column, array $config = []): array
@@ -117,7 +182,20 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getCascadeOptions(ColumnMetadata $column, array $config): array
     {
-        return $config['cascade'][$column->getName()] ?? [];
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+        
+        // Check if it's a FieldConfig object
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->cascade;
+        }
+        
+        // Check array format
+        if (is_array($columnConfig) && isset($columnConfig['cascade'])) {
+            return $columnConfig['cascade'];
+        }
+        
+        return [];
     }
 
     /**
@@ -159,5 +237,62 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         return $comment;
+    }
+
+    /**
+     * Get orphanRemoval setting from config
+     */
+    private function getOrphanRemoval(ColumnMetadata $column, array $config): bool
+    {
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+        
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->orphanRemoval;
+        }
+        
+        if (is_array($columnConfig) && isset($columnConfig['orphanRemoval'])) {
+            return (bool) $columnConfig['orphanRemoval'];
+        }
+        
+        return false;
+    }
+
+    /**
+     * Get indexBy setting from config
+     */
+    private function getIndexBy(ColumnMetadata $column, array $config): ?string
+    {
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+        
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->indexBy;
+        }
+        
+        if (is_array($columnConfig) && isset($columnConfig['indexBy'])) {
+            return $columnConfig['indexBy'];
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get orderBy setting from config
+     */
+    private function getOrderBy(ColumnMetadata $column, array $config): array
+    {
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+        
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->orderBy;
+        }
+        
+        if (is_array($columnConfig) && isset($columnConfig['orderBy'])) {
+            return $columnConfig['orderBy'];
+        }
+        
+        return [];
     }
 }
