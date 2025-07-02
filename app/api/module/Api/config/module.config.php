@@ -153,7 +153,7 @@ return [
         'factories' => [
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
-            'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClientFactory::class,
+            'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
             'FileUploader' => \Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class,
             'Document' => \Dvsa\Olcs\Api\Service\Document\DocumentFactory::class,
             'DocumentGenerator' => \Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class,
