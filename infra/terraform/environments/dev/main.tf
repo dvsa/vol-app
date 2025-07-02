@@ -295,6 +295,25 @@ module "service" {
         data.aws_security_group.search.id
       ]
     }
+    "pdf-converter" = {
+      cpu    = 1024
+      memory = 2048
+
+      enable_autoscaling_policies = false
+
+      version    = "8"
+      repository = "docker.io/gotenberg/gotenberg"
+
+      listener_rule_enable = false
+
+      task_iam_role_statements = []
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["API"].id
+      ]
+    }
   }
 
   batch = {

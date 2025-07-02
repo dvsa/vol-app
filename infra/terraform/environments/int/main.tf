@@ -294,6 +294,25 @@ module "service" {
       security_group_ids = [
         data.aws_security_group.search.id
       ]
+    },
+    "pdf-converter" = {
+      cpu    = 1024
+      memory = 2048
+
+      enable_autoscaling_policies = false
+
+      version    = "8"
+      repository = "docker.io/gotenberg/gotenberg"
+
+      listener_rule_enable = false
+
+      task_iam_role_statements = []
+
+      subnet_ids = data.aws_subnets.this["API"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["API"].id
+      ]
     }
   }
   batch = {
@@ -476,7 +495,7 @@ module "service" {
       },
       {
         name     = "process-queue-general",
-        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600",],
+        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600", ],
         timeout  = 610,
         schedule = "cron(0/2 8-17 * * ? *)",
       },
