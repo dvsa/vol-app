@@ -225,7 +225,7 @@ module "service" {
       listener_rule_host_header = "iuweb.*"
     }
 
-    /*"selfserve" = {
+    "selfserve" = {
       cpu    = 2048
       memory = 4096
 
@@ -264,7 +264,7 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
-    },*/
+    },
     "search" = {
       cpu    = 4096
       memory = 12288
