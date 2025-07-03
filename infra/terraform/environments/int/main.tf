@@ -225,7 +225,7 @@ module "service" {
       listener_rule_host_header = "iuweb.*"
     }
 
-    "selfserve" = {
+    /*"selfserve" = {
       cpu    = 2048
       memory = 4096
 
@@ -264,7 +264,7 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = "ssweb.*"
-    },
+    },*/
     "search" = {
       cpu    = 4096
       memory = 12288
@@ -476,7 +476,7 @@ module "service" {
       },
       {
         name     = "process-queue-general",
-        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600",],
+        commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "600", ],
         timeout  = 610,
         schedule = "cron(0/2 8-17 * * ? *)",
       },
