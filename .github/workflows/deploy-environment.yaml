@@ -36,6 +36,10 @@ on:
         description: "Search image tag"
         type: string
         required: true
+      queue-processor-image-tag:
+        description: "Queue processor image tag"
+        type: string
+        required: true
       assets-version:
         description: "Assets version"
         type: string
@@ -75,6 +79,9 @@ on:
         type: string
         required: true
       search-image-tag:
+        type: string
+        required: true
+      queue-processor-image-tag:
         type: string
         required: true
       assets-version:
@@ -195,6 +202,7 @@ jobs:
           TF_VAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
           TF_VAR_internal_image_tag: ${{ inputs.internal-image-tag }}
           TF_VAR_search_image_tag: ${{ inputs.search-image-tag }}
+          TF_VAR_queue_processor_image_tag: ${{ inputs.queue-processor-image-tag }}
           TF_VAR_assets_version: ${{ inputs.assets-version }}
         run: terraform plan -parallelism=80 ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -out=tfplan ${{ inputs.terraform-args || '' }}
 

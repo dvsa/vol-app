@@ -43,6 +43,38 @@ services:
       AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN-}
       PHP_IDE_CONFIG: "serverName=vol.local.api"
 
+  queue-processor:
+    build:
+      context: infra/docker/cli
+      target: development
+    entrypoint:
+      [
+        "php",
+        "-d",
+        "memory_limit=2048M",
+        "/var/www/html/vendor/bin/laminas",
+        "--container=/var/www/html/config/container-cli.php",
+        "queue:scheduler",
+      ]
+    volumes:
+      - ./app/api:/var/www/html
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY-}
+      AWS_SESSION_TOKEN: ${AWS_SESSION_TOKEN-}
+      ENVIRONMENT_NAME: local
+      PHP_IDE_CONFIG: "serverName=vol.local.queue-processor"
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/health-check.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
   selfserve:
     build:
       context: infra/docker/selfserve

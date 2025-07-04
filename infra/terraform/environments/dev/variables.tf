@@ -25,5 +25,10 @@ variable "cli_image_tag" {
 
 variable "search_image_tag" {
   type        = string
-  description = "The tag of the cli image to deploy"
+  description = "The tag of the search image to deploy"
+}
+
+variable "queue_processor_image_tag" {
+  type        = string
+  description = "The tag of the queue processor image to deploy"
 }

@@ -60,6 +60,7 @@ return [
             'queue:process-insolvency' => Dvsa\Olcs\Cli\Command\Queue\ProcessInsolvencySQSQueueCommand::class,
             'queue:process-insolvency-dlq' => Dvsa\Olcs\Cli\Command\Queue\ProcessInsolvencyDlqSQSQueueCommand::class,
             'queue:transxchange-consumer' => Dvsa\Olcs\Cli\Command\Queue\TransXChangeConsumerSQSQueueCommand::class,
+            'queue:scheduler' => Dvsa\Olcs\Cli\Command\Queue\SchedulerCommand::class,
             'migrations:current'    => MigrationCommands\CurrentCommand::class,
             'migrations:execute'    => MigrationCommands\ExecuteCommand::class,
             'migrations:generate'   => MigrationCommands\GenerateCommand::class,
@@ -175,6 +176,9 @@ return [
         QueueCommands\ProcessInsolvencySQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
+        QueueCommands\SchedulerCommand::class => array_merge($commonCommandDeps, [
+            'config',
+        ]),
     ],
     'cache' => [
         'adapter' => [
