@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "< 5.100.0"
     }
+    null = {
+      source  = "hashicorp/null"
+      version = ">= 3.0.0"
+    }
   }
 
   required_version = ">= 1.0"
@@ -16,7 +20,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = "prep"
+      Environment = "prod"
       Repository  = "https://github.com/dvsa/vol-app"
     }
   }
