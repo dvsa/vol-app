@@ -220,4 +220,16 @@ final readonly class MethodGeneratorService
     {
         return $this->inflector->singularize($word);
     }
+
+    /**
+     * Get the method name suffix for a field
+     * For collection fields, the property name is already pluralized, so just use it
+     */
+    public function getMethodNameForField(array $field): string
+    {
+        $propertyName = $field['property']['name'] ?? '';
+        
+        // Just capitalize the property name - it's already properly pluralized
+        return ucfirst($propertyName);
+    }
 }

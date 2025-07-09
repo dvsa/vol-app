@@ -38,12 +38,29 @@ class GenerateEntities extends AbstractCommandHandler
         // Get all tables from database
         $tableNames = $this->schemaIntrospector->getTableNames();
         
-        // Filter tables based on include/exclude lists
-        $tableNames = $this->filterTables($tableNames, $command);
+        // Get relationships (including ManyToMany from join tables)
+        $relationships = $this->schemaIntrospector->getRelationships();
+        $config['relationships'] = $relationships;
         
-        // Get table metadata and filter out ignored tables
+        // Get list of join tables to exclude from entity generation
+        $joinTableNames = [];
+        foreach ($relationships as $tableName => $tableRelationships) {
+            foreach ($tableRelationships as $relationship) {
+                if ($relationship['type'] === 'many_to_many' && isset($relationship['join_table'])) {
+                    $joinTableNames[] = $relationship['join_table'];
+                }
+            }
+        }
+        $joinTableNames = array_unique($joinTableNames);
+        
+        // Get table metadata and filter out ignored tables and join tables
         $tables = [];
         foreach ($tableNames as $tableName) {
+            // Skip join tables
+            if (in_array($tableName, $joinTableNames)) {
+                continue;
+            }
+            
             $tableMetadata = $this->schemaIntrospector->getTableMetadata($tableName);
             
             // Skip tables with @settings['ignore'] in comment
@@ -53,10 +70,6 @@ class GenerateEntities extends AbstractCommandHandler
             
             $tables[] = $tableMetadata;
         }
-
-        // Get relationships (including ManyToMany from join tables)
-        $relationships = $this->schemaIntrospector->getRelationships();
-        $config['relationships'] = $relationships;
 
         // Generate entities
         $result = $this->entityGenerator->generateEntities($tables, $config);
@@ -88,6 +101,7 @@ class GenerateEntities extends AbstractCommandHandler
         $olcsResult->setFlag('warnings', $result->getWarnings());
         $olcsResult->setFlag('duration', $result->getDuration());
         $olcsResult->setFlag('dryRun', $command->isDryRun());
+        $olcsResult->setFlag('outputPath', $config['outputPath']);
 
         return $olcsResult;
     }
@@ -115,26 +129,6 @@ class GenerateEntities extends AbstractCommandHandler
         ];
     }
 
-    /**
-     * Filter tables based on include/exclude lists
-     */
-    private function filterTables(array $tableNames, Command $command): array
-    {
-        $includeTables = $command->getIncludeTables();
-        $excludeTables = $command->getExcludeTables();
-
-        // Apply include filter if specified
-        if (!empty($includeTables)) {
-            $tableNames = array_intersect($tableNames, $includeTables);
-        }
-
-        // Apply exclude filter
-        if (!empty($excludeTables)) {
-            $tableNames = array_diff($tableNames, $excludeTables);
-        }
-
-        return array_values($tableNames);
-    }
 
     /**
      * Check if table should be ignored based on comment
@@ -163,27 +157,38 @@ class GenerateEntities extends AbstractCommandHandler
         foreach ($result->getEntities() as $entityData) {
             $namespaceFolder = $entityData->getNamespaceFolder();
             
-            // Create namespace folder if it doesn't exist
-            $namespacePath = $outputPath . '/' . $namespaceFolder;
+            // Handle path construction - avoid Entity/Entity duplication
+            if (empty($namespaceFolder) || $namespaceFolder === 'Entity') {
+                // For root entities, write directly to output path
+                $namespacePath = $outputPath;
+                $testNamespacePath = $outputPath . '/tests';
+            } else {
+                // For namespaced entities, create subdirectory
+                $namespacePath = $outputPath . '/' . $namespaceFolder;
+                $testNamespacePath = $outputPath . '/tests/' . $namespaceFolder;
+            }
+            
+            // Create directories if they don't exist
             if (!is_dir($namespacePath)) {
                 mkdir($namespacePath, 0755, true);
             }
             
-            // Write abstract entity in namespace folder
+            // Write abstract entity
             $abstractPath = $namespacePath . '/Abstract' . $entityData->getClassName() . '.php';
             file_put_contents($abstractPath, $entityData->getAbstractContent());
 
-            // Write concrete entity in namespace folder
+            // Write concrete entity ONLY if it doesn't already exist
             $concretePath = $namespacePath . '/' . $entityData->getClassName() . '.php';
-            file_put_contents($concretePath, $entityData->getConcreteContent());
-
-            // Write test in tests namespace folder
-            $testNamespacePath = $outputPath . '/tests/' . $namespaceFolder;
-            if (!is_dir($testNamespacePath)) {
-                mkdir($testNamespacePath, 0755, true);
+            if (!file_exists($concretePath)) {
+                file_put_contents($concretePath, $entityData->getConcreteContent());
             }
-            $testPath = $testNamespacePath . '/' . $entityData->getClassName() . 'EntityTest.php';
-            file_put_contents($testPath, $entityData->getTestContent());
+
+            // Test generation disabled
+            // if (!is_dir($testNamespacePath)) {
+            //     mkdir($testNamespacePath, 0755, true);
+            // }
+            // $testPath = $testNamespacePath . '/' . $entityData->getClassName() . 'EntityTest.php';
+            // file_put_contents($testPath, $entityData->getTestContent());
         }
     }
 
@@ -196,9 +201,10 @@ class GenerateEntities extends AbstractCommandHandler
             mkdir($outputPath, 0755, true);
         }
 
-        $testDir = $outputPath . '/tests';
-        if (!is_dir($testDir)) {
-            mkdir($testDir, 0755, true);
-        }
+        // Test directory creation disabled
+        // $testDir = $outputPath . '/tests';
+        // if (!is_dir($testDir)) {
+        //     mkdir($testDir, 0755, true);
+        // }
     }
 }

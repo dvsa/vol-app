@@ -13,7 +13,13 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
 {
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
-        // Check if explicitly configured as encrypted_string type
+        // Check if a FieldConfig object was passed in config array
+        if (isset($config['fieldConfig']) && $config['fieldConfig'] instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            $fieldConfig = $config['fieldConfig'];
+            return $fieldConfig->type !== null && $fieldConfig->type->value === 'encrypted_string';
+        }
+        
+        // Legacy support: Check if config is passed as array with column name as key
         $columnConfig = $config[$column->getName()] ?? null;
         
         if ($columnConfig !== null) {
@@ -52,6 +58,15 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
             $column->getName(),
             $optionsStr
         );
+    }
+
+    /**
+     * Override to not remove _id suffix for regular columns
+     */
+    protected function generatePropertyName(string $columnName): string
+    {
+        // For regular columns, just convert to camelCase without removing _id
+        return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
     }
 
     public function generateProperty(ColumnMetadata $column, array $config = []): array
