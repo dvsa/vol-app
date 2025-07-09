@@ -48,7 +48,7 @@ class EntityGenerator implements EntityGeneratorInterface
         }
 
         // Second pass: Add inverse relationships
-        $this->addInverseRelationships($result, $filteredTables);
+        $this->addInverseRelationships($result, $filteredTables, $config);
 
         $result->setDuration(microtime(true) - $startTime);
         return $result;
@@ -79,9 +79,9 @@ class EntityGenerator implements EntityGeneratorInterface
         $concreteContent = $this->generateConcreteEntity($entityData, $config);
         $entityData->setConcreteContent($concreteContent);
 
-        // Generate test
-        $testContent = $this->generateEntityTest($entityData, $config);
-        $entityData->setTestContent($testContent);
+        // Test generation disabled
+        // $testContent = $this->generateEntityTest($entityData, $config);
+        // $entityData->setTestContent($testContent);
 
         // Store enhanced metadata
         $entityData->setMetadata([
@@ -111,8 +111,11 @@ class EntityGenerator implements EntityGeneratorInterface
             $columnName = $column->getName();
             $fieldConfig = $tableConfig[$columnName] ?? null;
             
+            // Set table metadata on RelationshipTypeHandler BEFORE getting handler
+            $this->setTableOnRelationshipHandlers($table);
+            
             // Get the appropriate type handler with EntityConfig support
-            $handler = $this->typeHandlerRegistry->getHandler($column, $fieldConfig ? [$columnName => $fieldConfig] : []);
+            $handler = $this->typeHandlerRegistry->getHandler($column, $fieldConfig ? ['fieldConfig' => $fieldConfig] : []);
             
             if ($handler === null) {
                 throw new \RuntimeException(
@@ -120,23 +123,28 @@ class EntityGenerator implements EntityGeneratorInterface
                 );
             }
 
-            // Pass table metadata to handler if it's a RelationshipTypeHandler
-            if ($handler instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler) {
-                $handler->setCurrentTable($table);
-            }
-
             // Generate field data with EntityConfig integration
             $fieldData = [
                 'column' => $column,
                 'handler' => $handler,
                 'fieldConfig' => $fieldConfig,
-                'annotation' => $this->generateFieldAnnotation($column, $handler, $fieldConfig),
-                'property' => $this->generateFieldProperty($column, $handler, $fieldConfig, $tableName),
+                'annotation' => $this->generateFieldAnnotation($column, $handler, $fieldConfig, $config),
+                'property' => $this->generateFieldProperty($column, $handler, $fieldConfig, $tableName, $config),
                 'isRelationship' => $this->isRelationshipField($column, $table),
                 'isCollection' => false, // Will be set to true for inverse relationships
             ];
 
             $fields[] = $fieldData;
+        }
+
+        // Check if ManyToMany relationships should be skipped for this entity
+        $className = $this->generateClassName($tableName, $config);
+        $namespace = $this->getNamespace($className, $config);
+        $entityClass = $namespace . '\\' . $className;
+        
+        if ($this->entityConfigService->shouldSkipManyToMany($entityClass)) {
+            // Skip adding ManyToMany relationships for this entity
+            return $fields;
         }
 
         // Add ManyToMany relationships if present
@@ -157,7 +165,7 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Generate field annotation with EntityConfig support
      */
-    private function generateFieldAnnotation($column, $handler, $fieldConfig): string
+    private function generateFieldAnnotation($column, $handler, $fieldConfig, array $config = []): string
     {
         // Use enhanced annotation method if available
         if (method_exists($handler, 'generateAnnotationWithConfig')) {
@@ -165,16 +173,23 @@ class EntityGenerator implements EntityGeneratorInterface
         }
 
         // Fall back to legacy method
-        $config = $fieldConfig ? [$column->getName() => $fieldConfig] : [];
-        return $handler->generateAnnotation($column, $config);
+        $handlerConfig = ['fieldConfig' => $fieldConfig];
+        if (!empty($config)) {
+            $handlerConfig = array_merge($handlerConfig, $config);
+        }
+        return $handler->generateAnnotation($column, $handlerConfig);
     }
 
     /**
      * Generate field property with EntityConfig support
      */
-    private function generateFieldProperty($column, $handler, $fieldConfig, $tableName): array
+    private function generateFieldProperty($column, $handler, $fieldConfig, $tableName, array $config = []): array
     {
-        $property = $handler->generateProperty($column, $fieldConfig ? [$column->getName() => $fieldConfig] : []);
+        $handlerConfig = ['fieldConfig' => $fieldConfig];
+        if (!empty($config)) {
+            $handlerConfig = array_merge($handlerConfig, $config);
+        }
+        $property = $handler->generateProperty($column, $handlerConfig);
         
         // Check for property name override in field config first (e.g., address table)
         if ($fieldConfig && $fieldConfig->property !== null) {
@@ -210,9 +225,22 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Add inverse relationships to generated entities
      */
-    private function addInverseRelationships(GenerationResult $result, array $tables): void
+    private function addInverseRelationships(GenerationResult $result, array $tables, array $config): void
     {
-        $inverseRelationships = $this->inverseRelationshipProcessor->processInverseRelationships($tables);
+        // Get list of join table names from relationships config
+        $joinTableNames = [];
+        if (isset($config['relationships'])) {
+            foreach ($config['relationships'] as $tableName => $tableRelationships) {
+                foreach ($tableRelationships as $relationship) {
+                    if ($relationship['type'] === 'many_to_many' && isset($relationship['join_table'])) {
+                        $joinTableNames[] = $relationship['join_table'];
+                    }
+                }
+            }
+        }
+        $joinTableNames = array_unique($joinTableNames);
+        
+        $inverseRelationships = $this->inverseRelationshipProcessor->processInverseRelationships($tables, $joinTableNames);
 
         foreach ($result->getEntities() as $entityData) {
             $className = $entityData->getClassName();
@@ -397,8 +425,8 @@ class EntityGenerator implements EntityGeneratorInterface
             return 'Dvsa\\Olcs\\Api\\Entity\\' . $namespaces[$className];
         }
 
-        // Default namespace
-        return 'Dvsa\\Olcs\\Api\\Entity\\Generic';
+        // Default to root Entity namespace (no sub-namespace)
+        return 'Dvsa\\Olcs\\Api\\Entity';
     }
 
     /**
@@ -413,8 +441,8 @@ class EntityGenerator implements EntityGeneratorInterface
             return $namespaces[$className];
         }
 
-        // Default namespace
-        return 'Generic';
+        // Default to empty string (root Entity folder)
+        return '';
     }
 
     /**
@@ -426,21 +454,68 @@ class EntityGenerator implements EntityGeneratorInterface
         $foreignTable = $relationship['foreign_table'];
         $entityName = $this->generateClassName($foreignTable, []);
         
-        // Generate property name using PropertyNameResolver
-        $basePropertyName = lcfirst($entityName);
-        $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+        // Get namespace for the target entity from entity config
+        $namespace = $this->entityConfigService->getEntityNamespace($entityName) ?? 'Generic';
+        $targetEntityClass = 'Dvsa\\Olcs\\Api\\Entity\\' . $namespace . '\\' . $entityName;
+        
+        // Check if ManyToMany relationships should be skipped for the target entity
+        if ($this->entityConfigService->shouldSkipManyToMany($targetEntityClass)) {
+            // Skip creating ManyToMany relationship to this target entity
+            return null;
+        }
+        
+        // Check if there's an inversedBy configuration for this join table
+        // This happens when a join table also has an entity configuration
+        $joinTableConfig = $this->entityConfigService->getTableConfig($relationship['join_table']);
+        $propertyNameFromConfig = null;
+        
+        // Look for the foreign key that points back to our table
+        foreach ($joinTableConfig as $columnName => $fieldConfig) {
+            if ($fieldConfig instanceof FieldConfig && 
+                $fieldConfig->inversedBy !== null && 
+                $fieldConfig->inversedBy->entity === $this->generateClassName($tableName, [])) {
+                // Use the property name from the inversedBy configuration
+                $propertyNameFromConfig = $fieldConfig->inversedBy->property;
+                break;
+            }
+        }
+        
+        if ($propertyNameFromConfig !== null) {
+            // Use the property name from EntityConfig (don't pluralize it)
+            $propertyName = $propertyNameFromConfig;
+        } else {
+            // Derive property name from the inverse join column name
+            // e.g., category_id -> category -> categorys
+            $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
+            if ($inverseJoinColumn && preg_match('/^(.+?)_id$/', $inverseJoinColumn, $matches)) {
+                // Remove _id suffix and use that as base property name
+                $basePropertyName = lcfirst(str_replace('_', '', ucwords($matches[1], '_')));
+            } else {
+                // Fall back to entity-based name
+                $basePropertyName = lcfirst($entityName);
+            }
+            
+            $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+        }
         
         // Get namespace for the target entity from entity config
         $namespace = $this->entityConfigService->getEntityNamespace($entityName) ?? 'Generic';
         $targetEntity = 'Dvsa\\Olcs\\Api\\Entity\\' . $namespace . '\\' . $entityName;
         
-        // Determine which side owns the relationship (alphabetically first)
-        $isOwning = strcmp($tableName, $foreignTable) < 0;
-        
-        // For inverse side, check if EntityConfig has inversedBy
-        if (!$isOwning && !$this->hasInversedByConfiguration($foreignTable, $tableName)) {
-            return null; // Skip if no inversedBy configuration
+        // Determine which side owns the relationship based on column order in join table
+        // The entity whose foreign key column appears FIRST owns the relationship
+        $firstJoinColumn = $relationship['join_columns'][0] ?? null;
+        if ($firstJoinColumn && preg_match('/^(.+?)_id$/', $firstJoinColumn, $matches)) {
+            // Check if the first column's table name matches our current table
+            $firstColumnTable = $matches[1];
+            $isOwning = ($firstColumnTable === $tableName);
+        } else {
+            // Fallback to alphabetical ordering if we can't determine from columns
+            $isOwning = strcmp($tableName, $foreignTable) < 0;
         }
+        
+        // For inverse side, we should generate it automatically for many-to-many relationships
+        // The owning side will have inversedBy pointing to this side
         
         // Generate the inverse property name
         $inversePropertyName = $this->generateInversePropertyName($tableName);
@@ -637,5 +712,17 @@ class EntityGenerator implements EntityGeneratorInterface
 
         // Look for @settings['ignore'] in the comment
         return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
+    }
+
+    /**
+     * Set table metadata on all RelationshipTypeHandlers in the registry
+     */
+    private function setTableOnRelationshipHandlers(TableMetadata $table): void
+    {
+        foreach ($this->typeHandlerRegistry->getHandlers() as $handler) {
+            if ($handler instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler) {
+                $handler->setCurrentTable($table);
+            }
+        }
     }
 }

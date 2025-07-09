@@ -13,8 +13,8 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
 {
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
-        // Handle 'id' column specifically
-        return $column->getName() === 'id' && $column->isAutoIncrement();
+        // Handle any primary key column
+        return $column->isPrimary();
     }
 
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
@@ -25,27 +25,70 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
         $annotations[] = '@ORM\Id';
         
         // Add column definition
-        $type = 'integer';
-        $annotations[] = sprintf(
-            '@ORM\Column(type="%s", name="%s")',
-            $type,
+        $columnDef = sprintf(
+            '@ORM\Column(type="%s", name="%s"',
+            $column->getType(),
             $column->getName()
         );
         
-        // Add generation strategy
-        $annotations[] = '@ORM\GeneratedValue(strategy="IDENTITY")';
+        // Add length for string types
+        if ($column->getLength() && in_array($column->getType(), ['string', 'char'])) {
+            $columnDef .= sprintf(', length=%d', $column->getLength());
+        }
+        
+        // Add nullable if needed
+        if ($column->isNullable()) {
+            $columnDef .= ', nullable=true';
+        } else {
+            $columnDef .= ', nullable=false';
+        }
+        
+        $columnDef .= ')';
+        $annotations[] = $columnDef;
+        
+        // Add generation strategy only for auto-increment columns
+        if ($column->isAutoIncrement()) {
+            $annotations[] = '@ORM\GeneratedValue(strategy="IDENTITY")';
+        }
         
         return implode("\n     * ", $annotations);
     }
 
     public function generateProperty(ColumnMetadata $column, array $config = []): array
     {
+        // Map database types to PHP types
+        $phpType = match($column->getType()) {
+            'integer', 'bigint', 'smallint' => 'int',
+            'string', 'char', 'varchar' => 'string',
+            'boolean' => 'bool',
+            'float', 'double', 'decimal' => 'float',
+            default => 'mixed'
+        };
+        
+        // Generate appropriate default value
+        $defaultValue = 'null';
+        if (!$column->isNullable() && !$column->isAutoIncrement()) {
+            $defaultValue = match($phpType) {
+                'int' => '0',
+                'string' => "''",
+                'bool' => 'false',
+                'float' => '0.0',
+                default => 'null'
+            };
+        }
+        
+        // Generate descriptive docBlock
+        $docBlock = sprintf(
+            'Primary key%s',
+            $column->isAutoIncrement() ? '.  Auto incremented if numeric.' : ''
+        );
+        
         return [
-            'name' => 'id',
-            'type' => 'int',
-            'docBlock' => 'Identifier - Id',
-            'defaultValue' => 'null',
-            'nullable' => false,
+            'name' => $column->getName(),
+            'type' => $phpType,
+            'docBlock' => $docBlock,
+            'defaultValue' => $defaultValue,
+            'nullable' => $column->isNullable(),
             'isRelationship' => false,
         ];
     }

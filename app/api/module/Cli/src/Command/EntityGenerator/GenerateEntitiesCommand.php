@@ -52,18 +52,6 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
                 'c',
                 InputOption::VALUE_REQUIRED,
                 'Path to EntityConfig.php file (default: data/db/EntityConfig.php)'
-            )
-            ->addOption(
-                'include-tables',
-                'i',
-                InputOption::VALUE_REQUIRED,
-                'Comma-separated list of tables to include (if not specified, all tables are included)'
-            )
-            ->addOption(
-                'exclude-tables',
-                'e',
-                InputOption::VALUE_REQUIRED,
-                'Comma-separated list of tables to exclude'
             );
     }
 
@@ -73,26 +61,11 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
 
         $io->title('OLCS Entity Generator');
 
-        // Parse table lists
-        $includeTables = $this->parseTableList($input->getOption('include-tables'));
-        $excludeTables = $this->parseTableList($input->getOption('exclude-tables'));
-
-        // Debug output
-        $io->note([
-            'Raw include-tables option: ' . var_export($input->getOption('include-tables'), true),
-            'Raw exclude-tables option: ' . var_export($input->getOption('exclude-tables'), true),
-            'Raw output-path option: ' . var_export($input->getOption('output-path'), true),
-            'Parsed include tables: ' . implode(', ', $includeTables),
-            'Parsed exclude tables: ' . implode(', ', $excludeTables),
-        ]);
-
-        $command = new GenerateEntitiesDto([
+        $command = GenerateEntitiesDto::create([
             'outputPath' => $input->getOption('output-path'),
             'dryRun' => $input->getOption('dry-run'),
             'replace' => $input->getOption('replace'),
             'configPath' => $input->getOption('config'),
-            'includeTables' => $includeTables,
-            'excludeTables' => $excludeTables,
         ]);
 
         // Warn if replace mode is enabled
@@ -123,17 +96,6 @@ class GenerateEntitiesCommand extends AbstractOlcsCommand
         }
     }
 
-    /**
-     * Parse comma-separated table list
-     */
-    private function parseTableList(?string $tableList): array
-    {
-        if (empty($tableList)) {
-            return [];
-        }
-
-        return array_map('trim', explode(',', $tableList));
-    }
 
     /**
      * Display generation result

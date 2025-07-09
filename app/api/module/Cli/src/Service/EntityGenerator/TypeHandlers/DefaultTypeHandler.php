@@ -98,6 +98,15 @@ class DefaultTypeHandler extends AbstractTypeHandler
         return implode("\n     * ", $annotations);
     }
 
+    /**
+     * Override to not remove _id suffix for regular columns
+     */
+    protected function generatePropertyName(string $columnName): string
+    {
+        // For regular columns, just convert to camelCase without removing _id
+        return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
+    }
+
     public function generateProperty(ColumnMetadata $column, array $config = []): array
     {
         $propertyName = $this->generatePropertyName($column->getName());

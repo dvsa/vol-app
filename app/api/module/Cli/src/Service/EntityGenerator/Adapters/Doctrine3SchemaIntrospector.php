@@ -95,26 +95,25 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         // Add many_to_many relationships from join tables
         $joinTables = $this->detectJoinTables();
         foreach ($joinTables as $joinTableName => $joinTableInfo) {
-            // Add ManyToMany relationship to both entities
-            foreach ($joinTableInfo['entities'] as $index => $entity) {
-                $otherIndex = $index === 0 ? 1 : 0;
-                $otherEntity = $joinTableInfo['entities'][$otherIndex];
-                
-                if (!isset($relationships[$entity['table']])) {
-                    $relationships[$entity['table']] = [];
-                }
-                
-                $relationships[$entity['table']][] = [
-                    'type' => 'many_to_many',
-                    'join_table' => $joinTableName,
-                    'local_columns' => $entity['columns'],
-                    'foreign_table' => $otherEntity['table'],
-                    'foreign_columns' => $otherEntity['columns'],
-                    'join_columns' => $entity['join_columns'],
-                    'inverse_join_columns' => $otherEntity['join_columns'],
-                    'name' => $joinTableName . '_' . $entity['table'] . '_' . $otherEntity['table'],
-                ];
+            // Only add ManyToMany relationship to the FIRST entity (owner of the relationship)
+            // The inverse side will only be added if explicitly configured in EntityConfig
+            $owningEntity = $joinTableInfo['entities'][0];
+            $inverseEntity = $joinTableInfo['entities'][1];
+            
+            if (!isset($relationships[$owningEntity['table']])) {
+                $relationships[$owningEntity['table']] = [];
             }
+            
+            $relationships[$owningEntity['table']][] = [
+                'type' => 'many_to_many',
+                'join_table' => $joinTableName,
+                'local_columns' => $owningEntity['columns'],
+                'foreign_table' => $inverseEntity['table'],
+                'foreign_columns' => $inverseEntity['columns'],
+                'join_columns' => $owningEntity['join_columns'],
+                'inverse_join_columns' => $inverseEntity['join_columns'],
+                'name' => $joinTableName . '_' . $owningEntity['table'] . '_' . $inverseEntity['table'],
+            ];
         }
 
         return $relationships;
@@ -144,9 +143,31 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     private function extractColumns(Table $table): array
     {
         $columns = [];
+        
+        // Get primary key columns
+        $primaryKeyColumns = [];
+        if ($table->hasPrimaryKey()) {
+            $primaryKey = $table->getPrimaryKey();
+            $primaryKeyColumns = $primaryKey->getColumns();
+        }
 
         foreach ($table->getColumns() as $column) {
-            $columns[$column->getName()] = $this->convertColumn($column);
+            $columnMetadata = $this->convertColumn($column);
+            // Set primary key flag
+            if (in_array($column->getName(), $primaryKeyColumns)) {
+                $columnMetadata = new ColumnMetadata(
+                    name: $columnMetadata->getName(),
+                    type: $columnMetadata->getType(),
+                    length: $columnMetadata->getLength(),
+                    nullable: $columnMetadata->isNullable(),
+                    primary: true,
+                    autoIncrement: $columnMetadata->isAutoIncrement(),
+                    default: $columnMetadata->getDefault(),
+                    comment: $columnMetadata->getComment(),
+                    options: $columnMetadata->getOptions()
+                );
+            }
+            $columns[$column->getName()] = $columnMetadata;
         }
 
         return $columns;

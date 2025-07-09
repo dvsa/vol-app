@@ -86,8 +86,9 @@ final readonly class PropertyNameResolver
             return $basePropertyName;
         }
 
-        // Use Doctrine Inflector for standard pluralization
-        return $this->inflector->pluralize($basePropertyName);
+        // Match old system behavior: simple 's' suffix for pluralization
+        // This is how the legacy AlignEntitiesToSchema script works
+        return $basePropertyName . 's';
     }
 
     /**
