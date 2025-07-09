@@ -1,5 +1,31 @@
 # Changelog
 
+## [5.19.0-rc1](https://github.com/dvsa/vol-app/compare/v5.19.0...v5.19.0-rc1) (2025-07-09)
+
+
+### Features
+
+* editorjs implementation for case submission comments ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
+* replace tinyMCE with editorJS ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
+* replace tinyMCE with EditorJS and implement conversion service from editorJS JSON to HTML ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
+* update DTOs and unit tests for refactored tinymce to editorJS work ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
+* use editorjs instead of tinymce for case submission comments ([#949](https://github.com/dvsa/vol-app/issues/949)) ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
+
+
+### Bug Fixes
+
+* amend timings process queue ([#978](https://github.com/dvsa/vol-app/issues/978)) ([2ee38ae](https://github.com/dvsa/vol-app/commit/2ee38aeceb6db8d0fe2a6b2863430ca12d057650))
+* limit provider ([#953](https://github.com/dvsa/vol-app/issues/953)) ([d7c0374](https://github.com/dvsa/vol-app/commit/d7c0374a5b3054555c37f4e283d5346f69c85287))
+* resolve timing issues with process queue ([#975](https://github.com/dvsa/vol-app/issues/975)) ([f1aafbb](https://github.com/dvsa/vol-app/commit/f1aafbb1fd928c2800dbc5021518056cfbc3c07d))
+* static asset cache buster broken on production when using release strategy ([#968](https://github.com/dvsa/vol-app/issues/968)) ([0d8b7f1](https://github.com/dvsa/vol-app/commit/0d8b7f17588a9d82edbbaeef45ffdbceb234ea3b))
+* trigger-cd-20-july-1153 ([#951](https://github.com/dvsa/vol-app/issues/951)) ([242f22f](https://github.com/dvsa/vol-app/commit/242f22ff78d346799f2007f6e873f73b36ae2038))
+* update tf providers for envs ([#954](https://github.com/dvsa/vol-app/issues/954)) ([22ddaa4](https://github.com/dvsa/vol-app/commit/22ddaa4f161dd1ba2c756052b1cc62aa0e06cbc2))
+
+
+### Miscellaneous Chores
+
+* release v5.19.0-rc1 ([b776a2f](https://github.com/dvsa/vol-app/commit/b776a2f739551137d31c9e267d03077c1fbbcc7e))
+
 ## [5.19.0](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.19.0) (2025-06-19)
 
 
