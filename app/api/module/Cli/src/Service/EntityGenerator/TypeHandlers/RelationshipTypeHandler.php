@@ -24,10 +24,22 @@ class RelationshipTypeHandler extends AbstractTypeHandler
 
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
-        // Check if this column is a foreign key
-        return str_ends_with($column->getName(), '_id') && 
-               $column->getName() !== 'id' && 
-               !str_starts_with($column->getName(), 'ol_');
+        // Only handle columns that are actual foreign keys
+        if ($this->currentTable === null) {
+            return false;
+        }
+        
+        $columnName = $column->getName();
+        
+        // Check if this column is part of a foreign key constraint
+        foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+            $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
+            if (in_array($columnName, $localColumns)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
@@ -149,7 +161,27 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             return $config['targetEntity'][$columnName];
         }
 
-        // Try to derive from column name
+        // Get the foreign table name from the foreign key constraint
+        if ($this->currentTable !== null) {
+            foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+                $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
+                if (in_array($columnName, $localColumns)) {
+                    // Get the foreign table name from the constraint
+                    $foreignTableName = is_array($foreignKey) ? ($foreignKey['foreign_table'] ?? null) : $foreignKey->getForeignTableName();
+                    if ($foreignTableName !== null) {
+                        // Convert table name to entity name
+                        $entityName = $this->tableNameToEntityName($foreignTableName);
+                        
+                        // Check if there's a namespace mapping
+                        $namespace = $this->getEntityNamespace($entityName, $config);
+                        
+                        return $namespace . '\\' . $entityName;
+                    }
+                }
+            }
+        }
+
+        // Try to derive from column name as fallback
         if (preg_match('/^(.+)_id$/', $columnName, $matches)) {
             $entityName = $this->columnNameToEntityName($matches[1]);
             
@@ -208,16 +240,24 @@ class RelationshipTypeHandler extends AbstractTypeHandler
     }
 
     /**
+     * Convert table name to entity name
+     */
+    private function tableNameToEntityName(string $tableName): string
+    {
+        // Convert snake_case to PascalCase
+        return str_replace('_', '', ucwords($tableName, '_'));
+    }
+
+    /**
      * Get entity namespace based on entity name
      */
     private function getEntityNamespace(string $entityName, array $config): string
     {
         $namespaces = $config['namespaces'] ?? [];
         
-        foreach ($namespaces as $namespace => $entities) {
-            if (in_array($entityName, $entities)) {
-                return $namespace;
-            }
+        // The namespace config maps entity names to namespace folders
+        if (isset($namespaces[$entityName])) {
+            return 'Dvsa\\Olcs\\Api\\Entity\\' . $namespaces[$entityName];
         }
 
         // Default namespace

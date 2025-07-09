@@ -22,12 +22,19 @@ readonly class InverseRelationshipProcessor
     /**
      * Process all inverse relationships and return them grouped by target entity
      */
-    public function processInverseRelationships(array $tables): array
+    public function processInverseRelationships(array $tables, array $joinTableNames = []): array
     {
         $inverseRelationships = [];
 
         foreach ($tables as $table) {
             $tableName = $table->getTableName();
+            
+            // Skip processing inverse relationships for join tables
+            // Join tables should only create ManyToMany relationships, not OneToMany
+            if (in_array($tableName, $joinTableNames)) {
+                continue;
+            }
+            
             $tableConfig = $this->configService->getTableConfig($tableName);
 
             foreach ($table->getColumns() as $column) {

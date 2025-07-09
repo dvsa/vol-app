@@ -15,7 +15,14 @@ class YesNoTypeHandler extends AbstractTypeHandler
 {
     public function supports(ColumnMetadata $column, array $config = []): bool
     {
-        // Check if explicitly configured as yesno type in EntityConfig
+        // Check if a FieldConfig object was passed in config array
+        if (isset($config['fieldConfig']) && $config['fieldConfig'] instanceof FieldConfig) {
+            $fieldConfig = $config['fieldConfig'];
+            return $fieldConfig->type === CustomFieldType::YESNO 
+                || $fieldConfig->type === CustomFieldType::YESNO_NULL;
+        }
+        
+        // Legacy support: Check if config is passed as array with column name as key
         $columnConfig = $config[$column->getName()] ?? null;
         
         if ($columnConfig !== null) {
@@ -67,7 +74,9 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add default value option
         if ($column->getDefault() !== null) {
-            $defaultValue = $this->generateDefaultValue($column->getDefault());
+            // For yesno fields, the default is always numeric (0 or 1)
+            $default = $column->getDefault();
+            $defaultValue = is_numeric($default) ? (string)$default : '0';
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -96,7 +105,9 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         // Add default value option
         if ($column->getDefault() !== null) {
-            $defaultValue = $this->generateDefaultValue($column->getDefault());
+            // For yesno fields, the default is always numeric (0 or 1)
+            $default = $column->getDefault();
+            $defaultValue = is_numeric($default) ? (string)$default : '0';
             $options[] = 'options={"default": ' . $defaultValue . '}';
         }
 
@@ -108,6 +119,15 @@ class YesNoTypeHandler extends AbstractTypeHandler
             $column->getName(),
             $optionsStr
         );
+    }
+
+    /**
+     * Override to not remove _id suffix for regular columns
+     */
+    protected function generatePropertyName(string $columnName): string
+    {
+        // For regular columns, just convert to camelCase without removing _id
+        return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
     }
 
     public function generateProperty(ColumnMetadata $column, array $config = []): array
