@@ -6021,16 +6021,16 @@
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v7.16.1",
+      "version": "v7.17.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "f07f26a0365d87f6ee9fdd0125cd2be0192f79c7"
+        "reference": "22d59272188df8cda41a3727df9f5dafb8f56f68"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/f07f26a0365d87f6ee9fdd0125cd2be0192f79c7",
-        "reference": "f07f26a0365d87f6ee9fdd0125cd2be0192f79c7",
+        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/22d59272188df8cda41a3727df9f5dafb8f56f68",
+        "reference": "22d59272188df8cda41a3727df9f5dafb8f56f68",
         "shasum": ""
       },
       "require": {
@@ -6072,9 +6072,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Transfer",
       "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.16.1"
+        "source": "https://github.com/dvsa/olcs-transfer/tree/v7.17.0"
       },
-      "time": "2025-06-27T09:32:00+00:00"
+      "time": "2025-07-11T11:59:04+00:00"
     },
     {
       "name": "olcs/olcs-utils",
@@ -12204,7 +12204,7 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": {},
+  "stability-flags": [],
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
@@ -12215,7 +12215,7 @@
     "ext-redis": "*",
     "ext-pdo": "*"
   },
-  "platform-dev": {},
+  "platform-dev": [],
   "platform-overrides": {
     "ext-redis": "4.3"
   },
