@@ -53,6 +53,7 @@ class ApplicationTrackingEntityTest extends EntityTester
 
     public function testExchangeStatusArray()
     {
+        /** @var Entity|m\MockInterface $sut */
         $sut = m::mock(Entity::class)->makePartial();
 
         $data = [
@@ -76,6 +77,15 @@ class ApplicationTrackingEntityTest extends EntityTester
             'vehiclesDeclarationsStatus' => 18,
             'vehiclesPsvStatus' => 19,
             'vehiclesStatus' => 20,
+            'vehiclesSizeStatus' => 21,
+            'psvOperateSmallStatus' => 22,
+            'psvOperateLargeStatus' => 23,
+            'psvSmallConditionsStatus' => 24,
+            'psvOperateNoveltyStatus' => 25,
+            'psvSmallPartWrittenStatus' => 26,
+            'psvDocumentaryEvidenceSmallStatus' => 27,
+            'psvDocumentaryEvidenceLargeStatus' => 28,
+            'psvMainOccupationUndertakingsStatus' => 29,
         ];
 
         $sut->exchangeStatusArray($data);
@@ -100,6 +110,15 @@ class ApplicationTrackingEntityTest extends EntityTester
         $this->assertEquals(18, $sut->getVehiclesDeclarationsStatus());
         $this->assertEquals(19, $sut->getVehiclesPsvStatus());
         $this->assertEquals(20, $sut->getVehiclesStatus());
+        $this->assertEquals(21, $sut->getVehiclesSizeStatus());
+        $this->assertEquals(22, $sut->getPsvOperateSmallStatus());
+        $this->assertEquals(23, $sut->getPsvOperateLargeStatus());
+        $this->assertEquals(24, $sut->getPsvSmallConditionsStatus());
+        $this->assertEquals(25, $sut->getPsvOperateNoveltyStatus());
+        $this->assertEquals(26, $sut->getPsvSmallPartWrittenStatus());
+        $this->assertEquals(27, $sut->getPsvDocumentaryEvidenceSmallStatus());
+        $this->assertEquals(28, $sut->getPsvDocumentaryEvidenceLargeStatus());
+        $this->assertEquals(29, $sut->getPsvMainOccupationUndertakingsStatus());
     }
 
     public function testIsValidEmpty()

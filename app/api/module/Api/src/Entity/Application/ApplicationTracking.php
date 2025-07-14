@@ -27,7 +27,7 @@ class ApplicationTracking extends AbstractApplicationTracking
     public const STATUS_NOT_ACCEPTED   = 2;
     public const STATUS_NOT_APPLICABLE = 3;
 
-    protected $sections =  [
+    protected array $sections =  [
         'Addresses',
         'BusinessDetails',
         'BusinessType',
@@ -48,6 +48,15 @@ class ApplicationTracking extends AbstractApplicationTracking
         'VehiclesDeclarations',
         'VehiclesPsv',
         'Vehicles',
+        'PsvDocumentaryEvidenceLarge',
+        'PsvDocumentaryEvidenceSmall',
+        'PsvMainOccupationUndertakings',
+        'PsvOperateNovelty',
+        'PsvOperateSmall',
+        'PsvOperateLarge',
+        'PsvSmallConditions',
+        'PsvSmallPartWritten',
+        'VehiclesSize',
     ];
 
     /**
