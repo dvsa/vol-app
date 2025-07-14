@@ -239,6 +239,69 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     protected $typeOfLicenceStatus;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="vehicles_size_status", nullable=true)
+     */
+    protected $vehiclesSizeStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_operate_small_status", nullable=true)
+     */
+    protected $psvOperateSmallStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_operate_large_status", nullable=true)
+     */
+    protected $psvOperateLargeStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_small_conditions_status", nullable=true)
+     */
+    protected $psvSmallConditionsStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_operate_novelty_status", nullable=true)
+     */
+    protected $psvOperateNoveltyStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_small_part_written_status", nullable=true)
+     */
+    protected $psvSmallPartWrittenStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_documentary_evidence_small_status", nullable=true)
+     */
+    protected $psvDocumentaryEvidenceSmallStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_documentary_evidence_large_status", nullable=true)
+     */
+    protected $psvDocumentaryEvidenceLargeStatus;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_main_occupation_undertakings_status", nullable=true)
+     */
+    protected $psvMainOccupationUndertakingsStatus;
+
+    /**
      * Vehicles declarations status
      *
      * @var int
@@ -777,6 +840,105 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     public function getTypeOfLicenceStatus()
     {
         return $this->typeOfLicenceStatus;
+    }
+
+    public function getVehiclesSizeStatus()
+    {
+        return $this->vehiclesSizeStatus;
+    }
+
+    public function setVehiclesSizeStatus($vehiclesSizeStatus): AbstractApplicationTracking
+    {
+        $this->vehiclesSizeStatus = $vehiclesSizeStatus;
+        return $this;
+    }
+
+    public function getPsvOperateSmallStatus()
+    {
+        return $this->psvOperateSmallStatus;
+    }
+
+    public function setPsvOperateSmallStatus($psvOperateSmallStatus): AbstractApplicationTracking
+    {
+        $this->psvOperateSmallStatus = $psvOperateSmallStatus;
+        return $this;
+    }
+
+    public function getPsvOperateLargeStatus()
+    {
+        return $this->psvOperateLargeStatus;
+    }
+
+    public function setPsvOperateLargeStatus($psvOperateLargeStatus): AbstractApplicationTracking
+    {
+        $this->psvOperateLargeStatus = $psvOperateLargeStatus;
+        return $this;
+    }
+
+    public function getPsvSmallConditionsStatus()
+    {
+        return $this->psvSmallConditionsStatus;
+    }
+
+    public function setPsvSmallConditionsStatus($psvSmallConditionsStatus): AbstractApplicationTracking
+    {
+        $this->psvSmallConditionsStatus = $psvSmallConditionsStatus;
+        return $this;
+    }
+
+    public function getPsvOperateNoveltyStatus()
+    {
+        return $this->psvOperateNoveltyStatus;
+    }
+
+    public function setPsvOperateNoveltyStatus($psvOperateNoveltyStatus): AbstractApplicationTracking
+    {
+        $this->psvOperateNoveltyStatus = $psvOperateNoveltyStatus;
+        return $this;
+    }
+
+    public function getPsvSmallPartWrittenStatus()
+    {
+        return $this->psvSmallPartWrittenStatus;
+    }
+
+    public function setPsvSmallPartWrittenStatus($psvSmallPartWrittenStatus): AbstractApplicationTracking
+    {
+        $this->psvSmallPartWrittenStatus = $psvSmallPartWrittenStatus;
+        return $this;
+    }
+
+    public function getPsvDocumentaryEvidenceSmallStatus()
+    {
+        return $this->psvDocumentaryEvidenceSmallStatus;
+    }
+
+    public function setPsvDocumentaryEvidenceSmallStatus($psvDocumentaryEvidenceSmallStatus): AbstractApplicationTracking
+    {
+        $this->psvDocumentaryEvidenceSmallStatus = $psvDocumentaryEvidenceSmallStatus;
+        return $this;
+    }
+
+    public function getPsvDocumentaryEvidenceLargeStatus()
+    {
+        return $this->psvDocumentaryEvidenceLargeStatus;
+    }
+
+    public function setPsvDocumentaryEvidenceLargeStatus($psvDocumentaryEvidenceLargeStatus): AbstractApplicationTracking
+    {
+        $this->psvDocumentaryEvidenceLargeStatus = $psvDocumentaryEvidenceLargeStatus;
+        return $this;
+    }
+
+    public function getPsvMainOccupationUndertakingsStatus()
+    {
+        return $this->psvMainOccupationUndertakingsStatus;
+    }
+
+    public function setPsvMainOccupationUndertakingsStatus($psvMainOccupationUndertakingsStatus): AbstractApplicationTracking
+    {
+        $this->psvMainOccupationUndertakingsStatus = $psvMainOccupationUndertakingsStatus;
+        return $this;
     }
 
     /**
