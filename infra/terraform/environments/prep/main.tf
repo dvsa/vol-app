@@ -164,7 +164,7 @@ module "service" {
       cpu    = 2048
       memory = 4096
 
-      listener_rule_enable = false
+      listener_rule_enable = true
 
       version    = var.api_image_tag
       repository = data.aws_ecr_repository.this["api"].repository_url
@@ -186,7 +186,7 @@ module "service" {
       cpu    = 2048
       memory = 4096
 
-      listener_rule_enable = false
+      listener_rule_enable = true
 
       version    = var.internal_image_tag
       repository = data.aws_ecr_repository.this["internal"].repository_url
@@ -229,7 +229,7 @@ module "service" {
       cpu    = 2048
       memory = 4096
 
-      listener_rule_enable = false
+      listener_rule_enable = true
 
       version    = var.selfserve_image_tag
       repository = data.aws_ecr_repository.this["selfserve"].repository_url
