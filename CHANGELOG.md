@@ -1,35 +1,13 @@
 # Changelog
 
-## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
+## [5.20.0-rc1](https://github.com/dvsa/vol-app/compare/v5.19.0...v5.20.0-rc1) (2025-07-16)
 
-
-### Bug Fixes
-
-* add underline tool to editor js configuration ([#1009](https://github.com/dvsa/vol-app/issues/1009)) ([27b3a6c](https://github.com/dvsa/vol-app/commit/27b3a6c8c3a57dfbbe449a0c15fb999331b12568))
-* psv variations no longer show steps required for only restricted licences VOL-6504 ([#1008](https://github.com/dvsa/vol-app/issues/1008)) ([24e92a4](https://github.com/dvsa/vol-app/commit/24e92a4900c8e42448a4b12586b434bc3fc39006))
-
-## [6.0.1](https://github.com/dvsa/vol-app/compare/v6.0.0...v6.0.1) (2025-07-28)
-
-
-### Bug Fixes
-
-* remove reference to the old update command for vehicles declarations ([#1006](https://github.com/dvsa/vol-app/issues/1006)) ([8c49a6a](https://github.com/dvsa/vol-app/commit/8c49a6a21cca465c2330d78e3c0332d1c721cc19))
-
-## [6.0.0](https://github.com/dvsa/vol-app/compare/v5.19.0...v6.0.0) (2025-07-24)
-
-
-### ⚠ BREAKING CHANGES
-
-* enhance PSV restricted app journey VOL-5882 ([#1005](https://github.com/dvsa/vol-app/issues/1005))
 
 ### Features
 
 * add application tracking fields in prep for new internal psv journey VOL-6466 VOL-5882 ([#987](https://github.com/dvsa/vol-app/issues/987)) ([aa26e1b](https://github.com/dvsa/vol-app/commit/aa26e1b52e26f856b771038e7af14368c0195a6d))
-* add link to mprs ([#995](https://github.com/dvsa/vol-app/issues/995)) ([e5ac002](https://github.com/dvsa/vol-app/commit/e5ac0022a1b7fe7cf61917d9844ac6229255de90))
-* added prod env tf ([#737](https://github.com/dvsa/vol-app/issues/737)) ([e0ba9ee](https://github.com/dvsa/vol-app/commit/e0ba9ee28d68ee696267afc2614e220d5d67cc06))
 * correspondence inbox messages are no longer printed VOL-6467 ([#992](https://github.com/dvsa/vol-app/issues/992)) ([c43d994](https://github.com/dvsa/vol-app/commit/c43d994fcb65b77f4d5546a799a27daae4313b34))
 * editorjs implementation for case submission comments ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
-* enhance PSV restricted app journey VOL-5882 ([#1005](https://github.com/dvsa/vol-app/issues/1005)) ([8779c27](https://github.com/dvsa/vol-app/commit/8779c27098aa7b9f63d928c09f866d654096ff1d))
 * replace tinyMCE with editorJS ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
 * replace tinyMCE with EditorJS and implement conversion service from editorJS JSON to HTML ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
 * update DTOs and unit tests for refactored tinymce to editorJS work ([56d70a9](https://github.com/dvsa/vol-app/commit/56d70a9b5793730f944dacd6ae3761372d813983))
@@ -39,11 +17,17 @@
 ### Bug Fixes
 
 * amend timings process queue ([#978](https://github.com/dvsa/vol-app/issues/978)) ([2ee38ae](https://github.com/dvsa/vol-app/commit/2ee38aeceb6db8d0fe2a6b2863430ca12d057650))
+* bump to get rp-pr raised ([#993](https://github.com/dvsa/vol-app/issues/993)) ([64f3469](https://github.com/dvsa/vol-app/commit/64f3469821401f704dbaa8ac678cad674e422960))
 * limit provider ([#953](https://github.com/dvsa/vol-app/issues/953)) ([d7c0374](https://github.com/dvsa/vol-app/commit/d7c0374a5b3054555c37f4e283d5346f69c85287))
 * resolve timing issues with process queue ([#975](https://github.com/dvsa/vol-app/issues/975)) ([f1aafbb](https://github.com/dvsa/vol-app/commit/f1aafbb1fd928c2800dbc5021518056cfbc3c07d))
 * static asset cache buster broken on production when using release strategy ([#968](https://github.com/dvsa/vol-app/issues/968)) ([0d8b7f1](https://github.com/dvsa/vol-app/commit/0d8b7f17588a9d82edbbaeef45ffdbceb234ea3b))
 * trigger-cd-20-july-1153 ([#951](https://github.com/dvsa/vol-app/issues/951)) ([242f22f](https://github.com/dvsa/vol-app/commit/242f22ff78d346799f2007f6e873f73b36ae2038))
 * update tf providers for envs ([#954](https://github.com/dvsa/vol-app/issues/954)) ([22ddaa4](https://github.com/dvsa/vol-app/commit/22ddaa4f161dd1ba2c756052b1cc62aa0e06cbc2))
+
+
+### Miscellaneous Chores
+
+* release v5.20.0-rc1 ([5d6b218](https://github.com/dvsa/vol-app/commit/5d6b2188f7d7739b8768f9112239f64742fcddeb))
 
 ## [5.19.0](https://github.com/dvsa/vol-app/compare/v5.18.1...v5.19.0) (2025-06-19)
 
