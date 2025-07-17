@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.20.1-rc1](https://github.com/dvsa/vol-app/compare/v5.20.0-rc1...v5.20.1-rc1) (2025-07-17)
+
+
+### Bug Fixes
+
+* aws provider version to fix state ([#996](https://github.com/dvsa/vol-app/issues/996)) ([95ad1d4](https://github.com/dvsa/vol-app/commit/95ad1d4f6c1316e47fbfb63041195030c60b1225))
+
 ## [5.20.0-rc1](https://github.com/dvsa/vol-app/compare/v5.19.0...v5.20.0-rc1) (2025-07-16)
 
 
