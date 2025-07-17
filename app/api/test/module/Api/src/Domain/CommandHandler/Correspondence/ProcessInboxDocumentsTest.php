@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Correspondence;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Domain\Command\Correspondence\ProcessInboxDocuments as Command;
-use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue as EnqueueFileCommand;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments;
 use Dvsa\Olcs\Api\Domain\Repository;
@@ -70,7 +71,7 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         $mockLicence = m::mock()
             ->shouldReceive('getId')
             ->andReturn(1)
-            ->twice()
+            ->once()
             ->shouldReceive('getOrganisation')
             ->andReturn($organisation)
             ->shouldReceive('getLicNo')
@@ -90,27 +91,18 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
                 ]
             )
             ->once()
-            ->shouldReceive('getId')
-            ->andReturn('id')
-            ->once()
-            ->shouldReceive('getDescription')
-            ->andReturn('desc')
-            ->once()
             ->getMock();
 
         $mockInboxRecord = m::mock()
             ->shouldReceive('getLicence')
             ->andReturn($mockLicence)
-            ->twice()
-            ->shouldReceive('setEmailReminderSent')
-            ->with('Y')
             ->once()
-            ->shouldReceive('setPrinted')
+            ->shouldReceive('setEmailReminderSent')
             ->with('Y')
             ->once()
             ->shouldReceive('getDocument')
             ->andReturn($mockDocument)
-            ->times(2)
+            ->once()
             ->getMock();
 
         $this->repoMap['CorrespondenceInbox']
@@ -118,13 +110,9 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
             ->with(m::type(\DateTime::class), m::type(\DateTime::class))
             ->andReturn([$mockInboxRecord])
             ->once()
-            ->shouldReceive('getAllRequiringPrint')
-            ->with(m::type(\DateTime::class), m::type(\DateTime::class))
-            ->andReturn([$mockInboxRecord])
-            ->once()
             ->shouldReceive('save')
             ->with($mockInboxRecord)
-            ->twice()
+            ->once()
             ->getMock();
 
         $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')
@@ -143,18 +131,10 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 
         $this->expectedSideEffect(SendEmail::class, $data, $result);
 
-        $params = [
-            'documentId' => 'id',
-            'jobName' => 'desc'
-        ];
-        $this->expectedSideEffect(EnqueueFileCommand::class, $params, new Result());
-
         $expected = [
             'messages' => [
                 'Found 1 records to email',
                 'Sending email reminder for licence 1 to foo@bar.com',
-                'Found 1 records to print',
-                'Printing document for licence 1'
             ],
             'id' => []
         ];
@@ -207,7 +187,6 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['CorrespondenceInbox']
             ->shouldReceive('getAllRequiringReminder')->once()->andReturn([$mockInboxRecord])
-            ->shouldReceive('getAllRequiringPrint')->once()->andReturn([])
             ->shouldReceive('save')->never()
             ->getMock();
 
@@ -223,7 +202,6 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
             [
                 'Found 1 records to email',
                 sprintf(ProcessInboxDocuments::ERR_SEND_REMINDER, self::LIC_ID, self::ORG_ID),
-                'Found 0 records to print',
             ],
             $actual->getMessages()
         );
@@ -238,7 +216,7 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         $mockLicence = m::mock()
             ->shouldReceive('getId')
             ->andReturn(1)
-            ->twice()
+            ->once()
             ->shouldReceive('getOrganisation')
             ->andReturn($organisation)
             ->once()
@@ -256,24 +234,15 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
                 ]
             )
             ->once()
-            ->shouldReceive('getId')
-            ->andReturn('id')
-            ->once()
-            ->shouldReceive('getDescription')
-            ->andReturn('desc')
-            ->once()
             ->getMock();
 
         $mockInboxRecord = m::mock()
             ->shouldReceive('getLicence')
             ->andReturn($mockLicence)
-            ->twice()
-            ->shouldReceive('setPrinted')
-            ->with('Y')
             ->once()
             ->shouldReceive('getDocument')
             ->andReturn($mockDocument)
-            ->times(2)
+            ->once()
             ->getMock();
 
         $this->repoMap['CorrespondenceInbox']
@@ -281,27 +250,12 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
             ->with(m::type(\DateTime::class), m::type(\DateTime::class))
             ->andReturn([$mockInboxRecord])
             ->once()
-            ->shouldReceive('getAllRequiringPrint')
-            ->with(m::type(\DateTime::class), m::type(\DateTime::class))
-            ->andReturn([$mockInboxRecord])
-            ->once()
-            ->shouldReceive('save')
-            ->with($mockInboxRecord)
-            ->once()
             ->getMock();
-
-        $params = [
-            'documentId' => 'id',
-            'jobName' => 'desc'
-        ];
-        $this->expectedSideEffect(EnqueueFileCommand::class, $params, new Result());
 
         $expected = [
             'messages' => [
                 'Found 1 records to email',
                 'No admin email addresses for licence 1',
-                'Found 1 records to print',
-                'Printing document for licence 1'
             ],
             'id' => []
         ];

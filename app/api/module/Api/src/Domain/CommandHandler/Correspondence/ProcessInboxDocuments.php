@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence;
 
-use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue as EnqueueFileCommand;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
@@ -12,11 +11,6 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
 
-/**
- * Process inbox documents
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 final class ProcessInboxDocuments extends AbstractCommandHandler implements EmailAwareInterface
 {
     use EmailAwareTrait;
@@ -41,7 +35,6 @@ final class ProcessInboxDocuments extends AbstractCommandHandler implements Emai
         $result = new Result();
 
         $result->merge($this->sendReminders());
-        $result->merge($this->printDocuments());
 
         return $result;
     }
@@ -132,42 +125,6 @@ final class ProcessInboxDocuments extends AbstractCommandHandler implements Emai
                 $row->setEmailReminderSent('Y');
                 $repo->save($row);
             }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Print Documents
-     *
-     * @return Result
-     */
-    protected function printDocuments()
-    {
-        $result = new Result();
-        $minDate         = $this->getDate('P1M');
-        $maxPrintDate    = $this->getDate('P1W');
-        $printList = $this->getRepo()->getAllRequiringPrint($minDate, $maxPrintDate);
-        $result->addMessage('Found ' . count($printList) . ' records to print');
-
-        /** @var \Dvsa\Olcs\Api\Entity\Organisation\CorrespondenceInbox $row */
-        foreach ($printList as $row) {
-            $licence = $row->getLicence();
-            $document = $row->getDocument();
-
-            $result->addMessage('Printing document for licence ' . $licence->getId());
-
-            $printQueue = EnqueueFileCommand::create(
-                [
-                    'documentId' => $document->getId(),
-                    'jobName' => $document->getDescription()
-                ]
-            );
-
-            $this->result->merge($this->handleSideEffect($printQueue));
-
-            $row->setPrinted('Y');
-            $this->getRepo()->save($row);
         }
 
         return $result;
