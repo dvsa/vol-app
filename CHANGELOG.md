@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.20.4-rc1](https://github.com/dvsa/vol-app/compare/v5.20.3-rc1...v5.20.4-rc1) (2025-07-23)
+
+
+### Bug Fixes
+
+* try new general and txc schedule for responsiveness ([540226e](https://github.com/dvsa/vol-app/commit/540226e06608036dabcab8dd457f775027fcf7dc))
+* update main.tf for int ([75bea3f](https://github.com/dvsa/vol-app/commit/75bea3f882279e56a83d09566e6367e915f2557c))
+* update main.tf schedules to cover workday ([6f277af](https://github.com/dvsa/vol-app/commit/6f277af67aff545fff904b54fc4acecb2a095911))
+
 ## [5.20.3-rc1](https://github.com/dvsa/vol-app/compare/v5.20.1-rc1...v5.20.3-rc1) (2025-07-18)
 
 
