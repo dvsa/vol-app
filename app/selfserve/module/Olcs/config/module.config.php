@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Data as CommonDataService;
+use Common\Util\LvaRoute;
 use Laminas\Router\Http\Segment;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
@@ -39,6 +40,7 @@ use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFa
 use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
 use Olcs\Controller\Lva\TransportManager as LvaTransportManagerControllers;
 use Olcs\Controller\Lva\Variation as LvaVariationControllers;
+use Olcs\Controller\Lva\Variation\VehiclesDeclarationsController;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\OperatorRegistrationController;
 use Olcs\Controller\PromptController;
@@ -755,6 +757,96 @@ foreach ($files as $config) {
 $configRoutes['lva-variation']['child_routes'] = array_merge(
     $configRoutes['lva-variation']['child_routes'],
     [
+        'vehicles_size' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'vehicles-size[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'size',
+                ],
+            ],
+        ],
+        'psv_operate_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-large[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'operateLarge',
+                ],
+            ],
+        ],
+        'psv_operate_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-small[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'operateSmall',
+                ],
+            ],
+        ],
+        'psv_small_part_written' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-part-written[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'writtenExplanation',
+                ],
+            ],
+        ],
+        'psv_small_conditions' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-small-conditions[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'smallConditions',
+                ],
+            ],
+        ],
+        'psv_operate_novelty' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-operate-novelty[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'novelty',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_small' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-small[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'smallEvidence',
+                ],
+            ],
+        ],
+        'psv_documentary_evidence_large' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-documentary-evidence-large[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'largeEvidence',
+                ],
+            ],
+        ],
+        'psv_main_occupation_undertakings' => [
+            'type' => LvaRoute::class,
+            'options' => [
+                'route' => 'psv-main-occupation-undertakings[/]',
+                'defaults' => [
+                    'controller' => VehiclesDeclarationsController::class,
+                    'action' => 'mainOccupation',
+                ],
+            ],
+        ],
         'review' => [
             'type' => 'segment',
             'options' => [
@@ -1367,7 +1459,6 @@ return [
             'LvaVariation/Discs'                    => LvaVariationControllers\DiscsController::class,
             'LvaVariation/Undertakings'             => LvaVariationControllers\UndertakingsController::class,
             'LvaVariation/FinancialEvidence'        => LvaVariationControllers\FinancialEvidenceController::class,
-            'LvaVariation/VehiclesDeclarations'     => LvaVariationControllers\VehiclesDeclarationsController::class,
             'LvaVariation/FinancialHistory'         => LvaVariationControllers\FinancialHistoryController::class,
             'LvaVariation/LicenceHistory'           => LvaVariationControllers\LicenceHistoryController::class,
             'LvaVariation/ConvictionsPenalties'     => LvaVariationControllers\ConvictionsPenaltiesController::class,

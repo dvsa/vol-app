@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Aws\S3\S3Client;
@@ -21,7 +23,7 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
      * @var DataDvaNiExport
      */
     protected $sut;
-
+    private $mockS3client;
     private $tempDir;
 
     public function setUp(): void

@@ -505,7 +505,7 @@ class User extends AbstractUser implements OrganisationProviderInterface
     }
 
     /**
-     * Checks whether the user is aperator administrator
+     * Checks whether the user is operator administrator
      */
     public function isOperatorAdministrator(): bool
     {

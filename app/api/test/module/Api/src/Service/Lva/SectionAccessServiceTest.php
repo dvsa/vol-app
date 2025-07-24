@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Lva;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -81,17 +83,21 @@ class SectionAccessServiceTest extends MockeryTestCase
 
     public function testGetAccessibleSectionsApplication()
     {
-        /** @var RefData $goodsOrPsv */
+        /** @var RefData|m\MockInterface $goodsOrPsv */
         $goodsOrPsv = m::mock(RefData::class)->makePartial();
         $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
 
-        /** @var RefData $licenceType */
+        /** @var RefData|m\MockInterface $licenceType */
         $licenceType = m::mock(RefData::class)->makePartial();
         $licenceType->setId(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
 
-        /** @var RefData $vehicleType */
+        /** @var RefData|m\MockInterface $vehicleType */
         $vehicleType = m::mock(RefData::class)->makePartial();
         $vehicleType->setId(RefData::APP_VEHICLE_TYPE_HGV);
+
+        /** @var RefData|m\MockInterface $vehicleSizes */
+        $vehicleSizes = m::mock(RefData::class)->makePartial();
+        $vehicleSizes->setId(Application::PSV_VEHICLE_SIZE_SMALL);
 
         /** @var Licence|m\MockInterface $licence */
         $licence = m::mock(Licence::class)->makePartial();
@@ -105,6 +111,8 @@ class SectionAccessServiceTest extends MockeryTestCase
         $application->setLicenceType($licenceType);
         $application->setVehicleType($vehicleType);
         $application->setLicence($licence);
+        $application->setPsvWhichVehicleSizes($vehicleSizes);
+        $application->setPsvOperateSmallVhl('Y');
 
         $this->authService->shouldReceive('isGranted')
             ->with(Permission::INTERNAL_USER, null)
@@ -116,6 +124,8 @@ class SectionAccessServiceTest extends MockeryTestCase
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             RefData::APP_VEHICLE_TYPE_HGV,
+            Application::PSV_VEHICLE_SIZE_SMALL,
+            'isNotOperatingSmallVehiclesSmallPart',
             'noConditions'
         ];
 
@@ -140,17 +150,21 @@ class SectionAccessServiceTest extends MockeryTestCase
         /** @var ApplicationCompletion $appCompletion */
         $appCompletion = m::mock(ApplicationCompletion::class);
 
-        /** @var RefData $goodsOrPsv */
+        /** @var RefData|m\MockInterface $goodsOrPsv */
         $goodsOrPsv = m::mock(RefData::class)->makePartial();
         $goodsOrPsv->setId(Licence::LICENCE_CATEGORY_GOODS_VEHICLE);
 
-        /** @var RefData $licenceType */
+        /** @var RefData|m\MockInterface $licenceType */
         $licenceType = m::mock(RefData::class)->makePartial();
         $licenceType->setId(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
 
-        /** @var RefData $vehicleType */
+        /** @var RefData|m\MockInterface $vehicleType */
         $vehicleType = m::mock(RefData::class)->makePartial();
         $vehicleType->setId(RefData::APP_VEHICLE_TYPE_HGV);
+
+        /** @var RefData|m\MockInterface $vehicleSizes */
+        $vehicleSizes = m::mock(RefData::class)->makePartial();
+        $vehicleSizes->setId(Application::PSV_VEHICLE_SIZE_BOTH);
 
         /** @var Licence|m\MockInterface $licence */
         $licence = m::mock(Licence::class)->makePartial();
@@ -164,6 +178,8 @@ class SectionAccessServiceTest extends MockeryTestCase
         $application->setLicenceType($licenceType);
         $application->setVehicleType($vehicleType);
         $application->setLicence($licence);
+        $application->setPsvWhichVehicleSizes($vehicleSizes);
+        $application->setPsvOperateSmallVhl('Y');
         $application->setApplicationCompletion($appCompletion);
 
         $this->authService->shouldReceive('isGranted')
@@ -179,6 +195,8 @@ class SectionAccessServiceTest extends MockeryTestCase
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             RefData::APP_VEHICLE_TYPE_HGV,
+            Application::PSV_VEHICLE_SIZE_BOTH,
+            'isOperatingSmallVehiclesSmallPart',
             'hasConditions'
         ];
 

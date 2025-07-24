@@ -51,6 +51,20 @@ class ApplicationCompletion extends AbstractApplicationCompletion
         $this->setApplication($application);
     }
 
+    public function clearVehiclesSizeSectionsForApplication(): self
+    {
+        $this->psvOperateLargeStatus = self::STATUS_NOT_STARTED;
+        $this->psvOperateSmallStatus = self::STATUS_NOT_STARTED;
+        $this->psvSmallConditionsStatus = self::STATUS_NOT_STARTED;
+        $this->psvDocumentaryEvidenceLargeStatus = self::STATUS_NOT_STARTED;
+        $this->psvDocumentaryEvidenceSmallStatus = self::STATUS_NOT_STARTED;
+        $this->psvMainOccupationUndertakingsStatus = self::STATUS_NOT_STARTED;
+        $this->psvSmallPartWrittenStatus = self::STATUS_NOT_STARTED;
+        $this->psvOperateNoveltyStatus = self::STATUS_NOT_STARTED;
+
+        return $this;
+    }
+
     /**
      * Whether the section has been updated (status 2), note that for new apps a
      * status of 2 means something different i.e. completed
