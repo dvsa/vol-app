@@ -343,7 +343,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $query = OutstandingFees::create(['id' => $applicationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
         if (!$response->isOk()) {
-            throw new ResourceNotFoundException('Error getting outstaning fees');
+            throw new ResourceNotFoundException('Error getting outstanding fees');
         }
         $result = $response->getResult();
         $this->disableCardPayments = $result['disableCardPayments'];

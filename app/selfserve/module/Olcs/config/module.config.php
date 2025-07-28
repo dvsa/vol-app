@@ -907,13 +907,10 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
         'payment' => [
             'type' => 'segment',
             'options' => [
-                'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
+                'route' => 'payment[/]',
                 'defaults' => [
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'index'
-                ],
-                'constraints' => [
-                    'storedCardReference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                 ],
             ]
         ],

@@ -638,7 +638,7 @@ return [
                 'payment' => [
                     'type' => Segment::class,
                     'options' => [
-                        'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
+                        'route' => 'payment[/]',
                         'defaults' => [
                             'controller' => 'Application/PaymentSubmission',
                             'action' => 'index',
