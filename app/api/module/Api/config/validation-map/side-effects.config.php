@@ -123,7 +123,6 @@ return [
     AppCompCommandHandler\UpdatePsvSmallConditionsStatus::class                       => IsSideEffect::class,
     AppCompCommandHandler\UpdateUndertakingsStatus::class                             => IsSideEffect::class,
     AppCompCommandHandler\UpdateConditionsUndertakingsStatus::class                   => IsSideEffect::class,
-    AppCompCommandHandler\UpdateVehiclesDeclarationsStatus::class                     => IsSideEffect::class,
     AppCompCommandHandler\UpdateVehiclesPsvStatus::class                              => IsSideEffect::class,
     AppCompCommandHandler\UpdateTransportManagersStatus::class                        => IsSideEffect::class,
     AppCompCommandHandler\UpdateTaxiPhvStatus::class                                  => IsSideEffect::class,

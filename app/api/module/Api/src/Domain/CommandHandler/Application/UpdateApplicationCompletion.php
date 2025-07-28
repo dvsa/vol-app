@@ -51,7 +51,6 @@ final class UpdateApplicationCompletion extends AbstractCommandHandler implement
         'transportManagers',
         'typeOfLicence',
         'undertakings',
-        'vehiclesDeclarations',
         'vehiclesPsv',
         'vehiclesSize',
         'psvOperateSmall',
