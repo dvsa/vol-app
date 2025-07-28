@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.0.1](https://github.com/dvsa/vol-app/compare/v6.0.0...v6.0.1) (2025-07-28)
+
+
+### Bug Fixes
+
+* remove reference to the old update command for vehicles declarations ([#1006](https://github.com/dvsa/vol-app/issues/1006)) ([8c49a6a](https://github.com/dvsa/vol-app/commit/8c49a6a21cca465c2330d78e3c0332d1c721cc19))
+
 ## [6.0.0](https://github.com/dvsa/vol-app/compare/v5.19.0...v6.0.0) (2025-07-24)
 
 
