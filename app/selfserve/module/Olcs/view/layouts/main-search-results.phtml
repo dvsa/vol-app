@@ -24,6 +24,22 @@ echo $this->partial(
 );
 ?>
 
+<?php if(isset($this->displaySearchByPersonBanner) && $this->displaySearchByPersonBanner === true): ?>
+<div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Important
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-notification-banner__heading">
+      All persons throughout the duration of a licence will be shown here.
+    </p>
+    <p class="govuk-body">To see current/last persons please click on the licence number.</p>
+  </div>
+</div>
+<?php endif; ?>
+
 <div class="row">
     <div class="one-third sidebar--plain search-filter">
 
