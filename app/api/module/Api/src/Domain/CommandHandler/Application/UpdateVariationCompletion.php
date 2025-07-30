@@ -667,7 +667,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
                     'psv_operate_large',
                     'psv_documentary_evidence_small',
                 ];
-            } elseif($this->application->isPsvBothNotOperatingSmallPsvAsPartOfLarge()) {
+            } elseif ($this->application->isPsvBothNotOperatingSmallPsvAsPartOfLarge()) {
                 $relatedSections = [
                     'psv_operate_small',
                     'psv_small_conditions',
@@ -700,12 +700,17 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
 
         //restricted licences have extra sections - in theory this doesn't matter for variations, but included to future-proof
         if (!$this->application->isRestricted()) {
-            unset (
-                $relatedSections['psv_main_occupation_undertakings'],
-                $relatedSections['psv_documentary_evidence_large'],
-                $ignoredSections['psv_main_occupation_undertakings'],
-                $ignoredSections['psv_documentary_evidence_large'],
-            );
+            $restrictedOnlySections = [
+                'psv_main_occupation_undertakings',
+                'psv_documentary_evidence_large',
+            ];
+
+            foreach ($restrictedOnlySections as $restrictedOnlySection) {
+                if (($key = array_search($restrictedOnlySection, $relatedSections, true)) !== false) {
+                    unset($relatedSections[$key]);
+                    $ignoredSections[] = $restrictedOnlySection;
+                }
+            }
         }
 
         foreach ($relatedSections as $section) {
