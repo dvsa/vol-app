@@ -157,6 +157,7 @@ OLCS.editorjs();
 
 - **Bold** (`Ctrl/Cmd + B`)
 - **Italic** (`Ctrl/Cmd + I`)
+- **Underline** (`Ctrl/Cmd + U`)
 - **Link** (`Ctrl/Cmd + K`)
 
 ### Benefits Over TinyMCE
@@ -277,6 +278,7 @@ The EditorJS component is automatically initialized in internal.js. No additiona
     "@editorjs/editorjs": "^2.28.2",
     "@editorjs/header": "^2.8.1",
     "@editorjs/list": "^1.9.0",
-    "@editorjs/paragraph": "^2.11.3"
+    "@editorjs/paragraph": "^2.11.3",
+    "@editorjs/underline": "^1.2.1"
 }
 ```
