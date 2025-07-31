@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.0](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0) (2025-07-31)
+
+
+### Features
+
+* public lorry & bus search person search disclaimer and licence attachment status AND youtube help link for adding operating centre ([#1012](https://github.com/dvsa/vol-app/issues/1012)) ([3159c4a](https://github.com/dvsa/vol-app/commit/3159c4a2bda6544f47a177b5a4372a495c6341f4))
+
 ## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
 
 
