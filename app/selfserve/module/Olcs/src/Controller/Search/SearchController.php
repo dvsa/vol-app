@@ -247,6 +247,8 @@ class SearchController extends AbstractController
 
         $view->setTemplate('layouts/main-search-results.phtml');
 
+        $view->setVariable('displaySearchByPersonBanner', $indexPrm == 'person');
+
         $this->scriptFactory->loadFile('search-results');
 
         $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-' . $indexPrm . '.index');

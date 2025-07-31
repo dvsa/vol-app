@@ -24,6 +24,20 @@ echo $this->partial(
 );
 ?>
 
+<?php if(isset($this->displaySearchByPersonBanner) && $this->displaySearchByPersonBanner === true): ?>
+  <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+      <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+        <?= $this->translate('search.result.person.banner.title') ?>
+      </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+      <p class="govuk-notification-banner__heading"><?= $this->translate('search.result.person.banner.heading') ?></p>
+      <p class="govuk-body"><?= $this->translate('search.result.person.banner.body') ?></p>
+    </div>
+  </div>
+<?php endif; ?>
+
 <div class="row">
     <div class="one-third sidebar--plain search-filter">
 
