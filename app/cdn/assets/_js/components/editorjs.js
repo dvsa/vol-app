@@ -5,7 +5,7 @@
  * Follows OLCS component pattern for modal compatibility
  */
 
-/* global EditorJS, Header, List, Paragraph */
+/* global EditorJS, Header, List, Paragraph, Underline */
 OLCS.editorjs = (function (document, $, undefined) {
   "use strict";
 
@@ -70,6 +70,11 @@ OLCS.editorjs = (function (document, $, undefined) {
         class: Paragraph,
         inlineToolbar: true,
       };
+    }
+
+    // Add Underline tool if available
+    if (typeof Underline !== "undefined") {
+      tools.underline = Underline;
     }
 
     // Parse initial data
