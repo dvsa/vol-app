@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
+
+
+### Bug Fixes
+
+* add underline tool to editor js configuration ([#1009](https://github.com/dvsa/vol-app/issues/1009)) ([27b3a6c](https://github.com/dvsa/vol-app/commit/27b3a6c8c3a57dfbbe449a0c15fb999331b12568))
+* psv variations no longer show steps required for only restricted licences VOL-6504 ([#1008](https://github.com/dvsa/vol-app/issues/1008)) ([24e92a4](https://github.com/dvsa/vol-app/commit/24e92a4900c8e42448a4b12586b434bc3fc39006))
+
 ## [6.0.1](https://github.com/dvsa/vol-app/compare/v6.0.0...v6.0.1) (2025-07-28)
 
 
