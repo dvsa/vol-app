@@ -4173,16 +4173,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v8.1.0",
+      "version": "v8.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "5497a3ce173a2374cd7a8700a79e4be632b18bde"
+        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/5497a3ce173a2374cd7a8700a79e4be632b18bde",
-        "reference": "5497a3ce173a2374cd7a8700a79e4be632b18bde",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
+        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
         "shasum": ""
       },
       "require": {
@@ -4204,12 +4204,12 @@
         "laminas/laminas-servicemanager": "^3.3",
         "laminas/laminas-stdlib": "^3.7",
         "laminas/laminas-text": "^2.9",
-        "laminas/laminas-validator": "^2.11",
+        "laminas/laminas-validator": ">=2.30.0",
         "laminas/laminas-view": "^2.23",
-        "olcs/olcs-logging": "^6.0|^7.0",
-        "olcs/olcs-transfer": "^7.1.0",
+        "olcs/olcs-logging": "^7.2",
+        "olcs/olcs-transfer": "^7.17.0",
         "olcs/olcs-utils": "^6.0",
-        "php": "^8.0",
+        "php": "^8.2",
         "psr/container": "^1.1|^2"
       },
       "require-dev": {
@@ -4241,9 +4241,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v8.1.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v8.3.0"
       },
-      "time": "2025-07-16T14:56:16+00:00"
+      "time": "2025-07-31T15:25:38+00:00"
     },
     {
       "name": "olcs/olcs-logging",
