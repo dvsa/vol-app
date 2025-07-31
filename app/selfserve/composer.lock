@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "23697846a02684564b29620474742af7",
+  "content-hash": "7f6c92340201c77247c914bcd4535759",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4173,16 +4173,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v8.2.0",
+      "version": "v8.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "bcde92147bfa1fa9e55a24948d39d4a57036e5bc"
+        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/bcde92147bfa1fa9e55a24948d39d4a57036e5bc",
-        "reference": "bcde92147bfa1fa9e55a24948d39d4a57036e5bc",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
+        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
         "shasum": ""
       },
       "require": {
@@ -4241,9 +4241,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v8.2.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v8.3.0"
       },
-      "time": "2025-07-24T14:57:12+00:00"
+      "time": "2025-07-31T15:25:38+00:00"
     },
     {
       "name": "olcs/olcs-logging",
@@ -7864,5 +7864,5 @@
   "platform-overrides": {
     "ext-redis": "4.3"
   },
-  "plugin-api-version": "2.3.0"
+  "plugin-api-version": "2.6.0"
 }
