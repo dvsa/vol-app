@@ -262,6 +262,13 @@ module "batch" {
       tags = {
         JobQueue = "vol-app-${var.environment}-default"
       }
+      compute_environment_order = [
+        {
+          order                   = 0
+          compute_environment_key = "fargate"
+        }
+      ]
+
     },
     liquibase = {
       name     = "vol-app-${var.environment}-liquibase"
@@ -270,6 +277,12 @@ module "batch" {
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
       }
+      compute_environment_order = [
+        {
+          order                   = 0
+          compute_environment_key = "fargate"
+        }
+      ]
     },
   }
 
