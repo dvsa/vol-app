@@ -62,7 +62,7 @@ module "ecs_service" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "~> 5.10"
+  version = "~> 6.1.3"
 
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
@@ -153,14 +153,15 @@ module "ecs_service" {
   }
 
   load_balancer = (
-    each.value.listener_rule_enable ? [
-      {
+    each.value.listener_rule_enable ? {
+      "${each.key}" = {
         target_group_arn = aws_lb_target_group.this[each.key].arn
         container_name   = each.key
         container_port   = 8080
       }
-    ] : []
+    } : {}
   )
+
 
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids

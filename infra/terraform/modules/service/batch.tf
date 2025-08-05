@@ -230,7 +230,7 @@ locals {
 
 module "batch" {
   source  = "terraform-aws-modules/batch/aws"
-  version = "~> 2.0"
+  version = "~> 3.0"
 
   instance_iam_role_name        = "vol-app-${var.environment}-batch-instance"
   instance_iam_role_description = "Task execution role for vol-app-${var.environment}-batch"
@@ -262,6 +262,12 @@ module "batch" {
       tags = {
         JobQueue = "vol-app-${var.environment}-default"
       }
+      compute_environment_order = {
+        0 = {
+          compute_environment_key = "fargate"
+        }
+      }
+
     },
     liquibase = {
       name     = "vol-app-${var.environment}-liquibase"
@@ -269,6 +275,11 @@ module "batch" {
       priority = 1
       tags = {
         JobQueue = "vol-app-${var.environment}-liquibase"
+      }
+      compute_environment_order = {
+        0 = {
+          compute_environment_key = "fargate"
+        }
       }
     },
   }
