@@ -19,10 +19,10 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-resource "aws_lb_target_group" "proving" {
-  for_each = contains(["prep", "prod"], var.environment) ? var.services : {}
+resource "aws_lb_target_group" "proving-iuweb" {
+  count = contains(["prep", "prod"], var.environment) ? 1 : 0
 
-  name        = "vol-app-prov-${var.environment}-${each.key}-tg"
+  name        = "vol-app-prov-${var.environment}-internal-pub-tg"
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
