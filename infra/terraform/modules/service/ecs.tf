@@ -19,6 +19,27 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_target_group" "proving" {
+  for_each = var.services
+
+  name        = "vol-app-proving-${var.environment}-${each.key}-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = coalesce(each.value.vpc_id, var.vpc_id)
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 300
+    timeout             = 60
+    protocol            = "HTTP"
+    port                = 8080
+    path                = "/healthcheck"
+    matcher             = "200-499"
+  }
+}
+
 resource "aws_lb_listener_rule" "this" {
   for_each = {
     for service, config in var.services : service => config
