@@ -1,16 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\VariationBusinessDetails;
 
-/**
- * Variation Business Details Form Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class VariationBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
@@ -31,6 +28,11 @@ class VariationBusinessDetailsTest extends MockeryTestCase
     {
         $mockForm = m::mock();
 
+        $params = [
+            'orgType' => 'foo',
+            'isLicenseApplicationPsv' => false,
+        ];
+
         $this->fsm->shouldReceive('get')
             ->with('lva-variation')
             ->andReturn(
@@ -45,6 +47,6 @@ class VariationBusinessDetailsTest extends MockeryTestCase
             ->with($mockForm, 'allow-email')
             ->once();
 
-        $this->sut->alterForm($mockForm, ['orgType' => 'foo']);
+        $this->sut->alterForm($mockForm, $params);
     }
 }

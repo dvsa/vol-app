@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Olcs\FormService\Form\Lva;
+
+use Common\FormService\Form\Lva\VehiclesDeclarationsNovelty as CommonVehiclesDeclarationsNovelty;
+
+class VariationVehiclesDeclarationsPsvOperateNovelty extends CommonVehiclesDeclarationsNovelty
+{
+    /**
+     * Make form alterations
+     *
+     * @param \Laminas\Form\Form $form
+     * @return \Laminas\Form\Form
+     */
+    protected function alterForm($form)
+    {
+        parent::alterForm($form);
+
+        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        $form->get('form-actions')->get('save')->removeAttribute('class');
+        $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button govuk-button--primary');
+        $this->formHelper->remove($form, 'form-actions->saveAndContinue');
+
+        return $form;
+    }
+}

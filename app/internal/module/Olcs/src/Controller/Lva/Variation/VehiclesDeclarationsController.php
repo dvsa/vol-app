@@ -1,16 +1,11 @@
 <?php
 
-/**
- * Internal Variation Vehicles Declarations Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -20,11 +15,6 @@ use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Internal Variation Vehicles Declarations Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsController implements
     VariationControllerInterface
 {
@@ -51,10 +41,10 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         FormHelperService $formHelper,
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
-        DataHelperService $dataHelper,
         StringHelperService $stringHelper,
         protected $navigation,
-        protected FlashMessengerHelperService $flashMessengerHelper
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected FileUploadHelperService $uploadHelper
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -64,7 +54,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $formHelper,
             $formServiceManager,
             $scriptFactory,
-            $dataHelper
+            $uploadHelper,
+            $flashMessengerHelper
         );
     }
 }

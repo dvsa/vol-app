@@ -48,7 +48,6 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'financial_evidence' => [],
         'transport_managers' => [],
         'vehicles' => [],
-        'vehicles_declarations' => [],
         'discs' => [],
         'community_licences' => [],
         'safety' => [],
@@ -70,7 +69,15 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'transport_managers' => 'hasUpdatedTransportManagers',
         'vehicles' => 'hasUpdatedVehicles',
         'vehicles_psv' => 'hasUpdatedVehicles',
-        'vehicles_declarations' => 'hasUpdatedVehicleDeclarations',
+        'vehicles_size' => 'hasSavedSection',
+        'psv_operate_large' => 'hasSavedSection',
+        'psv_operate_small' => 'hasSavedSection',
+        'psv_small_part_written' => 'hasSavedSection',
+        'psv_small_conditions' => 'hasSavedSection',
+        'psv_documentary_evidence_small' => 'hasSavedSection',
+        'psv_documentary_evidence_large' => 'hasSavedSection',
+        'psv_operate_novelty' => 'hasSavedSection',
+        'psv_main_occupation_undertakings' => 'hasSavedSection',
         'discs' => 'hasSavedSection',
         'community_licences' => 'hasSavedSection',
         'safety' => 'hasUpdatedSafetySection',
@@ -88,6 +95,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         'people' => 'updateRelatedPeopleSections',
         'transport_managers' => 'updateRelatedTmSections',
         'vehicles' => 'updateRelatedVehiclesSections',
+        'vehicles_size' => 'updateRelatedVehiclesSizeSections',
         'discs' => 'updateRelatedDiscSections',
         'community_licences' => 'updateRelatedCommunityLicencesSections'
     ];
@@ -326,26 +334,6 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
     protected function hasUpdatedVehicles()
     {
         return ($this->application->getLicenceVehicles()->count() > 0);
-    }
-
-    /**
-     * If we have updated vehicle declarations
-     *
-     * @return boolean
-     */
-    protected function hasUpdatedVehicleDeclarations()
-    {
-        $fields = [
-            'PsvOperateSmallVhl',
-            'PsvSmallVhlNotes',
-            'PsvSmallVhlConfirmation',
-            'PsvNoSmallVhlConfirmation',
-            'PsvLimousines',
-            'PsvNoLimousineConfirmation',
-            'PsvOnlyLimousinesConfirmation'
-        ];
-
-        return $this->hasCompletedFields($fields);
     }
 
     /**
@@ -610,6 +598,132 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
         }
     }
 
+    protected function updateRelatedVehiclesSizeSections(): void
+    {
+        // If the section is no longer required then remove them
+        if (!$this->isPsv() || !$this->application->hasAuthChanged()) {
+            $allSections = [
+                'vehicles_size',
+                'psv_operate_large',
+                'psv_operate_small',
+                'psv_small_part_written',
+                'psv_small_conditions',
+                'psv_documentary_evidence_small',
+                'psv_documentary_evidence_large',
+                'psv_operate_novelty',
+                'psv_main_occupation_undertakings',
+            ];
+
+            foreach ($allSections as $section) {
+                $this->markSectionUnchanged($section);
+            }
+
+            return;
+        }
+
+        $relatedSections = [];
+        $ignoredSections = [];
+
+        if ($this->application->isPsvVehicleSizeSmall()) {
+            $relatedSections = [
+                'psv_small_conditions',
+                'psv_documentary_evidence_small',
+                'psv_operate_novelty',
+            ];
+
+            $ignoredSections = [
+                'psv_operate_small',
+                'psv_operate_large',
+                'psv_small_part_written',
+                'psv_documentary_evidence_large',
+                'psv_main_occupation_undertakings',
+            ];
+        } elseif ($this->application->isPsvVehicleSizeMediumLarge()) {
+            $relatedSections = [
+                'psv_operate_large',
+                'psv_documentary_evidence_large',
+                'psv_operate_novelty',
+                'psv_main_occupation_undertakings',
+            ];
+
+            $ignoredSections = [
+                'psv_operate_small',
+                'psv_small_conditions',
+                'psv_documentary_evidence_small',
+                'psv_small_part_written',
+            ];
+        } elseif ($this->application->isPsvVehicleSizeBoth()) {
+            if ($this->application->isOperatingSmallPsvAsPartOfLarge()) {
+                $relatedSections = [
+                    'psv_operate_small',
+                    'psv_small_conditions',
+                    'psv_documentary_evidence_large',
+                    'psv_operate_novelty',
+                    'psv_small_part_written',
+                    'psv_main_occupation_undertakings',
+                ];
+
+                $ignoredSections = [
+                    'psv_operate_large',
+                    'psv_documentary_evidence_small',
+                ];
+            } elseif ($this->application->isPsvBothNotOperatingSmallPsvAsPartOfLarge()) {
+                $relatedSections = [
+                    'psv_operate_small',
+                    'psv_small_conditions',
+                    'psv_documentary_evidence_large',
+                    'psv_operate_novelty',
+                    'psv_documentary_evidence_small',
+                    'psv_main_occupation_undertakings',
+                ];
+
+                $ignoredSections = [
+                    'psv_operate_large',
+                    'psv_small_part_written',
+                ];
+            } else {
+                $relatedSections = [
+                    'psv_operate_small',
+                    'psv_documentary_evidence_large',
+                    'psv_operate_novelty',
+                    'psv_main_occupation_undertakings',
+                ];
+
+                $ignoredSections = [
+                    'psv_operate_large',
+                    'psv_small_part_written',
+                    'psv_small_conditions',
+                    'psv_documentary_evidence_small',
+                ];
+            }
+        }
+
+        //restricted licences have extra sections - in theory this doesn't matter for variations, but included to future-proof
+        if (!$this->application->isRestricted()) {
+            $restrictedOnlySections = [
+                'psv_main_occupation_undertakings',
+                'psv_documentary_evidence_large',
+            ];
+
+            foreach ($restrictedOnlySections as $restrictedOnlySection) {
+                if (($key = array_search($restrictedOnlySection, $relatedSections, true)) !== false) {
+                    unset($relatedSections[$key]);
+                    $ignoredSections[] = $restrictedOnlySection;
+                }
+            }
+        }
+
+        foreach ($relatedSections as $section) {
+            if ($this->isUnchanged($section)) {
+                $this->markSectionRequired($section);
+            }
+        }
+
+        foreach ($ignoredSections as $section) {
+            $this->markSectionUnchanged($section);
+        }
+    }
+
     /**
      * Apply bespoke type of licence rules
      *
@@ -677,9 +791,9 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
                 $this->markSectionRequired('discs');
             }
 
-            // If the vehicles declaration section is unchanged and any of the tot auth vehicle columns has increased
-            if ($this->isUnchanged('vehicles_declarations') && $this->application->hasAuthChanged()) {
-                $this->markSectionRequired('vehicles_declarations');
+            // If the vehicles size section is unchanged and any of the tot auth vehicle columns has increased
+            if ($this->isUnchanged('vehicles_size') && $this->application->hasAuthChanged()) {
+                $this->markSectionRequired('vehicles_size');
             }
         }
 

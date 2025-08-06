@@ -59,8 +59,24 @@ return [
     TransferCommand\Application\DeletePsvVehicle::class => CommandHandler\Application\DeletePsvVehicle::class,
     TransferCommand\Application\CreateVehicleListDocument::class
         => CommandHandler\Application\CreateVehicleListDocument::class,
-    TransferCommand\Application\UpdateVehicleDeclaration::class =>
-        CommandHandler\Application\UpdateVehicleDeclaration::class,
+    TransferCommand\Application\UpdateVehicleSize::class =>
+        CommandHandler\Application\UpdateVehicleSize::class,
+    TransferCommand\Application\UpdateMainOccupationEvidence::class =>
+        CommandHandler\Application\UpdateMainOccupationEvidence::class,
+    TransferCommand\Application\UpdateSmallVehicleEvidence::class =>
+        CommandHandler\Application\UpdateSmallVehicleEvidence::class,
+    TransferCommand\Application\UpdateMainOccupationUndertakings::class =>
+        CommandHandler\Application\UpdateMainOccupationUndertakings::class,
+    TransferCommand\Application\UpdateNoveltyVehicles::class =>
+        CommandHandler\Application\UpdateNoveltyVehicles::class,
+    TransferCommand\Application\UpdateSmallVehicleConditionsAndUndertaking::class =>
+        CommandHandler\Application\UpdateSmallVehicleConditionsAndUndertaking::class,
+    TransferCommand\Application\UpdateVehicleOperatingSmall::class =>
+        CommandHandler\Application\UpdateVehicleOperatingSmall::class,
+    TransferCommand\Application\UpdateVehicleNinePassengers::class =>
+        CommandHandler\Application\UpdateVehicleNinePassengers::class,
+    TransferCommand\Application\UpdateWrittenExplanation::class =>
+        CommandHandler\Application\UpdateWrittenExplanation::class,
     TransferCommand\Application\WithdrawApplication::class => CommandHandler\Application\WithdrawApplication::class,
     TransferCommand\Application\ReviveApplication::class => CommandHandler\Application\ReviveApplication::class,
     TransferCommand\Application\RefuseApplication::class => CommandHandler\Application\RefuseApplication::class,
@@ -706,8 +722,24 @@ return [
     AppCompCommand\UpdateUndertakingsStatus::class => AppCompCommandHandler\UpdateUndertakingsStatus::class,
     AppCompCommand\UpdateConditionsUndertakingsStatus::class
         => AppCompCommandHandler\UpdateConditionsUndertakingsStatus::class,
-    AppCompCommand\UpdateVehiclesDeclarationsStatus::class
-        => AppCompCommandHandler\UpdateVehiclesDeclarationsStatus::class,
+    AppCompCommand\UpdateVehiclesSizeStatus::class
+    => AppCompCommandHandler\UpdateVehiclesSizeStatus::class,
+    AppCompCommand\UpdatePsvDocumentaryEvidenceSmallStatus::class
+    => AppCompCommandHandler\UpdatePsvDocumentaryEvidenceSmallStatus::class,
+    AppCompCommand\UpdatePsvDocumentaryEvidenceLargeStatus::class
+    => AppCompCommandHandler\UpdatePsvDocumentaryEvidenceLargeStatus::class,
+    AppCompCommand\UpdatePsvMainOccupationUndertakingsStatus::class
+    => AppCompCommandHandler\UpdatePsvMainOccupationUndertakingsStatus::class,
+    AppCompCommand\UpdatePsvOperateLargeStatus::class
+    => AppCompCommandHandler\UpdatePsvOperateLargeStatus::class,
+    AppCompCommand\UpdatePsvOperateSmallStatus::class
+    => AppCompCommandHandler\UpdatePsvOperateSmallStatus::class,
+    AppCompCommand\UpdatePsvOperateNoveltyStatus::class
+    => AppCompCommandHandler\UpdatePsvOperateNoveltyStatus::class,
+    AppCompCommand\UpdatePsvSmallPartWrittenStatus::class
+    => AppCompCommandHandler\UpdatePsvSmallPartWrittenStatus::class,
+    AppCompCommand\UpdatePsvSmallConditionsStatus::class
+    => AppCompCommandHandler\UpdatePsvSmallConditionsStatus::class,
     AppCompCommand\UpdateVehiclesPsvStatus::class => AppCompCommandHandler\UpdateVehiclesPsvStatus::class,
     AppCompCommand\UpdateTransportManagersStatus::class => AppCompCommandHandler\UpdateTransportManagersStatus::class,
     AppCompCommand\UpdateTaxiPhvStatus::class => AppCompCommandHandler\UpdateTaxiPhvStatus::class,

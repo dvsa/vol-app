@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Generator Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview;
 
@@ -24,11 +20,6 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\PhpRenderer;
 
-/**
- * Generator Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class GeneratorTest extends MockeryTestCase
 {
     public $sm;
@@ -111,6 +102,7 @@ class GeneratorTest extends MockeryTestCase
             'isGoods' => true,
             'isSpecialRestricted' => false,
             'isInternal' => true,
+            'isOperatingSmallPsvAsPartOfLarge' => true,
             'licence' => [
                 'organisation' => [
                     'name' => 'Foo ltd'
@@ -145,6 +137,7 @@ class GeneratorTest extends MockeryTestCase
             ->shouldReceive('serialize')
             ->once()
             ->andReturn($expectedData);
+        $this->application->expects('isOperatingSmallPsvAsPartOfLarge')->withNoArgs()->andReturnTrue();
 
         $this->niTranslation->shouldReceive('setLocaleForNiFlag')
             ->once()
@@ -199,6 +192,7 @@ class GeneratorTest extends MockeryTestCase
             'isGoods' => true,
             'isSpecialRestricted' => false,
             'isInternal' => true,
+            'isOperatingSmallPsvAsPartOfLarge' => true,
             'licence' => [
                 'organisation' => [
                     'name' => 'Foo ltd'
@@ -235,6 +229,7 @@ class GeneratorTest extends MockeryTestCase
             ->shouldReceive('serialize')
             ->once()
             ->andReturn($expectedData);
+        $this->application->expects('isOperatingSmallPsvAsPartOfLarge')->withNoArgs()->andReturnTrue();
 
         $this->mockSignatureSection();
 
@@ -299,6 +294,7 @@ class GeneratorTest extends MockeryTestCase
             'isGoods' => true,
             'isSpecialRestricted' => false,
             'isInternal' => true,
+            'isOperatingSmallPsvAsPartOfLarge' => false,
             'licence' => [
                 'organisation' => [
                     'name' => 'Foo ltd'
@@ -335,6 +331,7 @@ class GeneratorTest extends MockeryTestCase
             ->shouldReceive('serialize')
             ->once()
             ->andReturn($expectedData);
+        $this->application->expects('isOperatingSmallPsvAsPartOfLarge')->withNoArgs()->andReturnFalse();
 
         $this->mockSignatureSection();
 

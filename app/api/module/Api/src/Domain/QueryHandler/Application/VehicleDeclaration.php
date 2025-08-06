@@ -25,7 +25,10 @@ class VehicleDeclaration extends AbstractQueryHandler
                 'licence' => [
                     'trafficArea'
                 ]
-            ]
+            ],
+            [
+                'isOperatingSmallPsvAsPartOfLarge' => $application->isOperatingSmallPsvAsPartOfLarge(),
+            ],
         );
     }
 }

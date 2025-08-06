@@ -44,6 +44,7 @@ var sass = require("sass");
         "node_modules/@editorjs/header/dist/header.umd.js",
         "node_modules/@editorjs/list/dist/list.umd.js",
         "node_modules/@editorjs/paragraph/dist/paragraph.umd.js",
+        "node_modules/@editorjs/underline/dist/underline.umd.js",
         "assets/_js/components/*.js",
         "assets/_js/" + theme + "/*.js",
         "assets/_js/init/common.js",

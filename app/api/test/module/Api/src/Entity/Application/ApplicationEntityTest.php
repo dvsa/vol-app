@@ -577,6 +577,465 @@ class ApplicationEntityTest extends EntityTester
     }
 
     /**
+     * @dataProvider dpTestUpdatePsvVehicleSize
+     */
+    public function testUpdatePsvVehicleSizeWhenPreviouslyNull(string $size, ?string $psvOperateSmallVhl, bool $isVariation): void
+    {
+        $newVehicleSize = m::mock(RefData::class);
+        $newVehicleSize->expects('getId')->andReturn($size);
+
+        $applicationCompletion = m::mock(ApplicationCompletion::class);
+        $applicationCompletion->expects('clearVehiclesSizeSectionsForApplication')->never();
+        $this->entity->setApplicationCompletion($applicationCompletion);
+        $this->entity->setIsVariation($isVariation);
+
+        $this->entity->updatePsvVehicleSize($newVehicleSize);
+
+        $this->assertEquals($newVehicleSize, $this->entity->getPsvWhichVehicleSizes());
+        $this->assertEquals($psvOperateSmallVhl, $this->entity->getPsvOperateSmallVhl());
+    }
+
+    /**
+     * @dataProvider dpTestUpdatePsvVehicleSize
+     */
+    public function testUpdatePsvVehicleSizeWithNoChange(string $size, ?string $psvOperateSmallVhl, bool $isVariation): void
+    {
+        $oldVehicleSize = m::mock(RefData::class);
+        $oldVehicleSize->expects('getId')->andReturn($size);
+
+        $applicationCompletion = m::mock(ApplicationCompletion::class);
+        $applicationCompletion->expects('clearVehiclesSizeSectionsForApplication')->never();
+        $this->entity->setApplicationCompletion($applicationCompletion);
+        $this->entity->setIsVariation($isVariation);
+
+        //set the fields that we later will modify
+        $this->entity->setPsvWhichVehicleSizes($oldVehicleSize);
+        $this->entity->setPsvOperateSmallVhl(null);
+
+        $newVehicleSize = m::mock(RefData::class);
+        $newVehicleSize->expects('getId')->andReturn($size);
+
+        $this->entity->updatePsvVehicleSize($newVehicleSize);
+
+        $this->assertEquals($newVehicleSize, $this->entity->getPsvWhichVehicleSizes());
+        $this->assertEquals($psvOperateSmallVhl, $this->entity->getPsvOperateSmallVhl());
+    }
+
+    /**
+     * Tests fields are cleared when the vehicle size is changed
+     *
+     * @dataProvider dpTestUpdatePsvVehicleSize
+     */
+    public function testUpdatePsvVehicleSizeWithChange(string $size, ?string $psvOperateSmallVhl, bool $isVariation): void
+    {
+        $oldVehicleSize = m::mock(RefData::class);
+        $oldVehicleSize->expects('getId')->andReturn('id to be changed');
+
+        $applicationCompletion = m::mock(ApplicationCompletion::class);
+        $applicationCompletion->expects('clearVehiclesSizeSectionsForApplication')->times($isVariation ? 0 : 1)->withNoArgs()->andReturnSelf();
+        $this->entity->setApplicationCompletion($applicationCompletion);
+        $this->entity->setIsVariation($isVariation);
+
+        //set the fields that we later will modify
+        $this->entity->setPsvWhichVehicleSizes($oldVehicleSize);
+        $this->entity->setPsvOperateSmallVhl(null);
+        $this->entity->setPsvOccupationRecordsConfirmation('Y');
+        $this->entity->setPsvIncomeRecordsConfirmation('Y');
+        $this->entity->setPsvSmallVhlNotes('notes');
+        $this->entity->setPsvTotalVehicleSmall(10);
+        $this->entity->setPsvTotalVehicleLarge(11);
+        $this->entity->setPsvNoSmallVhlConfirmation('Y');
+        $this->entity->setPsvSmallVhlConfirmation('Y');
+        $this->entity->setPsvOnlyLimousinesConfirmation('Y');
+        $this->entity->setPsvNoLimousineConfirmation('Y');
+        $this->entity->setPsvLimousines('Y');
+        $this->entity->setSmallVehicleEvidenceUploaded(Entity::FINANCIAL_EVIDENCE_UPLOADED);
+        $this->entity->setOccupationEvidenceUploaded(Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER);
+
+        $newVehicleSize = m::mock(RefData::class);
+        $newVehicleSize->expects('getId')->andReturn($size);
+
+        $this->entity->updatePsvVehicleSize($newVehicleSize);
+
+        $this->assertEquals($newVehicleSize, $this->entity->getPsvWhichVehicleSizes());
+        $this->assertEquals($psvOperateSmallVhl, $this->entity->getPsvOperateSmallVhl());
+        $this->assertNull($this->entity->getPsvOccupationRecordsConfirmation());
+        $this->assertNull($this->entity->getPsvIncomeRecordsConfirmation());
+        $this->assertNull($this->entity->getPsvSmallVhlNotes());
+        $this->assertNull($this->entity->getPsvTotalVehicleSmall());
+        $this->assertNull($this->entity->getPsvTotalVehicleLarge());
+        $this->assertNull($this->entity->getPsvNoSmallVhlConfirmation());
+        $this->assertNull($this->entity->getPsvSmallVhlConfirmation());
+        $this->assertNull($this->entity->getPsvOnlyLimousinesConfirmation());
+        $this->assertNull($this->entity->getPsvNoLimousineConfirmation());
+        $this->assertNull($this->entity->getPsvLimousines());
+        $this->assertNull($this->entity->getSmallVehicleEvidenceUploaded());
+        $this->assertNull($this->entity->getOccupationEvidenceUploaded());
+    }
+
+    public function dpTestUpdatePsvVehicleSize(): array
+    {
+        return [
+            'small variation' => [
+                Entity::PSV_VEHICLE_SIZE_SMALL,
+                'Y',
+                true,
+            ],
+            'large variation' => [
+                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                'N',
+                true,
+            ],
+            'both variation' => [
+                Entity::PSV_VEHICLE_SIZE_BOTH,
+                null,
+                true,
+            ],
+            'small new app' => [
+                Entity::PSV_VEHICLE_SIZE_SMALL,
+                'Y',
+                false,
+            ],
+            'large new app' => [
+                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                'N',
+                false,
+            ],
+            'both new app' => [
+                Entity::PSV_VEHICLE_SIZE_BOTH,
+                null,
+                false,
+            ],
+        ];
+    }
+
+    public function testUpdatePsvNoveltyVehicles(): void
+    {
+        $usingLimousines = 'Y';
+        $psvNoLimousineConfirmation = 'N';
+        $psvOnlyLimousineConfirmation = 'Y';
+
+        $this->entity->updatePsvNoveltyVehicles(
+            $usingLimousines,
+            $psvNoLimousineConfirmation,
+            $psvOnlyLimousineConfirmation
+        );
+
+        $this->assertEquals($usingLimousines, $this->entity->getPsvLimousines());
+        $this->assertEquals($psvNoLimousineConfirmation, $this->entity->getPsvNoLimousineConfirmation());
+        $this->assertEquals($psvOnlyLimousineConfirmation, $this->entity->getPsvOnlyLimousinesConfirmation());
+    }
+
+    public function testUpdateWrittenEvidence(): void
+    {
+        $psvSmallVhlNotes = 'notes';
+        $psvTotalVehicleSmall = 10;
+        $psvTotalVehicleLarge = 11;
+
+        $this->entity->updateWrittenEvidence(
+            $psvSmallVhlNotes,
+            $psvTotalVehicleSmall,
+            $psvTotalVehicleLarge
+        );
+
+        $this->assertEquals($psvSmallVhlNotes, $this->entity->getPsvSmallVhlNotes());
+        $this->assertEquals($psvTotalVehicleSmall, $this->entity->getPsvTotalVehicleSmall());
+        $this->assertEquals($psvTotalVehicleLarge, $this->entity->getPsvTotalVehicleLarge());
+    }
+
+    public function testUpdateMainOccupationUndertakings(): void
+    {
+        $psvOccupationRecordsConfirmation = 'Y';
+        $psvIncomeRecordsConfirmation = 'N'; //wouldn't happen in reality but allows differentiation for this test
+
+        $this->entity->updateMainOccupationUndertakings(
+            $psvOccupationRecordsConfirmation,
+            $psvIncomeRecordsConfirmation
+        );
+
+        $this->assertEquals($psvOccupationRecordsConfirmation, $this->entity->getPsvOccupationRecordsConfirmation());
+        $this->assertEquals($psvIncomeRecordsConfirmation, $this->entity->getPsvIncomeRecordsConfirmation());
+    }
+
+    /**
+     * @dataProvider dpTestIsMainOccupationUndertakingsSectionCompleted
+     */
+    public function testIsMainOccupationUndertakingsSectionCompleted(
+        bool $isCompleted,
+        ?string $psvOccupationRecordsConfirmation,
+        ?string $psvIncomeRecordsConfirmation
+    ): void
+    {
+        $this->entity->setPsvOccupationRecordsConfirmation($psvOccupationRecordsConfirmation);
+        $this->entity->setPsvIncomeRecordsConfirmation($psvIncomeRecordsConfirmation);
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvMainOccupationUndertakings'));
+    }
+
+    public function dpTestIsMainOccupationUndertakingsSectionCompleted(): array
+    {
+        return [
+            'both fields null' => [
+                false,
+                null,
+                null,
+            ],
+            'missing occupation record' => [
+                false,
+                null,
+                'Y',
+            ],
+            'missing income record' => [
+                false,
+                'Y',
+                null,
+            ],
+            'both fields present' => [
+                true,
+                'Y',
+                'Y',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestIsWrittenEvidenceSectionCompleted
+     */
+    public function testIsWrittenEvidenceSectionCompleted(
+        bool $isCompleted,
+        ?string $psvSmallVhlNotes,
+        ?int $psvTotalVehicleSmall,
+        ?int $psvTotalVehicleLarge
+    ): void
+    {
+        $this->entity->setPsvSmallVhlNotes($psvSmallVhlNotes);
+        $this->entity->setPsvTotalVehicleSmall($psvTotalVehicleSmall);
+        $this->entity->setPsvTotalVehicleLarge($psvTotalVehicleLarge);
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvSmallPartWritten'));
+    }
+
+    public function dpTestIsWrittenEvidenceSectionCompleted(): array
+    {
+        return [
+            'all fields null' => [
+                false,
+                null,
+                null,
+                null,
+            ],
+            'notes field missing' => [
+                false,
+                null,
+                10,
+                20,
+            ],
+            'small vehicles missing' => [
+                false,
+                'notes',
+                null,
+                20,
+            ],
+            'large vehicles missing' => [
+                false,
+                'notes',
+                10,
+                null,
+            ],
+            'all fields present' => [
+                true,
+                'notes',
+                10,
+                20,
+            ],
+        ];
+    }
+
+    public function testIsNoveltyVehiclesSectionCompletedWithEmptyLimoField(): void
+    {
+        $this->entity->setPsvLimousines(null);
+        $this->assertFalse($this->entity->isSectionCompleted('PsvOperateNovelty'));
+    }
+
+    public function testIsNoveltyVehiclesSectionCompletedUsingLimosSmallVehicles(): void
+    {
+        $vehicleSize = m::mock(RefData::class);
+        $vehicleSize->expects('getId')->andReturn(Entity::PSV_VEHICLE_SIZE_SMALL);
+
+        $this->entity->setPsvWhichVehicleSizes($vehicleSize);
+        $this->entity->setPsvLimousines('Y');
+
+        $this->assertTrue($this->entity->isSectionCompleted('PsvOperateNovelty'));
+    }
+
+    /**
+     * @dataProvider dpTestIsNoveltyVehiclesSectionCompletedUsingLimosNotSmallVehicles
+     */
+    public function testIsNoveltyVehiclesSectionCompletedUsingLimosNotSmallVehicles(
+        bool $isCompleted,
+        string $size,
+        ?string $psvNoLimousineConfirmation,
+        ?string $psvOnlyLimousineConfirmation
+    ): void
+    {
+        $vehicleSize = m::mock(RefData::class);
+        $vehicleSize->expects('getId')->andReturn($size);
+
+        $this->entity->setPsvWhichVehicleSizes($vehicleSize);
+        $this->entity->setPsvLimousines('Y');
+        $this->entity->setPsvNoLimousineConfirmation($psvNoLimousineConfirmation);
+        $this->entity->setPsvOnlyLimousinesConfirmation($psvOnlyLimousineConfirmation);
+
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvOperateNovelty'));
+    }
+
+    public function dpTestIsNoveltyVehiclesSectionCompletedUsingLimosNotSmallVehicles(): array
+    {
+        return [
+            'both with no confirmation' => [
+                false,
+                Entity::PSV_VEHICLE_SIZE_BOTH,
+                null,
+                null,
+            ],
+            'large with no confirmation' => [
+                false,
+                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                null,
+                null,
+            ],
+            'both with incorrect confirmation' => [
+                false,
+                Entity::PSV_VEHICLE_SIZE_BOTH,
+                'Y',
+                null,
+            ],
+            'large with incorrect confirmation' => [
+                false,
+                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                'Y',
+                null,
+            ],
+            'both with correct confirmation' => [
+                true,
+                Entity::PSV_VEHICLE_SIZE_BOTH,
+                null,
+                'Y',
+            ],
+            'large with correct confirmation' => [
+                true,
+                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+                null,
+                'Y',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestIsNoveltyVehiclesSectionCompletedNotUsingLimos
+     */
+    public function testIsNoveltyVehiclesSectionCompletedNotUsingLimos(
+        bool $isCompleted,
+        ?string $psvNoLimousineConfirmation,
+        ?string $psvOnlyLimousineConfirmation
+    ): void
+    {
+        $this->entity->setPsvLimousines('N');
+        $this->entity->setPsvNoLimousineConfirmation($psvNoLimousineConfirmation);
+        $this->entity->setPsvOnlyLimousinesConfirmation($psvOnlyLimousineConfirmation);
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvOperateNovelty'));
+    }
+
+    public function dpTestIsNoveltyVehiclesSectionCompletedNotUsingLimos(): array
+    {
+        return [
+            'no confirmation' => [
+                false,
+                null,
+                null,
+            ],
+            'with wrong confirmation' => [
+                false,
+                null,
+                'Y',
+            ],
+            'with correct confirmation' => [
+                true,
+                'Y',
+                null,
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestPsvEvidenceSectionsCompleted
+     */
+    public function testPsvEvidenceSectionsCompleted(bool $isCompleted, ?int $value): void
+    {
+        $this->entity->setSmallVehicleEvidenceUploaded($value);
+        $this->entity->setOccupationEvidenceUploaded($value);
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvDocumentaryEvidenceSmall'));
+        $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvDocumentaryEvidenceLarge'));
+    }
+
+    public function dpTestPsvEvidenceSectionsCompleted(): array
+    {
+        return [
+            'field is null' => [
+                false,
+                null,
+            ],
+            'uploaded' => [
+                true,
+                Entity::FINANCIAL_EVIDENCE_UPLOADED,
+            ],
+            'upload later' => [
+                true,
+                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            ],
+        ];
+    }
+
+    public function testOperateLargeVehiclesSectionCompleted(): void
+    {
+        $this->assertFalse($this->entity->isSectionCompleted('PsvOperateLarge'));
+
+        $this->entity->setPsvNoSmallVhlConfirmation('Y');
+        $this->assertTrue($this->entity->isSectionCompleted('PsvOperateLarge'));
+    }
+
+    public function testOperateSmallVehiclesSectionCompleted(): void
+    {
+        $this->assertFalse($this->entity->isSectionCompleted('PsvOperateSmall'));
+
+        $this->entity->setPsvOperateSmallVhl('Y');
+        $this->assertTrue($this->entity->isSectionCompleted('PsvOperateSmall'));
+    }
+
+    public function testSmallVehicleConditionsSectionCompleted(): void
+    {
+        $this->assertFalse($this->entity->isSectionCompleted('PsvSmallConditions'));
+
+        $this->entity->setPsvSmallVhlConfirmation('Y');
+        $this->assertTrue($this->entity->isSectionCompleted('PsvSmallConditions'));
+    }
+
+    public function testVehiclesSizeSectionCompleted(): void
+    {
+        $this->assertFalse($this->entity->isSectionCompleted('VehiclesSize'));
+
+        $this->entity->setPsvOperateSmallVhl(Entity::PSV_VEHICLE_SIZE_SMALL);
+        $this->assertTrue($this->entity->isSectionCompleted('PsvOperateSmall'));
+    }
+
+    public function testIsSectionCompletedNoValidation(): void
+    {
+        $applicationSection = 'made up section';
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('There is no validation for this section: ' . $applicationSection);
+
+        $this->entity->isSectionCompleted($applicationSection);
+    }
+
+    /**
      * @dataProvider dpTestValidateFinancialHistory
      */
     public function testValidateFinancialHistory($flags, $text)

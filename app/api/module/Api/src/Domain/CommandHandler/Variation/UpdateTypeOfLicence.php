@@ -51,7 +51,7 @@ final class UpdateTypeOfLicence extends AbstractCommandHandler implements AuthAw
     {
         $result = new Result();
 
-        /** @var Application $licence */
+        /** @var Application $application */
         $application = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());
 
         $licence = $application->getLicence();

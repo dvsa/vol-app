@@ -3,7 +3,8 @@
 namespace Dvsa\Olcs\Application\Controller\Factory;
 
 use Common\FormService\FormServiceManager;
-use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -29,9 +30,10 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
         $scriptFactory = $container->get(ScriptFactory::class);
-        $dataHelper = $container->get(DataHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new VehiclesDeclarationsController(
             $niTextTranslationUtil,
@@ -39,9 +41,10 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
             $formHelper,
             $formServiceManager,
             $scriptFactory,
-            $dataHelper,
             $restrictionHelper,
-            $stringHelper
+            $stringHelper,
+            $uploadHelper,
+            $flashMessengerHelper
         );
     }
 }
