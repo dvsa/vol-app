@@ -132,6 +132,27 @@ services:
       VIRTUAL_HOST: mailpit.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8025
 
+  mock-govuk-signin:
+    container_name: mock-govuk-signin
+    build: ./app/mock-govuk-signin
+    expose:
+      - 8080
+    ports:
+      - "8090:8080"
+    environment:
+      NODE_ENV: development
+      PORT: 8080
+      VALIDATION_MODE: permissive
+      ISSUER_URL: http://mockgovsignin.local.olcs.dev-dvsacloud.uk
+      LOG_LEVEL: debug
+      VIRTUAL_HOST: mockgovsignin.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 8080
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   db-data:
   openldap-data:
