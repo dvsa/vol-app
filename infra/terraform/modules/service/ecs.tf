@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "this" {
 resource "aws_lb_target_group" "proving" {
   for_each = contains(["prep", "prod"], var.environment) ? var.services : {}
 
-  name        = "vol-app-proving-${var.environment}-${each.key}-tg"
+  name        = "vol-app-prov-${var.environment}-${each.key}-tg"
   port        = 8080
   protocol    = "HTTP"
   target_type = "ip"
