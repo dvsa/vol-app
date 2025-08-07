@@ -19,7 +19,7 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-resource "aws_lb_target_group" "internal-pub" {
+resource "aws_lb_target_group" "pub-iuweb" {
   count = contains(["prep", "prod"], var.environment) ? 1 : 0
 
   name        = "vol-app-iuweb-${var.environment}-pub-tg"
@@ -81,20 +81,43 @@ resource "aws_lb_listener_rule" "proving" {
     }
   }
 }
+/* if we want to have public listener rule in future for iuweb
+resource "aws_lb_listener_rule" "iuweb-pub" {
+  count = (
+    try(var.services.iuweb_pub_listener_arn, "") != "" &&
+    try(var.services.iuweb_pub_listener_rule_enable, false)
+  ) ? 1 : 0
 
-resource "aws_lb_listener_rule" "internal-pub-proving" {
-  count        = contains(["prep", "prod"], var.environment) ? 1 : 0
-  listener_arn = var.services["internal"].iuweb_pub_listener_arn
-  priority     = 9
+  listener_arn = var.services.iuweb_pub_listener_arn
+  priority     = 10
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.internal-pub[0].arn
+    target_group_arn = aws_lb_target_group["pub-iuweb"].arn
   }
 
   condition {
     host_header {
-      values = ["proving-iuweb.*"]
+      values = ["iuweb.*"]
+    }
+  }
+}
+*/
+resource "aws_lb_listener_rule" "iuweb-pub-proving" {
+  count = (
+    try(var.services.iuweb_pub_listener_arn, "") != "" ? 1 : 0
+  )
+  listener_arn = var.services.iuweb_pub_listener_arn
+  priority     = 9
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.pub-iuweb.arn
+  }
+
+  condition {
+    host_header {
+      values = "proving-iuweb.*"
     }
   }
 }
@@ -210,22 +233,13 @@ module "ecs_service" {
       memory_reservation = 100
     }
   }
-  load_balancer = concat(
-    [
-      {
-        target_group_arn = aws_lb_target_group.this[each.key].arn
-        container_name   = each.key
-        container_port   = 8080
-      }
-    ],
-    each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
-      {
-        target_group_arn = aws_lb_target_group.internal-pub[0].arn
-        container_name   = each.key
-        container_port   = 8080
-      }
-    ] : []
-  )
+  load_balancer = [
+    {
+      target_group_arn = aws_lb_target_group.this[each.key].arn
+      container_name   = each.key
+      container_port   = 8080
+    }
+  ]
 
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
