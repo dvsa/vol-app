@@ -64,7 +64,7 @@ resource "aws_lb_listener_rule" "this" {
 resource "aws_lb_listener_rule" "proving" {
   for_each = {
     for service, config in var.services : service => config
-    if contains(["prep", "prod"], var.environment) && config.listener_rule_enable
+    if contains(["prep", "prod"], var.environment)
   }
 
   listener_arn = each.value.lb_listener_arn
@@ -194,7 +194,14 @@ module "ecs_service" {
     }
   }
 
-  load_balancer = (
+  load_balancer = flatten([
+    [
+      {
+        target_group_arn = aws_lb_target_group.proving[each.key].arn
+        container_name   = each.key
+        container_port   = 8080
+      }
+    ],
     each.value.listener_rule_enable ? [
       {
         target_group_arn = aws_lb_target_group.this[each.key].arn
@@ -202,7 +209,7 @@ module "ecs_service" {
         container_port   = 8080
       }
     ] : []
-  )
+  ])
 
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
