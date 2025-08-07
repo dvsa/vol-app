@@ -81,32 +81,12 @@ resource "aws_lb_listener_rule" "proving" {
     }
   }
 }
-/* if we want to have public listener rule in future for iuweb
-resource "aws_lb_listener_rule" "iuweb-pub" {
-  count = (
-    try(var.services.iuweb_pub_listener_arn, "") != "" &&
-    try(var.services.iuweb_pub_listener_rule_enable, false)
-  ) ? 1 : 0
 
-  listener_arn = var.services.iuweb_pub_listener_arn
-  priority     = 10
-
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group["pub-iuweb"].arn
-  }
-
-  condition {
-    host_header {
-      values = ["iuweb.*"]
-    }
-  }
-}
-*/
 resource "aws_lb_listener_rule" "iuweb-pub-proving" {
-  count = (
-    try(var.services.iuweb_pub_listener_arn, "") != "" ? 1 : 0
-  )
+  for_each = {
+    for service, config in var.services : service => config
+    if try(service.iuweb_pub_listener_arn, "") != ""
+  }
   listener_arn = var.services.iuweb_pub_listener_arn
   priority     = 9
 
