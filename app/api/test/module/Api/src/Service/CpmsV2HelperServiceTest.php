@@ -460,93 +460,6 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testInitiateStoredCardRequest($miscParams, $expectedCustomer, $expectedReceiver)
-    {
-        $orgId = 99;
-        $redirectUrl = 'http://olcs-selfserve/foo';
-
-        $fees = [
-            $this->getStubFee(1, 525.25, FeeEntity::ACCRUAL_RULE_IMMEDIATE, null, $orgId, '2015-08-29'),
-            $this->getStubFee(2, 125.25, FeeEntity::ACCRUAL_RULE_LICENCE_START, '2014-12-25', $orgId, '2015-08-30'),
-        ];
-
-        $this->mockSchemaIdChange();
-
-        $now = (new DateTime())->format('Y-m-d');
-
-        $expectedParams = array_merge(
-            $expectedCustomer,
-            [
-                'payment_data' => [
-                    array_merge(
-                        $expectedReceiver,
-                        [
-                            'line_identifier' => '1',
-                            'amount' => '525.25',
-                            'allocated_amount' => '525.25',
-                            'net_amount' => '525.25',
-                            'tax_amount' => '0.00',
-                            'tax_code' => 'Z',
-                            'tax_rate' => '0',
-                            'invoice_date' => '2015-08-29',
-                            'sales_reference' => '1',
-                            'product_reference' => 'fee type description',
-                            'product_description' => 'fee type description',
-                            'rule_start_date' => $now,
-                            'deferment_period' => '1',
-                            'country_code' => 'GB',
-                            'sales_person_reference' => 'Traffic Area Ref',
-                        ]
-                    ),
-                    array_merge(
-                        $expectedReceiver,
-                        [
-                            'line_identifier' => '2',
-                            'amount' => '125.25',
-                            'allocated_amount' => '125.25',
-                            'net_amount' => '125.25',
-                            'tax_amount' => '0.00',
-                            'tax_code' => 'Z',
-                            'tax_rate' => '0',
-                            'invoice_date' => '2015-08-30',
-                            'sales_reference' => '2',
-                            'product_reference' => 'fee type description',
-                            'product_description' => 'fee type description',
-                            'rule_start_date' => '2014-12-25',
-                            'deferment_period' => '60',
-                            'country_code' => 'GB',
-                            'sales_person_reference' => 'Traffic Area Ref',
-                        ]
-                    )
-                ],
-                'total_amount' => '650.50',
-                'redirect_uri' => $redirectUrl,
-                'disable_redirection' => true,
-                'scope' => 'STORED_CARD',
-                'refund_overpayment' => false,
-                'country_code' => 'GB',
-            ]
-        );
-
-        $response = [
-            'receipt_reference' => 'guid_123',
-            'schema_id' => 'client_id'
-        ];
-
-        $this->cpmsClient
-            ->shouldReceive('post')
-            ->with('/api/payment/stored-card/STORED_CARD', 'STORED_CARD', $expectedParams)
-            ->once()
-            ->andReturn($response);
-
-        $result = $this->sut->initiateStoredCardRequest($redirectUrl, $fees, 'STORED_CARD', $miscParams);
-
-        $this->assertSame($response, $result);
-    }
-
     public function testInitiateCardRequestInvalidApiResponse()
     {
         $this->expectException(CpmsResponseException::class);
@@ -563,18 +476,6 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
             ->andReturn(400);
 
         $this->sut->initiateCardRequest('http://olcs-selfserve/foo', []);
-    }
-
-    public function testGetListStoredCards()
-    {
-        $this->cpmsClient
-            ->shouldReceive('get')
-            ->with('/api/stored-card', 'STORED_CARD', [])
-            ->andReturn(['FOO']);
-
-        $this->mockSchemaIdChange();
-
-        $this->assertSame(['FOO'], $this->sut->getListStoredCards('N'));
     }
 
     /**
