@@ -134,24 +134,21 @@ services:
 
   mock-govuk-signin:
     container_name: mock-govuk-signin
-    build: ./app/mock-govuk-signin
+    build:
+      context: .
+      dockerfile: infra/docker/mock-govuk-signin/Dockerfile
     expose:
-      - 8080
-    ports:
-      - "8090:8080"
+      - 80
     environment:
-      NODE_ENV: development
-      PORT: 8080
-      VALIDATION_MODE: permissive
-      ISSUER_URL: http://mockgovsignin.local.olcs.dev-dvsacloud.uk
-      LOG_LEVEL: debug
-      VIRTUAL_HOST: mockgovsignin.local.olcs.dev-dvsacloud.uk
-      VIRTUAL_PORT: 8080
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      LOCAL_PROXY: "true"
+      VIRTUAL_HOST: mocksignin.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 80
+      ISSUER_URL: http://mocksignin.local.olcs.dev-dvsacloud.uk
+    networks:
+      default:
+        aliases:
+          - mock-govuk-signin
+          - mocksignin.local.olcs.dev-dvsacloud.uk
 
 volumes:
   db-data:

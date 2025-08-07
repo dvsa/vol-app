@@ -1,3 +1,6 @@
+import * as fs from "fs";
+import * as path from "path";
+
 export type ValidationMode = "permissive" | "standard" | "strict";
 
 export interface Config {
@@ -8,8 +11,23 @@ export interface Config {
   jwtPrivateKey: string;
   jwtPublicKey: string;
   jwtAlgorithm: "RS256" | "HS256";
+  keyId: string;
+  ecPrivateKey: string;
+  ecPublicKey: string;
+  ecKeyId: string;
   environment: string;
 }
+
+// Simple key loading - keys are committed to repo
+const loadKey = (filename: string): string => {
+  try {
+    const keyPath = path.join(__dirname, "..", "..", filename);
+    return fs.readFileSync(keyPath, "utf8");
+  } catch (error) {
+    console.error(`Error loading ${filename}:`, error);
+    return "";
+  }
+};
 
 export const config: Config = {
   port: parseInt(process.env.PORT || "8080", 10),
@@ -18,10 +36,16 @@ export const config: Config = {
   logLevel: process.env.LOG_LEVEL || "info",
   environment: process.env.NODE_ENV || "development",
 
-  // In permissive mode, we'll auto-generate keys if not provided
-  jwtPrivateKey: process.env.JWT_PRIVATE_KEY || "mock-private-key-for-testing",
-  jwtPublicKey: process.env.JWT_PUBLIC_KEY || "mock-public-key-for-testing",
-  jwtAlgorithm: "HS256", // Use HS256 for simplicity in mock
+  // Load RSA keys for JWT signing (main tokens)
+  jwtPrivateKey: process.env.JWT_PRIVATE_KEY || loadKey("mock-private.pem"),
+  jwtPublicKey: process.env.JWT_PUBLIC_KEY || loadKey("mock-public.pem"),
+  jwtAlgorithm: "RS256", // Use RS256 for proper OAuth/OIDC compliance
+  keyId: "mock-key-1", // Key ID for JWKS
+
+  // Load EC keys for coreIdentityJWT signing
+  ecPrivateKey: loadKey("mock-ec-private.pem"),
+  ecPublicKey: loadKey("mock-ec-public.pem"),
+  ecKeyId: "mock-ec-key-1",
 };
 
 // Log configuration on startup

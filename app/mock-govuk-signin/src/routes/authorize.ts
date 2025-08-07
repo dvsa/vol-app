@@ -34,7 +34,25 @@ router.get("/authorize", (req, res) => {
 
 // POST /authorize - Process login
 router.post("/authorize", express.urlencoded({ extended: true }), (req, res) => {
-  const { email, password, ...oauthParams } = req.body;
+  console.log("📋 Raw POST body:", req.body);
+
+  // Clean up form data - remove ^ characters that seem to be incorrectly added
+  const cleanedBody: any = {};
+  for (const [key, value] of Object.entries(req.body)) {
+    const cleanKey = key.replace(/\^/g, "");
+    const cleanValue = typeof value === "string" ? value.replace(/\^/g, "") : value;
+    cleanedBody[cleanKey] = cleanValue;
+  }
+
+  console.log("🧹 Cleaned body:", cleanedBody);
+
+  const { email, password, ...oauthParams } = cleanedBody;
+
+  // Validate email is present
+  if (!email) {
+    console.error("❌ Email is missing from form data");
+    return res.status(400).json({ error: "Bad Request", message: "Email is required" });
+  }
 
   // Get user scenario based on email
   const scenario = userService.getUserScenario(email);
@@ -52,23 +70,21 @@ router.post("/authorize", express.urlencoded({ extended: true }), (req, res) => 
     return res.redirect(`${oauthParams.redirect_uri}?${errorParams}`);
   }
 
-  // Generate and store auth code
-  const authCode: AuthCode = {
-    code: storageService.generateAuthCode(),
+  // Generate stateless auth code JWT with embedded data
+  const authCode = storageService.createAuthCode({
     clientId: oauthParams.client_id,
     redirectUri: oauthParams.redirect_uri,
     state: oauthParams.state,
     nonce: oauthParams.nonce,
     email: email,
     scenario: scenario,
-    createdAt: new Date(),
-  };
+  });
 
-  storageService.storeAuthCode(authCode);
+  console.log(`📝 Generated stateless auth code for ${email}`);
 
   // Redirect back to client with auth code
   const successParams = new URLSearchParams({
-    code: authCode.code,
+    code: authCode,
     state: oauthParams.state,
   });
 

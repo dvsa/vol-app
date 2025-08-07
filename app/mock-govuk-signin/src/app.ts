@@ -6,6 +6,7 @@ import tokenRouter from "./routes/token";
 import userinfoRouter from "./routes/userinfo";
 import jwksRouter from "./routes/jwks";
 import healthRouter from "./routes/health";
+import wellKnownRouter from "./routes/wellKnown";
 
 export function createApp(): express.Application {
   const app = express();
@@ -22,6 +23,7 @@ export function createApp(): express.Application {
   });
 
   // Routes
+  app.use(wellKnownRouter);
   app.use(discoveryRouter);
   app.use(authorizeRouter);
   app.use(tokenRouter);

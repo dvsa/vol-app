@@ -28,7 +28,7 @@ router.get("/userinfo", (req, res) => {
   }
 
   // Generate userinfo response with core identity
-  const userInfo = tokenService.createUserInfo(tokenData.scenario);
+  const userInfo = tokenService.createUserInfo(tokenData.scenario, tokenData.clientId, tokenData.sub);
 
   console.log(`👤 UserInfo requested for ${tokenData.email}`);
 

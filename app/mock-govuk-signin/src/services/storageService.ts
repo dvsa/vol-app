@@ -1,102 +1,165 @@
+import jwt from "jsonwebtoken";
+import { config } from "../config";
 import { AuthCode } from "../types";
-import { v4 as uuidv4 } from "uuid";
 
+/**
+ * Stateless storage service that encodes all state in JWTs
+ * This allows the mock service to run in Lambda without any persistent storage
+ */
 export class StorageService {
-  private authCodes: Map<string, AuthCode> = new Map();
-  private accessTokens: Map<string, any> = new Map();
+  private privateKey = config.jwtPrivateKey;
+  private publicKey = config.jwtPublicKey;
+  private algorithm = config.jwtAlgorithm;
 
-  // Auth codes expire after 10 minutes
-  private AUTH_CODE_TTL = 10 * 60 * 1000;
-  // Access tokens expire after 1 hour
-  private ACCESS_TOKEN_TTL = 60 * 60 * 1000;
-
+  /**
+   * Generate a self-contained authorization code JWT
+   * VOL never validates this, just passes it back to us
+   */
   storeAuthCode(authCode: AuthCode): void {
-    this.authCodes.set(authCode.code, authCode);
-
-    // Auto-cleanup after TTL
-    setTimeout(() => {
-      this.authCodes.delete(authCode.code);
-    }, this.AUTH_CODE_TTL);
-
-    console.log(`📝 Stored auth code: ${authCode.code} for ${authCode.email}`);
+    // No-op: auth code is already self-contained
+    // The code itself IS the storage
+    console.log(`📝 Created stateless auth code for ${authCode.email}`);
   }
 
-  getAuthCode(code: string): AuthCode | undefined {
-    const authCode = this.authCodes.get(code);
+  /**
+   * Generate authorization code as a JWT containing all needed data
+   */
+  generateAuthCode(): string {
+    // This will be called by authorize route, which will encode the data
+    // For now, return a placeholder that will be replaced
+    return "placeholder";
+  }
 
-    if (authCode) {
-      // Check if expired
-      const age = Date.now() - authCode.createdAt.getTime();
-      if (age > this.AUTH_CODE_TTL) {
-        this.authCodes.delete(code);
-        console.log(`❌ Auth code expired: ${code}`);
+  /**
+   * Create auth code JWT with embedded data
+   */
+  createAuthCode(authCode: Omit<AuthCode, "code" | "createdAt">): string {
+    const now = Math.floor(Date.now() / 1000);
+
+    const payload = {
+      type: "auth_code",
+      email: authCode.email,
+      scenario: authCode.scenario,
+      clientId: authCode.clientId,
+      nonce: authCode.nonce,
+      redirectUri: authCode.redirectUri,
+      state: authCode.state,
+      iat: now,
+      exp: now + 600, // 10 minutes
+    };
+
+    // Sign with our private key
+    return jwt.sign(payload, this.privateKey, { algorithm: this.algorithm });
+  }
+
+  /**
+   * Decode and validate an authorization code JWT
+   */
+  consumeAuthCode(code: string): AuthCode | undefined {
+    try {
+      const decoded = jwt.verify(code, this.publicKey, {
+        algorithms: [this.algorithm],
+      }) as any;
+
+      // Check it's an auth code
+      if (decoded.type !== "auth_code") {
+        console.log(`❌ Invalid code type: ${decoded.type}`);
         return undefined;
       }
-    }
 
-    return authCode;
+      console.log(`✅ Consumed stateless auth code for ${decoded.email}`);
+
+      // JWT.verify already checks expiration, return as AuthCode format
+      return {
+        code: code,
+        email: decoded.email,
+        scenario: decoded.scenario,
+        clientId: decoded.clientId,
+        nonce: decoded.nonce,
+        redirectUri: decoded.redirectUri,
+        state: decoded.state,
+        createdAt: new Date(decoded.iat * 1000),
+      };
+    } catch (error: any) {
+      if (error.name === "TokenExpiredError") {
+        console.log(`❌ Auth code expired`);
+      } else {
+        console.error("Invalid auth code:", error.message);
+      }
+      return undefined;
+    }
   }
 
-  consumeAuthCode(code: string): AuthCode | undefined {
-    const authCode = this.getAuthCode(code);
-    if (authCode) {
-      // Auth codes are single-use
-      this.authCodes.delete(code);
-      console.log(`✅ Consumed auth code: ${code}`);
-    }
-    return authCode;
-  }
-
+  /**
+   * Access tokens are already self-contained JWTs
+   * This method is now a no-op since data is embedded in the token
+   */
   storeAccessToken(token: string, data: any): void {
-    this.accessTokens.set(token, {
-      data,
-      createdAt: new Date(),
-    });
-
-    // Auto-cleanup after TTL
-    setTimeout(() => {
-      this.accessTokens.delete(token);
-    }, this.ACCESS_TOKEN_TTL);
-
-    console.log(`📝 Stored access token for user: ${data.email}`);
+    // No-op: access token already contains all data in its claims
+    console.log(`📝 Access token is self-contained for user: ${data.email}`);
   }
 
+  /**
+   * Extract user data from the access token JWT
+   * The token already contains all needed data in custom claims
+   */
   getAccessTokenData(token: string): any | undefined {
-    const stored = this.accessTokens.get(token);
+    try {
+      // Decode without verification (we trust our own tokens)
+      // VOL has already validated the signature before sending it back
+      const decoded = jwt.decode(token) as any;
 
-    if (stored) {
-      // Check if expired
-      const age = Date.now() - stored.createdAt.getTime();
-      if (age > this.ACCESS_TOKEN_TTL) {
-        this.accessTokens.delete(token);
+      if (!decoded) {
+        console.log(`❌ Could not decode access token`);
+        return undefined;
+      }
+
+      // Check if it's one of our mock tokens with embedded data
+      if (!decoded.mock_email || !decoded.mock_scenario) {
+        console.log(`❌ Access token missing mock data`);
+        return undefined;
+      }
+
+      // Check expiration manually
+      if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
         console.log(`❌ Access token expired`);
         return undefined;
       }
-      return stored.data;
-    }
 
-    return undefined;
+      return {
+        email: decoded.mock_email,
+        scenario: decoded.mock_scenario,
+        clientId: decoded.client_id || decoded.aud,
+        sub: decoded.sub,
+      };
+    } catch (error) {
+      console.error("Error decoding access token:", error);
+      return undefined;
+    }
   }
 
-  generateAuthCode(): string {
-    return "code_" + uuidv4();
+  // These methods remain for compatibility but don't need storage
+  getAuthCode(code: string): AuthCode | undefined {
+    // Try to decode the JWT
+    return this.consumeAuthCode(code);
   }
 
   generateAccessToken(): string {
-    return "at_" + uuidv4();
+    // This is not used anymore - tokenService generates the JWT directly
+    return "unused";
   }
 
-  // Cleanup method for testing
+  // Cleanup method for testing (no-op in stateless mode)
   clear(): void {
-    this.authCodes.clear();
-    this.accessTokens.clear();
+    console.log("📝 Stateless storage - nothing to clear");
   }
 
-  // Stats for monitoring
+  // Stats for monitoring (always empty in stateless mode)
   getStats(): any {
     return {
-      authCodes: this.authCodes.size,
-      accessTokens: this.accessTokens.size,
+      authCodes: 0, // No storage
+      accessTokens: 0, // No storage
+      mode: "stateless",
     };
   }
 }

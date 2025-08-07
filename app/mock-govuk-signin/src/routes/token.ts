@@ -7,6 +7,7 @@ import { tokenService } from "../services/tokenService";
 const router = Router();
 
 router.post("/token", express.json(), express.urlencoded({ extended: true }), (req, res) => {
+  console.log("📝 Token request body:", JSON.stringify(req.body));
   const validation = validationService.validateTokenRequest(req.body);
 
   if (!validation.valid && validation.errors) {
@@ -36,14 +37,16 @@ router.post("/token", express.json(), express.urlencoded({ extended: true }), (r
     });
   }
 
-  // Generate tokens
-  const accessToken = storageService.generateAccessToken();
-  const idToken = tokenService.generateIdToken(params.client_id, authCode.nonce, authCode.scenario);
+  // Generate tokens (use the client_id from the original auth request, not the token request)
+  const accessToken = tokenService.generateAccessToken(authCode.scenario, authCode.clientId);
+  const idToken = tokenService.generateIdToken(authCode.clientId, authCode.nonce, authCode.scenario);
 
   // Store access token data for userinfo endpoint
   storageService.storeAccessToken(accessToken, {
     email: authCode.email,
     scenario: authCode.scenario,
+    clientId: authCode.clientId,
+    sub: `mock-user-${authCode.scenario.email}`,
   });
 
   console.log(`🎫 Tokens issued for ${authCode.email}`);
