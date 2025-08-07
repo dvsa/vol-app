@@ -84,7 +84,7 @@ resource "aws_lb_listener_rule" "proving" {
 
 resource "aws_lb_listener_rule" "iuweb-pub-proving" {
   count        = contains(["prep", "prod"], var.environment) ? 1 : 0
-  listener_arn = var.services.iuweb_pub_listener_arn
+  listener_arn = var.services.iuweb.iuweb_pub_listener_arn
   priority     = 9
 
   action {
