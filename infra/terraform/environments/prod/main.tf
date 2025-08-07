@@ -177,10 +177,10 @@ module "service" {
         data.aws_security_group.this["API"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["API"].arn
-      lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = "api.*"
-      listener_rule_host_header = "proving-api.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["API"].arn
+      lb_arn                            = data.aws_lb.this["API"].arn
+      listener_rule_host_header         = "api.*"
+      listener_rule_host_header_proving = "proving-api.*"
     }
 
     "internal" = {
