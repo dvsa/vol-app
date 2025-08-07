@@ -19,7 +19,7 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-resource "aws_lb_target_group" "pub-iuweb" {
+resource "aws_lb_target_group" "pub-internal" {
   count = contains(["prep", "prod"], var.environment) ? 1 : 0
 
   name        = "vol-app-iuweb-${var.environment}-pub-tg"
@@ -82,14 +82,14 @@ resource "aws_lb_listener_rule" "proving" {
   }
 }
 
-resource "aws_lb_listener_rule" "iuweb-pub-proving" {
+resource "aws_lb_listener_rule" "internal-pub-proving" {
   count        = contains(["prep", "prod"], var.environment) ? 1 : 0
-  listener_arn = var.services["iuweb"].iuweb_pub_listener_arn
+  listener_arn = var.services["internal"].iuweb_pub_listener_arn
   priority     = 9
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.pub-iuweb[0].arn
+    target_group_arn = aws_lb_target_group.pub-internal[0].arn
   }
 
   condition {
