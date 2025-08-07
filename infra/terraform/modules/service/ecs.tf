@@ -83,11 +83,8 @@ resource "aws_lb_listener_rule" "proving" {
 }
 
 resource "aws_lb_listener_rule" "iuweb-pub-proving" {
-  for_each = {
-    for service, config in var.services : service => config
-    if try(service.iuweb_pub_listener_arn, "") != ""
-  }
-  listener_arn = each.value.iuweb_pub_listener_arn
+  count        = contains(["prep", "prod"], var.environment) ? 1 : 0
+  listener_arn = var.services.iuweb_pub_listener_arn
   priority     = 9
 
   action {
