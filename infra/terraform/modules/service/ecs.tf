@@ -193,13 +193,13 @@ module "ecs_service" {
       memory_reservation = 100
     }
   }
-  load_balancer = (
+  load_balancer = [
     {
       target_group_arn = aws_lb_target_group.this[each.key].arn
       container_name   = each.key
       container_port   = 8080
     }
-  )
+  ]
 
   create_security_group = false
   security_group_ids    = var.services[each.key].security_group_ids
