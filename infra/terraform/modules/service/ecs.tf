@@ -218,9 +218,9 @@ module "ecs_service" {
         container_port   = 8080
       }
     ],
-    each.key == "internal" ? [
+    each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
       {
-        target_group_arn = aws_lb_target_group.internal_extra[each.key].arn
+        target_group_arn = aws_lb_target_group.internal-pub-proving.arn
         container_name   = each.key
         container_port   = 8080
       }
