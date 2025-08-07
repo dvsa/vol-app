@@ -139,7 +139,7 @@ data "aws_lb" "iuweb-pub" {
 }
 
 data "aws_lb_listener" "iuweb-pub" {
-  load_balancer_arn = data.aws_lb.this[each.key].arn
+  load_balancer_arn = data.aws_lb.iuweb-pub.arn
   port              = 443
 }
 
