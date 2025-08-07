@@ -94,7 +94,7 @@ resource "aws_lb_listener_rule" "iuweb-pub-proving" {
 
   condition {
     host_header {
-      values = "proving-iuweb.*"
+      values = ["proving-iuweb.*"]
     }
   }
 }
