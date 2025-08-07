@@ -232,7 +232,7 @@ module "service" {
       ]
 
       lb_listener_arn                   = data.aws_lb_listener.this["IUWEB"].arn
-      iuweb_pub_listener_arn            = data.aws_lb_listener.iuweb-pub
+      iuweb_pub_listener_arn            = data.aws_lb_listener.iuweb-pub.arn
       lb_arn                            = data.aws_lb.this["IUWEB"].arn
       listener_rule_host_header         = "iuweb.*"
       listener_rule_host_header_proving = "proving-iuweb.*"
