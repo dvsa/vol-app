@@ -48,6 +48,7 @@ variable "services" {
     enable_autoscaling_policies = optional(bool, true)
     lb_arn                      = optional(string)
     lb_listener_arn             = optional(string)
+    iuweb_pub_listener_arn      = optional(string)
     // The reason for this was to enable the parallel running of ECS and EC2 services.
     // This boolean will control the flow of traffic. If `true`, traffic will go to ECS. If `false`, traffic will go to EC2.
     // Can be removed when EC2 services are removed.
