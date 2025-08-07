@@ -89,7 +89,7 @@ resource "aws_lb_listener_rule" "iuweb-pub-proving" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.pub-iuweb.arn
+    target_group_arn = aws_lb_target_group.pub-iuweb[0].arn
   }
 
   condition {
