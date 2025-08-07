@@ -19,6 +19,8 @@ export interface Config {
 }
 
 // Simple key loading - keys are committed to repo
+// gitleaks:allow - These are intentionally insecure mock keys for testing only
+// security-scan-ignore: mock keys have no security implications
 const loadKey = (filename: string): string => {
   try {
     const keyPath = path.join(__dirname, "..", "..", filename);
@@ -37,12 +39,15 @@ export const config: Config = {
   environment: process.env.NODE_ENV || "development",
 
   // Load RSA keys for JWT signing (main tokens)
+  // NOTE: These mock keys are intentionally committed for testing purposes only
+  // They have no security implications and should NEVER be used in production
   jwtPrivateKey: process.env.JWT_PRIVATE_KEY || loadKey("mock-private.pem"),
   jwtPublicKey: process.env.JWT_PUBLIC_KEY || loadKey("mock-public.pem"),
   jwtAlgorithm: "RS256", // Use RS256 for proper OAuth/OIDC compliance
   keyId: "mock-key-1", // Key ID for JWKS
 
   // Load EC keys for coreIdentityJWT signing
+  // NOTE: These mock EC keys are also intentionally insecure test keys
   ecPrivateKey: loadKey("mock-ec-private.pem"),
   ecPublicKey: loadKey("mock-ec-public.pem"),
   ecKeyId: "mock-ec-key-1",

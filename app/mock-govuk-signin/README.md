@@ -2,6 +2,26 @@
 
 A mock OAuth 2.0/OpenID Connect provider that simulates GOV.UK Sign In for local development and testing.
 
+## Security Notice
+
+**⚠️ This is a MOCK service for testing only**
+
+The following files contain intentionally committed test keys that have **NO security implications**:
+
+- `mock-private.pem` - RSA private key for mock JWT signing
+- `mock-public.pem` - RSA public key for mock JWT verification
+- `mock-ec-private.pem` - EC private key for mock coreIdentityJWT
+- `mock-ec-public.pem` - EC public key for mock coreIdentityJWT verification
+
+These keys are:
+
+- ✅ Intentionally insecure and committed to the repository
+- ✅ Used ONLY for local testing and development
+- ✅ Never used in production environments
+- ✅ Safe to be detected by security scanners (configured in `.gitleaks.toml`)
+
+**DO NOT** use this service or these keys for any production or security-sensitive purposes.
+
 ## Features
 
 - ✅ Full OAuth 2.0 authorization code flow
