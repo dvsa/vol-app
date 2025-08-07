@@ -454,7 +454,7 @@ jobs:
     name: Run Selfserve Regression Tests on INT
     needs:
       - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
@@ -472,7 +472,7 @@ jobs:
     name: Run Internal Regression Tests on INT
     needs:
       - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: int
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
