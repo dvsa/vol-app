@@ -61,6 +61,27 @@ resource "aws_lb_listener_rule" "this" {
   }
 }
 
+resource "aws_lb_listener_rule" "proving" {
+  for_each = {
+    for service, config in var.services : service => config
+    if contains(["prep", "prod"], var.environment) && config.listener_rule_enable
+  }
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = each.value.listener_rule_priority
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = [each.value.listener_rule_host_header_proving]
+    }
+  }
+}
+
 module "ecs_cluster" {
   for_each = var.services
 

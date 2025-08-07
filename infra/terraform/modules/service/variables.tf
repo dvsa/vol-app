@@ -51,12 +51,13 @@ variable "services" {
     // The reason for this was to enable the parallel running of ECS and EC2 services.
     // This boolean will control the flow of traffic. If `true`, traffic will go to ECS. If `false`, traffic will go to EC2.
     // Can be removed when EC2 services are removed.
-    listener_rule_enable      = optional(bool, true)
-    listener_rule_priority    = optional(number, 10)
-    listener_rule_host_header = optional(string, "*")
-    security_group_ids        = list(string)
-    subnet_ids                = list(string)
-    vpc_id                    = optional(string, null)
+    listener_rule_enable              = optional(bool, true)
+    listener_rule_priority            = optional(number, 10)
+    listener_rule_host_header         = optional(string, "*")
+    listener_rule_host_header_proving = optional(string, "*")
+    security_group_ids                = list(string)
+    subnet_ids                        = list(string)
+    vpc_id                            = optional(string, null)
   }))
   description = "The services to deploy"
   default     = {}
