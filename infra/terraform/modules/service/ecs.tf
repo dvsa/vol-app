@@ -19,7 +19,7 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
-resource "aws_lb_target_group" "pub-internal" {
+resource "aws_lb_target_group" "internal-pub" {
   count = contains(["prep", "prod"], var.environment) ? 1 : 0
 
   name        = "vol-app-iuweb-${var.environment}-pub-tg"
@@ -89,7 +89,7 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.pub-internal[0].arn
+    target_group_arn = aws_lb_target_group.internal-pub[0].arn
   }
 
   condition {
@@ -220,7 +220,7 @@ module "ecs_service" {
     ],
     each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
       {
-        target_group_arn = aws_lb_target_group.internal-pub-proving.arn
+        target_group_arn = aws_lb_target_group.internal-pub.arn
         container_name   = each.key
         container_port   = 8080
       }
