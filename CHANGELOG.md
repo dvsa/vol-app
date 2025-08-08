@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.1.0](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0) (2025-08-08)
+
+
+### Features
+
+* add proving target groups ([#1029](https://github.com/dvsa/vol-app/issues/1029)) ([d634f0d](https://github.com/dvsa/vol-app/commit/d634f0df53352bd441108cb6264e4820c1a75e1d))
+* public lorry & bus search person search disclaimer and licence attachment status AND youtube help link for adding operating centre ([#1012](https://github.com/dvsa/vol-app/issues/1012)) ([3159c4a](https://github.com/dvsa/vol-app/commit/3159c4a2bda6544f47a177b5a4372a495c6341f4))
+
+
+### Bug Fixes
+
+* update provider to resolve bug ([#1015](https://github.com/dvsa/vol-app/issues/1015)) ([16cc03a](https://github.com/dvsa/vol-app/commit/16cc03a9aee38913cb69a98e8b4f77e2fd36cb40))
+
 ## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
 
 
