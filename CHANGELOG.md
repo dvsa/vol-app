@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.1-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.0-rc1-rc1...v6.1.1-rc1-rc1) (2025-08-08)
+
+
+### Bug Fixes
+
+* bumping .gitignore for release-please bump ([#1033](https://github.com/dvsa/vol-app/issues/1033)) ([28a5d98](https://github.com/dvsa/vol-app/commit/28a5d98344d45bc2dbc2e19268ac8b212804d73d))
+* bumping .gitignore for release-please bump ([#1038](https://github.com/dvsa/vol-app/issues/1038)) ([6bcc75a](https://github.com/dvsa/vol-app/commit/6bcc75a48ce78c37a5fc9f02ee727a8ae5e1db42))
+
 ## [6.1.0-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0-rc1-rc1) (2025-08-06)
 
 
