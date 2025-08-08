@@ -1,4 +1,6 @@
 import express, { Router } from "express";
+import escapeHtml from "escape-html";
+import rateLimit from "express-rate-limit";
 import { validationService } from "../services/validationService";
 import { userService } from "../services/userService";
 import { storageService } from "../services/storageService";
@@ -7,6 +9,15 @@ import { renderErrorPage } from "../views/error";
 import { AuthCode } from "../types";
 
 const router = Router();
+
+// Rate limiter for login attempts
+const loginRateLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // max 5 requests per minute per IP
+  message: "Too many login attempts, please try again later",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // GET /authorize - Display login page
 router.get("/authorize", (req, res) => {
@@ -19,21 +30,21 @@ router.get("/authorize", (req, res) => {
 
   const { params } = validation;
 
-  // Render login page with OAuth parameters
+  // Render login page with OAuth parameters (escaped for XSS protection)
   const html = renderLoginPage({
-    client_id: params.client_id,
-    redirect_uri: params.redirect_uri,
-    state: params.state,
-    nonce: params.nonce || "",
-    vtr: params.vtr || "",
-    claims: params.claims || "",
+    client_id: escapeHtml(params.client_id),
+    redirect_uri: escapeHtml(params.redirect_uri),
+    state: escapeHtml(params.state),
+    nonce: escapeHtml(params.nonce || ""),
+    vtr: escapeHtml(params.vtr || ""),
+    claims: escapeHtml(params.claims || ""),
   });
 
   res.send(html);
 });
 
-// POST /authorize - Process login
-router.post("/authorize", express.urlencoded({ extended: true }), (req, res) => {
+// POST /authorize - Process login (with rate limiting)
+router.post("/authorize", loginRateLimiter, express.urlencoded({ extended: true }), (req, res) => {
   console.log("📋 Raw POST body:", req.body);
 
   // Clean up form data - remove ^ characters that seem to be incorrectly added
