@@ -19,6 +19,27 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_target_group" "internal-pub" {
+  count = contains(["prep", "prod"], var.environment) ? 1 : 0
+
+  name        = "vol-app-iuweb-${var.environment}-pub-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = var.vpc_id
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 300
+    timeout             = 60
+    protocol            = "HTTP"
+    port                = 8080
+    path                = "/healthcheck"
+    matcher             = "200-499"
+  }
+}
+
 resource "aws_lb_listener_rule" "this" {
   for_each = {
     for service, config in var.services : service => config
@@ -36,6 +57,44 @@ resource "aws_lb_listener_rule" "this" {
   condition {
     host_header {
       values = [each.value.listener_rule_host_header]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "proving" {
+  for_each = {
+    for service, config in var.services : service => config
+    if contains(["prep", "prod"], var.environment)
+  }
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = each.value.listener_rule_priority
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = [each.value.listener_rule_host_header_proving]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "internal-pub-proving" {
+  count        = contains(["prep", "prod"], var.environment) ? 1 : 0
+  listener_arn = var.services["internal"].iuweb_pub_listener_arn
+  priority     = 9
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.internal-pub[0].arn
+  }
+
+  condition {
+    host_header {
+      values = ["proving-iuweb.*"]
     }
   }
 }
@@ -151,11 +210,17 @@ module "ecs_service" {
       memory_reservation = 100
     }
   }
-
-  load_balancer = (
-    each.value.listener_rule_enable ? [
+  load_balancer = concat(
+    [
       {
         target_group_arn = aws_lb_target_group.this[each.key].arn
+        container_name   = each.key
+        container_port   = 8080
+      }
+    ],
+    each.key == "internal" && contains(["prep", "prod"], var.environment) ? [
+      {
+        target_group_arn = aws_lb_target_group.internal-pub[0].arn
         container_name   = each.key
         container_port   = 8080
       }
