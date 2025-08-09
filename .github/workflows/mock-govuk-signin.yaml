@@ -8,15 +8,11 @@ on:
         required: true
         default: true
         type: boolean
-      environment:
-        description: "Environment to deploy to"
+      deploy:
+        description: "Deploy to Lambda after push"
         required: false
-        default: "dev"
-        type: choice
-        options:
-          - dev
-          - int
-          - none
+        default: false
+        type: boolean
 
 env:
   WORKING_DIR: infra/docker/mock-govuk-signin
@@ -152,8 +148,8 @@ jobs:
           echo "2. Deploy Lambda infrastructure via vol-terraform" >> $GITHUB_STEP_SUMMARY
 
   deploy-lambda:
-    name: Deploy to Lambda
-    if: ${{ inputs.environment != 'none' }}
+    name: Deploy to Lambda (nonprod)
+    if: ${{ inputs.deploy && inputs.push }}
     needs: build-and-push
     runs-on: ubuntu-latest
     permissions:
@@ -169,7 +165,7 @@ jobs:
       - name: Check if Lambda exists
         id: check-lambda
         run: |
-          LAMBDA_NAME="vol-${{ inputs.environment }}-mock-govuk-signin"
+          LAMBDA_NAME="vol-nonprod-mock-govuk-signin"
           if aws lambda get-function --function-name ${LAMBDA_NAME} 2>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "lambda_name=${LAMBDA_NAME}" >> $GITHUB_OUTPUT
@@ -207,7 +203,7 @@ jobs:
           echo "🧪 Testing Lambda endpoint..."
 
           # This would need to be adjusted based on your actual Lambda/API Gateway setup
-          ENDPOINT_URL="https://mocksignin.${{ inputs.environment }}.dev-dvsacloud.uk"
+          ENDPOINT_URL="https://mocksignin.olcs.dev-dvsacloud.uk"
 
           if curl -f ${ENDPOINT_URL}/health 2>/dev/null; then
             echo "✅ Lambda endpoint is healthy"
@@ -220,6 +216,6 @@ jobs:
         run: |
           echo "### ✅ Lambda Deployment Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment**: \`${{ inputs.environment }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Account**: \`nonprod\`" >> $GITHUB_STEP_SUMMARY
           echo "**Lambda Function**: \`${{ steps.check-lambda.outputs.lambda_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Image Tag**: \`${{ needs.build-and-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
