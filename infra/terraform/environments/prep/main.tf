@@ -134,6 +134,15 @@ data "aws_lb_listener" "this" {
   port              = each.key == "API" ? 80 : 443
 }
 
+data "aws_lb" "iuweb-pub" {
+  name = "APPPP-OLCS-PUB-IUWEB-ALB"
+}
+
+data "aws_lb_listener" "iuweb-pub" {
+  load_balancer_arn = data.aws_lb.iuweb-pub.arn
+  port              = 443
+}
+
 data "aws_vpc" "this" {
   filter {
     name = "tag:Name"
@@ -177,9 +186,10 @@ module "service" {
         data.aws_security_group.this["API"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["API"].arn
-      lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = "api.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["API"].arn
+      lb_arn                            = data.aws_lb.this["API"].arn
+      listener_rule_host_header         = "api.*"
+      listener_rule_host_header_proving = "proving-api.*"
     }
 
     "internal" = {
@@ -220,9 +230,11 @@ module "service" {
         data.aws_security_group.this["IUWEB"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
-      lb_arn                    = data.aws_lb.this["IUWEB"].arn
-      listener_rule_host_header = "iuweb.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["IUWEB"].arn
+      iuweb_pub_listener_arn            = data.aws_lb_listener.iuweb-pub.arn
+      lb_arn                            = data.aws_lb.this["IUWEB"].arn
+      listener_rule_host_header         = "iuweb.*"
+      listener_rule_host_header_proving = "proving-iuweb.*"
     }
 
     "selfserve" = {
@@ -263,9 +275,10 @@ module "service" {
         data.aws_security_group.this["SSWEB"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
-      lb_arn                    = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header = "ssweb.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["SSWEB"].arn
+      lb_arn                            = data.aws_lb.this["SSWEB"].arn
+      listener_rule_host_header         = "ssweb.*"
+      listener_rule_host_header_proving = "proving-ssweb.*"
     }
   }
   batch = {
