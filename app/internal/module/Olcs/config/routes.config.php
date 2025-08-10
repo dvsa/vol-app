@@ -2366,6 +2366,37 @@ $routes = [
             ],
         ],
     ],
+   'html-editor' => [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/html-editor',
+        'defaults' => [
+            'controller' => Olcs\Controller\Document\HtmlEditorController::class,
+            'action' => 'index',
+        ],
+    ],
+    'may_terminate' => true,
+    'child_routes' => [
+        'edit' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/edit',
+                'defaults' => [
+                    'action' => 'edit',
+                ],
+            ],
+        ],
+        'result' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/result',
+                'defaults' => [
+                    'action' => 'result',
+                ],
+            ],
+        ],
+    ],
+],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
