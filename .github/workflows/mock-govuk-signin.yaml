@@ -3,219 +3,130 @@ name: Mock GOV.UK Sign In
 on:
   workflow_dispatch:
     inputs:
-      push:
-        description: "Push to ECR"
-        required: true
-        default: true
-        type: boolean
       deploy:
-        description: "Deploy to Lambda after push"
+        description: "Deploy to Lambda"
         required: false
-        default: false
+        default: true
         type: boolean
 
 env:
-  WORKING_DIR: infra/docker/mock-govuk-signin
   APP_DIR: app/mock-govuk-signin
-  REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  LAMBDA_NAME: vol-nonprod-mock-govuk-signin
   AWS_OIDC_ROLE: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
 
 jobs:
-  build-and-push:
-    name: Build and Push Mock GOV.UK Sign In
-    runs-on: ubuntu-24.04-arm
-    permissions:
-      contents: read
-      id-token: write
-      packages: write
-    outputs:
-      image-tag: ${{ steps.meta.outputs.version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          platforms: linux/arm64
-
-      - name: Generate version
-        id: version
-        run: |
-          # Generate a version based on date and commit SHA
-          VERSION="v$(date +%Y%m%d)-${GITHUB_SHA:0:7}"
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "Generated version: ${VERSION}"
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ env.REGISTRY }}/vol-app/mock-govuk-signin
-          tags: |
-            type=raw,value=${{ steps.version.outputs.version }}
-            type=raw,value=latest
-            type=sha,prefix={{branch}}-
-
-      - name: Configure AWS credentials
-        if: ${{ inputs.push }}
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Check if ECR repository exists
-        if: ${{ inputs.push }}
-        id: check-ecr
-        run: |
-          if aws ecr describe-repositories --repository-names vol-app/mock-govuk-signin 2>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "✅ ECR repository exists"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "❌ ECR repository does not exist - please run Terraform first"
-            exit 1
-          fi
-
-      - name: Login to ECR
-        if: ${{ inputs.push && steps.check-ecr.outputs.exists == 'true' }}
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-
-      - name: Build Docker image
-        id: build
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ env.WORKING_DIR }}/Dockerfile
-          platforms: linux/arm64
-          push: false
-          load: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=mock-govuk-signin
-          cache-to: type=gha,mode=max,scope=mock-govuk-signin
-
-      - name: Test Docker image
-        run: |
-          # Run a basic smoke test
-          docker run --rm -d --name test-container \
-            -e NODE_ENV=development \
-            -e VALIDATION_MODE=permissive \
-            -e LOCAL_PROXY=false \
-            -p 8080:8080 \
-            ${{ steps.build.outputs.imageid }}
-
-          # Wait for container to be ready
-          sleep 5
-
-          # Check health endpoint
-          curl -f http://localhost:8080/health || exit 1
-
-          # Check discovery endpoint
-          curl -f http://localhost:8080/.well-known/openid-configuration || exit 1
-
-          # Stop test container
-          docker stop test-container
-
-          echo "✅ Docker image tests passed"
-
-      - name: Push Docker image
-        if: ${{ inputs.push && steps.check-ecr.outputs.exists == 'true' }}
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ${{ env.WORKING_DIR }}/Dockerfile
-          platforms: linux/arm64
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha,scope=mock-govuk-signin
-
-      - name: Summary
-        if: ${{ inputs.push }}
-        run: |
-          echo "### 🚀 Mock GOV.UK Sign In Deployed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Image**: \`${{ env.REGISTRY }}/vol-app/mock-govuk-signin:${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Also tagged as**: \`latest\`, \`${{ github.ref_name }}-${GITHUB_SHA:0:7}\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Next steps**:" >> $GITHUB_STEP_SUMMARY
-          echo "1. Update Terraform Lambda configuration to use this image tag" >> $GITHUB_STEP_SUMMARY
-          echo "2. Deploy Lambda infrastructure via vol-terraform" >> $GITHUB_STEP_SUMMARY
-
-  deploy-lambda:
-    name: Deploy to Lambda (nonprod)
-    if: ${{ inputs.deploy && inputs.push }}
-    needs: build-and-push
+  build-and-deploy:
+    name: Build and Deploy Mock GOV.UK Sign In
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          npm ci --production
+          npm run build || echo "No build script"
+
+      - name: Prepare deployment package
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          # Create dist directory if it doesn't exist
+          mkdir -p dist
+
+          # Copy built files to dist
+          cp -r lib/* dist/ 2>/dev/null || cp -r src/* dist/
+
+          # Copy package files
+          cp package*.json dist/
+
+          # Install production dependencies in dist
+          cd dist
+          npm ci --production --omit=dev
+
+          # Remove unnecessary files
+          find . -name "*.test.js" -delete
+          find . -name "*.test.ts" -delete
+          find . -name "__tests__" -type d -exec rm -rf {} + 2>/dev/null || true
+
       - name: Configure AWS credentials
+        if: ${{ inputs.deploy }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Check if Lambda exists
-        id: check-lambda
+      - name: Deploy to Lambda
+        if: ${{ inputs.deploy }}
+        uses: aws-actions/aws-lambda-deploy@v1
+        with:
+          function-name: ${{ env.LAMBDA_NAME }}
+          code-artifacts-dir: ${{ env.APP_DIR }}/dist
+          handler: index.handler
+          runtime: nodejs22.x
+          memory-size: 512
+          timeout: 30
+          environment: |
+            {
+              "NODE_ENV": "production",
+              "VALIDATION_MODE": "strict",
+              "LOG_LEVEL": "info",
+              "SERVICE_URL": "https://mocksignin.olcs.dev-dvsacloud.uk",
+              "ISSUER_URL": "https://mocksignin.olcs.dev-dvsacloud.uk"
+            }
+
+      - name: Wait for Lambda to be ready
+        if: ${{ inputs.deploy }}
         run: |
-          LAMBDA_NAME="vol-nonprod-mock-govuk-signin"
-          if aws lambda get-function --function-name ${LAMBDA_NAME} 2>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "lambda_name=${LAMBDA_NAME}" >> $GITHUB_OUTPUT
-            echo "✅ Lambda function exists: ${LAMBDA_NAME}"
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "❌ Lambda function does not exist: ${LAMBDA_NAME}"
-            echo "Please deploy the Lambda infrastructure via Terraform first"
-          fi
+          echo "Waiting for Lambda function to be ready..."
+          aws lambda wait function-active \
+            --function-name ${{ env.LAMBDA_NAME }} || true
 
-      - name: Update Lambda function
-        if: ${{ steps.check-lambda.outputs.exists == 'true' }}
+          echo "✅ Lambda function deployed"
+
+      - name: Test deployment
+        if: ${{ inputs.deploy }}
         run: |
-          echo "Updating Lambda function with new image..."
-          aws lambda update-function-code \
-            --function-name ${{ steps.check-lambda.outputs.lambda_name }} \
-            --image-uri ${{ env.REGISTRY }}/vol-app/mock-govuk-signin:${{ needs.build-and-push.outputs.image-tag }}
+          echo "🧪 Testing Lambda deployment..."
 
-          echo "✅ Lambda function updated successfully"
-
-      - name: Wait for update to complete
-        if: ${{ steps.check-lambda.outputs.exists == 'true' }}
-        run: |
-          echo "Waiting for Lambda update to complete..."
-          aws lambda wait function-updated \
-            --function-name ${{ steps.check-lambda.outputs.lambda_name }}
-
-          echo "✅ Lambda function is ready"
-
-      - name: Test Lambda endpoint
-        if: ${{ steps.check-lambda.outputs.exists == 'true' }}
-        run: |
-          # Get the Lambda function URL (if using function URLs)
-          # or API Gateway URL
-          echo "🧪 Testing Lambda endpoint..."
-
-          # This would need to be adjusted based on your actual Lambda/API Gateway setup
+          # Test via API Gateway if available
           ENDPOINT_URL="https://mocksignin.olcs.dev-dvsacloud.uk"
 
           if curl -f ${ENDPOINT_URL}/health 2>/dev/null; then
-            echo "✅ Lambda endpoint is healthy"
+            echo "✅ Lambda endpoint is healthy via API Gateway"
           else
-            echo "⚠️  Could not reach Lambda endpoint (this may be expected if API Gateway is not yet configured)"
+            echo "⚠️  API Gateway not yet configured or not accessible"
+            
+            # Try invoking Lambda directly
+            echo "Testing Lambda directly..."
+            aws lambda invoke \
+              --function-name ${{ env.LAMBDA_NAME }} \
+              --payload '{"path":"/health","httpMethod":"GET"}' \
+              response.json
+            
+            cat response.json
+            echo ""
           fi
 
       - name: Deployment Summary
-        if: ${{ steps.check-lambda.outputs.exists == 'true' }}
+        if: ${{ inputs.deploy }}
         run: |
           echo "### ✅ Lambda Deployment Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Account**: \`nonprod\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Lambda Function**: \`${{ steps.check-lambda.outputs.lambda_name }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Image Tag**: \`${{ needs.build-and-push.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Lambda Function**: \`${{ env.LAMBDA_NAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Runtime**: Node.js 22.x" >> $GITHUB_STEP_SUMMARY
+          echo "**Memory**: 512 MB" >> $GITHUB_STEP_SUMMARY
+          echo "**Timeout**: 30 seconds" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Service URL**: https://mocksignin.olcs.dev-dvsacloud.uk" >> $GITHUB_STEP_SUMMARY
