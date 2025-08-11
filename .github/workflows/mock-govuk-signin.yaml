@@ -33,32 +33,23 @@ jobs:
           cache: "npm"
           cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
 
-      - name: Install dependencies
+      - name: Build TypeScript
         working-directory: ${{ env.APP_DIR }}
         run: |
-          npm ci --production
-          npm run build || echo "No build script"
+          npm ci
+          npm run build
 
       - name: Prepare deployment package
         working-directory: ${{ env.APP_DIR }}
         run: |
-          # Create dist directory if it doesn't exist
-          mkdir -p dist
-
-          # Copy built files to dist
-          cp -r lib/* dist/ 2>/dev/null || cp -r src/* dist/
-
-          # Copy package files
-          cp package*.json dist/
-
-          # Install production dependencies in dist
-          cd dist
+          # Install production dependencies only
+          rm -rf node_modules
           npm ci --production --omit=dev
 
-          # Remove unnecessary files
-          find . -name "*.test.js" -delete
-          find . -name "*.test.ts" -delete
-          find . -name "__tests__" -type d -exec rm -rf {} + 2>/dev/null || true
+          # Remove unnecessary test files
+          find dist -name "*.test.js" -delete 2>/dev/null || true
+          find dist -name "*.test.ts" -delete 2>/dev/null || true
+          find dist -name "__tests__" -type d -exec rm -rf {} + 2>/dev/null || true
 
       - name: Configure AWS credentials
         if: ${{ inputs.deploy }}
@@ -73,7 +64,7 @@ jobs:
         with:
           function-name: ${{ env.LAMBDA_NAME }}
           code-artifacts-dir: ${{ env.APP_DIR }}/dist
-          handler: index.handler
+          handler: dist/lambda.handler
           runtime: nodejs22.x
           memory-size: 512
           timeout: 30
