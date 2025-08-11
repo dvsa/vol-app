@@ -163,6 +163,8 @@ module "service" {
 
   elasticache_url = "tcp://cache.dev.olcs.dev-dvsacloud.uk:6379"
 
+  maintenance_page_enabled = true
+
   services = {
     "api" = {
       cpu    = 2048

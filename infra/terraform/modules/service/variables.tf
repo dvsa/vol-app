@@ -94,7 +94,7 @@ variable "batch" {
 
 variable "maintenance_page_enabled" {
   type        = bool
-  default     = true
-  description = "Enable maintenance page - kept for completeness but always true for now"
+  default     = false
+  description = "Enable maintenance page infrastructure"
 }
 
