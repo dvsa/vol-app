@@ -1,9 +1,9 @@
 locals {
-  maintenance_subdomain = "maintenance-${var.environment}"
-  maintenance_domain    = "${local.maintenance_subdomain}.${var.domain_name}"
-  bucket_name           = "vol-app-${var.environment}-maintenance"
-  log_bucket_name       = "vol-app-${var.environment}-maintenance-logs"
-  oac_id                = "maintenance_oac_${var.environment}"
+  account_id         = data.aws_caller_identity.current_account_id.account_id
+  maintenance_domain = var.maintenance_domain
+  bucket_name        = "${local.account_id}-vol-app-maintenance"
+  log_bucket_name    = "${local.account_id}-vol-app-maintenance-logs"
+  oac_id             = "maintenance_oac_${local.account_id}"
 }
 
 # S3 bucket policy - only CloudFront access needed
@@ -176,7 +176,7 @@ data "aws_iam_policy_document" "maintenance_cloudfront_invalidation" {
 }
 
 resource "aws_iam_policy" "maintenance_cloudfront_invalidation" {
-  name_prefix = "maintenance-cloudfront-invalidation-${var.environment}-"
+  name_prefix = "maintenance-cloudfront-invalidation-${local.account_id}-"
   description = "Allow GitHub Actions to invalidate CloudFront cache for maintenance page"
   policy      = data.aws_iam_policy_document.maintenance_cloudfront_invalidation.json
 }
@@ -201,7 +201,7 @@ data "aws_iam_policy_document" "maintenance_s3_access" {
 }
 
 resource "aws_iam_policy" "maintenance_s3_access" {
-  name_prefix = "maintenance-s3-access-${var.environment}-"
+  name_prefix = "maintenance-s3-access-${local.account_id}-"
   description = "Allow GitHub Actions to manage maintenance page assets in S3"
   policy      = data.aws_iam_policy_document.maintenance_s3_access.json
 }
@@ -232,16 +232,13 @@ data "aws_iam_policy_document" "maintenance_github_assume_role" {
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
-      values = [
-        "repo:dvsa/vol-app:environment:${var.environment}",
-        "repo:dvsa/vol-app-maintenance:ref:refs/heads/main"
-      ]
+      values   = var.github_oidc_subjects
     }
   }
 }
 
 resource "aws_iam_role" "maintenance_github_actions" {
-  name_prefix        = "maintenance-github-actions-${var.environment}-"
+  name_prefix        = "maintenance-github-actions-${local.account_id}-"
   assume_role_policy = data.aws_iam_policy_document.maintenance_github_assume_role.json
   description        = "Role for GitHub Actions to deploy maintenance page assets"
 }
@@ -265,7 +262,7 @@ module "maintenance_records" {
 
   records = [
     {
-      name = local.maintenance_subdomain
+      name = "maintenance"
       type = "A"
       alias = {
         name    = module.maintenance_cloudfront.cloudfront_distribution_domain_name

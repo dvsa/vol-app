@@ -1,5 +1,9 @@
 locals {
   environments = ["dev", "int"]
+
+  # Domain configuration for this account
+  domain_name        = "dev-dvsacloud.uk"
+  maintenance_domain = "maintenance.dev-dvsacloud.uk"
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
@@ -19,6 +23,11 @@ module "environment-remote-state" {
 
   # Environments will re-use the same bucket as the account.
   create_bucket = false
+}
+
+# Route53 zone for maintenance page
+data "aws_route53_zone" "public" {
+  name = local.domain_name
 }
 
 module "account" {
@@ -58,4 +67,21 @@ module "account" {
     },
     { for env, remote-state in module.environment-remote-state : "${title(env)}DynamodbStateLock" => remote-state.dynamodb_state_lock_policy_arn }
   )
+}
+
+# Account-level maintenance page
+module "maintenance_page" {
+  source = "../../modules/maintenance-page"
+
+  maintenance_domain = local.maintenance_domain
+  route53_zone_id    = data.aws_route53_zone.public.zone_id
+
+  github_oidc_subjects = [
+    "repo:dvsa/vol-app:environment:account-nonprod",
+    "repo:dvsa/vol-app-maintenance:ref:refs/heads/main"
+  ]
+
+  providers = {
+    aws.acm = aws.acm
+  }
 }
