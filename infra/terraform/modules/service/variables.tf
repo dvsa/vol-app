@@ -91,6 +91,3 @@ variable "batch" {
     }))
   })
 }
-
-# maintenance_page_enabled variable removed - maintenance page now deployed at account level
-
