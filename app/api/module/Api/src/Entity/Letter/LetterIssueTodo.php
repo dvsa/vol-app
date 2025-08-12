@@ -14,4 +14,23 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LetterIssueTodo extends AbstractLetterIssueTodo
 {
+    /**
+     * Get todo description
+     *
+     * @return string
+     */
+    public function getTodoDescription()
+    {
+        return $this->letterTodoVersion->getDescription();
+    }
+
+    /**
+     * Get todo help text
+     *
+     * @return string|null
+     */
+    public function getTodoHelpText()
+    {
+        return $this->letterTodoVersion->getHelpText();
+    }
 }

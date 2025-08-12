@@ -14,4 +14,25 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class LetterTestData extends AbstractLetterTestData
 {
+    /**
+     * Get the decoded JSON data
+     *
+     * @return array
+     */
+    public function getDecodedJson()
+    {
+        return $this->json ?: [];
+    }
+
+    /**
+     * Set JSON data from array
+     *
+     * @param array $data
+     * @return self
+     */
+    public function setJsonFromArray(array $data)
+    {
+        $this->json = $data;
+        return $this;
+    }
 }
