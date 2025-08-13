@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.5-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.4-rc1-rc1...v6.1.5-rc1-rc1) (2025-08-13)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0821 ([#1056](https://github.com/dvsa/vol-app/issues/1056)) ([f137cc4](https://github.com/dvsa/vol-app/commit/f137cc49b7f6cad6edf8e8d7ac91b57e66e851d4))
+
 ## [6.1.4-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.3-rc1-rc1...v6.1.4-rc1-rc1) (2025-08-11)
 
 
