@@ -55,7 +55,7 @@ variable "services" {
     listener_rule_enable              = optional(bool, true)
     listener_rule_priority            = optional(number, 10)
     listener_rule_host_header         = optional(list(string), ["*"])
-    listener_rule_host_header_proving = optional(string, "*")
+    listener_rule_host_header_proving = optional(list(string), ["*"])
     security_group_ids                = list(string)
     subnet_ids                        = list(string)
     vpc_id                            = optional(string, null)
