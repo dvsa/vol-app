@@ -131,7 +131,7 @@ class EbsrSubmissionEntityTest extends EntityTester
         $ebsrSubmissionStatus->setId(Entity::FAILED_STATUS);
 
         $ebsrSubmissionResult = ['submission result'];
-        $encodedSubmissionResult = json_encode($ebsrSubmissionResult, JSON_THROW_ON_ERROR);
+        $encodedSubmissionResult = json_encode($ebsrSubmissionResult);
 
         $entity = $this->instantiate(Entity::class);
 
@@ -150,7 +150,7 @@ class EbsrSubmissionEntityTest extends EntityTester
     {
         $ebsrSubmissionStatus = m::mock(RefData::class)->makePartial();
         $ebsrSubmissionResult = ['submission result'];
-        $encodedSubmissionResult = json_encode($ebsrSubmissionResult, JSON_THROW_ON_ERROR);
+        $encodedSubmissionResult = json_encode($ebsrSubmissionResult);
 
         $entity = $this->instantiate(Entity::class);
 
@@ -366,7 +366,7 @@ class EbsrSubmissionEntityTest extends EntityTester
         $ebsrSubmissionStatus->shouldReceive('getId')->once()->andReturn(Entity::FAILED_STATUS);
 
         $entity->setEbsrSubmissionStatus($ebsrSubmissionStatus);
-        $entity->setEbsrSubmissionResult(json_encode($errors, JSON_THROW_ON_ERROR));
+        $entity->setEbsrSubmissionResult(json_encode($errors));
 
         $this->assertEquals($errorArray, $entity->getErrors());
     }

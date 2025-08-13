@@ -60,7 +60,7 @@ trait QueueAwareTrait
                 'entityId' => $entityId,
                 'type' => $type,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => json_encode($options, JSON_THROW_ON_ERROR),
+                'options' => json_encode($options),
                 'processAfterDate' => $processAfterDate
             ]
         );
