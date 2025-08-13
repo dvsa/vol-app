@@ -54,7 +54,7 @@ variable "services" {
     // Can be removed when EC2 services are removed.
     listener_rule_enable              = optional(bool, true)
     listener_rule_priority            = optional(number, 10)
-    listener_rule_host_header         = optional(string, "*")
+    listener_rule_host_header         = optional(list(string), "*")
     listener_rule_host_header_proving = optional(string, "*")
     security_group_ids                = list(string)
     subnet_ids                        = list(string)

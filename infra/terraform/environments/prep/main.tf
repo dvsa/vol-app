@@ -188,8 +188,8 @@ module "service" {
 
       lb_listener_arn                   = data.aws_lb_listener.this["API"].arn
       lb_arn                            = data.aws_lb.this["API"].arn
-      listener_rule_host_header         = "api.*"
-      listener_rule_host_header_proving = "proving-api.*"
+      listener_rule_host_header         = ["api.*"]
+      listener_rule_host_header_proving = ["proving-api.*"]
     }
 
     "internal" = {
@@ -233,8 +233,8 @@ module "service" {
       lb_listener_arn                   = data.aws_lb_listener.this["IUWEB"].arn
       iuweb_pub_listener_arn            = data.aws_lb_listener.iuweb-pub.arn
       lb_arn                            = data.aws_lb.this["IUWEB"].arn
-      listener_rule_host_header         = "iuweb.*"
-      listener_rule_host_header_proving = "proving-iuweb.*"
+      listener_rule_host_header         = ["iuweb.*"]
+      listener_rule_host_header_proving = ["proving-iuweb.*"]
     }
 
     "selfserve" = {
@@ -277,8 +277,8 @@ module "service" {
 
       lb_listener_arn                   = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                            = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header         = "ssweb.*"
-      listener_rule_host_header_proving = "proving-ssweb.*"
+      listener_rule_host_header         = ["ssweb.*", "www.preview.*"]
+      listener_rule_host_header_proving = ["proving-ssweb.*", "proving-preview.*"]
     }
   }
   batch = {
