@@ -56,7 +56,7 @@ resource "aws_lb_listener_rule" "this" {
 
   condition {
     host_header {
-      values = [each.value.listener_rule_host_header]
+      values = each.value.listener_rule_host_header
     }
   }
 }
@@ -77,7 +77,7 @@ resource "aws_lb_listener_rule" "proving" {
 
   condition {
     host_header {
-      values = [each.value.listener_rule_host_header_proving]
+      values = each.value.listener_rule_host_header_proving
     }
   }
 }
