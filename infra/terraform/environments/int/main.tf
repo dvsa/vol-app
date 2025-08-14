@@ -506,7 +506,7 @@ module "service" {
       },
       {
         name     = "process-queue-irhp-allocate",
-        commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_irhp_permits_allocate"],
         timeout  = 90,
         schedule = "cron(0/2 8-17 * * ? *)",
       },
