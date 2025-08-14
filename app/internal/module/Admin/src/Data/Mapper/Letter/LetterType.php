@@ -43,6 +43,11 @@ class LetterType implements MapperInterface
     {
         $commandData = $data['letterType'] ?? [];
         
+        // Remove the id field if it's empty (for create operations)
+        if (empty($commandData['id'])) {
+            unset($commandData['id']);
+        }
+        
         // Ensure boolean value for isActive
         if (isset($commandData['isActive'])) {
             $commandData['isActive'] = (bool) $commandData['isActive'];
