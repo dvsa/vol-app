@@ -98,6 +98,26 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
     }
   }
 }
+resource "aws_lb_listener_rule" "internal-pub" {
+  count = (
+    contains(["prep", "prod"], var.environment) &&
+    var.services["internal"].listener_rule_enable
+  ) ? 1 : 0
+
+  listener_arn = var.services["internal"].iuweb_pub_listener_arn
+  priority     = 16
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.internal-pub[0].arn
+  }
+
+  condition {
+    host_header {
+      values = ["iuweb.*"]
+    }
+  }
+}
 
 module "ecs_cluster" {
   for_each = var.services
