@@ -21,7 +21,6 @@ class ProcessPackFailedTest extends AbstractConsumerTestCase
         $item->setOptions(json_encode(['foo' => 'bar']));
 
         $result = $this->sut->getCommandData($item);
-
         $this->assertEquals(['foo' => 'bar'], $result);
     }
 }
