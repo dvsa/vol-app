@@ -196,6 +196,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-letter-test-data' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-test-data[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTestDataController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -982,6 +996,7 @@ return [
             Admin\Controller\Letter\MasterTemplateController::class => Admin\Controller\Letter\MasterTemplateControllerFactory::class,
             Admin\Controller\Letter\LetterTypeController::class => Admin\Controller\Letter\LetterTypeControllerFactory::class,
             Admin\Controller\Letter\LetterSectionController::class => Admin\Controller\Letter\LetterSectionControllerFactory::class,
+            Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
