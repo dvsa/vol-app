@@ -82,7 +82,7 @@ resource "aws_lb_listener_rule" "proving" {
   }
 }
 
-resource "aws_lb_listener_rule" "internal-pub-proving" {
+resource "aws_lb_listener_rule" "internal-pub" {
   count        = contains(["prep", "prod"], var.environment) ? 1 : 0
   listener_arn = var.services["internal"].iuweb_pub_listener_arn
   priority     = 15
@@ -94,7 +94,7 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
 
   condition {
     host_header {
-      values = ["proving-iuweb.*"]
+      values = ["iuweb.*", "proving-iuweb.*"]
     }
   }
 }
