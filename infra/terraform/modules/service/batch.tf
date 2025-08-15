@@ -68,44 +68,6 @@ locals {
       ]
     }
 
-    search = {
-      image = "${var.batch.search_repository}:latest"
-
-      environment = [
-        {
-          name  = "ELASTIC_HOST"
-          value = "searchv6.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_HOST"
-          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_NAME"
-          value = "OLCS_RDS_OLCSDB"
-        },
-        {
-          name  = "DB_USER"
-          value = "olcssearch"
-        },
-        {
-          name  = "DB_PORT"
-          value = "3306"
-        },
-        {
-          name  = "LS_JAVA_OPTS" #java memory limit
-          value = "-Xms8g -Xmx8g"
-        }
-      ]
-
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_search_rds_password::"
-        },
-      ]
-    }
-
     scripts = {
       image = "${var.batch.cli_repository}:${var.batch.cli_version}"
 
