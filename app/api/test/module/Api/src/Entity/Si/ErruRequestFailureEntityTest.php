@@ -5,7 +5,6 @@ namespace Dvsa\OlcsTest\Api\Entity\Si;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure as Entity;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
-use Laminas\Serializer\Adapter\Json;
 use Mockery as m;
 
 /**
@@ -29,13 +28,11 @@ class ErruRequestFailureEntityTest extends EntityTester
     {
         $document = m::mock(Document::class);
 
-        $json = new Json();
-
         $errors = ['foo' => 'bar'];
-        $errorsJson = $json->serialize($errors);
+        $errorsJson = json_encode($errors);
 
         $input = ['bar' => 'foo'];
-        $inputJson = $json->serialize($input);
+        $inputJson = json_encode($input);
 
         $entity = new Entity($document, $errors, $input);
 
@@ -51,10 +48,9 @@ class ErruRequestFailureEntityTest extends EntityTester
     {
         $document = m::mock(Document::class);
 
-        $json = new Json();
 
         $errors = ['foo' => 'bar'];
-        $errorsJson = $json->serialize($errors);
+        $errorsJson = json_encode($errors);
 
         $input = 'some string';
 
