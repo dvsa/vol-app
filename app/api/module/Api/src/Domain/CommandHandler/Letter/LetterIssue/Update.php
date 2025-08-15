@@ -1,0 +1,52 @@
+<?php
+
+namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterIssue;
+
+use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterIssue\Update as Cmd;
+
+/**
+ * Update LetterIssue
+ */
+final class Update extends AbstractCommandHandler
+{
+    protected $repoServiceName = 'LetterIssue';
+
+    public function handleCommand(CommandInterface $command): Result
+    {
+        /** @var Cmd $command */
+        
+        /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssue $letterIssue */
+        $letterIssue = $this->getRepo()->fetchUsingId($command);
+        
+        // Update working properties - versioning will be handled by repository
+        $letterIssue->setCategory($command->getCategory());
+        $letterIssue->setSubCategory($command->getSubCategory());
+        $letterIssue->setHeading($command->getHeading());
+        
+        if ($command->getDefaultBodyContent() \!== null) {
+            $letterIssue->setDefaultBodyContent($command->getDefaultBodyContent());
+        }
+        
+        if ($command->getDefaultReasonsContent() \!== null) {
+            $letterIssue->setDefaultReasonsContent($command->getDefaultReasonsContent());
+        }
+        
+        if ($command->getDefaultCounterMeasuresContent() \!== null) {
+            $letterIssue->setDefaultCounterMeasuresContent($command->getDefaultCounterMeasuresContent());
+        }
+        
+        if ($command->getDisplayOrder() \!== null) {
+            $letterIssue->setDisplayOrder($command->getDisplayOrder());
+        }
+
+        $this->getRepo()->save($letterIssue);
+
+        $this->result->addId('letterIssue', $letterIssue->getId());
+        $this->result->addMessage("Letter issue '{$letterIssue->getHeading()}' updated");
+        
+        return $this->result;
+    }
+}
