@@ -219,11 +219,8 @@ module "ecs_service" {
             name  = "CDN_URL"
             value = module.cloudfront.cloudfront_distribution_domain_name
           }
-        ] : [],
-        each.value.add_search_env_info ? local.job_types.search.environment : []
+        ] : []
       )
-
-      secrets = each.value.add_search_env_info ? local.job_types.search.secrets : []
 
       readonly_root_filesystem = false
 

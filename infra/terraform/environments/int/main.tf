@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["liquibase"]
 
   task_iam_role_statements = [
     {
@@ -96,10 +96,6 @@ data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
   name = "DEV/APP/QA-OLCS-PRI-${each.key}-SG"
-}
-
-data "aws_security_group" "search" {
-  name = "DEV/APP/QA-OLCS-PRI-SEARCHDATAV6-SG"
 }
 
 data "aws_subnets" "this" {
@@ -264,36 +260,6 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = ["ssweb.*"]
-    },
-    "search" = {
-      cpu    = 4096
-      memory = 12288
-
-      enable_autoscaling_policies = false
-
-      version    = var.search_image_tag
-      repository = data.aws_ecr_repository.sservice["search"].repository_url
-
-      listener_rule_enable = false
-      add_search_env_info  = true
-
-      task_iam_role_statements = [
-        {
-          effect = "Allow"
-          actions = [
-            "secretsmanager:GetSecretValue"
-          ]
-          resources = [
-            data.aws_secretsmanager_secret.this["api"].arn
-          ]
-        }
-      ]
-
-      subnet_ids = data.aws_subnets.this["API"].ids
-
-      security_group_ids = [
-        data.aws_security_group.search.id
-      ]
     }
   }
   batch = {
@@ -301,7 +267,6 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
@@ -562,11 +527,7 @@ module "service" {
         name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
-      },
-      {
-        name = "search",
-        type = "search"
-      },
+      }
     ]
   }
 }

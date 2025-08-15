@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["liquibase"]
 
   task_iam_role_statements = [
     {
@@ -286,7 +286,6 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
@@ -547,10 +546,6 @@ module "service" {
         name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
-      },
-      {
-        name = "search",
-        type = "search"
       },
       {
         name     = "sas-mi-extract",
