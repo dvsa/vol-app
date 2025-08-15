@@ -1,5 +1,25 @@
 # Changelog
 
+## [6.1.0](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0) (2025-08-15)
+
+
+### Features
+
+* add proving target groups ([#1029](https://github.com/dvsa/vol-app/issues/1029)) ([d634f0d](https://github.com/dvsa/vol-app/commit/d634f0df53352bd441108cb6264e4820c1a75e1d))
+* adding public iuweb routing for ecs ([#1060](https://github.com/dvsa/vol-app/issues/1060)) ([3c88517](https://github.com/dvsa/vol-app/commit/3c8851769225100f60be20daa269dce6c9227fa8))
+* public lorry & bus search person search disclaimer and licence attachment status AND youtube help link for adding operating centre ([#1012](https://github.com/dvsa/vol-app/issues/1012)) ([3159c4a](https://github.com/dvsa/vol-app/commit/3159c4a2bda6544f47a177b5a4372a495c6341f4))
+* remove search ([#1062](https://github.com/dvsa/vol-app/issues/1062)) ([307265f](https://github.com/dvsa/vol-app/commit/307265f4352b837044c6d2088d7cc09cddc42d6d))
+
+
+### Bug Fixes
+
+* correct allocate permits queue job include type ([#1061](https://github.com/dvsa/vol-app/issues/1061)) ([e5e6a88](https://github.com/dvsa/vol-app/commit/e5e6a88eb0f2df9f1ae5dc984de66a74435ee5ee))
+* lb rule priority  ([#1052](https://github.com/dvsa/vol-app/issues/1052)) ([e6ed6c6](https://github.com/dvsa/vol-app/commit/e6ed6c617d7a14f2ab92a03a80bcd6ab05a98ef8))
+* listener rule priorities ([#1051](https://github.com/dvsa/vol-app/issues/1051)) ([c5ef671](https://github.com/dvsa/vol-app/commit/c5ef671f89f2e7b002078e888539e9c0ca902dda))
+* modify listener rules to add preview to ecs ([#1055](https://github.com/dvsa/vol-app/issues/1055)) ([80f734b](https://github.com/dvsa/vol-app/commit/80f734b1d226ebc14d7198b7c9c5b2d4d762d97d))
+* remove remaining code around stored cards VOL-6371 ([#1037](https://github.com/dvsa/vol-app/issues/1037)) ([802463b](https://github.com/dvsa/vol-app/commit/802463b33a9958f3bf80324f0318a91b41ad92d9))
+* update provider to resolve bug ([#1015](https://github.com/dvsa/vol-app/issues/1015)) ([16cc03a](https://github.com/dvsa/vol-app/commit/16cc03a9aee38913cb69a98e8b4f77e2fd36cb40))
+
 ## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
 
 
