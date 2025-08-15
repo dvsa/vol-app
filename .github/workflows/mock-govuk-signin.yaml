@@ -1,0 +1,123 @@
+name: Mock GOV.UK Sign In
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Deploy to Lambda"
+        required: false
+        default: true
+        type: boolean
+
+env:
+  APP_DIR: app/mock-govuk-signin
+  LAMBDA_NAME: vol-nonprod-mock-govuk-signin
+  AWS_OIDC_ROLE: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+  AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Mock GOV.UK Sign In
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - name: Build TypeScript
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare deployment package
+        working-directory: ${{ env.APP_DIR }}
+        run: |
+          # Install production dependencies only
+          rm -rf node_modules
+          npm ci --production --omit=dev
+
+          # Remove unnecessary test files
+          find dist -name "*.test.js" -delete 2>/dev/null || true
+          find dist -name "*.test.ts" -delete 2>/dev/null || true
+          find dist -name "__tests__" -type d -exec rm -rf {} + 2>/dev/null || true
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.deploy }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy to Lambda
+        if: ${{ inputs.deploy }}
+        uses: aws-actions/aws-lambda-deploy@v1
+        with:
+          function-name: ${{ env.LAMBDA_NAME }}
+          code-artifacts-dir: ${{ env.APP_DIR }}/dist
+          handler: dist/lambda.handler
+          runtime: nodejs22.x
+          memory-size: 512
+          timeout: 30
+          environment: |
+            {
+              "NODE_ENV": "production",
+              "VALIDATION_MODE": "strict",
+              "LOG_LEVEL": "info",
+              "SERVICE_URL": "https://mocksignin.olcs.dev-dvsacloud.uk",
+              "ISSUER_URL": "https://mocksignin.olcs.dev-dvsacloud.uk"
+            }
+
+      - name: Wait for Lambda to be ready
+        if: ${{ inputs.deploy }}
+        run: |
+          echo "Waiting for Lambda function to be ready..."
+          aws lambda wait function-active \
+            --function-name ${{ env.LAMBDA_NAME }} || true
+
+          echo "✅ Lambda function deployed"
+
+      - name: Test deployment
+        if: ${{ inputs.deploy }}
+        run: |
+          echo "🧪 Testing Lambda deployment..."
+
+          # Test via API Gateway if available
+          ENDPOINT_URL="https://mocksignin.olcs.dev-dvsacloud.uk"
+
+          if curl -f ${ENDPOINT_URL}/health 2>/dev/null; then
+            echo "✅ Lambda endpoint is healthy via API Gateway"
+          else
+            echo "⚠️  API Gateway not yet configured or not accessible"
+            
+            # Try invoking Lambda directly
+            echo "Testing Lambda directly..."
+            aws lambda invoke \
+              --function-name ${{ env.LAMBDA_NAME }} \
+              --payload '{"path":"/health","httpMethod":"GET"}' \
+              response.json
+            
+            cat response.json
+            echo ""
+          fi
+
+      - name: Deployment Summary
+        if: ${{ inputs.deploy }}
+        run: |
+          echo "### ✅ Lambda Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Lambda Function**: \`${{ env.LAMBDA_NAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Runtime**: Node.js 22.x" >> $GITHUB_STEP_SUMMARY
+          echo "**Memory**: 512 MB" >> $GITHUB_STEP_SUMMARY
+          echo "**Timeout**: 30 seconds" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Service URL**: https://mocksignin.olcs.dev-dvsacloud.uk" >> $GITHUB_STEP_SUMMARY

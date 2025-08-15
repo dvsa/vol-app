@@ -132,6 +132,24 @@ services:
       VIRTUAL_HOST: mailpit.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8025
 
+  mock-govuk-signin:
+    container_name: mock-govuk-signin
+    build:
+      context: .
+      dockerfile: infra/docker/mock-govuk-signin/Dockerfile
+    expose:
+      - 80
+    environment:
+      LOCAL_PROXY: "true"
+      VIRTUAL_HOST: mocksignin.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 80
+      ISSUER_URL: http://mocksignin.local.olcs.dev-dvsacloud.uk
+    networks:
+      default:
+        aliases:
+          - mock-govuk-signin
+          - mocksignin.local.olcs.dev-dvsacloud.uk
+
 volumes:
   db-data:
   openldap-data:
