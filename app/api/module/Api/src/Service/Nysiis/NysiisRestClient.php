@@ -2,10 +2,11 @@
 
 namespace Dvsa\Olcs\Api\Service\Nysiis;
 
+use Dvsa\Olcs\Api\Domain\Exception\NysiisException;
 use Laminas\Http\Client as RestClient;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
-use Dvsa\Olcs\Api\Domain\Exception\NysiisException;
+use Laminas\Json\Exception\RuntimeException as JsonException;
 use Olcs\Logging\Log\Logger;
 
 /**
@@ -41,24 +42,36 @@ class NysiisRestClient
         Logger::info('Nysiis parameters', ['data' => [$forename, $familyName]]);
 
         $inputData = [
-            'volFirstName' => $forename,
-            'volFamilyName' => $familyName
+            'volFirstName'  => $forename,
+            'volFamilyName' => $familyName,
         ];
 
         $this->restClient->setEncType('application/json; charset=UTF-8');
         $this->restClient->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->restClient->getRequest()->setContent(json_encode($inputData, JSON_THROW_ON_ERROR));
+
+        try {
+            $jsonContent = json_encode($inputData, JSON_THROW_ON_ERROR);
+        } catch (JsonException $je) {
+            Logger::err('Nysiis JSON encoding exception', ['exception' => $je]);
+            throw new NysiisException(sprintf(self::NYSIIS_FAILURE, $je->getMessage()), 0, $je);
+        }
+        $this->restClient->getRequest()->setContent($jsonContent);
 
         try {
             $response = $this->restClient->send();
             Logger::info('Nysiis response', ['data' => $response]);
 
             if ($response instanceof HttpResponse && $response->isSuccess()) {
-                return json_decode($this->cleanJson($response->getContent()), true, 512, JSON_THROW_ON_ERROR);
+                try {
+                    return json_decode($this->cleanJson($response->getContent()), true, 512, JSON_THROW_ON_ERROR);
+                } catch (JsonException $je) {
+                    Logger::err('Nysiis JSON decode exception', ['exception' => $je]); // <— message fixed
+                    throw new NysiisException(sprintf(self::NYSIIS_FAILURE, $je->getMessage()), 0, $je);
+                }
             }
         } catch (\Exception $e) {
-            Logger::info('Nysiis exception object', ['data' => $e->__toString()]);
-            throw new NysiisException(sprintf(self::NYSIIS_FAILURE, $e->getMessage()));
+            Logger::info('Nysiis exception object', ['exception' => $e]);
+            throw new NysiisException(sprintf(self::NYSIIS_FAILURE, $e->getMessage()), 0, $e);
         }
 
         throw new NysiisException('Nysiis REST service returned incorrect response');
