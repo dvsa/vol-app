@@ -1,12 +1,14 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "application_api" {
-  name = "${local.account_prefix}APP${var.legacy_environment}-BASE-SM-APPLICATION-API"
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
 locals {
 
-  account_prefix = var.legacy_environment == "DEV" || var.legacy_environment == "QA" ? "DEV" : ""
+  account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
+  env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
+
   default_retry_policy = {
     attempts = 1
     evaluate_on_exit = {
