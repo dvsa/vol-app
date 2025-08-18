@@ -136,7 +136,7 @@ data "aws_lb_listener" "this" {
 }
 
 data "aws_lb" "iuweb-pub" {
-  name = "APPPP-OLCS-PUB-IUWEB-ALB"
+  name = "APP-OLCS-PUB-IUWEB-ALB"
 }
 
 data "aws_lb_listener" "iuweb-pub" {
