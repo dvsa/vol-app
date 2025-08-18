@@ -336,18 +336,22 @@ module "service" {
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",
