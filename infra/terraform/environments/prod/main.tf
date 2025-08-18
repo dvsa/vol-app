@@ -368,7 +368,7 @@ module "service" {
         name     = "duplicate-vehicle-removal",
         commands = ["batch:duplicate-vehicle-removal"],
         timeout  = 43200,
-        schedule = "cron(30 21 * * ? *)",
+        #schedule = "cron(30 21 * * ? *)",
       },
       {
         name     = "enqueue-ch-compare",
