@@ -7,7 +7,7 @@ data "aws_secretsmanager_secret" "application_api" {
 locals {
 
   account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
-  env_prefix     = var.legacy_environment == "APP" ? "" : "APP${var.legacy_environment}"
+  env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
 
   default_retry_policy = {
     attempts = 1
