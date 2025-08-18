@@ -1,4 +1,5 @@
 locals {
+  #testing tf plan
   service_names = ["api", "selfserve", "internal", "cli"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
@@ -135,7 +136,7 @@ data "aws_lb_listener" "this" {
 }
 
 data "aws_lb" "iuweb-pub" {
-  name = "APPPP-OLCS-PUB-IUWEB-ALB"
+  name = "APP-OLCS-PUB-IUWEB-ALB"
 }
 
 data "aws_lb_listener" "iuweb-pub" {
@@ -335,18 +336,22 @@ module "service" {
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",

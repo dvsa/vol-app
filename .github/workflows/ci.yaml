@@ -333,7 +333,7 @@ jobs:
           - dev
           - int
           - prep
-          #- prod
+          - prod
         exclude:
           - environment: ${{ needs.orchestrator.outputs.should-plan-dev-environment-terraform && 'ignored' || 'dev' }}
           - environment: ${{ needs.orchestrator.outputs.should-plan-int-environment-terraform && 'ignored' || 'int' }}
