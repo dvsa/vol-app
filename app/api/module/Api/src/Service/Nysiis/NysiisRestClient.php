@@ -47,7 +47,7 @@ class NysiisRestClient
 
         $this->restClient->setEncType('application/json; charset=UTF-8');
         $this->restClient->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->restClient->getRequest()->setContent(json_encode($inputData, JSON_THROW_ON_ERROR));
+        $this->restClient->getRequest()->setContent(json_encode($inputData));
 
         try {
             $response = $this->restClient->send();

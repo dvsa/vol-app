@@ -213,6 +213,9 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
      */
     public function getDecodedSubmissionResult()
     {
+        //This catch will not work because json_decode() without JSON_THROW_ON_ERROR won’t ever throw.
+        //As this is old code and changing too much could cause unforeseen issues,
+        //we leave it as is. All were trying to do is move away laminas-json to native PHP JSON function.
         try {
             $errorInfo = json_decode($this->ebsrSubmissionResult, true);
         } catch (JsonException) {
