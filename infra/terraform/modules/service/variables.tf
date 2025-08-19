@@ -44,7 +44,6 @@ variable "services" {
       resources = list(string)
     }))
     add_cdn_url_to_env          = optional(bool, false)
-    add_search_env_info         = optional(bool, false)
     enable_autoscaling_policies = optional(bool, true)
     lb_arn                      = optional(string)
     lb_listener_arn             = optional(string)
@@ -54,8 +53,8 @@ variable "services" {
     // Can be removed when EC2 services are removed.
     listener_rule_enable              = optional(bool, true)
     listener_rule_priority            = optional(number, 10)
-    listener_rule_host_header         = optional(string, "*")
-    listener_rule_host_header_proving = optional(string, "*")
+    listener_rule_host_header         = optional(list(string), ["*"])
+    listener_rule_host_header_proving = optional(list(string), ["*"])
     security_group_ids                = list(string)
     subnet_ids                        = list(string)
     vpc_id                            = optional(string, null)
@@ -69,7 +68,6 @@ variable "batch" {
   type = object({
     cli_version          = string
     cli_repository       = string
-    search_repository    = string
     liquibase_repository = string
     api_secret_file      = string
     subnet_ids           = list(string)
