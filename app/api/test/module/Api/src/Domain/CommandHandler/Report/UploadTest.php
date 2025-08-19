@@ -117,7 +117,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'options' => json_encode([
                     'identifier' => self::IDENTIFIER,
                     'user' => self::USER_ID,
-                ], JSON_THROW_ON_ERROR),
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -193,7 +193,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                     'identifier' => self::IDENTIFIER,
                     'user' => self::USER_ID,
                     'templateName' => $data['name']
-                ], JSON_THROW_ON_ERROR),
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -269,7 +269,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                     'identifier' => self::IDENTIFIER,
                     'user' => self::USER_ID,
                     'templateSlug' => $data['templateSlug']
-                ], JSON_THROW_ON_ERROR),
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -333,7 +333,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'status' => Queue::STATUS_QUEUED,
                 'options' => json_encode([
                     'identifier' => self::IDENTIFIER,
-                ], JSON_THROW_ON_ERROR),
+                ]),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')

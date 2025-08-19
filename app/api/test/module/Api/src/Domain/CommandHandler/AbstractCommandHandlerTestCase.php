@@ -260,7 +260,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             'entityId' => $entityId,
             'type' => $queueType,
             'status' => QueueEntity::STATUS_QUEUED,
-            'options' => json_encode($options, JSON_THROW_ON_ERROR),
+            'options' => json_encode($options),
             'processAfterDate' => $processAfterDate
         ];
 
@@ -292,7 +292,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             'entityId' => $entityId,
             'type' => QueueEntity::TYPE_EMAIL,
             'status' => QueueEntity::STATUS_QUEUED,
-            'options' => json_encode($emailOptions, JSON_THROW_ON_ERROR),
+            'options' => json_encode($emailOptions),
             'processAfterDate' => $processAfterDate
         ];
 
