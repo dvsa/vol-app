@@ -28,7 +28,7 @@ class UpdateTmNysiisName extends AbstractCommandConsumer
     /**
      * gets command data
      */
-    public function getCommandData(QueueEntity $item)
+    public function getCommandData(QueueEntity $item): array
     {
         return array_merge(
             json_decode($item->getOptions(), true),
