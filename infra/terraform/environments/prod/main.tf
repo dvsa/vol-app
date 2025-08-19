@@ -370,6 +370,12 @@ module "service" {
         #schedule = "cron(30 13 ? * 2-6 *)",
       },
       {
+        name     = "duplicate-vehicle-removal",
+        commands = ["batch:duplicate-vehicle-removal"],
+        timeout  = 43200,
+        #schedule = "cron(30 21 * * ? *)",
+      },
+      {
         name     = "enqueue-ch-compare",
         commands = ["batch:enqueue-ch-compare"],
         timeout  = 1800,
