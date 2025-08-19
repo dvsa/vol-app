@@ -321,14 +321,17 @@ module "service" {
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",
@@ -345,6 +348,12 @@ module "service" {
         commands = ["batch:duplicate-vehicle-warning"],
         timeout  = 43200,
         schedule = "cron(30 13 ? * 2-6 *)",
+      },
+      {
+        name     = "duplicate-vehicle-removal",
+        commands = ["batch:duplicate-vehicle-removal"],
+        timeout  = 43200,
+        schedule = "cron(30 21 * * ? *)",
       },
       {
         name     = "enqueue-ch-compare",
