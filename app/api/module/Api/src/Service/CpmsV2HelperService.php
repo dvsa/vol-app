@@ -103,25 +103,6 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
     }
 
     /**
-     * Initiate a stored card payment payment
-     *
-     * @param string $redirectUrl         redirect back to here from payment gateway
-     * @param array  $fees                fees
-     * @param string $storedCardReference Stored card reference
-     * @param array  $extraParams         extra params
-     *
-     * @return array CPMS response data
-     * @throws CpmsResponseException if response is invalid
-     */
-    public function initiateStoredCardRequest($redirectUrl, array $fees, $storedCardReference, array $extraParams = [])
-    {
-        $endPoint = '/api/payment/stored-card/' . $storedCardReference;
-        $scope    = ApiService::SCOPE_STORED_CARD;
-
-        return $this->initiateRequest($redirectUrl, $fees, $endPoint, $scope, $extraParams);
-    }
-
-    /**
      * Initiate a card not present (CNP) payment
      *
      * @param string $redirectUrl redirect back to here from payment gateway
@@ -412,25 +393,6 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
             ]
         ];
         return $this->send('get', '/api/report', ApiService::SCOPE_REPORT, $params);
-    }
-
-    /**
-     * Get a list of stored debit/credit cards references stored in CPMS
-     *
-     * @param string $isNi is NI list
-     *
-     * @return array
-     */
-    public function getListStoredCards($isNi)
-    {
-        return $this->send(
-            'get',
-            '/api/stored-card',
-            ApiService::SCOPE_STORED_CARD,
-            [],
-            null,
-            ($isNi === 'Y') ? $this->niSchemaId : $this->schemaId
-        );
     }
 
     /**

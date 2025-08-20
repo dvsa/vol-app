@@ -1,12 +1,14 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_secretsmanager_secret" "application_api" {
-  name = "${local.account_prefix}APP${var.legacy_environment}-BASE-SM-APPLICATION-API"
+  name = "${local.account_prefix}${local.env_prefix}-BASE-SM-APPLICATION-API"
 }
 
 locals {
 
-  account_prefix = var.legacy_environment == "DEV" || var.legacy_environment == "QA" ? "DEV" : ""
+  account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
+  env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
+
   default_retry_policy = {
     attempts = 1
     evaluate_on_exit = {
@@ -64,44 +66,6 @@ locals {
         {
           name      = "DB_PASSWORD"
           valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_api_rds_password::"
-        },
-      ]
-    }
-
-    search = {
-      image = "${var.batch.search_repository}:latest"
-
-      environment = [
-        {
-          name  = "ELASTIC_HOST"
-          value = "searchv6.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_HOST"
-          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
-          name  = "DB_NAME"
-          value = "OLCS_RDS_OLCSDB"
-        },
-        {
-          name  = "DB_USER"
-          value = "olcssearch"
-        },
-        {
-          name  = "DB_PORT"
-          value = "3306"
-        },
-        {
-          name  = "LS_JAVA_OPTS" #java memory limit
-          value = "-Xms8g -Xmx8g"
-        }
-      ]
-
-      secrets = [
-        {
-          name      = "DB_PASSWORD"
-          valueFrom = "${data.aws_secretsmanager_secret.application_api.arn}:olcs_search_rds_password::"
         },
       ]
     }

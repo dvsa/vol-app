@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["liquibase"]
 
   task_iam_role_statements = [
     {
@@ -98,10 +98,6 @@ data "aws_security_group" "this" {
   name = "DEV/APP/DEV-OLCS-PRI-${each.key}-SG"
 }
 
-data "aws_security_group" "search" {
-  name = "DEV/APP/DEV-OLCS-PRI-SEARCHDATAV6-SG"
-}
-
 data "aws_subnets" "this" {
   for_each = toset(setunion(local.legacy_service_names, ["BATCH"]))
 
@@ -181,7 +177,7 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["API"].arn
       lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = "api.*"
+      listener_rule_host_header = ["api.*"]
     }
 
     "internal" = {
@@ -222,7 +218,7 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
       lb_arn                    = data.aws_lb.this["IUWEB"].arn
-      listener_rule_host_header = "iuweb.*"
+      listener_rule_host_header = ["iuweb.*"]
     }
 
     "selfserve" = {
@@ -263,37 +259,7 @@ module "service" {
 
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header = "ssweb.*"
-    }
-    "search" = {
-      cpu    = 4096
-      memory = 12288
-
-      enable_autoscaling_policies = false
-
-      version    = var.search_image_tag
-      repository = data.aws_ecr_repository.sservice["search"].repository_url
-
-      listener_rule_enable = false
-      add_search_env_info  = true
-
-      task_iam_role_statements = [
-        {
-          effect = "Allow"
-          actions = [
-            "secretsmanager:GetSecretValue"
-          ]
-          resources = [
-            data.aws_secretsmanager_secret.this["api"].arn
-          ]
-        }
-      ]
-
-      subnet_ids = data.aws_subnets.this["API"].ids
-
-      security_group_ids = [
-        data.aws_security_group.search.id
-      ]
+      listener_rule_host_header = ["ssweb.*"]
     }
   }
 
@@ -302,7 +268,6 @@ module "service" {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
@@ -356,14 +321,17 @@ module "service" {
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",
@@ -380,6 +348,12 @@ module "service" {
         commands = ["batch:duplicate-vehicle-warning"],
         timeout  = 43200,
         schedule = "cron(30 13 ? * 2-6 *)",
+      },
+      {
+        name     = "duplicate-vehicle-removal",
+        commands = ["batch:duplicate-vehicle-removal"],
+        timeout  = 43200,
+        schedule = "cron(30 21 * * ? *)",
       },
       {
         name     = "enqueue-ch-compare",
@@ -507,7 +481,7 @@ module "service" {
       },
       {
         name     = "process-queue-irhp-allocate",
-        commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_irhp_permits_allocate"],
         timeout  = 90,
         schedule = "cron(0/2 8-17 * * ? *)",
       },
@@ -563,10 +537,6 @@ module "service" {
         name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
-      },
-      {
-        name = "search",
-        type = "search"
       },
       {
         name     = "sas-mi-extract",

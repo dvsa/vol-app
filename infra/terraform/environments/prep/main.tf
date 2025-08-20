@@ -3,7 +3,7 @@ locals {
 
   legacy_service_names = ["API", "IUWEB", "SSWEB"]
 
-  supporting_service_names = ["search", "liquibase"]
+  supporting_service_names = ["liquibase"]
 
   task_iam_role_statements = [
     {
@@ -134,6 +134,15 @@ data "aws_lb_listener" "this" {
   port              = each.key == "API" ? 80 : 443
 }
 
+data "aws_lb" "iuweb-pub" {
+  name = "APPPP-OLCS-PUB-IUWEB-ALB"
+}
+
+data "aws_lb_listener" "iuweb-pub" {
+  load_balancer_arn = data.aws_lb.iuweb-pub.arn
+  port              = 443
+}
+
 data "aws_vpc" "this" {
   filter {
     name = "tag:Name"
@@ -177,9 +186,10 @@ module "service" {
         data.aws_security_group.this["API"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["API"].arn
-      lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = "api.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["API"].arn
+      lb_arn                            = data.aws_lb.this["API"].arn
+      listener_rule_host_header         = ["api.*"]
+      listener_rule_host_header_proving = ["proving-api.*"]
     }
 
     "internal" = {
@@ -220,9 +230,11 @@ module "service" {
         data.aws_security_group.this["IUWEB"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["IUWEB"].arn
-      lb_arn                    = data.aws_lb.this["IUWEB"].arn
-      listener_rule_host_header = "iuweb.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["IUWEB"].arn
+      iuweb_pub_listener_arn            = data.aws_lb_listener.iuweb-pub.arn
+      lb_arn                            = data.aws_lb.this["IUWEB"].arn
+      listener_rule_host_header         = ["iuweb.*"]
+      listener_rule_host_header_proving = ["proving-iuweb.*"]
     }
 
     "selfserve" = {
@@ -263,16 +275,16 @@ module "service" {
         data.aws_security_group.this["SSWEB"].id
       ]
 
-      lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
-      lb_arn                    = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header = "ssweb.*"
+      lb_listener_arn                   = data.aws_lb_listener.this["SSWEB"].arn
+      lb_arn                            = data.aws_lb.this["SSWEB"].arn
+      listener_rule_host_header         = ["ssweb.*", "www.preview.*"]
+      listener_rule_host_header_proving = ["proving-ssweb.*", "proving-preview.*"]
     }
   }
   batch = {
     cli_version = var.cli_image_tag
 
     cli_repository       = data.aws_ecr_repository.this["cli"].repository_url
-    search_repository    = data.aws_ecr_repository.sservice["search"].repository_url
     liquibase_repository = data.aws_ecr_repository.sservice["liquibase"].repository_url
     api_secret_file      = data.aws_secretsmanager_secret.this["api"].arn
 
@@ -322,18 +334,22 @@ module "service" {
       {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-precheck",
         commands = ["batch:data-retention", "--precheck"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-delete",
         commands = ["batch:data-retention", "--delete"],
+        timeout  = 7200
       },
       {
         name     = "data-retention-postcheck",
         commands = ["batch:data-retention", "--postcheck"],
+        timeout  = 7200
       },
       {
         name     = "database-maintenance",
@@ -350,6 +366,12 @@ module "service" {
         commands = ["batch:duplicate-vehicle-warning"],
         timeout  = 43200,
         schedule = "cron(30 13 ? * 2-6 *)",
+      },
+      {
+        name     = "duplicate-vehicle-removal",
+        commands = ["batch:duplicate-vehicle-removal"],
+        timeout  = 43200,
+        schedule = "cron(30 21 * * ? *)",
       },
       {
         name     = "enqueue-ch-compare",
@@ -477,7 +499,7 @@ module "service" {
       },
       {
         name     = "process-queue-irhp-allocate",
-        commands = ["queue:process-queue", "--type", "que_typ_run_ecmt_scoring"],
+        commands = ["queue:process-queue", "--type", "que_typ_irhp_permits_allocate"],
         timeout  = 90,
         schedule = "cron(0/2 8-17 * * ? *)",
       },
@@ -533,10 +555,6 @@ module "service" {
         name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
-      },
-      {
-        name = "search",
-        type = "search"
       },
       {
         name     = "sas-mi-extract",

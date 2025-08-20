@@ -71,7 +71,6 @@ jobs:
       should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
       should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-search-docker: ${{ needs.release-please.outputs.release_created || steps.changed-search-docker-files.outputs.any_modified == 'true' || steps.changed-search-files.outputs.any_modified == 'true' || null }}
       # Terraform account
       should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
@@ -120,11 +119,6 @@ jobs:
         with:
           files: |
             infra/docker/internal/**
-      - uses: tj-actions/changed-files@v45
-        id: changed-search-docker-files
-        with:
-          files: |
-            infra/docker/search/**
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
         with:
@@ -176,7 +170,6 @@ jobs:
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
-      search: ${{ steps.search-version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -201,10 +194,6 @@ jobs:
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
         with:
           project-path: app/cdn
-      - id: search-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
-        with:
-          project-path: infra/docker/search
       - name: Add to summary
         run: |
           echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
@@ -213,7 +202,6 @@ jobs:
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Search**: \`${{ steps.search-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   cdn-nonprod:
     name: CDN
@@ -262,7 +250,7 @@ jobs:
 
   docker:
     name: Docker
-    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-and-push-search-docker) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker) }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
@@ -277,13 +265,11 @@ jobs:
           - cli
           - selfserve
           - internal
-          - search
         exclude:
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-cli-docker && 'ignored' || 'cli' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
           - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-and-push-search-docker && 'ignored' || 'search' }}
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
@@ -335,7 +321,6 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -403,7 +388,6 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -508,7 +492,6 @@ jobs:
       selfserve-image-tag: ${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}
       internal-image-tag: ${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env_int.outputs.previous_assets_version }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
     permissions:
       contents: read
       id-token: write
@@ -553,8 +536,6 @@ jobs:
             repo: vol-app
           - project: liquibase
             repo: vol-app
-          - project: search
-            repo: vol-app
           - project: vft
             repo: vol-qa
     steps:
@@ -581,8 +562,6 @@ jobs:
             echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "internal" ]; then
             echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.project }}" == "search" ]; then
-            echo "tag=${{ needs.get-version.outputs.search }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "liquibase" ]; then
             # For liquibase, use the latest tag
             echo "tag=latest" >> $GITHUB_OUTPUT
@@ -710,7 +689,6 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
@@ -775,7 +753,6 @@ jobs:
       selfserve-image-tag: ${{ needs.terraform_env_prep.outputs.previous_selfserve_image_tag }}
       internal-image-tag: ${{ needs.terraform_env_prep.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env_prep.outputs.previous_assets_version }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
     permissions:
       contents: read
       id-token: write
@@ -810,7 +787,6 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      search-image-tag: ${{ needs.get-version.outputs.search }}
       apply: true
     permissions:
       contents: read
