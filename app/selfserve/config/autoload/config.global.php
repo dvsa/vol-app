@@ -25,7 +25,7 @@ return [
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%ecs_api_hostname%' : 'api.%domain%')
+                            'route' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%ecs_api_hostname%' : 'api.%domain%'),
                         ]
                     ]
                 ]
@@ -37,7 +37,7 @@ return [
         'endpoints' => [
             // Backend service URI *Environment specific*
             'backend' => [
-                'url' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'http://%ecs_api_hostname%/' : 'http://api.%domain%/') ,
+                'url' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'http://%ecs_api_hostname%/' : 'http://api.%domain%/'),
                 'options' => [
                     'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,

@@ -25,7 +25,7 @@ return [
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%ecs_api_hostname%' : 'api.%domain%')
+                            'route' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%ecs_api_hostname%' : 'api.%domain%'),
                         ]
                     ]
                 ]
