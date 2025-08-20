@@ -279,8 +279,8 @@ module "service" {
 
       lb_listener_arn                   = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                            = data.aws_lb.this["SSWEB"].arn
-      listener_rule_host_header         = ["ssweb.*"]
-      listener_rule_host_header_proving = ["proving-ssweb.*"]
+      listener_rule_host_header         = ["ssweb.*", "www.*"]
+      listener_rule_host_header_proving = ["proving-ssweb.*", "www.proving.*"]
     }
   }
   batch = {
