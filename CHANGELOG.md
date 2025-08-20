@@ -1,5 +1,72 @@
 # Changelog
 
+## [6.1.7-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.6-rc1-rc1...v6.1.7-rc1-rc1) (2025-08-20)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0823 ([#1070](https://github.com/dvsa/vol-app/issues/1070)) ([ddebfd6](https://github.com/dvsa/vol-app/commit/ddebfd69a821cb8608c26756644a516265d4cf8a))
+
+## [6.1.6-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.5-rc1-rc1...v6.1.6-rc1-rc1) (2025-08-14)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0822 ([#1058](https://github.com/dvsa/vol-app/issues/1058)) ([e5836e4](https://github.com/dvsa/vol-app/commit/e5836e49fa9a7f283ee90e1646aac53132506d5b))
+
+## [6.1.5-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.4-rc1-rc1...v6.1.5-rc1-rc1) (2025-08-13)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0821 ([#1056](https://github.com/dvsa/vol-app/issues/1056)) ([f137cc4](https://github.com/dvsa/vol-app/commit/f137cc49b7f6cad6edf8e8d7ac91b57e66e851d4))
+
+## [6.1.4-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.3-rc1-rc1...v6.1.4-rc1-rc1) (2025-08-11)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0816 ([#1048](https://github.com/dvsa/vol-app/issues/1048)) ([8015e8a](https://github.com/dvsa/vol-app/commit/8015e8a1a84f466112119f2d1e8cb39d3cba98df))
+
+## [6.1.3-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.2-rc1-rc1...v6.1.3-rc1-rc1) (2025-08-08)
+
+
+### Bug Fixes
+
+* Trigger release please prerelease 0814 ([#1044](https://github.com/dvsa/vol-app/issues/1044)) ([5a296fa](https://github.com/dvsa/vol-app/commit/5a296fa4a35838924f0297f129bde87dd4a6baf6))
+
+## [6.1.2-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.1-rc1-rc1...v6.1.2-rc1-rc1) (2025-08-08)
+
+
+### Bug Fixes
+
+* trigger release please prerelease 0813 ([#1042](https://github.com/dvsa/vol-app/issues/1042)) ([42f6bad](https://github.com/dvsa/vol-app/commit/42f6bad1ebcc01d01c01d81e86fc5a911f3a81ad))
+
+## [6.1.1-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.1.0-rc1-rc1...v6.1.1-rc1-rc1) (2025-08-08)
+
+
+### Bug Fixes
+
+* bumping .gitignore for release-please bump ([#1033](https://github.com/dvsa/vol-app/issues/1033)) ([28a5d98](https://github.com/dvsa/vol-app/commit/28a5d98344d45bc2dbc2e19268ac8b212804d73d))
+* bumping .gitignore for release-please bump ([#1038](https://github.com/dvsa/vol-app/issues/1038)) ([6bcc75a](https://github.com/dvsa/vol-app/commit/6bcc75a48ce78c37a5fc9f02ee727a8ae5e1db42))
+
+## [6.1.0-rc1-rc1](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0-rc1-rc1) (2025-08-06)
+
+
+### Features
+
+* public lorry & bus search person search disclaimer and licence attachment status AND youtube help link for adding operating centre ([#1012](https://github.com/dvsa/vol-app/issues/1012)) ([3159c4a](https://github.com/dvsa/vol-app/commit/3159c4a2bda6544f47a177b5a4372a495c6341f4))
+
+
+### Bug Fixes
+
+* update provider to resolve bug ([#1015](https://github.com/dvsa/vol-app/issues/1015)) ([16cc03a](https://github.com/dvsa/vol-app/commit/16cc03a9aee38913cb69a98e8b4f77e2fd36cb40))
+
+
+### Miscellaneous Chores
+
+* release v6.1.0-rc1-rc1 ([0482c36](https://github.com/dvsa/vol-app/commit/0482c36b6eec8ac2bb4f54defb49f1fb7d75ead5))
+
 ## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
 
 
