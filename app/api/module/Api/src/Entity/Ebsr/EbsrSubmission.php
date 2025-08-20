@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
-use Laminas\Json\Exception\RuntimeException as JsonException;
 
 /**
  * EbsrSubmission Entity
@@ -217,8 +216,8 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
         //As this is old code and changing too much could cause unforeseen issues,
         //we leave it as is. All were trying to do is move away laminas-json to native PHP JSON function.
         try {
-            $errorInfo = json_decode($this->ebsrSubmissionResult, true);
-        } catch (JsonException) {
+            $errorInfo = json_decode($this->ebsrSubmissionResult, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
             $errorInfo = [];
         }
 
