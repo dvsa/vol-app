@@ -30,7 +30,7 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-pp-consumer-role"
+        "arn:aws:iam::000081644369:role/txc-prep-consumer-role"
       ]
     },
     {
