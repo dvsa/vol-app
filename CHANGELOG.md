@@ -1,5 +1,38 @@
 # Changelog
 
+## [6.1.0](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0) (2025-08-22)
+
+
+### Features
+
+* add duplicate removal aws batch job and schedule - previously m… ([#1066](https://github.com/dvsa/vol-app/issues/1066)) ([f05beab](https://github.com/dvsa/vol-app/commit/f05beab7587b425d8bfd0a3a6daffda7171e22cc))
+* add proving target groups ([#1029](https://github.com/dvsa/vol-app/issues/1029)) ([d634f0d](https://github.com/dvsa/vol-app/commit/d634f0df53352bd441108cb6264e4820c1a75e1d))
+* adding public iuweb routing for ecs ([#1060](https://github.com/dvsa/vol-app/issues/1060)) ([3c88517](https://github.com/dvsa/vol-app/commit/3c8851769225100f60be20daa269dce6c9227fa8))
+* include prod in ci checks ([#1063](https://github.com/dvsa/vol-app/issues/1063)) ([ef4204d](https://github.com/dvsa/vol-app/commit/ef4204dc341b4392b5805835cf4fb9b4efdef14f))
+* prod tf plan ([#1065](https://github.com/dvsa/vol-app/issues/1065)) ([02aa3b0](https://github.com/dvsa/vol-app/commit/02aa3b006f8a3202ab894001e4a1a9ac67514b7f))
+* public lorry & bus search person search disclaimer and licence attachment status AND youtube help link for adding operating centre ([#1012](https://github.com/dvsa/vol-app/issues/1012)) ([3159c4a](https://github.com/dvsa/vol-app/commit/3159c4a2bda6544f47a177b5a4372a495c6341f4))
+* remove search ([#1062](https://github.com/dvsa/vol-app/issues/1062)) ([307265f](https://github.com/dvsa/vol-app/commit/307265f4352b837044c6d2088d7cc09cddc42d6d))
+* verbose output for commands that had it in prod JS ([#1072](https://github.com/dvsa/vol-app/issues/1072)) ([d06e7cf](https://github.com/dvsa/vol-app/commit/d06e7cf59096d2a7409f173bde93605958319f1b))
+
+
+### Bug Fixes
+
+* add a timeout to data-retention jobs to allow their long runtimes ([#1064](https://github.com/dvsa/vol-app/issues/1064)) ([0a83c61](https://github.com/dvsa/vol-app/commit/0a83c6138c6a9b72f1bb1f12969b40578395a73b))
+* add missing lb rules ([#1078](https://github.com/dvsa/vol-app/issues/1078)) ([1224f0d](https://github.com/dvsa/vol-app/commit/1224f0dcce18c484ebb604f71db99750797914c7))
+* bumping .gitignore ([#1081](https://github.com/dvsa/vol-app/issues/1081)) ([aa06700](https://github.com/dvsa/vol-app/commit/aa06700f2f330428984fdebce435196fa4269d93))
+* bumping git ignore ([#1083](https://github.com/dvsa/vol-app/issues/1083)) ([1813b6f](https://github.com/dvsa/vol-app/commit/1813b6f453f99f95bf13db1064dfb9e583c6f349))
+* correct allocate permits queue job include type ([#1061](https://github.com/dvsa/vol-app/issues/1061)) ([e5e6a88](https://github.com/dvsa/vol-app/commit/e5e6a88eb0f2df9f1ae5dc984de66a74435ee5ee))
+* ecs hosts use specific config param for api hostname ([#1079](https://github.com/dvsa/vol-app/issues/1079)) ([63019bc](https://github.com/dvsa/vol-app/commit/63019bc6c85fd92928ea5f09b0ebe0d9e1775981))
+* lb rule priority  ([#1052](https://github.com/dvsa/vol-app/issues/1052)) ([e6ed6c6](https://github.com/dvsa/vol-app/commit/e6ed6c617d7a14f2ab92a03a80bcd6ab05a98ef8))
+* listener rule priorities ([#1051](https://github.com/dvsa/vol-app/issues/1051)) ([c5ef671](https://github.com/dvsa/vol-app/commit/c5ef671f89f2e7b002078e888539e9c0ca902dda))
+* modify listener rules to add preview to ecs ([#1055](https://github.com/dvsa/vol-app/issues/1055)) ([80f734b](https://github.com/dvsa/vol-app/commit/80f734b1d226ebc14d7198b7c9c5b2d4d762d97d))
+* prod apply param refs ([#1067](https://github.com/dvsa/vol-app/issues/1067)) ([8056760](https://github.com/dvsa/vol-app/commit/8056760da532a47ab2dbc6d392d998a8ff155f6b))
+* remove remaining code around stored cards VOL-6371 ([#1037](https://github.com/dvsa/vol-app/issues/1037)) ([802463b](https://github.com/dvsa/vol-app/commit/802463b33a9958f3bf80324f0318a91b41ad92d9))
+* resolve name mismatch for transxchange consumer role ([#1082](https://github.com/dvsa/vol-app/issues/1082)) ([dc8d2f3](https://github.com/dvsa/vol-app/commit/dc8d2f33c14584e0d683eb94d4c5bae96dd04ef7))
+* restore artefact download step removed when search container build stuff removed ([#1080](https://github.com/dvsa/vol-app/issues/1080)) ([76b39ba](https://github.com/dvsa/vol-app/commit/76b39bad1aa1d80df25f178ff414abe2d47d9e4a))
+* update provider to resolve bug ([#1015](https://github.com/dvsa/vol-app/issues/1015)) ([16cc03a](https://github.com/dvsa/vol-app/commit/16cc03a9aee38913cb69a98e8b4f77e2fd36cb40))
+* update rule priority ([#1068](https://github.com/dvsa/vol-app/issues/1068)) ([a452a49](https://github.com/dvsa/vol-app/commit/a452a4926493209a2095a18600c78c426243190a))
+
 ## [6.0.2](https://github.com/dvsa/vol-app/compare/v6.0.1...v6.0.2) (2025-07-31)
 
 
