@@ -68,7 +68,7 @@ resource "aws_lb_listener_rule" "proving" {
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = 27
+  priority     = 90
 
   action {
     type             = "forward"
