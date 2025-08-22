@@ -392,6 +392,32 @@ return [
                     ],
                 ],
                 [
+                    'label' => 'Letter Management',
+                    'id' => 'admin-dashboard/letter-management',
+                    'class' => 'govuk-link--no-visited-state',
+                    'route' => 'admin-dashboard/admin-master-template',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/letter-management/master-templates',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Master Templates',
+                            'route' => 'admin-dashboard/admin-master-template',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-types',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Types',
+                            'route' => 'admin-dashboard/admin-letter-type',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-sections',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Sections',
+                            'route' => 'admin-dashboard/admin-letter-section',
+                        ],
+                    ],
+                ],
+                [
                     'label' => 'Data retention',
                     'id' => 'admin-dashboard/admin-data-retention',
                     'class' => 'govuk-link--no-visited-state',
