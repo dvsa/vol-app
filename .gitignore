@@ -78,3 +78,7 @@ compose-custom.yaml
 
 # Local refresh cache
 packages/local-refresh/.cache/
+
+# JetBrains
+.idea
+
