@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Email\Service;
 
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
+use Dvsa\Olcs\Email\Transport\ArchivingMailer;
 use Dvsa\Olcs\Email\Transport\MultiTransport;
 use Dvsa\Olcs\Email\Transport\MultiTransportOptions;
 use Dvsa\Olcs\Email\Transport\S3File;
@@ -21,6 +22,12 @@ use Laminas\Mail\Exception\RuntimeException as LaminasMailRuntimeException;
 use Laminas\Mail\Transport\TransportInterface;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email as SymfonyEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
 /**
  * Class Email
@@ -34,29 +41,16 @@ class Email implements FactoryInterface
     public const MISSING_TO_ERROR = 'Email is missing a valid to address';
     public const NOT_SENT_ERROR = 'Email not sent: %s';
 
-    private $mailTransport;
+    private \Symfony\Component\Mailer\MailerInterface $mailer;
 
-    /**
-     * Get Transport.
-     *
-     * @return TransportInterface
-     */
-    public function getMailTransport()
+    public function getMailer(): MailerInterface
     {
-        return $this->mailTransport;
+        return $this->mailer;
     }
 
-    /**
-     * Set Transport.
-     *
-     * @param TransportInterface $mailTransport mail transport
-     *
-     * @return $this
-     */
-    public function setMailTransport(TransportInterface $mailTransport)
+    public function setMailer(MailerInterface $mailer): self
     {
-        $this->mailTransport = $mailTransport;
-
+        $this->mailer = $mailer;
         return $this;
     }
 
@@ -108,6 +102,17 @@ class Email implements FactoryInterface
         return $addressList;
     }
 
+    private function buildAddresses(string|array|null $value): array {
+        if (empty($value)) return [];
+        $arr = is_array($value) ? $value : [$value];
+        $out = [];
+        foreach ($arr as $k => $v) {
+            $email = is_int($k) ? $v : $k;
+            try { $out[] = new Address($email); } catch (\InvalidArgumentException) {}
+        }
+        return $out;
+    }
+
     /**
      * Sends an email
      *
@@ -136,86 +141,115 @@ class Email implements FactoryInterface
         array $docs = [],
         bool $highPriority = false
     ) {
-        $emailBody = new MimeMessage();
 
-        $fromAddress = $this->validateAddresses([$fromEmail => $fromName]);
+        $fromAddress = $this->buildAddresses([$fromEmail => $fromName]);
 
         if (count($fromAddress) === 0) {
             Logger::err('email failed', ['data' => self::MISSING_FROM_ERROR]);
             throw new EmailNotSentException(self::MISSING_FROM_ERROR);
         }
 
-        $toAddresses = $this->validateAddresses($to);
+        $toAddresses = $this->buildAddresses($to);
 
         if (count($toAddresses) === 0) {
             Logger::err('email failed', ['data' => self::MISSING_TO_ERROR, 'to' => $to]);
             throw new EmailNotSentException(self::MISSING_TO_ERROR);
         }
 
-        $mail = new LaminasMail\Message();
-        $mail->setFrom($fromAddress);
-        $mail->addTo($toAddresses);
-        $mail->addCc($this->validateAddresses($cc));
-        $mail->addBcc($this->validateAddresses($bcc));
-        $mail->setSubject($subject);
+//        $mail = new LaminasMail\Message();
+//        $mail->setFrom($fromAddress);
+//        $mail->addTo($toAddresses);
+//        $mail->addCc($this->validateAddresses($cc));
+//        $mail->addBcc($this->validateAddresses($bcc));
+//        $mail->setSubject($subject);
+//
+//        $plainPart = new LaminasMimePart($plainBody);
+//        $plainPart->encoding = LaminasMime::ENCODING_QUOTEDPRINTABLE;
+//        $plainPart->type = LaminasMime::TYPE_TEXT;
+//
+//        //if we've no html version we can safely send a plain text email without attachments
+//        //the only current (and likely future) use case for plain text only is the inspection request email
+//        if ($htmlBody === null) {
+//            $emailBody->addPart($plainPart);
+//            $messageType = LaminasMime::TYPE_TEXT;
+//        } else {
+//            $htmlPart = new LaminasMimePart($htmlBody);
+//            $htmlPart->encoding = LaminasMime::ENCODING_QUOTEDPRINTABLE;
+//            $htmlPart->type = LaminasMime::TYPE_HTML;
+//
+//            $parts = [$plainPart, $htmlPart];
+//
+//            if (!empty($docs)) {
+//                $messageType = LaminasMime::MULTIPART_MIXED;
+//
+//                $messageBody = new MimeMessage();
+//                $messageBody->setParts($parts);
+//
+//                $messagePart = new LaminasMimePart($messageBody->generateMessage());
+//                $messagePart->type = LaminasMime::MULTIPART_ALTERNATIVE . ";\n boundary=\"" .
+//                    $messageBody->getMime()->boundary() . '"';
+//
+//                $emailBody->addPart($messagePart);
+//
+//                foreach ($docs as $doc) {
+//                    $attachment = new LaminasMimePart($doc['content']);
+//                    $attachment->filename = $doc['fileName'];
+//                    $attachment->type = LaminasMime::TYPE_OCTETSTREAM;
+//                    $attachment->encoding = LaminasMime::ENCODING_BASE64;
+//                    $attachment->disposition = LaminasMime::DISPOSITION_ATTACHMENT;
+//                    $emailBody->addPart($attachment);
+//                }
+//            } else {
+//                $emailBody->setParts($parts);
+//                $messageType = LaminasMime::MULTIPART_ALTERNATIVE;
+//            }
+//        }
+//
+//        $mail->setBody($emailBody);
+//        $mail->getHeaders()->get('content-type')->setType($messageType);
+//
+//        if ($highPriority) {
+//            $this->setHighPriority($mail);
+//        }
+//
+//        $trans = $this->getMailTransport();
+//
+//        try {
+//            $trans->send($mail);
+//        } catch (\Exception $e) {
+//            $message = sprintf(self::NOT_SENT_ERROR, $e->getMessage());
+//            Logger::err('email failed', ['data' => $message]);
+//            throw new EmailNotSentException($message, 0, $e);
+//        }
 
-        $plainPart = new LaminasMimePart($plainBody);
-        $plainPart->encoding = LaminasMime::ENCODING_QUOTEDPRINTABLE;
-        $plainPart->type = LaminasMime::TYPE_TEXT;
+        $email = (new SymfonyEmail())
+            ->from($fromAddress)
+            ->to($toAddresses)
+            ->subject($subject)
+            ->text($plainBody);
 
-        //if we've no html version we can safely send a plain text email without attachments
-        //the only current (and likely future) use case for plain text only is the inspection request email
-        if ($htmlBody === null) {
-            $emailBody->addPart($plainPart);
-            $messageType = LaminasMime::TYPE_TEXT;
-        } else {
-            $htmlPart = new LaminasMimePart($htmlBody);
-            $htmlPart->encoding = LaminasMime::ENCODING_QUOTEDPRINTABLE;
-            $htmlPart->type = LaminasMime::TYPE_HTML;
+        if ($htmlBody !== null) { $email->html($htmlBody); }
 
-            $parts = [$plainPart, $htmlPart];
+        if ($ccList = $this->buildAddresses($cc))  { $email->cc(...$ccList); }
+        if ($bccList = $this->buildAddresses($bcc)) { $email->bcc(...$bccList); }
 
-            if (!empty($docs)) {
-                $messageType = LaminasMime::MULTIPART_MIXED;
-
-                $messageBody = new MimeMessage();
-                $messageBody->setParts($parts);
-
-                $messagePart = new LaminasMimePart($messageBody->generateMessage());
-                $messagePart->type = LaminasMime::MULTIPART_ALTERNATIVE . ";\n boundary=\"" .
-                    $messageBody->getMime()->boundary() . '"';
-
-                $emailBody->addPart($messagePart);
-
-                foreach ($docs as $doc) {
-                    $attachment = new LaminasMimePart($doc['content']);
-                    $attachment->filename = $doc['fileName'];
-                    $attachment->type = LaminasMime::TYPE_OCTETSTREAM;
-                    $attachment->encoding = LaminasMime::ENCODING_BASE64;
-                    $attachment->disposition = LaminasMime::DISPOSITION_ATTACHMENT;
-                    $emailBody->addPart($attachment);
-                }
-            } else {
-                $emailBody->setParts($parts);
-                $messageType = LaminasMime::MULTIPART_ALTERNATIVE;
-            }
+        foreach ($docs as $doc) {
+            $email->attach($doc['content'], $doc['fileName'] ?? 'attachment', 'application/octet-stream');
         }
-
-        $mail->setBody($emailBody);
-        $mail->getHeaders()->get('content-type')->setType($messageType);
 
         if ($highPriority) {
-            $this->setHighPriority($mail);
+            $email->priority(SymfonyEmail::PRIORITY_HIGH);
+            $email->getHeaders()->addTextHeader('Importance', 'High');
+            $email->getHeaders()->addTextHeader('X-Priority', '1');
+            $email->getHeaders()->addTextHeader('X-MSMail-Priority', 'High');
         }
 
-        $trans = $this->getMailTransport();
-
         try {
-            $trans->send($mail);
-        } catch (\Exception $e) {
-            $message = sprintf(self::NOT_SENT_ERROR, $e->getMessage());
-            Logger::err('email failed', ['data' => $message]);
-            throw new EmailNotSentException($message, 0, $e);
+            $this->mailer->send($email);
+        } catch (TransportExceptionInterface $e) {
+            $msg = sprintf(self::NOT_SENT_ERROR, $e->getMessage());
+            \Olcs\Logging\Log\Logger::err('email failed', ['data' => $msg]);
+            throw new EmailNotSentException($msg, 0, $e);
         }
     }
 
@@ -230,19 +264,35 @@ class Email implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-        if (!isset($config['mail'])) {
-            throw new LaminasMailRuntimeException('No mail config found');
+
+        if (!($config['mail']['use_symfony'] ?? false)) {
+            if (!isset($config['mail'])) {
+                throw new LaminasMailRuntimeException('No mail config found');
+            }
+            $transport = Factory::create($config['mail']);
+            if ($transport instanceof MultiTransport && isset($config['mail']['options'])) {
+                $s3Options = $container->get(S3FileOptions::class);
+                $multiTransportOptions = new MultiTransportOptions($config['mail']['options'], $s3Options);
+                $transport->setOptions($multiTransportOptions);
+            }
+            if ($transport instanceof S3File && isset($config['mail']['options'])) {
+                $transport->setOptions($container->get(S3FileOptions::class));
+            }
+            $this->setMailTransport($transport);
+            return $this;
         }
-        $transport = Factory::create($config['mail']);
-        if ($transport instanceof MultiTransport && isset($config['mail']['options'])) {
-            $s3Options = $container->get(S3FileOptions::class);
-            $multiTransportOptions = new MultiTransportOptions($config['mail']['options'], $s3Options);
-            $transport->setOptions($multiTransportOptions);
+
+        $dsn    = MailDsnBuilder::buildFromConfig($config['mail']); // from current array
+        $mailer = new Mailer(Transport::fromDsn($dsn));
+
+        if (!empty($config['mail']['options']['archive_to_s3']['bucket'])) {
+            $s3     = $container->get(\Aws\S3\S3Client::class);
+            $bucket = $config['mail']['options']['archive_to_s3']['bucket'];
+            $mailer = new ArchivingMailer($mailer, $s3, $bucket);
         }
-        if ($transport instanceof S3File && isset($config['mail']['options'])) {
-            $transport->setOptions($container->get(S3FileOptions::class));
-        }
-        $this->setMailTransport($transport);
+
+        $this->setMailer($mailer);
         return $this;
+
     }
 }
