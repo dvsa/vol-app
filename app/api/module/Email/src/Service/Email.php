@@ -108,6 +108,7 @@ class Email implements FactoryInterface
         $out = [];
         foreach ($arr as $k => $v) {
             $email = is_int($k) ? $v : $k;
+            var_dump($email);
             try { $out[] = new Address($email); } catch (\InvalidArgumentException) {}
         }
         return $out;
@@ -223,8 +224,8 @@ class Email implements FactoryInterface
 //        }
 
         $email = (new SymfonyEmail())
-            ->from($fromAddress)
-            ->to($toAddresses)
+            ->from($fromAddress[0])
+            ->to(...$toAddresses)
             ->subject($subject)
             ->text($plainBody);
 
@@ -265,24 +266,24 @@ class Email implements FactoryInterface
     {
         $config = $container->get('config');
 
-        if (!($config['mail']['use_symfony'] ?? false)) {
-            if (!isset($config['mail'])) {
-                throw new LaminasMailRuntimeException('No mail config found');
-            }
-            $transport = Factory::create($config['mail']);
-            if ($transport instanceof MultiTransport && isset($config['mail']['options'])) {
-                $s3Options = $container->get(S3FileOptions::class);
-                $multiTransportOptions = new MultiTransportOptions($config['mail']['options'], $s3Options);
-                $transport->setOptions($multiTransportOptions);
-            }
-            if ($transport instanceof S3File && isset($config['mail']['options'])) {
-                $transport->setOptions($container->get(S3FileOptions::class));
-            }
-            $this->setMailTransport($transport);
-            return $this;
-        }
+//        if (!($config['mail']['use_symfony'] ?? false)) {
+//            if (!isset($config['mail'])) {
+//                throw new LaminasMailRuntimeException('No mail config found');
+//            }
+//            $transport = Factory::create($config['mail']);
+//            if ($transport instanceof MultiTransport && isset($config['mail']['options'])) {
+//                $s3Options = $container->get(S3FileOptions::class);
+//                $multiTransportOptions = new MultiTransportOptions($config['mail']['options'], $s3Options);
+//                $transport->setOptions($multiTransportOptions);
+//            }
+//            if ($transport instanceof S3File && isset($config['mail']['options'])) {
+//                $transport->setOptions($container->get(S3FileOptions::class));
+//            }
+//            $this->setMailer($transport);
+//            return $this;
+//        }
 
-        $dsn    = MailDsnBuilder::buildFromConfig($config['mail']); // from current array
+        $dsn    = MailDsnBuilder::buildFromConfig($config['mail']);
         $mailer = new Mailer(Transport::fromDsn($dsn));
 
         if (!empty($config['mail']['options']['archive_to_s3']['bucket'])) {

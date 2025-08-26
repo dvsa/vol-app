@@ -29,7 +29,7 @@ final class MailDsnBuilder
             $auth = rawurlencode($user) . ($pass !== null ? ':' . rawurlencode($pass) : '') . '@';
         }
 
-        $hostPart = (strpos($host, ':') !== false && $host[0] !== '[') ? '['.$host.']' : $host;
+        $hostPart = (str_contains($host, ':') && $host[0] !== '[') ? '['.$host.']' : $host;
         $portPart = $port ? ':' . (int)$port : '';
 
         $q = [];

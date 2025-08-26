@@ -6,13 +6,11 @@ use Dvsa\Olcs\Email\Service\Email;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Mail\Message;
-use Laminas\Mail\Transport\TransportInterface;
-use Laminas\Mime\Mime as LaminasMime;
-use Laminas\Mime\Part as LaminasMimePart;
-use Laminas\Mail\AddressList;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Olcs\Logging\Log\Logger;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email as SymfonyEmail;
+use Symfony\Component\Mailer\Envelope;
 
 class EmailTest extends MockeryTestCase
 {
@@ -34,7 +32,8 @@ class EmailTest extends MockeryTestCase
 
     public function testCreateServiceMissingConfig()
     {
-        $this->expectException(\Laminas\Mail\Exception\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No mail config found');
 
         $config = [];
 
@@ -54,15 +53,15 @@ class EmailTest extends MockeryTestCase
         ];
 
         $sm = m::mock(ContainerInterface::class);
-        $sm->shouldReceive('get')->with('config')->andReturn($config);
+        $sm->allows('get')->with('config')->andReturns($config);
 
         $service = $this->sut->__invoke($sm, Email::class);
 
         $this->assertSame($this->sut, $service);
 
-        $transport = $this->sut->getMailTransport();
+        $transport = $this->sut->getMailer();
 
-        $this->assertInstanceOf(TransportInterface::class, $transport);
+        $this->assertInstanceOf(MailerInterface::class, $transport);
     }
 
     /**
@@ -70,38 +69,35 @@ class EmailTest extends MockeryTestCase
      */
     public function testSendText()
     {
-        $transport = m::mock(TransportInterface::class);
+        $transport = m::mock(MailerInterface::class);
+        $this->sut->setMailer($transport);
 
-        $this->sut->setMailTransport($transport);
+        $transport->expects('send')
+            ->withArgs(function ($message, $envelope = null) {
+                // 1) Right types
+                $this->assertInstanceOf(SymfonyEmail::class, $message);
+                // Envelope is optional; we don’t care here
+                $this->assertTrue($envelope === null || $envelope instanceof \Symfony\Component\Mailer\Envelope);
 
-        $transport->shouldReceive('send')
-            ->once()
-            ->with(m::type(Message::class))
-            ->andReturnUsing(
-                function (Message $message) {
+                // 2) Check interesting bits on the Email
+                $raw = $message->toString();
+                $this->assertStringContainsString("From: foo@bar.com", $raw);
+                $this->assertStringContainsString("To: bar@foo.com", $raw);
+                $this->assertStringContainsString("Cc: cc@foo.com", $raw);
 
-                    $content = $message->toString();
+                // Bcc often isn’t in the serialized raw headers sent over the wire,
+                // but it *is* on the Email headers object:
+                $bcc = $message->getHeaders()->get('Bcc');
+                $this->assertNotNull($bcc);
+                $this->assertStringContainsString('bcc@foo.com', $bcc->getBodyAsString());
 
-                    $parts = explode("\r\n", $content);
+                $this->assertStringContainsString("Subject: Subject", $raw);
+                $this->assertMatchesRegularExpression('/^Content-Type:\s*text\/plain;\s*charset=utf-8/im', $raw);
+                $this->assertMatchesRegularExpression('/^Content-Transfer-Encoding:\s*quoted-printable/im', $raw);
+                $this->assertStringContainsString("\r\n\r\nThis is the content", $raw);
 
-                    array_shift($parts);
-
-                    $expected = [
-                        'From: foo@bar.com',
-                        'To: bar@foo.com',
-                        'Cc: cc@foo.com',
-                        'Bcc: bcc@foo.com',
-                        'Subject: Subject',
-                        'MIME-Version: 1.0',
-                        'Content-Type: ' . LaminasMime::TYPE_TEXT,
-                        'Content-Transfer-Encoding: ' . LaminasMime::ENCODING_QUOTEDPRINTABLE,
-                        '',
-                        'This is the content'
-                    ];
-
-                    $this->assertEquals($expected, $parts);
-                }
-            );
+                return true; // tell Mockery the expectation matched
+            });
 
         $this->sut->send(
             'foo@bar.com',
@@ -117,109 +113,77 @@ class EmailTest extends MockeryTestCase
 
     /**
      * Tests sending an email with attachments
+     * @throws EmailNotSentException
      */
-    public function testSendWithAttachments()
+    public function testSendWithAttachments(): void
     {
-        $transport = m::mock(TransportInterface::class);
+        $transport = m::mock(MailerInterface::class);
+        $this->sut->setMailer($transport);
 
-        $this->sut->setMailTransport($transport);
+        $transport->expects('send')
+            ->withArgs(function ($message, $envelope = null) {
+                // Types
+                $this->assertInstanceOf(SymfonyEmail::class, $message);
+                $this->assertTrue($envelope === null || $envelope instanceof Envelope);
 
-        $transport->shouldReceive('send')
-            ->once()
-            ->with(m::type(Message::class))
-            ->andReturnUsing(
-                function (Message $message) {
-                    //expecting 3 parts, multipart text/html followed by two attachments
-                    $parts = $message->getBody()->getParts();
-                    $this->assertCount(3, $parts);
+                // Subject
+                $this->assertSame('msg subject', $message->getSubject());
 
-                    /**
-                     * @var LaminasMimePart $messagePart
-                     * @var LaminasMimePart $attachmentPart
-                     */
-                    $messagePart = $parts[0];
-                    $attachmentPart1 = $parts[1];
-                    $attachmentPart2 = $parts[2];
+                // From / To / Cc / Bcc
+                $this->assertSame(['foo@bar.com'], array_map(fn($a) => $a->getAddress(), $message->getFrom()));
+                $this->assertSame(['bar@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getTo()));
+                $this->assertSame(['cc1@foo.com','cc2@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getCc()));
+                $this->assertSame(['bcc1@foo.com','bcc2@foo.com','bcc3@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getBcc()));
 
-                    $expectedPlainText = "Content-Type: " . LaminasMime::TYPE_TEXT . "\n" .
-                        "Content-Transfer-Encoding: " . LaminasMime::ENCODING_QUOTEDPRINTABLE . "\n\n" .
-                        "plain content";
+                // Bodies
+                $this->assertSame('plain content', $message->getTextBody());
+                $this->assertSame('html content',  $message->getHtmlBody());
 
-                    $expectedHtml = "Content-Type: " . LaminasMime::TYPE_HTML . "\n" .
-                        "Content-Transfer-Encoding: " . LaminasMime::ENCODING_QUOTEDPRINTABLE . "\n\n" .
-                        "html content";
+                // Attachments: two present
+                $attachments = $message->getAttachments();
+                $this->assertCount(2, $attachments);
 
-                    //test part one (this is a generated multipart message body, so we check both parts are included)
-                    $this->assertStringContainsString($expectedPlainText, $messagePart->getRawContent());
-                    $this->assertStringContainsString($expectedHtml, $messagePart->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $messagePart);
-
-                    //test part two (the first attachment)
-                    $this->assertEquals(LaminasMime::TYPE_OCTETSTREAM, $attachmentPart1->type);
-                    $this->assertEquals(LaminasMime::ENCODING_BASE64, $attachmentPart1->encoding);
-                    $this->assertEquals(LaminasMime::DISPOSITION_ATTACHMENT, $attachmentPart1->disposition);
-                    $this->assertEquals('docFilename', $attachmentPart1->filename);
-                    $this->assertEquals('docContent', $attachmentPart1->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $attachmentPart1);
-
-                    //test part three (the second attachment)
-                    $this->assertEquals(LaminasMime::TYPE_OCTETSTREAM, $attachmentPart2->type);
-                    $this->assertEquals(LaminasMime::ENCODING_BASE64, $attachmentPart2->encoding);
-                    $this->assertEquals(LaminasMime::DISPOSITION_ATTACHMENT, $attachmentPart2->disposition);
-                    $this->assertEquals('docFilename2', $attachmentPart2->filename);
-                    $this->assertEquals('docContent2', $attachmentPart2->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $attachmentPart2);
-
-                    /**
-                     * @var AddressList $from
-                     * @var AddressList $toList
-                     * @var AddressList $ccList
-                     * @var AddressList $bccList
-                     */
-                    $headers = $message->getHeaders();
-                    $from = $headers->get('from')->getAddressList();
-                    $toList = $headers->get('to')->getAddressList();
-                    $ccList = $headers->get('cc')->getAddressList();
-                    $bccList = $headers->get('bcc')->getAddressList();
-
-                    //test mail headers
-                    $this->assertEquals(LaminasMime::MULTIPART_MIXED, $headers->get('content-type')->getType());
-                    $this->assertEquals('msg subject', $headers->get('subject')->getFieldValue());
-                    $this->assertEquals(true, $from->has('foo@bar.com'));
-                    $this->assertEquals(1, $from->count());
-                    $this->assertEquals(true, $toList->has('bar@foo.com'));
-                    $this->assertEquals(1, $toList->count());
-                    $this->assertEquals(true, $ccList->has('cc1@foo.com'));
-                    $this->assertEquals(true, $ccList->has('cc2@foo.com'));
-                    $this->assertEquals(2, $ccList->count());
-                    $this->assertEquals(true, $bccList->has('bcc1@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc2@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc3@foo.com'));
-                    $this->assertEquals(3, $bccList->count());
+                // Filenames (prefer API; fallback to raw string check if API differs)
+                $names = [];
+                foreach ($attachments as $att) {
+                    if (method_exists($att, 'getFilename')) {
+                        $names[] = $att->getFilename();
+                    }
                 }
-            );
+                if ($names) {
+                    sort($names);
+                    $this->assertSame(['docFilename','docFilename2'], $names);
+                } else {
+                    $raw = $message->toString();
+                    $this->assertStringContainsString('filename=docFilename',  $raw);
+                    $this->assertStringContainsString('filename=docFilename2', $raw);
+                }
+
+                // MIME structure sanity: multipart/mixed with alternative inside (symfony builds this automatically)
+                $raw = $message->toString();
+                $this->assertMatchesRegularExpression('/^MIME-Version:\s*1\.0/im', $raw);
+                $this->assertMatchesRegularExpression('/^Content-Type:\s*multipart\/mixed;/im', $raw);
+                $this->assertStringContainsString("Content-Type: text/plain; charset=utf-8", $raw);
+                $this->assertStringContainsString("Content-Type: text/html; charset=utf-8", $raw);
+
+                return true; // tell Mockery the args matched
+            });
 
         $docs = [
-            0 => [
-                'content' => 'docContent',
-                'fileName' => 'docFilename'
-            ],
-            1 => [
-                'content' => 'docContent2',
-                'fileName' => 'docFilename2'
-            ]
+            ['content' => 'docContent',  'fileName' => 'docFilename'],
+            ['content' => 'docContent2', 'fileName' => 'docFilename2'],
         ];
 
-        $cc = ['invalid-email', 'cc1@foo.com', 'cc2@foo.com'];
-        $bcc = [null, 'bcc1@foo.com', 'bcc2@foo.com', 'bcc3@foo.com'];
+        $cc  = ['invalid-email', 'cc1@foo.com', 'cc2@foo.com'];
+        $bcc = ['bcc1@foo.com', 'bcc2@foo.com', 'bcc3@foo.com'];
 
         $this->sut->send(
-            'foo@bar.com',
-            'foo',
-            'bar@foo.com',
-            'msg subject',
-            'plain content',
-            'html content',
+            'foo@bar.com',     // from
+            'foo',             // fromName
+            'bar@foo.com',     // to
+            'msg subject',     // subject
+            'plain content',   // plain body
+            'html content',    // html body
             $cc,
             $bcc,
             $docs

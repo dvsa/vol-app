@@ -17,7 +17,7 @@ final class MultiMailer implements MailerInterface
         $error = null;
         foreach ($this->mailers as $m) {
             try { $m->send($message, $envelope); }
-            catch (TransportExceptionInterface $e) { $error ??= $e; } // try all, report first error
+            catch (TransportExceptionInterface $e) { $error ??= $e; }
         }
         if ($error) { throw $error; }
     }
