@@ -108,7 +108,6 @@ class Email implements FactoryInterface
         $out = [];
         foreach ($arr as $k => $v) {
             $email = is_int($k) ? $v : $k;
-            var_dump($email);
             try { $out[] = new Address($email); } catch (\InvalidArgumentException) {}
         }
         return $out;
