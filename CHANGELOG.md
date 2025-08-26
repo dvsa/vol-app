@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.1](https://github.com/dvsa/vol-app/compare/v6.1.0...v6.1.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* upped rule priority ([#1084](https://github.com/dvsa/vol-app/issues/1084)) ([953842f](https://github.com/dvsa/vol-app/commit/953842f6e20cf7cdc8844c0c017da7e7ea99d58f))
+
 ## [6.1.0](https://github.com/dvsa/vol-app/compare/v6.0.2...v6.1.0) (2025-08-22)
 
 
