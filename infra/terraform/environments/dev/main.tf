@@ -75,6 +75,7 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-olcs-pri-olcs-autotest-s3/*",
+        "arn:aws:s3:::devapp-vol-content/*",
       ]
     },
   ]
