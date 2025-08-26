@@ -269,6 +269,9 @@ return [
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
         'version' => '%olcs_aws_version%',
+        's3' => [
+            'use_path_style_endpoint' => false,
+        ],
         's3Options' => $isProductionAccount ? null : [
             'roleArn' => '%olcs_aws_s3_role_arn%',
             'roleSessionName' => '%olcs_aws_s3_role_session_name%'
