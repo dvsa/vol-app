@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.2](https://github.com/dvsa/vol-app/compare/v6.1.1...v6.1.2) (2025-08-27)
+
+
+### Bug Fixes
+
+* add a default false for aweOptions-&gt;s3-&gt;use_path_style_endpoint config to stop warnings in nonprod and prod ([#1090](https://github.com/dvsa/vol-app/issues/1090)) ([b3d731a](https://github.com/dvsa/vol-app/commit/b3d731a4945adbc6c45d477c9f0f57b1ca832b6d))
+* batch permissions arguments ([#1086](https://github.com/dvsa/vol-app/issues/1086)) ([6f30ffc](https://github.com/dvsa/vol-app/commit/6f30ffc27d3c0b740dd4c2f4b25d6d3a84cfc800))
+
 ## [6.1.1](https://github.com/dvsa/vol-app/compare/v6.1.0...v6.1.1) (2025-08-26)
 
 
