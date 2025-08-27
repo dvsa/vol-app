@@ -1,5 +1,14 @@
 # Changelog
 
+## [6.1.3](https://github.com/dvsa/vol-app/compare/v6.1.2...v6.1.3) (2025-08-27)
+
+
+### Bug Fixes
+
+* account for transxchange prod was also incorrect for sts policy ([#1091](https://github.com/dvsa/vol-app/issues/1091)) ([cbc6d40](https://github.com/dvsa/vol-app/commit/cbc6d4047cd942de21bafb8f1223f85623f1a59a))
+* align prep and prod with proven dev/int general queue schedules ([#1094](https://github.com/dvsa/vol-app/issues/1094)) ([08be7e9](https://github.com/dvsa/vol-app/commit/08be7e93c3824c5e7a511b0ef07dd0e4c8006166))
+* update PROD batch schedules for 24x7, replaced prod deploy backstop to only block release candidates ([#1092](https://github.com/dvsa/vol-app/issues/1092)) ([f2798a9](https://github.com/dvsa/vol-app/commit/f2798a9ed6a59dce372205f16c261c57613699d1))
+
 ## [6.1.2](https://github.com/dvsa/vol-app/compare/v6.1.1...v6.1.2) (2025-08-27)
 
 
