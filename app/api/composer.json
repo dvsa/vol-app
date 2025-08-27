@@ -44,7 +44,6 @@
     "laminas/laminas-http": "^2.16",
     "laminas/laminas-view": "^2.23",
     "laminas/laminas-i18n": "^2.17",
-    "laminas/laminas-serializer": "^2.13",
     "laminas/laminas-eventmanager": "^3.5",
     "psr/container": "^1.1|^2",
     "laminas/laminas-cli": "^1.5",
