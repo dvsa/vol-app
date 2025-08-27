@@ -305,13 +305,13 @@ module "service" {
       },
       {
         name     = "psv-operator-list-export",
-        commands = ["batch:data-gov-uk-export",  "--report-name","psv-operator-list"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "psv-operator-list"],
         timeout  = 43200,
         schedule = "cron(00 13 ? * 1 *)",
       },
       {
         name     = "international-goods-export",
-        commands = ["batch:data-gov-uk-export", "--report-name","international-goods"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "international-goods"],
         timeout  = 43200,
         schedule = "cron(00 13 ? * 1 *)",
       },

@@ -30,7 +30,7 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::000081644369:role/txc-prep-consumer-role"
+        "arn:aws:iam::259405524870:role/txc-prep-consumer-role"
       ]
     },
     {
@@ -322,13 +322,13 @@ module "service" {
       },
       {
         name     = "psv-operator-list-export",
-        commands = ["batch:data-gov-uk-export","--report-name","psv-operator-list"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "psv-operator-list"],
         timeout  = 43200,
         schedule = "cron(00 13 ? * 1 *)",
       },
       {
         name     = "international-goods-export",
-        commands = ["batch:data-gov-uk-export","--report-name","international-goods"],
+        commands = ["batch:data-gov-uk-export", "--report-name", "international-goods"],
         timeout  = 43200,
         schedule = "cron(00 13 ? * 1 *)",
       },
