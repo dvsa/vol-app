@@ -766,11 +766,11 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-') &&
-      !contains(needs.get-version.outputs.cli, '-') &&
-      !contains(needs.get-version.outputs.selfserve, '-') &&
-      !contains(needs.get-version.outputs.internal, '-') &&
-      !contains(needs.get-version.outputs.assets, '-')
+      !contains(needs.get-version.outputs.api, 'rc') &&
+      !contains(needs.get-version.outputs.cli, 'rc') &&
+      !contains(needs.get-version.outputs.selfserve, 'rc') &&
+      !contains(needs.get-version.outputs.internal, 'rc') &&
+      !contains(needs.get-version.outputs.assets, 'rc')
     concurrency:
       group: terraform-environment-prod
     needs:
@@ -801,7 +801,7 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-')
+      !contains(needs.get-version.outputs.api, 'rc')
     needs:
       - terraform_env_prod
     uses: ./.github/workflows/run-liquibase.yaml
