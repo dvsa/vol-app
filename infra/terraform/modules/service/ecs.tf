@@ -258,6 +258,6 @@ autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
   
 }
 
-  output "api_autoscaling_min" {
+  output "api_autoscaling_mins" {
   value = module.service.services["api"].autoscaling_min_capacity
 }
