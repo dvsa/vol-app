@@ -157,25 +157,26 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
+  autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
   autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
-    "cpu" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageCPUUtilization"
+    "cpu" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
         }
       }
-    },
-    "memory" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageMemoryUtilization"
+    }
+    "memory" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
         }
       }
     }
   } : {}
-
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"
@@ -252,4 +253,7 @@ module "ecs_service" {
   wait_for_steady_state = false
   wait_until_stable     = true
   force_new_deployment  = false
+
+
 }
+
