@@ -157,6 +157,8 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  desired_count = try(var.services[each.key].desired_count, 1)
+
   autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
     "cpu" : {
       "policy_type" : "TargetTrackingScaling",

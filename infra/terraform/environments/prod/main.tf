@@ -173,8 +173,9 @@ module "service" {
 
   services = {
     "api" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
+      desired_count = 3
 
       listener_rule_enable = false
 
@@ -196,8 +197,9 @@ module "service" {
     }
 
     "internal" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
+      desired_count = 1
 
       listener_rule_enable = false
 
@@ -241,8 +243,9 @@ module "service" {
     }
 
     "selfserve" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
+      desired_count = 1
 
       listener_rule_enable = false
 
