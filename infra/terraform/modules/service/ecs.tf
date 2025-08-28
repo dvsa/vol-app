@@ -258,6 +258,3 @@ module "ecs_service" {
 
 }
 
-output "api_autoscaling_min" {
-  value = module.service.services["api"].autoscaling_min_capacity
-}
