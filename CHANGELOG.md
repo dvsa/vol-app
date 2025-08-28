@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.1.4](https://github.com/dvsa/vol-app/compare/v6.1.3...v6.1.4) (2025-08-28)
+
+
+### Bug Fixes
+
+* add try and desired_count to ecs module ([#1096](https://github.com/dvsa/vol-app/issues/1096)) ([c88f07c](https://github.com/dvsa/vol-app/commit/c88f07c086d54268229c3f0a1c33ab35e0661473))
+
 ## [6.1.3](https://github.com/dvsa/vol-app/compare/v6.1.2...v6.1.3) (2025-08-27)
 
 
