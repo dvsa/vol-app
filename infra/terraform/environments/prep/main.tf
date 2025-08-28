@@ -171,9 +171,10 @@ module "service" {
 
   services = {
     "api" = {
-      cpu           = 2048
-      memory        = 4096
-      autoscaling_min = 3
+      cpu                         = 2048
+      memory                      = 4096
+      autoscaling_min             = 3
+      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
@@ -195,9 +196,10 @@ module "service" {
     }
 
     "internal" = {
-      cpu           = 2048
-      memory        = 4096
-      autoscaling_min = 1
+      cpu                         = 2048
+      memory                      = 4096
+      autoscaling_min             = 1
+      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
@@ -241,9 +243,10 @@ module "service" {
     }
 
     "selfserve" = {
-      cpu           = 2048
-      memory        = 4096
-      autoscaling_min = 1
+      cpu                         = 2048
+      memory                      = 4096
+      autoscaling_min             = 1
+      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
