@@ -10,8 +10,8 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
-# Install icu-dev, intl, pdo_mysql, opcache
-RUN apk add --no-cache icu-dev libzip-dev \
+# Install icu-dev, intl, pdo_mysql, opcache, and cups-client for lpr command
+RUN apk add --no-cache icu-dev libzip-dev cups-client \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
