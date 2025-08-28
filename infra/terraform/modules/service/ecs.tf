@@ -157,8 +157,10 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
-  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 3)
+  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
   autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
+
+  enable_autoscaling = var.services[each.key].enable_autoscaling_policies
 
   autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
     "cpu" : {
