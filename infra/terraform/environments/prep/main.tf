@@ -174,7 +174,6 @@ module "service" {
       cpu                         = 2048
       memory                      = 4096
       autoscaling_min             = 3
-      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
@@ -199,7 +198,6 @@ module "service" {
       cpu                         = 2048
       memory                      = 4096
       autoscaling_min             = 1
-      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
@@ -246,7 +244,6 @@ module "service" {
       cpu                         = 2048
       memory                      = 4096
       autoscaling_min             = 1
-      enable_autoscaling_policies = true
 
       listener_rule_enable = true
 
