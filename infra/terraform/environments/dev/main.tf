@@ -164,7 +164,7 @@ module "service" {
     "api" = {
       cpu           = 2048
       memory        = 4096
-      desired_count = 1
+      autoscaling_min = 1
 
       version    = var.api_image_tag
       repository = data.aws_ecr_repository.this["api"].repository_url
@@ -185,7 +185,7 @@ module "service" {
     "internal" = {
       cpu           = 2048
       memory        = 4096
-      desired_count = 1
+      autoscaling_min = 1
 
       version    = var.internal_image_tag
       repository = data.aws_ecr_repository.this["internal"].repository_url
@@ -227,7 +227,7 @@ module "service" {
     "selfserve" = {
       cpu           = 2048
       memory        = 4096
-      desired_count = 1
+      autoscaling_min = 1
 
       version    = var.selfserve_image_tag
       repository = data.aws_ecr_repository.this["selfserve"].repository_url
