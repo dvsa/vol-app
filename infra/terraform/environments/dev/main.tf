@@ -162,8 +162,8 @@ module "service" {
 
   services = {
     "api" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
       desired_count = 1
 
       version    = var.api_image_tag
@@ -183,8 +183,8 @@ module "service" {
     }
 
     "internal" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
       desired_count = 1
 
       version    = var.internal_image_tag
@@ -225,8 +225,8 @@ module "service" {
     }
 
     "selfserve" = {
-      cpu    = 2048
-      memory = 4096
+      cpu           = 2048
+      memory        = 4096
       desired_count = 1
 
       version    = var.selfserve_image_tag
