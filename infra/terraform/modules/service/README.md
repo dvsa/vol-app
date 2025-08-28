@@ -70,5 +70,5 @@
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_autoscaling_min"></a> [api\_autoscaling\_min](#output\_api\_autoscaling\_min) | n/a |
+| <a name="output_api_autoscaling_mins"></a> [api\_autoscaling\_mins](#output\_api\_autoscaling\_mins) | n/a |
 <!-- END_TF_DOCS -->
