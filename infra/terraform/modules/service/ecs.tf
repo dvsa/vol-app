@@ -141,7 +141,7 @@ module "ecs_service" {
   for_each = var.services
 
   source  = "terraform-aws-modules/ecs/aws//modules/service"
-  version = "~> 6.2.2"
+  version = "~> 5.10"
 
   name        = "vol-app-${var.environment}-${each.key}-service"
   cluster_arn = module.ecs_cluster[each.key].arn
@@ -157,27 +157,27 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
-enable_autoscaling         = var.services[each.key].enable_autoscaling_policies
-autoscaling_min_capacity   = try(var.services[each.key].autoscaling_min, 1)
-autoscaling_max_capacity   = try(var.services[each.key].autoscaling_max, 10)
-autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
-  "cpu" = {
-    policy_type = "TargetTrackingScaling"
-    target_tracking_scaling_policy_configuration = {
-      predefined_metric_specification = {
-        predefined_metric_type = "ECSServiceAverageCPUUtilization"
+  enable_autoscaling       = var.services[each.key].enable_autoscaling_policies
+  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
+  autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
+  autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
+    "cpu" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
+        }
       }
     }
-  }
-  "memory" = {
-    policy_type = "TargetTrackingScaling"
-    target_tracking_scaling_policy_configuration = {
-      predefined_metric_specification = {
-        predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+    "memory" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
+        }
       }
     }
-  }
-} : {}
+  } : {}
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"
@@ -255,9 +255,9 @@ autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
   wait_until_stable     = true
   force_new_deployment  = false
 
-  
+
 }
 
-  output "api_autoscaling_min_capacity" {
+output "api_autoscaling_min_capacity" {
   value = module.service.services["api"].autoscaling_min_capacity
 }
