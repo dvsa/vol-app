@@ -178,15 +178,16 @@ locals {
   schedules = {
     for pair in flatten([
       for job in var.batch.jobs : [
-        for jobschedule in try(job.schedule, []) : {
+        for idx, jobschedule in try(job.schedule, []) : {
           job_name = job.name
           schedule = jobschedule
+          index    = idx
         }
 
         if length(try(job.schedule, [])) > 0
       ]
     ]) :
-    "${var.environment}-${pair.job_name}" => {
+    "${var.environment}-${pair.job_name}-${pair.index}" => {
       description         = "Schedule for ${module.batch.job_definitions[pair.job_name].name}"
       schedule_expression = pair.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
