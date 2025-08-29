@@ -196,6 +196,7 @@ jobs:
     if: >
       needs.orchestrator.outputs.should-build-app ||
       needs.orchestrator.outputs.should-build-api-docker ||
+      needs.orchestrator.outputs.should-build-cli-docker ||
       needs.orchestrator.outputs.should-build-selfserve-docker ||
       needs.orchestrator.outputs.should-build-internal-docker
     concurrency:
