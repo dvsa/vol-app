@@ -647,7 +647,6 @@ jobs:
 
   terraform-account-prod:
     name: Account (prod)
-    environment: account-prod
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
       group: terraform-account-prod
