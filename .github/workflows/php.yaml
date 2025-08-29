@@ -20,6 +20,9 @@ on:
         type: number
         required: false
         default: 7
+      version:
+        type: string
+        required: false
 
 jobs:
   warm-cache:
@@ -165,6 +168,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
+      - name: Write version file
+        if: ${{ inputs.version }}
+        run: echo "${{ inputs.version }}" > config/version
       - name: Archive
         run: tar -czf ${{ inputs.project }}.tar.gz *
       - name: Upload artefact

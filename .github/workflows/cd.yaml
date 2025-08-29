@@ -245,6 +245,7 @@ jobs:
       should-upload-artefact: true
       artefact-name: ${{ matrix.project}}
       retention-days: 1
+      version: ${{ needs.get-version.outputs[matrix.project] }}
     permissions:
       contents: read
 
