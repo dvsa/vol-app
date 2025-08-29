@@ -176,19 +176,27 @@ locals {
   } }
 
   schedules = {
-    for job in var.batch.jobs : "${var.environment}-${job.name}" => {
-      description         = "Schedule for ${module.batch.job_definitions[job.name].name}"
-      schedule_expression = job.schedule
+    for pair in flatten([
+      for job in var.batch.jobs : [
+        for jobschedule in try(job.schedule, []) : {
+          job_name = job.name
+          schedule = jobschedule
+        }
+      ]
+    ]) :
+    "${var.environment}-${pair.job_name}-${replace(replace(replace(pair.schedule, "(", "_"), ")", "_"), " ", "_")}" => {
+      description         = "Schedule for ${module.batch.job_definitions[pair.job_name].name}"
+      schedule_expression = pair.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
       input = jsonencode({
-        "JobName" : module.batch.job_definitions[job.name].name,
-        "JobQueue" : lookup(module.batch.job_queues, job.queue, module.batch.job_queues.default).arn,
-        "JobDefinition" : module.batch.job_definitions[job.name].arn,
+        "JobName" : module.batch.job_definitions[pair.job_name].name,
+        "JobQueue" : lookup(module.batch.job_queues, lookup(var.batch.jobs[{ for i, j in var.batch.jobs : j.name => i }[pair.job_name]], "queue", "default"), module.batch.job_queues.default).arn,
+        "JobDefinition" : module.batch.job_definitions[pair.job_name].arn,
         "ShareIdentifier" : "volapp",
         "SchedulingPriorityOverride" : 1
       })
     }
-    if job.schedule != ""
+    if length(try(job.schedule, [])) > 0
   }
 }
 
