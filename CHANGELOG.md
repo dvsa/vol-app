@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.5](https://github.com/dvsa/vol-app/compare/v6.1.4...v6.1.5) (2025-08-29)
+
+
+### Bug Fixes
+
+* add cups-client to get lpr command in batch container ([#1099](https://github.com/dvsa/vol-app/issues/1099)) ([fd78b69](https://github.com/dvsa/vol-app/commit/fd78b69f936569ba419cf0bbe5ff3f9efe22f830))
+* bake versions into container images built by the cd pipeline ([#1100](https://github.com/dvsa/vol-app/issues/1100)) ([9278030](https://github.com/dvsa/vol-app/commit/927803086496ef56ae12d2c83eaf6bd12f1105df))
+
 ## [6.1.4](https://github.com/dvsa/vol-app/compare/v6.1.3...v6.1.4) (2025-08-28)
 
 
