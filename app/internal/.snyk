@@ -7,14 +7,4 @@ ignore:
         reason: Low risk - JWT RS256 algorithm concern. Upstream fix pending, tracked in https://github.com/firebase/php-jwt/issues/605
         expires: 2025-10-28T08:12:10.000Z
         created: 2025-08-29T08:12:10.000Z
-  'snyk:lic:composer:phprtflite:phprtflite:GPL-3.0':
-    - '*':
-        reason: Due to licence. Being looked at in VOL-5968
-        expires: 2025-12-18T02:01:00.000Z
-        created: 2024-02-28T13:46:27.880Z
-  'snyk:lic:composer:behat:transliterator:Artistic-1.0':
-    - '*':
-        reason: Issue is due to licence
-        expires: 2025-12-18T02:01:00.000Z
-        created: 2024-02-28T13:46:38.578Z
 patch: {}
