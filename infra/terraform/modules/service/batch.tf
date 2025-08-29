@@ -186,7 +186,7 @@ locals {
         if length(try(job.schedule, [])) > 0
       ]
     ]) :
-    "${var.environment}-${pair.job_name}-${replace(replace(replace(pair.schedule, "(", "_"), ")", "_"), " ", "_")}" => {
+    "${var.environment}-${pair.job_name}" => {
       description         = "Schedule for ${module.batch.job_definitions[pair.job_name].name}"
       schedule_expression = pair.schedule
       arn                 = "arn:aws:scheduler:::aws-sdk:batch:submitJob"
