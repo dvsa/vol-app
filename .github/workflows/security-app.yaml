@@ -8,8 +8,11 @@ on:
 
 jobs:
   app-scan:
-    name: App
+    name: App - ${{ matrix.project }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [api, internal, selfserve, cdn]
     defaults:
       run:
         working-directory: app
@@ -17,12 +20,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Snyk
         uses: snyk/actions/setup@master
-      - name: Scan
-        run: snyk test --sarif-file-output=snyk-results.sarif --all-projects
+      - name: Scan ${{ matrix.project }}
+        run: snyk test ${{ matrix.project }} --sarif-file-output=${{ matrix.project }}-snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: app/snyk-results.sarif
+          sarif_file: app/${{ matrix.project }}-snyk-results.sarif
+          category: snyk-${{ matrix.project }}
