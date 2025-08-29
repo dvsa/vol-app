@@ -10,7 +10,7 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
   && docker-php-ext-enable igbinary apcu redis \
   && apk del pcre-dev $PHPIZE_DEPS
 
-# Install system packages: icu-dev, libzip-dev, cups-client (for lpr command)
+# Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
 # Install PHP extensions: intl, pdo_mysql, opcache, zip
 RUN apk add --no-cache icu-dev libzip-dev cups-client \
   && docker-php-ext-configure intl \
