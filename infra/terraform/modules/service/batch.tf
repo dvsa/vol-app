@@ -182,6 +182,8 @@ locals {
           job_name = job.name
           schedule = jobschedule
         }
+
+        if length(try(job.schedule, [])) > 0
       ]
     ]) :
     "${var.environment}-${pair.job_name}-${replace(replace(replace(pair.schedule, "(", "_"), ")", "_"), " ", "_")}" => {
@@ -196,7 +198,6 @@ locals {
         "SchedulingPriorityOverride" : 1
       })
     }
-    if length(try(job.schedule, [])) > 0
   }
 }
 
