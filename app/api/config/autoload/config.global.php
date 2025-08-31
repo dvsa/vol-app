@@ -377,7 +377,7 @@ return [
 
     // CUPS print server
     'print' => [
-        'server' => 'print.%domain%:631'
+        'server' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%cups_server_url$' : 'print.%domain%:631'),
     ],
 
     // If this value is populated then printing will use this service,
