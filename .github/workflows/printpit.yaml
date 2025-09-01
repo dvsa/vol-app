@@ -127,7 +127,7 @@ jobs:
         with:
           plugin_name: com.amazonaws.signer.notation.plugin
           plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
-          plugin_checksum: f8139ab6364ee214c3e097c072ff395e9056c6a83e3c5b6166a6fbbcc1bf5ed5
+          plugin_checksum: f8efa548932edc4851f4ba464496994bad753cdf21cd32baa575f7291a26c7b9
           key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
           target_artifact_reference: ${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}
 
