@@ -19,6 +19,12 @@ env:
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
   REGISTRY_MIRROR: ghcr.io
 
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
 jobs:
   build-and-push:
     name: Build and Push PrintPit
