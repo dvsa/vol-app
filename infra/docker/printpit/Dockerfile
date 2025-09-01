@@ -1,8 +1,39 @@
-FROM alpine:3.19
+FROM alpine:3.22 AS builder
+
+# Set shell for proper pipe error handling
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
+# Install build dependencies
+RUN apk add --no-cache \
+    go \
+    git \
+    nodejs \
+    npm \
+    make
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Build FileBrowser from source
+ENV FILEBROWSER_VERSION=v2.42.5
+WORKDIR /build
+RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git . && \
+    cd frontend && \
+    npm install && \
+    npm run build && \
+    cd .. && \
+    go build -ldflags "-s -w" -o filebrowser .
+
+FROM alpine:3.22
+
+# Set shell for proper pipe error handling
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Install required packages
 # cups-pdf is in edge/testing repository (available for both x86_64 and aarch64)
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+# hadolint ignore=DL3018
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories && \
+    echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
     apk add --no-cache \
     cups \
     cups-pdf \
@@ -13,16 +44,20 @@ RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/reposi
     curl \
     bash \
     tzdata \
+    pcre2 \
     && rm -rf /var/cache/apk/*
 
-# Install FileBrowser (Alpine compatible)
-RUN curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+# Copy FileBrowser binary from builder
+COPY --from=builder /build/filebrowser /usr/local/bin/filebrowser
+RUN chmod +x /usr/local/bin/filebrowser
 
 # Create necessary directories
 RUN mkdir -p /var/spool/cups-pdf \
     && chmod 777 /var/spool/cups-pdf \
     && mkdir -p /var/log/supervisor \
-    && mkdir -p /var/run/cups
+    && mkdir -p /var/run/cups \
+    && mkdir -p /var/lib/filebrowser \
+    && chmod 755 /var/lib/filebrowser
 
 # Copy configuration files
 COPY cupsd.conf /etc/cups/cupsd.conf

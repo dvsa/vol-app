@@ -27,6 +27,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Lint Dockerfile with Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: infra/docker/printpit/Dockerfile
+          failure-threshold: warning
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
@@ -68,7 +74,33 @@ jobs:
           echo "Removing existing latest tag from NONPROD ECR if it exists"
           aws ecr batch-delete-image --repository-name vol-app/printpit --image-ids imageTag=latest || true
 
-      - name: Build and push to NONPROD
+      - name: Build image locally for scanning
+        uses: docker/build-push-action@v6
+        with:
+          context: infra/docker/printpit
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: printpit:test
+          cache-from: type=gha,scope=printpit
+          cache-to: type=gha,mode=max,scope=printpit
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: printpit:test
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "MEDIUM,HIGH,CRITICAL"
+          exit-code: "1"
+
+      - name: Upload Trivy results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Push to NONPROD
         uses: docker/build-push-action@v6
         with:
           context: infra/docker/printpit
@@ -77,7 +109,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=printpit
-          cache-to: type=gha,mode=max,scope=printpit
 
       # Sign the NONPROD image
       - name: Setup Notation CLI
