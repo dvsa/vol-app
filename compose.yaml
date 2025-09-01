@@ -153,7 +153,7 @@ services:
       TZ: Europe/London
       # FileBrowser UI via nginx-proxy
       VIRTUAL_HOST: printpit.local.olcs.dev-dvsacloud.uk
-      VIRTUAL_PORT: 8080
+      VIRTUAL_PORT: 8631
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:631/"]
       interval: 30s
