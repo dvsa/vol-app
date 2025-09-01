@@ -13,6 +13,7 @@ services:
           - ssweb.local.olcs.dev-dvsacloud.uk
           - iuweb.local.olcs.dev-dvsacloud.uk
           - cdn.local.olcs.dev-dvsacloud.uk
+          - printpit.local.olcs.dev-dvsacloud.uk
 
   api:
     build:
@@ -132,6 +133,34 @@ services:
       VIRTUAL_HOST: mailpit.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8025
 
+  printpit:
+    build:
+      context: infra/docker/printpit
+    container_name: printpit
+    hostname: printpit
+    ports:
+      - "8631:8631" # FileBrowser web UI
+    expose:
+      - 631 # CUPS/IPP (internal only)
+      - 8631
+    volumes:
+      - printpit-pdfs:/var/spool/cups-pdf
+    environment:
+      CUPS_ADMIN_USER: admin
+      CUPS_ADMIN_PASSWORD: printpit
+      CLEANUP_HOURS: 6
+      TZ: Europe/London
+      # FileBrowser UI via nginx-proxy
+      VIRTUAL_HOST: printpit.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 8631
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:631/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+
 volumes:
   db-data:
   openldap-data:
+  printpit-pdfs:
