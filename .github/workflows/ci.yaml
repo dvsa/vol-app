@@ -86,6 +86,7 @@ jobs:
             infra/docker/**
           files_ignore: |
             infra/docker/liquibase/**
+            infra/docker/printpit/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files

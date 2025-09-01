@@ -657,6 +657,7 @@ jobs:
       - test_int_internal
       - test_int_selfserve
       - test_int_smoke
+      - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
