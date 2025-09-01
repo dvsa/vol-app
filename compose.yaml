@@ -145,7 +145,6 @@ services:
       - 8631
     volumes:
       - printpit-pdfs:/var/spool/cups-pdf
-      - printpit-config:/etc/cups
     environment:
       CUPS_ADMIN_USER: admin
       CUPS_ADMIN_PASSWORD: printpit
@@ -165,4 +164,3 @@ volumes:
   db-data:
   openldap-data:
   printpit-pdfs:
-  printpit-config:
