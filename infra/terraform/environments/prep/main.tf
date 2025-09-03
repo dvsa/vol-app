@@ -294,7 +294,7 @@ module "service" {
       cpu    = 1024
       memory = 2048
 
-      enable_autoscaling_policies = false
+      enable_autoscaling_policies = true
 
       version    = "8"
       repository = "docker.io/gotenberg/gotenberg"
