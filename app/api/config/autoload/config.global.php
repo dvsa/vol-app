@@ -383,7 +383,12 @@ return [
     // If this value is populated then printing will use this service,
     // if it is not populated or missing then the Libreoffice converter will be used
     'convert_to_pdf' => [
-        'uri' => 'http://renderer.%domain%:8080/convert-document',
+        'type' => \Aws\Credentials\CredentialProvider::shouldUseEcs()
+            ? '%pdf_service_type%'
+            : 'webservice',
+        'uri' => \Aws\Credentials\CredentialProvider::shouldUseEcs()
+            ? '%pdf_service_uri%'
+            : 'http://renderer.%domain%:8080/convert-document',
     ],
 
     /**
