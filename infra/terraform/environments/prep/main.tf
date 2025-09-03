@@ -299,7 +299,7 @@ module "service" {
       version    = "8"
       repository = "docker.io/gotenberg/gotenberg"
 
-      listener_rule_enable = true
+      listener_rule_enable = false
 
       task_iam_role_statements = []
 
