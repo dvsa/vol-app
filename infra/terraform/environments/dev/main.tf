@@ -1,7 +1,7 @@
 locals {
   service_names = ["api", "selfserve", "internal", "cli"]
 
-  legacy_service_names = ["API", "IUWEB", "SSWEB"]
+  legacy_service_names = ["API", "IUWEB", "SSWEB", "RENDERER"]
 
   supporting_service_names = ["liquibase"]
 
@@ -123,16 +123,22 @@ data "aws_cognito_user_pools" "this" {
 }
 
 data "aws_lb" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = setsubtract(local.legacy_service_names, ["RENDERER"])
 
   name = "DEVAPPDEV-OLCS-PRI-${(each.key == "API" ? "SVCS" : each.key)}-ALB"
 }
 
 data "aws_lb_listener" "this" {
-  for_each = toset(local.legacy_service_names)
+  for_each = setsubtract(local.legacy_service_names, ["RENDERER"])
 
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
+}
+
+data "aws_lb_listener" "renderer" {
+
+  load_balancer_arn = data.aws_lb.this["API"].arn
+  port              = 443
 }
 
 data "aws_vpc" "this" {
@@ -264,6 +270,30 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.this["SSWEB"].arn
       lb_arn                    = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header = ["ssweb.*"]
+    }
+    "pdf-converter" = {
+      cpu    = 1024
+      memory = 2048
+
+      enable_autoscaling_policies = true
+
+      version    = "8"
+      repository = "docker.io/gotenberg/gotenberg"
+
+      listener_rule_enable = true
+
+      task_iam_role_statements = []
+
+      subnet_ids = data.aws_subnets.this["RENDERER"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["RENDERER"].id
+      ]
+
+      lb_listener_arn           = data.aws_lb_listener.renderer.arn
+      lb_arn                    = data.aws_lb.this["API"].arn
+      listener_rule_host_header = ["renderer.*"]
+      listener_rule_priority    = 5
     }
   }
 

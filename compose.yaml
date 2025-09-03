@@ -133,6 +133,14 @@ services:
       VIRTUAL_HOST: mailpit.local.olcs.dev-dvsacloud.uk
       VIRTUAL_PORT: 8025
 
+  pdf-converter:
+    image: gotenberg/gotenberg:8
+    ports:
+      - "8080:3000"
+    environment:
+      VIRTUAL_HOST: renderer.local.olcs.dev-dvsacloud.uk
+      VIRTUAL_PORT: 3000
+
   printpit:
     build:
       context: infra/docker/printpit

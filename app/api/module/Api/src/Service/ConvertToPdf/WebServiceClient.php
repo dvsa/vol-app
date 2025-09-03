@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RestResponseException;
  * Class InrClient
  * @package Dvsa\Olcs\Api\Service\Nr
  */
-class WebServiceClient
+class WebServiceClient implements ConvertToPdfInterface
 {
     /**
      * @var HttpClient
