@@ -1,12 +1,15 @@
 # Getting api subnets for renderer listener rule conditional
-data "aws_subnet" "api_subnets" {
-  for_each = toset(var.services["api"].subnet_ids)
-  id       = each.value
+data "aws_subnet" "renderer_conditional_subnets" {
+  for_each = toset(concat(
+    var.services["api"].subnet_ids,
+    var.batch.subnet_ids
+  ))
+  id = each.value
 }
 
 locals {
-  api_subnet_cidrs = [
-    for s in data.aws_subnet.api_subnets : s.cidr_block
+  renderer_conditional_subnets_cidrs = [
+    for s in data.aws_subnet.renderer_conditional_subnets : s.cidr_block
   ]
 }
 
@@ -76,7 +79,7 @@ resource "aws_lb_listener_rule" "this" {
     for_each = each.key == "pdf-converter" ? [1] : []
     content {
       source_ip {
-        values = local.api_subnet_cidrs
+        values = local.renderer_conditional_subnets_cidrs
       }
     }
   }
