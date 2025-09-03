@@ -108,6 +108,8 @@ resource "aws_lb_listener_rule" "renderer-batch" {
     host_header {
       values = var.services["pdf-converter"].listener_rule_host_header
     }
+  }
+  condition {
     source_ip {
       values = local.batch_subnets_cidrs
     }
