@@ -94,6 +94,7 @@ resource "aws_lb_listener_rule" "this" {
   }
 }
 resource "aws_lb_listener_rule" "renderer-batch" {
+  count = var.services["pdf-converter"].listener_rule_enable ? 1 : 0
 
   listener_arn = var.services["pdf-converter"].lb_listener_arn
   priority     = 87
