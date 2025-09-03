@@ -28,11 +28,12 @@ class ConvertToPdfFactory implements FactoryInterface
             throw new \RuntimeException('Missing print service config[convert_to_pdf][uri]');
         }
 
-        $type = $config['convert_to_pdf']['type'] ?? 'webservice';
         $uri = $config['convert_to_pdf']['uri'];
         $httpOptions = $config['convert_to_pdf']['options'] ?? [];
 
-        if ($type === 'gotenberg') {
+        // Use protocol to determine which client to use
+        // HTTPS = Gotenberg (modern), HTTP = WebService (legacy)
+        if (str_starts_with($uri, 'https://')) {
             $httpClient = new HttpClient($uri, $httpOptions);
             $wrapper = new ClientAdapterLoggingWrapper();
             $wrapper->wrapAdapter($httpClient);
