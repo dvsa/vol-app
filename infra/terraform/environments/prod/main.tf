@@ -1,6 +1,6 @@
 locals {
   #testing tf plan
-  service_names = ["api", "selfserve", "internal", "cli", "pdf-converter"]
+  service_names = ["api", "selfserve", "internal", "cli"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB", "RENDERER"]
 
