@@ -1,5 +1,5 @@
 locals {
-  service_names = ["api", "selfserve", "internal", "cli"]
+  service_names = ["api", "selfserve", "internal", "cli", "pdf-converter"]
 
   legacy_service_names = ["API", "IUWEB", "SSWEB", "RENDERER"]
 
