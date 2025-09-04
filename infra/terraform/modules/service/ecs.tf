@@ -122,9 +122,8 @@ resource "aws_lb_listener_rule" "renderer-batch" {
 
 resource "aws_lb_listener_rule" "proving" {
   for_each = {
-    for k, v in var.services :
-    k => v
-    if k == "pdf-converter" && v.listener_rule_enable
+    for service, config in var.services : service => config
+    if contains(["prep", "prod"], var.environment)
   }
 
   listener_arn = each.value.lb_listener_arn
