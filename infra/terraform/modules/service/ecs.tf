@@ -94,19 +94,23 @@ resource "aws_lb_listener_rule" "this" {
   }
 }
 resource "aws_lb_listener_rule" "renderer-batch" {
-  count = var.services["pdf-converter"].listener_rule_enable ? 1 : 0
+  for_each = {
+    for k, v in var.services :
+    k => v
+    if k == "pdf-converter" && v.listener_rule_enable
+  }
 
-  listener_arn = var.services["pdf-converter"].lb_listener_arn
+  listener_arn = each.value.lb_listener_arn
   priority     = 87
 
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this["pdf-converter"].arn
+    target_group_arn = aws_lb_target_group.this[each.key].arn
   }
 
   condition {
     host_header {
-      values = var.services["pdf-converter"].listener_rule_host_header
+      values = each.value.listener_rule_host_header
     }
   }
   condition {
@@ -154,12 +158,13 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
   }
 }
 resource "aws_lb_listener_rule" "internal-pub" {
-  count = (
-    contains(["prep", "prod"], var.environment) &&
-    var.services["internal"].listener_rule_enable
-  ) ? 1 : 0
+  for_each = (
+    contains(["prep", "prod"], var.environment) && try(var.services["internal"].listener_rule_enable, false)
+    ) ? {
+    "internal" = var.services["internal"]
+  } : {}
 
-  listener_arn = var.services["internal"].iuweb_pub_listener_arn
+  listener_arn = each.value.iuweb_pub_listener_arn
   priority     = 16
 
   action {
