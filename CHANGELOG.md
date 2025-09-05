@@ -1,5 +1,27 @@
 # Changelog
 
+## [6.2.0](https://github.com/dvsa/vol-app/compare/v6.1.4...v6.2.0) (2025-09-05)
+
+
+### Features
+
+* non-windows, containerised pdf renderer solution proposal ([#970](https://github.com/dvsa/vol-app/issues/970)) ([cedac7a](https://github.com/dvsa/vol-app/commit/cedac7a93ddd25bc5fb5696819205e5083bc58b6))
+* printpit docker container for print testing ([#1105](https://github.com/dvsa/vol-app/issues/1105)) ([0b90009](https://github.com/dvsa/vol-app/commit/0b90009bb859e4c3d8d8fcd9c1692b8fd0d9d1fe))
+
+
+### Bug Fixes
+
+* add cups-client to get lpr command in batch container ([#1099](https://github.com/dvsa/vol-app/issues/1099)) ([fd78b69](https://github.com/dvsa/vol-app/commit/fd78b69f936569ba419cf0bbe5ff3f9efe22f830))
+* add listener toggle to prod and fix schedule issue ([#1104](https://github.com/dvsa/vol-app/issues/1104)) ([72350ae](https://github.com/dvsa/vol-app/commit/72350aee7f4520f081ec5d6e7163a70134f54c19))
+* added env port rules ([#1112](https://github.com/dvsa/vol-app/issues/1112)) ([39549f4](https://github.com/dvsa/vol-app/commit/39549f48dd11fa890c97a3247725bbee367b5383))
+* added port options ([#1110](https://github.com/dvsa/vol-app/issues/1110)) ([2055327](https://github.com/dvsa/vol-app/commit/2055327a4f31525135dffd5ec1dbb7c26b5a98d1))
+* bake versions into container images built by the cd pipeline ([#1100](https://github.com/dvsa/vol-app/issues/1100)) ([9278030](https://github.com/dvsa/vol-app/commit/927803086496ef56ae12d2c83eaf6bd12f1105df))
+* conditional syntax ([#1108](https://github.com/dvsa/vol-app/issues/1108)) ([cc580bd](https://github.com/dvsa/vol-app/commit/cc580bdd237a083fb8c862f7ba0557ecabe360ba))
+* continuation checklists no longer print automatically VOL-6539 ([#1107](https://github.com/dvsa/vol-app/issues/1107)) ([79471ea](https://github.com/dvsa/vol-app/commit/79471ea7487a40f932941e35bbd8766559278ec7))
+* remove container port options ([#1111](https://github.com/dvsa/vol-app/issues/1111)) ([c27eb94](https://github.com/dvsa/vol-app/commit/c27eb942ef0ed34dfc2a816e1163610b35e0b263))
+* renderer container repo ([#1109](https://github.com/dvsa/vol-app/issues/1109)) ([9c7e0c8](https://github.com/dvsa/vol-app/commit/9c7e0c865a1010afc776789108f70e2457b9106c))
+* tag prod tf apply with correct environment to add approval gate … ([#1103](https://github.com/dvsa/vol-app/issues/1103)) ([8c12aec](https://github.com/dvsa/vol-app/commit/8c12aec61c0a08e339cff248afec4368eee6a3a2))
+
 ## [6.1.4](https://github.com/dvsa/vol-app/compare/v6.1.3...v6.1.4) (2025-08-28)
 
 
