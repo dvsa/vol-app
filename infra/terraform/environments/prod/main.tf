@@ -303,6 +303,13 @@ module "service" {
       version    = "8"
       repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
 
+      environment = [
+        {
+          name  = "API_PORT"
+          value = "8080"
+        }
+      ]
+
       listener_rule_enable = false
 
       task_iam_role_statements = []
@@ -317,7 +324,6 @@ module "service" {
       lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = ["renderer.*"]
       listener_rule_priority    = 5
-      container_port            = 3000
     }
   }
   batch = {

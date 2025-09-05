@@ -58,8 +58,6 @@ variable "services" {
     security_group_ids                = list(string)
     subnet_ids                        = list(string)
     vpc_id                            = optional(string, null)
-    host_port                         = optional(number, 8080)
-    container_port                    = optional(number, 8080)
   }))
   description = "The services to deploy"
   default     = {}
