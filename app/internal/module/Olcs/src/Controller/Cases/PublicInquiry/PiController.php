@@ -25,6 +25,7 @@ use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislati
 use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterTmDecision as TmDecisionForm;
 use Olcs\Form\Model\Form\PublicInquirySla as SlaForm;
+use Olcs\Form\Model\Form\PublicInquirySlaException;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
@@ -59,6 +60,9 @@ class PiController extends AbstractInternalController implements CaseControllerI
      */
     protected $slaForm = SlaForm::class;
     protected $updateSlaCommand = UpdateSlaCmd::class;
+
+    protected $slaExceptionForm = PublicInquirySlaException::class;
+    protected $addSlaExceptionCommand = UpdateSlaCmd::class;
 
     /**
      * Close
@@ -307,6 +311,24 @@ class PiController extends AbstractInternalController implements CaseControllerI
 
         $element->setOption('hint', $hint);
         return $form;
+    }
+
+    /**
+     * Deal with Pi Sla Exception
+     *
+     * @return array|\Laminas\View\Model\ViewModel
+     */
+    public function slaExceptionAction()
+    {
+        return $this->add(
+            $this->slaExceptionForm,
+            new GenericItem($this->itemParams),
+            $this->updateSlaCommand,
+            $this->mapperClass,
+            $this->editViewTemplate,
+            'Added SLA Exception',
+            'Add SLA Exception'
+        );
     }
 
     /**
