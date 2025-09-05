@@ -85,6 +85,15 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     protected $isMessaging = 0;
 
     /**
+     * Is Case SLA Exception
+     *
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", name="is_case_sla_exception", nullable=false, options={"default": 0})
+     */
+    protected $isCaseSlaException = 0;
+
+    /**
      * Is scan category
      *
      * @var boolean
