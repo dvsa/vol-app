@@ -298,7 +298,6 @@ module "service" {
       lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = ["renderer.*"]
       listener_rule_priority    = 5
-      container_port            = 3000
     }
   }
   batch = {
