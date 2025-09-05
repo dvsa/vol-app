@@ -280,6 +280,12 @@ module "ecs_service" {
             name  = "CDN_URL"
             value = module.cloudfront.cloudfront_distribution_domain_name
           }
+        ] : [],
+        each.value.set_custom_port ? [
+          {
+            name  = "API_PORT"
+            value = "8080"
+          }
         ] : []
       )
 

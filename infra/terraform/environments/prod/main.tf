@@ -303,12 +303,7 @@ module "service" {
       version    = "8"
       repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
 
-      environment = [
-        {
-          name  = "API_PORT"
-          value = "8080"
-        }
-      ]
+      set_custom_port = true
 
       listener_rule_enable = false
 
