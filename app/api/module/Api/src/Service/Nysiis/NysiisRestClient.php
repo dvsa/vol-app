@@ -6,6 +6,7 @@ use Laminas\Http\Client as RestClient;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Dvsa\Olcs\Api\Domain\Exception\NysiisException;
+use Laminas\Json\Json as LaminasJson;
 use Olcs\Logging\Log\Logger;
 
 /**
@@ -47,14 +48,14 @@ class NysiisRestClient
 
         $this->restClient->setEncType('application/json; charset=UTF-8');
         $this->restClient->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->restClient->getRequest()->setContent(json_encode($inputData));
+        $this->restClient->getRequest()->setContent(LaminasJson::encode($inputData));
 
         try {
             $response = $this->restClient->send();
             Logger::info('Nysiis response', ['data' => $response]);
 
             if ($response instanceof HttpResponse && $response->isSuccess()) {
-                return json_decode($this->cleanJson($response->getContent()), true, 512, JSON_THROW_ON_ERROR);
+                return LaminasJson::decode($this->cleanJson($response->getContent()), LaminasJson::TYPE_ARRAY);
             }
         } catch (\Exception $e) {
             Logger::info('Nysiis exception object', ['data' => $e->__toString()]);

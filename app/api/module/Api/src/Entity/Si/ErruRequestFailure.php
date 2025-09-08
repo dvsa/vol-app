@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
+use Laminas\Serializer\Adapter\Json;
 
 /**
  * ErruRequestFailure Entity
@@ -30,12 +31,13 @@ class ErruRequestFailure extends AbstractErruRequestFailure
      */
     public function __construct(Document $document, array $errors, $input)
     {
+        $json = new Json();
 
         $this->document = $document;
-        $this->errors = json_encode($errors);
+        $this->errors = $json->serialize($errors);
 
         if (is_array($input)) {
-            $this->input = json_encode($input);
+            $this->input = $json->serialize($input);
         }
     }
 }

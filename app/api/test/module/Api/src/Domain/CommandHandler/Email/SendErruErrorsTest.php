@@ -2,18 +2,20 @@
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
-use Dvsa\Olcs\Api\Domain\Command\Email\SendErruErrors as SendErruErrorsCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
-use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendErruErrors;
-use Dvsa\Olcs\Api\Domain\Repository\ErruRequestFailure as ErruRequestFailureRepo;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure;
-use Dvsa\Olcs\Email\Data\Message;
 use Dvsa\Olcs\Email\Domain\Command\SendEmail;
-use Dvsa\Olcs\Email\Service\TemplateRenderer;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Domain\Repository\ErruRequestFailure as ErruRequestFailureRepo;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
+use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Mockery as m;
+use Doctrine\ORM\Query;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendErruErrors;
+use Dvsa\Olcs\Api\Domain\Command\Email\SendErruErrors as SendErruErrorsCmd;
+use Laminas\Json\Json;
+use Dvsa\Olcs\Email\Data\Message;
 
 /**
  * SendErruErrorsTest
@@ -65,10 +67,10 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
             'originatingAuthority' => $originatingAuthority,
             'sentAt' => $sentAt,
         ];
-        $inputJson = json_encode($inputData);
+        $inputJson = Json::encode($inputData);
 
         $errors = ['error 1', 'error 2'];
-        $errorJson = json_encode($errors);
+        $errorJson = Json::encode($errors);
 
         $command = SendErruErrorsCmd::create(['id' => $requestFailureId]);
 
@@ -129,7 +131,7 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
         $documentId = 5678;
 
         $errors = ['error 1', 'error 2'];
-        $errorJson = json_encode($errors);
+        $errorJson = Json::encode($errors);
 
         $command = SendErruErrorsCmd::create(['id' => $requestFailureId]);
 
