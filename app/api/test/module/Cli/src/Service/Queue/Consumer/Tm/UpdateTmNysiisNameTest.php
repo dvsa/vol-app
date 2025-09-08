@@ -5,6 +5,7 @@ namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Tm;
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Tm\UpdateTmNysiisName as Sut;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
+use Laminas\Serializer\Adapter\Json as LaminasJson;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Retry as RetryCmd;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Domain\Command\Tm\UpdateNysiisName as UpdateNysiisCmd;
@@ -50,7 +51,8 @@ class UpdateTmNysiisNameTest extends AbstractConsumerTestCase
             'userId' => $userId
         ];
 
-        $options = json_encode($optionsArray);
+        $json = new LaminasJson();
+        $options = $json->serialize($optionsArray);
 
         $item = new QueueEntity();
         $item->setId($itemId);

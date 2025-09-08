@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Report\Upload as UploadCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
+use Laminas\Json\Json as LaminasJson;
 use LmcRbacMvc\Service\AuthorizationService;
 
 /**
@@ -114,10 +115,12 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_COMM_LIC_BULK_REPRINT,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => json_encode([
-                    'identifier' => self::IDENTIFIER,
-                    'user' => self::USER_ID,
-                ]),
+                'options' => LaminasJson::encode(
+                    [
+                        'identifier' => self::IDENTIFIER,
+                        'user' => self::USER_ID,
+                    ]
+                ),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -189,11 +192,13 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_EMAIL_BULK_UPLOAD,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => json_encode([
-                    'identifier' => self::IDENTIFIER,
-                    'user' => self::USER_ID,
-                    'templateName' => $data['name']
-                ]),
+                'options' => LaminasJson::encode(
+                    [
+                        'identifier' => self::IDENTIFIER,
+                        'user' => self::USER_ID,
+                        'templateName' => $data['name']
+                    ]
+                ),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -265,11 +270,13 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_LETTER_BULK_UPLOAD,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => json_encode([
-                    'identifier' => self::IDENTIFIER,
-                    'user' => self::USER_ID,
-                    'templateSlug' => $data['templateSlug']
-                ]),
+                'options' => LaminasJson::encode(
+                    [
+                        'identifier' => self::IDENTIFIER,
+                        'user' => self::USER_ID,
+                        'templateSlug' => $data['templateSlug']
+                    ]
+                ),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')
@@ -331,9 +338,11 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 'entityId' => null,
                 'type' => Queue::TYPE_POST_SCORING_EMAIL,
                 'status' => Queue::STATUS_QUEUED,
-                'options' => json_encode([
-                    'identifier' => self::IDENTIFIER,
-                ]),
+                'options' => LaminasJson::encode(
+                    [
+                        'identifier' => self::IDENTIFIER,
+                    ]
+                ),
                 'processAfterDate' => null,
             ],
             (new Result())->addMessage('Queue item created')

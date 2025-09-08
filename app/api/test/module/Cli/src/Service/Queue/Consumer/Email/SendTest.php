@@ -11,6 +11,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
+use Laminas\Serializer\Adapter\Json as LaminasJson;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
 /**
@@ -26,7 +27,8 @@ class SendTest extends AbstractConsumerTestCase
 
     public function testProcessMessageSuccess()
     {
-        $options = json_encode(
+        $json = new LaminasJson();
+        $options = $json->serialize(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -67,7 +69,8 @@ class SendTest extends AbstractConsumerTestCase
 
     public function testProcessMessageHandlesEmailNotSentException()
     {
-        $options = json_encode(
+        $json = new LaminasJson();
+        $options = $json->serialize(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -108,7 +111,8 @@ class SendTest extends AbstractConsumerTestCase
 
     public function testProcessMessageHandlesLaminasServiceException()
     {
-        $options = json_encode(
+        $json = new LaminasJson();
+        $options = $json->serialize(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -148,7 +152,8 @@ class SendTest extends AbstractConsumerTestCase
 
     public function testProcessMessageHandlesException()
     {
-        $options = json_encode(
+        $json = new LaminasJson();
+        $options = $json->serialize(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [
@@ -188,7 +193,8 @@ class SendTest extends AbstractConsumerTestCase
 
     public function testProcessMessageHandlesMaxAttempts()
     {
-        $options = json_encode(
+        $json = new LaminasJson();
+        $options = $json->serialize(
             [
                 'commandClass' => SampleEmail::class,
                 'commandData' => [

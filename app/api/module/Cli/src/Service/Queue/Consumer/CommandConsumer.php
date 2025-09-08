@@ -7,6 +7,7 @@
 namespace Dvsa\Olcs\Cli\Service\Queue\Consumer;
 
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
+use Laminas\Serializer\Adapter\Json as LaminasJson;
 
 /**
  * Command Consumer
@@ -19,7 +20,8 @@ class CommandConsumer extends AbstractCommandConsumer
      */
     protected function getCommandName(QueueEntity $item)
     {
-        return json_decode($item->getOptions(), true)['commandClass'];
+        $json = new LaminasJson();
+        return $json->unserialize($item->getOptions())['commandClass'];
     }
 
     /**
@@ -28,6 +30,7 @@ class CommandConsumer extends AbstractCommandConsumer
      */
     public function getCommandData(QueueEntity $item)
     {
-        return json_decode($item->getOptions(), true)['commandData'];
+        $json = new LaminasJson();
+        return $json->unserialize($item->getOptions())['commandData'];
     }
 }

@@ -8,6 +8,8 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
+use Laminas\Json\Json as LaminasJson;
+use Laminas\Json\Exception\RuntimeException as JsonException;
 
 /**
  * EbsrSubmission Entity
@@ -127,7 +129,7 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
     public function finishValidating(RefData $ebsrSubmissionStatus, array $ebsrSubmissionResult): void
     {
         $this->ebsrSubmissionStatus = $ebsrSubmissionStatus;
-        $this->ebsrSubmissionResult = json_encode($ebsrSubmissionResult);
+        $this->ebsrSubmissionResult = LaminasJson::encode($ebsrSubmissionResult);
         $this->validationEnd = new \DateTime();
 
         //if the submission hasn't failed (so far - this isn't yet a success) then also populate processStart timestamp
@@ -213,8 +215,8 @@ class EbsrSubmission extends AbstractEbsrSubmission implements OrganisationProvi
     public function getDecodedSubmissionResult()
     {
         try {
-            $errorInfo = json_decode($this->ebsrSubmissionResult, true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException) {
+            $errorInfo = LaminasJson::decode($this->ebsrSubmissionResult, LaminasJson::TYPE_ARRAY);
+        } catch (JsonException) {
             $errorInfo = [];
         }
 
