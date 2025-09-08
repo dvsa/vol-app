@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.3.0](https://github.com/dvsa/vol-app/compare/v6.2.0...v6.3.0) (2025-09-08)
+
+
+### Features
+
+* vol-6098 remove usage of laminas-json replace with native php ([#1069](https://github.com/dvsa/vol-app/issues/1069)) ([bdaef45](https://github.com/dvsa/vol-app/commit/bdaef45c2bd71f2f59910fe341da0d68e438f480))
+
+
+### Bug Fixes
+
+* remove proving renderer ([#1115](https://github.com/dvsa/vol-app/issues/1115)) ([929d73f](https://github.com/dvsa/vol-app/commit/929d73fb569fc0df566d1db8683e321e2fbb6570))
+
 ## [6.2.0](https://github.com/dvsa/vol-app/compare/v6.1.4...v6.2.0) (2025-09-05)
 
 
