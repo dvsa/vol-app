@@ -1,0 +1,187 @@
+name: Build and Deploy PrintPit
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag for the image (e.g., 1.0.0)"
+        required: false
+        default: "latest"
+      push_to_prod:
+        description: "Also push to PROD ECR"
+        type: boolean
+        required: false
+        default: false
+
+env:
+  NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
+  AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+  REGISTRY_MIRROR: ghcr.io
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  security-events: write
+
+jobs:
+  build-and-push:
+    name: Build and Push PrintPit
+    runs-on: ubuntu-latest # x86_64 runner
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint Dockerfile with Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: infra/docker/printpit/Dockerfile
+          failure-threshold: warning
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          platforms: linux/amd64 # x86_64 architecture
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.NONPROD_REGISTRY }}/vol-app/printpit
+            ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/printpit
+          tags: |
+            type=raw,value=${{ inputs.version }}
+            type=raw,value=latest
+            type=sha,prefix=
+
+      # Build and push to NONPROD
+      - name: Configure AWS credentials (NONPROD)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to NONPROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.NONPROD_REGISTRY }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY_MIRROR }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove existing latest tag from NONPROD ECR
+        run: |
+          echo "Removing existing latest tag from NONPROD ECR if it exists"
+          aws ecr batch-delete-image --repository-name vol-app/printpit --image-ids imageTag=latest || true
+
+      - name: Build image locally for scanning
+        uses: docker/build-push-action@v6
+        with:
+          context: infra/docker/printpit
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: printpit:test
+          cache-from: type=gha,scope=printpit
+          cache-to: type=gha,mode=max,scope=printpit
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@0.29.0
+        with:
+          image-ref: printpit:test
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "MEDIUM,HIGH,CRITICAL"
+          exit-code: "1"
+
+      - name: Upload Trivy results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Push to NONPROD
+        uses: docker/build-push-action@v6
+        with:
+          context: infra/docker/printpit
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=printpit
+
+      # Sign the NONPROD image
+      - name: Setup Notation CLI
+        uses: notaryproject/notation-action/setup@v1
+        with:
+          version: "1.1.0"
+
+      - name: Sign NONPROD image
+        uses: notaryproject/notation-action/sign@v1
+        with:
+          plugin_name: com.amazonaws.signer.notation.plugin
+          plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
+          plugin_checksum: f8efa548932edc4851f4ba464496994bad753cdf21cd32baa575f7291a26c7b9
+          key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
+          target_artifact_reference: ${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}
+
+      # Optionally push to PROD
+      - name: Configure AWS credentials (PROD)
+        if: ${{ inputs.push_to_prod }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to PROD ECR
+        if: ${{ inputs.push_to_prod }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.PROD_REGISTRY }}
+
+      - name: Remove existing latest tag from PROD ECR
+        if: ${{ inputs.push_to_prod }}
+        run: |
+          echo "Removing existing latest tag from PROD ECR if it exists"
+          aws ecr batch-delete-image --repository-name vol-app/printpit --image-ids imageTag=latest || true
+
+      - name: Tag and push to PROD
+        if: ${{ inputs.push_to_prod }}
+        run: |
+          # Pull the image we just built
+          docker pull ${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}
+
+          # Tag for PROD registry
+          docker tag ${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }} ${{ env.PROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}
+          docker tag ${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }} ${{ env.PROD_REGISTRY }}/vol-app/printpit:latest
+
+          # Push to PROD
+          docker push ${{ env.PROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}
+          docker push ${{ env.PROD_REGISTRY }}/vol-app/printpit:latest
+
+      - name: Summary
+        run: |
+          echo "### PrintPit Build Complete 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** \`${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Architecture:** \`linux/amd64\`" >> $GITHUB_STEP_SUMMARY
+          echo "**NONPROD ECR:** ✅ Pushed and signed" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ inputs.push_to_prod }}" == "true" ]]; then
+            echo "**PROD ECR:** ✅ Pushed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**PROD ECR:** ⏭️ Skipped" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Images:**" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.NONPROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ env.NONPROD_REGISTRY }}/vol-app/printpit:latest\`" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ inputs.push_to_prod }}" == "true" ]]; then
+            echo "- \`${{ env.PROD_REGISTRY }}/vol-app/printpit:${{ inputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- \`${{ env.PROD_REGISTRY }}/vol-app/printpit:latest\`" >> $GITHUB_STEP_SUMMARY
+          fi

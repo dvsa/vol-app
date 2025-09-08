@@ -245,6 +245,7 @@ jobs:
       should-upload-artefact: true
       artefact-name: ${{ matrix.project}}
       retention-days: 1
+      version: ${{ needs.get-version.outputs[matrix.project] }}
     permissions:
       contents: read
 
@@ -656,6 +657,7 @@ jobs:
       - test_int_internal
       - test_int_selfserve
       - test_int_smoke
+      - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -766,11 +768,11 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-') &&
-      !contains(needs.get-version.outputs.cli, '-') &&
-      !contains(needs.get-version.outputs.selfserve, '-') &&
-      !contains(needs.get-version.outputs.internal, '-') &&
-      !contains(needs.get-version.outputs.assets, '-')
+      !contains(needs.get-version.outputs.api, 'rc') &&
+      !contains(needs.get-version.outputs.cli, 'rc') &&
+      !contains(needs.get-version.outputs.selfserve, 'rc') &&
+      !contains(needs.get-version.outputs.internal, 'rc') &&
+      !contains(needs.get-version.outputs.assets, 'rc')
     concurrency:
       group: terraform-environment-prod
     needs:
@@ -801,7 +803,7 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, '-')
+      !contains(needs.get-version.outputs.api, 'rc')
     needs:
       - terraform_env_prod
     uses: ./.github/workflows/run-liquibase.yaml

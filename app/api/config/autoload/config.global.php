@@ -269,6 +269,9 @@ return [
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
         'version' => '%olcs_aws_version%',
+        's3' => [
+            'use_path_style_endpoint' => false,
+        ],
         's3Options' => $isProductionAccount ? null : [
             'roleArn' => '%olcs_aws_s3_role_arn%',
             'roleSessionName' => '%olcs_aws_s3_role_session_name%'
@@ -374,13 +377,15 @@ return [
 
     // CUPS print server
     'print' => [
-        'server' => 'print.%domain%:631'
+        'server' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? '%cups_server_url%' : 'print.%domain%:631'),
     ],
 
     // If this value is populated then printing will use this service,
     // if it is not populated or missing then the Libreoffice converter will be used
     'convert_to_pdf' => [
-        'uri' => 'http://renderer.%domain%:8080/convert-document',
+        'uri' => \Aws\Credentials\CredentialProvider::shouldUseEcs()
+            ? '%pdf_service_uri%'
+            : 'http://renderer.%domain%:8080/convert-document',
     ],
 
     /**

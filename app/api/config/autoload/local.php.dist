@@ -162,12 +162,12 @@ return [
     'txc_consumer_role_arn' => 'arn:aws:iam::000000000000:role/txc-local-consumer-role',
   ],
   'print' => [
-    'server' => 'print.localdev:631'
+    'server' => 'printpit:631'
   ],
   // If this value is populated then printing will use this service,
   // if it is not populated or missing then the Libreoffice converter will be used
   'convert_to_pdf' => [
-    'uri' => 'http://renderer.qa.olcs.dev-dvsacloud.uk:8080/convert-document',
+    'uri' => 'http://pdf-converter:3000',
   ],
   'log' => [
     'Logger' => [

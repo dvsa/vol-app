@@ -1,3 +1,28 @@
+# Getting api subnets for renderer listener rule conditional
+data "aws_subnet" "api_subnets" {
+  for_each = toset(concat(
+    var.services["api"].subnet_ids,
+  ))
+  id = each.value
+}
+
+data "aws_subnet" "batch_subnets" {
+  for_each = toset(concat(
+    var.batch.subnet_ids
+  ))
+  id = each.value
+}
+
+locals {
+  api_subnets_cidrs = [
+    for s in data.aws_subnet.api_subnets : s.cidr_block
+  ]
+  batch_subnets_cidrs = [
+    for s in data.aws_subnet.batch_subnets : s.cidr_block
+  ]
+}
+
+
 resource "aws_lb_target_group" "this" {
   for_each = var.services
 
@@ -59,6 +84,40 @@ resource "aws_lb_listener_rule" "this" {
       values = each.value.listener_rule_host_header
     }
   }
+  dynamic "condition" {
+    for_each = each.key == "pdf-converter" ? [1] : []
+    content {
+      source_ip {
+        values = local.api_subnets_cidrs
+      }
+    }
+  }
+}
+resource "aws_lb_listener_rule" "renderer-batch" {
+  for_each = {
+    for k, v in var.services :
+    k => v
+    if k == "pdf-converter" && v.listener_rule_enable
+  }
+
+  listener_arn = each.value.lb_listener_arn
+  priority     = 87
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.this[each.key].arn
+  }
+
+  condition {
+    host_header {
+      values = each.value.listener_rule_host_header
+    }
+  }
+  condition {
+    source_ip {
+      values = local.batch_subnets_cidrs
+    }
+  }
 }
 
 resource "aws_lb_listener_rule" "proving" {
@@ -68,7 +127,7 @@ resource "aws_lb_listener_rule" "proving" {
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = 27
+  priority     = 90
 
   action {
     type             = "forward"
@@ -99,12 +158,13 @@ resource "aws_lb_listener_rule" "internal-pub-proving" {
   }
 }
 resource "aws_lb_listener_rule" "internal-pub" {
-  count = (
-    contains(["prep", "prod"], var.environment) &&
-    var.services["internal"].listener_rule_enable
-  ) ? 1 : 0
+  for_each = (
+    contains(["prep", "prod"], var.environment) && try(var.services["internal"].listener_rule_enable, false)
+    ) ? {
+    "internal" = var.services["internal"]
+  } : {}
 
-  listener_arn = var.services["internal"].iuweb_pub_listener_arn
+  listener_arn = each.value.iuweb_pub_listener_arn
   priority     = 16
 
   action {
@@ -157,25 +217,26 @@ module "ecs_service" {
   cpu    = var.services[each.key].cpu
   memory = var.services[each.key].memory
 
+  autoscaling_min_capacity = try(var.services[each.key].autoscaling_min, 1)
+  autoscaling_max_capacity = try(var.services[each.key].autoscaling_max, 10)
   autoscaling_policies = var.services[each.key].enable_autoscaling_policies ? {
-    "cpu" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageCPUUtilization"
+    "cpu" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageCPUUtilization"
         }
       }
-    },
-    "memory" : {
-      "policy_type" : "TargetTrackingScaling",
-      "target_tracking_scaling_policy_configuration" : {
-        "predefined_metric_specification" : {
-          "predefined_metric_type" : "ECSServiceAverageMemoryUtilization"
+    }
+    "memory" = {
+      policy_type = "TargetTrackingScaling"
+      target_tracking_scaling_policy_configuration = {
+        predefined_metric_specification = {
+          predefined_metric_type = "ECSServiceAverageMemoryUtilization"
         }
       }
     }
   } : {}
-
   runtime_platform = {
     operating_system_family = "LINUX",
     cpu_architecture        = "ARM64"
@@ -219,6 +280,12 @@ module "ecs_service" {
             name  = "CDN_URL"
             value = module.cloudfront.cloudfront_distribution_domain_name
           }
+        ] : [],
+        each.value.set_custom_port ? [
+          {
+            name  = "API_PORT"
+            value = "8080"
+          }
         ] : []
       )
 
@@ -252,4 +319,7 @@ module "ecs_service" {
   wait_for_steady_state = false
   wait_until_stable     = true
   force_new_deployment  = false
+
+
 }
+
