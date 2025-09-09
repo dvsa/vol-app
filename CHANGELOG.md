@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.2](https://github.com/dvsa/vol-app/compare/v6.3.1...v6.3.2) (2025-09-09)
+
+
+### Bug Fixes
+
+* rerun cd after termination on previous release run ([#1124](https://github.com/dvsa/vol-app/issues/1124)) ([9095025](https://github.com/dvsa/vol-app/commit/9095025e650aa4e967e6a2f1e106ebc12a4f7410))
+
 ## [6.3.1](https://github.com/dvsa/vol-app/compare/v6.3.0...v6.3.1) (2025-09-09)
 
 
