@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\PrintScan\Printer;
 use Dvsa\Olcs\Api\Entity\User\User;
-use Dvsa\Olcs\Api\Service\ConvertToPdf\WebServiceClient;
+use Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfInterface;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -41,7 +41,7 @@ class PrintJob extends AbstractCommandHandler
     /** @var int */
     private $stubPrintToLicenceId;
 
-    public function __construct(private array $config, private ContentStoreFileUploader $fileUploader, private WebServiceClient $convertToPdfService)
+    public function __construct(private array $config, private ContentStoreFileUploader $fileUploader, private ConvertToPdfInterface $convertToPdfService)
     {
     }
 
