@@ -94,10 +94,6 @@ data "aws_ecr_repository" "sservice" {
   name = "vol-app/${each.key}"
 }
 
-data "aws_ecr_repository" "dockerhub_gotenberg" {
-  name = "docker-hub/gotenberg/gotenberg"
-}
-
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -139,11 +135,7 @@ data "aws_lb_listener" "this" {
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
 }
-data "aws_lb_listener" "renderer" {
 
-  load_balancer_arn = data.aws_lb.this["API"].arn
-  port              = 443
-}
 data "aws_lb" "iuweb-pub" {
   name = "APP-OLCS-PUB-IUWEB-ALB"
 }
