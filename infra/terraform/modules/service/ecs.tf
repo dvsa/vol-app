@@ -72,7 +72,7 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   listener_arn = each.value.lb_listener_arn
-  priority     = each.value.listener_rule_priority
+  priority     = each.key == "pdf-converter" ? 86 : each.value.listener_rule_priority
 
   action {
     type             = "forward"
