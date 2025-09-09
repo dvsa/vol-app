@@ -294,32 +294,6 @@ module "service" {
       listener_rule_host_header         = ["ssweb.*", "www.*"]
       listener_rule_host_header_proving = ["proving-ssweb.*", "www.proving.*"]
     }
-    "pdf-converter" = {
-      cpu    = 1024
-      memory = 2048
-
-      enable_autoscaling_policies = true
-
-      version    = "8"
-      repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
-
-      set_custom_port = true
-
-      listener_rule_enable = false
-
-      task_iam_role_statements = []
-
-      subnet_ids = data.aws_subnets.this["RENDERER"].ids
-
-      security_group_ids = [
-        data.aws_security_group.this["RENDERER"].id
-      ]
-
-      lb_listener_arn           = data.aws_lb_listener.renderer.arn
-      lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = ["renderer.*"]
-      listener_rule_priority    = 5
-    }
   }
   batch = {
     cli_version = var.cli_image_tag
