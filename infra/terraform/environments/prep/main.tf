@@ -305,7 +305,7 @@ module "service" {
 
       set_custom_port = true
 
-      listener_rule_enable = false
+      listener_rule_enable = true
 
       task_iam_role_statements = []
 
