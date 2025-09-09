@@ -2,15 +2,17 @@
 
 namespace Dvsa\OlcsTest\Email\Service;
 
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\Olcs\Email\Service\Email;
-use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Olcs\Logging\Log\Logger;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email as SymfonyEmail;
-use Symfony\Component\Mailer\Envelope;
+
 
 class EmailTest extends MockeryTestCase
 {
@@ -30,7 +32,7 @@ class EmailTest extends MockeryTestCase
         Logger::setLogger($logger);
     }
 
-    public function testCreateServiceMissingConfig()
+    public function testCreateServiceMissingConfig(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No mail config found');
@@ -38,30 +40,34 @@ class EmailTest extends MockeryTestCase
         $config = [];
 
         $sm = m::mock(ContainerInterface::class);
-        $sm->shouldReceive('get')->with('config')->andReturn($config);
+        $sm->expects('get')
+            ->with('config')
+            ->andReturns($config);
 
         $this->sut->__invoke($sm, Email::class);
     }
 
-    /**
-     * Tests create service
-     */
-    public function testCreateService()
+    public function testCreateServiceBuildsMailer(): void
     {
         $config = [
-            'mail' => []
+            'mail' => [
+                'type'    => '\Laminas\Mail\Transport\Smtp',
+                'options' => [
+                    'host' => 'localhost',
+                    'port' => 1025,
+                ],
+            ],
         ];
 
         $sm = m::mock(ContainerInterface::class);
-        $sm->allows('get')->with('config')->andReturns($config);
+        $sm->allows()->get('config')->andReturns($config);
 
         $service = $this->sut->__invoke($sm, Email::class);
 
         $this->assertSame($this->sut, $service);
 
-        $transport = $this->sut->getMailer();
-
-        $this->assertInstanceOf(MailerInterface::class, $transport);
+        $mailer = $this->sut->getMailer();
+        $this->assertInstanceOf(\Symfony\Component\Mailer\MailerInterface::class, $mailer);
     }
 
     /**
@@ -193,82 +199,54 @@ class EmailTest extends MockeryTestCase
     /**
      * Tests sending an email without attachments
      */
-    public function testSendWithoutAttachments()
+    public function testSendWithoutAttachments(): void
     {
-        $transport = m::mock(TransportInterface::class);
+        $transport = m::mock(MailerInterface::class);
+        $this->sut->setMailer($transport);
 
-        $this->sut->setMailTransport($transport);
+        $transport->expects('send')
+            ->withArgs(function ($message, $envelope = null) {
+                // Types
+                $this->assertInstanceOf(SymfonyEmail::class, $message);
+                $this->assertTrue($envelope === null || $envelope instanceof Envelope);
 
-        $transport->shouldReceive('send')
-            ->once()
-            ->with(m::type(Message::class))
-            ->andReturnUsing(
-                function (Message $message) {
-                    //expecting 2 parts, text and html
-                    $parts = $message->getBody()->getParts();
-                    $this->assertCount(2, $parts);
+                // Recipients / subject
+                $this->assertSame(['foo@bar.com'], array_map(fn($a) => $a->getAddress(), $message->getFrom()));
+                $this->assertSame(['bar@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getTo()));
+                $this->assertSame(['cc1@foo.com','cc2@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getCc()));
+                $this->assertSame(['bcc1@foo.com','bcc2@foo.com','bcc3@foo.com'], array_map(fn($a) => $a->getAddress(), $message->getBcc()));
+                $this->assertSame('msg subject', $message->getSubject());
 
-                    /**
-                     * @var LaminasMimePart $plainPart
-                     * @var LaminasMimePart $htmlPart
-                     */
-                    $plainPart = $parts[0];
-                    $htmlPart = $parts[1];
+                // Bodies
+                $this->assertSame('plain content', $message->getTextBody());
+                $this->assertSame('html content',  $message->getHtmlBody());
 
-                    //test part one (plain text)
-                    $this->assertEquals('plain content', $plainPart->getRawContent());
-                    $this->assertEquals(LaminasMime::TYPE_TEXT, $plainPart->type);
-                    $this->assertEquals(LaminasMime::ENCODING_QUOTEDPRINTABLE, $plainPart->encoding);
-                    $this->assertInstanceOf(LaminasMimePart::class, $plainPart);
+                // No attachments
+                $this->assertCount(0, $message->getAttachments());
 
-                    //test part two (html)
-                    $this->assertEquals('html content', $htmlPart->getRawContent());
-                    $this->assertEquals(LaminasMime::TYPE_HTML, $htmlPart->type);
-                    $this->assertEquals(LaminasMime::ENCODING_QUOTEDPRINTABLE, $htmlPart->encoding);
-                    $this->assertInstanceOf(LaminasMimePart::class, $htmlPart);
+                // MIME structure (order can vary; assert presence)
+                $raw = $message->toString();
+                $this->assertMatchesRegularExpression('/^MIME-Version:\s*1\.0/im', $raw);
+                $this->assertMatchesRegularExpression('/^Content-Type:\s*multipart\/alternative;/im', $raw);
+                $this->assertStringContainsString('Content-Type: text/plain; charset=utf-8', $raw);
+                $this->assertStringContainsString('Content-Type: text/html; charset=utf-8',  $raw);
 
-                    /**
-                     * @var AddressList $from
-                     * @var AddressList $toList
-                     * @var AddressList $ccList
-                     * @var AddressList $bccList
-                     */
-                    $headers = $message->getHeaders();
-                    $from = $headers->get('from')->getAddressList();
-                    $toList = $headers->get('to')->getAddressList();
-                    $ccList = $headers->get('cc')->getAddressList();
-                    $bccList = $headers->get('bcc')->getAddressList();
+                return true; // tell Mockery the args matched
+            });
 
-                    //test mail headers
-                    $this->assertEquals(LaminasMime::MULTIPART_ALTERNATIVE, $headers->get('content-type')->getType());
-                    $this->assertEquals('msg subject', $headers->get('subject')->getFieldValue());
-                    $this->assertEquals(true, $from->has('foo@bar.com'));
-                    $this->assertEquals(1, $from->count());
-                    $this->assertEquals(true, $toList->has('bar@foo.com'));
-                    $this->assertEquals(1, $toList->count());
-                    $this->assertEquals(true, $ccList->has('cc1@foo.com'));
-                    $this->assertEquals(true, $ccList->has('cc2@foo.com'));
-                    $this->assertEquals(2, $ccList->count());
-                    $this->assertEquals(true, $bccList->has('bcc1@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc2@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc3@foo.com'));
-                    $this->assertEquals(3, $bccList->count());
-                }
-            );
-
-        $cc = ['cc1@foo.com', 'cc2@foo.com', 'invalid-email'];
+        $cc  = ['cc1@foo.com', 'cc2@foo.com', 'invalid-email']; // invalid ignored by buildAddresses()
         $bcc = ['bcc1@foo.com', 'bcc2@foo.com', 'bcc3@foo.com', null];
 
         $this->sut->send(
-            'foo@bar.com',
-            'foo',
-            'bar@foo.com',
-            'msg subject',
-            'plain content',
-            'html content',
+            'foo@bar.com',     // from
+            'foo',             // fromName
+            'bar@foo.com',     // to
+            'msg subject',     // subject
+            'plain content',   // text
+            'html content',    // html
             $cc,
             $bcc,
-            []
+            []                 // no attachments
         );
     }
 
@@ -298,7 +276,7 @@ class EmailTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function toFromAddressProvider()
+    public function toFromAddressProvider(): array
     {
         return [
             ['foo@bar.com', 'from name', null, Email::MISSING_TO_ERROR],
@@ -308,19 +286,22 @@ class EmailTest extends MockeryTestCase
         ];
     }
 
-    public function testSendHandlesException()
+    public function testSendHandlesException(): void
     {
         $this->expectException(\Dvsa\Olcs\Email\Exception\EmailNotSentException::class);
         $this->expectExceptionMessage('Email not sent: exception message');
 
-        $transport = m::mock(TransportInterface::class);
+        $transport = m::mock(MailerInterface::class);
+        $this->sut->setMailer($transport);
 
-        $this->sut->setMailTransport($transport);
-
-        $transport->shouldReceive('send')
-            ->once()
-            ->with(m::type(Message::class))
-            ->andThrow(new \Exception('exception message'));
+        $transport->expects('send')
+            // Symfony's signature is send(RawMessage $message, ?Envelope $envelope = null)
+            ->withArgs(function ($message, $envelope = null) {
+                $this->assertInstanceOf(SymfonyEmail::class, $message);
+                // envelope can be null; we don't care here
+                return true;
+            })
+            ->andThrow(new TransportException('exception message'));
 
         $this->sut->send(
             'foo@bar.com',
@@ -328,7 +309,7 @@ class EmailTest extends MockeryTestCase
             'bar@foo.com',
             'Subject',
             'This is the content',
-            null
+            null // html body
         );
     }
 }
