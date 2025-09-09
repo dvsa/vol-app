@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Queue\Retry as RetryCmd;
 use Dvsa\Olcs\Api\Domain\Exception\NotReadyException;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Dvsa\Olcs\Api\Entity\User\User;
+use Laminas\Serializer\Adapter\Json as LaminasJson;
 
 /**
  * Print job test
@@ -96,7 +97,8 @@ class PrintJobTest extends AbstractConsumerTestCase
             'userId' => $userId,
         ];
 
-        $options = json_encode($optionsArray);
+        $json = new LaminasJson();
+        $options = $json->serialize($optionsArray);
 
         $item = new QueueEntity();
         $item->setId($itemId);

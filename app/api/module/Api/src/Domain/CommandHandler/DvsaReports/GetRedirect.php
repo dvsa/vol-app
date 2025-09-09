@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Laminas\Http\Client;
 use Laminas\Http\Client\Adapter\Curl;
+use Laminas\Json\Json;
 use Olcs\Logging\Log\Logger;
 
 /**
@@ -40,7 +41,7 @@ class GetRedirect extends AbstractCommandHandler implements AuthAwareInterface, 
     public function handleCommand(CommandInterface $command)
     {
         $currentUser = $this->getCurrentUser();
-        $postDataJson = json_encode([
+        $postDataJson = Json::encode([
             'operators' => $command->getOlNumbers(),
             'operator_name' => $currentUser->getRelatedOrganisationName(),
             'refresh_token' => $command->getRefreshToken()

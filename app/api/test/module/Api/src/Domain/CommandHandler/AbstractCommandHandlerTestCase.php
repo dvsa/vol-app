@@ -32,6 +32,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\ValidateMockRepoTypeTrait;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Laminas\Json\Json as LaminasJson;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Logging\Log\Logger;
 
@@ -260,7 +261,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             'entityId' => $entityId,
             'type' => $queueType,
             'status' => QueueEntity::STATUS_QUEUED,
-            'options' => json_encode($options),
+            'options' => LaminasJson::encode($options),
             'processAfterDate' => $processAfterDate
         ];
 
@@ -292,7 +293,7 @@ abstract class AbstractCommandHandlerTestCase extends MockeryTestCase
             'entityId' => $entityId,
             'type' => QueueEntity::TYPE_EMAIL,
             'status' => QueueEntity::STATUS_QUEUED,
-            'options' => json_encode($emailOptions),
+            'options' => LaminasJson::encode($emailOptions),
             'processAfterDate' => $processAfterDate
         ];
 
