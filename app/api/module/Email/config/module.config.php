@@ -1,5 +1,6 @@
 <?php
 
+use Aws\S3\S3Client;
 use Dvsa\Olcs\Email\Domain\Command;
 use Dvsa\Olcs\Email\Domain\CommandHandler;
 use Dvsa\Olcs\Email\Service;
@@ -18,6 +19,15 @@ return [
             Service\Email::class => Service\Email::class,
             Service\TemplateRenderer::class => Service\TemplateRendererFactory::class,
             'ImapService' => Service\Imap::class,
+            // New: make Aws\S3\S3Client resolvable from awsOptions config
+            S3Client::class => function ($c) {
+                $cfg = $c->get('config')['awsOptions'] ?? [];
+                return new S3Client([
+                    'region'                  => $cfg['region']  ?? 'eu-west-1',
+                    'version'                 => $cfg['version'] ?? 'latest',
+                    'use_path_style_endpoint' => $cfg['s3']['use_path_style_endpoint'] ?? false,
+                ]);
+            },
         ],
         'aliases' => [
             'translator'   => 'MvcTranslator',

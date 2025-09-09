@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Email\Transport;
 
+use Aws\S3\S3Client;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\RawMessage;
 use Symfony\Component\Mailer\Envelope;
@@ -10,7 +11,7 @@ final class ArchivingMailer implements MailerInterface
 {
     public function __construct(
         private MailerInterface $inner,
-        private \Aws\S3\S3Client $s3,
+        private S3Client $s3,
         private string $bucket
     ) {}
 

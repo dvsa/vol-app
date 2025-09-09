@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Email\Service;
 
+use Aws\S3\S3Client;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\Olcs\Email\Transport\ArchivingMailer;
 use Olcs\Logging\Log\Logger;
@@ -15,7 +16,7 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
-class Email /* implements FactoryInterface (keep if needed) */
+class Email
 {
     public const MISSING_FROM_ERROR = 'Email is missing a valid from address';
     public const MISSING_TO_ERROR   = 'Email is missing a valid to address';
@@ -27,7 +28,7 @@ class Email /* implements FactoryInterface (keep if needed) */
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): static
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
 
@@ -35,18 +36,22 @@ class Email /* implements FactoryInterface (keep if needed) */
             throw new \RuntimeException('No mail config found');
         }
 
-        // Build DSN from existing PHP config (no env change)
+        // Build Symfony Mailer from DSN
         $dsn    = MailDsnBuilder::buildFromConfig($config['mail']);
-        $mailer = new Mailer(Transport::fromDsn($dsn));
+        $mailer = new Mailer(
+            Transport::fromDsn($dsn)
+        );
 
-        // Optional S3 archiving decorator
-        if (!empty($config['mail']['options']['archive_to_s3']['bucket'])) {
-            $s3     = $container->get(\Aws\S3\S3Client::class);
-            $bucket = $config['mail']['options']['archive_to_s3']['bucket'];
+        // Wrap with ArchivingMailer if archive_to_s3 configured
+        $arch = $config['mail']['options']['archive_to_s3'] ?? null;
+        if (!empty($arch['bucket'])) {
+            $s3     = $container->get(S3Client::class);
+            $bucket = $arch['bucket'];
             $mailer = new ArchivingMailer($mailer, $s3, $bucket);
         }
 
         $this->setMailer($mailer);
+
         return $this;
     }
 
