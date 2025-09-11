@@ -10,13 +10,56 @@ permissions:
 jobs:
   approval-check:
     name: Check Approval
-    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
-    outputs:
-      approved: ${{ steps.set-output.outputs.approved }}
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     steps:
-      - name: Set output if approved
-        id: set-output
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # This step checks for two approvals and one code owner
+      - name: Check Approvals and Code Owners
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            // Filter for approved reviews
+            const approvedReviews = reviews.filter(review => review.state === 'APPROVED');
+            // Get the current PR files and their code owners
+            const files = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const changedFiles = files.data.map(file => file.filename);
+            const { data: codeOwners } = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: '.github/CODEOWNERS',
+            });
+            const codeOwnersContent = Buffer.from(codeOwners.content, 'base64').toString('utf8');
+            const codeOwnersList = codeOwnersContent.split('\n').filter(line => line.trim() !== '').map(line => line.trim().split(/\s+/).slice(1)).flat();
+
+            // Check if there are at least two approvals
+            const hasTwoApprovals = approvedReviews.length >= 2;
+
+            // Check if at least one approver is a code owner
+            const hasCodeOwnerApproval = approvedReviews.some(review => codeOwnersList.includes(`@${review.user.login}`));
+
+            if (hasTwoApprovals && hasCodeOwnerApproval) {
+              console.log('Approval conditions met. Proceeding with the workflow.');
+              return true;
+            } else {
+              console.log('Approval conditions not met. Workflow will be skipped.');
+              return false;
+            }
+          result-encoding: string
+      - name: Run conditional tf apply if changes are made to env or account directories using orchestrator.
+        if: steps.check.outputs.result == 'true'
         run: echo "approved=true" >> $GITHUB_OUTPUT
 
   orchestrator:
