@@ -132,6 +132,8 @@ jobs:
     name: Apply Branch to dev
     needs:
       - get-version
+    concurrency:
+      group: terraform-environment-dev
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: dev
@@ -153,6 +155,8 @@ jobs:
       - get-version
       - terraform-dev-apply
     if: failure()
+    concurrency:
+      group: terraform-environment-dev
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: dev
