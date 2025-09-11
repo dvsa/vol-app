@@ -1,0 +1,80 @@
+name: Deploy Terraform from branch
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  approval_check:
+    name: Check Approval
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    outputs:
+      approved: ${{ steps.set-output.outputs.approved }}
+    steps:
+      - name: Set output if approved
+        id: set-output
+        run: echo "approved=true" >> $GITHUB_OUTPUT
+
+  get-version:
+    name: Get latest app versions
+    if: needs.approval_check.outputs.approved == 'true'
+    needs: approval_check
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      cli: ${{ steps.cli-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+      assets: ${{ steps.assets-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: api-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/api infra/docker/api
+      - id: cli-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/api infra/docker/cli
+      - id: selfserve-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/selfserve infra/docker/selfserve
+      - id: internal-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/internal infra/docker/internal
+      - id: assets-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/cdn
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  terraform_env_dev:
+    name: Apply Environment (dev)
+    needs:
+      - get-version
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: dev
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
