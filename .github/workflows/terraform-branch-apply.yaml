@@ -66,6 +66,8 @@ jobs:
     name: Check for tf changes
     if: needs.approval_check.outputs.approved == 'true'
     needs: approval-check
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     outputs:
       # Terraform environment
