@@ -16,10 +16,30 @@ jobs:
         id: set-output
         run: echo "approved=true" >> $GITHUB_OUTPUT
 
-  get-version:
-    name: Get latest app versions
+  orchestrator:
+    name: Check for tf changes
     if: needs.approval_check.outputs.approved == 'true'
     needs: approval-check
+    runs-on: ubuntu-latest
+    outputs:
+      # Terraform environment
+      should-apply-environment-terraform: ${{ steps.changed-environments-terraform-files.outputs.any_modified == 'true' || null }}
+    steps:
+      - uses: tj-actions/changed-files@v45
+        id: changed-environments-terraform-files
+        with:
+          files: |
+            infra/terraform/environments/{dev,int,prep,prod}/**
+            infra/terraform/modules/**
+          files_ignore: |
+            infra/terraform/modules/account/**
+            infra/terraform/modules/github/**
+            infra/terraform/modules/remote-state/**
+
+  get-version:
+    name: Get latest app versions
+    if: ${{ needs.orchestrator.outputs.should-apply-environment-terraform }}
+    needs: orchestrator
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
@@ -61,7 +81,7 @@ jobs:
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   terraform-dev-apply:
-    name: Apply Environment (dev)
+    name: Apply Branch to dev
     needs:
       - get-version
     uses: ./.github/workflows/deploy-environment.yaml
@@ -80,7 +100,10 @@ jobs:
     secrets: inherit
 
   failed-apply:
-    needs: terraform-dev-apply
+    name: Apply main to dev
+    needs:
+      - get-version
+      - terraform-dev-apply
     if: failure()
     uses: ./.github/workflows/deploy-environment.yaml
     with:
