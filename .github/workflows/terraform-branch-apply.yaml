@@ -19,7 +19,7 @@ jobs:
   get-version:
     name: Get latest app versions
     if: needs.approval_check.outputs.approved == 'true'
-    needs: approval_check
+    needs: approval-check
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
