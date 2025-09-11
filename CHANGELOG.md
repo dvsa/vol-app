@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.3.3](https://github.com/dvsa/vol-app/compare/v6.3.2...v6.3.3) (2025-09-11)
+
+
+### Bug Fixes
+
+* trigger CD job ([#1126](https://github.com/dvsa/vol-app/issues/1126)) ([90d474b](https://github.com/dvsa/vol-app/commit/90d474bccedbbdb28870c5dcdfdff636f1bdb5bd))
+* trigger CD job ([#1130](https://github.com/dvsa/vol-app/issues/1130)) ([c780dc1](https://github.com/dvsa/vol-app/commit/c780dc1b32c94d17b92533a2dabd5bead2735ea8))
+
 ## [6.3.2](https://github.com/dvsa/vol-app/compare/v6.3.1...v6.3.2) (2025-09-09)
 
 
