@@ -5,7 +5,7 @@ on:
     types: [submitted]
 
 jobs:
-  approval_check:
+  approval-check:
     name: Check Approval
     if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
@@ -60,13 +60,32 @@ jobs:
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
-  terraform_env_dev:
+  terraform-dev-apply:
     name: Apply Environment (dev)
     needs:
       - get-version
     uses: ./.github/workflows/deploy-environment.yaml
     with:
       environment: dev
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  failed-apply:
+    needs: terraform-dev-apply
+    if: failure()
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: dev
+      ref: main
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
