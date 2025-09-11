@@ -25,6 +25,10 @@
     "@editorjs/paragraph": "^2.10.0",
     "@editorjs/underline": "^1.2.1"
   },
+  "overrides": {
+    "browser-sync": "^3.0.4",
+    "axios": "^1.7.9"
+  },
   "devDependencies": {
     "@babel/core": "^7.18.2",
     "@babel/preset-env": "^7.18.2",
