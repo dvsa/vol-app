@@ -124,6 +124,42 @@ OLCS.editorjs = (function (document, $, undefined) {
           editor.save().then(function (outputData) {
             hiddenInput.value = JSON.stringify(outputData);
           });
+
+          // Enable spellcheck on all contenteditable elements
+          var editableElements = editorContainer.querySelectorAll("[contenteditable=\"true\"]");
+          editableElements.forEach(function (element) {
+            element.setAttribute("spellcheck", "true");
+          });
+
+          // Watch for new blocks being added and enable spellcheck on them
+          var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              if (mutation.type === "childList") {
+                mutation.addedNodes.forEach(function (node) {
+                  if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Check if the added node itself is contenteditable
+                    if (node.getAttribute("contenteditable") === "true") {
+                      node.setAttribute("spellcheck", "true");
+                    }
+                    // Also check for contenteditable descendants
+                    var newEditables = node.querySelectorAll("[contenteditable=\"true\"]");
+                    newEditables.forEach(function (element) {
+                      element.setAttribute("spellcheck", "true");
+                    });
+                  }
+                });
+              }
+            });
+          });
+
+          // Start observing the editor container for changes
+          observer.observe(editorContainer, {
+            childList: true,
+            subtree: true,
+          });
+
+          // Store observer for cleanup
+          editorInstances[inputName + "_observer"] = observer;
         })
         .catch(function (error) {
           if (typeof OLCS.logger !== "undefined") {
@@ -172,16 +208,25 @@ OLCS.editorjs = (function (document, $, undefined) {
 
     // Cleanup when modal closes
     OLCS.eventEmitter.on("hide:modal", function () {
-      // Clean up EditorJS instances
+      // Clean up EditorJS instances and observers
       Object.keys(editorInstances).forEach(function (name) {
         try {
-          var editor = editorInstances[name];
-          if (editor && typeof editor.destroy === "function") {
-            editor.destroy();
+          // Clean up MutationObserver if it exists
+          if (name.endsWith("_observer")) {
+            var observer = editorInstances[name];
+            if (observer && typeof observer.disconnect === "function") {
+              observer.disconnect();
+            }
+          } else {
+            // Clean up EditorJS instance
+            var editor = editorInstances[name];
+            if (editor && typeof editor.destroy === "function") {
+              editor.destroy();
+            }
           }
         } catch (e) {
           if (typeof OLCS.logger !== "undefined") {
-            OLCS.logger("Error destroying EditorJS instance: " + name + " - " + e.message);
+            OLCS.logger("Error destroying instance: " + name + " - " + e.message);
           }
         }
       });
