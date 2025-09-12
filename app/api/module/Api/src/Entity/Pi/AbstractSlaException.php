@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Api\Entity\Pi;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,6 +28,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 abstract class AbstractSlaException implements BundleSerializableInterface, JsonSerializable
 {
     use BundleSerializableTrait;
+    use ProcessDateTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
