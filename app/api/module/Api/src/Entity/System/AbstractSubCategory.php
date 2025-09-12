@@ -94,6 +94,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      */
     protected $isMessaging = 0;
 
+
     /**
      * Is scan
      *

@@ -445,6 +445,20 @@ return [
             ]
         ]
     ],
+    'case_pi_sla_exception' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/pi/sla-exception[/:action][/]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(add)'
+            ],
+            'defaults' => [
+                'controller' => Cases\PublicInquiry\SlaExceptionController::class,
+                'action' => 'add'
+            ]
+        ]
+    ],
     'submission_action_recommendation' => [
         'type' => 'segment',
         'options' => [

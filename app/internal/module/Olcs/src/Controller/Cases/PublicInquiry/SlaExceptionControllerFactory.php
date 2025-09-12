@@ -5,15 +5,13 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Common\Service\Script\ScriptFactory;
-use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class PiControllerFactory implements FactoryInterface
+class SlaExceptionControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PiController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SlaExceptionController
     {
         $formHelper = $container->get(FormHelperService::class);
         assert($formHelper instanceof FormHelperService);
@@ -27,19 +25,11 @@ class PiControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
-        $scriptService = $container->get(ScriptFactory::class);
-        assert($scriptService instanceof ScriptFactory);
-
-        $tableFactory = $container->get(TableFactory::class);
-        assert($tableFactory instanceof TableFactory);
-
-        return new PiController(
+        return new SlaExceptionController(
             $translationHelper,
             $formHelper,
             $flashMessenger,
-            $navigation,
-            $scriptService,
-            $tableFactory
+            $navigation
         );
     }
 }
