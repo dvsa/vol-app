@@ -126,7 +126,7 @@ OLCS.editorjs = (function (document, $, undefined) {
           });
 
           // Enable spellcheck on all contenteditable elements
-          var editableElements = editorContainer.querySelectorAll('[contenteditable="true"]');
+          var editableElements = editorContainer.querySelectorAll("[contenteditable=\"true\"]");
           editableElements.forEach(function (element) {
             element.setAttribute("spellcheck", "true");
           });
@@ -142,7 +142,7 @@ OLCS.editorjs = (function (document, $, undefined) {
                       node.setAttribute("spellcheck", "true");
                     }
                     // Also check for contenteditable descendants
-                    var newEditables = node.querySelectorAll('[contenteditable="true"]');
+                    var newEditables = node.querySelectorAll("[contenteditable=\"true\"]");
                     newEditables.forEach(function (element) {
                       element.setAttribute("spellcheck", "true");
                     });
