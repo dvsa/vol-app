@@ -626,6 +626,8 @@ return [
             'EventHistoryType' => RepositoryFactory::class,
             'PublicHoliday' => RepositoryFactory::class,
             'Sla' => RepositoryFactory::class,
+            Repository\SlaException::class => RepositoryFactory::class,
+            Repository\PiSlaException::class => RepositoryFactory::class,
             'LicenceNoGen' => RepositoryFactory::class,
             'UserPasswordReset' => RepositoryFactory::class,
             'PreviousConviction' => RepositoryFactory::class,
@@ -815,6 +817,8 @@ return [
             'Correspondence' => Repository\Correspondence::class,
             'PostcodeEnforcementArea' => Repository\PostcodeEnforcementArea::class,
             'AdminAreaTrafficArea' => Repository\AdminAreaTrafficArea::class,
+            'SlaException' => Repository\SlaException::class,
+            'PiSlaException' => Repository\PiSlaException::class,
         ],
     ],
     \Dvsa\Olcs\Api\Domain\FormControlServiceManagerFactory::CONFIG_KEY => [

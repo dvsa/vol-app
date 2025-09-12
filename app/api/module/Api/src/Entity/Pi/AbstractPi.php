@@ -526,6 +526,15 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $slaTargetDates;
 
     /**
+     * PI SLA Exception
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PiSlaException", mappedBy="pi")
+     */
+    protected $piSlaExceptions;
+
+    /**
      * Initialise the collections
      *
      * @return void
@@ -549,6 +558,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
         $this->piHearings = new ArrayCollection();
         $this->publicationLinks = new ArrayCollection();
         $this->slaTargetDates = new ArrayCollection();
+        $this->piSlaExceptions = new ArrayCollection();
     }
 
     /**
@@ -1969,5 +1979,15 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
         }
 
         return $this;
+    }
+
+    /**
+     * Get the pi sla exceptions
+     *
+     * @return ArrayCollection
+     */
+    public function getPiSlaExceptions()
+    {
+        return $this->piSlaExceptions;
     }
 }
