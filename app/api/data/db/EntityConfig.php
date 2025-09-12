@@ -1617,6 +1617,14 @@ return array(
             )
         )
     ),
+    'pi_sla_exception' => array(
+        'pi_id' => array(
+            'inversedBy' => array(
+                'entity' => 'Pi',
+                'property' => 'piSlaException'
+            )
+        )
+    ),
     /* 'pi_type' => array(
       'pi_id' => array(
       'inversedBy' => array(

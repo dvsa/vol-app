@@ -448,13 +448,14 @@ return [
     'case_pi_sla_exception' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/pi/sla-exception[/]',
+            'route' => '/case/:case/pi/sla-exception[/:action][/]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(add)'
             ],
             'defaults' => [
-                'controller' => Cases\PublicInquiry\PiController::class,
-                'action' => 'slaException'
+                'controller' => Cases\PublicInquiry\SlaExceptionController::class,
+                'action' => 'add'
             ]
         ]
     ],

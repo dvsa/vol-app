@@ -12,26 +12,21 @@ use Laminas\Form\Annotation as Form;
 class PublicInquirySlaException extends Base
 {
     /**
-     * @Form\Attributes({"id":"sla","placeholder":""})
-     * @Form\Options({
-     *     "label": "SLA",
-     *     "service_name": "Olcs\Service\Data\Category",
-     *     "context": {"isCaseSlaException": "Y" },
-     *     "empty_option": "Please Select"
-     * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Attributes({"type":"hidden"})
+     * @Form\Type("Hidden")
      */
-    public $sla = null;
+    public $pi = null;
 
     /**
-     * @Form\Attributes({"id":"subCategory","placeholder":""})
+     * @Form\Attributes({"id":"slaException","placeholder":""})
      * @Form\Options({
-     *     "label": "Reason for exception",
-     *     "service_name": "Olcs\Service\Data\SubCategory",
-     *     "context": {"isCaseSlaException": "Y" },
-     *     "empty_option": "Please Select"
+     *     "label": "SLA Exception",
+     *     "service_name": "Olcs\Service\Data\SlaException",
+     *     "empty_option": "Please Select",
+     *     "use_groups": true,
+     *     "hint": "Please note, choose carefully; once an SLA exception is saved, you will not be able to edit or delete it.",
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $reasonForException = null;
+    public $slaException = null;
 }

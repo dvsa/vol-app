@@ -7,6 +7,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
@@ -14,6 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateTmDecision as UpdateTmDecisionCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreatePiSlaException as CreatePiSlaExceptionCmd;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
@@ -21,6 +23,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Pi as PiMapper;
+use Olcs\Data\Mapper\PiSlaException as PiSlaExceptionMapper;
 use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterTmDecision as TmDecisionForm;
@@ -61,8 +64,6 @@ class PiController extends AbstractInternalController implements CaseControllerI
     protected $slaForm = SlaForm::class;
     protected $updateSlaCommand = UpdateSlaCmd::class;
 
-    protected $slaExceptionForm = PublicInquirySlaException::class;
-    protected $addSlaExceptionCommand = UpdateSlaCmd::class;
 
     /**
      * Close
@@ -107,6 +108,10 @@ class PiController extends AbstractInternalController implements CaseControllerI
             'route' => 'case_pi',
             'action' => 'index'
         ],
+        'slaException' => [
+            'route' => 'case_pi',
+            'action' => 'index'
+        ],
         'details' => [
             'action' => 'index'
         ]
@@ -122,7 +127,8 @@ class PiController extends AbstractInternalController implements CaseControllerI
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
-        protected ScriptFactory $scriptService
+        protected ScriptFactory $scriptService,
+        protected TableFactory $tableFactory
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
@@ -186,6 +192,13 @@ class PiController extends AbstractInternalController implements CaseControllerI
                         $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
                     }
                     break;
+                case 'addcasepislaexception':
+                    return $this->redirect()->toRoute(
+                        'case_pi_sla_exception',
+                        ['action' => 'add', 'case' => $this->params()->fromRoute('case')],
+                        ['code' => '303'],
+                        true
+                    );
             }
 
             //if no matched action, or no valid id, we won't have redirect params
@@ -208,6 +221,9 @@ class PiController extends AbstractInternalController implements CaseControllerI
                 'pi' => $pi['id']
             ]
         );
+
+        // Build the SLA exceptions table
+        $this->buildPiSlaExceptionsTable($pi);
 
         return $this->details(
             $this->itemDto,
@@ -313,23 +329,6 @@ class PiController extends AbstractInternalController implements CaseControllerI
         return $form;
     }
 
-    /**
-     * Deal with Pi Sla Exception
-     *
-     * @return array|\Laminas\View\Model\ViewModel
-     */
-    public function slaExceptionAction()
-    {
-        return $this->add(
-            $this->slaExceptionForm,
-            new GenericItem($this->itemParams),
-            $this->updateSlaCommand,
-            $this->mapperClass,
-            $this->editViewTemplate,
-            'Added SLA Exception',
-            'Add SLA Exception'
-        );
-    }
 
     /**
      * Parameters for redirect to the hearing controller
@@ -363,6 +362,41 @@ class PiController extends AbstractInternalController implements CaseControllerI
         }
 
         return true;
+    }
+
+    /**
+     * Build PI SLA exceptions table
+     *
+     * @param array $pi PI data
+     *
+     * @return void
+     */
+    private function buildPiSlaExceptionsTable($pi)
+    {
+        $slaExceptions = $pi['piSlaExceptions'] ?? [];
+
+        $tableData = [
+            'Count' => count($slaExceptions),
+            'Results' => $slaExceptions
+        ];
+
+        // Create table builder
+        $tableBuilderFactory = clone $this->tableFactory;
+        $tableBuilder = $tableBuilderFactory->getTableBuilder();
+
+        // Set table as disabled if PI is closed
+        if (!empty($pi['isClosed']) && $pi['isClosed']) {
+            $tableBuilder->setDisabled(true);
+        }
+
+        $this->table()->setTableBuilder($tableBuilder);
+
+        // Build the table and store in placeholder
+        $table = $this->table()->buildTable('pi-sla-exceptions', $tableData, [
+            'case' => $this->params()->fromRoute('case')
+        ]);
+
+        $this->placeholder()->setPlaceholder('pi-sla-exceptions', $table);
     }
 
     /**
