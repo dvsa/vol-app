@@ -36,7 +36,7 @@ final class GenerateChecklistReminder extends AbstractCommandHandler implements 
                         [
                             'id' => $continuationDetail->getId(),
                             'user' => $command->getUser(),
-                            'enforcePrint' => true,
+                            'enforcePrint' => false,
                         ]
                     )
                 )

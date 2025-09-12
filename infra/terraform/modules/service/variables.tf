@@ -44,6 +44,7 @@ variable "services" {
       resources = list(string)
     }))
     add_cdn_url_to_env          = optional(bool, false)
+    set_custom_port             = optional(bool, false)
     enable_autoscaling_policies = optional(bool, true)
     lb_arn                      = optional(string)
     lb_listener_arn             = optional(string)
@@ -85,7 +86,7 @@ variable "batch" {
       cpu      = optional(number, 1)
       memory   = optional(number, 2048)
       timeout  = optional(number, 300)
-      schedule = optional(string, "")
+      schedule = optional(list(string), [])
     }))
   })
 }

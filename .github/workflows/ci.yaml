@@ -86,6 +86,7 @@ jobs:
             infra/docker/**
           files_ignore: |
             infra/docker/liquibase/**
+            infra/docker/printpit/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v45
         id: changed-accounts-terraform-files
@@ -196,6 +197,7 @@ jobs:
     if: >
       needs.orchestrator.outputs.should-build-app ||
       needs.orchestrator.outputs.should-build-api-docker ||
+      needs.orchestrator.outputs.should-build-cli-docker ||
       needs.orchestrator.outputs.should-build-selfserve-docker ||
       needs.orchestrator.outputs.should-build-internal-docker
     concurrency:

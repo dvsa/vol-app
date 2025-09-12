@@ -1,0 +1,12 @@
+# Ignore files not needed in the Docker image
+README.md
+docker-compose.yml
+.git
+.gitignore
+*.md
+pdf-output/
+.DS_Store
+*.swp
+*.log
+.idea
+.vscode
