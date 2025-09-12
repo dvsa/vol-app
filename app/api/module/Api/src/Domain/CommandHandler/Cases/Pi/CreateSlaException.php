@@ -30,13 +30,19 @@ final class CreateSlaException extends AbstractCommandHandler implements Transac
     {
         $result = new Result();
 
-        // getPi() actually returns case ID for case-level SLA exceptions (one-to-one)
-        $caseId = $command->getPi();
+        // Get the case ID from the command
+        $caseId = $command->getCase();
 
         /** @var CaseEntity $case */
         $case = $this->getRepo('Cases')->fetchById($caseId);
         if (!$case) {
             throw new NotFoundException('Case not found: ' . $caseId);
+        }
+
+        // Validate that the case has a public inquiry
+        $pi = $case->getPublicInquiry();
+        if (!$pi) {
+            throw new NotFoundException('Case does not have a public inquiry: ' . $caseId);
         }
 
         /** @var SlaExceptionEntity $slaException */
@@ -45,9 +51,9 @@ final class CreateSlaException extends AbstractCommandHandler implements Transac
             throw new NotFoundException('SLA Exception not found');
         }
 
-        // Users can add multiple SLA exceptions to a single case
-        // Create new case SLA Exception relationship (now properly case-based)
-        $piSlaException = new PiSlaExceptionEntity($case->getPublicInquiry(), $slaException);
+        // Users can add multiple SLA exceptions to a single PI
+        // Create new PI SLA Exception relationship
+        $piSlaException = new PiSlaExceptionEntity($pi, $slaException);
 
         $this->getRepo()->save($piSlaException);
 
