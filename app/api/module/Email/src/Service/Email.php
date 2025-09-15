@@ -2,9 +2,7 @@
 
 namespace Dvsa\Olcs\Email\Service;
 
-use Aws\S3\S3Client;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
-use Dvsa\Olcs\Email\Transport\ArchivingMailer;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -31,27 +29,16 @@ class Email
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
-
         if (empty($config['mail'])) {
             throw new \RuntimeException('No mail config found');
         }
 
-        // Build Symfony Mailer from DSN
         $dsn    = MailDsnBuilder::buildFromConfig($config['mail']);
         $mailer = new Mailer(
             Transport::fromDsn($dsn)
         );
 
-        // Wrap with ArchivingMailer if archive_to_s3 configured
-        $arch = $config['mail']['options']['archive_to_s3'] ?? null;
-        if (!empty($arch['bucket'])) {
-            $s3     = $container->get(S3Client::class);
-            $bucket = $arch['bucket'];
-            $mailer = new ArchivingMailer($mailer, $s3, $bucket);
-        }
-
         $this->setMailer($mailer);
-
         return $this;
     }
 
