@@ -583,29 +583,29 @@ module "service" {
       },
       {
         name     = "sas-mi-extract",
-        commands = ["source /mnt/data/sas_mi_extract.sh"],
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts"
       },
       {
         name     = "import-anondb",
-        commands = ["source /mnt/data/import_anondb.sh"],
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "populate-anondb",
-        commands = ["source /mnt/data/populate_anondb.sh"],
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "ni-compliance",
-        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]
   }
 }
 
-resource "null_resource" "deployed_versions" {
+re "null_resource" "deployed_versions" {
   triggers = {
     deployed_api_image_tag       = var.api_image_tag
     deployed_internal_image_tag  = var.internal_image_tag
