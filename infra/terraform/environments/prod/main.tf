@@ -566,7 +566,8 @@ module "service" {
       {
         name     = "sas-mi-extract",
         commands = ["source /mnt/data/sas_mi_extract.sh"],
-        type     = "scripts"
+        type     = "scripts",
+        schedule = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
