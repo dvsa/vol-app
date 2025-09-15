@@ -3,26 +3,24 @@ FROM alpine:3.22 AS builder
 # Set shell for proper pipe error handling
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# Install build dependencies
+# Install build dependencies and pnpm
 RUN apk add --no-cache \
-    go \
-    git \
-    nodejs \
-    npm \
-    make
-
-# Install pnpm
-RUN npm install -g pnpm
+    go=1.24.7-r0 \
+    git=2.49.1-r0 \
+    nodejs=22.16.0-r2 \
+    npm=11.3.0-r1 \
+    make=4.4.1-r3 && \
+    npm install -g pnpm@10.15.1
 
 # Build FileBrowser from source
 ENV FILEBROWSER_VERSION=v2.42.5
 WORKDIR /build
-RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git . && \
-    cd frontend && \
-    npm install && \
-    npm run build && \
-    cd .. && \
-    go build -ldflags "-s -w" -o filebrowser .
+RUN git clone --depth 1 --branch ${FILEBROWSER_VERSION} https://github.com/filebrowser/filebrowser.git .
+WORKDIR /build/frontend
+RUN npm install && \
+    npm run build
+WORKDIR /build
+RUN go build -ldflags "-s -w" -o filebrowser .
 
 FROM alpine:3.22
 

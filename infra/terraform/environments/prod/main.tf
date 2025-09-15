@@ -94,10 +94,6 @@ data "aws_ecr_repository" "sservice" {
   name = "vol-app/${each.key}"
 }
 
-data "aws_ecr_repository" "dockerhub_gotenberg" {
-  name = "docker-hub/gotenberg/gotenberg"
-}
-
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
@@ -139,11 +135,7 @@ data "aws_lb_listener" "this" {
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
 }
-data "aws_lb_listener" "renderer" {
 
-  load_balancer_arn = data.aws_lb.this["API"].arn
-  port              = 443
-}
 data "aws_lb" "iuweb-pub" {
   name = "APP-OLCS-PUB-IUWEB-ALB"
 }
@@ -293,32 +285,6 @@ module "service" {
       lb_arn                            = data.aws_lb.this["SSWEB"].arn
       listener_rule_host_header         = ["ssweb.*", "www.*"]
       listener_rule_host_header_proving = ["proving-ssweb.*", "www.proving.*"]
-    }
-    "pdf-converter" = {
-      cpu    = 1024
-      memory = 2048
-
-      enable_autoscaling_policies = true
-
-      version    = "8"
-      repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
-
-      set_custom_port = true
-
-      listener_rule_enable = false
-
-      task_iam_role_statements = []
-
-      subnet_ids = data.aws_subnets.this["RENDERER"].ids
-
-      security_group_ids = [
-        data.aws_security_group.this["RENDERER"].id
-      ]
-
-      lb_listener_arn           = data.aws_lb_listener.renderer.arn
-      lb_arn                    = data.aws_lb.this["API"].arn
-      listener_rule_host_header = ["renderer.*"]
-      listener_rule_priority    = 5
     }
   }
   batch = {

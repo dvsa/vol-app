@@ -1,5 +1,33 @@
 # Changelog
 
+## [6.3.2](https://github.com/dvsa/vol-app/compare/v6.3.1...v6.3.2) (2025-09-09)
+
+
+### Bug Fixes
+
+* rerun cd after termination on previous release run ([#1124](https://github.com/dvsa/vol-app/issues/1124)) ([9095025](https://github.com/dvsa/vol-app/commit/9095025e650aa4e967e6a2f1e106ebc12a4f7410))
+
+## [6.3.1](https://github.com/dvsa/vol-app/compare/v6.3.0...v6.3.1) (2025-09-09)
+
+
+### Bug Fixes
+
+* another conditional for lb rules ([#1122](https://github.com/dvsa/vol-app/issues/1122)) ([ff214ed](https://github.com/dvsa/vol-app/commit/ff214ed5a202ccf62aa52f093f242b79d042b1e5))
+* remove pdf-convertor from prod  ([#1119](https://github.com/dvsa/vol-app/issues/1119)) ([95cb7f0](https://github.com/dvsa/vol-app/commit/95cb7f08a1814e1a01f2e1454f92336a5b93638e))
+* resolve build pipeline scanning issues ([#1118](https://github.com/dvsa/vol-app/issues/1118)) ([a3ac52a](https://github.com/dvsa/vol-app/commit/a3ac52a31f627978efa09d0fb29b4ee81721246b))
+
+## [6.3.0](https://github.com/dvsa/vol-app/compare/v6.2.0...v6.3.0) (2025-09-08)
+
+
+### Features
+
+* vol-6098 remove usage of laminas-json replace with native php ([#1069](https://github.com/dvsa/vol-app/issues/1069)) ([bdaef45](https://github.com/dvsa/vol-app/commit/bdaef45c2bd71f2f59910fe341da0d68e438f480))
+
+
+### Bug Fixes
+
+* remove proving renderer ([#1115](https://github.com/dvsa/vol-app/issues/1115)) ([929d73f](https://github.com/dvsa/vol-app/commit/929d73fb569fc0df566d1db8683e321e2fbb6570))
+
 ## [6.2.0](https://github.com/dvsa/vol-app/compare/v6.1.4...v6.2.0) (2025-09-05)
 
 

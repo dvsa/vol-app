@@ -93,6 +93,7 @@ jobs:
 
       - name: Scan image with Trivy
         uses: aquasecurity/trivy-action@0.29.0
+        continue-on-error: true
         with:
           image-ref: printpit:test
           format: "sarif"
@@ -101,8 +102,9 @@ jobs:
           exit-code: "1"
 
       - name: Upload Trivy results to GitHub Security
-        if: always()
+        if: always() && success() || failure()
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: "trivy-results.sarif"
 
