@@ -15,10 +15,10 @@ class PublicInquirySlaException extends Base
      * @Form\Attributes({"type":"hidden"})
      * @Form\Type("Hidden")
      */
-    public $pi = null;
+    public $case = null;
 
     /**
-     * @Form\Attributes({"id":"slaException","placeholder":""})
+     * @Form\Attributes({"id":"slaException","placeholder":"","required":"required"})
      * @Form\Options({
      *     "label": "SLA Exception",
      *     "service_name": "Olcs\Service\Data\SlaException",
@@ -27,6 +27,8 @@ class PublicInquirySlaException extends Base
      *     "hint": "Please note, choose carefully; once an SLA exception is saved, you will not be able to edit or delete it.",
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Required(true)
+     * @Form\Validator("Laminas\Validator\NotEmpty")
      */
     public $slaException = null;
 }

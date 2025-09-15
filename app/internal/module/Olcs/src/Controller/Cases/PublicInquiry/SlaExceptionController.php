@@ -79,20 +79,23 @@ class SlaExceptionController extends AbstractInternalController implements CaseC
     }
 
     /**
-     * Alter form for SLA Exception - populate PI ID
+     * Alter form for SLA Exception - populate case ID
      *
      * @param \Laminas\Form\FormInterface $form Form
+     * @param array $data Data
      *
      * @return \Laminas\Form\FormInterface
      */
-    public function alterFormForAdd($form)
+    public function alterFormForAdd($form, $data = [])
     {
-        $pi = $this->getPi();
+        // Case ID should already be set in initial data via mapper
+        // But if it's missing, get it from route as fallback
+        $caseId = $data['fields']['case'] ?? $this->params()->fromRoute('case');
         
-        if (isset($pi['id'])) {
-            $form->get('fields')->get('pi')->setValue($pi['id']);
+        if ($caseId) {
+            $form->get('fields')->get('case')->setValue($caseId);
         }
-        
+
         return $form;
     }
 

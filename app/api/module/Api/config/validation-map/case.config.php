@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
-use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NoValidationRequired;
 
 return [
     //  commands
@@ -37,7 +36,7 @@ return [
     CommandHandler\Cases\Pi\UpdateTmDecision::class                         => IsInternalUser::class,
     CommandHandler\Cases\Pi\UpdateHearing::class                            => IsInternalUser::class,
     CommandHandler\Cases\Pi\UpdateSla::class                                => IsInternalUser::class,
-    CommandHandler\Cases\Pi\CreateSlaException::class                         => IsInternalUser::class,
+    CommandHandler\Cases\Pi\CreateSlaException::class                       => IsInternalUser::class,
     CommandHandler\Cases\Prohibition\Create::class                          => IsInternalUser::class,
     CommandHandler\Cases\Prohibition\Defect\Create::class                   => IsInternalUser::class,
     CommandHandler\Cases\Prohibition\Defect\Delete::class                   => IsInternalUser::class,
@@ -100,7 +99,7 @@ return [
     QueryHandler\Cases\Pi\HearingList::class                                => IsInternalUser::class,
     QueryHandler\Cases\Pi\ReportList::class                                 => IsInternalUser::class,
     QueryHandler\Cases\Pi\PiDefinitionList::class                           => IsInternalUser::class,
-    QueryHandler\Cases\Pi\SlaExceptionList::class                           => NoValidationRequired::class,
+    QueryHandler\Cases\Pi\SlaExceptionList::class                           => IsInternalUser::class,
     QueryHandler\Cases\Prohibition\Defect::class                            => IsInternalUser::class,
     QueryHandler\Cases\Prohibition\DefectList::class                        => IsInternalUser::class,
     QueryHandler\Cases\Prohibition\Prohibition::class                       => IsInternalUser::class,

@@ -25,7 +25,7 @@ class PiSlaException extends AbstractRepository
             $qb->expr()->eq($this->alias . '.pi', ':piId')
         )
         ->setParameter('piId', $piId)
-        ->join($this->alias . '.piException', 'se')
+        ->join($this->alias . '.slaException', 'se')
         ->addSelect('se')
         ->orderBy('se.slaDescription', 'ASC')
         ->addOrderBy($this->alias . '.createdOn', 'DESC');
@@ -48,7 +48,7 @@ class PiSlaException extends AbstractRepository
             $qb->expr()->eq('p.case', ':caseId')
         )
         ->setParameter('caseId', $caseId)
-        ->join($this->alias . '.piException', 'se')
+        ->join($this->alias . '.slaException', 'se')
         ->addSelect('se', 'p')
         ->orderBy('se.slaDescription', 'ASC')
         ->addOrderBy($this->alias . '.createdOn', 'DESC');
@@ -76,7 +76,7 @@ class PiSlaException extends AbstractRepository
             $qb->expr()->eq($this->alias . '.pi', ':piId')
         )
         ->setParameter('piId', $piId)
-        ->join($this->alias . '.piException', 'se')
+        ->join($this->alias . '.slaException', 'se')
         ->andWhere(
             $qb->expr()->lte('se.effectiveFrom', ':checkDate')
         )

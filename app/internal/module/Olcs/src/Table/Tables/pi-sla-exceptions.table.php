@@ -22,13 +22,13 @@ return [
         [
             'title' => 'SLA Description',
             'formatter' => function ($row, $column) {
-                return $row['piException']['slaDescription'] ?? '';
+                return $row['slaException']['slaDescription'] ?? '';
             }
         ],
         [
             'title' => 'Exception Description',
             'formatter' => function ($row, $column) {
-                return $row['piException']['slaExceptionDescription'] ?? '';
+                return $row['slaException']['slaExceptionDescription'] ?? '';
             }
         ],
         [

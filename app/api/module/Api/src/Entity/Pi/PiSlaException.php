@@ -15,13 +15,13 @@ class PiSlaException extends AbstractPiSlaException
     /**
      * Constructor
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\Pi           $pi          PI entity
-     * @param \Dvsa\Olcs\Api\Entity\Pi\SlaException $piException SLA Exception entity
+     * @param \Dvsa\Olcs\Api\Entity\Pi\Pi           $pi           PI entity
+     * @param \Dvsa\Olcs\Api\Entity\Pi\SlaException $slaException SLA Exception entity
      */
-    public function __construct($pi, $piException)
+    public function __construct($pi, $slaException)
     {
         $this->setPi($pi);
-        $this->setPiException($piException);
+        $this->setSlaException($slaException);
     }
 
     /**
@@ -53,7 +53,7 @@ class PiSlaException extends AbstractPiSlaException
      */
     public function isSlaExceptionActive($checkDate = null)
     {
-        return $this->getPiException() ? $this->getPiException()->isActive($checkDate) : false;
+        return $this->getSlaException() ? $this->getSlaException()->isActive($checkDate) : false;
     }
 
     /**
@@ -64,7 +64,7 @@ class PiSlaException extends AbstractPiSlaException
     public function __toString()
     {
         $piId = $this->getPi() ? $this->getPi()->getId() : 'Unknown';
-        $exceptionDesc = $this->getPiException() ? $this->getPiException()->getSlaDescription() : 'Unknown';
+        $exceptionDesc = $this->getSlaException() ? $this->getSlaException()->getSlaDescription() : 'Unknown';
         
         return "PI {$piId} - {$exceptionDesc}";
     }

@@ -18,7 +18,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="pi_sla_exception",
  *    indexes={
  *        @ORM\Index(name="ix_pi_sla_exception_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_pi_sla_exception_pi_exception_id", columns={"pi_exception_id"}),
+ *        @ORM\Index(name="ix_pi_sla_exception_sla_exception_id", columns={"sla_exception_id"}),
  *        @ORM\Index(name="ix_pi_sla_exception_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_pi_sla_exception_last_modified_by", columns={"last_modified_by"})
  *    }
@@ -57,9 +57,9 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Pi\SlaException
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\SlaException", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_exception_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="sla_exception_id", referencedColumnName="id", nullable=false)
      */
-    protected $piException;
+    protected $slaException;
 
     /**
      * Created by
@@ -118,27 +118,27 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the PI Exception
+     * Set the SLA Exception
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\SlaException $piException entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Pi\SlaException $slaException entity being set as the value
      *
      * @return AbstractPiSlaException
      */
-    public function setPiException($piException)
+    public function setSlaException($slaException)
     {
-        $this->piException = $piException;
+        $this->slaException = $slaException;
 
         return $this;
     }
 
     /**
-     * Get the PI Exception
+     * Get the SLA Exception
      *
      * @return \Dvsa\Olcs\Api\Entity\Pi\SlaException
      */
-    public function getPiException()
+    public function getSlaException()
     {
-        return $this->piException;
+        return $this->slaException;
     }
 
 }

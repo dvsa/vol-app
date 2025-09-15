@@ -20,11 +20,11 @@ class PiSlaException implements MapperInterface
      */
     public static function mapFromResult(array $data): array
     {
-        // For add form, we just need the PI ID and case ID for context
+        // For add form, the data contains the case ID directly as 'id'
+        // since the defaultDataProvider uses ['id' => 'case'] mapping
         return [
             'fields' => [
-                'pi' => $data['id'] ?? null,
-                'case' => $data['case']['id'] ?? null,
+                'case' => $data['id'] ?? $data['case'] ?? null,
             ]
         ];
     }
@@ -40,7 +40,7 @@ class PiSlaException implements MapperInterface
         $fields = $data['fields'] ?? [];
         
         return [
-            'pi' => $fields['pi'] ?? null,
+            'case' => $fields['case'] ?? null,
             'slaException' => $fields['slaException'] ?? null,
         ];
     }

@@ -52,7 +52,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH ' .
             'AND m.pi = [[123]] ' .
-            'INNER JOIN m.piException se ' .
+            'INNER JOIN m.slaException se ' .
             'SELECT se ' .
             'ORDER BY se.slaDescription ASC ' .
             'ORDER BY m.createdOn DESC';
@@ -82,7 +82,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $expectedQuery = 'BLAH ' .
             'INNER JOIN m.pi p ' .
             'AND p.case = [[456]] ' .
-            'INNER JOIN m.piException se ' .
+            'INNER JOIN m.slaException se ' .
             'SELECT se, p ' .
             'ORDER BY se.slaDescription ASC ' .
             'ORDER BY m.createdOn DESC';
@@ -112,7 +112,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH ' .
             'AND m.pi = [[789]] ' .
-            'INNER JOIN m.piException se ' .
+            'INNER JOIN m.slaException se ' .
             'AND se.effectiveFrom <= [[2024-01-15T00:00:00+00:00]] ' .
             'AND (se.effectiveTo IS NULL OR se.effectiveTo >= [[2024-01-15T00:00:00+00:00]]) ' .
             'SELECT se ' .
@@ -144,7 +144,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         // Check that query contains today's date and proper structure
         $today = (new \DateTime())->format('Y-m-d');
         $this->assertStringContainsString('AND m.pi = [[999]]', $this->query);
-        $this->assertStringContainsString('INNER JOIN m.piException se', $this->query);
+        $this->assertStringContainsString('INNER JOIN m.slaException se', $this->query);
         $this->assertStringContainsString('se.effectiveFrom <=', $this->query);
         $this->assertStringContainsString($today, $this->query);
         $this->assertStringContainsString('ORDER BY se.slaDescription ASC', $this->query);
@@ -172,7 +172,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH ' .
             'AND m.pi = [[888]] ' .
-            'INNER JOIN m.piException se ' .
+            'INNER JOIN m.slaException se ' .
             'SELECT se ' .
             'ORDER BY se.slaDescription ASC ' .
             'ORDER BY m.createdOn DESC';
@@ -202,7 +202,7 @@ class PiSlaExceptionTest extends RepositoryTestCase
         $expectedQuery = 'BLAH ' .
             'INNER JOIN m.pi p ' .
             'AND p.case = [[777]] ' .
-            'INNER JOIN m.piException se ' .
+            'INNER JOIN m.slaException se ' .
             'SELECT se, p ' .
             'ORDER BY se.slaDescription ASC ' .
             'ORDER BY m.createdOn DESC';
