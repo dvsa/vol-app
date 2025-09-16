@@ -140,7 +140,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $mainServiceNumber = 'BUS001';
 
         $parsedEbsrData = [
-            'transXChangeVersion'  => $parsedSchemaVersion,
+            'txcVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -198,9 +198,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             ->with(m::type(BusRegEntity::class))
             ->once()
             ->andReturnSelf();
-        $ebsrSubmission->shouldReceive('setTransXChangeVersion')
+        $ebsrSubmission->shouldReceive('setTxcVersion')
             ->once()
-            ->with($parsedSchemaVersion)
+            ->with($parsedEbsrData['txcVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -397,7 +397,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $busShortNotice = ['bus short notice'];
 
         $parsedEbsrData = [
-            'transXChangeVersion'  => $parsedSchemaVersion,
+            'txcVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -456,9 +456,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             ->once()
             ->andReturnSelf();
 
-        $ebsrSubmission->shouldReceive('setTransXChangeVersion')
+        $ebsrSubmission->shouldReceive('setTxcVersion')
             ->once()
-            ->with($parsedSchemaVersion)
+            ->with($parsedEbsrData['txcVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -604,7 +604,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
-            'transXChangeVersion'  => $parsedSchemaVersion,
+            'txcVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -645,9 +645,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
             ->once()
             ->andReturnSelf();
 
-        $ebsrSubmission->shouldReceive('setTransXChangeVersion')
+        $ebsrSubmission->shouldReceive('setTxcVersion')
             ->once()
-            ->with($parsedSchemaVersion)
+            ->with($parsedEbsrData['txcVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);

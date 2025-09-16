@@ -286,7 +286,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @ORM\Column(name="txc_version", type="string", length=10, nullable=true, options={"default": null})
      */
-    protected string $txcVersion;
+    protected ?string $txcVersion = null;
 
     /**
      * Set the application classification
@@ -961,7 +961,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Set the TransXChange schema version
      */
-    public function setTransXChangeVersion(string $version): EbsrSubmission
+    public function setTxcVersion(string $version): EbsrSubmission
     {
         $this->txcVersion = $version;
 
@@ -971,7 +971,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the TransXChange schema version
      */
-    public function getTransXChangeVersion(): ?string
+    public function getTxcVersion(): ?string
     {
         return $this->txcVersion;
     }

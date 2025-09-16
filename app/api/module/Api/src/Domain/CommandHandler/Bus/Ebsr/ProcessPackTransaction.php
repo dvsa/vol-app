@@ -119,9 +119,6 @@ final class ProcessPackTransaction extends AbstractProcessPack implements
         $busReg->setEbsrSubmissions(new ArrayCollection([$ebsrSub]));
         $this->getRepo()->save($busReg);
 
-        //set the TransXChange schema version
-        $ebsrSub->setTransXChangeVersion($ebsrData['transXChangeVersion']);
-
         //update submission status to processed
         $ebsrSub->setBusReg($busReg);
         $this->getRepo('EbsrSubmission')->save($ebsrSub);
