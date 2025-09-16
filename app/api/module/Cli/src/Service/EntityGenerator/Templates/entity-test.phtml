@@ -1,0 +1,23 @@
+<<?php /* Template Hack */ ?>?php
+
+declare(strict_types=1);
+
+namespace <?php echo $namespace; ?>;
+
+use <?php echo $entityNamespace; ?>\<?php echo $entityClass; ?> as Entity;
+use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
+
+/**
+ * <?php echo $className; ?> Entity Unit Tests
+ *
+ * Initially auto-generated but won't be overridden
+ */
+class <?php echo $className; ?>EntityTest extends EntityTester
+{
+    /**
+     * Define the entity to test
+     *
+     * @var string
+     */
+    protected $entityClass = Entity::class;
+}
