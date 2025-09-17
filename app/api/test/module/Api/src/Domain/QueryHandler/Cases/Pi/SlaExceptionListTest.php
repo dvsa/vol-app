@@ -60,11 +60,9 @@ class SlaExceptionListTest extends QueryHandlerTestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('result', $result);
         $this->assertArrayHasKey('count', $result);
-        $this->assertArrayHasKey('results', $result);
 
         $this->assertEquals(2, $result['count']);
         $this->assertCount(2, $result['result']);
-        $this->assertEquals($result['result'], $result['results']); // For compatibility
 
         // Check first result
         $firstResult = $result['result'][0];
@@ -102,12 +100,10 @@ class SlaExceptionListTest extends QueryHandlerTestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('result', $result);
         $this->assertArrayHasKey('count', $result);
-        $this->assertArrayHasKey('results', $result);
 
         $this->assertEquals(0, $result['count']);
         $this->assertCount(0, $result['result']);
         $this->assertEquals([], $result['result']);
-        $this->assertEquals($result['result'], $result['results']);
     }
 
     /**
@@ -206,12 +202,9 @@ class SlaExceptionListTest extends QueryHandlerTestCase
         $result = $this->sut->handleQuery($query);
 
         // Test required keys exist
-        $expectedKeys = ['result', 'count', 'results'];
+        $expectedKeys = ['result', 'count'];
         foreach ($expectedKeys as $key) {
             $this->assertArrayHasKey($key, $result, "Result should contain key: {$key}");
         }
-
-        // Test result and results are the same (for compatibility)
-        $this->assertSame($result['result'], $result['results']);
     }
 }

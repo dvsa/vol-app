@@ -59,7 +59,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListData()
     {
-        $results = ['results' => $this->sampleData];
+        $results = ['result' => $this->sampleData];
 
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -89,7 +89,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithCaching()
     {
         // First call should hit the API
-        $results = ['results' => $this->sampleData];
+        $results = ['result' => $this->sampleData];
 
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -193,7 +193,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListOptionsWithGroups()
     {
-        $results = ['results' => $this->sampleData];
+        $results = ['result' => $this->sampleData];
 
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -234,7 +234,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListOptionsWithoutGroups()
     {
-        $results = ['results' => $this->sampleData];
+        $results = ['result' => $this->sampleData];
 
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))
@@ -265,7 +265,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListOptionsEmpty()
     {
-        $results = ['results' => []];
+        $results = ['result' => []];
 
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(Qry::class))

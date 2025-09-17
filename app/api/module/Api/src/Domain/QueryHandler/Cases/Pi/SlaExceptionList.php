@@ -45,7 +45,7 @@ final class SlaExceptionList extends AbstractQueryHandler
 
         return [
             'count' => count($results),
-            'results' => $results,
+            'result' => $results,
         ];
     }
 }
