@@ -24,29 +24,28 @@ final class SlaExceptionList extends AbstractQueryHandler
     {
         /** @var \Dvsa\Olcs\Api\Domain\Repository\SlaException $repo */
         $repo = $this->getRepo();
-        
+
         $slaExceptions = $repo->fetchActive();
 
         $results = [];
         foreach ($slaExceptions as $slaException) {
             $effectiveFrom = $slaException->getEffectiveFrom();
             $effectiveTo = $slaException->getEffectiveTo();
-            
+
             $results[] = [
                 'id' => $slaException->getId(),
                 'slaDescription' => $slaException->getSlaDescription(),
                 'slaExceptionDescription' => $slaException->getSlaExceptionDescription(),
-                'effectiveFrom' => $effectiveFrom instanceof \DateTime ? 
+                'effectiveFrom' => $effectiveFrom instanceof \DateTime ?
                     $effectiveFrom->format('Y-m-d') : $effectiveFrom,
-                'effectiveTo' => $effectiveTo instanceof \DateTime ? 
+                'effectiveTo' => $effectiveTo instanceof \DateTime ?
                     $effectiveTo->format('Y-m-d') : $effectiveTo,
             ];
         }
 
         return [
-            'result' => $results,
             'count' => count($results),
-            'results' => $results, // For compatibility with list data services
+            'results' => $results,
         ];
     }
 }

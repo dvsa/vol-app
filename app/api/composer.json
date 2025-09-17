@@ -22,7 +22,7 @@
     "league/flysystem-webdav": "1.0.10",
     "monolog/monolog": "^2.9",
     "olcs/olcs-logging": "^7.0",
-    "olcs/olcs-transfer": "^7.18.1",
+    "olcs/olcs-transfer": "^7.19",
     "olcs/olcs-utils": "^6.0.0",
     "olcs/olcs-xmltools": "~7.0.0",
     "oro/doctrine-extensions": "^2",
