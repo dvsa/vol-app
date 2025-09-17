@@ -46,7 +46,7 @@ class SlaException extends AbstractListDataService
         }
 
         $result = $response->getResult();
-        $slaExceptions = $result['result'] ?? [];
+        $slaExceptions = $result['results'] ?? [];
 
         $this->setData('slaExceptions', $slaExceptions);
 
