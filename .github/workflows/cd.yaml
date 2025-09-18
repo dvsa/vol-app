@@ -505,12 +505,32 @@ jobs:
       contents: read
       id-token: write
 
-  terraform-account-prod:
-    name: Account (prod)
+  terraform-account-prod-plan:
+    name: Account (prod) plan
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
       group: terraform-account-prod
     needs:
+      - release-please
+      - orchestrator
+      - deploy_int
+      - push-to-prod-ecr
+    uses: ./.github/workflows/deploy-account.yaml
+    with:
+      account: prod
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  terraform-account-prod:
+    name: Account (prod)
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && needs.terraform-account-prod-plan.result != 'failure' }}
+    concurrency:
+      group: terraform-account-prod
+    needs:
+      - terraform-account-prod-plan
       - release-please
       - orchestrator
       - deploy_int
