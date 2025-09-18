@@ -513,10 +513,7 @@ jobs:
     needs:
       - release-please
       - orchestrator
-      - terraform_env_int
-      - test_int_internal
-      - test_int_selfserve
-      - test_int_smoke
+      - deploy_int
       - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:

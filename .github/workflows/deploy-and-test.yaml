@@ -51,8 +51,30 @@ on:
         required: true
 
 jobs:
+  terraform_env_plan:
+    name: Environment Plan - ${{ inputs.environment }}
+    if: ${{ inputs.account == 'prod' }}
+    concurrency:
+      group: terraform-environment-${{ inputs.environment }}
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      api-image-tag: ${{ inputs.api-image-tag }}
+      cli-image-tag: ${{ inputs.cli-image-tag }}
+      selfserve-image-tag: ${{ inputs.selfserve-image-tag }}
+      internal-image-tag: ${{ inputs.internal-image-tag }}
+      assets-version: ${{ inputs.assets-version }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
   terraform_env:
     name: Environment - ${{ inputs.environment }}
+    if: needs.terraform_env_plan.result != 'failure'
+    needs:
+      - terraform_env_plan
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
     uses: ./.github/workflows/deploy-environment.yaml
