@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.4.0](https://github.com/dvsa/vol-app/compare/v6.3.2...v6.4.0) (2025-09-16)
+
+
+### Features
+
+* updated Internal heading to read VOL instead of OLCS - VOL-6593 ([#1129](https://github.com/dvsa/vol-app/issues/1129)) ([835df38](https://github.com/dvsa/vol-app/commit/835df3877a9963fd4d5f539fe442b4da3a72c59f))
+
+
+### Bug Fixes
+
+* match session.gc_maxlifetime to match what puppet was setting on ec2 instances ([#1133](https://github.com/dvsa/vol-app/issues/1133)) ([2bba0b3](https://github.com/dvsa/vol-app/commit/2bba0b386898192059934881b84a9f03140841a0))
+* trigger CD job ([#1126](https://github.com/dvsa/vol-app/issues/1126)) ([90d474b](https://github.com/dvsa/vol-app/commit/90d474bccedbbdb28870c5dcdfdff636f1bdb5bd))
+* trigger CD job ([#1130](https://github.com/dvsa/vol-app/issues/1130)) ([c780dc1](https://github.com/dvsa/vol-app/commit/c780dc1b32c94d17b92533a2dabd5bead2735ea8))
+
 ## [6.3.2](https://github.com/dvsa/vol-app/compare/v6.3.1...v6.3.2) (2025-09-09)
 
 
