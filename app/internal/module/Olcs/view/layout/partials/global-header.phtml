@@ -1,6 +1,6 @@
 <div role="banner" class="global-header">
     <div class="global-header__wrapper">
-        <h2 class="global-header__title"><a href="/">OLCS</a></h2>
+        <h2 class="global-header__title"><?php echo $this->link('/', $this->translate('internal.login.olcs-header'), ''); ?></h2>
         <?php echo $this->partial('layout/partials/search'); ?>
         <?php
         if ($this->isGranted('internal-case-worker') || $this->isGranted('internal-admin')) {
