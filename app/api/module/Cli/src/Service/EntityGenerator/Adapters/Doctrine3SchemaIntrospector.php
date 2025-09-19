@@ -95,15 +95,18 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         // Add many_to_many relationships from join tables
         $joinTables = $this->detectJoinTables();
         foreach ($joinTables as $joinTableName => $joinTableInfo) {
-            // Only add ManyToMany relationship to the FIRST entity (owner of the relationship)
-            // The inverse side will only be added if explicitly configured in EntityConfig
-            $owningEntity = $joinTableInfo['entities'][0];
-            $inverseEntity = $joinTableInfo['entities'][1];
+            // Determine ownership based on join table name
+            // The entity whose name appears first in the join table name owns the relationship
+            $owningEntity = $this->determineOwningEntity($joinTableName, $joinTableInfo['entities']);
+            $inverseEntity = ($owningEntity === $joinTableInfo['entities'][0]) 
+                ? $joinTableInfo['entities'][1] 
+                : $joinTableInfo['entities'][0];
             
             if (!isset($relationships[$owningEntity['table']])) {
                 $relationships[$owningEntity['table']] = [];
             }
             
+            // Add owning side relationship
             $relationships[$owningEntity['table']][] = [
                 'type' => 'many_to_many',
                 'join_table' => $joinTableName,
@@ -113,7 +116,29 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
                 'join_columns' => $owningEntity['join_columns'],
                 'inverse_join_columns' => $inverseEntity['join_columns'],
                 'name' => $joinTableName . '_' . $owningEntity['table'] . '_' . $inverseEntity['table'],
+                'is_owning' => true,
             ];
+            
+            // Add inverse side relationship (unless the target should skip ManyToMany)
+            // Skip inverse for ref_data table as it's configured with skipManyToMany
+            if ($inverseEntity['table'] !== 'ref_data' && $inverseEntity['table'] !== 'country') {
+                if (!isset($relationships[$inverseEntity['table']])) {
+                    $relationships[$inverseEntity['table']] = [];
+                }
+                
+                $relationships[$inverseEntity['table']][] = [
+                    'type' => 'many_to_many',
+                    'join_table' => $joinTableName,
+                    'local_columns' => $inverseEntity['columns'],
+                    'foreign_table' => $owningEntity['table'],
+                    'foreign_columns' => $owningEntity['columns'],
+                    'join_columns' => $inverseEntity['join_columns'],
+                    'inverse_join_columns' => $owningEntity['join_columns'],
+                    'name' => $joinTableName . '_' . $inverseEntity['table'] . '_' . $owningEntity['table'],
+                    'is_owning' => false,
+                    'mapped_by_property' => null, // Will be determined by EntityGenerator
+                ];
+            }
         }
 
         return $relationships;
@@ -297,9 +322,20 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
                 continue;
             }
 
-            // Check that the table has no other columns (only the 2 FK columns)
+            // Check that the table has no other columns besides FK columns and legacy OLBS columns
             $allColumns = $table->getColumns();
-            if (count($allColumns) !== count($allForeignKeyColumns)) {
+            $nonLegacyColumns = [];
+            
+            foreach ($allColumns as $column) {
+                $columnName = $column->getName();
+                // Skip legacy OLBS migration columns (olbs_key, olbs_oc_id, olbs_opp_id, olbs_type, etc.)
+                if (!preg_match('/^olbs_/', $columnName)) {
+                    $nonLegacyColumns[] = $columnName;
+                }
+            }
+            
+            // The non-legacy columns should only be the FK columns
+            if (count($nonLegacyColumns) !== count($allForeignKeyColumns)) {
                 continue;
             }
 
@@ -321,6 +357,72 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         }
 
         return $joinTables;
+    }
+
+    /**
+     * Determine which entity owns the ManyToMany relationship based on join table name
+     * The entity whose name appears first in the join table name is the owner
+     */
+    private function determineOwningEntity(string $joinTableName, array $entities): array
+    {
+        // Convert join table name to lowercase for comparison
+        $tableName = strtolower($joinTableName);
+        
+        // Special case mappings for abbreviated table names
+        $abbreviationMappings = [
+            'ptr' => 'propose_to_revoke',
+            'irfo' => 'irfo_psv_auth',
+            'irhp' => 'irhp_application',
+        ];
+        
+        // First, try exact match with entity table names
+        foreach ($entities as $entity) {
+            $entityTableName = strtolower($entity['table']);
+            
+            // Check if the join table name starts with this entity's table name
+            if (strpos($tableName, $entityTableName . '_') === 0) {
+                return $entity;
+            }
+            
+            // Check for singular form (e.g., 'user' in 'user_role' for table 'users')
+            $singularEntityName = rtrim($entityTableName, 's');
+            if (strpos($tableName, $singularEntityName . '_') === 0) {
+                return $entity;
+            }
+        }
+        
+        // Check for abbreviation mappings
+        foreach ($abbreviationMappings as $abbrev => $fullName) {
+            if (strpos($tableName, $abbrev . '_') === 0) {
+                foreach ($entities as $entity) {
+                    if (strtolower($entity['table']) === $fullName) {
+                        return $entity;
+                    }
+                }
+            }
+        }
+        
+        // For complex table names like 'licence_status_decision', check for partial matches
+        // Split by underscore and check progressively
+        $parts = explode('_', $tableName);
+        $accumulator = '';
+        
+        foreach ($parts as $part) {
+            if ($accumulator !== '') {
+                $accumulator .= '_';
+            }
+            $accumulator .= $part;
+            
+            foreach ($entities as $entity) {
+                $entityTableName = strtolower($entity['table']);
+                if ($entityTableName === $accumulator || $entityTableName === $accumulator . 's') {
+                    return $entity;
+                }
+            }
+        }
+        
+        // Fallback: return the first entity (maintains current behavior for edge cases)
+        return $entities[0];
     }
 
     /**

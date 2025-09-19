@@ -31,26 +31,26 @@ class TemplateRenderer
     public function render(string $templateName, array $data = []): string
     {
         $templateFile = $this->templatePath . '/' . $templateName . '.phtml';
-        
+
         if (!file_exists($templateFile)) {
             throw new \InvalidArgumentException(sprintf('Template file not found: %s', $templateFile));
         }
 
         // Make MethodGeneratorService methods available to template as helper functions
         $methodGenerator = $this->methodGenerator;
-        
+
         // Extract data to variables
         extract($data, EXTR_SKIP);
-        
+
         // Start output buffering
         ob_start();
-        
+
         // Include the template
         include $templateFile;
-        
+
         // Get the output and clean the buffer
         $content = ob_get_clean();
-        
+
         if ($content === false) {
             throw new \RuntimeException(sprintf('Failed to render template: %s', $templateName));
         }
@@ -64,24 +64,24 @@ class TemplateRenderer
     public function generateOptionsFromAttributes(array $attributes, string $type): string
     {
         $options = [];
-        
+
         foreach ($attributes as $key => $value) {
             // Skip 'unique' attribute for indexes (it's not valid for @ORM\Index)
             if ($type === 'indexes' && $key === 'unique') {
                 continue;
             }
-            
+
             if ($key === 'options' && is_array($value)) {
                 // Handle nested options array separately
                 continue;
             }
-            
+
             if (is_array($value)) {
                 // Skip empty arrays in annotations
                 if (empty($value)) {
                     continue;
                 }
-                
+
                 // Handle arrays of strings (like columns)
                 $cleanValues = array_filter(array_map(function($v) {
                     if (is_array($v)) {
@@ -90,7 +90,7 @@ class TemplateRenderer
                     }
                     return '"' . $v . '"';
                 }, $value));
-                
+
                 if (!empty($cleanValues)) {
                     $options[] = $key . '={' . implode(', ', $cleanValues) . '}';
                 }
@@ -119,7 +119,7 @@ class TemplateRenderer
     }
 
     /**
-     * Enhanced helper to determine trait usage with modern PHP features
+     * Enhanced helper to determine trait usage
      */
     public function getRequiredTraits(array $fields, bool $hasCollections, bool $softDeletable): array
     {
@@ -134,7 +134,7 @@ class TemplateRenderer
         // Check for specific trait fields
         foreach ($fields as $field) {
             $propertyName = $field['property']['name'] ?? '';
-            
+
             match ($propertyName) {
                 'createdOn' => $traits[] = 'CreatedOnTrait',
                 'lastModifiedOn' => $traits[] = 'ModifiedOnTrait',
@@ -215,7 +215,7 @@ class TemplateRenderer
     }
 
     /**
-     * Check if entity has blameable fields using modern PHP
+     * Check if entity has blameable fields
      */
     private function hasBlameableFields(array $fields): bool
     {
@@ -251,12 +251,12 @@ class TemplateRenderer
         $property = $fieldData['property'];
         $propertyName = $property['name'];
         $type = $property['type'];
-        
+
         $getterName = 'get' . ucfirst($propertyName);
         $setterName = 'set' . ucfirst($propertyName);
-        
+
         $methods = [];
-        
+
         // Getter
         $methods[] = sprintf(
             "    /**\n     * Get %s\n     *\n     * @return %s\n     */\n    public function %s(): %s\n    {\n        return \$this->%s;\n    }",
@@ -266,7 +266,7 @@ class TemplateRenderer
             $property['nullable'] ? '?' . $type : $type,
             $propertyName
         );
-        
+
         // Setter
         $methods[] = sprintf(
             "    /**\n     * Set %s\n     *\n     * @param %s \$%s\n     * @return \$this\n     */\n    public function %s(%s \$%s): self\n    {\n        \$this->%s = \$%s;\n        return \$this;\n    }",
@@ -279,7 +279,7 @@ class TemplateRenderer
             $propertyName,
             $propertyName
         );
-        
+
         return implode("\n\n", $methods);
     }
 }

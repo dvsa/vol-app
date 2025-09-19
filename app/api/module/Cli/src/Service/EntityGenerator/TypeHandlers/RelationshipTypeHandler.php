@@ -169,8 +169,12 @@ class RelationshipTypeHandler extends AbstractTypeHandler
                     // Get the foreign table name from the constraint
                     $foreignTableName = is_array($foreignKey) ? ($foreignKey['foreign_table'] ?? null) : $foreignKey->getForeignTableName();
                     if ($foreignTableName !== null) {
-                        // Convert table name to entity name
-                        $entityName = $this->tableNameToEntityName($foreignTableName);
+                        // Check for custom class name mapping first
+                        $entityName = $config['mappingConfig']['classNameForTable'][$foreignTableName] ?? null;
+                        if ($entityName === null) {
+                            // Convert table name to entity name
+                            $entityName = $this->tableNameToEntityName($foreignTableName);
+                        }
                         
                         // Check if there's a namespace mapping
                         $namespace = $this->getEntityNamespace($entityName, $config);
@@ -260,8 +264,8 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             return 'Dvsa\\Olcs\\Api\\Entity\\' . $namespaces[$entityName];
         }
 
-        // Default namespace
-        return 'Dvsa\\Olcs\\Api\\Entity\\System';
+        // Default namespace (root Entity folder)
+        return 'Dvsa\\Olcs\\Api\\Entity';
     }
 
     /**

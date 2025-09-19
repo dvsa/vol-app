@@ -8,15 +8,16 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Exceptions\EntityConfigException;
 
 /**
- * Service for loading and processing EntityConfig.php with modern PHP features
+ * Service for loading and processing EntityConfig.php
  */
-final readonly class EntityConfigService
+final class EntityConfigService
 {
-    private array $config;
-    private array $namespaces;
+    private readonly array $config;
+    private readonly array $namespaces;
+    private array $tableConfigCache = [];
 
     public function __construct(
-        #[\SensitiveParameter] private string $configPath
+        #[\SensitiveParameter] private readonly string $configPath
     ) {
         $this->config = $this->loadConfig();
         $this->namespaces = $this->config['namespaces'] ?? [];
@@ -38,18 +39,22 @@ final readonly class EntityConfigService
     }
 
     /**
-     * Get all field configurations for a table
+     * Get all field configurations for a table with caching
      */
     public function getTableConfig(string $table): array
     {
-        $tableConfig = $this->config[$table] ?? [];
-        $result = [];
+        if (!isset($this->tableConfigCache[$table])) {
+            $tableConfig = $this->config[$table] ?? [];
+            $result = [];
 
-        foreach ($tableConfig as $column => $config) {
-            $result[$column] = FieldConfig::fromArray($config);
+            foreach ($tableConfig as $column => $config) {
+                $result[$column] = FieldConfig::fromArray($config);
+            }
+
+            $this->tableConfigCache[$table] = $result;
         }
 
-        return $result;
+        return $this->tableConfigCache[$table];
     }
 
     /**
@@ -142,7 +147,7 @@ final readonly class EntityConfigService
                 if (isset($fieldConfig['inversedBy'])) {
                     $inversedByConfig = $fieldConfig['inversedBy'];
                     $targetEntity = $inversedByConfig['entity'];
-                    
+
                     $inverseRelationships[$targetEntity] ??= [];
                     $inverseRelationships[$targetEntity][] = [
                         'sourceTable' => $tableName,

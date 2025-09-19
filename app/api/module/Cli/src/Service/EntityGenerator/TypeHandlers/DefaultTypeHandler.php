@@ -69,6 +69,12 @@ class DefaultTypeHandler extends AbstractTypeHandler
             if ($doctrineType === 'boolean' && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
                 $defaultValue = ($default === '1' || $default === 'true') ? '1' : '0';
+            } elseif (in_array($doctrineType, ['integer', 'smallint', 'bigint', 'decimal', 'float']) && is_numeric($default)) {
+                // For numeric types, don't quote the default value in options
+                $defaultValue = (string) $default;
+            } elseif (is_string($default)) {
+                // For string types in options array, use double quotes escaped for PHP
+                $defaultValue = '"' . addslashes($default) . '"';
             } else {
                 $defaultValue = $this->generateDefaultValue($default);
             }

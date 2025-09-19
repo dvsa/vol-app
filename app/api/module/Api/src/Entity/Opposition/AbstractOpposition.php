@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Opposition;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Opposition Abstract Entity
+ * AbstractOpposition Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,10 +34,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_opposition_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_opposition_opposer_id", columns={"opposer_id"}),
  *        @ORM\Index(name="ix_opposition_opposition_type", columns={"opposition_type"}),
- *        @ORM\Index(name="ix_opposition_status", columns={"status"})
+ *        @ORM\Index(name="ix_opposition_status", columns={"status"}),
+ *        @ORM\Index(name="uk_opposition_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_opposition_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_opposition_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -48,18 +52,65 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="oppositions"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
+
+    /**
+     * Foreign Key to opposer
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Opposition\Opposer
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposer", fetch="LAZY")
+     * @ORM\JoinColumn(name="opposer_id", referencedColumnName="id")
+     */
+    protected $opposer;
+
+    /**
+     * OppositionType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="opposition_type", referencedColumnName="id")
+     */
+    protected $oppositionType;
+
+    /**
+     * Status
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
+     */
+    protected $status;
+
+    /**
+     * yes, no, undecided
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="is_valid", referencedColumnName="id")
+     */
+    protected $isValid;
 
     /**
      * Created by
@@ -71,87 +122,6 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Ground
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="oppositions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="opposition_grounds",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="ground_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $grounds;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is copied
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_copied", nullable=false, options={"default": 0})
-     */
-    protected $isCopied = 0;
-
-    /**
-     * Is in time
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_in_time", nullable=false, options={"default": 0})
-     */
-    protected $isInTime = 0;
-
-    /**
-     * Is valid
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="is_valid", referencedColumnName="id", nullable=false)
-     */
-    protected $isValid;
-
-    /**
-     * Is willing to attend pi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="is_willing_to_attend_pi",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $isWillingToAttendPi = 0;
-
-    /**
-     * Is withdrawn
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_withdrawn", nullable=false, options={"default": 0})
-     */
-    protected $isWithdrawn = 0;
 
     /**
      * Last modified by
@@ -174,67 +144,13 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     protected $notes;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
+     * isCopied
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="yesno", name="is_copied", nullable=false, options={"default": 0})
      */
-    protected $olbsType;
-
-    /**
-     * Operating centre
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre",
-     *     inversedBy="oppositions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="operating_centre_opposition",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $operatingCentres;
-
-    /**
-     * Opposer
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Opposition\Opposer
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposer",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="opposer_id", referencedColumnName="id", nullable=false)
-     */
-    protected $opposer;
-
-    /**
-     * Opposition type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="opposition_type", referencedColumnName="id", nullable=false)
-     */
-    protected $oppositionType;
+    protected $isCopied = 0;
 
     /**
      * Raised date
@@ -246,14 +162,22 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     protected $raisedDate;
 
     /**
-     * Status
+     * isInTime
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="yesno", name="is_in_time", nullable=false, options={"default": 0})
      */
-    protected $status;
+    protected $isInTime = 0;
+
+    /**
+     * isWithdrawn
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_withdrawn", nullable=false, options={"default": 0})
+     */
+    protected $isWithdrawn = 0;
 
     /**
      * Valid notes
@@ -263,6 +187,15 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      * @ORM\Column(type="string", name="valid_notes", length=4000, nullable=true)
      */
     protected $validNotes;
+
+    /**
+     * isWillingToAttendPi
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_willing_to_attend_pi", nullable=false, options={"default": 0})
+     */
+    protected $isWillingToAttendPi = 0;
 
     /**
      * Version
@@ -275,9 +208,51 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @return void
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * OperatingCentres
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", mappedBy="oppositions", fetch="LAZY")
+     */
+    protected $operatingCentres;
+
+    /**
+     * Ground
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="oppositions", fetch="LAZY")
+     * @ORM\JoinTable(name="opposition_grounds",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="ground_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $ground;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -285,126 +260,14 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->operatingCentres = new ArrayCollection();
-        $this->grounds = new ArrayCollection();
+        $this->ground = new ArrayCollection();
     }
 
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return Opposition
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-
-        return $this;
-    }
-
-    /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Opposition
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the ground
-     *
-     * @param ArrayCollection $grounds collection being set as the value
-     *
-     * @return Opposition
-     */
-    public function setGrounds($grounds)
-    {
-        $this->grounds = $grounds;
-
-        return $this;
-    }
-
-    /**
-     * Get the grounds
-     *
-     * @return ArrayCollection
-     */
-    public function getGrounds()
-    {
-        return $this->grounds;
-    }
-
-    /**
-     * Add a grounds
-     *
-     * @param ArrayCollection|mixed $grounds collection being added
-     *
-     * @return Opposition
-     */
-    public function addGrounds($grounds)
-    {
-        if ($grounds instanceof ArrayCollection) {
-            $this->grounds = new ArrayCollection(
-                array_merge(
-                    $this->grounds->toArray(),
-                    $grounds->toArray()
-                )
-            );
-        } elseif (!$this->grounds->contains($grounds)) {
-            $this->grounds->add($grounds);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a grounds
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $grounds collection being removed
-     *
-     * @return Opposition
-     */
-    public function removeGrounds($grounds)
-    {
-        if ($this->grounds->contains($grounds)) {
-            $this->grounds->removeElement($grounds);
-        }
-
-        return $this;
-    }
 
     /**
      * Set the id
@@ -423,65 +286,108 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the is copied
+     * Set the case
      *
-     * @param string $isCopied new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return Opposition
      */
-    public function setIsCopied($isCopied)
+    public function setCase($case)
     {
-        $this->isCopied = $isCopied;
+        $this->case = $case;
 
         return $this;
     }
 
     /**
-     * Get the is copied
+     * Get the case
      *
-     * @return string
-     */
-    public function getIsCopied()
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
     {
-        return $this->isCopied;
+        return $this->case;
     }
 
     /**
-     * Set the is in time
+     * Set the opposer
      *
-     * @param string $isInTime new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Opposition\Opposer $opposer new value being set
      *
      * @return Opposition
      */
-    public function setIsInTime($isInTime)
+    public function setOpposer($opposer)
     {
-        $this->isInTime = $isInTime;
+        $this->opposer = $opposer;
 
         return $this;
     }
 
     /**
-     * Get the is in time
+     * Get the opposer
      *
-     * @return string
-     */
-    public function getIsInTime()
+     * @return \Dvsa\Olcs\Api\Entity\Opposition\Opposer     */
+    public function getOpposer()
     {
-        return $this->isInTime;
+        return $this->opposer;
+    }
+
+    /**
+     * Set the opposition type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $oppositionType new value being set
+     *
+     * @return Opposition
+     */
+    public function setOppositionType($oppositionType)
+    {
+        $this->oppositionType = $oppositionType;
+
+        return $this;
+    }
+
+    /**
+     * Get the opposition type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getOppositionType()
+    {
+        return $this->oppositionType;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return Opposition
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
      * Set the is valid
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $isValid entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $isValid new value being set
      *
      * @return Opposition
      */
@@ -495,65 +401,39 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the is valid
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getIsValid()
     {
         return $this->isValid;
     }
 
     /**
-     * Set the is willing to attend pi
+     * Set the created by
      *
-     * @param string $isWillingToAttendPi new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Opposition
      */
-    public function setIsWillingToAttendPi($isWillingToAttendPi)
+    public function setCreatedBy($createdBy)
     {
-        $this->isWillingToAttendPi = $isWillingToAttendPi;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is willing to attend pi
+     * Get the created by
      *
-     * @return string
-     */
-    public function getIsWillingToAttendPi()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->isWillingToAttendPi;
-    }
-
-    /**
-     * Set the is withdrawn
-     *
-     * @param string $isWithdrawn new value being set
-     *
-     * @return Opposition
-     */
-    public function setIsWithdrawn($isWithdrawn)
-    {
-        $this->isWithdrawn = $isWithdrawn;
-
-        return $this;
-    }
-
-    /**
-     * Get the is withdrawn
-     *
-     * @return string
-     */
-    public function getIsWithdrawn()
-    {
-        return $this->isWithdrawn;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Opposition
      */
@@ -567,8 +447,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -591,11 +470,177 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the notes
      *
-     * @return string
-     */
+     * @return string     */
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Set the is copied
+     *
+     * @param string $isCopied new value being set
+     *
+     * @return Opposition
+     */
+    public function setIsCopied($isCopied)
+    {
+        $this->isCopied = $isCopied;
+
+        return $this;
+    }
+
+    /**
+     * Get the is copied
+     *
+     * @return string     */
+    public function getIsCopied()
+    {
+        return $this->isCopied;
+    }
+
+    /**
+     * Set the raised date
+     *
+     * @param \DateTime $raisedDate new value being set
+     *
+     * @return Opposition
+     */
+    public function setRaisedDate($raisedDate)
+    {
+        $this->raisedDate = $raisedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the raised date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getRaisedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->raisedDate);
+        }
+
+        return $this->raisedDate;
+    }
+
+    /**
+     * Set the is in time
+     *
+     * @param string $isInTime new value being set
+     *
+     * @return Opposition
+     */
+    public function setIsInTime($isInTime)
+    {
+        $this->isInTime = $isInTime;
+
+        return $this;
+    }
+
+    /**
+     * Get the is in time
+     *
+     * @return string     */
+    public function getIsInTime()
+    {
+        return $this->isInTime;
+    }
+
+    /**
+     * Set the is withdrawn
+     *
+     * @param string $isWithdrawn new value being set
+     *
+     * @return Opposition
+     */
+    public function setIsWithdrawn($isWithdrawn)
+    {
+        $this->isWithdrawn = $isWithdrawn;
+
+        return $this;
+    }
+
+    /**
+     * Get the is withdrawn
+     *
+     * @return string     */
+    public function getIsWithdrawn()
+    {
+        return $this->isWithdrawn;
+    }
+
+    /**
+     * Set the valid notes
+     *
+     * @param string $validNotes new value being set
+     *
+     * @return Opposition
+     */
+    public function setValidNotes($validNotes)
+    {
+        $this->validNotes = $validNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get the valid notes
+     *
+     * @return string     */
+    public function getValidNotes()
+    {
+        return $this->validNotes;
+    }
+
+    /**
+     * Set the is willing to attend pi
+     *
+     * @param string $isWillingToAttendPi new value being set
+     *
+     * @return Opposition
+     */
+    public function setIsWillingToAttendPi($isWillingToAttendPi)
+    {
+        $this->isWillingToAttendPi = $isWillingToAttendPi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is willing to attend pi
+     *
+     * @return string     */
+    public function getIsWillingToAttendPi()
+    {
+        return $this->isWillingToAttendPi;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Opposition
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -615,8 +660,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -639,17 +683,16 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the operating centre
+     * Set the operating centres
      *
-     * @param ArrayCollection $operatingCentres collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being set as the value
      *
      * @return Opposition
      */
@@ -663,7 +706,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Get the operating centres
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOperatingCentres()
     {
@@ -673,7 +716,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     /**
      * Add a operating centres
      *
-     * @param ArrayCollection|mixed $operatingCentres collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $operatingCentres collection being added
      *
      * @return Opposition
      */
@@ -710,153 +753,73 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the opposer
+     * Set the ground
      *
-     * @param \Dvsa\Olcs\Api\Entity\Opposition\Opposer $opposer entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $ground collection being set as the value
      *
      * @return Opposition
      */
-    public function setOpposer($opposer)
+    public function setGround($ground)
     {
-        $this->opposer = $opposer;
+        $this->ground = $ground;
 
         return $this;
     }
 
     /**
-     * Get the opposer
+     * Get the ground
      *
-     * @return \Dvsa\Olcs\Api\Entity\Opposition\Opposer
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getOpposer()
+    public function getGround()
     {
-        return $this->opposer;
+        return $this->ground;
     }
 
     /**
-     * Set the opposition type
+     * Add a ground
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $oppositionType entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $ground collection being added
      *
      * @return Opposition
      */
-    public function setOppositionType($oppositionType)
+    public function addGround($ground)
     {
-        $this->oppositionType = $oppositionType;
-
-        return $this;
-    }
-
-    /**
-     * Get the opposition type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getOppositionType()
-    {
-        return $this->oppositionType;
-    }
-
-    /**
-     * Set the raised date
-     *
-     * @param \DateTime $raisedDate new value being set
-     *
-     * @return Opposition
-     */
-    public function setRaisedDate($raisedDate)
-    {
-        $this->raisedDate = $raisedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the raised date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getRaisedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->raisedDate);
+        if ($ground instanceof ArrayCollection) {
+            $this->ground = new ArrayCollection(
+                array_merge(
+                    $this->ground->toArray(),
+                    $ground->toArray()
+                )
+            );
+        } elseif (!$this->ground->contains($ground)) {
+            $this->ground->add($ground);
         }
 
-        return $this->raisedDate;
+        return $this;
     }
 
     /**
-     * Set the status
+     * Remove a ground
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $ground collection being removed
      *
      * @return Opposition
      */
-    public function setStatus($status)
+    public function removeGround($ground)
     {
-        $this->status = $status;
+        if ($this->ground->contains($ground)) {
+            $this->ground->removeElement($ground);
+        }
 
         return $this;
     }
 
     /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     * Get bundle data
      */
-    public function getStatus()
+    public function __toString(): string
     {
-        return $this->status;
-    }
-
-    /**
-     * Set the valid notes
-     *
-     * @param string $validNotes new value being set
-     *
-     * @return Opposition
-     */
-    public function setValidNotes($validNotes)
-    {
-        $this->validNotes = $validNotes;
-
-        return $this;
-    }
-
-    /**
-     * Get the valid notes
-     *
-     * @return string
-     */
-    public function getValidNotes()
-    {
-        return $this->validNotes;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Opposition
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

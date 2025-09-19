@@ -18,6 +18,10 @@ use Psr\Container\ContainerInterface;
  */
 class GenerateEntities extends AbstractCommandHandler
 {
+    private const ENTITY_RELATIVE_PATH = '/api/module/Api/src/Entity';
+    private const TEST_RELATIVE_PATH = '/api/test/module/Api/src/Entity';
+    private const PROJECT_ROOT_DEPTH = 7; // Depth from this file to project root
+    
     private Doctrine3SchemaIntrospector $schemaIntrospector;
     private EntityGenerator $entityGenerator;
 
@@ -101,7 +105,11 @@ class GenerateEntities extends AbstractCommandHandler
         $olcsResult->setFlag('warnings', $result->getWarnings());
         $olcsResult->setFlag('duration', $result->getDuration());
         $olcsResult->setFlag('dryRun', $command->isDryRun());
-        $olcsResult->setFlag('outputPath', $config['outputPath']);
+        // Report the actual output path used
+        $actualOutputPath = $config['replace'] 
+            ? $this->getEntityPath()
+            : $config['outputPath'];
+        $olcsResult->setFlag('outputPath', $actualOutputPath);
 
         return $olcsResult;
     }
@@ -143,13 +151,41 @@ class GenerateEntities extends AbstractCommandHandler
         // Look for @settings['ignore'] in the comment
         return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
     }
+    
+    /**
+     * Get project root directory
+     */
+    private function getProjectRoot(): string
+    {
+        return dirname(__DIR__, self::PROJECT_ROOT_DEPTH);
+    }
+    
+    /**
+     * Get entity directory path
+     */
+    private function getEntityPath(): string
+    {
+        return $this->getProjectRoot() . self::ENTITY_RELATIVE_PATH;
+    }
+    
+    /**
+     * Get test directory path
+     */
+    private function getTestPath(): string
+    {
+        return $this->getProjectRoot() . self::TEST_RELATIVE_PATH;
+    }
 
     /**
      * Write generated files to disk
      */
     private function writeGeneratedFiles(GenerationResult $result, Command $command, array $config): void
     {
-        $outputPath = $config['outputPath'];
+        // If replace mode is enabled, write directly to the Entity directory
+        // Otherwise use the specified output path (default: /tmp/generated-entities)
+        $outputPath = $config['replace'] 
+            ? $this->getEntityPath()
+            : $config['outputPath'];
         
         // Create output directories
         $this->createDirectories($outputPath);
@@ -161,11 +197,11 @@ class GenerateEntities extends AbstractCommandHandler
             if (empty($namespaceFolder) || $namespaceFolder === 'Entity') {
                 // For root entities, write directly to output path
                 $namespacePath = $outputPath;
-                $testNamespacePath = $outputPath . '/tests';
+                $testNamespacePath = $this->getTestPath();
             } else {
                 // For namespaced entities, create subdirectory
                 $namespacePath = $outputPath . '/' . $namespaceFolder;
-                $testNamespacePath = $outputPath . '/tests/' . $namespaceFolder;
+                $testNamespacePath = $this->getTestPath() . '/' . $namespaceFolder;
             }
             
             // Create directories if they don't exist
@@ -178,17 +214,22 @@ class GenerateEntities extends AbstractCommandHandler
             file_put_contents($abstractPath, $entityData->getAbstractContent());
 
             // Write concrete entity ONLY if it doesn't already exist
+            // Never overwrite existing concrete entities as they contain business logic
             $concretePath = $namespacePath . '/' . $entityData->getClassName() . '.php';
             if (!file_exists($concretePath)) {
                 file_put_contents($concretePath, $entityData->getConcreteContent());
             }
 
-            // Test generation disabled
-            // if (!is_dir($testNamespacePath)) {
-            //     mkdir($testNamespacePath, 0755, true);
-            // }
-            // $testPath = $testNamespacePath . '/' . $entityData->getClassName() . 'EntityTest.php';
-            // file_put_contents($testPath, $entityData->getTestContent());
+            // Generate test file ONLY if it doesn't exist
+            if (!is_dir($testNamespacePath)) {
+                mkdir($testNamespacePath, 0755, true);
+            }
+            $testPath = $testNamespacePath . '/' . $entityData->getClassName() . 'EntityTest.php';
+            
+            // Never overwrite existing test files - they may contain custom test logic
+            if (!file_exists($testPath)) {
+                file_put_contents($testPath, $entityData->getTestContent());
+            }
         }
     }
 

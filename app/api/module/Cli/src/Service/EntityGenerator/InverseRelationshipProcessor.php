@@ -116,7 +116,7 @@ readonly class InverseRelationshipProcessor
         
         foreach ($foreignKeys as $fk) {
             // Handle both array and object structures for foreign keys
-            $localColumns = is_array($fk) ? ($fk['localColumns'] ?? []) : $fk->getLocalColumns();
+            $localColumns = is_array($fk) ? ($fk['localColumns'] ?? $fk['local_columns'] ?? []) : $fk->getLocalColumns();
             
             if (in_array($sourceColumn, $localColumns)) {
                 // Check if this FK column is part of a unique constraint
@@ -124,13 +124,19 @@ readonly class InverseRelationshipProcessor
                 
                 foreach ($uniqueConstraints as $uc) {
                     $columns = is_array($uc) ? ($uc['columns'] ?? []) : $uc->getColumns();
-                    if (count($columns) === 1 && $columns[0] === $sourceColumn) {
-                        // Single-column unique constraint on FK = OneToOne
-                        return RelationshipType::ONE_TO_ONE;
+                    
+                    // Check if the foreign key column is in any unique constraint
+                    if (in_array($sourceColumn, $columns)) {
+                        // If it's a single-column unique constraint, it's definitely OneToOne
+                        if (count($columns) === 1) {
+                            return RelationshipType::ONE_TO_ONE;
+                        }
+                        // Multi-column unique constraints might also indicate OneToOne in some cases
+                        // but we'll be conservative and only treat single-column unique as OneToOne
                     }
                 }
                 
-                // Regular FK = ManyToOne (so inverse is OneToMany)
+                // Regular FK without unique constraint = ManyToOne (so inverse is OneToMany)
                 return RelationshipType::ONE_TO_MANY;
             }
         }

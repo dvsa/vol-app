@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Cli\Service\EntityGenerator;
 
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Exceptions\EntityConfigException;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityData;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityGeneratorInterface;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\GenerationResult;
@@ -40,9 +41,18 @@ class EntityGenerator implements EntityGeneratorInterface
             try {
                 $entityData = $this->generateEntity($table, $config);
                 $result->addEntity($entityData);
-            } catch (\Exception $e) {
+            } catch (EntityConfigException $e) {
                 $result->addError(
-                    sprintf('Failed to generate entity for table %s: %s', $table->getTableName(), $e->getMessage())
+                    sprintf('Config error for table %s: %s', $table->getTableName(), $e->getMessage())
+                );
+            } catch (\RuntimeException $e) {
+                $result->addError(
+                    sprintf('Runtime error for table %s: %s', $table->getTableName(), $e->getMessage())
+                );
+            } catch (\Exception $e) {
+                // Only catch truly unexpected exceptions
+                $result->addError(
+                    sprintf('Unexpected error for table %s: %s', $table->getTableName(), $e->getMessage())
                 );
             }
         }
@@ -79,9 +89,9 @@ class EntityGenerator implements EntityGeneratorInterface
         $concreteContent = $this->generateConcreteEntity($entityData, $config);
         $entityData->setConcreteContent($concreteContent);
 
-        // Test generation disabled
-        // $testContent = $this->generateEntityTest($entityData, $config);
-        // $entityData->setTestContent($testContent);
+        // Generate test content for entities
+        $testContent = $this->generateEntityTest($entityData, $config);
+        $entityData->setTestContent($testContent);
 
         // Store enhanced metadata
         $entityData->setMetadata([
@@ -151,7 +161,7 @@ class EntityGenerator implements EntityGeneratorInterface
         if (isset($config['relationships'][$tableName])) {
             foreach ($config['relationships'][$tableName] as $relationship) {
                 if ($relationship['type'] === 'many_to_many') {
-                    $field = $this->createManyToManyField($relationship, $tableName);
+                    $field = $this->createManyToManyField($relationship, $tableName, $config);
                     if ($field !== null) {
                         $fields[] = $field;
                     }
@@ -386,7 +396,10 @@ class EntityGenerator implements EntityGeneratorInterface
      */
     private function generateEntityTest(EntityData $entityData, array $config): string
     {
-        $testNamespace = str_replace('\\Entity\\', '\\Test\\Entity\\', $entityData->getNamespace());
+        // Convert entity namespace to test namespace
+        // From: Dvsa\Olcs\Api\Entity\System
+        // To:   Dvsa\OlcsTest\Api\Entity\System
+        $testNamespace = str_replace('Dvsa\\Olcs\\Api\\Entity', 'Dvsa\\OlcsTest\\Api\\Entity', $entityData->getNamespace());
         
         $templateData = [
             'namespace' => $testNamespace,
@@ -448,7 +461,7 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Create a ManyToMany field from relationship data
      */
-    private function createManyToManyField(array $relationship, string $tableName): ?array
+    private function createManyToManyField(array $relationship, string $tableName, array $config): ?array
     {
         // Get the foreign table name and convert to entity name
         $foreignTable = $relationship['foreign_table'];
@@ -481,49 +494,75 @@ class EntityGenerator implements EntityGeneratorInterface
         }
         
         if ($propertyNameFromConfig !== null) {
-            // Use the property name from EntityConfig (don't pluralize it)
-            $propertyName = $propertyNameFromConfig;
-        } else {
-            // Derive property name from the inverse join column name
-            // e.g., category_id -> category -> categorys
-            $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
-            if ($inverseJoinColumn && preg_match('/^(.+?)_id$/', $inverseJoinColumn, $matches)) {
-                // Remove _id suffix and use that as base property name
-                $basePropertyName = lcfirst(str_replace('_', '', ucwords($matches[1], '_')));
-            } else {
-                // Fall back to entity-based name
+            // Check if target entity is NOT RefData
+            if ($entityName !== 'RefData') {
+                // For non-RefData entities, ignore EntityConfig and use target entity name
+                // This fixes incorrect mappings like licenceStatusDecision -> decisions
                 $basePropertyName = lcfirst($entityName);
+                $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+            } else {
+                // For RefData, keep the EntityConfig property name (it's descriptive)
+                // e.g., variationReasons, serviceTypes, etc.
+                $propertyName = $propertyNameFromConfig;
             }
-            
-            $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+        } else {
+            // No EntityConfig - derive property name appropriately
+            if ($entityName === 'RefData') {
+                // For RefData without config, derive from join column name for descriptive naming
+                $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
+                if ($inverseJoinColumn && preg_match('/^(.+?)_id$/', $inverseJoinColumn, $matches)) {
+                    // Convert variation_reason_id -> variationReasons
+                    $basePropertyName = lcfirst(str_replace('_', '', ucwords($matches[1], '_')));
+                    $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+                } else {
+                    // Fallback to entity name
+                    $basePropertyName = lcfirst($entityName);
+                    $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+                }
+            } else {
+                // For non-RefData, use target entity name
+                $basePropertyName = lcfirst($entityName);
+                $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+            }
         }
         
         // Get namespace for the target entity from entity config
         $namespace = $this->entityConfigService->getEntityNamespace($entityName) ?? 'Generic';
         $targetEntity = 'Dvsa\\Olcs\\Api\\Entity\\' . $namespace . '\\' . $entityName;
         
-        // Determine which side owns the relationship based on column order in join table
-        // The entity whose foreign key column appears FIRST owns the relationship
-        $firstJoinColumn = $relationship['join_columns'][0] ?? null;
-        if ($firstJoinColumn && preg_match('/^(.+?)_id$/', $firstJoinColumn, $matches)) {
-            // Check if the first column's table name matches our current table
-            $firstColumnTable = $matches[1];
-            $isOwning = ($firstColumnTable === $tableName);
+        // Use the is_owning flag if it exists, otherwise determine from join columns
+        if (isset($relationship['is_owning'])) {
+            $isOwning = $relationship['is_owning'];
         } else {
-            // Fallback to alphabetical ordering if we can't determine from columns
-            $isOwning = strcmp($tableName, $foreignTable) < 0;
+            // Fallback to original logic for backwards compatibility
+            $firstJoinColumn = $relationship['join_columns'][0] ?? null;
+            if ($firstJoinColumn && preg_match('/^(.+?)_id$/', $firstJoinColumn, $matches)) {
+                // Check if the first column's table name matches our current table
+                $firstColumnTable = $matches[1];
+                $isOwning = ($firstColumnTable === $tableName);
+            } else {
+                // Fallback to alphabetical ordering if we can't determine from columns
+                $isOwning = strcmp($tableName, $foreignTable) < 0;
+            }
         }
         
-        // For inverse side, we should generate it automatically for many-to-many relationships
-        // The owning side will have inversedBy pointing to this side
-        
         // Generate the inverse property name
-        $inversePropertyName = $this->generateInversePropertyName($tableName);
+        if (!$isOwning) {
+            // For inverse side, mappedBy should reference the property name on the owning side
+            // The owning side generates its property name from the inverse entity (this entity)
+            // We need to use the same logic the owning side would use
+            $entityNameForProperty = $this->generateClassName($tableName, $config);
+            $basePropertyName = lcfirst($entityNameForProperty);
+            $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+        } else {
+            // For owning side, generate the inverse property name for inversedBy  
+            $inversePropertyName = $this->generateInversePropertyName($tableName);
+        }
         
         // Build annotation based on ownership
         $annotation = $isOwning 
             ? $this->buildOwningManyToManyAnnotation($targetEntity, $inversePropertyName, $relationship)
-            : $this->buildInverseManyToManyAnnotation($targetEntity, $propertyName);
+            : $this->buildInverseManyToManyAnnotation($targetEntity, $inversePropertyName);
         
         return $this->buildManyToManyFieldArray($propertyName, $annotation);
     }

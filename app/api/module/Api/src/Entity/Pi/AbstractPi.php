@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Pi Abstract Entity
+ * AbstractPi Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -34,11 +37,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_pi_decided_by_tc_role", columns={"decided_by_tc_role"}),
  *        @ORM\Index(name="ix_pi_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_pi_pi_status", columns={"pi_status"}),
- *        @ORM\Index(name="ix_pi_written_outcome", columns={"written_outcome"})
+ *        @ORM\Index(name="ix_pi_written_outcome", columns={"written_outcome"}),
+ *        @ORM\Index(name="uk_pi_case_id", columns={"case_id"}),
+ *        @ORM\Index(name="uk_pi_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_pi_case_id", columns={"case_id"}),
- *        @ORM\UniqueConstraint(name="uk_pi_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_pi_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -52,36 +57,28 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     use SoftDeletableTrait;
 
     /**
-     * Agreed by tc
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="agreed_by_tc_id", referencedColumnName="id", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $agreedByTc;
+    protected $id;
 
     /**
-     * Agreed by tc role
+     * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="agreed_by_tc_role", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
-    protected $agreedByTcRole;
+    protected $case;
 
     /**
-     * Agreed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="agreed_date", nullable=true)
-     */
-    protected $agreedDate;
-
-    /**
-     * Assigned caseworker
+     * AssignedCaseworker
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
@@ -91,7 +88,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $assignedCaseworker;
 
     /**
-     * Assigned to
+     * User PI is assigned to.
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
@@ -101,54 +98,64 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $assignedTo;
 
     /**
-     * Brief to tc date
+     * TC who agreed the PI
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
      *
-     * @ORM\Column(type="date", name="brief_to_tc_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
+     * @ORM\JoinColumn(name="agreed_by_tc_id", referencedColumnName="id", nullable=true)
      */
-    protected $briefToTcDate;
+    protected $agreedByTc;
 
     /**
-     * Call up letter date
+     * TC who presided over PI decision
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
      *
-     * @ORM\Column(type="date", name="call_up_letter_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
+     * @ORM\JoinColumn(name="decided_by_tc_id", referencedColumnName="id", nullable=true)
      */
-    protected $callUpLetterDate;
+    protected $decidedByTc;
 
     /**
-     * Case
+     * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="publicInquiry"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="agreed_by_tc_role", referencedColumnName="id", nullable=true)
      */
-    protected $case;
+    protected $agreedByTcRole;
 
     /**
-     * Closed date
+     * e.g. Traffic Commissioner or Deputy Traffic Commissioner
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="decided_by_tc_role", referencedColumnName="id", nullable=true)
      */
-    protected $closedDate;
+    protected $decidedByTcRole;
 
     /**
-     * Comment
+     * PiStatus
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="pi_status", referencedColumnName="id")
      */
-    protected $comment;
+    protected $piStatus;
+
+    /**
+     * WrittenOutcome
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="written_outcome", referencedColumnName="id", nullable=true)
+     */
+    protected $writtenOutcome;
 
     /**
      * Created by
@@ -162,24 +169,69 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $createdBy;
 
     /**
-     * Decided by tc
+     * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="decided_by_tc_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
      */
-    protected $decidedByTc;
+    protected $lastModifiedBy;
 
     /**
-     * Decided by tc role
+     * Is ecms case
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="decided_by_tc_role", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="is_ecms_case", nullable=true, options={"default": 0})
      */
-    protected $decidedByTcRole;
+    protected $isEcmsCase = 0;
+
+    /**
+     * Ecms first received date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="ecms_first_received_date", nullable=true)
+     */
+    protected $ecmsFirstReceivedDate;
+
+    /**
+     * Agreed date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="agreed_date", nullable=true)
+     */
+    protected $agreedDate;
+
+    /**
+     * TM called with Operator
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="tm_called_with_operator", nullable=false, options={"default": 0})
+     */
+    protected $tmCalledWithOperator = 0;
+
+    /**
+     * Witnesses for the PI decision
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="witnesses", nullable=true)
+     */
+    protected $witnesses;
+
+    /**
+     * PI is cancelled
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_cancelled", nullable=false, options={"default": 0})
+     */
+    protected $isCancelled = 0;
 
     /**
      * Decision date
@@ -191,6 +243,87 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $decisionDate;
 
     /**
+     * The licence was revoked
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="licence_revoked_at_pi", nullable=false, options={"default": 0})
+     */
+    protected $licenceRevokedAtPi = 0;
+
+    /**
+     * The licence was curtailed. e.g. No of vehicles decreased.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="licence_curtailed_at_pi", nullable=false, options={"default": 0})
+     */
+    protected $licenceCurtailedAtPi = 0;
+
+    /**
+     * Licence suspended
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="licence_suspended_at_pi", nullable=false, options={"default": 0})
+     */
+    protected $licenceSuspendedAtPi = 0;
+
+    /**
+     * Notification date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="notification_date", nullable=true)
+     */
+    protected $notificationDate;
+
+    /**
+     * Decision notes
+     *
+     * @var string
+     *
+     * @ORM\Column(type="text", name="decision_notes", nullable=true)
+     */
+    protected $decisionNotes;
+
+    /**
+     * Comment
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
+     */
+    protected $comment;
+
+    /**
+     * Call up letter date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="call_up_letter_date", nullable=true)
+     */
+    protected $callUpLetterDate;
+
+    /**
+     * Brief to tc date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="brief_to_tc_date", nullable=true)
+     */
+    protected $briefToTcDate;
+
+    /**
+     * Written reason date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="written_reason_date", nullable=true)
+     */
+    protected $writtenReasonDate;
+
+    /**
      * Decision letter sent date
      *
      * @var \DateTime
@@ -200,16 +333,80 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $decisionLetterSentDate;
 
     /**
-     * Decision notes
+     * Tc written reason date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="tc_written_reason_date", nullable=true)
+     */
+    protected $tcWrittenReasonDate;
+
+    /**
+     * Tc written decision date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="tc_written_decision_date", nullable=true)
+     */
+    protected $tcWrittenDecisionDate;
+
+    /**
+     * Written reason letter date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="written_reason_letter_date", nullable=true)
+     */
+    protected $writtenReasonLetterDate;
+
+    /**
+     * Written decision letter date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="written_decision_letter_date", nullable=true)
+     */
+    protected $writtenDecisionLetterDate;
+
+    /**
+     * Date pi closed.For showing important, open records to user.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
+     */
+    protected $closedDate;
+
+    /**
+     * Version
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
+     * @ORM\Version
+     */
+    protected $version = 1;
+
+    /**
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
      *
-     * @ORM\Column(type="text", name="decision_notes", length=65535, nullable=true)
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
-    protected $decisionNotes;
+    protected $olbsType;
 
     /**
-     * Decision
+     * Decisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -226,150 +423,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $decisions;
 
     /**
-     * Ecms first received date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="ecms_first_received_date", nullable=true)
-     */
-    protected $ecmsFirstReceivedDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is cancelled
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_cancelled", nullable=false, options={"default": 0})
-     */
-    protected $isCancelled = 0;
-
-    /**
-     * Is ecms case
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_ecms_case", nullable=true, options={"default": 0})
-     */
-    protected $isEcmsCase = 0;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
-
-    /**
-     * Licence curtailed at pi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="licence_curtailed_at_pi",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $licenceCurtailedAtPi = 0;
-
-    /**
-     * Licence revoked at pi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="licence_revoked_at_pi",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $licenceRevokedAtPi = 0;
-
-    /**
-     * Licence suspended at pi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="licence_suspended_at_pi",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $licenceSuspendedAtPi = 0;
-
-    /**
-     * Notification date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="notification_date", nullable=true)
-     */
-    protected $notificationDate;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
-     */
-    protected $olbsType;
-
-    /**
-     * Pi status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_status", referencedColumnName="id", nullable=false)
-     */
-    protected $piStatus;
-
-    /**
-     * Pi type
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="pis",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="pi_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="pi_type_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $piTypes;
-
-    /**
-     * Reason
+     * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -386,45 +440,11 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $reasons;
 
     /**
-     * Tc written decision date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="tc_written_decision_date", nullable=true)
-     */
-    protected $tcWrittenDecisionDate;
-
-    /**
-     * Tc written reason date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="tc_written_reason_date", nullable=true)
-     */
-    protected $tcWrittenReasonDate;
-
-    /**
-     * Tm called with operator
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="tm_called_with_operator",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $tmCalledWithOperator = 0;
-
-    /**
-     * Tm decision
+     * TmDecisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="pis",
-     *     fetch="LAZY"
-     * )
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="pis", fetch="LAZY")
      * @ORM\JoinTable(name="pi_tm_decision",
      *     joinColumns={
      *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
@@ -437,63 +457,24 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $tmDecisions;
 
     /**
-     * Version
+     * PiTypes
      *
-     * @var int
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="pis", fetch="LAZY")
+     * @ORM\JoinTable(name="pi_type",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="pi_type_id", referencedColumnName="id")
+     *     }
+     * )
      */
-    protected $version = 1;
+    protected $piTypes;
 
     /**
-     * Witnesses
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="witnesses", nullable=true)
-     */
-    protected $witnesses;
-
-    /**
-     * Written decision letter date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_decision_letter_date", nullable=true)
-     */
-    protected $writtenDecisionLetterDate;
-
-    /**
-     * Written outcome
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="written_outcome", referencedColumnName="id", nullable=true)
-     */
-    protected $writtenOutcome;
-
-    /**
-     * Written reason date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_reason_date", nullable=true)
-     */
-    protected $writtenReasonDate;
-
-    /**
-     * Written reason letter date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="written_reason_letter_date", nullable=true)
-     */
-    protected $writtenReasonLetterDate;
-
-    /**
-     * Pi hearing
+     * PiHearings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -502,7 +483,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $piHearings;
 
     /**
-     * Publication link
+     * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -511,33 +492,16 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $publicationLinks;
 
     /**
-     * Sla target date
+     * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate",
-     *     mappedBy="pi",
-     *     cascade={"persist"},
-     *     indexBy="sla_id",
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="pi", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
     protected $slaTargetDates;
 
     /**
-     * PI SLA Exception
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PiSlaException", mappedBy="pi")
-     */
-    protected $piSlaExceptions;
-
-    /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -545,11 +509,9 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->decisions = new ArrayCollection();
         $this->reasons = new ArrayCollection();
@@ -558,13 +520,105 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
         $this->piHearings = new ArrayCollection();
         $this->publicationLinks = new ArrayCollection();
         $this->slaTargetDates = new ArrayCollection();
-        $this->piSlaExceptions = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Pi
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the case
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
+     *
+     * @return Pi
+     */
+    public function setCase($case)
+    {
+        $this->case = $case;
+
+        return $this;
+    }
+
+    /**
+     * Get the case
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
+    /**
+     * Set the assigned caseworker
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker new value being set
+     *
+     * @return Pi
+     */
+    public function setAssignedCaseworker($assignedCaseworker)
+    {
+        $this->assignedCaseworker = $assignedCaseworker;
+
+        return $this;
+    }
+
+    /**
+     * Get the assigned caseworker
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getAssignedCaseworker()
+    {
+        return $this->assignedCaseworker;
+    }
+
+    /**
+     * Set the assigned to
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo new value being set
+     *
+     * @return Pi
+     */
+    public function setAssignedTo($assignedTo)
+    {
+        $this->assignedTo = $assignedTo;
+
+        return $this;
+    }
+
+    /**
+     * Get the assigned to
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
     }
 
     /**
      * Set the agreed by tc
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $agreedByTc entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $agreedByTc new value being set
      *
      * @return Pi
      */
@@ -578,17 +632,39 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the agreed by tc
      *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
     public function getAgreedByTc()
     {
         return $this->agreedByTc;
     }
 
     /**
+     * Set the decided by tc
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $decidedByTc new value being set
+     *
+     * @return Pi
+     */
+    public function setDecidedByTc($decidedByTc)
+    {
+        $this->decidedByTc = $decidedByTc;
+
+        return $this;
+    }
+
+    /**
+     * Get the decided by tc
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+    public function getDecidedByTc()
+    {
+        return $this->decidedByTc;
+    }
+
+    /**
      * Set the agreed by tc role
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $agreedByTcRole entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $agreedByTcRole new value being set
      *
      * @return Pi
      */
@@ -602,11 +678,177 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the agreed by tc role
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getAgreedByTcRole()
     {
         return $this->agreedByTcRole;
+    }
+
+    /**
+     * Set the decided by tc role
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $decidedByTcRole new value being set
+     *
+     * @return Pi
+     */
+    public function setDecidedByTcRole($decidedByTcRole)
+    {
+        $this->decidedByTcRole = $decidedByTcRole;
+
+        return $this;
+    }
+
+    /**
+     * Get the decided by tc role
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getDecidedByTcRole()
+    {
+        return $this->decidedByTcRole;
+    }
+
+    /**
+     * Set the pi status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $piStatus new value being set
+     *
+     * @return Pi
+     */
+    public function setPiStatus($piStatus)
+    {
+        $this->piStatus = $piStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the pi status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getPiStatus()
+    {
+        return $this->piStatus;
+    }
+
+    /**
+     * Set the written outcome
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $writtenOutcome new value being set
+     *
+     * @return Pi
+     */
+    public function setWrittenOutcome($writtenOutcome)
+    {
+        $this->writtenOutcome = $writtenOutcome;
+
+        return $this;
+    }
+
+    /**
+     * Get the written outcome
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getWrittenOutcome()
+    {
+        return $this->writtenOutcome;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Pi
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Pi
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the is ecms case
+     *
+     * @param bool $isEcmsCase new value being set
+     *
+     * @return Pi
+     */
+    public function setIsEcmsCase($isEcmsCase)
+    {
+        $this->isEcmsCase = $isEcmsCase;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ecms case
+     *
+     * @return bool     */
+    public function getIsEcmsCase()
+    {
+        return $this->isEcmsCase;
+    }
+
+    /**
+     * Set the ecms first received date
+     *
+     * @param \DateTime $ecmsFirstReceivedDate new value being set
+     *
+     * @return Pi
+     */
+    public function setEcmsFirstReceivedDate($ecmsFirstReceivedDate)
+    {
+        $this->ecmsFirstReceivedDate = $ecmsFirstReceivedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the ecms first received date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEcmsFirstReceivedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->ecmsFirstReceivedDate);
+        }
+
+        return $this->ecmsFirstReceivedDate;
     }
 
     /**
@@ -628,9 +870,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -641,264 +881,72 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the assigned caseworker
+     * Set the tm called with operator
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker entity being set as the value
+     * @param string $tmCalledWithOperator new value being set
      *
      * @return Pi
      */
-    public function setAssignedCaseworker($assignedCaseworker)
+    public function setTmCalledWithOperator($tmCalledWithOperator)
     {
-        $this->assignedCaseworker = $assignedCaseworker;
+        $this->tmCalledWithOperator = $tmCalledWithOperator;
 
         return $this;
     }
 
     /**
-     * Get the assigned caseworker
+     * Get the tm called with operator
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getAssignedCaseworker()
+     * @return string     */
+    public function getTmCalledWithOperator()
     {
-        return $this->assignedCaseworker;
+        return $this->tmCalledWithOperator;
     }
 
     /**
-     * Set the assigned to
+     * Set the witnesses
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo entity being set as the value
+     * @param int $witnesses new value being set
      *
      * @return Pi
      */
-    public function setAssignedTo($assignedTo)
+    public function setWitnesses($witnesses)
     {
-        $this->assignedTo = $assignedTo;
+        $this->witnesses = $witnesses;
 
         return $this;
     }
 
     /**
-     * Get the assigned to
+     * Get the witnesses
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getAssignedTo()
+     * @return int     */
+    public function getWitnesses()
     {
-        return $this->assignedTo;
+        return $this->witnesses;
     }
 
     /**
-     * Set the brief to tc date
+     * Set the is cancelled
      *
-     * @param \DateTime $briefToTcDate new value being set
+     * @param string $isCancelled new value being set
      *
      * @return Pi
      */
-    public function setBriefToTcDate($briefToTcDate)
+    public function setIsCancelled($isCancelled)
     {
-        $this->briefToTcDate = $briefToTcDate;
+        $this->isCancelled = $isCancelled;
 
         return $this;
     }
 
     /**
-     * Get the brief to tc date
+     * Get the is cancelled
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getBriefToTcDate($asDateTime = false)
+     * @return string     */
+    public function getIsCancelled()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->briefToTcDate);
-        }
-
-        return $this->briefToTcDate;
-    }
-
-    /**
-     * Set the call up letter date
-     *
-     * @param \DateTime $callUpLetterDate new value being set
-     *
-     * @return Pi
-     */
-    public function setCallUpLetterDate($callUpLetterDate)
-    {
-        $this->callUpLetterDate = $callUpLetterDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the call up letter date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getCallUpLetterDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->callUpLetterDate);
-        }
-
-        return $this->callUpLetterDate;
-    }
-
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-
-        return $this;
-    }
-
-    /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
-    /**
-     * Set the closed date
-     *
-     * @param \DateTime $closedDate new value being set
-     *
-     * @return Pi
-     */
-    public function setClosedDate($closedDate)
-    {
-        $this->closedDate = $closedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the closed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getClosedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->closedDate);
-        }
-
-        return $this->closedDate;
-    }
-
-    /**
-     * Set the comment
-     *
-     * @param string $comment new value being set
-     *
-     * @return Pi
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get the comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the decided by tc
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $decidedByTc entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setDecidedByTc($decidedByTc)
-    {
-        $this->decidedByTc = $decidedByTc;
-
-        return $this;
-    }
-
-    /**
-     * Get the decided by tc
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
-    public function getDecidedByTc()
-    {
-        return $this->decidedByTc;
-    }
-
-    /**
-     * Set the decided by tc role
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $decidedByTcRole entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setDecidedByTcRole($decidedByTcRole)
-    {
-        $this->decidedByTcRole = $decidedByTcRole;
-
-        return $this;
-    }
-
-    /**
-     * Get the decided by tc role
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getDecidedByTcRole()
-    {
-        return $this->decidedByTcRole;
+        return $this->isCancelled;
     }
 
     /**
@@ -920,9 +968,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -930,6 +976,237 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
         }
 
         return $this->decisionDate;
+    }
+
+    /**
+     * Set the licence revoked at pi
+     *
+     * @param string $licenceRevokedAtPi new value being set
+     *
+     * @return Pi
+     */
+    public function setLicenceRevokedAtPi($licenceRevokedAtPi)
+    {
+        $this->licenceRevokedAtPi = $licenceRevokedAtPi;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence revoked at pi
+     *
+     * @return string     */
+    public function getLicenceRevokedAtPi()
+    {
+        return $this->licenceRevokedAtPi;
+    }
+
+    /**
+     * Set the licence curtailed at pi
+     *
+     * @param string $licenceCurtailedAtPi new value being set
+     *
+     * @return Pi
+     */
+    public function setLicenceCurtailedAtPi($licenceCurtailedAtPi)
+    {
+        $this->licenceCurtailedAtPi = $licenceCurtailedAtPi;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence curtailed at pi
+     *
+     * @return string     */
+    public function getLicenceCurtailedAtPi()
+    {
+        return $this->licenceCurtailedAtPi;
+    }
+
+    /**
+     * Set the licence suspended at pi
+     *
+     * @param string $licenceSuspendedAtPi new value being set
+     *
+     * @return Pi
+     */
+    public function setLicenceSuspendedAtPi($licenceSuspendedAtPi)
+    {
+        $this->licenceSuspendedAtPi = $licenceSuspendedAtPi;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence suspended at pi
+     *
+     * @return string     */
+    public function getLicenceSuspendedAtPi()
+    {
+        return $this->licenceSuspendedAtPi;
+    }
+
+    /**
+     * Set the notification date
+     *
+     * @param \DateTime $notificationDate new value being set
+     *
+     * @return Pi
+     */
+    public function setNotificationDate($notificationDate)
+    {
+        $this->notificationDate = $notificationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the notification date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getNotificationDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->notificationDate);
+        }
+
+        return $this->notificationDate;
+    }
+
+    /**
+     * Set the decision notes
+     *
+     * @param string $decisionNotes new value being set
+     *
+     * @return Pi
+     */
+    public function setDecisionNotes($decisionNotes)
+    {
+        $this->decisionNotes = $decisionNotes;
+
+        return $this;
+    }
+
+    /**
+     * Get the decision notes
+     *
+     * @return string     */
+    public function getDecisionNotes()
+    {
+        return $this->decisionNotes;
+    }
+
+    /**
+     * Set the comment
+     *
+     * @param string $comment new value being set
+     *
+     * @return Pi
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get the comment
+     *
+     * @return string     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set the call up letter date
+     *
+     * @param \DateTime $callUpLetterDate new value being set
+     *
+     * @return Pi
+     */
+    public function setCallUpLetterDate($callUpLetterDate)
+    {
+        $this->callUpLetterDate = $callUpLetterDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the call up letter date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getCallUpLetterDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->callUpLetterDate);
+        }
+
+        return $this->callUpLetterDate;
+    }
+
+    /**
+     * Set the brief to tc date
+     *
+     * @param \DateTime $briefToTcDate new value being set
+     *
+     * @return Pi
+     */
+    public function setBriefToTcDate($briefToTcDate)
+    {
+        $this->briefToTcDate = $briefToTcDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the brief to tc date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getBriefToTcDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->briefToTcDate);
+        }
+
+        return $this->briefToTcDate;
+    }
+
+    /**
+     * Set the written reason date
+     *
+     * @param \DateTime $writtenReasonDate new value being set
+     *
+     * @return Pi
+     */
+    public function setWrittenReasonDate($writtenReasonDate)
+    {
+        $this->writtenReasonDate = $writtenReasonDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the written reason date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getWrittenReasonDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->writtenReasonDate);
+        }
+
+        return $this->writtenReasonDate;
     }
 
     /**
@@ -951,9 +1228,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDecisionLetterSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -964,33 +1239,223 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the decision notes
+     * Set the tc written reason date
      *
-     * @param string $decisionNotes new value being set
+     * @param \DateTime $tcWrittenReasonDate new value being set
      *
      * @return Pi
      */
-    public function setDecisionNotes($decisionNotes)
+    public function setTcWrittenReasonDate($tcWrittenReasonDate)
     {
-        $this->decisionNotes = $decisionNotes;
+        $this->tcWrittenReasonDate = $tcWrittenReasonDate;
 
         return $this;
     }
 
     /**
-     * Get the decision notes
+     * Get the tc written reason date
      *
-     * @return string
-     */
-    public function getDecisionNotes()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getTcWrittenReasonDate($asDateTime = false)
     {
-        return $this->decisionNotes;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->tcWrittenReasonDate);
+        }
+
+        return $this->tcWrittenReasonDate;
     }
 
     /**
-     * Set the decision
+     * Set the tc written decision date
      *
-     * @param ArrayCollection $decisions collection being set as the value
+     * @param \DateTime $tcWrittenDecisionDate new value being set
+     *
+     * @return Pi
+     */
+    public function setTcWrittenDecisionDate($tcWrittenDecisionDate)
+    {
+        $this->tcWrittenDecisionDate = $tcWrittenDecisionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the tc written decision date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getTcWrittenDecisionDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->tcWrittenDecisionDate);
+        }
+
+        return $this->tcWrittenDecisionDate;
+    }
+
+    /**
+     * Set the written reason letter date
+     *
+     * @param \DateTime $writtenReasonLetterDate new value being set
+     *
+     * @return Pi
+     */
+    public function setWrittenReasonLetterDate($writtenReasonLetterDate)
+    {
+        $this->writtenReasonLetterDate = $writtenReasonLetterDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the written reason letter date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getWrittenReasonLetterDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->writtenReasonLetterDate);
+        }
+
+        return $this->writtenReasonLetterDate;
+    }
+
+    /**
+     * Set the written decision letter date
+     *
+     * @param \DateTime $writtenDecisionLetterDate new value being set
+     *
+     * @return Pi
+     */
+    public function setWrittenDecisionLetterDate($writtenDecisionLetterDate)
+    {
+        $this->writtenDecisionLetterDate = $writtenDecisionLetterDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the written decision letter date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getWrittenDecisionLetterDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->writtenDecisionLetterDate);
+        }
+
+        return $this->writtenDecisionLetterDate;
+    }
+
+    /**
+     * Set the closed date
+     *
+     * @param \DateTime $closedDate new value being set
+     *
+     * @return Pi
+     */
+    public function setClosedDate($closedDate)
+    {
+        $this->closedDate = $closedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the closed date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getClosedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->closedDate);
+        }
+
+        return $this->closedDate;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Pi
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return Pi
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the olbs type
+     *
+     * @param string $olbsType new value being set
+     *
+     * @return Pi
+     */
+    public function setOlbsType($olbsType)
+    {
+        $this->olbsType = $olbsType;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs type
+     *
+     * @return string     */
+    public function getOlbsType()
+    {
+        return $this->olbsType;
+    }
+
+    /**
+     * Set the decisions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being set as the value
      *
      * @return Pi
      */
@@ -1004,7 +1469,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the decisions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDecisions()
     {
@@ -1014,7 +1479,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a decisions
      *
-     * @param ArrayCollection|mixed $decisions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $decisions collection being added
      *
      * @return Pi
      */
@@ -1051,374 +1516,9 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the ecms first received date
+     * Set the reasons
      *
-     * @param \DateTime $ecmsFirstReceivedDate new value being set
-     *
-     * @return Pi
-     */
-    public function setEcmsFirstReceivedDate($ecmsFirstReceivedDate)
-    {
-        $this->ecmsFirstReceivedDate = $ecmsFirstReceivedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the ecms first received date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEcmsFirstReceivedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->ecmsFirstReceivedDate);
-        }
-
-        return $this->ecmsFirstReceivedDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Pi
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the is cancelled
-     *
-     * @param string $isCancelled new value being set
-     *
-     * @return Pi
-     */
-    public function setIsCancelled($isCancelled)
-    {
-        $this->isCancelled = $isCancelled;
-
-        return $this;
-    }
-
-    /**
-     * Get the is cancelled
-     *
-     * @return string
-     */
-    public function getIsCancelled()
-    {
-        return $this->isCancelled;
-    }
-
-    /**
-     * Set the is ecms case
-     *
-     * @param boolean $isEcmsCase new value being set
-     *
-     * @return Pi
-     */
-    public function setIsEcmsCase($isEcmsCase)
-    {
-        $this->isEcmsCase = $isEcmsCase;
-
-        return $this;
-    }
-
-    /**
-     * Get the is ecms case
-     *
-     * @return boolean
-     */
-    public function getIsEcmsCase()
-    {
-        return $this->isEcmsCase;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the licence curtailed at pi
-     *
-     * @param string $licenceCurtailedAtPi new value being set
-     *
-     * @return Pi
-     */
-    public function setLicenceCurtailedAtPi($licenceCurtailedAtPi)
-    {
-        $this->licenceCurtailedAtPi = $licenceCurtailedAtPi;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence curtailed at pi
-     *
-     * @return string
-     */
-    public function getLicenceCurtailedAtPi()
-    {
-        return $this->licenceCurtailedAtPi;
-    }
-
-    /**
-     * Set the licence revoked at pi
-     *
-     * @param string $licenceRevokedAtPi new value being set
-     *
-     * @return Pi
-     */
-    public function setLicenceRevokedAtPi($licenceRevokedAtPi)
-    {
-        $this->licenceRevokedAtPi = $licenceRevokedAtPi;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence revoked at pi
-     *
-     * @return string
-     */
-    public function getLicenceRevokedAtPi()
-    {
-        return $this->licenceRevokedAtPi;
-    }
-
-    /**
-     * Set the licence suspended at pi
-     *
-     * @param string $licenceSuspendedAtPi new value being set
-     *
-     * @return Pi
-     */
-    public function setLicenceSuspendedAtPi($licenceSuspendedAtPi)
-    {
-        $this->licenceSuspendedAtPi = $licenceSuspendedAtPi;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence suspended at pi
-     *
-     * @return string
-     */
-    public function getLicenceSuspendedAtPi()
-    {
-        return $this->licenceSuspendedAtPi;
-    }
-
-    /**
-     * Set the notification date
-     *
-     * @param \DateTime $notificationDate new value being set
-     *
-     * @return Pi
-     */
-    public function setNotificationDate($notificationDate)
-    {
-        $this->notificationDate = $notificationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the notification date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getNotificationDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->notificationDate);
-        }
-
-        return $this->notificationDate;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Pi
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return Pi
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
-    }
-
-    /**
-     * Set the pi status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $piStatus entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setPiStatus($piStatus)
-    {
-        $this->piStatus = $piStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get the pi status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getPiStatus()
-    {
-        return $this->piStatus;
-    }
-
-    /**
-     * Set the pi type
-     *
-     * @param ArrayCollection $piTypes collection being set as the value
-     *
-     * @return Pi
-     */
-    public function setPiTypes($piTypes)
-    {
-        $this->piTypes = $piTypes;
-
-        return $this;
-    }
-
-    /**
-     * Get the pi types
-     *
-     * @return ArrayCollection
-     */
-    public function getPiTypes()
-    {
-        return $this->piTypes;
-    }
-
-    /**
-     * Add a pi types
-     *
-     * @param ArrayCollection|mixed $piTypes collection being added
-     *
-     * @return Pi
-     */
-    public function addPiTypes($piTypes)
-    {
-        if ($piTypes instanceof ArrayCollection) {
-            $this->piTypes = new ArrayCollection(
-                array_merge(
-                    $this->piTypes->toArray(),
-                    $piTypes->toArray()
-                )
-            );
-        } elseif (!$this->piTypes->contains($piTypes)) {
-            $this->piTypes->add($piTypes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a pi types
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $piTypes collection being removed
-     *
-     * @return Pi
-     */
-    public function removePiTypes($piTypes)
-    {
-        if ($this->piTypes->contains($piTypes)) {
-            $this->piTypes->removeElement($piTypes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the reason
-     *
-     * @param ArrayCollection $reasons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
      * @return Pi
      */
@@ -1432,7 +1532,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the reasons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReasons()
     {
@@ -1442,7 +1542,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a reasons
      *
-     * @param ArrayCollection|mixed $reasons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
      * @return Pi
      */
@@ -1479,95 +1579,9 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the tc written decision date
+     * Set the tm decisions
      *
-     * @param \DateTime $tcWrittenDecisionDate new value being set
-     *
-     * @return Pi
-     */
-    public function setTcWrittenDecisionDate($tcWrittenDecisionDate)
-    {
-        $this->tcWrittenDecisionDate = $tcWrittenDecisionDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the tc written decision date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getTcWrittenDecisionDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->tcWrittenDecisionDate);
-        }
-
-        return $this->tcWrittenDecisionDate;
-    }
-
-    /**
-     * Set the tc written reason date
-     *
-     * @param \DateTime $tcWrittenReasonDate new value being set
-     *
-     * @return Pi
-     */
-    public function setTcWrittenReasonDate($tcWrittenReasonDate)
-    {
-        $this->tcWrittenReasonDate = $tcWrittenReasonDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the tc written reason date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getTcWrittenReasonDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->tcWrittenReasonDate);
-        }
-
-        return $this->tcWrittenReasonDate;
-    }
-
-    /**
-     * Set the tm called with operator
-     *
-     * @param string $tmCalledWithOperator new value being set
-     *
-     * @return Pi
-     */
-    public function setTmCalledWithOperator($tmCalledWithOperator)
-    {
-        $this->tmCalledWithOperator = $tmCalledWithOperator;
-
-        return $this;
-    }
-
-    /**
-     * Get the tm called with operator
-     *
-     * @return string
-     */
-    public function getTmCalledWithOperator()
-    {
-        return $this->tmCalledWithOperator;
-    }
-
-    /**
-     * Set the tm decision
-     *
-     * @param ArrayCollection $tmDecisions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being set as the value
      *
      * @return Pi
      */
@@ -1581,7 +1595,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the tm decisions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTmDecisions()
     {
@@ -1591,7 +1605,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a tm decisions
      *
-     * @param ArrayCollection|mixed $tmDecisions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmDecisions collection being added
      *
      * @return Pi
      */
@@ -1628,174 +1642,72 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the version
+     * Set the pi types
      *
-     * @param int $version new value being set
+     * @param \Doctrine\Common\Collections\ArrayCollection $piTypes collection being set as the value
      *
      * @return Pi
      */
-    public function setVersion($version)
+    public function setPiTypes($piTypes)
     {
-        $this->version = $version;
+        $this->piTypes = $piTypes;
 
         return $this;
     }
 
     /**
-     * Get the version
+     * Get the pi types
      *
-     * @return int
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getVersion()
+    public function getPiTypes()
     {
-        return $this->version;
+        return $this->piTypes;
     }
 
     /**
-     * Set the witnesses
+     * Add a pi types
      *
-     * @param int $witnesses new value being set
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piTypes collection being added
      *
      * @return Pi
      */
-    public function setWitnesses($witnesses)
+    public function addPiTypes($piTypes)
     {
-        $this->witnesses = $witnesses;
-
-        return $this;
-    }
-
-    /**
-     * Get the witnesses
-     *
-     * @return int
-     */
-    public function getWitnesses()
-    {
-        return $this->witnesses;
-    }
-
-    /**
-     * Set the written decision letter date
-     *
-     * @param \DateTime $writtenDecisionLetterDate new value being set
-     *
-     * @return Pi
-     */
-    public function setWrittenDecisionLetterDate($writtenDecisionLetterDate)
-    {
-        $this->writtenDecisionLetterDate = $writtenDecisionLetterDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the written decision letter date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getWrittenDecisionLetterDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->writtenDecisionLetterDate);
+        if ($piTypes instanceof ArrayCollection) {
+            $this->piTypes = new ArrayCollection(
+                array_merge(
+                    $this->piTypes->toArray(),
+                    $piTypes->toArray()
+                )
+            );
+        } elseif (!$this->piTypes->contains($piTypes)) {
+            $this->piTypes->add($piTypes);
         }
 
-        return $this->writtenDecisionLetterDate;
-    }
-
-    /**
-     * Set the written outcome
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $writtenOutcome entity being set as the value
-     *
-     * @return Pi
-     */
-    public function setWrittenOutcome($writtenOutcome)
-    {
-        $this->writtenOutcome = $writtenOutcome;
-
         return $this;
     }
 
     /**
-     * Get the written outcome
+     * Remove a pi types
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getWrittenOutcome()
-    {
-        return $this->writtenOutcome;
-    }
-
-    /**
-     * Set the written reason date
-     *
-     * @param \DateTime $writtenReasonDate new value being set
+     * @param \Doctrine\Common\Collections\ArrayCollection $piTypes collection being removed
      *
      * @return Pi
      */
-    public function setWrittenReasonDate($writtenReasonDate)
+    public function removePiTypes($piTypes)
     {
-        $this->writtenReasonDate = $writtenReasonDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the written reason date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getWrittenReasonDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->writtenReasonDate);
+        if ($this->piTypes->contains($piTypes)) {
+            $this->piTypes->removeElement($piTypes);
         }
 
-        return $this->writtenReasonDate;
-    }
-
-    /**
-     * Set the written reason letter date
-     *
-     * @param \DateTime $writtenReasonLetterDate new value being set
-     *
-     * @return Pi
-     */
-    public function setWrittenReasonLetterDate($writtenReasonLetterDate)
-    {
-        $this->writtenReasonLetterDate = $writtenReasonLetterDate;
-
         return $this;
     }
 
     /**
-     * Get the written reason letter date
+     * Set the pi hearings
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getWrittenReasonLetterDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->writtenReasonLetterDate);
-        }
-
-        return $this->writtenReasonLetterDate;
-    }
-
-    /**
-     * Set the pi hearing
-     *
-     * @param ArrayCollection $piHearings collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $piHearings collection being set as the value
      *
      * @return Pi
      */
@@ -1809,7 +1721,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the pi hearings
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPiHearings()
     {
@@ -1819,7 +1731,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a pi hearings
      *
-     * @param ArrayCollection|mixed $piHearings collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piHearings collection being added
      *
      * @return Pi
      */
@@ -1856,9 +1768,9 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the publication link
+     * Set the publication links
      *
-     * @param ArrayCollection $publicationLinks collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
      * @return Pi
      */
@@ -1872,7 +1784,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the publication links
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPublicationLinks()
     {
@@ -1882,7 +1794,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a publication links
      *
-     * @param ArrayCollection|mixed $publicationLinks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
      * @return Pi
      */
@@ -1919,9 +1831,9 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Set the sla target date
+     * Set the sla target dates
      *
-     * @param ArrayCollection $slaTargetDates collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
      * @return Pi
      */
@@ -1935,7 +1847,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Get the sla target dates
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSlaTargetDates()
     {
@@ -1945,7 +1857,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     /**
      * Add a sla target dates
      *
-     * @param ArrayCollection|mixed $slaTargetDates collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
      * @return Pi
      */
@@ -1982,12 +1894,10 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     }
 
     /**
-     * Get the pi sla exceptions
-     *
-     * @return ArrayCollection
+     * Get bundle data
      */
-    public function getPiSlaExceptions()
+    public function __toString(): string
     {
-        return $this->piSlaExceptions;
+        return (string) $this->getId();
     }
 }
