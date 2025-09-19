@@ -1,5 +1,22 @@
 # Changelog
 
+## [6.5.0](https://github.com/dvsa/vol-app/compare/v6.4.0...v6.5.0) (2025-09-19)
+
+
+### Features
+
+* implement SLA Exception feature for Public Inquiries ([#1113](https://github.com/dvsa/vol-app/issues/1113)) ([2d25946](https://github.com/dvsa/vol-app/commit/2d2594686051635c3af7d6f2624ba42d8133fcff))
+* updated Internal heading to read VOL instead of OLCS - VOL-6593 ([#1138](https://github.com/dvsa/vol-app/issues/1138)) ([fa9df45](https://github.com/dvsa/vol-app/commit/fa9df458026c6837034e1e392d5420b63ce16e77))
+* vol-6098 re-merge remove usage of laminas-json replace with native php ([#1132](https://github.com/dvsa/vol-app/issues/1132)) ([577b02f](https://github.com/dvsa/vol-app/commit/577b02fc5d11a98a2e86a9a242f6a0df2b82e9c5))
+* vol-6589 store TransXChange schema version from xml on ebsr submission ([#1135](https://github.com/dvsa/vol-app/issues/1135)) ([5412f0f](https://github.com/dvsa/vol-app/commit/5412f0f480052e037adfa8fa4b24777a9a12fbd8))
+
+
+### Bug Fixes
+
+* add sas extract shedule ([#1134](https://github.com/dvsa/vol-app/issues/1134)) ([7c79700](https://github.com/dvsa/vol-app/commit/7c79700a92f9eb2945e7e76c27e0c8a1e622a73d))
+* continuations missing condition or undertaking info, now display correctly VOL-6569 ([#1137](https://github.com/dvsa/vol-app/issues/1137)) ([ab66cc6](https://github.com/dvsa/vol-app/commit/ab66cc66ec562518df22e26b78d84eaf1cb80d73))
+* ensure all editorJS blocks have spellcheck=true attr set to ensu… ([#1131](https://github.com/dvsa/vol-app/issues/1131)) ([0002020](https://github.com/dvsa/vol-app/commit/00020204d8cee42d002ca87b0be452eef4973e44))
+
 ## [6.4.0](https://github.com/dvsa/vol-app/compare/v6.3.2...v6.4.0) (2025-09-16)
 
 
