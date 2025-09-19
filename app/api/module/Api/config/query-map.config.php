@@ -167,6 +167,7 @@ return [
     TransferQuery\Cases\Pi\HearingList::class => QueryHandler\Cases\Pi\HearingList::class,
     TransferQuery\Cases\Pi\ReportList::class => QueryHandler\Cases\Pi\ReportList::class,
     TransferQuery\Cases\Pi\PiDefinitionList::class => QueryHandler\Cases\Pi\PiDefinitionList::class,
+    TransferQuery\Cases\Pi\SlaExceptionList::class => QueryHandler\Cases\Pi\SlaExceptionList::class,
     TransferQuery\Cases\AnnualTestHistory::class => QueryHandler\Cases\AnnualTestHistory::class,
     TransferQuery\Cases\LegacyOffence::class => QueryHandler\Cases\LegacyOffence::class,
     TransferQuery\Cases\LegacyOffenceList::class => QueryHandler\Cases\LegacyOffenceList::class,
