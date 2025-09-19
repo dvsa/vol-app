@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Util\Escape;
 
 return [
     'variables' => [
@@ -22,13 +23,15 @@ return [
         [
             'title' => 'SLA Description',
             'formatter' => function ($row, $column) {
-                return $row['slaException']['slaDescription'] ?? '';
+                $description = $row['slaException']['slaDescription'] ?? '';
+                return Escape::html($description);
             }
         ],
         [
             'title' => 'Exception Description',
             'formatter' => function ($row, $column) {
-                return $row['slaException']['slaExceptionDescription'] ?? '';
+                $exceptionDescription = $row['slaException']['slaExceptionDescription'] ?? '';
+                return Escape::html($exceptionDescription);
             }
         ],
         [
@@ -46,10 +49,10 @@ return [
                  */
                 if (isset($row['createdBy']['contactDetails']['person'])) {
                     $person = $row['createdBy']['contactDetails']['person'];
-                    return trim(($person['forename'] ?? '') . ' ' . ($person['familyName'] ?? ''));
+                    return Escape::html(trim(($person['forename'] ?? '') . ' ' . ($person['familyName'] ?? '')));
                 }
                 if (isset($row['createdBy']['loginId'])) {
-                    return trim($row['createdBy']['loginId']);
+                    return Escape::html(trim($row['createdBy']['loginId']));
                 }
                 return 'Unknown';
             }

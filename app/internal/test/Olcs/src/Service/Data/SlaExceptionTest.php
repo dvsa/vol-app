@@ -18,7 +18,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 {
     /** @var SlaException */
     private $sut;
-    
+
     /** @var AbstractListDataServiceServices */
     private $abstractListDataServiceServices;
 
@@ -31,7 +31,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
             'effectiveTo' => '2024-12-31'
         ],
         [
-            'id' => 2, 
+            'id' => 2,
             'slaDescription' => 'Standard Processing',
             'slaExceptionDescription' => 'Holiday Period Extension',
             'effectiveFrom' => '2024-01-01',
@@ -39,7 +39,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ],
         [
             'id' => 3,
-            'slaDescription' => 'Fast Track Processing', 
+            'slaDescription' => 'Fast Track Processing',
             'slaExceptionDescription' => 'Emergency Exception',
             'effectiveFrom' => '2024-06-01',
             'effectiveTo' => '2024-12-31'
@@ -53,7 +53,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->abstractListDataServiceServices = new AbstractListDataServiceServices(
             $this->abstractDataServiceServices
         );
-        
+
         $this->sut = new SlaException($this->abstractListDataServiceServices);
     }
 
@@ -82,7 +82,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($mockResponse);
 
         $result = $this->sut->fetchListData();
-        
+
         $this->assertEquals($this->sampleData, $result);
     }
 
@@ -109,10 +109,10 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
         // First call
         $result1 = $this->sut->fetchListData();
-        
+
         // Second call should use cached data (no additional expectations needed)
         $result2 = $this->sut->fetchListData();
-        
+
         $this->assertEquals($this->sampleData, $result1);
         $this->assertEquals($this->sampleData, $result2);
     }
@@ -149,7 +149,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
                 ]
             ],
             'Fast Track Processing' => [
-                'label' => 'Fast Track Processing', 
+                'label' => 'Fast Track Processing',
                 'options' => [
                     3 => 'Emergency Exception'
                 ]
@@ -157,7 +157,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ];
 
         $result = $this->sut->formatDataForGroups($this->sampleData);
-        
+
         $this->assertEquals($expected, $result);
     }
 
@@ -165,14 +165,14 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     {
         // Test with SLA Exception entity objects
         $entity1 = m::mock(SlaExceptionEntity::class);
-        $entity1->shouldReceive('getId')->andReturn(1);
-        $entity1->shouldReceive('getSlaDescription')->andReturn('Standard Processing');
-        $entity1->shouldReceive('getSlaExceptionDescription')->andReturn('Complex Case Extension');
+        $entity1->expects('getId')->andReturn(1);
+        $entity1->expects('getSlaDescription')->andReturn('Standard Processing');
+        $entity1->expects('getSlaExceptionDescription')->andReturn('Complex Case Extension');
 
         $entity2 = m::mock(SlaExceptionEntity::class);
-        $entity2->shouldReceive('getId')->andReturn(2);
-        $entity2->shouldReceive('getSlaDescription')->andReturn('Standard Processing');
-        $entity2->shouldReceive('getSlaExceptionDescription')->andReturn('Holiday Period Extension');
+        $entity2->expects('getId')->andReturn(2);
+        $entity2->expects('getSlaDescription')->andReturn('Standard Processing');
+        $entity2->expects('getSlaExceptionDescription')->andReturn('Holiday Period Extension');
 
         $entityData = [$entity1, $entity2];
 
@@ -187,7 +187,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ];
 
         $result = $this->sut->formatDataForGroups($entityData);
-        
+
         $this->assertEquals($expected, $result);
     }
 
@@ -195,9 +195,8 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => $this->sampleData];
 
-        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->expects('createQuery')
             ->with(m::type(Qry::class))
-            ->once()
             ->andReturn($this->query);
 
         $mockResponse = m::mock()
@@ -228,7 +227,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ];
 
         $result = $this->sut->fetchListOptions(null, true);
-        
+
         $this->assertEquals($expected, $result);
     }
 
@@ -236,9 +235,8 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => $this->sampleData];
 
-        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->expects('createQuery')
             ->with(m::type(Qry::class))
-            ->once()
             ->andReturn($this->query);
 
         $mockResponse = m::mock()
@@ -254,12 +252,12 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
 
         $expected = [
             1 => 'Standard Processing - Complex Case Extension',
-            2 => 'Standard Processing - Holiday Period Extension', 
+            2 => 'Standard Processing - Holiday Period Extension',
             3 => 'Fast Track Processing - Emergency Exception'
         ];
 
         $result = $this->sut->fetchListOptions(null, false);
-        
+
         $this->assertEquals($expected, $result);
     }
 
@@ -267,9 +265,8 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => []];
 
-        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->expects('createQuery')
             ->with(m::type(Qry::class))
-            ->once()
             ->andReturn($this->query);
 
         $mockResponse = m::mock()
@@ -284,7 +281,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($mockResponse);
 
         $result = $this->sut->fetchListOptions();
-        
+
         $this->assertEquals([], $result);
     }
 
@@ -297,21 +294,21 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ];
 
         $result = $this->sut->formatData($this->sampleData);
-        
+
         $this->assertEquals($expected, $result);
     }
 
     public function testFormatDataWithEntities()
     {
         $entity1 = m::mock(SlaExceptionEntity::class);
-        $entity1->shouldReceive('getId')->andReturn(1);
-        $entity1->shouldReceive('getSlaDescription')->andReturn('Standard Processing');
-        $entity1->shouldReceive('getSlaExceptionDescription')->andReturn('Complex Case Extension');
+        $entity1->expects('getId')->andReturn(1);
+        $entity1->expects('getSlaDescription')->andReturn('Standard Processing');
+        $entity1->expects('getSlaExceptionDescription')->andReturn('Complex Case Extension');
 
         $entity2 = m::mock(SlaExceptionEntity::class);
-        $entity2->shouldReceive('getId')->andReturn(2);
-        $entity2->shouldReceive('getSlaDescription')->andReturn('Fast Track Processing');
-        $entity2->shouldReceive('getSlaExceptionDescription')->andReturn('Emergency Exception');
+        $entity2->expects('getId')->andReturn(2);
+        $entity2->expects('getSlaDescription')->andReturn('Fast Track Processing');
+        $entity2->expects('getSlaExceptionDescription')->andReturn('Emergency Exception');
 
         $entityData = [$entity1, $entity2];
 
@@ -321,7 +318,7 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
         ];
 
         $result = $this->sut->formatData($entityData);
-        
+
         $this->assertEquals($expected, $result);
     }
 }
