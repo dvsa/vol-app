@@ -4173,16 +4173,16 @@
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v8.3.0",
+      "version": "v8.4.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799"
+        "reference": "6ae223f9b074693884b38e007d333b17d7dab46e"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
-        "reference": "995d3acdac77bb4a6c888c3b92e5b3683b4b6799",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/6ae223f9b074693884b38e007d333b17d7dab46e",
+        "reference": "6ae223f9b074693884b38e007d333b17d7dab46e",
         "shasum": ""
       },
       "require": {
@@ -4216,7 +4216,6 @@
         "bamarni/composer-bin-plugin": "^1.8",
         "doctrine/annotations": "^1.14.2",
         "johnkary/phpunit-speedtrap": "^4.0",
-        "laminas/laminas-serializer": "^2.10",
         "lm-commons/lmc-rbac-mvc": "^3.3",
         "mikey179/vfsstream": "~v1.6.11",
         "mockery/mockery": "^1.6.7",
@@ -4241,9 +4240,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v8.3.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/v8.4.0"
       },
-      "time": "2025-07-31T15:25:38+00:00"
+      "time": "2025-09-12T09:20:49+00:00"
     },
     {
       "name": "olcs/olcs-logging",
