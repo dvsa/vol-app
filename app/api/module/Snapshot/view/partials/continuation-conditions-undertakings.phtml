@@ -64,7 +64,7 @@
             ?>
         </h4>
 
-        <?php if (count($oc['conditions']) > 0) : ?>
+        <?php if (isset($oc['conditions']) && is_countable($oc['conditions']) && count($oc['conditions']) > 0) : ?>
                 <h5><?php echo $this->translate('continuations.conditions-undertakings.conditions'); ?></h5>
                 <ul class="list--bullet">
                     <?php foreach($oc['conditions'] as $cu) : ?>
@@ -74,7 +74,7 @@
 
         <?php endif; ?>
 
-        <?php if (count($oc['undertakings']) > 0) : ?>
+        <?php if (isset($oc['undertakings']) && is_countable($oc['undertakings']) && count($oc['undertakings']) > 0) : ?>
                 <h5><?php echo $this->translate('continuations.conditions-undertakings.undertakings'); ?></h5>
                 <ul class="list--bullet">
                     <?php foreach($oc['undertakings'] as $cu) : ?>

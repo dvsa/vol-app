@@ -33,6 +33,10 @@ final class Pi extends AbstractQueryHandler
         'assignedCaseworker',
         'assignedTo',
         'case',
+        'piSlaExceptions' => [
+            'slaException',
+            'createdBy'
+        ],
     ];
 
     /**

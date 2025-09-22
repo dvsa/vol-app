@@ -212,6 +212,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         $ebsrSub->setVariationNo($ebsrData['variationNo']);
         $ebsrSub->setRegistrationNo($ebsrData['routeNo']);
         $ebsrSub->setOrganisationEmailAddress($ebsrData['organisationEmail']);
+        $ebsrSub->setTxcVersion($ebsrData['txcSchemaVersion']);
 
         return $ebsrSub;
     }

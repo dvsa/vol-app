@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Service\Ebsr\Mapping;
 
 use Olcs\XmlTools\Xml\Specification\FixedValue;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Olcs\XmlTools\Xml\Specification\NodeAttribute;
 use Olcs\XmlTools\Xml\Specification\NodeValue;
 use Olcs\XmlTools\Xml\Specification\Recursion;
 use Olcs\XmlTools\Xml\Specification\MultiNodeValue;
@@ -240,11 +241,12 @@ class TransExchangeXmlFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $transXChange = [
-            'Services' => new Recursion($this->getServicesSpecification()),
-            'Operators' => new Recursion($this->getOperators()),
-            'Registrations' => new Recursion($this->getRegistrations()),
-            'Routes' => new Recursion($this->getRoutes()),
-            'StopPoints' => new Recursion($this->getStopPoints()),
+            new NodeAttribute('txcSchemaVersion', 'SchemaVersion'),
+            'Services'            => new Recursion($this->getServicesSpecification()),
+            'Operators'           => new Recursion($this->getOperators()),
+            'Registrations'       => new Recursion($this->getRegistrations()),
+            'Routes'              => new Recursion($this->getRoutes()),
+            'StopPoints'          => new Recursion($this->getStopPoints()),
             'SupportingDocuments' => new Recursion($this->getDocuments()),
         ];
         $mapping = new Recursion($transXChange);

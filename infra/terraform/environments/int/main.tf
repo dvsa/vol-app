@@ -577,7 +577,27 @@ module "service" {
         name  = "liquibase",
         type  = "liquibase",
         queue = "liquibase"
-      }
+      },
+      {
+        name     = "sas-mi-extract",
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "import-anondb",
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "populate-anondb",
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
+        type     = "scripts"
+      },
+      {
+        name     = "ni-compliance",
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
+        type     = "scripts"
+      },
     ]
   }
 }

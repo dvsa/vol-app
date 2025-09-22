@@ -128,6 +128,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -139,6 +140,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $mainServiceNumber = 'BUS001';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -195,6 +197,10 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setBusReg')
             ->with(m::type(BusRegEntity::class))
             ->once()
+            ->andReturnSelf();
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -377,6 +383,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -390,6 +397,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $busShortNotice = ['bus short notice'];
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -446,6 +454,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setBusReg')
             ->with(m::type(BusRegEntity::class))
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -583,6 +596,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -590,6 +604,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -628,6 +643,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setBusReg')
             ->with(m::type(BusRegEntity::class))
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 3);
@@ -899,6 +919,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -906,6 +927,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -932,6 +954,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setOrganisationEmailAddress')
             ->with($parsedOrganisationEmail)
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 2);
@@ -1020,6 +1047,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
         $xmlDocContext = ['xml_filename' => $xmlName];
 
+        $parsedSchemaVersion = '2.1';
         $parsedLicenceNumber = 'OB1234567';
         $parsedVariationNumber = 666;
         $parsedRouteNumber = '12345';
@@ -1027,6 +1055,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $existingRegNo = 'OB1234567/12345';
 
         $parsedEbsrData = [
+            'txcSchemaVersion'  => $parsedSchemaVersion,
             'licNo' => $parsedLicenceNumber,
             'variationNo' => $parsedVariationNumber,
             'routeNo' => $parsedRouteNumber,
@@ -1053,6 +1082,11 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $ebsrSubmission->shouldReceive('setOrganisationEmailAddress')
             ->with($parsedOrganisationEmail)
             ->once()
+            ->andReturnSelf();
+
+        $ebsrSubmission->shouldReceive('setTxcVersion')
+            ->once()
+            ->with($parsedEbsrData['txcSchemaVersion'])
             ->andReturnSelf();
 
         $this->ebsrSubmissionRepo($command, $ebsrSubmission, 2);
