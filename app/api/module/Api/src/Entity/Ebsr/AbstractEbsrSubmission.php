@@ -270,6 +270,15 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
+     * Txc version
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="txc_version", length=10, nullable=true)
+     */
+    protected $txcVersion;
+
+    /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
@@ -904,6 +913,29 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the txc version
+     *
+     * @param string $txcVersion new value being set
+     *
+     * @return EbsrSubmission
+     */
+    public function setTxcVersion($txcVersion)
+    {
+        $this->txcVersion = $txcVersion;
+
+        return $this;
+    }
+
+    /**
+     * Get the txc version
+     *
+     * @return string     */
+    public function getTxcVersion()
+    {
+        return $this->txcVersion;
     }
 
     /**
