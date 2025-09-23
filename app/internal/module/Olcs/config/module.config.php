@@ -224,6 +224,7 @@ return [
             'LvaVariation/Publish' => \Olcs\Controller\Lva\Variation\PublishController::class,
         ],
         'factories' => [
+            \Olcs\Controller\StaticAssetsController::class => \Olcs\Controller\Factory\StaticAssetsControllerFactory::class,
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class => TransportManagerControllerFactories\Details\TransportManagerDetailsResponsibilityControllerFactory::class,
             \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
             LvaApplicationControllers\AddressesController::class => LvaApplicationControllerFactories\AddressesControllerFactory::class,
