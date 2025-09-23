@@ -235,7 +235,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     protected $operatingCentres;
 
     /**
-     * Ground
+     * Grounds
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -249,7 +249,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *     }
      * )
      */
-    protected $ground;
+    protected $grounds;
 
     /**
      * Initialise the collections
@@ -265,7 +265,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     public function initCollections(): void
     {
         $this->operatingCentres = new ArrayCollection();
-        $this->ground = new ArrayCollection();
+        $this->grounds = new ArrayCollection();
     }
 
 
@@ -753,63 +753,63 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the ground
+     * Set the grounds
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $ground collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $grounds collection being set as the value
      *
      * @return Opposition
      */
-    public function setGround($ground)
+    public function setGrounds($grounds)
     {
-        $this->ground = $ground;
+        $this->grounds = $grounds;
 
         return $this;
     }
 
     /**
-     * Get the ground
+     * Get the grounds
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getGround()
+    public function getGrounds()
     {
-        return $this->ground;
+        return $this->grounds;
     }
 
     /**
-     * Add a ground
+     * Add a grounds
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $ground collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $grounds collection being added
      *
      * @return Opposition
      */
-    public function addGround($ground)
+    public function addGrounds($grounds)
     {
-        if ($ground instanceof ArrayCollection) {
-            $this->ground = new ArrayCollection(
+        if ($grounds instanceof ArrayCollection) {
+            $this->grounds = new ArrayCollection(
                 array_merge(
-                    $this->ground->toArray(),
-                    $ground->toArray()
+                    $this->grounds->toArray(),
+                    $grounds->toArray()
                 )
             );
-        } elseif (!$this->ground->contains($ground)) {
-            $this->ground->add($ground);
+        } elseif (!$this->grounds->contains($grounds)) {
+            $this->grounds->add($grounds);
         }
 
         return $this;
     }
 
     /**
-     * Remove a ground
+     * Remove a grounds
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $ground collection being removed
+     * @param \Doctrine\Common\Collections\ArrayCollection $grounds collection being removed
      *
      * @return Opposition
      */
-    public function removeGround($ground)
+    public function removeGrounds($grounds)
     {
-        if ($this->ground->contains($ground)) {
-            $this->ground->removeElement($ground);
+        if ($this->grounds->contains($grounds)) {
+            $this->grounds->removeElement($grounds);
         }
 
         return $this;

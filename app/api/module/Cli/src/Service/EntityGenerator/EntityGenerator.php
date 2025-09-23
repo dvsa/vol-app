@@ -501,18 +501,20 @@ class EntityGenerator implements EntityGeneratorInterface
                 $basePropertyName = lcfirst($entityName);
                 $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
             } else {
-                // For RefData, keep the EntityConfig property name (it's descriptive)
-                // e.g., variationReasons, serviceTypes, etc.
-                $propertyName = $propertyNameFromConfig;
+                // For RefData, pluralize the EntityConfig property name since it's a collection
+                // e.g., ground -> grounds, actionType -> actionTypes
+                $propertyName = $this->propertyNameResolver->resolvePropertyName($propertyNameFromConfig, true);
             }
         } else {
             // No EntityConfig - derive property name appropriately
             if ($entityName === 'RefData') {
                 // For RefData without config, derive from join column name for descriptive naming
                 $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
-                if ($inverseJoinColumn && preg_match('/^(.+?)_id$/', $inverseJoinColumn, $matches)) {
-                    // Convert variation_reason_id -> variationReasons
-                    $basePropertyName = lcfirst(str_replace('_', '', ucwords($matches[1], '_')));
+                if ($inverseJoinColumn) {
+                    // Remove _id suffix if present, otherwise use whole column name
+                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    // Convert snake_case to camelCase (e.g., action_type -> actionType)
+                    $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
                 } else {
                     // Fallback to entity name

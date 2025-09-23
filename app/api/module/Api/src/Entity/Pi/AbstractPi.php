@@ -483,6 +483,15 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     protected $piHearings;
 
     /**
+     * PiSlaExceptions
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\PiSlaException", mappedBy="pi")
+     */
+    protected $piSlaExceptions;
+
+    /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -518,6 +527,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
         $this->tmDecisions = new ArrayCollection();
         $this->piTypes = new ArrayCollection();
         $this->piHearings = new ArrayCollection();
+        $this->piSlaExceptions = new ArrayCollection();
         $this->publicationLinks = new ArrayCollection();
         $this->slaTargetDates = new ArrayCollection();
     }
@@ -1762,6 +1772,69 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     {
         if ($this->piHearings->contains($piHearings)) {
             $this->piHearings->removeElement($piHearings);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the pi sla exceptions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $piSlaExceptions collection being set as the value
+     *
+     * @return Pi
+     */
+    public function setPiSlaExceptions($piSlaExceptions)
+    {
+        $this->piSlaExceptions = $piSlaExceptions;
+
+        return $this;
+    }
+
+    /**
+     * Get the pi sla exceptions
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getPiSlaExceptions()
+    {
+        return $this->piSlaExceptions;
+    }
+
+    /**
+     * Add a pi sla exceptions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $piSlaExceptions collection being added
+     *
+     * @return Pi
+     */
+    public function addPiSlaExceptions($piSlaExceptions)
+    {
+        if ($piSlaExceptions instanceof ArrayCollection) {
+            $this->piSlaExceptions = new ArrayCollection(
+                array_merge(
+                    $this->piSlaExceptions->toArray(),
+                    $piSlaExceptions->toArray()
+                )
+            );
+        } elseif (!$this->piSlaExceptions->contains($piSlaExceptions)) {
+            $this->piSlaExceptions->add($piSlaExceptions);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove a pi sla exceptions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $piSlaExceptions collection being removed
+     *
+     * @return Pi
+     */
+    public function removePiSlaExceptions($piSlaExceptions)
+    {
+        if ($this->piSlaExceptions->contains($piSlaExceptions)) {
+            $this->piSlaExceptions->removeElement($piSlaExceptions);
         }
 
         return $this;

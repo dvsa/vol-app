@@ -129,7 +129,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     protected $reasons;
 
     /**
-     * ActionType
+     * ActionTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -143,7 +143,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *     }
      * )
      */
-    protected $actionType;
+    protected $actionTypes;
 
     /**
      * Initialise the collections
@@ -159,7 +159,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     public function initCollections(): void
     {
         $this->reasons = new ArrayCollection();
-        $this->actionType = new ArrayCollection();
+        $this->actionTypes = new ArrayCollection();
     }
 
 
@@ -388,63 +388,63 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the action type
+     * Set the action types
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $actionType collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being set as the value
      *
      * @return SubmissionAction
      */
-    public function setActionType($actionType)
+    public function setActionTypes($actionTypes)
     {
-        $this->actionType = $actionType;
+        $this->actionTypes = $actionTypes;
 
         return $this;
     }
 
     /**
-     * Get the action type
+     * Get the action types
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getActionType()
+    public function getActionTypes()
     {
-        return $this->actionType;
+        return $this->actionTypes;
     }
 
     /**
-     * Add a action type
+     * Add a action types
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $actionType collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $actionTypes collection being added
      *
      * @return SubmissionAction
      */
-    public function addActionType($actionType)
+    public function addActionTypes($actionTypes)
     {
-        if ($actionType instanceof ArrayCollection) {
-            $this->actionType = new ArrayCollection(
+        if ($actionTypes instanceof ArrayCollection) {
+            $this->actionTypes = new ArrayCollection(
                 array_merge(
-                    $this->actionType->toArray(),
-                    $actionType->toArray()
+                    $this->actionTypes->toArray(),
+                    $actionTypes->toArray()
                 )
             );
-        } elseif (!$this->actionType->contains($actionType)) {
-            $this->actionType->add($actionType);
+        } elseif (!$this->actionTypes->contains($actionTypes)) {
+            $this->actionTypes->add($actionTypes);
         }
 
         return $this;
     }
 
     /**
-     * Remove a action type
+     * Remove a action types
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $actionType collection being removed
+     * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being removed
      *
      * @return SubmissionAction
      */
-    public function removeActionType($actionType)
+    public function removeActionTypes($actionTypes)
     {
-        if ($this->actionType->contains($actionType)) {
-            $this->actionType->removeElement($actionType);
+        if ($this->actionTypes->contains($actionTypes)) {
+            $this->actionTypes->removeElement($actionTypes);
         }
 
         return $this;

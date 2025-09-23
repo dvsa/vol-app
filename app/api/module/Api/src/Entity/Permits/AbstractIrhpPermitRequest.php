@@ -114,7 +114,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     protected $version = 1;
 
     /**
-     * IrhpPermitRequestAttribute
+     * IrhpPermitRequestAttributes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -128,7 +128,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *     }
      * )
      */
-    protected $irhpPermitRequestAttribute;
+    protected $irhpPermitRequestAttributes;
 
     /**
      * Initialise the collections
@@ -143,7 +143,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      */
     public function initCollections(): void
     {
-        $this->irhpPermitRequestAttribute = new ArrayCollection();
+        $this->irhpPermitRequestAttributes = new ArrayCollection();
     }
 
 
@@ -309,63 +309,63 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     }
 
     /**
-     * Set the irhp permit request attribute
+     * Set the irhp permit request attributes
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttribute collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttributes collection being set as the value
      *
      * @return IrhpPermitRequest
      */
-    public function setIrhpPermitRequestAttribute($irhpPermitRequestAttribute)
+    public function setIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {
-        $this->irhpPermitRequestAttribute = $irhpPermitRequestAttribute;
+        $this->irhpPermitRequestAttributes = $irhpPermitRequestAttributes;
 
         return $this;
     }
 
     /**
-     * Get the irhp permit request attribute
+     * Get the irhp permit request attributes
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getIrhpPermitRequestAttribute()
+    public function getIrhpPermitRequestAttributes()
     {
-        return $this->irhpPermitRequestAttribute;
+        return $this->irhpPermitRequestAttributes;
     }
 
     /**
-     * Add a irhp permit request attribute
+     * Add a irhp permit request attributes
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequestAttribute collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequestAttributes collection being added
      *
      * @return IrhpPermitRequest
      */
-    public function addIrhpPermitRequestAttribute($irhpPermitRequestAttribute)
+    public function addIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {
-        if ($irhpPermitRequestAttribute instanceof ArrayCollection) {
-            $this->irhpPermitRequestAttribute = new ArrayCollection(
+        if ($irhpPermitRequestAttributes instanceof ArrayCollection) {
+            $this->irhpPermitRequestAttributes = new ArrayCollection(
                 array_merge(
-                    $this->irhpPermitRequestAttribute->toArray(),
-                    $irhpPermitRequestAttribute->toArray()
+                    $this->irhpPermitRequestAttributes->toArray(),
+                    $irhpPermitRequestAttributes->toArray()
                 )
             );
-        } elseif (!$this->irhpPermitRequestAttribute->contains($irhpPermitRequestAttribute)) {
-            $this->irhpPermitRequestAttribute->add($irhpPermitRequestAttribute);
+        } elseif (!$this->irhpPermitRequestAttributes->contains($irhpPermitRequestAttributes)) {
+            $this->irhpPermitRequestAttributes->add($irhpPermitRequestAttributes);
         }
 
         return $this;
     }
 
     /**
-     * Remove a irhp permit request attribute
+     * Remove a irhp permit request attributes
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttribute collection being removed
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttributes collection being removed
      *
      * @return IrhpPermitRequest
      */
-    public function removeIrhpPermitRequestAttribute($irhpPermitRequestAttribute)
+    public function removeIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {
-        if ($this->irhpPermitRequestAttribute->contains($irhpPermitRequestAttribute)) {
-            $this->irhpPermitRequestAttribute->removeElement($irhpPermitRequestAttribute);
+        if ($this->irhpPermitRequestAttributes->contains($irhpPermitRequestAttributes)) {
+            $this->irhpPermitRequestAttributes->removeElement($irhpPermitRequestAttributes);
         }
 
         return $this;
