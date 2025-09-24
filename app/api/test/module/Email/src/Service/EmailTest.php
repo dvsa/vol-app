@@ -47,27 +47,36 @@ class EmailTest extends MockeryTestCase
         $this->sut->__invoke($sm, Email::class);
     }
 
-    public function testCreateServiceBuildsMailer(): void
+    public function testCreateServiceBuildsMailerWithMultipleTransportsFirst(): void
     {
         $config = [
             'mail' => [
-                'type'    => '\Laminas\Mail\Transport\Smtp',
-                'options' => [
-                    'host' => 'localhost',
-                    'port' => 1025,
+                'transports' => [
+                    [
+                        'scheme' => 'smtp',
+                        'host'   => 'mailpit',
+                        'port'   => 1025,
+                        'username' => null,
+                        'password' => null,
+                    ],
+                    [
+                        'scheme' => 'smtp',
+                        'host'   => 'backup',
+                        'port'   => 1025,
+                        'username' => null,
+                        'password' => null,
+                    ],
                 ],
+                'strategy' => 'first',
             ],
         ];
 
         $sm = m::mock(ContainerInterface::class);
         $sm->allows()->get('config')->andReturns($config);
 
-        $service = $this->sut->__invoke($sm, Email::class);
+        $this->sut->__invoke($sm, Email::class);
 
-        $this->assertSame($this->sut, $service);
-
-        $mailer = $this->sut->getMailer();
-        $this->assertInstanceOf(\Symfony\Component\Mailer\MailerInterface::class, $mailer);
+        $this->assertInstanceOf(\Symfony\Component\Mailer\MailerInterface::class, $this->sut->getMailer());
     }
 
     /**
