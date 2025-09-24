@@ -11,6 +11,10 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\Dsn;
+use Symfony\Component\Mailer\Transport\FailoverTransport;
+use Symfony\Component\Mailer\Transport\RoundRobinTransport;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
@@ -28,17 +32,43 @@ class Email
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('config');
-        if (empty($config['mail'])) {
+        $config = $container->get('config')['mail'] ?? null;
+        if (!$config) {
             throw new \RuntimeException('No mail config found');
         }
 
-        $dsn    = MailDsnBuilder::buildFromConfig($config['mail']);
-        $mailer = new Mailer(
-            Transport::fromDsn($dsn)
-        );
+        // Accept either a single transport or an array of transports
+        $items = $config['transports']
+            ?? (isset($config['transport']) ? [ $config['transport'] ] : []);
 
-        $this->setMailer($mailer);
+        if (!is_array($items) || !$items) {
+            throw new \RuntimeException('No mail transports configured');
+        }
+
+        $built = array_map(function (array $item) {
+            $scheme  = $item['scheme'];
+            $host    = $item['host'];
+            $user    = $item['username'];
+            $pass    = $item['password'];
+            $port    = $item['port'];
+
+            $dsn = new Dsn($scheme, $host, $user, $pass, $port);
+
+            // Build transport using Esmtp factory
+            $factory = new Transport([new EsmtpTransportFactory()]);
+            return $factory->fromDsnObject($dsn);
+        }, $items);
+
+
+        // Strategy: first (default), failover, round_robin
+        $strategy = $config['strategy'] ?? 'first';
+        $transport = match ($strategy) {
+            'failover' => new FailoverTransport($built),
+            'round_robin' => new RoundRobinTransport($built),
+            default => $built[0],
+        };
+
+        $this->setMailer(new Mailer($transport));
         return $this;
     }
 
