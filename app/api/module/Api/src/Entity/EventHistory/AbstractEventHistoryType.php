@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\EventHistory;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -10,12 +12,16 @@ use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * EventHistoryType Abstract Entity
+ * AbstractEventHistoryType Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="event_history_type",
+ *    indexes={
+ *        @ORM\Index(name="uk_event_history_type_event_code", columns={"event_code"})
+ *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_event_history_type_event_code", columns={"event_code"})
  *    }
@@ -28,13 +34,15 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     use ClearPropertiesTrait;
 
     /**
-     * Description
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="description", length=50, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $description;
+    protected $id;
 
     /**
      * Event code
@@ -46,38 +54,36 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     protected $eventCode;
 
     /**
-     * Identifier - Id
+     * Description
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="string", name="description", length=50, nullable=false)
      */
-    protected $id;
+    protected $description = '';
+
 
     /**
-     * Set the description
+     * Set the id
      *
-     * @param string $description new value being set
+     * @param int $id new value being set
      *
      * @return EventHistoryType
      */
-    public function setDescription($description)
+    public function setId($id)
     {
-        $this->description = $description;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the description
+     * Get the id
      *
-     * @return string
-     */
-    public function getDescription()
+     * @return int     */
+    public function getId()
     {
-        return $this->description;
+        return $this->id;
     }
 
     /**
@@ -97,34 +103,40 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Get the event code
      *
-     * @return string
-     */
+     * @return string     */
     public function getEventCode()
     {
         return $this->eventCode;
     }
 
     /**
-     * Set the id
+     * Set the description
      *
-     * @param int $id new value being set
+     * @param string $description new value being set
      *
      * @return EventHistoryType
      */
-    public function setId($id)
+    public function setDescription($description)
     {
-        $this->id = $id;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the description
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getDescription()
     {
-        return $this->id;
+        return $this->description;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

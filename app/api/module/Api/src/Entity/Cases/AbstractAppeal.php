@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Appeal Abstract Entity
+ * AbstractAppeal Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -24,11 +29,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_appeal_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_appeal_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_appeal_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_appeal_reason", columns={"reason"})
+ *        @ORM\Index(name="ix_appeal_reason", columns={"reason"}),
+ *        @ORM\Index(name="uk_appeal_case_id", columns={"case_id"}),
+ *        @ORM\Index(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_appeal_case_id", columns={"case_id"}),
- *        @ORM\UniqueConstraint(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_appeal_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -36,50 +43,50 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Appeal date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="appeal_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $appealDate;
-
-    /**
-     * Appeal no
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="appeal_no", length=20, nullable=true)
-     */
-    protected $appealNo;
+    protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="appeal"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Comment
+     * Reason
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="comment", length=1024, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="reason", referencedColumnName="id", nullable=true)
      */
-    protected $comment;
+    protected $reason;
+
+    /**
+     * Outcome
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
+     */
+    protected $outcome;
 
     /**
      * Created by
@@ -93,53 +100,6 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     protected $createdBy;
 
     /**
-     * Deadline date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="deadline_date", nullable=true)
-     */
-    protected $deadlineDate;
-
-    /**
-     * Decision date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_date", nullable=true)
-     */
-    protected $decisionDate;
-
-    /**
-     * Dvsa notified
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="dvsa_notified", nullable=false, options={"default": 0})
-     */
-    protected $dvsaNotified = 0;
-
-    /**
-     * Hearing date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
-     */
-    protected $hearingDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -151,41 +111,49 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
+     * Non system generated number entered by user.
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="string", name="appeal_no", length=20, nullable=true)
      */
-    protected $olbsType;
+    protected $appealNo;
 
     /**
-     * Outcome
+     * Deadline date
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="deadline_date", nullable=true)
      */
-    protected $outcome;
+    protected $deadlineDate;
 
     /**
-     * Outline ground
+     * Appeal date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="appeal_date", nullable=true)
+     */
+    protected $appealDate;
+
+    /**
+     * Grounds for the appeal.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="outline_ground", length=1024, nullable=true)
      */
     protected $outlineGround;
+
+    /**
+     * Hearing date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
+     */
+    protected $hearingDate;
 
     /**
      * Papers due date
@@ -206,6 +174,15 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     protected $papersDueTcDate;
 
     /**
+     * Comment
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="comment", length=1024, nullable=true)
+     */
+    protected $comment;
+
+    /**
      * Papers sent date
      *
      * @var \DateTime
@@ -224,14 +201,31 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     protected $papersSentTcDate;
 
     /**
-     * Reason
+     * Decision date
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="reason", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="date", name="decision_date", nullable=true)
      */
-    protected $reason;
+    protected $decisionDate;
+
+    /**
+     * Withdrawn date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="withdrawn_date", nullable=true)
+     */
+    protected $withdrawnDate;
+
+    /**
+     * dvsaNotified
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="dvsa_notified", nullable=false, options={"default": 0})
+     */
+    protected $dvsaNotified = 0;
 
     /**
      * Version
@@ -244,43 +238,175 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     protected $version = 1;
 
     /**
-     * Withdrawn date
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="withdrawn_date", nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $withdrawnDate;
+    protected $olbsKey;
 
     /**
-     * Set the appeal date
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @param \DateTime $appealDate new value being set
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
      *
      * @return Appeal
      */
-    public function setAppealDate($appealDate)
+    public function setId($id)
     {
-        $this->appealDate = $appealDate;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the appeal date
+     * Get the id
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getAppealDate($asDateTime = false)
+     * @return int     */
+    public function getId()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->appealDate);
-        }
+        return $this->id;
+    }
 
-        return $this->appealDate;
+    /**
+     * Set the case
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
+     *
+     * @return Appeal
+     */
+    public function setCase($case)
+    {
+        $this->case = $case;
+
+        return $this;
+    }
+
+    /**
+     * Get the case
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
+    /**
+     * Set the reason
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $reason new value being set
+     *
+     * @return Appeal
+     */
+    public function setReason($reason)
+    {
+        $this->reason = $reason;
+
+        return $this;
+    }
+
+    /**
+     * Get the reason
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getReason()
+    {
+        return $this->reason;
+    }
+
+    /**
+     * Set the outcome
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
+     *
+     * @return Appeal
+     */
+    public function setOutcome($outcome)
+    {
+        $this->outcome = $outcome;
+
+        return $this;
+    }
+
+    /**
+     * Get the outcome
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getOutcome()
+    {
+        return $this->outcome;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Appeal
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Appeal
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -300,83 +426,10 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Get the appeal no
      *
-     * @return string
-     */
+     * @return string     */
     public function getAppealNo()
     {
         return $this->appealNo;
-    }
-
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return Appeal
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-
-        return $this;
-    }
-
-    /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
-    /**
-     * Set the comment
-     *
-     * @param string $comment new value being set
-     *
-     * @return Appeal
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get the comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Appeal
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
     }
 
     /**
@@ -398,9 +451,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDeadlineDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -411,58 +462,55 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the decision date
+     * Set the appeal date
      *
-     * @param \DateTime $decisionDate new value being set
+     * @param \DateTime $appealDate new value being set
      *
      * @return Appeal
      */
-    public function setDecisionDate($decisionDate)
+    public function setAppealDate($appealDate)
     {
-        $this->decisionDate = $decisionDate;
+        $this->appealDate = $appealDate;
 
         return $this;
     }
 
     /**
-     * Get the decision date
+     * Get the appeal date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getDecisionDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getAppealDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->decisionDate);
+            return $this->asDateTime($this->appealDate);
         }
 
-        return $this->decisionDate;
+        return $this->appealDate;
     }
 
     /**
-     * Set the dvsa notified
+     * Set the outline ground
      *
-     * @param string $dvsaNotified new value being set
+     * @param string $outlineGround new value being set
      *
      * @return Appeal
      */
-    public function setDvsaNotified($dvsaNotified)
+    public function setOutlineGround($outlineGround)
     {
-        $this->dvsaNotified = $dvsaNotified;
+        $this->outlineGround = $outlineGround;
 
         return $this;
     }
 
     /**
-     * Get the dvsa notified
+     * Get the outline ground
      *
-     * @return string
-     */
-    public function getDvsaNotified()
+     * @return string     */
+    public function getOutlineGround()
     {
-        return $this->dvsaNotified;
+        return $this->outlineGround;
     }
 
     /**
@@ -484,9 +532,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -494,150 +540,6 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
         }
 
         return $this->hearingDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Appeal
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Appeal
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Appeal
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return Appeal
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
-    }
-
-    /**
-     * Set the outcome
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome entity being set as the value
-     *
-     * @return Appeal
-     */
-    public function setOutcome($outcome)
-    {
-        $this->outcome = $outcome;
-
-        return $this;
-    }
-
-    /**
-     * Get the outcome
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getOutcome()
-    {
-        return $this->outcome;
-    }
-
-    /**
-     * Set the outline ground
-     *
-     * @param string $outlineGround new value being set
-     *
-     * @return Appeal
-     */
-    public function setOutlineGround($outlineGround)
-    {
-        $this->outlineGround = $outlineGround;
-
-        return $this;
-    }
-
-    /**
-     * Get the outline ground
-     *
-     * @return string
-     */
-    public function getOutlineGround()
-    {
-        return $this->outlineGround;
     }
 
     /**
@@ -659,9 +561,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPapersDueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -690,9 +590,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPapersDueTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -700,6 +598,29 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
         }
 
         return $this->papersDueTcDate;
+    }
+
+    /**
+     * Set the comment
+     *
+     * @param string $comment new value being set
+     *
+     * @return Appeal
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get the comment
+     *
+     * @return string     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 
     /**
@@ -721,9 +642,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPapersSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -752,9 +671,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPapersSentTcDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -765,51 +682,32 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     }
 
     /**
-     * Set the reason
+     * Set the decision date
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $reason entity being set as the value
+     * @param \DateTime $decisionDate new value being set
      *
      * @return Appeal
      */
-    public function setReason($reason)
+    public function setDecisionDate($decisionDate)
     {
-        $this->reason = $reason;
+        $this->decisionDate = $decisionDate;
 
         return $this;
     }
 
     /**
-     * Get the reason
+     * Get the decision date
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getReason()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getDecisionDate($asDateTime = false)
     {
-        return $this->reason;
-    }
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->decisionDate);
+        }
 
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Appeal
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return $this->decisionDate;
     }
 
     /**
@@ -831,9 +729,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getWithdrawnDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -841,5 +737,105 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
         }
 
         return $this->withdrawnDate;
+    }
+
+    /**
+     * Set the dvsa notified
+     *
+     * @param string $dvsaNotified new value being set
+     *
+     * @return Appeal
+     */
+    public function setDvsaNotified($dvsaNotified)
+    {
+        $this->dvsaNotified = $dvsaNotified;
+
+        return $this;
+    }
+
+    /**
+     * Get the dvsa notified
+     *
+     * @return string     */
+    public function getDvsaNotified()
+    {
+        return $this->dvsaNotified;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Appeal
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return Appeal
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the olbs type
+     *
+     * @param string $olbsType new value being set
+     *
+     * @return Appeal
+     */
+    public function setOlbsType($olbsType)
+    {
+        $this->olbsType = $olbsType;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs type
+     *
+     * @return string     */
+    public function getOlbsType()
+    {
+        return $this->olbsType;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

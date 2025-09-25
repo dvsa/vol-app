@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Team Abstract Entity
+ * AbstractTeam Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,7 +30,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_team_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_team_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_team_traffic_area_id", columns={"traffic_area_id"})
+ *        @ORM\Index(name="ix_team_traffic_area_id", columns={"traffic_area_id"}),
+ *        @ORM\Index(name="uk_team_name", columns={"name"}),
+ *        @ORM\Index(name="uk_team_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_team_name", columns={"name"}),
@@ -45,6 +50,27 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to traffic_area
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $trafficArea;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -54,26 +80,6 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -87,32 +93,22 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     protected $lastModifiedBy;
 
     /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=true)
+     */
+    protected $description;
+
+    /**
      * Name
      *
      * @var string
      *
      * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
-    protected $name;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Traffic area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
-     */
-    protected $trafficArea;
+    protected $name = '';
 
     /**
      * Version
@@ -125,7 +121,16 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     protected $version = 1;
 
     /**
-     * Task
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -134,7 +139,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     protected $tasks;
 
     /**
-     * Task allocation rule
+     * TaskAllocationRules
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -143,23 +148,16 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     protected $taskAllocationRules;
 
     /**
-     * Team printer
+     * TeamPrinters
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter",
-     *     mappedBy="team",
-     *     cascade={"persist","remove"},
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter", mappedBy="team", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $teamPrinters;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -167,21 +165,66 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->tasks = new ArrayCollection();
         $this->taskAllocationRules = new ArrayCollection();
         $this->teamPrinters = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Team
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the traffic area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
+     *
+     * @return Team
+     */
+    public function setTrafficArea($trafficArea)
+    {
+        $this->trafficArea = $trafficArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the traffic area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+    public function getTrafficArea()
+    {
+        return $this->trafficArea;
+    }
+
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Team
      */
@@ -195,11 +238,33 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Team
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -219,59 +284,10 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the description
      *
-     * @return string
-     */
+     * @return string     */
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Team
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Team
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
     }
 
     /**
@@ -291,59 +307,10 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the name
      *
-     * @return string
-     */
+     * @return string     */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Team
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the traffic area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
-     *
-     * @return Team
-     */
-    public function setTrafficArea($trafficArea)
-    {
-        $this->trafficArea = $trafficArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the traffic area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getTrafficArea()
-    {
-        return $this->trafficArea;
     }
 
     /**
@@ -363,17 +330,39 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the task
+     * Set the olbs key
      *
-     * @param ArrayCollection $tasks collection being set as the value
+     * @param int $olbsKey new value being set
+     *
+     * @return Team
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the tasks
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being set as the value
      *
      * @return Team
      */
@@ -387,7 +376,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the tasks
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTasks()
     {
@@ -397,7 +386,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a tasks
      *
-     * @param ArrayCollection|mixed $tasks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tasks collection being added
      *
      * @return Team
      */
@@ -434,9 +423,9 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the task allocation rule
+     * Set the task allocation rules
      *
-     * @param ArrayCollection $taskAllocationRules collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $taskAllocationRules collection being set as the value
      *
      * @return Team
      */
@@ -450,7 +439,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the task allocation rules
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTaskAllocationRules()
     {
@@ -460,7 +449,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a task allocation rules
      *
-     * @param ArrayCollection|mixed $taskAllocationRules collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $taskAllocationRules collection being added
      *
      * @return Team
      */
@@ -497,9 +486,9 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the team printer
+     * Set the team printers
      *
-     * @param ArrayCollection $teamPrinters collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being set as the value
      *
      * @return Team
      */
@@ -513,7 +502,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the team printers
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTeamPrinters()
     {
@@ -523,7 +512,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a team printers
      *
-     * @param ArrayCollection|mixed $teamPrinters collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $teamPrinters collection being added
      *
      * @return Team
      */
@@ -557,5 +546,13 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

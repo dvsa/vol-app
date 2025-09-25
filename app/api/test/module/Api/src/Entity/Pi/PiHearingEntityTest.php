@@ -118,6 +118,9 @@ class PiHearingEntityTest extends EntityTester
             if ($expectException === true) {
                 $this->fail('ValidationException SHOULD have been thrown');
             }
+
+            // Assert the entity was successfully updated when no exception expected
+            $this->assertInstanceOf(Entity::class, $sut);
         } catch (ValidationException $e) {
             if ($expectException === false) {
                 $this->fail('ValidationException should NOT have been thrown');

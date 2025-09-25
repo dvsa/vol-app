@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * GracePeriod Abstract Entity
+ * AbstractGracePeriod Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,7 +28,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_grace_period_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_grace_period_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_grace_period_licence_id", columns={"licence_id"})
+ *        @ORM\Index(name="ix_grace_period_licence_id", columns={"licence_id"}),
+ *        @ORM\Index(name="uk_grace_period_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_grace_period_olbs_key", columns={"olbs_key"})
@@ -34,9 +40,30 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
 
     /**
      * Created by
@@ -50,35 +77,6 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=90, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * End date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=false)
-     */
-    protected $endDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -90,36 +88,31 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Licence
+     * Description of why the grace period was granted.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="gracePeriods"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="description", length=90, nullable=true)
      */
-    protected $licence;
+    protected $description;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Start date
+     * Period can start on a future date.
      *
      * @var \DateTime
      *
      * @ORM\Column(type="date", name="start_date", nullable=false)
      */
     protected $startDate;
+
+    /**
+     * End date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="end_date", nullable=false)
+     */
+    protected $endDate;
 
     /**
      * Version
@@ -132,9 +125,80 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return GracePeriod
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
+     *
+     * @return GracePeriod
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return GracePeriod
      */
@@ -148,11 +212,33 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return GracePeriod
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -172,138 +258,10 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     /**
      * Get the description
      *
-     * @return string
-     */
+     * @return string     */
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set the end date
-     *
-     * @param \DateTime $endDate new value being set
-     *
-     * @return GracePeriod
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the end date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEndDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->endDate);
-        }
-
-        return $this->endDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return GracePeriod
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return GracePeriod
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the licence
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
-     *
-     * @return GracePeriod
-     */
-    public function setLicence($licence)
-    {
-        $this->licence = $licence;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
-    public function getLicence()
-    {
-        return $this->licence;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return GracePeriod
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**
@@ -325,9 +283,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -335,6 +291,35 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
         }
 
         return $this->startDate;
+    }
+
+    /**
+     * Set the end date
+     *
+     * @param \DateTime $endDate new value being set
+     *
+     * @return GracePeriod
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the end date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEndDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->endDate);
+        }
+
+        return $this->endDate;
     }
 
     /**
@@ -354,10 +339,40 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return GracePeriod
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

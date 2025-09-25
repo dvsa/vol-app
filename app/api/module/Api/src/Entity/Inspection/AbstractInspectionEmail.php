@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Inspection;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * InspectionEmail Abstract Entity
+ * AbstractInspectionEmail Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="inspection_email",
  *    indexes={
- *        @ORM\Index(name="ix_inspection_email_inspection_request_id",
-     *     columns={"inspection_request_id"})
+ *        @ORM\Index(name="ix_inspection_email_inspection_request_id", columns={"inspection_request_id"})
  *    }
  * )
  */
@@ -26,7 +30,46 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to inspection_request
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest", fetch="LAZY")
+     * @ORM\JoinColumn(name="inspection_request_id", referencedColumnName="id")
+     */
+    protected $inspectionRequest;
+
+    /**
+     * Subject
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="subject", length=1024, nullable=false)
+     */
+    protected $subject = '';
+
+    /**
+     * Message body
+     *
+     * @var string
+     *
+     * @ORM\Column(type="text", name="message_body", nullable=true)
+     */
+    protected $messageBody;
 
     /**
      * Email status
@@ -35,55 +78,16 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @ORM\Column(type="string", name="email_status", length=1, nullable=false)
      */
-    protected $emailStatus;
+    protected $emailStatus = '';
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Inspection request
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest", fetch="LAZY")
-     * @ORM\JoinColumn(name="inspection_request_id", referencedColumnName="id", nullable=false)
-     */
-    protected $inspectionRequest;
-
-    /**
-     * Message body
-     *
-     * @var string
-     *
-     * @ORM\Column(type="text", name="message_body", length=16777215, nullable=true)
-     */
-    protected $messageBody;
-
-    /**
-     * Processed
+     * processed
      *
      * @var string
      *
      * @ORM\Column(type="yesno", name="processed", nullable=false, options={"default": 0})
      */
     protected $processed = 0;
-
-    /**
-     * Received date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="received_date", nullable=false)
-     */
-    protected $receivedDate;
 
     /**
      * Sender email address
@@ -95,13 +99,13 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     protected $senderEmailAddress;
 
     /**
-     * Subject
+     * Received date
      *
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(type="string", name="subject", length=1024, nullable=false)
+     * @ORM\Column(type="datetime", name="received_date", nullable=false)
      */
-    protected $subject;
+    protected $receivedDate;
 
     /**
      * Version
@@ -114,28 +118,20 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     protected $version = 1;
 
     /**
-     * Set the email status
-     *
-     * @param string $emailStatus new value being set
-     *
-     * @return InspectionEmail
+     * Initialise the collections
      */
-    public function setEmailStatus($emailStatus)
+    public function __construct()
     {
-        $this->emailStatus = $emailStatus;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the email status
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getEmailStatus()
+    public function initCollections(): void
     {
-        return $this->emailStatus;
     }
+
 
     /**
      * Set the id
@@ -154,8 +150,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -164,7 +159,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Set the inspection request
      *
-     * @param \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest $inspectionRequest entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest $inspectionRequest new value being set
      *
      * @return InspectionEmail
      */
@@ -178,11 +173,33 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the inspection request
      *
-     * @return \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest     */
     public function getInspectionRequest()
     {
         return $this->inspectionRequest;
+    }
+
+    /**
+     * Set the subject
+     *
+     * @param string $subject new value being set
+     *
+     * @return InspectionEmail
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    /**
+     * Get the subject
+     *
+     * @return string     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 
     /**
@@ -202,11 +219,33 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the message body
      *
-     * @return string
-     */
+     * @return string     */
     public function getMessageBody()
     {
         return $this->messageBody;
+    }
+
+    /**
+     * Set the email status
+     *
+     * @param string $emailStatus new value being set
+     *
+     * @return InspectionEmail
+     */
+    public function setEmailStatus($emailStatus)
+    {
+        $this->emailStatus = $emailStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the email status
+     *
+     * @return string     */
+    public function getEmailStatus()
+    {
+        return $this->emailStatus;
     }
 
     /**
@@ -226,11 +265,33 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the processed
      *
-     * @return string
-     */
+     * @return string     */
     public function getProcessed()
     {
         return $this->processed;
+    }
+
+    /**
+     * Set the sender email address
+     *
+     * @param string $senderEmailAddress new value being set
+     *
+     * @return InspectionEmail
+     */
+    public function setSenderEmailAddress($senderEmailAddress)
+    {
+        $this->senderEmailAddress = $senderEmailAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get the sender email address
+     *
+     * @return string     */
+    public function getSenderEmailAddress()
+    {
+        return $this->senderEmailAddress;
     }
 
     /**
@@ -252,9 +313,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -262,54 +321,6 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
         }
 
         return $this->receivedDate;
-    }
-
-    /**
-     * Set the sender email address
-     *
-     * @param string $senderEmailAddress new value being set
-     *
-     * @return InspectionEmail
-     */
-    public function setSenderEmailAddress($senderEmailAddress)
-    {
-        $this->senderEmailAddress = $senderEmailAddress;
-
-        return $this;
-    }
-
-    /**
-     * Get the sender email address
-     *
-     * @return string
-     */
-    public function getSenderEmailAddress()
-    {
-        return $this->senderEmailAddress;
-    }
-
-    /**
-     * Set the subject
-     *
-     * @param string $subject new value being set
-     *
-     * @return InspectionEmail
-     */
-    public function setSubject($subject)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * Get the subject
-     *
-     * @return string
-     */
-    public function getSubject()
-    {
-        return $this->subject;
     }
 
     /**
@@ -329,10 +340,17 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

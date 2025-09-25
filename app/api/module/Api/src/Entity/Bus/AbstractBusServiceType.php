@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Bus;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -12,12 +14,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * BusServiceType Abstract Entity
+ * AbstractBusServiceType Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="bus_service_type")
+ * @ORM\Table(name="bus_service_type" * )
  */
 abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable
 {
@@ -26,17 +29,14 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     use ClearPropertiesWithCollectionsTrait;
 
     /**
-     * Bus reg
+     * Primary key
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var int
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     mappedBy="busServiceTypes",
-     *     fetch="LAZY"
-     * )
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
      */
-    protected $busRegs;
+    protected $id = 0;
 
     /**
      * Description
@@ -48,18 +48,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     protected $description;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Txc name
+     * TransXChange name.
      *
      * @var string
      *
@@ -68,9 +57,16 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     protected $txcName;
 
     /**
-     * Initialise the collections
+     * BusRegs
      *
-     * @return void
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="busServiceTypes", fetch="LAZY")
+     */
+    protected $busRegs;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -78,19 +74,87 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->busRegs = new ArrayCollection();
     }
 
+
     /**
-     * Set the bus reg
+     * Set the id
      *
-     * @param ArrayCollection $busRegs collection being set as the value
+     * @param int $id new value being set
+     *
+     * @return BusServiceType
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return BusServiceType
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the txc name
+     *
+     * @param string $txcName new value being set
+     *
+     * @return BusServiceType
+     */
+    public function setTxcName($txcName)
+    {
+        $this->txcName = $txcName;
+
+        return $this;
+    }
+
+    /**
+     * Get the txc name
+     *
+     * @return string     */
+    public function getTxcName()
+    {
+        return $this->txcName;
+    }
+
+    /**
+     * Set the bus regs
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
      * @return BusServiceType
      */
@@ -104,7 +168,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Get the bus regs
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getBusRegs()
     {
@@ -114,7 +178,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     /**
      * Add a bus regs
      *
-     * @param ArrayCollection|mixed $busRegs collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
      * @return BusServiceType
      */
@@ -151,74 +215,10 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return BusServiceType
+     * Get bundle data
      */
-    public function setDescription($description)
+    public function __toString(): string
     {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return BusServiceType
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the txc name
-     *
-     * @param string $txcName new value being set
-     *
-     * @return BusServiceType
-     */
-    public function setTxcName($txcName)
-    {
-        $this->txcName = $txcName;
-
-        return $this;
-    }
-
-    /**
-     * Get the txc name
-     *
-     * @return string
-     */
-    public function getTxcName()
-    {
-        return $this->txcName;
+        return (string) $this->getId();
     }
 }

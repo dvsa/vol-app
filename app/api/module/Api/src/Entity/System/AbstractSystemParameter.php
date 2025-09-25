@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -10,12 +12,13 @@ use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SystemParameter Abstract Entity
+ * AbstractSystemParameter Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="system_parameter")
+ * @ORM\Table(name="system_parameter" * )
  */
 abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable
 {
@@ -24,23 +27,14 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     use ClearPropertiesTrait;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Identifier - Id
+     * Primary key
      *
      * @var string
      *
      * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=32)
+     * @ORM\Column(type="string", name="id", length=32, nullable=false)
      */
-    protected $id;
+    protected $id = '';
 
     /**
      * Param value
@@ -52,28 +46,14 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     protected $paramValue;
 
     /**
-     * Set the description
+     * Description
      *
-     * @param string $description new value being set
+     * @var string
      *
-     * @return SystemParameter
+     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
-    public function setDescription($description)
-    {
-        $this->description = $description;
+    protected $description;
 
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     /**
      * Set the id
@@ -92,8 +72,7 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return string
-     */
+     * @return string     */
     public function getId()
     {
         return $this->id;
@@ -116,10 +95,40 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get the param value
      *
-     * @return string
-     */
+     * @return string     */
     public function getParamValue()
     {
         return $this->paramValue;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return SystemParameter
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

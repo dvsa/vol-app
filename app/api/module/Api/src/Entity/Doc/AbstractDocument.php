@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Doc;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,40 +18,39 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Document Abstract Entity
+ * AbstractDocument Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="document",
  *    indexes={
- *        @ORM\Index(name="fk_document_continuation_detail_id_continuation_detail_id",
-     *     columns={"continuation_detail_id"}),
- *        @ORM\Index(name="fk_document_irhp_application_id_irhp_application_id",
-     *     columns={"irhp_application_id"}),
- *        @ORM\Index(name="fk_document_messaging_conversation_id",
-     *     columns={"messaging_conversation_id"}),
- *        @ORM\Index(name="fk_document_messaging_message_id", columns={"messaging_message_id"}),
- *        @ORM\Index(name="ix_document_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_document_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_document_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_document_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_document_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_document_irfo_organisation_id", columns={"irfo_organisation_id"}),
- *        @ORM\Index(name="ix_document_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_document_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_document_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_document_statement_id", columns={"statement_id"}),
- *        @ORM\Index(name="ix_document_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_document_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="ix_document_surrender_id", columns={"surrender_id"}),
+ *        @ORM\Index(name="fk_document_irhp_application_id_irhp_application_id", columns={"irhp_application_id"}),
+ *        @ORM\Index(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"}),
+ *        @ORM\Index(name="ix_document_transport_manager_id", columns={"transport_manager_id"}),
  *        @ORM\Index(name="ix_document_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_document_transport_manager_id", columns={"transport_manager_id"})
+ *        @ORM\Index(name="ix_document_surrender_id", columns={"surrender_id"}),
+ *        @ORM\Index(name="ix_document_submission_id", columns={"submission_id"}),
+ *        @ORM\Index(name="ix_document_sub_category_id", columns={"sub_category_id"}),
+ *        @ORM\Index(name="ix_document_statement_id", columns={"statement_id"}),
+ *        @ORM\Index(name="ix_document_operating_centre_id", columns={"operating_centre_id"}),
+ *        @ORM\Index(name="ix_document_licence_id", columns={"licence_id"}),
+ *        @ORM\Index(name="ix_document_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_document_irfo_organisation_id", columns={"irfo_organisation_id"}),
+ *        @ORM\Index(name="ix_document_created_by", columns={"created_by"}),
+ *        @ORM\Index(name="ix_document_category_id", columns={"category_id"}),
+ *        @ORM\Index(name="ix_document_case_id", columns={"case_id"}),
+ *        @ORM\Index(name="ix_document_bus_reg_id", columns={"bus_reg_id"}),
+ *        @ORM\Index(name="ix_document_application_id", columns={"application_id"}),
+ *        @ORM\Index(name="fk_document_messaging_message_id", columns={"messaging_message_id"}),
+ *        @ORM\Index(name="fk_document_messaging_conversation_id", columns={"messaging_conversation_id"}),
+ *        @ORM\Index(name="fk_document_continuation_detail_id_continuation_detail_id", columns={"continuation_detail_id"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_document_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -63,59 +64,148 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     use SoftDeletableTrait;
 
     /**
-     * Application
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to traffic_area
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $trafficArea;
+
+    /**
+     * Foreign Key to category
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\Category
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    protected $category;
+
+    /**
+     * Foreign Key to sub_category
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
+     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
+     */
+    protected $subCategory;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
+     */
+    protected $licence;
+
+    /**
+     * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
     protected $application;
 
     /**
-     * Bus reg
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
-     */
-    protected $busReg;
-
-    /**
-     * Case
+     * FK to related case (cases table)
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
      * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
     protected $case;
 
     /**
-     * Category
+     * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\Category
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
-    protected $category;
+    protected $transportManager;
 
     /**
-     * Continuation detail
+     * Foreign key to surrender
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Surrender
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Surrender", fetch="LAZY")
+     * @ORM\JoinColumn(name="surrender_id", referencedColumnName="id", nullable=true)
+     */
+    protected $surrender;
+
+    /**
+     * Foreign Key to operating_centre
+     *
+     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
+     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
+     */
+    protected $operatingCentre;
+
+    /**
+     * Foreign Key to bus_reg
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
+     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
+     */
+    protected $busReg;
+
+    /**
+     * FK to organisation.  Only populated for international road fright operator organisations
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_organisation_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irfoOrganisation;
+
+    /**
+     * Foreign Key to submission
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
+     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
+     */
+    protected $submission;
+
+    /**
+     * Foreign Key to statement
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
+     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
+     */
+    protected $statement;
+
+    /**
+     * ContinuationDetail
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail
      *
@@ -123,6 +213,36 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @ORM\JoinColumn(name="continuation_detail_id", referencedColumnName="id", nullable=true)
      */
     protected $continuationDetail;
+
+    /**
+     * IrhpApplication
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irhpApplication;
+
+    /**
+     * MessagingConversation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation", fetch="LAZY")
+     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id", nullable=true)
+     */
+    protected $messagingConversation;
+
+    /**
+     * MessagingMessage
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage", fetch="LAZY")
+     * @ORM\JoinColumn(name="messaging_message_id", referencedColumnName="id", nullable=true)
+     */
+    protected $messagingMessage;
 
     /**
      * Created by
@@ -136,107 +256,6 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Filename
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="filename", length=1000, nullable=true)
-     */
-    protected $filename;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Identifier
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id", length=1000, nullable=false)
-     */
-    protected $identifier;
-
-    /**
-     * Irfo organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_organisation_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irfoOrganisation;
-
-    /**
-     * Irhp application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irhpApplication;
-
-    /**
-     * Is external
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_external", nullable=false, options={"default": 0})
-     */
-    protected $isExternal = 0;
-
-    /**
-     * Is post submission upload
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_post_submission_upload",
-     *     nullable=true,
-     *     options={"default": 0})
-     */
-    protected $isPostSubmissionUpload = 0;
-
-    /**
-     * Is scan
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
-     */
-    protected $isScan = 0;
-
-    /**
-     * Issued date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date", nullable=true)
-     */
-    protected $issuedDate;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -248,45 +267,40 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $lastModifiedBy;
 
     /**
-     * Licence
+     * Depending upon document store used could be filepath or unique id of stored document
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="document_store_id", length=1000, nullable=false)
      */
-    protected $licence;
+    protected $identifier = '';
 
     /**
-     * Messaging conversation
+     * Brief description of the document.  Sometimes user entered and sometimes set by application based on context of doc creation.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
-    protected $messagingConversation;
+    protected $description;
 
     /**
-     * Messaging message
+     * Normally file created date
      *
-     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="messaging_message_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="issued_date", nullable=true)
      */
-    protected $messagingMessage;
+    protected $issuedDate;
+
+    /**
+     * filename on disk
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="filename", length=1000, nullable=true)
+     */
+    protected $filename;
 
     /**
      * Metadata
@@ -298,39 +312,25 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $metadata;
 
     /**
-     * Olbs key
+     * Flag true if doc was created/uploaded by non dvsa self service user
      *
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="boolean", name="is_external", nullable=false, options={"default": 0})
      */
-    protected $olbsKey;
+    protected $isExternal = 0;
 
     /**
-     * Olbs type
+     * Was created by scanning a paper document. Used in search filter as there are many scans and removing them helps.
      *
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
      */
-    protected $olbsType;
+    protected $isScan = 0;
 
     /**
-     * Operating centre
-     *
-     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre",
-     *     fetch="LAZY",
-     *     inversedBy="adDocuments"
-     * )
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
-     */
-    protected $operatingCentre;
-
-    /**
-     * Size
+     * size in bytes
      *
      * @var int
      *
@@ -339,76 +339,13 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $size;
 
     /**
-     * Statement
+     * Is post submission upload
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
-     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="is_post_submission_upload", nullable=true, options={"default": 0})
      */
-    protected $statement;
-
-    /**
-     * Sub category
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
-     */
-    protected $subCategory;
-
-    /**
-     * Submission
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
-     */
-    protected $submission;
-
-    /**
-     * Surrender
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Surrender
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Surrender", fetch="LAZY")
-     * @ORM\JoinColumn(name="surrender_id", referencedColumnName="id", nullable=true)
-     */
-    protected $surrender;
-
-    /**
-     * Traffic area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
-     */
-    protected $trafficArea;
-
-    /**
-     * Transport manager
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="documents"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
-     */
-    protected $transportManager;
+    protected $isPostSubmissionUpload = 0;
 
     /**
      * Version
@@ -421,19 +358,34 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $version = 1;
 
     /**
-     * Continuation detail
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * ContinuationDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail",
-     *     mappedBy="checklistDocument"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", mappedBy="checklistDocument")
      */
     protected $continuationDetails;
 
     /**
-     * Template
+     * Templates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -442,61 +394,43 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     protected $templates;
 
     /**
-     * Ebsr submission
+     * EbsrSubmission
      *
-     * @var \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission
+     * @var \Dvsa\Olcs\Api\Entity\EbsrSubmission
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission",
-     *     mappedBy="document",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission", mappedBy="document", cascade={"persist"})
      */
     protected $ebsrSubmission;
 
     /**
-     * Request erru
+     * RequestErru
      *
-     * @var \Dvsa\Olcs\Api\Entity\Si\ErruRequest
+     * @var \Dvsa\Olcs\Api\Entity\ErruRequest
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest",
-     *     mappedBy="requestDocument",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="requestDocument", cascade={"persist"})
      */
     protected $requestErru;
 
     /**
-     * Response erru
+     * ResponseErru
      *
-     * @var \Dvsa\Olcs\Api\Entity\Si\ErruRequest
+     * @var \Dvsa\Olcs\Api\Entity\ErruRequest
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest",
-     *     mappedBy="responseDocument",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="responseDocument", cascade={"persist"})
      */
     protected $responseErru;
 
     /**
-     * Sla target date
+     * SlaTargetDate
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SlaTargetDate
+     * @var \Dvsa\Olcs\Api\Entity\SlaTargetDate
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate",
-     *     mappedBy="document",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="document", cascade={"persist"})
      */
     protected $slaTargetDate;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -504,207 +438,14 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->continuationDetails = new ArrayCollection();
         $this->templates = new ArrayCollection();
     }
 
-    /**
-     * Set the application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
-     *
-     * @return Document
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get the application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * Set the bus reg
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg entity being set as the value
-     *
-     * @return Document
-     */
-    public function setBusReg($busReg)
-    {
-        $this->busReg = $busReg;
-
-        return $this;
-    }
-
-    /**
-     * Get the bus reg
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     */
-    public function getBusReg()
-    {
-        return $this->busReg;
-    }
-
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return Document
-     */
-    public function setCase($case)
-    {
-        $this->case = $case;
-
-        return $this;
-    }
-
-    /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
-    {
-        return $this->case;
-    }
-
-    /**
-     * Set the category
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\Category $category entity being set as the value
-     *
-     * @return Document
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get the category
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set the continuation detail
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail $continuationDetail entity being set as the value
-     *
-     * @return Document
-     */
-    public function setContinuationDetail($continuationDetail)
-    {
-        $this->continuationDetail = $continuationDetail;
-
-        return $this;
-    }
-
-    /**
-     * Get the continuation detail
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail
-     */
-    public function getContinuationDetail()
-    {
-        return $this->continuationDetail;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Document
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return Document
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the filename
-     *
-     * @param string $filename new value being set
-     *
-     * @return Document
-     */
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
-
-        return $this;
-    }
-
-    /**
-     * Get the filename
-     *
-     * @return string
-     */
-    public function getFilename()
-    {
-        return $this->filename;
-    }
 
     /**
      * Set the id
@@ -723,11 +464,447 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the traffic area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
+     *
+     * @return Document
+     */
+    public function setTrafficArea($trafficArea)
+    {
+        $this->trafficArea = $trafficArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the traffic area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+    public function getTrafficArea()
+    {
+        return $this->trafficArea;
+    }
+
+    /**
+     * Set the category
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
+     *
+     * @return Document
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get the category
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set the sub category
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
+     *
+     * @return Document
+     */
+    public function setSubCategory($subCategory)
+    {
+        $this->subCategory = $subCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get the sub category
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+    public function getSubCategory()
+    {
+        return $this->subCategory;
+    }
+
+    /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
+     *
+     * @return Document
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
+     * Set the application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
+     *
+     * @return Document
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get the application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Set the case
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
+     *
+     * @return Document
+     */
+    public function setCase($case)
+    {
+        $this->case = $case;
+
+        return $this;
+    }
+
+    /**
+     * Get the case
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
+    /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return Document
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the surrender
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Surrender $surrender new value being set
+     *
+     * @return Document
+     */
+    public function setSurrender($surrender)
+    {
+        $this->surrender = $surrender;
+
+        return $this;
+    }
+
+    /**
+     * Get the surrender
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Surrender     */
+    public function getSurrender()
+    {
+        return $this->surrender;
+    }
+
+    /**
+     * Set the operating centre
+     *
+     * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
+     *
+     * @return Document
+     */
+    public function setOperatingCentre($operatingCentre)
+    {
+        $this->operatingCentre = $operatingCentre;
+
+        return $this;
+    }
+
+    /**
+     * Get the operating centre
+     *
+     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre     */
+    public function getOperatingCentre()
+    {
+        return $this->operatingCentre;
+    }
+
+    /**
+     * Set the bus reg
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
+     *
+     * @return Document
+     */
+    public function setBusReg($busReg)
+    {
+        $this->busReg = $busReg;
+
+        return $this;
+    }
+
+    /**
+     * Get the bus reg
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+    public function getBusReg()
+    {
+        return $this->busReg;
+    }
+
+    /**
+     * Set the irfo organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
+     *
+     * @return Document
+     */
+    public function setIrfoOrganisation($irfoOrganisation)
+    {
+        $this->irfoOrganisation = $irfoOrganisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+    public function getIrfoOrganisation()
+    {
+        return $this->irfoOrganisation;
+    }
+
+    /**
+     * Set the submission
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
+     *
+     * @return Document
+     */
+    public function setSubmission($submission)
+    {
+        $this->submission = $submission;
+
+        return $this;
+    }
+
+    /**
+     * Get the submission
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission     */
+    public function getSubmission()
+    {
+        return $this->submission;
+    }
+
+    /**
+     * Set the statement
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement new value being set
+     *
+     * @return Document
+     */
+    public function setStatement($statement)
+    {
+        $this->statement = $statement;
+
+        return $this;
+    }
+
+    /**
+     * Get the statement
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Statement     */
+    public function getStatement()
+    {
+        return $this->statement;
+    }
+
+    /**
+     * Set the continuation detail
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail $continuationDetail new value being set
+     *
+     * @return Document
+     */
+    public function setContinuationDetail($continuationDetail)
+    {
+        $this->continuationDetail = $continuationDetail;
+
+        return $this;
+    }
+
+    /**
+     * Get the continuation detail
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail     */
+    public function getContinuationDetail()
+    {
+        return $this->continuationDetail;
+    }
+
+    /**
+     * Set the irhp application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
+     *
+     * @return Document
+     */
+    public function setIrhpApplication($irhpApplication)
+    {
+        $this->irhpApplication = $irhpApplication;
+
+        return $this;
+    }
+
+    /**
+     * Get the irhp application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+    public function getIrhpApplication()
+    {
+        return $this->irhpApplication;
+    }
+
+    /**
+     * Set the messaging conversation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation new value being set
+     *
+     * @return Document
+     */
+    public function setMessagingConversation($messagingConversation)
+    {
+        $this->messagingConversation = $messagingConversation;
+
+        return $this;
+    }
+
+    /**
+     * Get the messaging conversation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation     */
+    public function getMessagingConversation()
+    {
+        return $this->messagingConversation;
+    }
+
+    /**
+     * Set the messaging message
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $messagingMessage new value being set
+     *
+     * @return Document
+     */
+    public function setMessagingMessage($messagingMessage)
+    {
+        $this->messagingMessage = $messagingMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get the messaging message
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage     */
+    public function getMessagingMessage()
+    {
+        return $this->messagingMessage;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Document
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Document
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -747,131 +924,33 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the identifier
      *
-     * @return string
-     */
+     * @return string     */
     public function getIdentifier()
     {
         return $this->identifier;
     }
 
     /**
-     * Set the irfo organisation
+     * Set the description
      *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation entity being set as the value
+     * @param string $description new value being set
      *
      * @return Document
      */
-    public function setIrfoOrganisation($irfoOrganisation)
+    public function setDescription($description)
     {
-        $this->irfoOrganisation = $irfoOrganisation;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get the irfo organisation
+     * Get the description
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getIrfoOrganisation()
+     * @return string     */
+    public function getDescription()
     {
-        return $this->irfoOrganisation;
-    }
-
-    /**
-     * Set the irhp application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication entity being set as the value
-     *
-     * @return Document
-     */
-    public function setIrhpApplication($irhpApplication)
-    {
-        $this->irhpApplication = $irhpApplication;
-
-        return $this;
-    }
-
-    /**
-     * Get the irhp application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     */
-    public function getIrhpApplication()
-    {
-        return $this->irhpApplication;
-    }
-
-    /**
-     * Set the is external
-     *
-     * @param boolean $isExternal new value being set
-     *
-     * @return Document
-     */
-    public function setIsExternal($isExternal)
-    {
-        $this->isExternal = $isExternal;
-
-        return $this;
-    }
-
-    /**
-     * Get the is external
-     *
-     * @return boolean
-     */
-    public function getIsExternal()
-    {
-        return $this->isExternal;
-    }
-
-    /**
-     * Set the is post submission upload
-     *
-     * @param boolean $isPostSubmissionUpload new value being set
-     *
-     * @return Document
-     */
-    public function setIsPostSubmissionUpload($isPostSubmissionUpload)
-    {
-        $this->isPostSubmissionUpload = $isPostSubmissionUpload;
-
-        return $this;
-    }
-
-    /**
-     * Get the is post submission upload
-     *
-     * @return boolean
-     */
-    public function getIsPostSubmissionUpload()
-    {
-        return $this->isPostSubmissionUpload;
-    }
-
-    /**
-     * Set the is scan
-     *
-     * @param boolean $isScan new value being set
-     *
-     * @return Document
-     */
-    public function setIsScan($isScan)
-    {
-        $this->isScan = $isScan;
-
-        return $this;
-    }
-
-    /**
-     * Get the is scan
-     *
-     * @return boolean
-     */
-    public function getIsScan()
-    {
-        return $this->isScan;
+        return $this->description;
     }
 
     /**
@@ -893,9 +972,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -906,99 +983,26 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Set the last modified by
+     * Set the filename
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $filename new value being set
      *
      * @return Document
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setFilename($filename)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->filename = $filename;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the filename
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getFilename()
     {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the licence
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
-     *
-     * @return Document
-     */
-    public function setLicence($licence)
-    {
-        $this->licence = $licence;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
-    public function getLicence()
-    {
-        return $this->licence;
-    }
-
-    /**
-     * Set the messaging conversation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation entity being set as the value
-     *
-     * @return Document
-     */
-    public function setMessagingConversation($messagingConversation)
-    {
-        $this->messagingConversation = $messagingConversation;
-
-        return $this;
-    }
-
-    /**
-     * Get the messaging conversation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
-     */
-    public function getMessagingConversation()
-    {
-        return $this->messagingConversation;
-    }
-
-    /**
-     * Set the messaging message
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $messagingMessage entity being set as the value
-     *
-     * @return Document
-     */
-    public function setMessagingMessage($messagingMessage)
-    {
-        $this->messagingMessage = $messagingMessage;
-
-        return $this;
-    }
-
-    /**
-     * Get the messaging message
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
-     */
-    public function getMessagingMessage()
-    {
-        return $this->messagingMessage;
+        return $this->filename;
     }
 
     /**
@@ -1018,11 +1022,125 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the metadata
      *
-     * @return string
-     */
+     * @return string     */
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /**
+     * Set the is external
+     *
+     * @param bool $isExternal new value being set
+     *
+     * @return Document
+     */
+    public function setIsExternal($isExternal)
+    {
+        $this->isExternal = $isExternal;
+
+        return $this;
+    }
+
+    /**
+     * Get the is external
+     *
+     * @return bool     */
+    public function getIsExternal()
+    {
+        return $this->isExternal;
+    }
+
+    /**
+     * Set the is scan
+     *
+     * @param bool $isScan new value being set
+     *
+     * @return Document
+     */
+    public function setIsScan($isScan)
+    {
+        $this->isScan = $isScan;
+
+        return $this;
+    }
+
+    /**
+     * Get the is scan
+     *
+     * @return bool     */
+    public function getIsScan()
+    {
+        return $this->isScan;
+    }
+
+    /**
+     * Set the size
+     *
+     * @param int $size new value being set
+     *
+     * @return Document
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+
+        return $this;
+    }
+
+    /**
+     * Get the size
+     *
+     * @return int     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * Set the is post submission upload
+     *
+     * @param bool $isPostSubmissionUpload new value being set
+     *
+     * @return Document
+     */
+    public function setIsPostSubmissionUpload($isPostSubmissionUpload)
+    {
+        $this->isPostSubmissionUpload = $isPostSubmissionUpload;
+
+        return $this;
+    }
+
+    /**
+     * Get the is post submission upload
+     *
+     * @return bool     */
+    public function getIsPostSubmissionUpload()
+    {
+        return $this->isPostSubmissionUpload;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Document
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -1042,8 +1160,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -1066,233 +1183,16 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the operating centre
+     * Set the continuation details
      *
-     * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre entity being set as the value
-     *
-     * @return Document
-     */
-    public function setOperatingCentre($operatingCentre)
-    {
-        $this->operatingCentre = $operatingCentre;
-
-        return $this;
-    }
-
-    /**
-     * Get the operating centre
-     *
-     * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     */
-    public function getOperatingCentre()
-    {
-        return $this->operatingCentre;
-    }
-
-    /**
-     * Set the size
-     *
-     * @param int $size new value being set
-     *
-     * @return Document
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * Get the size
-     *
-     * @return int
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
-
-    /**
-     * Set the statement
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement entity being set as the value
-     *
-     * @return Document
-     */
-    public function setStatement($statement)
-    {
-        $this->statement = $statement;
-
-        return $this;
-    }
-
-    /**
-     * Get the statement
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Statement
-     */
-    public function getStatement()
-    {
-        return $this->statement;
-    }
-
-    /**
-     * Set the sub category
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory entity being set as the value
-     *
-     * @return Document
-     */
-    public function setSubCategory($subCategory)
-    {
-        $this->subCategory = $subCategory;
-
-        return $this;
-    }
-
-    /**
-     * Get the sub category
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
-     */
-    public function getSubCategory()
-    {
-        return $this->subCategory;
-    }
-
-    /**
-     * Set the submission
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission entity being set as the value
-     *
-     * @return Document
-     */
-    public function setSubmission($submission)
-    {
-        $this->submission = $submission;
-
-        return $this;
-    }
-
-    /**
-     * Get the submission
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission
-     */
-    public function getSubmission()
-    {
-        return $this->submission;
-    }
-
-    /**
-     * Set the surrender
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Surrender $surrender entity being set as the value
-     *
-     * @return Document
-     */
-    public function setSurrender($surrender)
-    {
-        $this->surrender = $surrender;
-
-        return $this;
-    }
-
-    /**
-     * Get the surrender
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Surrender
-     */
-    public function getSurrender()
-    {
-        return $this->surrender;
-    }
-
-    /**
-     * Set the traffic area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
-     *
-     * @return Document
-     */
-    public function setTrafficArea($trafficArea)
-    {
-        $this->trafficArea = $trafficArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the traffic area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getTrafficArea()
-    {
-        return $this->trafficArea;
-    }
-
-    /**
-     * Set the transport manager
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
-     *
-     * @return Document
-     */
-    public function setTransportManager($transportManager)
-    {
-        $this->transportManager = $transportManager;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
-    {
-        return $this->transportManager;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Document
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the continuation detail
-     *
-     * @param ArrayCollection $continuationDetails collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being set as the value
      *
      * @return Document
      */
@@ -1306,7 +1206,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the continuation details
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getContinuationDetails()
     {
@@ -1316,7 +1216,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Add a continuation details
      *
-     * @param ArrayCollection|mixed $continuationDetails collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $continuationDetails collection being added
      *
      * @return Document
      */
@@ -1353,9 +1253,9 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Set the template
+     * Set the templates
      *
-     * @param ArrayCollection $templates collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $templates collection being set as the value
      *
      * @return Document
      */
@@ -1369,7 +1269,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the templates
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTemplates()
     {
@@ -1379,7 +1279,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Add a templates
      *
-     * @param ArrayCollection|mixed $templates collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $templates collection being added
      *
      * @return Document
      */
@@ -1432,8 +1332,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the ebsr submission
      *
-     * @return \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission     */
     public function getEbsrSubmission()
     {
         return $this->ebsrSubmission;
@@ -1456,8 +1355,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the request erru
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest     */
     public function getRequestErru()
     {
         return $this->requestErru;
@@ -1480,8 +1378,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the response erru
      *
-     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Si\ErruRequest     */
     public function getResponseErru()
     {
         return $this->responseErru;
@@ -1504,10 +1401,17 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
     /**
      * Get the sla target date
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SlaTargetDate
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SlaTargetDate     */
     public function getSlaTargetDate()
     {
         return $this->slaTargetDate;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

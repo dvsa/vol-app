@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -10,14 +12,18 @@ use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Sla Abstract Entity
+ * AbstractSla Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="sla",
+ *    indexes={
+ *        @ORM\Index(name="uniqueCategoryFieldCompare", columns={"category", "field", "compare_to"})
+ *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uniqueCategoryFieldCompare", columns={"category","field","compare_to"})
+ *        @ORM\UniqueConstraint(name="uniqueCategoryFieldCompare", columns={"category", "field", "compare_to"})
  *    }
  * )
  */
@@ -28,7 +34,18 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     use ClearPropertiesTrait;
 
     /**
-     * Category
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * e.g. PI
      *
      * @var string
      *
@@ -37,7 +54,16 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     protected $category;
 
     /**
-     * Compare to
+     * Field holding source of sla
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="field", length=32, nullable=true)
+     */
+    protected $field;
+
+    /**
+     * Field holding result
      *
      * @var string
      *
@@ -46,7 +72,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     protected $compareTo;
 
     /**
-     * Days
+     * Number of days between source and result for succes. Can be negative
      *
      * @var int
      *
@@ -73,42 +99,46 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     protected $effectiveTo;
 
     /**
-     * Field
+     * Include public holidays in SLA calculation
      *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="field", length=32, nullable=true)
-     */
-    protected $field;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Public holiday
-     *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="public_holiday", nullable=false, options={"default": 0})
      */
     protected $publicHoliday = 0;
 
     /**
-     * Weekend
+     * Include weekends in SLA calculation
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="weekend", nullable=false, options={"default": 0})
      */
     protected $weekend = 0;
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Sla
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set the category
@@ -127,11 +157,33 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the category
      *
-     * @return string
-     */
+     * @return string     */
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set the field
+     *
+     * @param string $field new value being set
+     *
+     * @return Sla
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+
+        return $this;
+    }
+
+    /**
+     * Get the field
+     *
+     * @return string     */
+    public function getField()
+    {
+        return $this->field;
     }
 
     /**
@@ -151,8 +203,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the compare to
      *
-     * @return string
-     */
+     * @return string     */
     public function getCompareTo()
     {
         return $this->compareTo;
@@ -175,8 +226,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the days
      *
-     * @return int
-     */
+     * @return int     */
     public function getDays()
     {
         return $this->days;
@@ -201,9 +251,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -232,9 +280,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getEffectiveTo($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -245,57 +291,9 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     }
 
     /**
-     * Set the field
-     *
-     * @param string $field new value being set
-     *
-     * @return Sla
-     */
-    public function setField($field)
-    {
-        $this->field = $field;
-
-        return $this;
-    }
-
-    /**
-     * Get the field
-     *
-     * @return string
-     */
-    public function getField()
-    {
-        return $this->field;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Sla
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set the public holiday
      *
-     * @param boolean $publicHoliday new value being set
+     * @param bool $publicHoliday new value being set
      *
      * @return Sla
      */
@@ -309,8 +307,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the public holiday
      *
-     * @return boolean
-     */
+     * @return bool     */
     public function getPublicHoliday()
     {
         return $this->publicHoliday;
@@ -319,7 +316,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Set the weekend
      *
-     * @param boolean $weekend new value being set
+     * @param bool $weekend new value being set
      *
      * @return Sla
      */
@@ -333,10 +330,17 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Get the weekend
      *
-     * @return boolean
-     */
+     * @return bool     */
     public function getWeekend()
     {
         return $this->weekend;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

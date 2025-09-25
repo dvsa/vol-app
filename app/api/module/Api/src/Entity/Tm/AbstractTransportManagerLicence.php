@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TransportManagerLicence Abstract Entity
+ * AbstractTransportManagerLicence Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,12 +29,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="transport_manager_licence",
  *    indexes={
  *        @ORM\Index(name="ix_transport_manager_licence_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_licence_last_modified_by",
-     *     columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_transport_manager_licence_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_transport_manager_licence_licence_id", columns={"licence_id"}),
  *        @ORM\Index(name="ix_transport_manager_licence_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_licence_transport_manager_id",
-     *     columns={"transport_manager_id"})
+ *        @ORM\Index(name="ix_transport_manager_licence_transport_manager_id", columns={"transport_manager_id"}),
+ *        @ORM\Index(name="uk_transport_manager_licence_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_transport_manager_licence_olbs_key", columns={"olbs_key"})
@@ -48,13 +50,45 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     use SoftDeletableTrait;
 
     /**
-     * Additional information
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $additionalInformation;
+    protected $id;
+
+    /**
+     * Foreign Key to transport_manager
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
+     */
+    protected $transportManager;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
+
+    /**
+     * TmType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
+     */
+    protected $tmType;
 
     /**
      * Created by
@@ -68,89 +102,6 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     protected $createdBy;
 
     /**
-     * Hours fri
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_fri", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursFri;
-
-    /**
-     * Hours mon
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_mon", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursMon;
-
-    /**
-     * Hours sat
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_sat", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursSat;
-
-    /**
-     * Hours sun
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_sun", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursSun;
-
-    /**
-     * Hours thu
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_thu", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursThu;
-
-    /**
-     * Hours tue
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_tue", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursTue;
-
-    /**
-     * Hours wed
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_wed", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursWed;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is owner
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_owner", nullable=true)
-     */
-    protected $isOwner;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -162,6 +113,87 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     protected $lastModifiedBy;
 
     /**
+     * isOwner
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_owner", nullable=true)
+     */
+    protected $isOwner;
+
+    /**
+     * Hours mon
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_mon", nullable=true)
+     */
+    protected $hoursMon;
+
+    /**
+     * Hours tue
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_tue", nullable=true)
+     */
+    protected $hoursTue;
+
+    /**
+     * Hours wed
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_wed", nullable=true)
+     */
+    protected $hoursWed;
+
+    /**
+     * Hours thu
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_thu", nullable=true)
+     */
+    protected $hoursThu;
+
+    /**
+     * Hours fri
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_fri", nullable=true)
+     */
+    protected $hoursFri;
+
+    /**
+     * Hours sat
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_sat", nullable=true)
+     */
+    protected $hoursSat;
+
+    /**
+     * Hours sun
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="hours_sun", nullable=true)
+     */
+    protected $hoursSun;
+
+    /**
+     * Additional information
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
+     */
+    protected $additionalInformation;
+
+    /**
      * Last tm letter date
      *
      * @var \DateTime
@@ -169,53 +201,6 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      * @ORM\Column(type="date", name="last_tm_letter_date", nullable=true)
      */
     protected $lastTmLetterDate;
-
-    /**
-     * Licence
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="tmLicences"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
-     */
-    protected $licence;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Tm type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
-     */
-    protected $tmType;
-
-    /**
-     * Transport manager
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="tmLicences"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=false)
-     */
-    protected $transportManager;
 
     /**
      * Version
@@ -228,21 +213,25 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     protected $version = 1;
 
     /**
-     * Other licence
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence",
-     *     mappedBy="transportManagerLicence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="transportManagerLicence")
      */
     protected $otherLicences;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -250,230 +239,13 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->otherLicences = new ArrayCollection();
     }
 
-    /**
-     * Set the additional information
-     *
-     * @param string $additionalInformation new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setAdditionalInformation($additionalInformation)
-    {
-        $this->additionalInformation = $additionalInformation;
-
-        return $this;
-    }
-
-    /**
-     * Get the additional information
-     *
-     * @return string
-     */
-    public function getAdditionalInformation()
-    {
-        return $this->additionalInformation;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TransportManagerLicence
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the hours fri
-     *
-     * @param float $hoursFri new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursFri($hoursFri)
-    {
-        $this->hoursFri = $hoursFri;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours fri
-     *
-     * @return float
-     */
-    public function getHoursFri()
-    {
-        return $this->hoursFri;
-    }
-
-    /**
-     * Set the hours mon
-     *
-     * @param float $hoursMon new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursMon($hoursMon)
-    {
-        $this->hoursMon = $hoursMon;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours mon
-     *
-     * @return float
-     */
-    public function getHoursMon()
-    {
-        return $this->hoursMon;
-    }
-
-    /**
-     * Set the hours sat
-     *
-     * @param float $hoursSat new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursSat($hoursSat)
-    {
-        $this->hoursSat = $hoursSat;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours sat
-     *
-     * @return float
-     */
-    public function getHoursSat()
-    {
-        return $this->hoursSat;
-    }
-
-    /**
-     * Set the hours sun
-     *
-     * @param float $hoursSun new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursSun($hoursSun)
-    {
-        $this->hoursSun = $hoursSun;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours sun
-     *
-     * @return float
-     */
-    public function getHoursSun()
-    {
-        return $this->hoursSun;
-    }
-
-    /**
-     * Set the hours thu
-     *
-     * @param float $hoursThu new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursThu($hoursThu)
-    {
-        $this->hoursThu = $hoursThu;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours thu
-     *
-     * @return float
-     */
-    public function getHoursThu()
-    {
-        return $this->hoursThu;
-    }
-
-    /**
-     * Set the hours tue
-     *
-     * @param float $hoursTue new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursTue($hoursTue)
-    {
-        $this->hoursTue = $hoursTue;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours tue
-     *
-     * @return float
-     */
-    public function getHoursTue()
-    {
-        return $this->hoursTue;
-    }
-
-    /**
-     * Set the hours wed
-     *
-     * @param float $hoursWed new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setHoursWed($hoursWed)
-    {
-        $this->hoursWed = $hoursWed;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours wed
-     *
-     * @return float
-     */
-    public function getHoursWed()
-    {
-        return $this->hoursWed;
-    }
 
     /**
      * Set the id
@@ -492,11 +264,125 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
+     * Set the tm type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmType new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setTmType($tmType)
+    {
+        $this->tmType = $tmType;
+
+        return $this;
+    }
+
+    /**
+     * Get the tm type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getTmType()
+    {
+        return $this->tmType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -516,35 +402,194 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the is owner
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsOwner()
     {
         return $this->isOwner;
     }
 
     /**
-     * Set the last modified by
+     * Set the hours mon
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $hoursMon new value being set
      *
      * @return TransportManagerLicence
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setHoursMon($hoursMon)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->hoursMon = $hoursMon;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the hours mon
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getHoursMon()
     {
-        return $this->lastModifiedBy;
+        return $this->hoursMon;
+    }
+
+    /**
+     * Set the hours tue
+     *
+     * @param string $hoursTue new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursTue($hoursTue)
+    {
+        $this->hoursTue = $hoursTue;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours tue
+     *
+     * @return string     */
+    public function getHoursTue()
+    {
+        return $this->hoursTue;
+    }
+
+    /**
+     * Set the hours wed
+     *
+     * @param string $hoursWed new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursWed($hoursWed)
+    {
+        $this->hoursWed = $hoursWed;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours wed
+     *
+     * @return string     */
+    public function getHoursWed()
+    {
+        return $this->hoursWed;
+    }
+
+    /**
+     * Set the hours thu
+     *
+     * @param string $hoursThu new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursThu($hoursThu)
+    {
+        $this->hoursThu = $hoursThu;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours thu
+     *
+     * @return string     */
+    public function getHoursThu()
+    {
+        return $this->hoursThu;
+    }
+
+    /**
+     * Set the hours fri
+     *
+     * @param string $hoursFri new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursFri($hoursFri)
+    {
+        $this->hoursFri = $hoursFri;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours fri
+     *
+     * @return string     */
+    public function getHoursFri()
+    {
+        return $this->hoursFri;
+    }
+
+    /**
+     * Set the hours sat
+     *
+     * @param string $hoursSat new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursSat($hoursSat)
+    {
+        $this->hoursSat = $hoursSat;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours sat
+     *
+     * @return string     */
+    public function getHoursSat()
+    {
+        return $this->hoursSat;
+    }
+
+    /**
+     * Set the hours sun
+     *
+     * @param string $hoursSun new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setHoursSun($hoursSun)
+    {
+        $this->hoursSun = $hoursSun;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours sun
+     *
+     * @return string     */
+    public function getHoursSun()
+    {
+        return $this->hoursSun;
+    }
+
+    /**
+     * Set the additional information
+     *
+     * @param string $additionalInformation new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setAdditionalInformation($additionalInformation)
+    {
+        $this->additionalInformation = $additionalInformation;
+
+        return $this;
+    }
+
+    /**
+     * Get the additional information
+     *
+     * @return string     */
+    public function getAdditionalInformation()
+    {
+        return $this->additionalInformation;
     }
 
     /**
@@ -566,9 +611,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getLastTmLetterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -576,102 +619,6 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
         }
 
         return $this->lastTmLetterDate;
-    }
-
-    /**
-     * Set the licence
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
-     *
-     * @return TransportManagerLicence
-     */
-    public function setLicence($licence)
-    {
-        $this->licence = $licence;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
-    public function getLicence()
-    {
-        return $this->licence;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return TransportManagerLicence
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the tm type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmType entity being set as the value
-     *
-     * @return TransportManagerLicence
-     */
-    public function setTmType($tmType)
-    {
-        $this->tmType = $tmType;
-
-        return $this;
-    }
-
-    /**
-     * Get the tm type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getTmType()
-    {
-        return $this->tmType;
-    }
-
-    /**
-     * Set the transport manager
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
-     *
-     * @return TransportManagerLicence
-     */
-    public function setTransportManager($transportManager)
-    {
-        $this->transportManager = $transportManager;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
-    {
-        return $this->transportManager;
     }
 
     /**
@@ -691,17 +638,39 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the other licence
+     * Set the olbs key
      *
-     * @param ArrayCollection $otherLicences collection being set as the value
+     * @param int $olbsKey new value being set
+     *
+     * @return TransportManagerLicence
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the other licences
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $otherLicences collection being set as the value
      *
      * @return TransportManagerLicence
      */
@@ -715,7 +684,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Get the other licences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOtherLicences()
     {
@@ -725,7 +694,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Add a other licences
      *
-     * @param ArrayCollection|mixed $otherLicences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $otherLicences collection being added
      *
      * @return TransportManagerLicence
      */
@@ -759,5 +728,13 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

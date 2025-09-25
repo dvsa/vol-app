@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Submission;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Submission Abstract Entity
+ * AbstractSubmission Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -44,13 +47,15 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     use SoftDeletableTrait;
 
     /**
-     * Assigned date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="assigned_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $assignedDate;
+    protected $id;
 
     /**
      * Case
@@ -58,18 +63,39 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Closed date
+     * SubmissionType
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="submission_type", referencedColumnName="id")
      */
-    protected $closedDate;
+    protected $submissionType;
+
+    /**
+     * User that assigned a submission to a recipient
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="sender_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $senderUser;
+
+    /**
+     * The user who must next action a submission
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="recipient_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $recipientUser;
 
     /**
      * Created by
@@ -83,35 +109,6 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     protected $createdBy;
 
     /**
-     * Data snapshot
-     *
-     * @var string
-     *
-     * @ORM\Column(type="text", name="data_snapshot", length=16777215, nullable=true)
-     */
-    protected $dataSnapshot;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Information complete date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="information_complete_date", nullable=true)
-     */
-    protected $informationCompleteDate;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -123,52 +120,58 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     protected $lastModifiedBy;
 
     /**
-     * Recipient user
+     * Contains data for each submission section concatenated togather as a JSon string.
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="recipient_user_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="text", name="data_snapshot", nullable=true)
      */
-    protected $recipientUser;
+    protected $dataSnapshot;
 
     /**
-     * Sender user
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="sender_user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $senderUser;
-
-    /**
-     * Submission type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_type", referencedColumnName="id", nullable=false)
-     */
-    protected $submissionType;
-
-    /**
-     * Tc sla started
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="tc_sla_started", nullable=false, options={"default": 0})
-     */
-    protected $tcSlaStarted = 0;
-
-    /**
-     * Urgent
+     * Flag to prioratise submissions for recipient user
      *
      * @var string
      *
      * @ORM\Column(type="yesnonull", name="urgent", nullable=true)
      */
     protected $urgent;
+
+    /**
+     * Date submission was assigned
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="assigned_date", nullable=true)
+     */
+    protected $assignedDate;
+
+    /**
+     * Tc sla started
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="tc_sla_started", nullable=false, options={"default": 0})
+     */
+    protected $tcSlaStarted = 0;
+
+    /**
+     * Date all submission information was completed
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="information_complete_date", nullable=true)
+     */
+    protected $informationCompleteDate;
+
+    /**
+     * Date submission completed, no further action required
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
+     */
+    protected $closedDate;
 
     /**
      * Version
@@ -181,7 +184,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     protected $version = 1;
 
     /**
-     * Document
+     * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -190,48 +193,34 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     protected $documents;
 
     /**
-     * Sla target date
+     * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate",
-     *     mappedBy="submission",
-     *     cascade={"persist"},
-     *     indexBy="sla_id",
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="submission", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
     protected $slaTargetDates;
 
     /**
-     * Submission action
+     * SubmissionActions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionAction",
-     *     mappedBy="submission"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionAction", mappedBy="submission")
      */
     protected $submissionActions;
 
     /**
-     * Submission section comment
+     * SubmissionSectionComments
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment",
-     *     mappedBy="submission"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment", mappedBy="submission")
      */
     protected $submissionSectionComments;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -239,16 +228,222 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->documents = new ArrayCollection();
         $this->slaTargetDates = new ArrayCollection();
         $this->submissionActions = new ArrayCollection();
         $this->submissionSectionComments = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Submission
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the case
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
+     *
+     * @return Submission
+     */
+    public function setCase($case)
+    {
+        $this->case = $case;
+
+        return $this;
+    }
+
+    /**
+     * Get the case
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
+    /**
+     * Set the submission type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $submissionType new value being set
+     *
+     * @return Submission
+     */
+    public function setSubmissionType($submissionType)
+    {
+        $this->submissionType = $submissionType;
+
+        return $this;
+    }
+
+    /**
+     * Get the submission type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getSubmissionType()
+    {
+        return $this->submissionType;
+    }
+
+    /**
+     * Set the sender user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $senderUser new value being set
+     *
+     * @return Submission
+     */
+    public function setSenderUser($senderUser)
+    {
+        $this->senderUser = $senderUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the sender user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getSenderUser()
+    {
+        return $this->senderUser;
+    }
+
+    /**
+     * Set the recipient user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $recipientUser new value being set
+     *
+     * @return Submission
+     */
+    public function setRecipientUser($recipientUser)
+    {
+        $this->recipientUser = $recipientUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the recipient user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getRecipientUser()
+    {
+        return $this->recipientUser;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Submission
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Submission
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the data snapshot
+     *
+     * @param string $dataSnapshot new value being set
+     *
+     * @return Submission
+     */
+    public function setDataSnapshot($dataSnapshot)
+    {
+        $this->dataSnapshot = $dataSnapshot;
+
+        return $this;
+    }
+
+    /**
+     * Get the data snapshot
+     *
+     * @return string     */
+    public function getDataSnapshot()
+    {
+        return $this->dataSnapshot;
+    }
+
+    /**
+     * Set the urgent
+     *
+     * @param string $urgent new value being set
+     *
+     * @return Submission
+     */
+    public function setUrgent($urgent)
+    {
+        $this->urgent = $urgent;
+
+        return $this;
+    }
+
+    /**
+     * Get the urgent
+     *
+     * @return string     */
+    public function getUrgent()
+    {
+        return $this->urgent;
     }
 
     /**
@@ -270,9 +465,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getAssignedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -283,130 +476,26 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the case
+     * Set the tc sla started
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param bool $tcSlaStarted new value being set
      *
      * @return Submission
      */
-    public function setCase($case)
+    public function setTcSlaStarted($tcSlaStarted)
     {
-        $this->case = $case;
+        $this->tcSlaStarted = $tcSlaStarted;
 
         return $this;
     }
 
     /**
-     * Get the case
+     * Get the tc sla started
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
-    public function getCase()
+     * @return bool     */
+    public function getTcSlaStarted()
     {
-        return $this->case;
-    }
-
-    /**
-     * Set the closed date
-     *
-     * @param \DateTime $closedDate new value being set
-     *
-     * @return Submission
-     */
-    public function setClosedDate($closedDate)
-    {
-        $this->closedDate = $closedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the closed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getClosedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->closedDate);
-        }
-
-        return $this->closedDate;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Submission
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the data snapshot
-     *
-     * @param string $dataSnapshot new value being set
-     *
-     * @return Submission
-     */
-    public function setDataSnapshot($dataSnapshot)
-    {
-        $this->dataSnapshot = $dataSnapshot;
-
-        return $this;
-    }
-
-    /**
-     * Get the data snapshot
-     *
-     * @return string
-     */
-    public function getDataSnapshot()
-    {
-        return $this->dataSnapshot;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Submission
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->tcSlaStarted;
     }
 
     /**
@@ -428,9 +517,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getInformationCompleteDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -441,147 +528,32 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the last modified by
+     * Set the closed date
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \DateTime $closedDate new value being set
      *
      * @return Submission
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setClosedDate($closedDate)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->closedDate = $closedDate;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the closed date
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getClosedDate($asDateTime = false)
     {
-        return $this->lastModifiedBy;
-    }
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->closedDate);
+        }
 
-    /**
-     * Set the recipient user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $recipientUser entity being set as the value
-     *
-     * @return Submission
-     */
-    public function setRecipientUser($recipientUser)
-    {
-        $this->recipientUser = $recipientUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the recipient user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getRecipientUser()
-    {
-        return $this->recipientUser;
-    }
-
-    /**
-     * Set the sender user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $senderUser entity being set as the value
-     *
-     * @return Submission
-     */
-    public function setSenderUser($senderUser)
-    {
-        $this->senderUser = $senderUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the sender user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getSenderUser()
-    {
-        return $this->senderUser;
-    }
-
-    /**
-     * Set the submission type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $submissionType entity being set as the value
-     *
-     * @return Submission
-     */
-    public function setSubmissionType($submissionType)
-    {
-        $this->submissionType = $submissionType;
-
-        return $this;
-    }
-
-    /**
-     * Get the submission type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getSubmissionType()
-    {
-        return $this->submissionType;
-    }
-
-    /**
-     * Set the tc sla started
-     *
-     * @param boolean $tcSlaStarted new value being set
-     *
-     * @return Submission
-     */
-    public function setTcSlaStarted($tcSlaStarted)
-    {
-        $this->tcSlaStarted = $tcSlaStarted;
-
-        return $this;
-    }
-
-    /**
-     * Get the tc sla started
-     *
-     * @return boolean
-     */
-    public function getTcSlaStarted()
-    {
-        return $this->tcSlaStarted;
-    }
-
-    /**
-     * Set the urgent
-     *
-     * @param string $urgent new value being set
-     *
-     * @return Submission
-     */
-    public function setUrgent($urgent)
-    {
-        $this->urgent = $urgent;
-
-        return $this;
-    }
-
-    /**
-     * Get the urgent
-     *
-     * @return string
-     */
-    public function getUrgent()
-    {
-        return $this->urgent;
+        return $this->closedDate;
     }
 
     /**
@@ -601,17 +573,16 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the document
+     * Set the documents
      *
-     * @param ArrayCollection $documents collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
      * @return Submission
      */
@@ -625,7 +596,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocuments()
     {
@@ -635,7 +606,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Add a documents
      *
-     * @param ArrayCollection|mixed $documents collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
      * @return Submission
      */
@@ -672,9 +643,9 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the sla target date
+     * Set the sla target dates
      *
-     * @param ArrayCollection $slaTargetDates collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
      * @return Submission
      */
@@ -688,7 +659,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the sla target dates
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSlaTargetDates()
     {
@@ -698,7 +669,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Add a sla target dates
      *
-     * @param ArrayCollection|mixed $slaTargetDates collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
      * @return Submission
      */
@@ -735,9 +706,9 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the submission action
+     * Set the submission actions
      *
-     * @param ArrayCollection $submissionActions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being set as the value
      *
      * @return Submission
      */
@@ -751,7 +722,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the submission actions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSubmissionActions()
     {
@@ -761,7 +732,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Add a submission actions
      *
-     * @param ArrayCollection|mixed $submissionActions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionActions collection being added
      *
      * @return Submission
      */
@@ -798,9 +769,9 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the submission section comment
+     * Set the submission section comments
      *
-     * @param ArrayCollection $submissionSectionComments collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $submissionSectionComments collection being set as the value
      *
      * @return Submission
      */
@@ -814,7 +785,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Get the submission section comments
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSubmissionSectionComments()
     {
@@ -824,7 +795,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
     /**
      * Add a submission section comments
      *
-     * @param ArrayCollection|mixed $submissionSectionComments collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionSectionComments collection being added
      *
      * @return Submission
      */
@@ -858,5 +829,13 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

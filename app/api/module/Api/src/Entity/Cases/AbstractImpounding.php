@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Impounding Abstract Entity
+ * AbstractImpounding Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -42,13 +45,25 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     use ModifiedOnTrait;
 
     /**
-     * Application receipt date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="application_receipt_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $applicationReceiptDate;
+    protected $id;
+
+    /**
+     * ImpoundingType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="impounding_type", referencedColumnName="id")
+     */
+    protected $impoundingType;
 
     /**
      * Case
@@ -56,18 +71,39 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Close date
+     * Foreign Key to presiding_tc
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
      *
-     * @ORM\Column(type="datetime", name="close_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
+     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=true)
      */
-    protected $closeDate;
+    protected $presidingTc;
+
+    /**
+     * Vehicle(s) returned or not returned
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
+     */
+    protected $outcome;
+
+    /**
+     * Foreign Key to venue
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Venue
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Venue", fetch="LAZY")
+     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
+     */
+    protected $venue;
 
     /**
      * Created by
@@ -81,57 +117,6 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     protected $createdBy;
 
     /**
-     * Hearing date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
-     */
-    protected $hearingDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Impounding legislation type
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="impoundings",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="impounding_legislation_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="impounding_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="impounding_legislation_type_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $impoundingLegislationTypes;
-
-    /**
-     * Impounding type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="impounding_type", referencedColumnName="id", nullable=false)
-     */
-    protected $impoundingType;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -143,23 +128,22 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     protected $lastModifiedBy;
 
     /**
-     * Notes
+     * Hearing date
      *
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
+     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
      */
-    protected $notes;
+    protected $hearingDate;
 
     /**
-     * Outcome
+     * Application receipt date
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="application_receipt_date", nullable=true)
      */
-    protected $outcome;
+    protected $applicationReceiptDate;
 
     /**
      * Outcome sent date
@@ -171,24 +155,22 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     protected $outcomeSentDate;
 
     /**
-     * Presiding tc
+     * Notes
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
-    protected $presidingTc;
+    protected $notes;
 
     /**
-     * Venue
+     * Close date
      *
-     * @var \Dvsa\Olcs\Api\Entity\Venue
+     * @var \DateTime
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Venue", fetch="LAZY")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="datetime", name="close_date", nullable=true)
      */
-    protected $venue;
+    protected $closeDate;
 
     /**
      * Venue other
@@ -198,6 +180,15 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      * @ORM\Column(type="string", name="venue_other", length=255, nullable=true)
      */
     protected $venueOther;
+
+    /**
+     * Vrm
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     */
+    protected $vrm;
 
     /**
      * Version
@@ -210,18 +201,24 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     protected $version = 1;
 
     /**
-     * Vrm
+     * ImpoundingLegislationTypes
      *
-     * @var string
+     * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="impoundings", fetch="LAZY")
+     * @ORM\JoinTable(name="impounding_legislation_type",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="impounding_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="impounding_legislation_type_id", referencedColumnName="id")
+     *     }
+     * )
      */
-    protected $vrm;
+    protected $impoundingLegislationTypes;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -229,50 +226,64 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->impoundingLegislationTypes = new ArrayCollection();
     }
 
+
     /**
-     * Set the application receipt date
+     * Set the id
      *
-     * @param \DateTime $applicationReceiptDate new value being set
+     * @param int $id new value being set
      *
      * @return Impounding
      */
-    public function setApplicationReceiptDate($applicationReceiptDate)
+    public function setId($id)
     {
-        $this->applicationReceiptDate = $applicationReceiptDate;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the application receipt date
+     * Get the id
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getApplicationReceiptDate($asDateTime = false)
+     * @return int     */
+    public function getId()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->applicationReceiptDate);
-        }
+        return $this->id;
+    }
 
-        return $this->applicationReceiptDate;
+    /**
+     * Set the impounding type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $impoundingType new value being set
+     *
+     * @return Impounding
+     */
+    public function setImpoundingType($impoundingType)
+    {
+        $this->impoundingType = $impoundingType;
+
+        return $this;
+    }
+
+    /**
+     * Get the impounding type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getImpoundingType()
+    {
+        return $this->impoundingType;
     }
 
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return Impounding
      */
@@ -286,48 +297,85 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
     }
 
     /**
-     * Set the close date
+     * Set the presiding tc
      *
-     * @param \DateTime $closeDate new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
      *
      * @return Impounding
      */
-    public function setCloseDate($closeDate)
+    public function setPresidingTc($presidingTc)
     {
-        $this->closeDate = $closeDate;
+        $this->presidingTc = $presidingTc;
 
         return $this;
     }
 
     /**
-     * Get the close date
+     * Get the presiding tc
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getCloseDate($asDateTime = false)
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+    public function getPresidingTc()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->closeDate);
-        }
+        return $this->presidingTc;
+    }
 
-        return $this->closeDate;
+    /**
+     * Set the outcome
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
+     *
+     * @return Impounding
+     */
+    public function setOutcome($outcome)
+    {
+        $this->outcome = $outcome;
+
+        return $this;
+    }
+
+    /**
+     * Get the outcome
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getOutcome()
+    {
+        return $this->outcome;
+    }
+
+    /**
+     * Set the venue
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Venue $venue new value being set
+     *
+     * @return Impounding
+     */
+    public function setVenue($venue)
+    {
+        $this->venue = $venue;
+
+        return $this;
+    }
+
+    /**
+     * Get the venue
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Venue     */
+    public function getVenue()
+    {
+        return $this->venue;
     }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Impounding
      */
@@ -341,11 +389,33 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Impounding
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -367,9 +437,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getHearingDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -380,33 +448,188 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the id
+     * Set the application receipt date
      *
-     * @param int $id new value being set
+     * @param \DateTime $applicationReceiptDate new value being set
      *
      * @return Impounding
      */
-    public function setId($id)
+    public function setApplicationReceiptDate($applicationReceiptDate)
     {
-        $this->id = $id;
+        $this->applicationReceiptDate = $applicationReceiptDate;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the application receipt date
      *
-     * @return int
-     */
-    public function getId()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getApplicationReceiptDate($asDateTime = false)
     {
-        return $this->id;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->applicationReceiptDate);
+        }
+
+        return $this->applicationReceiptDate;
     }
 
     /**
-     * Set the impounding legislation type
+     * Set the outcome sent date
      *
-     * @param ArrayCollection $impoundingLegislationTypes collection being set as the value
+     * @param \DateTime $outcomeSentDate new value being set
+     *
+     * @return Impounding
+     */
+    public function setOutcomeSentDate($outcomeSentDate)
+    {
+        $this->outcomeSentDate = $outcomeSentDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the outcome sent date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getOutcomeSentDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->outcomeSentDate);
+        }
+
+        return $this->outcomeSentDate;
+    }
+
+    /**
+     * Set the notes
+     *
+     * @param string $notes new value being set
+     *
+     * @return Impounding
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get the notes
+     *
+     * @return string     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Set the close date
+     *
+     * @param \DateTime $closeDate new value being set
+     *
+     * @return Impounding
+     */
+    public function setCloseDate($closeDate)
+    {
+        $this->closeDate = $closeDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the close date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getCloseDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->closeDate);
+        }
+
+        return $this->closeDate;
+    }
+
+    /**
+     * Set the venue other
+     *
+     * @param string $venueOther new value being set
+     *
+     * @return Impounding
+     */
+    public function setVenueOther($venueOther)
+    {
+        $this->venueOther = $venueOther;
+
+        return $this;
+    }
+
+    /**
+     * Get the venue other
+     *
+     * @return string     */
+    public function getVenueOther()
+    {
+        return $this->venueOther;
+    }
+
+    /**
+     * Set the vrm
+     *
+     * @param string $vrm new value being set
+     *
+     * @return Impounding
+     */
+    public function setVrm($vrm)
+    {
+        $this->vrm = $vrm;
+
+        return $this;
+    }
+
+    /**
+     * Get the vrm
+     *
+     * @return string     */
+    public function getVrm()
+    {
+        return $this->vrm;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Impounding
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the impounding legislation types
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $impoundingLegislationTypes collection being set as the value
      *
      * @return Impounding
      */
@@ -420,7 +643,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Get the impounding legislation types
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getImpoundingLegislationTypes()
     {
@@ -430,7 +653,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     /**
      * Add a impounding legislation types
      *
-     * @param ArrayCollection|mixed $impoundingLegislationTypes collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $impoundingLegislationTypes collection being added
      *
      * @return Impounding
      */
@@ -467,249 +690,10 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     }
 
     /**
-     * Set the impounding type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $impoundingType entity being set as the value
-     *
-     * @return Impounding
+     * Get bundle data
      */
-    public function setImpoundingType($impoundingType)
+    public function __toString(): string
     {
-        $this->impoundingType = $impoundingType;
-
-        return $this;
-    }
-
-    /**
-     * Get the impounding type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getImpoundingType()
-    {
-        return $this->impoundingType;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Impounding
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the notes
-     *
-     * @param string $notes new value being set
-     *
-     * @return Impounding
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-
-        return $this;
-    }
-
-    /**
-     * Get the notes
-     *
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
-
-    /**
-     * Set the outcome
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome entity being set as the value
-     *
-     * @return Impounding
-     */
-    public function setOutcome($outcome)
-    {
-        $this->outcome = $outcome;
-
-        return $this;
-    }
-
-    /**
-     * Get the outcome
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getOutcome()
-    {
-        return $this->outcome;
-    }
-
-    /**
-     * Set the outcome sent date
-     *
-     * @param \DateTime $outcomeSentDate new value being set
-     *
-     * @return Impounding
-     */
-    public function setOutcomeSentDate($outcomeSentDate)
-    {
-        $this->outcomeSentDate = $outcomeSentDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the outcome sent date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getOutcomeSentDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->outcomeSentDate);
-        }
-
-        return $this->outcomeSentDate;
-    }
-
-    /**
-     * Set the presiding tc
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc entity being set as the value
-     *
-     * @return Impounding
-     */
-    public function setPresidingTc($presidingTc)
-    {
-        $this->presidingTc = $presidingTc;
-
-        return $this;
-    }
-
-    /**
-     * Get the presiding tc
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
-    public function getPresidingTc()
-    {
-        return $this->presidingTc;
-    }
-
-    /**
-     * Set the venue
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Venue $venue entity being set as the value
-     *
-     * @return Impounding
-     */
-    public function setVenue($venue)
-    {
-        $this->venue = $venue;
-
-        return $this;
-    }
-
-    /**
-     * Get the venue
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Venue
-     */
-    public function getVenue()
-    {
-        return $this->venue;
-    }
-
-    /**
-     * Set the venue other
-     *
-     * @param string $venueOther new value being set
-     *
-     * @return Impounding
-     */
-    public function setVenueOther($venueOther)
-    {
-        $this->venueOther = $venueOther;
-
-        return $this;
-    }
-
-    /**
-     * Get the venue other
-     *
-     * @return string
-     */
-    public function getVenueOther()
-    {
-        return $this->venueOther;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Impounding
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the vrm
-     *
-     * @param string $vrm new value being set
-     *
-     * @return Impounding
-     */
-    public function setVrm($vrm)
-    {
-        $this->vrm = $vrm;
-
-        return $this;
-    }
-
-    /**
-     * Get the vrm
-     *
-     * @return string
-     */
-    public function getVrm()
-    {
-        return $this->vrm;
+        return (string) $this->getId();
     }
 }

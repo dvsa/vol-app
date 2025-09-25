@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Publication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Publication Abstract Entity
+ * AbstractPublication Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -42,37 +45,28 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     use ModifiedOnTrait;
 
     /**
-     * Created by
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $createdBy;
+    protected $id;
 
     /**
-     * Doc name
+     * Foreign Key to traffic_area
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      *
-     * @ORM\Column(type="string", name="doc_name", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
-    protected $docName;
+    protected $trafficArea;
 
     /**
-     * Doc template
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplate", fetch="LAZY")
-     * @ORM\JoinColumn(name="doc_template_id", referencedColumnName="id", nullable=true)
-     */
-    protected $docTemplate;
-
-    /**
-     * Document
+     * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      *
@@ -82,15 +76,45 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     protected $document;
 
     /**
-     * Identifier - Id
+     * Foreign Key to police version of the document
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="police_document_id", referencedColumnName="id", nullable=true)
      */
-    protected $id;
+    protected $policeDocument;
+
+    /**
+     * Foreign Key to doc_template
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplate", fetch="LAZY")
+     * @ORM\JoinColumn(name="doc_template_id", referencedColumnName="id", nullable=true)
+     */
+    protected $docTemplate;
+
+    /**
+     * PubStatus
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="pub_status", referencedColumnName="id")
+     */
+    protected $pubStatus;
+
+    /**
+     * Created by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
+     */
+    protected $createdBy;
 
     /**
      * Last modified by
@@ -104,14 +128,22 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Police document
+     * Publication no
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="police_document_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="smallint", name="publication_no", nullable=false)
      */
-    protected $policeDocument;
+    protected $publicationNo = 0;
+
+    /**
+     * Either A&D or N&P
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="pub_type", length=3, nullable=false)
+     */
+    protected $pubType = '';
 
     /**
      * Pub date
@@ -123,42 +155,13 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     protected $pubDate;
 
     /**
-     * Pub status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="pub_status", referencedColumnName="id", nullable=false)
-     */
-    protected $pubStatus;
-
-    /**
-     * Pub type
+     * Doc name
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="pub_type", length=3, nullable=false)
+     * @ORM\Column(type="string", name="doc_name", length=255, nullable=true)
      */
-    protected $pubType;
-
-    /**
-     * Publication no
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="publication_no", nullable=false)
-     */
-    protected $publicationNo;
-
-    /**
-     * Traffic area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=false)
-     */
-    protected $trafficArea;
+    protected $docName;
 
     /**
      * Version
@@ -171,21 +174,16 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Publication link
+     * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink",
-     *     mappedBy="publication"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="publication")
      */
     protected $publicationLinks;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -193,110 +191,13 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->publicationLinks = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Publication
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the doc name
-     *
-     * @param string $docName new value being set
-     *
-     * @return Publication
-     */
-    public function setDocName($docName)
-    {
-        $this->docName = $docName;
-
-        return $this;
-    }
-
-    /**
-     * Get the doc name
-     *
-     * @return string
-     */
-    public function getDocName()
-    {
-        return $this->docName;
-    }
-
-    /**
-     * Set the doc template
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\DocTemplate $docTemplate entity being set as the value
-     *
-     * @return Publication
-     */
-    public function setDocTemplate($docTemplate)
-    {
-        $this->docTemplate = $docTemplate;
-
-        return $this;
-    }
-
-    /**
-     * Get the doc template
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
-     */
-    public function getDocTemplate()
-    {
-        return $this->docTemplate;
-    }
-
-    /**
-     * Set the document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document entity being set as the value
-     *
-     * @return Publication
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get the document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
 
     /**
      * Set the id
@@ -315,41 +216,62 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
+     * Set the traffic area
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
      * @return Publication
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setTrafficArea($trafficArea)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->trafficArea = $trafficArea;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+    public function getTrafficArea()
     {
-        return $this->lastModifiedBy;
+        return $this->trafficArea;
+    }
+
+    /**
+     * Set the document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
+     *
+     * @return Publication
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get the document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getDocument()
+    {
+        return $this->document;
     }
 
     /**
      * Set the police document
      *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $policeDocument entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $policeDocument new value being set
      *
      * @return Publication
      */
@@ -363,11 +285,148 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the police document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
     public function getPoliceDocument()
     {
         return $this->policeDocument;
+    }
+
+    /**
+     * Set the doc template
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\DocTemplate $docTemplate new value being set
+     *
+     * @return Publication
+     */
+    public function setDocTemplate($docTemplate)
+    {
+        $this->docTemplate = $docTemplate;
+
+        return $this;
+    }
+
+    /**
+     * Get the doc template
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\DocTemplate     */
+    public function getDocTemplate()
+    {
+        return $this->docTemplate;
+    }
+
+    /**
+     * Set the pub status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $pubStatus new value being set
+     *
+     * @return Publication
+     */
+    public function setPubStatus($pubStatus)
+    {
+        $this->pubStatus = $pubStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the pub status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getPubStatus()
+    {
+        return $this->pubStatus;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Publication
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Publication
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the publication no
+     *
+     * @param int $publicationNo new value being set
+     *
+     * @return Publication
+     */
+    public function setPublicationNo($publicationNo)
+    {
+        $this->publicationNo = $publicationNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the publication no
+     *
+     * @return int     */
+    public function getPublicationNo()
+    {
+        return $this->publicationNo;
+    }
+
+    /**
+     * Set the pub type
+     *
+     * @param string $pubType new value being set
+     *
+     * @return Publication
+     */
+    public function setPubType($pubType)
+    {
+        $this->pubType = $pubType;
+
+        return $this;
+    }
+
+    /**
+     * Get the pub type
+     *
+     * @return string     */
+    public function getPubType()
+    {
+        return $this->pubType;
     }
 
     /**
@@ -389,9 +448,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPubDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -402,99 +459,26 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Set the pub status
+     * Set the doc name
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $pubStatus entity being set as the value
+     * @param string $docName new value being set
      *
      * @return Publication
      */
-    public function setPubStatus($pubStatus)
+    public function setDocName($docName)
     {
-        $this->pubStatus = $pubStatus;
+        $this->docName = $docName;
 
         return $this;
     }
 
     /**
-     * Get the pub status
+     * Get the doc name
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getPubStatus()
+     * @return string     */
+    public function getDocName()
     {
-        return $this->pubStatus;
-    }
-
-    /**
-     * Set the pub type
-     *
-     * @param string $pubType new value being set
-     *
-     * @return Publication
-     */
-    public function setPubType($pubType)
-    {
-        $this->pubType = $pubType;
-
-        return $this;
-    }
-
-    /**
-     * Get the pub type
-     *
-     * @return string
-     */
-    public function getPubType()
-    {
-        return $this->pubType;
-    }
-
-    /**
-     * Set the publication no
-     *
-     * @param int $publicationNo new value being set
-     *
-     * @return Publication
-     */
-    public function setPublicationNo($publicationNo)
-    {
-        $this->publicationNo = $publicationNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the publication no
-     *
-     * @return int
-     */
-    public function getPublicationNo()
-    {
-        return $this->publicationNo;
-    }
-
-    /**
-     * Set the traffic area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
-     *
-     * @return Publication
-     */
-    public function setTrafficArea($trafficArea)
-    {
-        $this->trafficArea = $trafficArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the traffic area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getTrafficArea()
-    {
-        return $this->trafficArea;
+        return $this->docName;
     }
 
     /**
@@ -514,17 +498,16 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the publication link
+     * Set the publication links
      *
-     * @param ArrayCollection $publicationLinks collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
      * @return Publication
      */
@@ -538,7 +521,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Get the publication links
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPublicationLinks()
     {
@@ -548,7 +531,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
     /**
      * Add a publication links
      *
-     * @param ArrayCollection|mixed $publicationLinks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
      * @return Publication
      */
@@ -582,5 +565,13 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

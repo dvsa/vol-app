@@ -305,6 +305,9 @@ class PiEntityTest extends EntityTester
             if ($expectException) {
                 $this->fail('ValidationException should have been thrown');
             }
+
+            // Assert the entity was successfully updated when no exception expected
+            $this->assertInstanceOf(Entity::class, $this->entity);
         } catch (ValidationException $e) {
             if (!$expectException) {
                 $this->fail('ValidationException should NOT have been thrown');

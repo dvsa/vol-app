@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Question Abstract Entity
+ * AbstractQuestion Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,7 +30,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="fk_question_form_control_type_ref_data_id", columns={"form_control_type"}),
  *        @ORM\Index(name="fk_question_last_modified_by_user_id", columns={"last_modified_by"}),
  *        @ORM\Index(name="fk_question_question_type_ref_data_id", columns={"question_type"}),
- *        @ORM\Index(name="fk_question_submit_options_ref_data_id", columns={"submit_options"})
+ *        @ORM\Index(name="fk_question_submit_options_ref_data_id", columns={"submit_options"}),
+ *        @ORM\Index(name="question_slug_uindex", columns={"slug"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="question_slug_uindex", columns={"slug"})
@@ -43,27 +47,28 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     use ModifiedOnTrait;
 
     /**
-     * Created by
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $createdBy;
+    protected $id;
 
     /**
-     * Description
+     * QuestionType
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="question_type", referencedColumnName="id", nullable=true)
      */
-    protected $description;
+    protected $questionType;
 
     /**
-     * Form control type
+     * FormControlType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -73,15 +78,14 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     protected $formControlType;
 
     /**
-     * Identifier - Id
+     * SubmitOptions
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="submit_options", referencedColumnName="id", nullable=true)
      */
-    protected $id;
+    protected $submitOptions;
 
     /**
      * Last modified by
@@ -95,42 +99,15 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     protected $lastModifiedBy;
 
     /**
-     * Option source
+     * Created by
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\Column(type="string", name="option_source", length=4096, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
      */
-    protected $optionSource;
-
-    /**
-     * Question type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_type", referencedColumnName="id", nullable=true)
-     */
-    protected $questionType;
-
-    /**
-     * Slug
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="slug", length=255, nullable=true)
-     */
-    protected $slug;
-
-    /**
-     * Submit options
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="submit_options", referencedColumnName="id", nullable=true)
-     */
-    protected $submitOptions;
+    protected $createdBy;
 
     /**
      * Title
@@ -140,6 +117,33 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      * @ORM\Column(type="string", name="title", length=100, nullable=true)
      */
     protected $title;
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=true)
+     */
+    protected $description;
+
+    /**
+     * Option source
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="option_source", length=4096, nullable=true)
+     */
+    protected $optionSource;
+
+    /**
+     * Slug
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="slug", length=255, nullable=true)
+     */
+    protected $slug;
 
     /**
      * Version
@@ -152,20 +156,17 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     protected $version = 1;
 
     /**
-     * Application validation
+     * ApplicationValidations
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation",
-     *     mappedBy="question"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation", mappedBy="question")
      * @ORM\OrderBy({"weight" = "ASC"})
      */
     protected $applicationValidations;
 
     /**
-     * Question text
+     * QuestionTexts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -175,8 +176,6 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -184,87 +183,14 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->applicationValidations = new ArrayCollection();
         $this->questionTexts = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Question
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return Question
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the form control type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $formControlType entity being set as the value
-     *
-     * @return Question
-     */
-    public function setFormControlType($formControlType)
-    {
-        $this->formControlType = $formControlType;
-
-        return $this;
-    }
-
-    /**
-     * Get the form control type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getFormControlType()
-    {
-        return $this->formControlType;
-    }
 
     /**
      * Set the id
@@ -283,65 +209,16 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Question
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the option source
-     *
-     * @param string $optionSource new value being set
-     *
-     * @return Question
-     */
-    public function setOptionSource($optionSource)
-    {
-        $this->optionSource = $optionSource;
-
-        return $this;
-    }
-
-    /**
-     * Get the option source
-     *
-     * @return string
-     */
-    public function getOptionSource()
-    {
-        return $this->optionSource;
-    }
-
-    /**
      * Set the question type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $questionType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $questionType new value being set
      *
      * @return Question
      */
@@ -355,41 +232,39 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the question type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getQuestionType()
     {
         return $this->questionType;
     }
 
     /**
-     * Set the slug
+     * Set the form control type
      *
-     * @param string $slug new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $formControlType new value being set
      *
      * @return Question
      */
-    public function setSlug($slug)
+    public function setFormControlType($formControlType)
     {
-        $this->slug = $slug;
+        $this->formControlType = $formControlType;
 
         return $this;
     }
 
     /**
-     * Get the slug
+     * Get the form control type
      *
-     * @return string
-     */
-    public function getSlug()
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getFormControlType()
     {
-        return $this->slug;
+        return $this->formControlType;
     }
 
     /**
      * Set the submit options
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $submitOptions entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $submitOptions new value being set
      *
      * @return Question
      */
@@ -403,11 +278,56 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the submit options
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getSubmitOptions()
     {
         return $this->submitOptions;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Question
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Question
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 
     /**
@@ -427,11 +347,79 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the title
      *
-     * @return string
-     */
+     * @return string     */
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return Question
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the option source
+     *
+     * @param string $optionSource new value being set
+     *
+     * @return Question
+     */
+    public function setOptionSource($optionSource)
+    {
+        $this->optionSource = $optionSource;
+
+        return $this;
+    }
+
+    /**
+     * Get the option source
+     *
+     * @return string     */
+    public function getOptionSource()
+    {
+        return $this->optionSource;
+    }
+
+    /**
+     * Set the slug
+     *
+     * @param string $slug new value being set
+     *
+     * @return Question
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get the slug
+     *
+     * @return string     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
     /**
@@ -451,17 +439,16 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the application validation
+     * Set the application validations
      *
-     * @param ArrayCollection $applicationValidations collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being set as the value
      *
      * @return Question
      */
@@ -475,7 +462,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the application validations
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplicationValidations()
     {
@@ -485,7 +472,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Add a application validations
      *
-     * @param ArrayCollection|mixed $applicationValidations collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationValidations collection being added
      *
      * @return Question
      */
@@ -522,9 +509,9 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Set the question text
+     * Set the question texts
      *
-     * @param ArrayCollection $questionTexts collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $questionTexts collection being set as the value
      *
      * @return Question
      */
@@ -538,7 +525,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Get the question texts
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getQuestionTexts()
     {
@@ -548,7 +535,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
     /**
      * Add a question texts
      *
-     * @param ArrayCollection|mixed $questionTexts collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $questionTexts collection being added
      *
      * @return Question
      */
@@ -582,5 +569,13 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

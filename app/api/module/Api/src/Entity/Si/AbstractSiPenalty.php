@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -11,22 +13,25 @@ use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SiPenalty Abstract Entity
+ * AbstractSiPenalty Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="si_penalty",
  *    indexes={
+ *        @ORM\Index(name="fk_si_penalty_si_penalty_requested_id_si_penalty_requested_id", columns={"si_penalty_erru_requested_id"}),
  *        @ORM\Index(name="ix_si_penalty_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_si_penalty_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_si_penalty_serious_infringement_id",
-     *     columns={"serious_infringement_id"}),
+ *        @ORM\Index(name="ix_si_penalty_serious_infringement_id", columns={"serious_infringement_id"}),
  *        @ORM\Index(name="ix_si_penalty_si_penalty_type_id", columns={"si_penalty_type_id"})
  *    }
  * )
@@ -41,6 +46,47 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * SiPenaltyErruRequested
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", fetch="LAZY")
+     * @ORM\JoinColumn(name="si_penalty_erru_requested_id", referencedColumnName="id", nullable=true)
+     */
+    protected $erruPenaltyRequested;
+
+    /**
+     * Foreign Key to serious_infringement
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement", fetch="LAZY")
+     * @ORM\JoinColumn(name="serious_infringement_id", referencedColumnName="id")
+     */
+    protected $seriousInfringement;
+
+    /**
+     * Foreign Key to si_penalty_type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyType", fetch="LAZY")
+     * @ORM\JoinColumn(name="si_penalty_type_id", referencedColumnName="id")
+     */
+    protected $siPenaltyType;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -50,35 +96,6 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * End date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=true)
-     */
-    protected $endDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Imposed
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="imposed", nullable=true)
-     */
-    protected $imposed;
 
     /**
      * Last modified by
@@ -92,56 +109,13 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     protected $lastModifiedBy;
 
     /**
-     * The corresponding penalty that was requested (nullable for now due to existing data)
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", fetch="LAZY", inversedBy="appliedPenalties")
-     * @ORM\JoinColumn(name="si_penalty_erru_requested_id", referencedColumnName="id", nullable=true)
-     */
-    protected $erruPenaltyRequested;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Reason not imposed
+     * imposed
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="reason_not_imposed", length=500, nullable=true)
+     * @ORM\Column(type="yesnonull", name="imposed", nullable=true)
      */
-    protected $reasonNotImposed;
-
-    /**
-     * Serious infringement
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement",
-     *     fetch="LAZY",
-     *     inversedBy="appliedPenalties"
-     * )
-     * @ORM\JoinColumn(name="serious_infringement_id", referencedColumnName="id", nullable=false)
-     */
-    protected $seriousInfringement;
-
-    /**
-     * Si penalty type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyType", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_penalty_type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $siPenaltyType;
+    protected $imposed;
 
     /**
      * Start date
@@ -151,6 +125,24 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @ORM\Column(type="date", name="start_date", nullable=true)
      */
     protected $startDate;
+
+    /**
+     * End date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="end_date", nullable=true)
+     */
+    protected $endDate;
+
+    /**
+     * Reason not imposed
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="reason_not_imposed", length=500, nullable=true)
+     */
+    protected $reasonNotImposed;
 
     /**
      * Version
@@ -163,59 +155,29 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     protected $version = 1;
 
     /**
-     * Set the created by
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var int
      *
-     * @return SiPenalty
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
 
-    /**
-     * Set the end date
-     *
-     * @param \DateTime $endDate new value being set
-     *
-     * @return SiPenalty
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the end date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEndDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->endDate);
-        }
-
-        return $this->endDate;
-    }
 
     /**
      * Set the id
@@ -234,11 +196,125 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the erru penalty requested
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested $erruPenaltyRequested new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setErruPenaltyRequested($erruPenaltyRequested)
+    {
+        $this->erruPenaltyRequested = $erruPenaltyRequested;
+
+        return $this;
+    }
+
+    /**
+     * Get the erru penalty requested
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested     */
+    public function getErruPenaltyRequested()
+    {
+        return $this->erruPenaltyRequested;
+    }
+
+    /**
+     * Set the serious infringement
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setSeriousInfringement($seriousInfringement)
+    {
+        $this->seriousInfringement = $seriousInfringement;
+
+        return $this;
+    }
+
+    /**
+     * Get the serious infringement
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement     */
+    public function getSeriousInfringement()
+    {
+        return $this->seriousInfringement;
+    }
+
+    /**
+     * Set the si penalty type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType $siPenaltyType new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setSiPenaltyType($siPenaltyType)
+    {
+        $this->siPenaltyType = $siPenaltyType;
+
+        return $this;
+    }
+
+    /**
+     * Get the si penalty type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType     */
+    public function getSiPenaltyType()
+    {
+        return $this->siPenaltyType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -258,131 +334,10 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Get the imposed
      *
-     * @return string
-     */
+     * @return string     */
     public function getImposed()
     {
         return $this->imposed;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return SiPenalty
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return SiPenalty
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the reason not imposed
-     *
-     * @param string $reasonNotImposed new value being set
-     *
-     * @return SiPenalty
-     */
-    public function setReasonNotImposed($reasonNotImposed)
-    {
-        $this->reasonNotImposed = $reasonNotImposed;
-
-        return $this;
-    }
-
-    /**
-     * Get the reason not imposed
-     *
-     * @return string
-     */
-    public function getReasonNotImposed()
-    {
-        return $this->reasonNotImposed;
-    }
-
-    /**
-     * Set the serious infringement
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement entity being set as the value
-     *
-     * @return SiPenalty
-     */
-    public function setSeriousInfringement($seriousInfringement)
-    {
-        $this->seriousInfringement = $seriousInfringement;
-
-        return $this;
-    }
-
-    /**
-     * Get the serious infringement
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
-     */
-    public function getSeriousInfringement()
-    {
-        return $this->seriousInfringement;
-    }
-
-    /**
-     * Set the si penalty type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType $siPenaltyType entity being set as the value
-     *
-     * @return SiPenalty
-     */
-    public function setSiPenaltyType($siPenaltyType)
-    {
-        $this->siPenaltyType = $siPenaltyType;
-
-        return $this;
-    }
-
-    /**
-     * Get the si penalty type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType
-     */
-    public function getSiPenaltyType()
-    {
-        return $this->siPenaltyType;
     }
 
     /**
@@ -404,9 +359,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -416,16 +369,56 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
         return $this->startDate;
     }
 
-    public function setErruPenaltyRequested($erruPenaltyRequested)
+    /**
+     * Set the end date
+     *
+     * @param \DateTime $endDate new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setEndDate($endDate)
     {
-        $this->erruPenaltyRequested = $erruPenaltyRequested;
+        $this->endDate = $endDate;
 
         return $this;
     }
 
-    public function getErruPenaltyRequested()
+    /**
+     * Get the end date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEndDate($asDateTime = false)
     {
-        return $this->erruPenaltyRequested;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->endDate);
+        }
+
+        return $this->endDate;
+    }
+
+    /**
+     * Set the reason not imposed
+     *
+     * @param string $reasonNotImposed new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setReasonNotImposed($reasonNotImposed)
+    {
+        $this->reasonNotImposed = $reasonNotImposed;
+
+        return $this;
+    }
+
+    /**
+     * Get the reason not imposed
+     *
+     * @return string     */
+    public function getReasonNotImposed()
+    {
+        return $this->reasonNotImposed;
     }
 
     /**
@@ -445,10 +438,40 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return SiPenalty
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

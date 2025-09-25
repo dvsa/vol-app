@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Task;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TaskAlphaSplit Abstract Entity
+ * AbstractTaskAlphaSplit Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,8 +28,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_task_alpha_split_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_task_alpha_split_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_task_alpha_split_task_allocation_rule_id",
-     *     columns={"task_allocation_rule_id"}),
+ *        @ORM\Index(name="ix_task_alpha_split_task_allocation_rule_id", columns={"task_allocation_rule_id"}),
  *        @ORM\Index(name="ix_task_alpha_split_user_id", columns={"user_id"})
  *    }
  * )
@@ -33,9 +37,40 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * TaskAllocationRule
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule", fetch="LAZY")
+     * @ORM\JoinColumn(name="task_allocation_rule_id", referencedColumnName="id")
+     */
+    protected $taskAllocationRule;
+
+    /**
+     * Foreign Key to user
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
 
     /**
      * Created by
@@ -47,17 +82,6 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -77,31 +101,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @ORM\Column(type="string", name="letters", length=50, nullable=false)
      */
-    protected $letters;
-
-    /**
-     * Task allocation rule
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule",
-     *     fetch="LAZY",
-     *     inversedBy="taskAlphaSplits"
-     * )
-     * @ORM\JoinColumn(name="task_allocation_rule_id", referencedColumnName="id", nullable=false)
-     */
-    protected $taskAllocationRule;
-
-    /**
-     * User
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    protected $user;
+    protected $letters = '';
 
     /**
      * Version
@@ -114,28 +114,20 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TaskAlphaSplit
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -154,17 +146,85 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the task allocation rule
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule $taskAllocationRule new value being set
+     *
+     * @return TaskAlphaSplit
+     */
+    public function setTaskAllocationRule($taskAllocationRule)
+    {
+        $this->taskAllocationRule = $taskAllocationRule;
+
+        return $this;
+    }
+
+    /**
+     * Get the task allocation rule
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule     */
+    public function getTaskAllocationRule()
+    {
+        return $this->taskAllocationRule;
+    }
+
+    /**
+     * Set the user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
+     *
+     * @return TaskAlphaSplit
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get the user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TaskAlphaSplit
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return TaskAlphaSplit
      */
@@ -178,8 +238,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -202,59 +261,10 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
     /**
      * Get the letters
      *
-     * @return string
-     */
+     * @return string     */
     public function getLetters()
     {
         return $this->letters;
-    }
-
-    /**
-     * Set the task allocation rule
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule $taskAllocationRule entity being set as the value
-     *
-     * @return TaskAlphaSplit
-     */
-    public function setTaskAllocationRule($taskAllocationRule)
-    {
-        $this->taskAllocationRule = $taskAllocationRule;
-
-        return $this;
-    }
-
-    /**
-     * Get the task allocation rule
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule
-     */
-    public function getTaskAllocationRule()
-    {
-        return $this->taskAllocationRule;
-    }
-
-    /**
-     * Set the user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $user entity being set as the value
-     *
-     * @return TaskAlphaSplit
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get the user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**
@@ -274,10 +284,17 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

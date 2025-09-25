@@ -1,35 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationOrganisationPerson Abstract Entity
+ * AbstractApplicationOrganisationPerson Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="application_organisation_person",
  *    indexes={
- *        @ORM\Index(name="ix_application_organisation_person_application_id",
-     *     columns={"application_id"}),
+ *        @ORM\Index(name="ix_application_organisation_person_application_id", columns={"application_id"}),
  *        @ORM\Index(name="ix_application_organisation_person_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_organisation_person_last_modified_by",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_organisation_person_organisation_id",
-     *     columns={"organisation_id"}),
- *        @ORM\Index(name="ix_application_organisation_person_original_person_id",
-     *     columns={"original_person_id"}),
+ *        @ORM\Index(name="ix_application_organisation_person_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_application_organisation_person_organisation_id", columns={"organisation_id"}),
+ *        @ORM\Index(name="ix_application_organisation_person_original_person_id", columns={"original_person_id"}),
  *        @ORM\Index(name="ix_application_organisation_person_person_id", columns={"person_id"})
  *    }
  * )
@@ -38,54 +39,60 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Action
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=false)
-     */
-    protected $action;
-
-    /**
-     * Application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="applicationOrganisationPersons"
-     * )
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=false)
-     */
-    protected $application;
-
-    /**
-     * Created by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
-     */
-    protected $createdBy;
-
-    /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * Foreign Key to person
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    protected $person;
+
+    /**
+     * Populated if change is an edit of a person record on a licence.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
+     * @ORM\JoinColumn(name="original_person_id", referencedColumnName="id", nullable=true)
+     */
+    protected $originalPerson;
+
+    /**
+     * Foreign Key to organisation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    protected $organisation;
+
+    /**
+     * Foreign Key to application
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
+     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     */
+    protected $application;
 
     /**
      * Last modified by
@@ -99,41 +106,27 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     protected $lastModifiedBy;
 
     /**
-     * Organisation
+     * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
      */
-    protected $organisation;
+    protected $createdBy;
 
     /**
-     * Original person
+     * Action
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
-     * @ORM\JoinColumn(name="original_person_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="action", length=1, nullable=false)
      */
-    protected $originalPerson;
+    protected $action = '';
 
     /**
-     * Person
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Person\Person",
-     *     fetch="LAZY",
-     *     inversedBy="applicationOrganisationPersons"
-     * )
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=false)
-     */
-    protected $person;
-
-    /**
-     * Position
+     * Populated if org type is other.  For Ltd companies derived from company type.
      *
      * @var string
      *
@@ -152,76 +145,20 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     protected $version = 1;
 
     /**
-     * Set the action
-     *
-     * @param string $action new value being set
-     *
-     * @return ApplicationOrganisationPerson
+     * Initialise the collections
      */
-    public function setAction($action)
+    public function __construct()
     {
-        $this->action = $action;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the action
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getAction()
+    public function initCollections(): void
     {
-        return $this->action;
     }
 
-    /**
-     * Set the application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
-     *
-     * @return ApplicationOrganisationPerson
-     */
-    public function setApplication($application)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get the application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ApplicationOrganisationPerson
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -240,89 +177,16 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return ApplicationOrganisationPerson
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return ApplicationOrganisationPerson
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    /**
-     * Set the original person
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Person\Person $originalPerson entity being set as the value
-     *
-     * @return ApplicationOrganisationPerson
-     */
-    public function setOriginalPerson($originalPerson)
-    {
-        $this->originalPerson = $originalPerson;
-
-        return $this;
-    }
-
-    /**
-     * Get the original person
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person
-     */
-    public function getOriginalPerson()
-    {
-        return $this->originalPerson;
-    }
-
-    /**
      * Set the person
      *
-     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
      * @return ApplicationOrganisationPerson
      */
@@ -336,11 +200,148 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the person
      *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
     public function getPerson()
     {
         return $this->person;
+    }
+
+    /**
+     * Set the original person
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Person\Person $originalPerson new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setOriginalPerson($originalPerson)
+    {
+        $this->originalPerson = $originalPerson;
+
+        return $this;
+    }
+
+    /**
+     * Get the original person
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+    public function getOriginalPerson()
+    {
+        return $this->originalPerson;
+    }
+
+    /**
+     * Set the organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * Set the application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setApplication($application)
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get the application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the action
+     *
+     * @param string $action new value being set
+     *
+     * @return ApplicationOrganisationPerson
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get the action
+     *
+     * @return string     */
+    public function getAction()
+    {
+        return $this->action;
     }
 
     /**
@@ -360,8 +361,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the position
      *
-     * @return string
-     */
+     * @return string     */
     public function getPosition()
     {
         return $this->position;
@@ -384,10 +384,17 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

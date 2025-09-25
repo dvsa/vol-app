@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\OperatingCentre;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * OperatingCentre Abstract Entity
+ * AbstractOperatingCentre Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -25,7 +28,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_operating_centre_address_id", columns={"address_id"}),
  *        @ORM\Index(name="ix_operating_centre_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_operating_centre_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="ix_operating_centre_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="uk_operating_centre_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_operating_centre_olbs_key", columns={"olbs_key"})
@@ -41,7 +45,18 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Address
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to address
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
      *
@@ -49,19 +64,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
     protected $address;
-
-    /**
-     * Complaint
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Complaint",
-     *     mappedBy="operatingCentres",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $complaints;
 
     /**
      * Created by
@@ -75,17 +77,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -95,28 +86,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Opposition
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposition",
-     *     mappedBy="operatingCentres",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $oppositions;
 
     /**
      * Version
@@ -129,31 +98,60 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     protected $version = 1;
 
     /**
-     * Application
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * Complaints
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre",
-     *     mappedBy="operatingCentre"
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Complaint", mappedBy="operatingCentres", fetch="LAZY")
+     */
+    protected $complaints;
+
+    /**
+     * Oppositions
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposition", inversedBy="operatingCentres", fetch="LAZY")
+     * @ORM\JoinTable(name="operating_centre_opposition",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="opposition_id", referencedColumnName="id")
+     *     }
      * )
+     */
+    protected $oppositions;
+
+    /**
+     * Applications
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre", mappedBy="operatingCentre")
      */
     protected $applications;
 
     /**
-     * Condition undertaking
+     * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking",
-     *     mappedBy="operatingCentre"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="operatingCentre")
      */
     protected $conditionUndertakings;
 
     /**
-     * Ad document
+     * AdDocuments
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -163,8 +161,6 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -172,11 +168,9 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->complaints = new ArrayCollection();
         $this->oppositions = new ArrayCollection();
@@ -185,10 +179,34 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
         $this->adDocuments = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return OperatingCentre
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * Set the address
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address new value being set
      *
      * @return OperatingCentre
      */
@@ -202,17 +220,108 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the address
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address
-     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address     */
     public function getAddress()
     {
         return $this->address;
     }
 
     /**
-     * Set the complaint
+     * Set the created by
      *
-     * @param ArrayCollection $complaints collection being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return OperatingCentre
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return OperatingCentre
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return OperatingCentre
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return OperatingCentre
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the complaints
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being set as the value
      *
      * @return OperatingCentre
      */
@@ -226,7 +335,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the complaints
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getComplaints()
     {
@@ -236,7 +345,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Add a complaints
      *
-     * @param ArrayCollection|mixed $complaints collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $complaints collection being added
      *
      * @return OperatingCentre
      */
@@ -273,105 +382,9 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the created by
+     * Set the oppositions
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return OperatingCentre
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return OperatingCentre
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return OperatingCentre
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return OperatingCentre
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the opposition
-     *
-     * @param ArrayCollection $oppositions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being set as the value
      *
      * @return OperatingCentre
      */
@@ -385,7 +398,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the oppositions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOppositions()
     {
@@ -395,7 +408,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Add a oppositions
      *
-     * @param ArrayCollection|mixed $oppositions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $oppositions collection being added
      *
      * @return OperatingCentre
      */
@@ -432,33 +445,9 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the version
+     * Set the applications
      *
-     * @param int $version new value being set
-     *
-     * @return OperatingCentre
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the application
-     *
-     * @param ArrayCollection $applications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being set as the value
      *
      * @return OperatingCentre
      */
@@ -472,7 +461,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the applications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplications()
     {
@@ -482,7 +471,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Add a applications
      *
-     * @param ArrayCollection|mixed $applications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applications collection being added
      *
      * @return OperatingCentre
      */
@@ -519,9 +508,9 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the condition undertaking
+     * Set the condition undertakings
      *
-     * @param ArrayCollection $conditionUndertakings collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
      * @return OperatingCentre
      */
@@ -535,7 +524,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the condition undertakings
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getConditionUndertakings()
     {
@@ -545,7 +534,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Add a condition undertakings
      *
-     * @param ArrayCollection|mixed $conditionUndertakings collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
      * @return OperatingCentre
      */
@@ -582,9 +571,9 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the ad document
+     * Set the ad documents
      *
-     * @param ArrayCollection $adDocuments collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $adDocuments collection being set as the value
      *
      * @return OperatingCentre
      */
@@ -598,7 +587,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Get the ad documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAdDocuments()
     {
@@ -608,7 +597,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Add a ad documents
      *
-     * @param ArrayCollection|mixed $adDocuments collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $adDocuments collection being added
      *
      * @return OperatingCentre
      */
@@ -642,5 +631,13 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

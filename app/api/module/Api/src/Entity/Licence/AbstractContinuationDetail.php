@@ -1,41 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ContinuationDetail Abstract Entity
+ * AbstractContinuationDetail Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="continuation_detail",
  *    indexes={
- *        @ORM\Index(name="fk_continuation_detail_digital_signature_id_digital_signature_id",
-     *     columns={"digital_signature_id"}),
- *        @ORM\Index(name="fk_continuation_detail_signature_type_ref_data_id",
-     *     columns={"signature_type"}),
- *        @ORM\Index(name="ix_continuation_detail_checklist_document_id",
-     *     columns={"checklist_document_id"}),
+ *        @ORM\Index(name="fk_continuation_detail_digital_signature_id_digital_signature_id", columns={"digital_signature_id"}),
+ *        @ORM\Index(name="fk_continuation_detail_signature_type_ref_data_id", columns={"signature_type"}),
+ *        @ORM\Index(name="ix_continuation_detail_checklist_document_id", columns={"checklist_document_id"}),
  *        @ORM\Index(name="ix_continuation_detail_continuation_id", columns={"continuation_id"}),
  *        @ORM\Index(name="ix_continuation_detail_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_continuation_detail_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_continuation_detail_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_continuation_detail_status", columns={"status"})
+ *        @ORM\Index(name="ix_continuation_detail_status", columns={"status"}),
+ *        @ORM\Index(name="uk_continuation_detail_licence_id_continuation_id", columns={"licence_id", "continuation_id"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_continuation_detail_licence_id_continuation_id",
-     *     columns={"licence_id","continuation_id"})
+ *        @ORM\UniqueConstraint(name="uk_continuation_detail_licence_id_continuation_id", columns={"licence_id", "continuation_id"})
  *    }
  * )
  */
@@ -43,46 +45,80 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Average balance amount
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var float
+     * @var int
      *
-     * @ORM\Column(type="decimal",
-     *     name="average_balance_amount",
-     *     precision=12,
-     *     scale=2,
-     *     nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $averageBalanceAmount;
+    protected $id;
 
     /**
-     * Checklist document
+     * Foreign Key to continuation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Continuation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Continuation", fetch="LAZY")
+     * @ORM\JoinColumn(name="continuation_id", referencedColumnName="id")
+     */
+    protected $continuation;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
+
+    /**
+     * ChecklistDocument
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document",
-     *     fetch="LAZY",
-     *     inversedBy="continuationDetails"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
      * @ORM\JoinColumn(name="checklist_document_id", referencedColumnName="id", nullable=true)
      */
     protected $checklistDocument;
 
     /**
-     * Continuation
+     * Status
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Continuation
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Continuation", fetch="LAZY")
-     * @ORM\JoinColumn(name="continuation_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
-    protected $continuation;
+    protected $status;
+
+    /**
+     * SignatureType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="signature_type", referencedColumnName="id", nullable=true)
+     */
+    protected $signatureType;
+
+    /**
+     * DigitalSignature
+     *
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
+     * @ORM\JoinColumn(name="digital_signature_id", referencedColumnName="id", nullable=true)
+     */
+    protected $digitalSignature;
 
     /**
      * Created by
@@ -96,102 +132,6 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     protected $createdBy;
 
     /**
-     * Digital notification sent
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="digital_notification_sent", nullable=true)
-     */
-    protected $digitalNotificationSent;
-
-    /**
-     * Digital reminder sent
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="digital_reminder_sent",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $digitalReminderSent = 0;
-
-    /**
-     * Digital signature
-     *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="digital_signature_id", referencedColumnName="id", nullable=true)
-     */
-    protected $digitalSignature;
-
-    /**
-     * Factoring amount
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="factoring_amount", precision=12, scale=2, nullable=true)
-     */
-    protected $factoringAmount;
-
-    /**
-     * Financial evidence uploaded
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="financial_evidence_uploaded", nullable=true)
-     */
-    protected $financialEvidenceUploaded;
-
-    /**
-     * Has factoring
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_factoring", nullable=true)
-     */
-    protected $hasFactoring;
-
-    /**
-     * Has other finances
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_other_finances", nullable=true)
-     */
-    protected $hasOtherFinances;
-
-    /**
-     * Has overdraft
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_overdraft", nullable=true)
-     */
-    protected $hasOverdraft;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is digital
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_digital", nullable=false, options={"default": 0})
-     */
-    protected $isDigital = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -203,29 +143,101 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     protected $lastModifiedBy;
 
     /**
-     * Licence
+     * received
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="continuationDetails"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="yesno", name="received", nullable=false, options={"default": 0})
      */
-    protected $licence;
+    protected $received = 0;
+
+    /**
+     * Tot auth vehicles
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="tot_auth_vehicles", nullable=true)
+     */
+    protected $totAuthVehicles;
+
+    /**
+     * Tot psv discs
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="tot_psv_discs", nullable=true)
+     */
+    protected $totPsvDiscs;
+
+    /**
+     * Tot community licences
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="tot_community_licences", nullable=true)
+     */
+    protected $totCommunityLicences;
+
+    /**
+     * Average balance amount
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="average_balance_amount", nullable=true)
+     */
+    protected $averageBalanceAmount;
+
+    /**
+     * hasOverdraft
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="has_overdraft", nullable=true)
+     */
+    protected $hasOverdraft;
+
+    /**
+     * Overdraft amount
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="overdraft_amount", nullable=true)
+     */
+    protected $overdraftAmount;
+
+    /**
+     * hasFactoring
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="has_factoring", nullable=true)
+     */
+    protected $hasFactoring;
+
+    /**
+     * Factoring amount
+     *
+     * @var string
+     *
+     * @ORM\Column(type="decimal", name="factoring_amount", nullable=true)
+     */
+    protected $factoringAmount;
+
+    /**
+     * hasOtherFinances
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="has_other_finances", nullable=true)
+     */
+    protected $hasOtherFinances;
 
     /**
      * Other finances amount
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(type="decimal",
-     *     name="other_finances_amount",
-     *     precision=12,
-     *     scale=2,
-     *     nullable=true)
+     * @ORM\Column(type="decimal", name="other_finances_amount", nullable=true)
      */
     protected $otherFinancesAmount;
 
@@ -239,69 +251,40 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     protected $otherFinancesDetails;
 
     /**
-     * Overdraft amount
+     * Financial evidence uploaded
      *
-     * @var float
+     * @var bool
      *
-     * @ORM\Column(type="decimal", name="overdraft_amount", precision=12, scale=2, nullable=true)
+     * @ORM\Column(type="boolean", name="financial_evidence_uploaded", nullable=true)
      */
-    protected $overdraftAmount;
+    protected $financialEvidenceUploaded;
 
     /**
-     * Received
+     * Is digital
      *
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(type="yesno", name="received", nullable=false, options={"default": 0})
+     * @ORM\Column(type="boolean", name="is_digital", nullable=false, options={"default": 0})
      */
-    protected $received = 0;
+    protected $isDigital = 0;
 
     /**
-     * Signature type
+     * Digital notification sent
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="signature_type", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="digital_notification_sent", nullable=true)
      */
-    protected $signatureType;
+    protected $digitalNotificationSent;
 
     /**
-     * Status
+     * Digital reminder sent
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="digital_reminder_sent", nullable=false, options={"default": 0})
      */
-    protected $status;
-
-    /**
-     * Tot auth vehicles
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_auth_vehicles", nullable=true)
-     */
-    protected $totAuthVehicles;
-
-    /**
-     * Tot community licences
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_community_licences", nullable=true)
-     */
-    protected $totCommunityLicences;
-
-    /**
-     * Tot psv discs
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="tot_psv_discs", nullable=true)
-     */
-    protected $totPsvDiscs;
+    protected $digitalReminderSent = 0;
 
     /**
      * Version
@@ -314,57 +297,48 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     protected $version = 1;
 
     /**
-     * Set the average balance amount
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
      *
-     * @param float $averageBalanceAmount new value being set
+     * @param int $id new value being set
      *
      * @return ContinuationDetail
      */
-    public function setAverageBalanceAmount($averageBalanceAmount)
+    public function setId($id)
     {
-        $this->averageBalanceAmount = $averageBalanceAmount;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the average balance amount
+     * Get the id
      *
-     * @return float
-     */
-    public function getAverageBalanceAmount()
+     * @return int     */
+    public function getId()
     {
-        return $this->averageBalanceAmount;
-    }
-
-    /**
-     * Set the checklist document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $checklistDocument entity being set as the value
-     *
-     * @return ContinuationDetail
-     */
-    public function setChecklistDocument($checklistDocument)
-    {
-        $this->checklistDocument = $checklistDocument;
-
-        return $this;
-    }
-
-    /**
-     * Get the checklist document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getChecklistDocument()
-    {
-        return $this->checklistDocument;
+        return $this->id;
     }
 
     /**
      * Set the continuation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Continuation $continuation entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Continuation $continuation new value being set
      *
      * @return ContinuationDetail
      */
@@ -378,89 +352,108 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the continuation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Continuation
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Continuation     */
     public function getContinuation()
     {
         return $this->continuation;
     }
 
     /**
-     * Set the created by
+     * Set the licence
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
      * @return ContinuationDetail
      */
-    public function setCreatedBy($createdBy)
+    public function setLicence($licence)
     {
-        $this->createdBy = $createdBy;
+        $this->licence = $licence;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+    public function getLicence()
     {
-        return $this->createdBy;
+        return $this->licence;
     }
 
     /**
-     * Set the digital notification sent
+     * Set the checklist document
      *
-     * @param boolean $digitalNotificationSent new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $checklistDocument new value being set
      *
      * @return ContinuationDetail
      */
-    public function setDigitalNotificationSent($digitalNotificationSent)
+    public function setChecklistDocument($checklistDocument)
     {
-        $this->digitalNotificationSent = $digitalNotificationSent;
+        $this->checklistDocument = $checklistDocument;
 
         return $this;
     }
 
     /**
-     * Get the digital notification sent
+     * Get the checklist document
      *
-     * @return boolean
-     */
-    public function getDigitalNotificationSent()
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getChecklistDocument()
     {
-        return $this->digitalNotificationSent;
+        return $this->checklistDocument;
     }
 
     /**
-     * Set the digital reminder sent
+     * Set the status
      *
-     * @param boolean $digitalReminderSent new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
      * @return ContinuationDetail
      */
-    public function setDigitalReminderSent($digitalReminderSent)
+    public function setStatus($status)
     {
-        $this->digitalReminderSent = $digitalReminderSent;
+        $this->status = $status;
 
         return $this;
     }
 
     /**
-     * Get the digital reminder sent
+     * Get the status
      *
-     * @return boolean
-     */
-    public function getDigitalReminderSent()
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
     {
-        return $this->digitalReminderSent;
+        return $this->status;
+    }
+
+    /**
+     * Set the signature type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType new value being set
+     *
+     * @return ContinuationDetail
+     */
+    public function setSignatureType($signatureType)
+    {
+        $this->signatureType = $signatureType;
+
+        return $this;
+    }
+
+    /**
+     * Get the signature type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getSignatureType()
+    {
+        return $this->signatureType;
     }
 
     /**
      * Set the digital signature
      *
-     * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature new value being set
      *
      * @return ContinuationDetail
      */
@@ -474,107 +467,171 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
-     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
     public function getDigitalSignature()
     {
         return $this->digitalSignature;
     }
 
     /**
-     * Set the factoring amount
+     * Set the created by
      *
-     * @param float $factoringAmount new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return ContinuationDetail
      */
-    public function setFactoringAmount($factoringAmount)
+    public function setCreatedBy($createdBy)
     {
-        $this->factoringAmount = $factoringAmount;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the factoring amount
+     * Get the created by
      *
-     * @return float
-     */
-    public function getFactoringAmount()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->factoringAmount;
+        return $this->createdBy;
     }
 
     /**
-     * Set the financial evidence uploaded
+     * Set the last modified by
      *
-     * @param boolean $financialEvidenceUploaded new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ContinuationDetail
      */
-    public function setFinancialEvidenceUploaded($financialEvidenceUploaded)
+    public function setLastModifiedBy($lastModifiedBy)
     {
-        $this->financialEvidenceUploaded = $financialEvidenceUploaded;
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
 
     /**
-     * Get the financial evidence uploaded
+     * Get the last modified by
      *
-     * @return boolean
-     */
-    public function getFinancialEvidenceUploaded()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
     {
-        return $this->financialEvidenceUploaded;
+        return $this->lastModifiedBy;
     }
 
     /**
-     * Set the has factoring
+     * Set the received
      *
-     * @param string $hasFactoring new value being set
+     * @param string $received new value being set
      *
      * @return ContinuationDetail
      */
-    public function setHasFactoring($hasFactoring)
+    public function setReceived($received)
     {
-        $this->hasFactoring = $hasFactoring;
+        $this->received = $received;
 
         return $this;
     }
 
     /**
-     * Get the has factoring
+     * Get the received
      *
-     * @return string
-     */
-    public function getHasFactoring()
+     * @return string     */
+    public function getReceived()
     {
-        return $this->hasFactoring;
+        return $this->received;
     }
 
     /**
-     * Set the has other finances
+     * Set the tot auth vehicles
      *
-     * @param string $hasOtherFinances new value being set
+     * @param int $totAuthVehicles new value being set
      *
      * @return ContinuationDetail
      */
-    public function setHasOtherFinances($hasOtherFinances)
+    public function setTotAuthVehicles($totAuthVehicles)
     {
-        $this->hasOtherFinances = $hasOtherFinances;
+        $this->totAuthVehicles = $totAuthVehicles;
 
         return $this;
     }
 
     /**
-     * Get the has other finances
+     * Get the tot auth vehicles
      *
-     * @return string
-     */
-    public function getHasOtherFinances()
+     * @return int     */
+    public function getTotAuthVehicles()
     {
-        return $this->hasOtherFinances;
+        return $this->totAuthVehicles;
+    }
+
+    /**
+     * Set the tot psv discs
+     *
+     * @param int $totPsvDiscs new value being set
+     *
+     * @return ContinuationDetail
+     */
+    public function setTotPsvDiscs($totPsvDiscs)
+    {
+        $this->totPsvDiscs = $totPsvDiscs;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot psv discs
+     *
+     * @return int     */
+    public function getTotPsvDiscs()
+    {
+        return $this->totPsvDiscs;
+    }
+
+    /**
+     * Set the tot community licences
+     *
+     * @param int $totCommunityLicences new value being set
+     *
+     * @return ContinuationDetail
+     */
+    public function setTotCommunityLicences($totCommunityLicences)
+    {
+        $this->totCommunityLicences = $totCommunityLicences;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot community licences
+     *
+     * @return int     */
+    public function getTotCommunityLicences()
+    {
+        return $this->totCommunityLicences;
+    }
+
+    /**
+     * Set the average balance amount
+     *
+     * @param string $averageBalanceAmount new value being set
+     *
+     * @return ContinuationDetail
+     */
+    public function setAverageBalanceAmount($averageBalanceAmount)
+    {
+        $this->averageBalanceAmount = $averageBalanceAmount;
+
+        return $this;
+    }
+
+    /**
+     * Get the average balance amount
+     *
+     * @return string     */
+    public function getAverageBalanceAmount()
+    {
+        return $this->averageBalanceAmount;
     }
 
     /**
@@ -594,113 +651,108 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the has overdraft
      *
-     * @return string
-     */
+     * @return string     */
     public function getHasOverdraft()
     {
         return $this->hasOverdraft;
     }
 
     /**
-     * Set the id
+     * Set the overdraft amount
      *
-     * @param int $id new value being set
+     * @param string $overdraftAmount new value being set
      *
      * @return ContinuationDetail
      */
-    public function setId($id)
+    public function setOverdraftAmount($overdraftAmount)
     {
-        $this->id = $id;
+        $this->overdraftAmount = $overdraftAmount;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the overdraft amount
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getOverdraftAmount()
     {
-        return $this->id;
+        return $this->overdraftAmount;
     }
 
     /**
-     * Set the is digital
+     * Set the has factoring
      *
-     * @param boolean $isDigital new value being set
+     * @param string $hasFactoring new value being set
      *
      * @return ContinuationDetail
      */
-    public function setIsDigital($isDigital)
+    public function setHasFactoring($hasFactoring)
     {
-        $this->isDigital = $isDigital;
+        $this->hasFactoring = $hasFactoring;
 
         return $this;
     }
 
     /**
-     * Get the is digital
+     * Get the has factoring
      *
-     * @return boolean
-     */
-    public function getIsDigital()
+     * @return string     */
+    public function getHasFactoring()
     {
-        return $this->isDigital;
+        return $this->hasFactoring;
     }
 
     /**
-     * Set the last modified by
+     * Set the factoring amount
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $factoringAmount new value being set
      *
      * @return ContinuationDetail
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setFactoringAmount($factoringAmount)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->factoringAmount = $factoringAmount;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the factoring amount
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getFactoringAmount()
     {
-        return $this->lastModifiedBy;
+        return $this->factoringAmount;
     }
 
     /**
-     * Set the licence
+     * Set the has other finances
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
+     * @param string $hasOtherFinances new value being set
      *
      * @return ContinuationDetail
      */
-    public function setLicence($licence)
+    public function setHasOtherFinances($hasOtherFinances)
     {
-        $this->licence = $licence;
+        $this->hasOtherFinances = $hasOtherFinances;
 
         return $this;
     }
 
     /**
-     * Get the licence
+     * Get the has other finances
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
-    public function getLicence()
+     * @return string     */
+    public function getHasOtherFinances()
     {
-        return $this->licence;
+        return $this->hasOtherFinances;
     }
 
     /**
      * Set the other finances amount
      *
-     * @param float $otherFinancesAmount new value being set
+     * @param string $otherFinancesAmount new value being set
      *
      * @return ContinuationDetail
      */
@@ -714,8 +766,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the other finances amount
      *
-     * @return float
-     */
+     * @return string     */
     public function getOtherFinancesAmount()
     {
         return $this->otherFinancesAmount;
@@ -738,179 +789,102 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the other finances details
      *
-     * @return string
-     */
+     * @return string     */
     public function getOtherFinancesDetails()
     {
         return $this->otherFinancesDetails;
     }
 
     /**
-     * Set the overdraft amount
+     * Set the financial evidence uploaded
      *
-     * @param float $overdraftAmount new value being set
+     * @param bool $financialEvidenceUploaded new value being set
      *
      * @return ContinuationDetail
      */
-    public function setOverdraftAmount($overdraftAmount)
+    public function setFinancialEvidenceUploaded($financialEvidenceUploaded)
     {
-        $this->overdraftAmount = $overdraftAmount;
+        $this->financialEvidenceUploaded = $financialEvidenceUploaded;
 
         return $this;
     }
 
     /**
-     * Get the overdraft amount
+     * Get the financial evidence uploaded
      *
-     * @return float
-     */
-    public function getOverdraftAmount()
+     * @return bool     */
+    public function getFinancialEvidenceUploaded()
     {
-        return $this->overdraftAmount;
+        return $this->financialEvidenceUploaded;
     }
 
     /**
-     * Set the received
+     * Set the is digital
      *
-     * @param string $received new value being set
+     * @param bool $isDigital new value being set
      *
      * @return ContinuationDetail
      */
-    public function setReceived($received)
+    public function setIsDigital($isDigital)
     {
-        $this->received = $received;
+        $this->isDigital = $isDigital;
 
         return $this;
     }
 
     /**
-     * Get the received
+     * Get the is digital
      *
-     * @return string
-     */
-    public function getReceived()
+     * @return bool     */
+    public function getIsDigital()
     {
-        return $this->received;
+        return $this->isDigital;
     }
 
     /**
-     * Set the signature type
+     * Set the digital notification sent
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType entity being set as the value
+     * @param bool $digitalNotificationSent new value being set
      *
      * @return ContinuationDetail
      */
-    public function setSignatureType($signatureType)
+    public function setDigitalNotificationSent($digitalNotificationSent)
     {
-        $this->signatureType = $signatureType;
+        $this->digitalNotificationSent = $digitalNotificationSent;
 
         return $this;
     }
 
     /**
-     * Get the signature type
+     * Get the digital notification sent
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getSignatureType()
+     * @return bool     */
+    public function getDigitalNotificationSent()
     {
-        return $this->signatureType;
+        return $this->digitalNotificationSent;
     }
 
     /**
-     * Set the status
+     * Set the digital reminder sent
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
+     * @param bool $digitalReminderSent new value being set
      *
      * @return ContinuationDetail
      */
-    public function setStatus($status)
+    public function setDigitalReminderSent($digitalReminderSent)
     {
-        $this->status = $status;
+        $this->digitalReminderSent = $digitalReminderSent;
 
         return $this;
     }
 
     /**
-     * Get the status
+     * Get the digital reminder sent
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
+     * @return bool     */
+    public function getDigitalReminderSent()
     {
-        return $this->status;
-    }
-
-    /**
-     * Set the tot auth vehicles
-     *
-     * @param int $totAuthVehicles new value being set
-     *
-     * @return ContinuationDetail
-     */
-    public function setTotAuthVehicles($totAuthVehicles)
-    {
-        $this->totAuthVehicles = $totAuthVehicles;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot auth vehicles
-     *
-     * @return int
-     */
-    public function getTotAuthVehicles()
-    {
-        return $this->totAuthVehicles;
-    }
-
-    /**
-     * Set the tot community licences
-     *
-     * @param int $totCommunityLicences new value being set
-     *
-     * @return ContinuationDetail
-     */
-    public function setTotCommunityLicences($totCommunityLicences)
-    {
-        $this->totCommunityLicences = $totCommunityLicences;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot community licences
-     *
-     * @return int
-     */
-    public function getTotCommunityLicences()
-    {
-        return $this->totCommunityLicences;
-    }
-
-    /**
-     * Set the tot psv discs
-     *
-     * @param int $totPsvDiscs new value being set
-     *
-     * @return ContinuationDetail
-     */
-    public function setTotPsvDiscs($totPsvDiscs)
-    {
-        $this->totPsvDiscs = $totPsvDiscs;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot psv discs
-     *
-     * @return int
-     */
-    public function getTotPsvDiscs()
-    {
-        return $this->totPsvDiscs;
+        return $this->digitalReminderSent;
     }
 
     /**
@@ -930,10 +904,17 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

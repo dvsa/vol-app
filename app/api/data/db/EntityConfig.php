@@ -1398,6 +1398,13 @@ return array(
                 'entity' => 'SeriousInfringement',
                 'property' => 'appliedPenaltie'
             )
+        ),
+        'si_penalty_erru_requested_id' => array(
+            'property' => 'erruPenaltyRequested',
+            'inversedBy' => array(
+                'entity' => 'SiPenaltyErruRequested',
+                'property' => 'appliedPenalties'
+            )
         )
     ),
     'si_penalty_erru_imposed' => array(

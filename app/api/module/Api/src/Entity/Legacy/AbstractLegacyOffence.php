@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Legacy;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * LegacyOffence Abstract Entity
+ * AbstractLegacyOffence Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,21 +36,27 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="legacyOffences"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
@@ -61,35 +72,6 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     protected $createdBy;
 
     /**
-     * Definition
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="definition", length=1000, nullable=true)
-     */
-    protected $definition;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is trailer
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_trailer", nullable=true)
-     */
-    protected $isTrailer;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -99,6 +81,24 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
+
+    /**
+     * Definition
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="definition", length=1000, nullable=true)
+     */
+    protected $definition;
+
+    /**
+     * isTrailer
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_trailer", nullable=true)
+     */
+    protected $isTrailer;
 
     /**
      * Notes
@@ -146,15 +146,6 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     protected $offenceToDate;
 
     /**
-     * Offence type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="offence_type", length=100, nullable=true)
-     */
-    protected $offenceType;
-
-    /**
      * Offender name
      *
      * @var string
@@ -182,14 +173,13 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     protected $position;
 
     /**
-     * Version
+     * Offence type
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
+     * @ORM\Column(type="string", name="offence_type", length=100, nullable=true)
      */
-    protected $version = 1;
+    protected $offenceType;
 
     /**
      * Vrm
@@ -201,9 +191,58 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     protected $vrm;
 
     /**
+     * Version
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
+     * @ORM\Version
+     */
+    protected $version = 1;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return LegacyOffence
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return LegacyOffence
      */
@@ -217,8 +256,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
@@ -227,7 +265,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return LegacyOffence
      */
@@ -241,11 +279,33 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return LegacyOffence
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -265,35 +325,10 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the definition
      *
-     * @return string
-     */
+     * @return string     */
     public function getDefinition()
     {
         return $this->definition;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return LegacyOffence
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -313,35 +348,10 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the is trailer
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsTrailer()
     {
         return $this->isTrailer;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return LegacyOffence
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
     }
 
     /**
@@ -361,8 +371,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the notes
      *
-     * @return string
-     */
+     * @return string     */
     public function getNotes()
     {
         return $this->notes;
@@ -385,8 +394,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the num of offences
      *
-     * @return int
-     */
+     * @return int     */
     public function getNumOfOffences()
     {
         return $this->numOfOffences;
@@ -409,8 +417,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the offence authority
      *
-     * @return string
-     */
+     * @return string     */
     public function getOffenceAuthority()
     {
         return $this->offenceAuthority;
@@ -435,9 +442,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getOffenceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -466,9 +471,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getOffenceToDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -476,30 +479,6 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
         }
 
         return $this->offenceToDate;
-    }
-
-    /**
-     * Set the offence type
-     *
-     * @param string $offenceType new value being set
-     *
-     * @return LegacyOffence
-     */
-    public function setOffenceType($offenceType)
-    {
-        $this->offenceType = $offenceType;
-
-        return $this;
-    }
-
-    /**
-     * Get the offence type
-     *
-     * @return string
-     */
-    public function getOffenceType()
-    {
-        return $this->offenceType;
     }
 
     /**
@@ -519,8 +498,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the offender name
      *
-     * @return string
-     */
+     * @return string     */
     public function getOffenderName()
     {
         return $this->offenderName;
@@ -543,8 +521,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the points
      *
-     * @return int
-     */
+     * @return int     */
     public function getPoints()
     {
         return $this->points;
@@ -567,35 +544,33 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the position
      *
-     * @return string
-     */
+     * @return string     */
     public function getPosition()
     {
         return $this->position;
     }
 
     /**
-     * Set the version
+     * Set the offence type
      *
-     * @param int $version new value being set
+     * @param string $offenceType new value being set
      *
      * @return LegacyOffence
      */
-    public function setVersion($version)
+    public function setOffenceType($offenceType)
     {
-        $this->version = $version;
+        $this->offenceType = $offenceType;
 
         return $this;
     }
 
     /**
-     * Get the version
+     * Get the offence type
      *
-     * @return int
-     */
-    public function getVersion()
+     * @return string     */
+    public function getOffenceType()
     {
-        return $this->version;
+        return $this->offenceType;
     }
 
     /**
@@ -615,10 +590,40 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
     /**
      * Get the vrm
      *
-     * @return string
-     */
+     * @return string     */
     public function getVrm()
     {
         return $this->vrm;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return LegacyOffence
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

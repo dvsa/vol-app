@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CompaniesHouseAlert Abstract Entity
+ * AbstractCompaniesHouseAlert Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -38,13 +41,25 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     use ModifiedOnTrait;
 
     /**
-     * Company or llp no
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $companyOrLlpNo;
+    protected $id;
+
+    /**
+     * Foreign Key to organisation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    protected $organisation;
 
     /**
      * Created by
@@ -58,26 +73,6 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is closed
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_closed", nullable=false, options={"default": 0})
-     */
-    protected $isClosed = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -89,14 +84,22 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     protected $lastModifiedBy;
 
     /**
-     * Organisation
+     * Company or llp no
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
      */
-    protected $organisation;
+    protected $companyOrLlpNo;
+
+    /**
+     * isClosed
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_closed", nullable=false, options={"default": 0})
+     */
+    protected $isClosed = 0;
 
     /**
      * Version
@@ -109,22 +112,16 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     protected $version = 1;
 
     /**
-     * Reason
+     * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason",
-     *     mappedBy="companiesHouseAlert",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlertReason", mappedBy="companiesHouseAlert", cascade={"persist"})
      */
     protected $reasons;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -132,13 +129,104 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->reasons = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return CompaniesHouseAlert
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
+     *
+     * @return CompaniesHouseAlert
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return CompaniesHouseAlert
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return CompaniesHouseAlert
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -158,59 +246,10 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the company or llp no
      *
-     * @return string
-     */
+     * @return string     */
     public function getCompanyOrLlpNo()
     {
         return $this->companyOrLlpNo;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return CompaniesHouseAlert
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return CompaniesHouseAlert
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -230,59 +269,10 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the is closed
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsClosed()
     {
         return $this->isClosed;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return CompaniesHouseAlert
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return CompaniesHouseAlert
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
     }
 
     /**
@@ -302,17 +292,16 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the reason
+     * Set the reasons
      *
-     * @param ArrayCollection $reasons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
      * @return CompaniesHouseAlert
      */
@@ -326,7 +315,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Get the reasons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReasons()
     {
@@ -336,7 +325,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
     /**
      * Add a reasons
      *
-     * @param ArrayCollection|mixed $reasons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
      * @return CompaniesHouseAlert
      */
@@ -370,5 +359,13 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,19 +17,18 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrhpPermitRequest Abstract Entity
+ * AbstractIrhpPermitRequest Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="irhp_permit_request",
  *    indexes={
  *        @ORM\Index(name="ix_irhp_permit_request_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irhp_permit_request_irhp_application_id",
-     *     columns={"irhp_application_id"}),
- *        @ORM\Index(name="ix_irhp_permit_request_irhp_permit_application_id",
-     *     columns={"irhp_permit_application_id"}),
+ *        @ORM\Index(name="ix_irhp_permit_request_irhp_application_id", columns={"irhp_application_id"}),
+ *        @ORM\Index(name="ix_irhp_permit_request_irhp_permit_application_id", columns={"irhp_permit_application_id"}),
  *        @ORM\Index(name="ix_irhp_permit_request_last_modified_by", columns={"last_modified_by"})
  *    }
  * )
@@ -41,6 +42,37 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     use ModifiedOnTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * IrhpApplication
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irhpApplication;
+
+    /**
+     * IrhpPermitApplication
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irhpPermitApplication;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -50,66 +82,6 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irhp application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication",
-     *     fetch="LAZY",
-     *     inversedBy="irhpPermitRequests"
-     * )
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irhpApplication;
-
-    /**
-     * Irhp permit application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication",
-     *     fetch="LAZY",
-     *     inversedBy="irhpPermitRequests"
-     * )
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irhpPermitApplication;
-
-    /**
-     * Irhp permit request attribute
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="irhpPermitRequests",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="irhp_permit_request_attribute",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_request_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_request_attribute_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $irhpPermitRequestAttributes;
 
     /**
      * Last modified by
@@ -129,7 +101,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @ORM\Column(type="integer", name="permits_required", nullable=false)
      */
-    protected $permitsRequired;
+    protected $permitsRequired = 0;
 
     /**
      * Version
@@ -142,9 +114,24 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * IrhpPermitRequestAttributes
      *
-     * @return void
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="irhpPermitRequests", fetch="LAZY")
+     * @ORM\JoinTable(name="irhp_permit_request_attribute",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="irhp_permit_request_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="irhp_permit_request_attribute_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $irhpPermitRequestAttributes;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -152,38 +139,13 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->irhpPermitRequestAttributes = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return IrhpPermitRequest
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -202,8 +164,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -212,7 +173,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Set the irhp application
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
      * @return IrhpPermitRequest
      */
@@ -226,8 +187,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -236,7 +196,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Set the irhp permit application
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
      * @return IrhpPermitRequest
      */
@@ -250,17 +210,108 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
     }
 
     /**
-     * Set the irhp permit request attribute
+     * Set the created by
      *
-     * @param ArrayCollection $irhpPermitRequestAttributes collection being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return IrhpPermitRequest
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return IrhpPermitRequest
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the permits required
+     *
+     * @param int $permitsRequired new value being set
+     *
+     * @return IrhpPermitRequest
+     */
+    public function setPermitsRequired($permitsRequired)
+    {
+        $this->permitsRequired = $permitsRequired;
+
+        return $this;
+    }
+
+    /**
+     * Get the permits required
+     *
+     * @return int     */
+    public function getPermitsRequired()
+    {
+        return $this->permitsRequired;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return IrhpPermitRequest
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the irhp permit request attributes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttributes collection being set as the value
      *
      * @return IrhpPermitRequest
      */
@@ -274,7 +325,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Get the irhp permit request attributes
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermitRequestAttributes()
     {
@@ -284,7 +335,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Add a irhp permit request attributes
      *
-     * @param ArrayCollection|mixed $irhpPermitRequestAttributes collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequestAttributes collection being added
      *
      * @return IrhpPermitRequest
      */
@@ -321,74 +372,10 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return IrhpPermitRequest
+     * Get bundle data
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function __toString(): string
     {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the permits required
-     *
-     * @param int $permitsRequired new value being set
-     *
-     * @return IrhpPermitRequest
-     */
-    public function setPermitsRequired($permitsRequired)
-    {
-        $this->permitsRequired = $permitsRequired;
-
-        return $this;
-    }
-
-    /**
-     * Get the permits required
-     *
-     * @return int
-     */
-    public function getPermitsRequired()
-    {
-        return $this->permitsRequired;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return IrhpPermitRequest
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

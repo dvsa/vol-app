@@ -1,27 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * SubCategoryDescription Abstract Entity
+ * AbstractSubCategoryDescription Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="sub_category_description",
  *    indexes={
- *        @ORM\Index(name="ix_sub_category_description_sub_category_id", columns={"sub_category_id"})
+ *        @ORM\Index(name="ix_sub_category_description_sub_category_id", columns={"sub_category_id"}),
+ *        @ORM\Index(name="uk_sub_category_description_sub_category_id_description", columns={"sub_category_id", "description"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_sub_category_description_sub_category_id_description",
-     *     columns={"sub_category_id","description"})
+ *        @ORM\UniqueConstraint(name="uk_sub_category_description_sub_category_id_description", columns={"sub_category_id", "description"})
  *    }
  * )
  */
@@ -29,7 +34,28 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to sub_category
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
+     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id")
+     */
+    protected $subCategory;
 
     /**
      * Description
@@ -38,52 +64,23 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      *
      * @ORM\Column(type="string", name="description", length=100, nullable=false)
      */
-    protected $description;
+    protected $description = '';
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * Initialise the collections
      */
-    protected $id;
-
-    /**
-     * Sub category
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=false)
-     */
-    protected $subCategory;
-
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return SubCategoryDescription
-     */
-    public function setDescription($description)
+    public function __construct()
     {
-        $this->description = $description;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the description
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getDescription()
+    public function initCollections(): void
     {
-        return $this->description;
     }
+
 
     /**
      * Set the id
@@ -102,8 +99,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -112,7 +108,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Set the sub category
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
      * @return SubCategoryDescription
      */
@@ -126,10 +122,40 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
     public function getSubCategory()
     {
         return $this->subCategory;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return SubCategoryDescription
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }
