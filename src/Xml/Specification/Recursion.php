@@ -65,6 +65,12 @@ class Recursion implements SpecificationInterface
             }
         }
 
+        //allows the contents of the root element to also be accessed
+        if (isset($specification[$domElement->tagName])) {
+            $instruction = $specification[$domElement->tagName];
+            $result = ArrayUtils::merge($result, $instruction->apply($domElement));
+        }
+
         return $result;
     }
 }
