@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.0](https://github.com/dvsa/olcs-xmltools/compare/v8.0.0...v8.1.0) (2025-09-26)
+
+
+### Features
+
+* allow the parent element to be accessed by the recursion class VOL-6589 ([#21](https://github.com/dvsa/olcs-xmltools/issues/21)) ([7d5c406](https://github.com/dvsa/olcs-xmltools/commit/7d5c406ce91f59f2426e511ccb24208629c3dfd7))
+
 ## [8.0.0](https://github.com/dvsa/olcs-xmltools/compare/v7.0.0...v8.0.0) (2025-09-19)
 
 
