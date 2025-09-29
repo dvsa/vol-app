@@ -31,7 +31,9 @@ class ApplicationOperatingCentre extends AbstractQueryHandler
                     'address' => [
                         'countryCode'
                     ],
-                    'adDocuments',
+                    'adDocuments'=>[
+                        'application'
+                    ],
                 ],
             ];
         $data = [
