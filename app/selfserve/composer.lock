@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "c1345b8dddf537aa1880dcfa69dbc8fa",
+  "content-hash": "fd662fd589a786d33f43dc57d0fa17a1",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -53,16 +53,16 @@
     },
     {
       "name": "aws/aws-sdk-php",
-      "version": "3.356.23",
+      "version": "3.356.27",
       "source": {
         "type": "git",
         "url": "https://github.com/aws/aws-sdk-php.git",
-        "reference": "e9253cf6073f06080a7458af54e18fc474f0c864"
+        "reference": "6f6b8cfdc1a1555b7a749395a79bda51910646e0"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e9253cf6073f06080a7458af54e18fc474f0c864",
-        "reference": "e9253cf6073f06080a7458af54e18fc474f0c864",
+        "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6f6b8cfdc1a1555b7a749395a79bda51910646e0",
+        "reference": "6f6b8cfdc1a1555b7a749395a79bda51910646e0",
         "shasum": ""
       },
       "require": {
@@ -138,9 +138,9 @@
       "support": {
         "forum": "https://github.com/aws/aws-sdk-php/discussions",
         "issues": "https://github.com/aws/aws-sdk-php/issues",
-        "source": "https://github.com/aws/aws-sdk-php/tree/3.356.23"
+        "source": "https://github.com/aws/aws-sdk-php/tree/3.356.27"
       },
-      "time": "2025-09-22T18:10:31+00:00"
+      "time": "2025-09-26T18:12:38+00:00"
     },
     {
       "name": "brick/varexporter",
@@ -950,16 +950,16 @@
     },
     {
       "name": "doctrine/persistence",
-      "version": "3.4.0",
+      "version": "3.4.1",
       "source": {
         "type": "git",
         "url": "https://github.com/doctrine/persistence.git",
-        "reference": "0ea965320cec355dba75031c1b23d4c78362e3ff"
+        "reference": "23069c8cfc19d7825e9fbe3341227d8c51eff2bc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/doctrine/persistence/zipball/0ea965320cec355dba75031c1b23d4c78362e3ff",
-        "reference": "0ea965320cec355dba75031c1b23d4c78362e3ff",
+        "url": "https://api.github.com/repos/doctrine/persistence/zipball/23069c8cfc19d7825e9fbe3341227d8c51eff2bc",
+        "reference": "23069c8cfc19d7825e9fbe3341227d8c51eff2bc",
         "shasum": ""
       },
       "require": {
@@ -1018,7 +1018,7 @@
       "keywords": ["mapper", "object", "odm", "orm", "persistence"],
       "support": {
         "issues": "https://github.com/doctrine/persistence/issues",
-        "source": "https://github.com/doctrine/persistence/tree/3.4.0"
+        "source": "https://github.com/doctrine/persistence/tree/3.4.1"
       },
       "funding": [
         {
@@ -1034,7 +1034,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2024-10-30T19:48:12+00:00"
+      "time": "2025-09-29T06:33:58+00:00"
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
@@ -4279,16 +4279,16 @@
     },
     {
       "name": "olcs/olcs-auth",
-      "version": "v9.0.1",
+      "version": "dev-upload-oc-fix",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-auth.git",
-        "reference": "277396aa38de4520f03ebd342d4d3c2dfaf62b88"
+        "reference": "d28f65fbb37c2cc947856b9b589b56d626aa207c"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/277396aa38de4520f03ebd342d4d3c2dfaf62b88",
-        "reference": "277396aa38de4520f03ebd342d4d3c2dfaf62b88",
+        "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/d28f65fbb37c2cc947856b9b589b56d626aa207c",
+        "reference": "d28f65fbb37c2cc947856b9b589b56d626aa207c",
         "shasum": ""
       },
       "require": {
@@ -4303,7 +4303,7 @@
         "laminas/laminas-validator": "2.64.0",
         "laminas/laminas-view": "^2.41",
         "lm-commons/lmc-rbac-mvc": "^3.5",
-        "olcs/olcs-common": "^9.0",
+        "olcs/olcs-common": "dev-upload-oc-fix",
         "olcs/olcs-transfer": "^8.0",
         "php": "~8.2.0 || ~8.3.0",
         "psr/container": "^1.1|^2"
@@ -4335,22 +4335,22 @@
       "license": ["MIT"],
       "description": "OLCS Authentication",
       "support": {
-        "source": "https://github.com/dvsa/olcs-auth/tree/v9.0.1"
+        "source": "https://github.com/dvsa/olcs-auth/tree/upload-oc-fix"
       },
-      "time": "2025-09-22T15:19:36+00:00"
+      "time": "2025-09-29T09:31:00+00:00"
     },
     {
       "name": "olcs/olcs-common",
-      "version": "v9.1.0",
+      "version": "dev-upload-oc-fix",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-common.git",
-        "reference": "b9d3a3ea9faf4aa6904eeec878fbeb37f9687579"
+        "reference": "ae13d3952c86f5120f6d5d0a332575985fc7cdbf"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/b9d3a3ea9faf4aa6904eeec878fbeb37f9687579",
-        "reference": "b9d3a3ea9faf4aa6904eeec878fbeb37f9687579",
+        "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/ae13d3952c86f5120f6d5d0a332575985fc7cdbf",
+        "reference": "ae13d3952c86f5120f6d5d0a332575985fc7cdbf",
         "shasum": ""
       },
       "require": {
@@ -4408,9 +4408,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "Common library for the OLCS Project",
       "support": {
-        "source": "https://github.com/dvsa/olcs-common/tree/v9.1.0"
+        "source": "https://github.com/dvsa/olcs-common/tree/upload-oc-fix"
       },
-      "time": "2025-09-25T10:43:18+00:00"
+      "time": "2025-09-26T13:25:56+00:00"
     },
     {
       "name": "olcs/olcs-logging",
@@ -4978,16 +4978,16 @@
     },
     {
       "name": "symfony/console",
-      "version": "v6.4.25",
+      "version": "v6.4.26",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/console.git",
-        "reference": "273fd29ff30ba0a88ca5fb83f7cf1ab69306adae"
+        "reference": "492de6dfd93910d7d7a729c5a04ddcd2b9e99c4f"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/console/zipball/273fd29ff30ba0a88ca5fb83f7cf1ab69306adae",
-        "reference": "273fd29ff30ba0a88ca5fb83f7cf1ab69306adae",
+        "url": "https://api.github.com/repos/symfony/console/zipball/492de6dfd93910d7d7a729c5a04ddcd2b9e99c4f",
+        "reference": "492de6dfd93910d7d7a729c5a04ddcd2b9e99c4f",
         "shasum": ""
       },
       "require": {
@@ -5043,7 +5043,7 @@
       "homepage": "https://symfony.com",
       "keywords": ["cli", "command-line", "console", "terminal"],
       "support": {
-        "source": "https://github.com/symfony/console/tree/v6.4.25"
+        "source": "https://github.com/symfony/console/tree/v6.4.26"
       },
       "funding": [
         {
@@ -5063,7 +5063,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-08-22T10:21:53+00:00"
+      "time": "2025-09-26T12:13:46+00:00"
     },
     {
       "name": "symfony/dependency-injection",
@@ -5976,16 +5976,16 @@
     },
     {
       "name": "symfony/string",
-      "version": "v7.3.3",
+      "version": "v7.3.4",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/string.git",
-        "reference": "17a426cce5fd1f0901fefa9b2a490d0038fd3c9c"
+        "reference": "f96476035142921000338bad71e5247fbc138872"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/string/zipball/17a426cce5fd1f0901fefa9b2a490d0038fd3c9c",
-        "reference": "17a426cce5fd1f0901fefa9b2a490d0038fd3c9c",
+        "url": "https://api.github.com/repos/symfony/string/zipball/f96476035142921000338bad71e5247fbc138872",
+        "reference": "f96476035142921000338bad71e5247fbc138872",
         "shasum": ""
       },
       "require": {
@@ -6000,7 +6000,6 @@
       },
       "require-dev": {
         "symfony/emoji": "^7.1",
-        "symfony/error-handler": "^6.4|^7.0",
         "symfony/http-client": "^6.4|^7.0",
         "symfony/intl": "^6.4|^7.0",
         "symfony/translation-contracts": "^2.5|^3.0",
@@ -6030,7 +6029,7 @@
       "homepage": "https://symfony.com",
       "keywords": ["grapheme", "i18n", "string", "unicode", "utf-8", "utf8"],
       "support": {
-        "source": "https://github.com/symfony/string/tree/v7.3.3"
+        "source": "https://github.com/symfony/string/tree/v7.3.4"
       },
       "funding": [
         {
@@ -6050,7 +6049,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-08-25T06:35:40+00:00"
+      "time": "2025-09-11T14:36:48+00:00"
     },
     {
       "name": "webimpress/safe-writer",
@@ -6974,16 +6973,16 @@
     },
     {
       "name": "phpunit/phpunit",
-      "version": "9.6.28",
+      "version": "9.6.29",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/phpunit.git",
-        "reference": "a8017241a554a259997a5285eee5d10c69ff7187"
+        "reference": "9ecfec57835a5581bc888ea7e13b51eb55ab9dd3"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a8017241a554a259997a5285eee5d10c69ff7187",
-        "reference": "a8017241a554a259997a5285eee5d10c69ff7187",
+        "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9ecfec57835a5581bc888ea7e13b51eb55ab9dd3",
+        "reference": "9ecfec57835a5581bc888ea7e13b51eb55ab9dd3",
         "shasum": ""
       },
       "require": {
@@ -7008,7 +7007,7 @@
         "sebastian/comparator": "^4.0.9",
         "sebastian/diff": "^4.0.6",
         "sebastian/environment": "^5.1.5",
-        "sebastian/exporter": "^4.0.7",
+        "sebastian/exporter": "^4.0.8",
         "sebastian/global-state": "^5.0.8",
         "sebastian/object-enumerator": "^4.0.4",
         "sebastian/resource-operations": "^3.0.4",
@@ -7045,7 +7044,7 @@
       "support": {
         "issues": "https://github.com/sebastianbergmann/phpunit/issues",
         "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-        "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.28"
+        "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.29"
       },
       "funding": [
         {
@@ -7069,7 +7068,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-09-23T06:20:12+00:00"
+      "time": "2025-09-24T06:29:11+00:00"
     },
     {
       "name": "san/san-session-toolbar",
@@ -7541,16 +7540,16 @@
     },
     {
       "name": "sebastian/exporter",
-      "version": "4.0.7",
+      "version": "4.0.8",
       "source": {
         "type": "git",
         "url": "https://github.com/sebastianbergmann/exporter.git",
-        "reference": "eb49b981ef0817890129cb70f774506bebe57740"
+        "reference": "14c6ba52f95a36c3d27c835d65efc7123c446e8c"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/eb49b981ef0817890129cb70f774506bebe57740",
-        "reference": "eb49b981ef0817890129cb70f774506bebe57740",
+        "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/14c6ba52f95a36c3d27c835d65efc7123c446e8c",
+        "reference": "14c6ba52f95a36c3d27c835d65efc7123c446e8c",
         "shasum": ""
       },
       "require": {
@@ -7599,7 +7598,7 @@
       "keywords": ["export", "exporter"],
       "support": {
         "issues": "https://github.com/sebastianbergmann/exporter/issues",
-        "source": "https://github.com/sebastianbergmann/exporter/tree/4.0.7"
+        "source": "https://github.com/sebastianbergmann/exporter/tree/4.0.8"
       },
       "funding": [
         {
@@ -7619,7 +7618,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-09-22T05:18:21+00:00"
+      "time": "2025-09-24T06:03:27+00:00"
     },
     {
       "name": "sebastian/global-state",
@@ -8072,16 +8071,16 @@
     },
     {
       "name": "symfony/var-dumper",
-      "version": "v7.3.3",
+      "version": "v7.3.4",
       "source": {
         "type": "git",
         "url": "https://github.com/symfony/var-dumper.git",
-        "reference": "34d8d4c4b9597347306d1ec8eb4e1319b1e6986f"
+        "reference": "b8abe7daf2730d07dfd4b2ee1cecbf0dd2fbdabb"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/symfony/var-dumper/zipball/34d8d4c4b9597347306d1ec8eb4e1319b1e6986f",
-        "reference": "34d8d4c4b9597347306d1ec8eb4e1319b1e6986f",
+        "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b8abe7daf2730d07dfd4b2ee1cecbf0dd2fbdabb",
+        "reference": "b8abe7daf2730d07dfd4b2ee1cecbf0dd2fbdabb",
         "shasum": ""
       },
       "require": {
@@ -8124,7 +8123,7 @@
       "homepage": "https://symfony.com",
       "keywords": ["debug", "dump"],
       "support": {
-        "source": "https://github.com/symfony/var-dumper/tree/v7.3.3"
+        "source": "https://github.com/symfony/var-dumper/tree/v7.3.4"
       },
       "funding": [
         {
@@ -8144,7 +8143,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2025-08-13T11:49:31+00:00"
+      "time": "2025-09-11T10:12:26+00:00"
     },
     {
       "name": "theseer/tokenizer",
@@ -8195,7 +8194,10 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": {},
+  "stability-flags": {
+    "olcs/olcs-auth": 20,
+    "olcs/olcs-common": 20
+  },
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
