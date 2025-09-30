@@ -12,7 +12,7 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
 
 # Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
 # Install PHP extensions: intl, pdo_mysql, opcache, zip
-RUN apk add --no-cache icu-dev libzip-dev cups-client \
+RUN apk add --no-cache icu-dev libzip-dev cups-client bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
