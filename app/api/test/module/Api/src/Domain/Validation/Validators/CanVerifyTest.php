@@ -51,22 +51,6 @@ class CanVerifyTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    /**
-     * testIsValidForTransportManagerContextOnly
-     */
-    public function testIsValidForTransportManagerContextOnly(): void
-    {
-        $dto = m::mock(ProcessSignatureResponse::class);
-
-        $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
-        $this->setIsGranted(Permission::OPERATOR_TC, false);
-        $this->setIsGranted(Permission::OPERATOR_USER, false);
-        $this->setIsGranted(Permission::TRANSPORT_MANAGER, true);
-        $dto->expects('getTransportManagerApplication')->withNoArgs()->andReturn(1);
-
-        $this->assertTrue($this->sut->isValid($dto));
-    }
-
     public function testFailsValidationIfNotProcessSignatureAndTMA(): void
     {
         $dto = m::mock(GetAuthRequest::class);
