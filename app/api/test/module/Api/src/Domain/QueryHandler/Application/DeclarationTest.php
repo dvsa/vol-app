@@ -68,11 +68,6 @@ class DeclarationTest extends QueryHandlerTestCase
             ->with($query)
             ->andReturn($mockApplication);
 
-        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
-            ->andReturn(true)
-            ->once();
-
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -144,11 +139,6 @@ class DeclarationTest extends QueryHandlerTestCase
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
             ->with($query)
             ->andReturn($mockApplication);
-
-        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
-            ->andReturn(true)
-            ->once();
 
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
@@ -248,11 +238,6 @@ class DeclarationTest extends QueryHandlerTestCase
             ->shouldReceive('getReference')
             ->with(TrafficAreaEntity::class, TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
             ->andReturn('N')
-            ->once();
-
-        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
-            ->andReturn(true)
             ->once();
 
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
@@ -382,11 +367,6 @@ class DeclarationTest extends QueryHandlerTestCase
             ->andReturn('N')
             ->once();
 
-        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
-            ->andReturn(true)
-            ->once();
-
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -491,11 +471,6 @@ class DeclarationTest extends QueryHandlerTestCase
             ->shouldReceive('getReference')
             ->with(TrafficAreaEntity::class, TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
             ->andReturn('N')
-            ->once();
-
-        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
-            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
-            ->andReturn(true)
             ->once();
 
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
