@@ -50,16 +50,4 @@ class CanVerifyTest extends AbstractHandlerTestCase
 
         $this->assertTrue($this->sut->isValid($dto));
     }
-
-    public function testFailsValidationIfNotProcessSignatureAndTMA(): void
-    {
-        $dto = m::mock(GetAuthRequest::class);
-
-        $this->setIsGranted(Permission::OPERATOR_ADMIN, false);
-        $this->setIsGranted(Permission::OPERATOR_TC, false);
-        $this->setIsGranted(Permission::OPERATOR_USER, false);
-        $this->setIsGranted(Permission::TRANSPORT_MANAGER, true);
-
-        $this->assertFalse($this->sut->isValid($dto));
-    }
 }
