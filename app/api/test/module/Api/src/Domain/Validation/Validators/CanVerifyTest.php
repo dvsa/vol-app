@@ -7,8 +7,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanVerify as Sut;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse;
-use Dvsa\Olcs\Transfer\Query\GdsVerify\GetAuthRequest;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 

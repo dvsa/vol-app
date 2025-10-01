@@ -124,10 +124,6 @@ class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getDisableSelfServeCardPayments')
             ->andReturn(false)
             ->once();
-        $this->repoMap['SystemParameter']
-            ->shouldReceive('getDisableGdsVerifySignatures')
-            ->andReturn('DISABLE_SIGNATURES')
-            ->once();
 
         $mockFee = m::mock(BundleSerializableInterface::class)
             ->shouldReceive('serialize')
@@ -211,10 +207,6 @@ class GetTest extends QueryHandlerTestCase
             ->shouldReceive('getDisableSelfServeCardPayments')
             ->andReturn(false)
             ->once();
-        $this->repoMap['SystemParameter']
-            ->shouldReceive('getDisableGdsVerifySignatures')
-            ->andReturn('DISABLE_SIGNATURES')
-            ->once();
 
         $mockFee = m::mock(BundleSerializableInterface::class)
             ->shouldReceive('serialize')
@@ -292,10 +284,6 @@ class GetTest extends QueryHandlerTestCase
         $this->repoMap['SystemParameter']
             ->shouldReceive('getDisableSelfServeCardPayments')
             ->andReturn(false)
-            ->once();
-        $this->repoMap['SystemParameter']
-            ->shouldReceive('getDisableGdsVerifySignatures')
-            ->andReturn('DISABLE_SIGNATURES')
             ->once();
 
         $mockFee = m::mock(BundleSerializableInterface::class)
@@ -386,10 +374,6 @@ class GetTest extends QueryHandlerTestCase
         $this->repoMap['SystemParameter']
             ->shouldReceive('getDisableSelfServeCardPayments')
             ->andReturn(false)
-            ->once();
-        $this->repoMap['SystemParameter']
-            ->shouldReceive('getDisableGdsVerifySignatures')
-            ->andReturn('DISABLE_SIGNATURES')
             ->once();
 
         $mockFee = m::mock(BundleSerializableInterface::class)

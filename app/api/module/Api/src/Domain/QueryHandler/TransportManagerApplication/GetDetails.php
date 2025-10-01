@@ -113,7 +113,6 @@ class GetDetails extends AbstractQueryHandler
             ],
             [
                 'isTmLoggedInUser' => $this->getCurrentUser()->getTransportManager() === $tma->getTransportManager(),
-                'disableSignatures' => $this->getRepo('SystemParameter')->getDisableGdsVerifySignatures(),
                 'lgvAcquiredRightsReferenceNumber' => $lgvAcquiredRightsReferenceNumber,
             ]
         );

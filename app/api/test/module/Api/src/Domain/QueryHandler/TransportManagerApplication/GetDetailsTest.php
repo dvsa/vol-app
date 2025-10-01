@@ -112,10 +112,6 @@ class GetDetailsTest extends QueryHandlerTestCase
         // loadTransportManagerEmployements
         $this->repoMap['TmEmployment']->shouldReceive('fetchByTransportManager')->with(213)->once();
 
-        $this->repoMap['SystemParameter']
-            ->shouldReceive('getDisableGdsVerifySignatures')
-            ->once()
-            ->andReturn('disable gds verify signatures value');
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
             ->andReturn($mockUser);
