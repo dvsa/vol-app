@@ -1,5 +1,28 @@
 # Changelog
 
+## [6.5.0](https://github.com/dvsa/vol-app/compare/v6.4.0...v6.5.0) (2025-09-29)
+
+
+### Features
+
+* implement SLA Exception feature for Public Inquiries ([#1113](https://github.com/dvsa/vol-app/issues/1113)) ([2d25946](https://github.com/dvsa/vol-app/commit/2d2594686051635c3af7d6f2624ba42d8133fcff))
+* updated Internal heading to read VOL instead of OLCS - VOL-6593 ([#1138](https://github.com/dvsa/vol-app/issues/1138)) ([fa9df45](https://github.com/dvsa/vol-app/commit/fa9df458026c6837034e1e392d5420b63ce16e77))
+* vol-6098 re-merge remove usage of laminas-json replace with native php ([#1132](https://github.com/dvsa/vol-app/issues/1132)) ([577b02f](https://github.com/dvsa/vol-app/commit/577b02fc5d11a98a2e86a9a242f6a0df2b82e9c5))
+* vol-6589 store TransXChange schema version from xml on ebsr submission ([#1135](https://github.com/dvsa/vol-app/issues/1135)) ([5412f0f](https://github.com/dvsa/vol-app/commit/5412f0f480052e037adfa8fa4b24777a9a12fbd8))
+
+
+### Bug Fixes
+
+* add redirect to CDN for old static assset requests, to resolve html snapshot rendering issues ([#1141](https://github.com/dvsa/vol-app/issues/1141)) ([59f363c](https://github.com/dvsa/vol-app/commit/59f363cad5da07979fbca33b70d983c5d751f70b))
+* add sas extract shedule ([#1134](https://github.com/dvsa/vol-app/issues/1134)) ([7c79700](https://github.com/dvsa/vol-app/commit/7c79700a92f9eb2945e7e76c27e0c8a1e622a73d))
+* continuations missing condition or undertaking info, now display correctly VOL-6569 ([#1137](https://github.com/dvsa/vol-app/issues/1137)) ([ab66cc6](https://github.com/dvsa/vol-app/commit/ab66cc66ec562518df22e26b78d84eaf1cb80d73))
+* eager load pi, pislaexception, createdby, contactdetails, person ([#1142](https://github.com/dvsa/vol-app/issues/1142)) ([919d378](https://github.com/dvsa/vol-app/commit/919d3786bd4bd0998c152e3a8479bd332490e028))
+* ensure all editorJS blocks have spellcheck=true attr set to ensu… ([#1131](https://github.com/dvsa/vol-app/issues/1131)) ([0002020](https://github.com/dvsa/vol-app/commit/00020204d8cee42d002ca87b0be452eef4973e44))
+* pi sla exception created by correctly loads other users ([#1143](https://github.com/dvsa/vol-app/issues/1143)) ([fe7bf5c](https://github.com/dvsa/vol-app/commit/fe7bf5c2f34804a5c9ebacff830bbcd7151751f8))
+* revert operating centre document fix ([#1149](https://github.com/dvsa/vol-app/issues/1149)) ([93960ff](https://github.com/dvsa/vol-app/commit/93960ff2693987203ae7bb7d1fb5c4c0a881b876))
+* transxchange schema version now saved correctly for successful EBSRs VOL-6589 ([#1148](https://github.com/dvsa/vol-app/issues/1148)) ([36cdb46](https://github.com/dvsa/vol-app/commit/36cdb46afd3799b82037e390ca4a8c9b71b2617c))
+* trigger deploy and extend nonprod batch job schedule a bit ([#1150](https://github.com/dvsa/vol-app/issues/1150)) ([4f005b6](https://github.com/dvsa/vol-app/commit/4f005b655b2f67bae7d30bcc39f94fe52798273b))
+
 ## [6.4.0](https://github.com/dvsa/vol-app/compare/v6.3.2...v6.4.0) (2025-09-16)
 
 
