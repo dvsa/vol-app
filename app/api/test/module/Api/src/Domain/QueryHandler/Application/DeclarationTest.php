@@ -107,7 +107,6 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
-            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => 123.45
@@ -179,7 +178,6 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
-            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [
                 'name' => 'Bob Smith',
@@ -298,7 +296,6 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
-            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => 123.45
@@ -419,7 +416,6 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
-            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => null
@@ -525,7 +521,6 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
-            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => null

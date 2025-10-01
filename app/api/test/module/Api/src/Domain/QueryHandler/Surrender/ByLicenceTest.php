@@ -61,11 +61,9 @@ class ByLicenceTest extends QueryHandlerTestCase
                 'status',
                 'licenceDocumentStatus',
                 'communityLicenceDocumentStatus',
-                'digitalSignature',
                 'signatureType'
             ],
             [
-                'disableSignatures' => true,
                 'goodsDiscsOnLicence' => 9,
                 'psvDiscsOnLicence' => 7,
                 'addressLastModified' => new DateTime(),

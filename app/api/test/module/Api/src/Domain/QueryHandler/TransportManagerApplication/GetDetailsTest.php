@@ -119,7 +119,6 @@ class GetDetailsTest extends QueryHandlerTestCase
         $expected = [
             'foo' => 'bar',
             'isTmLoggedInUser' => true,
-            'disableSignatures' => 'disable gds verify signatures value',
             'lgvAcquiredRightsReferenceNumber' => $expectedLgvAcquiredRightsReferenceNumber,
         ];
 

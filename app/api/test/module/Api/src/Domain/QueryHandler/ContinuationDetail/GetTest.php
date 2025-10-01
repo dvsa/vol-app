@@ -176,7 +176,6 @@ class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
-                'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [],
                 'reference' => 'OLCS-12345',
@@ -248,7 +247,6 @@ class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
-                'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [],
                 'reference' => null,
@@ -334,7 +332,6 @@ class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
-                'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [
                     'name' => 'NAME',
@@ -411,7 +408,6 @@ class GetTest extends QueryHandlerTestCase
                 'documents' => ['document1', 'document2'],
                 'organisationTypeId' => 'ORG_TYPE_ID',
                 'declarations' => 'DECLARATIONS',
-                'disableSignatures' => 'DISABLE_SIGNATURES',
                 'hasOutstandingContinuationFee' => true,
                 'signature' => [
                     'name' => 'NAME',
