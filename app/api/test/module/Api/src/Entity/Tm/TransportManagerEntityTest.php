@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
@@ -631,19 +633,15 @@ class TransportManagerEntityTest extends EntityTester
 
     /**
      * @dataProvider dpHasReputeCheckDataProvider
-     *
-     * @param string|null $forename
-     * @param string|null $familyName
-     * @param \DateTime|null $birthDate
-     * @param string|null $birthPlace
-     * @param ArrayCollection|null $qualifications
-     * @param bool $result
      */
-    public function testHasReputeCheckData($forename, $familyName, $birthDate, $birthPlace, $qualifications, $result)
-    {
+    public function testHasReputeCheckAddress(
+        ?string $forename,
+        ?string $familyName,
+        ?\DateTime $birthDate,
+        ?string $birthPlace,
+        bool $result
+    ): void {
         $entity = new Entity();
-
-        $entity->setQualifications($qualifications);
 
         $person = new Person();
         $person->setForename($forename);
@@ -656,34 +654,47 @@ class TransportManagerEntityTest extends EntityTester
 
         $entity->setHomeCd($contactDetails);
 
-        $this->assertEquals($result, $entity->hasReputeCheckData());
+        $this->assertEquals($result, $entity->hasReputeCheckAddress());
+    }
+
+    public function testHasQualificationsTrue(): void
+    {
+        $entity = new Entity();
+
+        $qualification = m::mock(TmQualification::class);
+        $qualificationCollection = new ArrayCollection([$qualification]);
+
+        $entity->setQualifications($qualificationCollection);
+        $this->assertTrue($entity->hasQualifications());
+    }
+
+    public function testHasQualificationsFalse(): void
+    {
+        $entity = new Entity();
+        $entity->setQualifications(new ArrayCollection());
+        $this->assertFalse($entity->hasQualifications());
     }
 
     /**
-     * Data provider for testHasReputeCheckData
-     *
-     * @return array
+     * Data provider for testHasReputeCheckAddress
      */
-    public function dpHasReputeCheckDataProvider()
+    public function dpHasReputeCheckDataProvider(): array
     {
         $forename = 'forename';
         $familyName = 'family name';
         $birthDate = new \DateTime('2015-12-25');
         $birthPlace = 'birth place';
-        $qualification = m::mock(TmQualification::class);
-        $qualifications = new ArrayCollection([$qualification]);
 
         return [
-            [null, $familyName, $birthDate, $birthPlace, $qualifications, false],
-            [$forename, null, $birthDate, $birthPlace, $qualifications, false],
-            [$forename, $familyName, null, $birthPlace, $qualifications, false],
-            [$forename, $familyName, $birthDate, null, $qualifications, false],
-            [$forename, $familyName, $birthDate, $birthPlace, new ArrayCollection(), false],
-            [$forename, $familyName, $birthDate, $birthPlace, $qualifications, true]
+            [null, $familyName, $birthDate, $birthPlace, false],
+            [$forename, null, $birthDate, $birthPlace, false],
+            [$forename, $familyName, null, $birthPlace, false],
+            [$forename, $familyName, $birthDate, null, false],
+            [$forename, $familyName, $birthDate, $birthPlace, true]
         ];
     }
 
-    public function testGetMostRecentQualification()
+    public function testGetMostRecentQualification(): void
     {
         $qual1 = new TmQualification();
         $qual1->setIssuedDate(new \DateTime('2015-12-25 00:00:00'));

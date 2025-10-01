@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CheckGoodRepute_Response xmlns="https://webgate.ec.testa.eu/move-hub/erru/3.4">
+  <Header version="3.4"
+          technicalId="f148c54c-488f-42bc-bae1-8eb09e8f7a3f"
+          workflowId="446940dc-eb68-4462-9424-4893ce051fdb"
+          sentAt="2016-01-01T00:00:05Z"
+          from="EU"
+          to="IE"/>
+  <Body businessCaseId="CGR Notification Example"
+        originatingAuthority="UK Competent Authority">
+    <SearchedTransportManager>
+      <TransportManagerNameDetails familyName="Creighton-Ward"
+                                   firstName="Penelope"
+                                   dateOfBirth="1939-12-24"
+                                   familyNameSearchKey="CRAGTANWAD"
+                                   firstNameSearchKey="PANALAP"/>
+      <TransportManagerCertificateDetails certificateNumber="CPC004"
+                                          certificateIssueDate="2012-01-31"
+                                          certificateIssueCountry="UK"/>
+    </SearchedTransportManager>
+    <MemberState memberStateCode="AT"
+                 statusCode="NotFound"/>
+    <MemberState memberStateCode="BE"
+                 statusCode="NotFound"/>
+    <!-- Multiple other countries -->
+    <MemberState memberStateCode="UK"
+                 statusCode="Found">
+      <TransportManagerDetails respondingAuthority=" UK Competent Authority "
+                               searchMethod="CPC">
+        <TransportManagerNameDetails familyName="Creighton-Ward"
+                                     firstName="Penelope"
+                                     dateOfBirth="1939-12-24"
+                                     placeOfBirth="London"/>
+        <TransportManagerAddressDetails address="Address Line 1"
+                                        postCode="W1"
+                                        city="London"
+                                        country="UK"/>
+        <TransportManagerCertificateDetails certificateNumber="CPC004"
+                                            certificateIssueDate="2012-01-31"
+                                            certificateIssueCountry="UK"
+                                            certificateValidity="Invalid">
+          <Fitness fitnessStatus="Unfit"
+                   unfitStartDate="2015-12-09"
+                   unfitEndDate="2016-06-09"/>
+        </TransportManagerCertificateDetails>
+        <TransportUndertakings totalManagedUndertakings="1"
+                               totalManagedVehicles="7">
+          <TransportUndertaking transportUndertakingName="International Rescue "
+                                numberOfVehicles="7"
+                                communityLicenceNumber="CL-IR-000001-001"
+                                communityLicenceStatus="Active">
+            <TransportUndertakingAddress address="Tracy Villa"
+                                         postCode="SP1"
+                                         city="Tracy Island"
+                                         country="UK"/>
+          </TransportUndertaking>
+        </TransportUndertakings>
+      </TransportManagerDetails>
+    </MemberState>
+  </Body>
+</CheckGoodRepute_Response>
