@@ -16,17 +16,11 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
-RUN apk add --no-cache python3 py3-venv py3-pip \
-  && python3 -m venv /opt/venv \
-  && . /opt/venv/bin/activate \
-  mysql-client \
-  groff \
-  less \
-  bash \
-  curl && \
-  pip install --no-cache-dir awscli && \
-  aws --version && \
-  mysql --version
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl \
+    && python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir awscli \
+    && /opt/venv/bin/aws --version \
+    && mysql --version
 # Add extra scirpts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
 
