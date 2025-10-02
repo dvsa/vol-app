@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.5.2](https://github.com/dvsa/vol-app/compare/v6.5.1...v6.5.2) (2025-10-02)
+
+
+### Bug Fixes
+
+* retrigger cd after vft prep fail ([#1157](https://github.com/dvsa/vol-app/issues/1157)) ([35adb2f](https://github.com/dvsa/vol-app/commit/35adb2f483593826a34c7b72bb249bfbe7f54e62))
+
 ## [6.5.1](https://github.com/dvsa/vol-app/compare/v6.5.0...v6.5.1) (2025-10-02)
 
 
