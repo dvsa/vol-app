@@ -16,7 +16,17 @@ RUN apk add --no-cache icu-dev libzip-dev cups-client bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
-
+RUN apk update && apk add --no-cache \
+  mysql-client \
+  python3 \
+  py3-pip \
+  groff \
+  less \
+  bash \
+  curl && \
+  pip3 install --no-cache-dir awscli && \
+  aws --version && \
+  mysql --version
 # Add extra scirpts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
 
