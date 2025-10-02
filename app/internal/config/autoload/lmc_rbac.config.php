@@ -47,6 +47,7 @@ return [
             'server-error' => ['*'],
             'create-translation-csv' => ['*'],
             'static-assets' => ['*'],
+            'styles-assets' => ['*'],
 
             // Admin Module Routes
             'admin-dashboard/admin-report/upload*' => [RefData::PERMISSION_SYSTEM_ADMIN],
