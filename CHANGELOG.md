@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.5.1](https://github.com/dvsa/vol-app/compare/v6.5.0...v6.5.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* install bash on cli ([#1152](https://github.com/dvsa/vol-app/issues/1152)) ([c3896c0](https://github.com/dvsa/vol-app/commit/c3896c05e5d2cb4cff7bdb9f5ff398dc3458dde6))
+* print css link redirect to cdn ([#1154](https://github.com/dvsa/vol-app/issues/1154)) ([c21cd33](https://github.com/dvsa/vol-app/commit/c21cd33fca9c4056ef7593601ccdfcfefb83fc79))
+
 ## [6.5.0](https://github.com/dvsa/vol-app/compare/v6.4.0...v6.5.0) (2025-09-29)
 
 
