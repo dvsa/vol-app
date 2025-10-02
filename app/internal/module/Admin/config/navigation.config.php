@@ -416,6 +416,12 @@ return [
                             'route' => 'admin-dashboard/admin-letter-section',
                         ],
                         [
+                            'id' => 'admin-dashboard/letter-management/letter-issues',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Issues',
+                            'route' => 'admin-dashboard/admin-letter-issue',
+                        ],
+                        [
                             'id' => 'admin-dashboard/letter-management/letter-test-data',
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Test Data',
