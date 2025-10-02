@@ -196,6 +196,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-letter-issue' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-issue[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterIssueController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-letter-test-data' => [
                         'type' => 'Segment',
                         'options' => [
@@ -996,6 +1010,7 @@ return [
             Admin\Controller\Letter\MasterTemplateController::class => Admin\Controller\Letter\MasterTemplateControllerFactory::class,
             Admin\Controller\Letter\LetterTypeController::class => Admin\Controller\Letter\LetterTypeControllerFactory::class,
             Admin\Controller\Letter\LetterSectionController::class => Admin\Controller\Letter\LetterSectionControllerFactory::class,
+            Admin\Controller\Letter\LetterIssueController::class => Admin\Controller\Letter\LetterIssueControllerFactory::class,
             Admin\Controller\Letter\LetterTestDataController::class => Admin\Controller\Letter\LetterTestDataControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
