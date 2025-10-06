@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Process Ebsr pack
- */
-
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -400,14 +396,10 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
 
     /**
      * Returns a command to queue a transxchange map request
-     *
-     * @param int $busRegId bus reg id
-     *
-     * @return RequestMapQueueCmd
      */
-    protected function getRequestMapQueueCmd($busRegId)
+    protected function getRequestMapQueueCmd(int $busRegId): RequestMapQueueCmd
     {
-        return RequestMapQueueCmd::create(['id' => $busRegId, 'scale' => 'auto', 'fromNewEbsr' => true]);
+        return RequestMapQueueCmd::create(['id' => $busRegId, 'scale' => 'auto']);
     }
 
     /**

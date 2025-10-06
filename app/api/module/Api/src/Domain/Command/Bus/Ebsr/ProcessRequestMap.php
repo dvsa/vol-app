@@ -18,8 +18,6 @@ class ProcessRequestMap extends AbstractIdOnlyCommand
 
     protected $regNo;
 
-    protected $fromNewEbsr;
-
     /**
      * Gets the scale
      *
@@ -50,13 +48,4 @@ class ProcessRequestMap extends AbstractIdOnlyCommand
         return $this->regNo;
     }
 
-    /**
-     * Gets whether the request is a result of a new EBSR pack
-     *
-     * @return bool
-     */
-    public function getFromNewEbsr()
-    {
-        return $this->fromNewEbsr;
-    }
 }

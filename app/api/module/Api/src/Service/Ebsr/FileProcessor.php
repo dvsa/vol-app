@@ -50,13 +50,12 @@ class FileProcessor implements FileProcessorInterface
      * Returns the filename of extracted EBSR xml file
      *
      * @param string $identifier     document identifier
-     * @param bool   $isTransXchange whether this is a transXchange request, requiring extra file permissions to be set
      *
      * @return string
      * @throws \RuntimeException
      * @throws EbsrPackException
      */
-    public function fetchXmlFileNameFromDocumentStore($identifier, $isTransXchange = false)
+    public function fetchXmlFileNameFromDocumentStore($identifier): string
     {
         $targetDir = $this->tmpDir . $this->subDirPath;
 
@@ -81,12 +80,6 @@ class FileProcessor implements FileProcessorInterface
             $this->decompressFilter->filter($filePath);
         } catch (LaminasFilterRuntimeException $e) {
             throw new EbsrPackException(self::DECOMPRESS_ERROR_PREFIX . $e->getMessage());
-        }
-
-        //transxchange runs through tomcat, therefore tomcat needs permissions on the files we've just created
-        if ($isTransXchange) {
-            $execCmd = 'setfacl -bR -m u:tomcat:rwx ' . $tmpDir;
-            exec(escapeshellcmd($execCmd));
         }
 
         $finder = new Finder();
