@@ -76,7 +76,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="irfo_contact_details_id", referencedColumnName="id", nullable=true)
      */
     protected $irfoContactDetails;

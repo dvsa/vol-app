@@ -73,7 +73,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="complainant_contact_details_id", referencedColumnName="id", nullable=true)
      */
     protected $complainantContactDetails;
