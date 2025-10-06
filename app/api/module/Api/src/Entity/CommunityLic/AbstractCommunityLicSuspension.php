@@ -63,7 +63,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="community_lic_id", referencedColumnName="id")
      */
     protected $communityLic;
