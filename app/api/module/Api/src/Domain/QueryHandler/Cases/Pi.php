@@ -35,7 +35,11 @@ final class Pi extends AbstractQueryHandler
         'case',
         'piSlaExceptions' => [
             'slaException',
-            'createdBy'
+            'createdBy' => [
+                'contactDetails' => [
+                    'person',
+                ]
+            ]
         ],
     ];
 

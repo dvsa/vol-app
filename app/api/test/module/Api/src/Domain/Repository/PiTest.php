@@ -55,7 +55,9 @@ class PiTest extends RepositoryTestCase
             ->shouldReceive('with')->once()->with('tmDecisions')->andReturnSelf()
             ->shouldReceive('with')->once()->with('piHearings')->andReturnSelf()
             ->shouldReceive('with')->once()->with('case', 'c')->andReturnSelf()
-            ->shouldReceive('with')->once()->with('c.transportManager')->andReturnSelf();
+            ->shouldReceive('with')->once()->with('c.transportManager')->andReturnSelf()
+            ->shouldReceive('with')->once()->with('piSlaExceptions', 's')->andReturnSelf()
+            ->shouldReceive('withCreatedBy')->once()->with('createdBy', 's')->andReturnSelf();
 
         /** @var EntityRepository $repo */
         $repo = m::mock(EntityRepository::class);
