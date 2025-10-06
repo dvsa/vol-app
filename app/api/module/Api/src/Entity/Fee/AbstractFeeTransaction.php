@@ -129,7 +129,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="reversedFeeTxn")
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="reversedFeeTransaction")
      */
     protected $reversingFeeTransactions;
 
