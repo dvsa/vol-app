@@ -195,7 +195,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpPermitRanges", fetch="LAZY")
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpPermitStockRanges", fetch="LAZY")
      * @ORM\JoinTable(name="irhp_permit_range_country",
      *     joinColumns={
      *         @ORM\JoinColumn(name="irhp_permit_stock_range_id", referencedColumnName="id")

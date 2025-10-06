@@ -121,7 +121,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             
             // Add inverse side relationship (unless the target should skip ManyToMany)
             // Skip inverse for ref_data table as it's configured with skipManyToMany
-            if ($inverseEntity['table'] !== 'ref_data' && $inverseEntity['table'] !== 'country') {
+            if ($inverseEntity['table'] !== 'ref_data') {
                 if (!isset($relationships[$inverseEntity['table']])) {
                     $relationships[$inverseEntity['table']] = [];
                 }

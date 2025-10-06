@@ -522,9 +522,18 @@ class EntityGenerator implements EntityGeneratorInterface
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
                 }
             } else {
-                // For non-RefData, use target entity name
-                $basePropertyName = lcfirst($entityName);
-                $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+                // For non-RefData, also derive from join column for descriptive naming
+                $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
+                if ($inverseJoinColumn) {
+                    // Remove _id suffix and convert snake_case to camelCase
+                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
+                    $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+                } else {
+                    // Fallback to entity name if no inverse join column
+                    $basePropertyName = lcfirst($entityName);
+                    $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+                }
             }
         }
         
@@ -557,8 +566,18 @@ class EntityGenerator implements EntityGeneratorInterface
             $basePropertyName = lcfirst($entityNameForProperty);
             $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
         } else {
-            // For owning side, generate the inverse property name for inversedBy  
-            $inversePropertyName = $this->generateInversePropertyName($tableName);
+            // For owning side, generate the inverse property name for inversedBy
+            // Derive from the join column name to capture descriptive naming
+            $joinColumn = $relationship['join_columns'][0] ?? null;
+            if ($joinColumn) {
+                // Remove _id suffix and convert snake_case to camelCase
+                $basePropertyName = preg_replace('/_id$/', '', $joinColumn);
+                $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
+                $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
+            } else {
+                // Fallback to table name if no join column available
+                $inversePropertyName = $this->generateInversePropertyName($tableName);
+            }
         }
         
         // Build annotation based on ownership
