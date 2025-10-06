@@ -1315,6 +1315,21 @@ $routes['static-assets'] = [
     ],
 ];
 
+$routes['styles-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/styles/:path',
+        'constraints' => [
+            'path' => '.+',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+            'prefix' => 'styles',
+        ],
+    ],
+];
+
 return [
     'router' => [
         'routes' => array_merge($routes, $configRoutes),
@@ -1797,6 +1812,7 @@ return [
                 'search*' => ['*'],
                 'index' => ['*'],
                 'static-assets' => ['*'],
+                'styles-assets' => ['*'],
                 'user-registration*' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies*' => ['*'],

@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TmEmployment Abstract Entity
+ * AbstractTmEmployment Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -34,18 +39,39 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Contact details
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to transport_manager
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
+     */
+    protected $transportManager;
+
+    /**
+     * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
     protected $contactDetails;
 
@@ -59,35 +85,6 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Employer name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="employer_name", length=90, nullable=true)
-     */
-    protected $employerName;
-
-    /**
-     * Hours per week
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="hours_per_week", length=300, nullable=true)
-     */
-    protected $hoursPerWeek;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -110,18 +107,22 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     protected $position;
 
     /**
-     * Transport manager
+     * Employer name
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="employments"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="employer_name", length=90, nullable=true)
      */
-    protected $transportManager;
+    protected $employerName;
+
+    /**
+     * Hours per week
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="hours_per_week", length=300, nullable=true)
+     */
+    protected $hoursPerWeek;
 
     /**
      * Version
@@ -134,100 +135,20 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Set the contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
-     *
-     * @return TmEmployment
+     * Initialise the collections
      */
-    public function setContactDetails($contactDetails)
+    public function __construct()
     {
-        $this->contactDetails = $contactDetails;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * Initialise collections
      */
-    public function getContactDetails()
+    public function initCollections(): void
     {
-        return $this->contactDetails;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TmEmployment
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the employer name
-     *
-     * @param string $employerName new value being set
-     *
-     * @return TmEmployment
-     */
-    public function setEmployerName($employerName)
-    {
-        $this->employerName = $employerName;
-
-        return $this;
-    }
-
-    /**
-     * Get the employer name
-     *
-     * @return string
-     */
-    public function getEmployerName()
-    {
-        return $this->employerName;
-    }
-
-    /**
-     * Set the hours per week
-     *
-     * @param string $hoursPerWeek new value being set
-     *
-     * @return TmEmployment
-     */
-    public function setHoursPerWeek($hoursPerWeek)
-    {
-        $this->hoursPerWeek = $hoursPerWeek;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours per week
-     *
-     * @return string
-     */
-    public function getHoursPerWeek()
-    {
-        return $this->hoursPerWeek;
-    }
 
     /**
      * Set the id
@@ -246,17 +167,85 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return TmEmployment
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the contact details
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
+     *
+     * @return TmEmployment
+     */
+    public function setContactDetails($contactDetails)
+    {
+        $this->contactDetails = $contactDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get the contact details
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getContactDetails()
+    {
+        return $this->contactDetails;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TmEmployment
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return TmEmployment
      */
@@ -270,8 +259,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -294,35 +282,56 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the position
      *
-     * @return string
-     */
+     * @return string     */
     public function getPosition()
     {
         return $this->position;
     }
 
     /**
-     * Set the transport manager
+     * Set the employer name
      *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
+     * @param string $employerName new value being set
      *
      * @return TmEmployment
      */
-    public function setTransportManager($transportManager)
+    public function setEmployerName($employerName)
     {
-        $this->transportManager = $transportManager;
+        $this->employerName = $employerName;
 
         return $this;
     }
 
     /**
-     * Get the transport manager
+     * Get the employer name
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
+     * @return string     */
+    public function getEmployerName()
     {
-        return $this->transportManager;
+        return $this->employerName;
+    }
+
+    /**
+     * Set the hours per week
+     *
+     * @param string $hoursPerWeek new value being set
+     *
+     * @return TmEmployment
+     */
+    public function setHoursPerWeek($hoursPerWeek)
+    {
+        $this->hoursPerWeek = $hoursPerWeek;
+
+        return $this;
+    }
+
+    /**
+     * Get the hours per week
+     *
+     * @return string     */
+    public function getHoursPerWeek()
+    {
+        return $this->hoursPerWeek;
     }
 
     /**
@@ -342,10 +351,17 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

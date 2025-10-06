@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Opposition;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Opposer Abstract Entity
+ * AbstractOpposer Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -24,10 +29,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_opposer_contact_details_id", columns={"contact_details_id"}),
  *        @ORM\Index(name="ix_opposer_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_opposer_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_opposer_opposer_type", columns={"opposer_type"})
+ *        @ORM\Index(name="ix_opposer_opposer_type", columns={"opposer_type"}),
+ *        @ORM\Index(name="uk_opposer_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_opposer_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_opposer_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -35,23 +41,40 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Contact details
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
     protected $contactDetails;
+
+    /**
+     * OpposerType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="opposer_type", referencedColumnName="id", nullable=true)
+     */
+    protected $opposerType;
 
     /**
      * Created by
@@ -65,17 +88,6 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -85,34 +97,6 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
-     */
-    protected $olbsType;
-
-    /**
-     * Opposer type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="opposer_type", referencedColumnName="id", nullable=true)
-     */
-    protected $opposerType;
 
     /**
      * Version
@@ -125,52 +109,38 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Set the contact details
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
+     * @var int
      *
-     * @return Opposer
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setContactDetails($contactDetails)
-    {
-        $this->contactDetails = $contactDetails;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * Initialise collections
      */
-    public function getContactDetails()
+    public function initCollections(): void
     {
-        return $this->contactDetails;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Opposer
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -189,17 +159,85 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the contact details
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
+     *
+     * @return Opposer
+     */
+    public function setContactDetails($contactDetails)
+    {
+        $this->contactDetails = $contactDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get the contact details
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getContactDetails()
+    {
+        return $this->contactDetails;
+    }
+
+    /**
+     * Set the opposer type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $opposerType new value being set
+     *
+     * @return Opposer
+     */
+    public function setOpposerType($opposerType)
+    {
+        $this->opposerType = $opposerType;
+
+        return $this;
+    }
+
+    /**
+     * Get the opposer type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getOpposerType()
+    {
+        return $this->opposerType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Opposer
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Opposer
      */
@@ -213,11 +251,33 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Opposer
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -237,8 +297,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -261,58 +320,17 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the opposer type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $opposerType entity being set as the value
-     *
-     * @return Opposer
+     * Get bundle data
      */
-    public function setOpposerType($opposerType)
+    public function __toString(): string
     {
-        $this->opposerType = $opposerType;
-
-        return $this;
-    }
-
-    /**
-     * Get the opposer type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getOpposerType()
-    {
-        return $this->opposerType;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Opposer
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

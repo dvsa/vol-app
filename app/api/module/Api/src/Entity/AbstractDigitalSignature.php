@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * DigitalSignature Abstract Entity
+ * AbstractDigitalSignature Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,18 +35,20 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Attributes
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="encrypted_string", name="attributes", length=65535, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $attributes;
+    protected $id;
 
     /**
      * Created by
@@ -55,17 +62,6 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -77,11 +73,20 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     protected $lastModifiedBy;
 
     /**
-     * Saml response
+     * All attributes from Verify
      *
      * @var string
      *
-     * @ORM\Column(type="text", name="saml_response", length=65535, nullable=true)
+     * @ORM\Column(type="encrypted_string", name="attributes", nullable=true, length=65535)
+     */
+    protected $attributes;
+
+    /**
+     * SAML response received
+     *
+     * @var string
+     *
+     * @ORM\Column(type="text", name="saml_response", nullable=true)
      */
     protected $samlResponse;
 
@@ -96,52 +101,20 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     protected $version = 1;
 
     /**
-     * Set the attributes
-     *
-     * @param string $attributes new value being set
-     *
-     * @return DigitalSignature
+     * Initialise the collections
      */
-    public function setAttributes($attributes)
+    public function __construct()
     {
-        $this->attributes = $attributes;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the attributes
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getAttributes()
+    public function initCollections(): void
     {
-        return $this->attributes;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return DigitalSignature
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -160,17 +133,39 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return DigitalSignature
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return DigitalSignature
      */
@@ -184,11 +179,33 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the attributes
+     *
+     * @param string $attributes new value being set
+     *
+     * @return DigitalSignature
+     */
+    public function setAttributes($attributes)
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get the attributes
+     *
+     * @return string     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
@@ -208,8 +225,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the saml response
      *
-     * @return string
-     */
+     * @return string     */
     public function getSamlResponse()
     {
         return $this->samlResponse;
@@ -232,10 +248,17 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

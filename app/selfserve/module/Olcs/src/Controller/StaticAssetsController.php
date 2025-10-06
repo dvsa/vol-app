@@ -15,8 +15,11 @@ class StaticAssetsController extends AbstractActionController
 
     public function redirectAction()
     {
-        // Get the captured path after /static/public/
+        // Get the captured path from the route
         $path = $this->params()->fromRoute('path', '');
+
+        // Get optional prefix (e.g., 'styles' for /styles/* routes)
+        $prefix = $this->params()->fromRoute('prefix', '');
 
         // Get the assets URL from config
         $assetsUrl = $this->config['assets']['base_url'] ?? null;
@@ -26,8 +29,11 @@ class StaticAssetsController extends AbstractActionController
             throw new \RuntimeException('CDN URL not configured. Static assets require assets.base_url in configuration.');
         }
 
+        // Build the full path with optional prefix
+        $fullPath = $prefix ? trim($prefix, '/') . '/' . ltrim($path, '/') : $path;
+
         // Build the redirect URL
-        $redirectUrl = rtrim($assetsUrl, '/') . '/' . ltrim($path, '/');
+        $redirectUrl = rtrim($assetsUrl, '/') . '/' . ltrim($fullPath, '/');
 
         // Return a 302 redirect
         return $this->redirect()->toUrl($redirectUrl);

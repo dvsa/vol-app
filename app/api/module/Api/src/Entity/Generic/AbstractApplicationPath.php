@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,21 +17,19 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationPath Abstract Entity
+ * AbstractApplicationPath Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="application_path",
  *    indexes={
- *        @ORM\Index(name="fk_application_path_application_path_group_id",
-     *     columns={"application_path_group_id"}),
+ *        @ORM\Index(name="fk_application_path_application_path_group_id", columns={"application_path_group_id"}),
  *        @ORM\Index(name="fk_application_path_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_path_irhp_permit_type_id_irhp_permit_type_id",
-     *     columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="fk_application_path_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
+ *        @ORM\Index(name="fk_application_path_irhp_permit_type_id_irhp_permit_type_id", columns={"irhp_permit_type_id"}),
+ *        @ORM\Index(name="fk_application_path_last_modified_by_user_id", columns={"last_modified_by"})
  *    }
  * )
  */
@@ -42,15 +42,32 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Application path group
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * IrhpPermitType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id")
+     */
+    protected $irhpPermitType;
+
+    /**
+     * ApplicationPathGroup
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup",
-     *     fetch="LAZY",
-     *     inversedBy="applicationPaths"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup", fetch="LAZY")
      * @ORM\JoinColumn(name="application_path_group_id", referencedColumnName="id", nullable=true)
      */
     protected $applicationPathGroup;
@@ -65,40 +82,6 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Effective from
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=true)
-     */
-    protected $effectiveFrom;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irhp permit type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType",
-     *     fetch="LAZY",
-     *     inversedBy="applicationPaths"
-     * )
-     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $irhpPermitType;
 
     /**
      * Last modified by
@@ -121,6 +104,15 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     protected $title;
 
     /**
+     * Effective from
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="effective_from", nullable=true)
+     */
+    protected $effectiveFrom;
+
+    /**
      * Version
      *
      * @var int
@@ -131,22 +123,17 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     protected $version = 1;
 
     /**
-     * Application step
+     * ApplicationSteps
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep",
-     *     mappedBy="applicationPath"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep", mappedBy="applicationPath")
      * @ORM\OrderBy({"weight" = "ASC"})
      */
     protected $applicationSteps;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -154,93 +141,13 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->applicationSteps = new ArrayCollection();
     }
 
-    /**
-     * Set the application path group
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup $applicationPathGroup entity being set as the value
-     *
-     * @return ApplicationPath
-     */
-    public function setApplicationPathGroup($applicationPathGroup)
-    {
-        $this->applicationPathGroup = $applicationPathGroup;
-
-        return $this;
-    }
-
-    /**
-     * Get the application path group
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
-     */
-    public function getApplicationPathGroup()
-    {
-        return $this->applicationPathGroup;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ApplicationPath
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the effective from
-     *
-     * @param \DateTime $effectiveFrom new value being set
-     *
-     * @return ApplicationPath
-     */
-    public function setEffectiveFrom($effectiveFrom)
-    {
-        $this->effectiveFrom = $effectiveFrom;
-
-        return $this;
-    }
-
-    /**
-     * Get the effective from
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEffectiveFrom($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->effectiveFrom);
-        }
-
-        return $this->effectiveFrom;
-    }
 
     /**
      * Set the id
@@ -259,8 +166,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -269,7 +175,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Set the irhp permit type
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType new value being set
      *
      * @return ApplicationPath
      */
@@ -283,17 +189,62 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the irhp permit type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType     */
     public function getIrhpPermitType()
     {
         return $this->irhpPermitType;
     }
 
     /**
+     * Set the application path group
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup $applicationPathGroup new value being set
+     *
+     * @return ApplicationPath
+     */
+    public function setApplicationPathGroup($applicationPathGroup)
+    {
+        $this->applicationPathGroup = $applicationPathGroup;
+
+        return $this;
+    }
+
+    /**
+     * Get the application path group
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup     */
+    public function getApplicationPathGroup()
+    {
+        return $this->applicationPathGroup;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ApplicationPath
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ApplicationPath
      */
@@ -307,8 +258,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -331,11 +281,39 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the title
      *
-     * @return string
-     */
+     * @return string     */
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set the effective from
+     *
+     * @param \DateTime $effectiveFrom new value being set
+     *
+     * @return ApplicationPath
+     */
+    public function setEffectiveFrom($effectiveFrom)
+    {
+        $this->effectiveFrom = $effectiveFrom;
+
+        return $this;
+    }
+
+    /**
+     * Get the effective from
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEffectiveFrom($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->effectiveFrom);
+        }
+
+        return $this->effectiveFrom;
     }
 
     /**
@@ -355,17 +333,16 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the application step
+     * Set the application steps
      *
-     * @param ArrayCollection $applicationSteps collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applicationSteps collection being set as the value
      *
      * @return ApplicationPath
      */
@@ -379,7 +356,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Get the application steps
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplicationSteps()
     {
@@ -389,7 +366,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
     /**
      * Add a application steps
      *
-     * @param ArrayCollection|mixed $applicationSteps collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationSteps collection being added
      *
      * @return ApplicationPath
      */
@@ -423,5 +400,13 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

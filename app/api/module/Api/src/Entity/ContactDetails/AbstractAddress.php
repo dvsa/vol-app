@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\ContactDetails;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Address Abstract Entity
+ * AbstractAddress Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,10 +31,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_address_admin_area", columns={"admin_area"}),
  *        @ORM\Index(name="ix_address_country_code", columns={"country_code"}),
  *        @ORM\Index(name="ix_address_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_address_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="ix_address_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="uk_address_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_address_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_address_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -45,56 +49,28 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     use SoftDeletableTrait;
 
     /**
-     * Address line1
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="saon_desc", length=90, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $addressLine1;
+    protected $id;
 
     /**
-     * Address line2
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="paon_desc", length=90, nullable=true)
-     */
-    protected $addressLine2;
-
-    /**
-     * Address line3
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="street", length=100, nullable=true)
-     */
-    protected $addressLine3;
-
-    /**
-     * Address line4
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="locality", length=35, nullable=true)
-     */
-    protected $addressLine4;
-
-    /**
-     * Admin area
+     * Local council name.Defines traffic area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea",
-     *     fetch="LAZY"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea", fetch="LAZY")
      * @ORM\JoinColumn(name="admin_area", referencedColumnName="id", nullable=true)
      */
     protected $adminArea;
 
     /**
-     * Country code
+     * ISO country code
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
      *
@@ -115,17 +91,6 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -137,34 +102,16 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
+     * Unique reference number.
      *
      * @var int
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="integer", name="uprn", nullable=true)
      */
-    protected $olbsKey;
+    protected $uprn;
 
     /**
-     * Olbs type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
-     */
-    protected $olbsType;
-
-    /**
-     * Paon end
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="paon_end", length=5, nullable=true)
-     */
-    protected $paonEnd;
-
-    /**
-     * Paon start
+     * Primary addressable object prefix
      *
      * @var string
      *
@@ -173,25 +120,25 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $paonStart;
 
     /**
-     * Postcode
+     * Primary addressable object suffix end range. e.g. 10 in 1 to 10
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="postcode", length=8, nullable=true)
+     * @ORM\Column(type="string", name="paon_end", length=5, nullable=true)
      */
-    protected $postcode;
+    protected $paonEnd;
 
     /**
-     * Saon end
+     * Primary adressable object. Second line of address
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="saon_end", length=5, nullable=true)
+     * @ORM\Column(type="string", name="paon_desc", length=90, nullable=true)
      */
-    protected $saonEnd;
+    protected $addressLine2;
 
     /**
-     * Saon start
+     * secondary addressable object prefix start
      *
      * @var string
      *
@@ -200,7 +147,43 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $saonStart;
 
     /**
-     * Town
+     * Secondary addressable object prefix end
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="saon_end", length=5, nullable=true)
+     */
+    protected $saonEnd;
+
+    /**
+     * Secondary addressable object. First line od address
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="saon_desc", length=90, nullable=true)
+     */
+    protected $addressLine1;
+
+    /**
+     * street road etc
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="street", length=100, nullable=true)
+     */
+    protected $addressLine3;
+
+    /**
+     * area of town
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="locality", length=35, nullable=true)
+     */
+    protected $addressLine4;
+
+    /**
+     * town village city name
      *
      * @var string
      *
@@ -209,13 +192,13 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $town;
 
     /**
-     * Uprn
+     * uk postcode
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="bigint", name="uprn", nullable=true)
+     * @ORM\Column(type="string", name="postcode", length=8, nullable=true)
      */
-    protected $uprn;
+    protected $postcode;
 
     /**
      * Version
@@ -228,21 +211,34 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Contact detail
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * ContactDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     mappedBy="address"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", mappedBy="address")
      */
     protected $contactDetails;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -250,37 +246,196 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->contactDetails = new ArrayCollection();
     }
 
+
     /**
-     * Set the address line1
+     * Set the id
      *
-     * @param string $addressLine1 new value being set
+     * @param int $id new value being set
      *
      * @return Address
      */
-    public function setAddressLine1($addressLine1)
+    public function setId($id)
     {
-        $this->addressLine1 = $addressLine1;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the address line1
+     * Get the id
      *
-     * @return string
-     */
-    public function getAddressLine1()
+     * @return int     */
+    public function getId()
     {
-        return $this->addressLine1;
+        return $this->id;
+    }
+
+    /**
+     * Set the admin area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea $adminArea new value being set
+     *
+     * @return Address
+     */
+    public function setAdminArea($adminArea)
+    {
+        $this->adminArea = $adminArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the admin area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea     */
+    public function getAdminArea()
+    {
+        return $this->adminArea;
+    }
+
+    /**
+     * Set the country code
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $countryCode new value being set
+     *
+     * @return Address
+     */
+    public function setCountryCode($countryCode)
+    {
+        $this->countryCode = $countryCode;
+
+        return $this;
+    }
+
+    /**
+     * Get the country code
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+    public function getCountryCode()
+    {
+        return $this->countryCode;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Address
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Address
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the uprn
+     *
+     * @param int $uprn new value being set
+     *
+     * @return Address
+     */
+    public function setUprn($uprn)
+    {
+        $this->uprn = $uprn;
+
+        return $this;
+    }
+
+    /**
+     * Get the uprn
+     *
+     * @return int     */
+    public function getUprn()
+    {
+        return $this->uprn;
+    }
+
+    /**
+     * Set the paon start
+     *
+     * @param string $paonStart new value being set
+     *
+     * @return Address
+     */
+    public function setPaonStart($paonStart)
+    {
+        $this->paonStart = $paonStart;
+
+        return $this;
+    }
+
+    /**
+     * Get the paon start
+     *
+     * @return string     */
+    public function getPaonStart()
+    {
+        return $this->paonStart;
+    }
+
+    /**
+     * Set the paon end
+     *
+     * @param string $paonEnd new value being set
+     *
+     * @return Address
+     */
+    public function setPaonEnd($paonEnd)
+    {
+        $this->paonEnd = $paonEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get the paon end
+     *
+     * @return string     */
+    public function getPaonEnd()
+    {
+        return $this->paonEnd;
     }
 
     /**
@@ -300,11 +455,79 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line2
      *
-     * @return string
-     */
+     * @return string     */
     public function getAddressLine2()
     {
         return $this->addressLine2;
+    }
+
+    /**
+     * Set the saon start
+     *
+     * @param string $saonStart new value being set
+     *
+     * @return Address
+     */
+    public function setSaonStart($saonStart)
+    {
+        $this->saonStart = $saonStart;
+
+        return $this;
+    }
+
+    /**
+     * Get the saon start
+     *
+     * @return string     */
+    public function getSaonStart()
+    {
+        return $this->saonStart;
+    }
+
+    /**
+     * Set the saon end
+     *
+     * @param string $saonEnd new value being set
+     *
+     * @return Address
+     */
+    public function setSaonEnd($saonEnd)
+    {
+        $this->saonEnd = $saonEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get the saon end
+     *
+     * @return string     */
+    public function getSaonEnd()
+    {
+        return $this->saonEnd;
+    }
+
+    /**
+     * Set the address line1
+     *
+     * @param string $addressLine1 new value being set
+     *
+     * @return Address
+     */
+    public function setAddressLine1($addressLine1)
+    {
+        $this->addressLine1 = $addressLine1;
+
+        return $this;
+    }
+
+    /**
+     * Get the address line1
+     *
+     * @return string     */
+    public function getAddressLine1()
+    {
+        return $this->addressLine1;
     }
 
     /**
@@ -324,8 +547,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line3
      *
-     * @return string
-     */
+     * @return string     */
     public function getAddressLine3()
     {
         return $this->addressLine3;
@@ -348,131 +570,79 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line4
      *
-     * @return string
-     */
+     * @return string     */
     public function getAddressLine4()
     {
         return $this->addressLine4;
     }
 
     /**
-     * Set the admin area
+     * Set the town
      *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea $adminArea entity being set as the value
+     * @param string $town new value being set
      *
      * @return Address
      */
-    public function setAdminArea($adminArea)
+    public function setTown($town)
     {
-        $this->adminArea = $adminArea;
+        $this->town = $town;
 
         return $this;
     }
 
     /**
-     * Get the admin area
+     * Get the town
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea
-     */
-    public function getAdminArea()
+     * @return string     */
+    public function getTown()
     {
-        return $this->adminArea;
+        return $this->town;
     }
 
     /**
-     * Set the country code
+     * Set the postcode
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $countryCode entity being set as the value
+     * @param string $postcode new value being set
      *
      * @return Address
      */
-    public function setCountryCode($countryCode)
+    public function setPostcode($postcode)
     {
-        $this->countryCode = $countryCode;
+        $this->postcode = $postcode;
 
         return $this;
     }
 
     /**
-     * Get the country code
+     * Get the postcode
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     */
-    public function getCountryCode()
+     * @return string     */
+    public function getPostcode()
     {
-        return $this->countryCode;
+        return $this->postcode;
     }
 
     /**
-     * Set the created by
+     * Set the version
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param int $version new value being set
      *
      * @return Address
      */
-    public function setCreatedBy($createdBy)
+    public function setVersion($version)
     {
-        $this->createdBy = $createdBy;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the version
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Address
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Address
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->version;
     }
 
     /**
@@ -492,8 +662,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -516,209 +685,16 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the paon end
+     * Set the contact details
      *
-     * @param string $paonEnd new value being set
-     *
-     * @return Address
-     */
-    public function setPaonEnd($paonEnd)
-    {
-        $this->paonEnd = $paonEnd;
-
-        return $this;
-    }
-
-    /**
-     * Get the paon end
-     *
-     * @return string
-     */
-    public function getPaonEnd()
-    {
-        return $this->paonEnd;
-    }
-
-    /**
-     * Set the paon start
-     *
-     * @param string $paonStart new value being set
-     *
-     * @return Address
-     */
-    public function setPaonStart($paonStart)
-    {
-        $this->paonStart = $paonStart;
-
-        return $this;
-    }
-
-    /**
-     * Get the paon start
-     *
-     * @return string
-     */
-    public function getPaonStart()
-    {
-        return $this->paonStart;
-    }
-
-    /**
-     * Set the postcode
-     *
-     * @param string $postcode new value being set
-     *
-     * @return Address
-     */
-    public function setPostcode($postcode)
-    {
-        $this->postcode = $postcode;
-
-        return $this;
-    }
-
-    /**
-     * Get the postcode
-     *
-     * @return string
-     */
-    public function getPostcode()
-    {
-        return $this->postcode;
-    }
-
-    /**
-     * Set the saon end
-     *
-     * @param string $saonEnd new value being set
-     *
-     * @return Address
-     */
-    public function setSaonEnd($saonEnd)
-    {
-        $this->saonEnd = $saonEnd;
-
-        return $this;
-    }
-
-    /**
-     * Get the saon end
-     *
-     * @return string
-     */
-    public function getSaonEnd()
-    {
-        return $this->saonEnd;
-    }
-
-    /**
-     * Set the saon start
-     *
-     * @param string $saonStart new value being set
-     *
-     * @return Address
-     */
-    public function setSaonStart($saonStart)
-    {
-        $this->saonStart = $saonStart;
-
-        return $this;
-    }
-
-    /**
-     * Get the saon start
-     *
-     * @return string
-     */
-    public function getSaonStart()
-    {
-        return $this->saonStart;
-    }
-
-    /**
-     * Set the town
-     *
-     * @param string $town new value being set
-     *
-     * @return Address
-     */
-    public function setTown($town)
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
-    /**
-     * Get the town
-     *
-     * @return string
-     */
-    public function getTown()
-    {
-        return $this->town;
-    }
-
-    /**
-     * Set the uprn
-     *
-     * @param int $uprn new value being set
-     *
-     * @return Address
-     */
-    public function setUprn($uprn)
-    {
-        $this->uprn = $uprn;
-
-        return $this;
-    }
-
-    /**
-     * Get the uprn
-     *
-     * @return int
-     */
-    public function getUprn()
-    {
-        return $this->uprn;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Address
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the contact detail
-     *
-     * @param ArrayCollection $contactDetails collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $contactDetails collection being set as the value
      *
      * @return Address
      */
@@ -732,7 +708,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the contact details
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getContactDetails()
     {
@@ -742,7 +718,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Add a contact details
      *
-     * @param ArrayCollection|mixed $contactDetails collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $contactDetails collection being added
      *
      * @return Address
      */
@@ -776,5 +752,13 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

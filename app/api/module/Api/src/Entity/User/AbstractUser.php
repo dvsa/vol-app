@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * User Abstract Entity
+ * AbstractUser Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,10 +32,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_user_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_user_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_user_local_authority_id", columns={"local_authority_id"}),
- *        @ORM\Index(name="ix_user_partner_contact_details_id",
-     *     columns={"partner_contact_details_id"}),
+ *        @ORM\Index(name="ix_user_partner_contact_details_id", columns={"partner_contact_details_id"}),
  *        @ORM\Index(name="ix_user_team_id", columns={"team_id"}),
- *        @ORM\Index(name="ix_user_transport_manager_id", columns={"transport_manager_id"})
+ *        @ORM\Index(name="ix_user_transport_manager_id", columns={"transport_manager_id"}),
+ *        @ORM\Index(name="uk_user_login_id", columns={"login_id"}),
+ *        @ORM\Index(name="uk_user_pid", columns={"pid"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_user_login_id", columns={"login_id"}),
@@ -50,27 +54,65 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     use SoftDeletableTrait;
 
     /**
-     * Account disabled
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="yesno", name="account_disabled", nullable=false, options={"default": 0})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $accountDisabled = 0;
+    protected $id;
 
     /**
-     * Contact details
+     * Foreign Key to team
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\Team
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
+     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=true)
+     */
+    protected $team;
+
+    /**
+     * If user is also a transport manager.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportManager;
+
+    /**
+     * If user is a member of a local authority a link to the LA details.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority", fetch="LAZY")
+     * @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id", nullable=true)
+     */
+    protected $localAuthority;
+
+    /**
+     * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=true)
      */
     protected $contactDetails;
+
+    /**
+     * If user is part of a partner, such as HMRC a link to the partners details.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="partner_contact_details_id", referencedColumnName="id", nullable=true)
+     */
+    protected $partnerContactDetails;
 
     /**
      * Created by
@@ -84,35 +126,6 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     protected $createdBy;
 
     /**
-     * Disabled date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="disabled_date", nullable=true)
-     */
-    protected $disabledDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Last login at
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_login_at", nullable=true)
-     */
-    protected $lastLoginAt;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -124,18 +137,13 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     protected $lastModifiedBy;
 
     /**
-     * Local authority
+     * Pid
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority",
-     *     fetch="LAZY",
-     *     inversedBy="users"
-     * )
-     * @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="pid", length=255, nullable=true)
      */
-    protected $localAuthority;
+    protected $pid;
 
     /**
      * Login id
@@ -147,30 +155,62 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     protected $loginId;
 
     /**
-     * Partner contact details
-     *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="partner_contact_details_id", referencedColumnName="id", nullable=true)
-     */
-    protected $partnerContactDetails;
-
-    /**
-     * Pid
+     * Account locked by DVSA. Cannot be unlocked by non DVSA user.
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="pid", length=255, nullable=true)
+     * @ORM\Column(type="yesno", name="account_disabled", nullable=false, options={"default": 0})
      */
-    protected $pid;
+    protected $accountDisabled = 0;
 
     /**
-     * Role
+     * Date when the account was disabled
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="disabled_date", nullable=true)
+     */
+    protected $disabledDate;
+
+    /**
+     * Communication to be in Welsh
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="translate_to_welsh", nullable=false, options={"default": 0})
+     */
+    protected $translateToWelsh = 0;
+
+    /**
+     * Last login at
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="last_login_at", nullable=true)
+     */
+    protected $lastLoginAt;
+
+    /**
+     * Whether user has agreed to terms and conditions
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="terms_agreed", nullable=false, options={"default": 0})
+     */
+    protected $termsAgreed = 0;
+
+    /**
+     * Version
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
+     * @ORM\Version
+     */
+    protected $version = 1;
+
+    /**
+     * Roles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -187,89 +227,25 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     protected $roles;
 
     /**
-     * Team
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\Team
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=true)
-     */
-    protected $team;
-
-    /**
-     * Translate to welsh
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="translate_to_welsh", nullable=false, options={"default": 0})
-     */
-    protected $translateToWelsh = 0;
-
-    /**
-     * Terms agreed
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="terms_agreed", nullable=false, options={"default": 0})
-     */
-    protected $termsAgreed = 0;
-
-    /**
-     * Transport manager
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="users"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
-     */
-    protected $transportManager;
-
-    /**
-     * Version
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
-     */
-    protected $version = 1;
-
-    /**
-     * Organisation user
+     * OrganisationUsers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser",
-     *     mappedBy="user",
-     *     cascade={"persist"},
-     *     indexBy="organisation_id",
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser", mappedBy="user", cascade={"persist"}, indexBy="organisation_id", orphanRemoval=true)
      */
     protected $organisationUsers;
 
     /**
-     * Password reset
+     * PasswordResets
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\User\UserPasswordReset",
-     *     mappedBy="user",
-     *     fetch="EXTRA_LAZY"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\UserPasswordReset", mappedBy="user", fetch="EXTRA_LAZY")
      */
     protected $passwordResets;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -277,15 +253,244 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->roles = new ArrayCollection();
         $this->organisationUsers = new ArrayCollection();
         $this->passwordResets = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return User
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the team
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\Team $team new value being set
+     *
+     * @return User
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * Get the team
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\Team     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return User
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the local authority
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority $localAuthority new value being set
+     *
+     * @return User
+     */
+    public function setLocalAuthority($localAuthority)
+    {
+        $this->localAuthority = $localAuthority;
+
+        return $this;
+    }
+
+    /**
+     * Get the local authority
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority     */
+    public function getLocalAuthority()
+    {
+        return $this->localAuthority;
+    }
+
+    /**
+     * Set the contact details
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
+     *
+     * @return User
+     */
+    public function setContactDetails($contactDetails)
+    {
+        $this->contactDetails = $contactDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get the contact details
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getContactDetails()
+    {
+        return $this->contactDetails;
+    }
+
+    /**
+     * Set the partner contact details
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $partnerContactDetails new value being set
+     *
+     * @return User
+     */
+    public function setPartnerContactDetails($partnerContactDetails)
+    {
+        $this->partnerContactDetails = $partnerContactDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get the partner contact details
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getPartnerContactDetails()
+    {
+        return $this->partnerContactDetails;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return User
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return User
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the pid
+     *
+     * @param string $pid new value being set
+     *
+     * @return User
+     */
+    public function setPid($pid)
+    {
+        $this->pid = $pid;
+
+        return $this;
+    }
+
+    /**
+     * Get the pid
+     *
+     * @return string     */
+    public function getPid()
+    {
+        return $this->pid;
+    }
+
+    /**
+     * Set the login id
+     *
+     * @param string $loginId new value being set
+     *
+     * @return User
+     */
+    public function setLoginId($loginId)
+    {
+        $this->loginId = $loginId;
+
+        return $this;
+    }
+
+    /**
+     * Get the login id
+     *
+     * @return string     */
+    public function getLoginId()
+    {
+        return $this->loginId;
     }
 
     /**
@@ -305,83 +510,10 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the account disabled
      *
-     * @return string
-     */
+     * @return string     */
     public function getAccountDisabled()
     {
         return $this->accountDisabled;
-    }
-
-    /**
-     * Set the terms agreed
-     *
-     * @param boolean $termsAgreed new value being set
-     *
-     * @return User
-     */
-    public function setTermsAgreed($termsAgreed)
-    {
-        $this->termsAgreed = $termsAgreed;
-
-        return $this;
-    }
-
-    /**
-     * Get the terms agreed
-     *
-     * @return boolean
-     */
-    public function getTermsAgreed()
-    {
-        return $this->termsAgreed;
-    }
-
-    /**
-     * Set the contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
-     *
-     * @return User
-     */
-    public function setContactDetails($contactDetails)
-    {
-        $this->contactDetails = $contactDetails;
-
-        return $this;
-    }
-
-    /**
-     * Get the contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getContactDetails()
-    {
-        return $this->contactDetails;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return User
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
     }
 
     /**
@@ -403,9 +535,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDisabledDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -416,27 +546,26 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the id
+     * Set the translate to welsh
      *
-     * @param int $id new value being set
+     * @param string $translateToWelsh new value being set
      *
      * @return User
      */
-    public function setId($id)
+    public function setTranslateToWelsh($translateToWelsh)
     {
-        $this->id = $id;
+        $this->translateToWelsh = $translateToWelsh;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the translate to welsh
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getTranslateToWelsh()
     {
-        return $this->id;
+        return $this->translateToWelsh;
     }
 
     /**
@@ -458,9 +587,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getLastLoginAt($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -471,129 +598,55 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the last modified by
+     * Set the terms agreed
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param bool $termsAgreed new value being set
      *
      * @return User
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setTermsAgreed($termsAgreed)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->termsAgreed = $termsAgreed;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the terms agreed
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return bool     */
+    public function getTermsAgreed()
     {
-        return $this->lastModifiedBy;
+        return $this->termsAgreed;
     }
 
     /**
-     * Set the local authority
+     * Set the version
      *
-     * @param \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority $localAuthority entity being set as the value
+     * @param int $version new value being set
      *
      * @return User
      */
-    public function setLocalAuthority($localAuthority)
+    public function setVersion($version)
     {
-        $this->localAuthority = $localAuthority;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the local authority
+     * Get the version
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
-     */
-    public function getLocalAuthority()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->localAuthority;
+        return $this->version;
     }
 
     /**
-     * Set the login id
+     * Set the roles
      *
-     * @param string $loginId new value being set
-     *
-     * @return User
-     */
-    public function setLoginId($loginId)
-    {
-        $this->loginId = $loginId;
-
-        return $this;
-    }
-
-    /**
-     * Get the login id
-     *
-     * @return string
-     */
-    public function getLoginId()
-    {
-        return $this->loginId;
-    }
-
-    /**
-     * Set the partner contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $partnerContactDetails entity being set as the value
-     *
-     * @return User
-     */
-    public function setPartnerContactDetails($partnerContactDetails)
-    {
-        $this->partnerContactDetails = $partnerContactDetails;
-
-        return $this;
-    }
-
-    /**
-     * Get the partner contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getPartnerContactDetails()
-    {
-        return $this->partnerContactDetails;
-    }
-
-    /**
-     * Set the pid
-     *
-     * @param string $pid new value being set
-     *
-     * @return User
-     */
-    public function setPid($pid)
-    {
-        $this->pid = $pid;
-
-        return $this;
-    }
-
-    /**
-     * Get the pid
-     *
-     * @return string
-     */
-    public function getPid()
-    {
-        return $this->pid;
-    }
-
-    /**
-     * Set the role
-     *
-     * @param ArrayCollection $roles collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $roles collection being set as the value
      *
      * @return User
      */
@@ -607,7 +660,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the roles
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getRoles()
     {
@@ -617,7 +670,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a roles
      *
-     * @param ArrayCollection|mixed $roles collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $roles collection being added
      *
      * @return User
      */
@@ -654,105 +707,9 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the team
+     * Set the organisation users
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\Team $team entity being set as the value
-     *
-     * @return User
-     */
-    public function setTeam($team)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get the team
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * Set the translate to welsh
-     *
-     * @param string $translateToWelsh new value being set
-     *
-     * @return User
-     */
-    public function setTranslateToWelsh($translateToWelsh)
-    {
-        $this->translateToWelsh = $translateToWelsh;
-
-        return $this;
-    }
-
-    /**
-     * Get the translate to welsh
-     *
-     * @return string
-     */
-    public function getTranslateToWelsh()
-    {
-        return $this->translateToWelsh;
-    }
-
-    /**
-     * Set the transport manager
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
-     *
-     * @return User
-     */
-    public function setTransportManager($transportManager)
-    {
-        $this->transportManager = $transportManager;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
-    {
-        return $this->transportManager;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return User
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the organisation user
-     *
-     * @param ArrayCollection $organisationUsers collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $organisationUsers collection being set as the value
      *
      * @return User
      */
@@ -766,7 +723,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the organisation users
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrganisationUsers()
     {
@@ -776,7 +733,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a organisation users
      *
-     * @param ArrayCollection|mixed $organisationUsers collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationUsers collection being added
      *
      * @return User
      */
@@ -813,9 +770,9 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     }
 
     /**
-     * Set the password reset
+     * Set the password resets
      *
-     * @param ArrayCollection $passwordResets collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $passwordResets collection being set as the value
      *
      * @return User
      */
@@ -829,7 +786,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Get the password resets
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPasswordResets()
     {
@@ -839,7 +796,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Add a password resets
      *
-     * @param ArrayCollection|mixed $passwordResets collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $passwordResets collection being added
      *
      * @return User
      */
@@ -873,5 +830,13 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

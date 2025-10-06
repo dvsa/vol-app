@@ -1,24 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * CompaniesHouseAlertReason Abstract Entity
+ * AbstractCompaniesHouseAlertReason Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="companies_house_alert_reason",
  *    indexes={
- *        @ORM\Index(name="ix_companies_house_alert_reason_companies_house_alert_id",
-     *     columns={"companies_house_alert_id"}),
+ *        @ORM\Index(name="ix_companies_house_alert_reason_companies_house_alert_id", columns={"companies_house_alert_id"}),
  *        @ORM\Index(name="ix_companies_house_alert_reason_reason_type", columns={"reason_type"})
  *    }
  * )
@@ -27,35 +31,31 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
 
     /**
-     * Companies house alert
-     *
-     * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert",
-     *     fetch="LAZY",
-     *     inversedBy="reasons"
-     * )
-     * @ORM\JoinColumn(name="companies_house_alert_id", referencedColumnName="id", nullable=false)
-     */
-    protected $companiesHouseAlert;
-
-    /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Reason type
+     * Foreign Key to companies_house_alert
+     *
+     * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert", fetch="LAZY")
+     * @ORM\JoinColumn(name="companies_house_alert_id", referencedColumnName="id")
+     */
+    protected $companiesHouseAlert;
+
+    /**
+     * ReasonType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -75,28 +75,20 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     protected $version = 1;
 
     /**
-     * Set the companies house alert
-     *
-     * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert $companiesHouseAlert entity being set as the value
-     *
-     * @return CompaniesHouseAlertReason
+     * Initialise the collections
      */
-    public function setCompaniesHouseAlert($companiesHouseAlert)
+    public function __construct()
     {
-        $this->companiesHouseAlert = $companiesHouseAlert;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the companies house alert
-     *
-     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
+     * Initialise collections
      */
-    public function getCompaniesHouseAlert()
+    public function initCollections(): void
     {
-        return $this->companiesHouseAlert;
     }
+
 
     /**
      * Set the id
@@ -115,17 +107,39 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the companies house alert
+     *
+     * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert $companiesHouseAlert new value being set
+     *
+     * @return CompaniesHouseAlertReason
+     */
+    public function setCompaniesHouseAlert($companiesHouseAlert)
+    {
+        $this->companiesHouseAlert = $companiesHouseAlert;
+
+        return $this;
+    }
+
+    /**
+     * Get the companies house alert
+     *
+     * @return \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert     */
+    public function getCompaniesHouseAlert()
+    {
+        return $this->companiesHouseAlert;
+    }
+
+    /**
      * Set the reason type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $reasonType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $reasonType new value being set
      *
      * @return CompaniesHouseAlertReason
      */
@@ -139,8 +153,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the reason type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getReasonType()
     {
         return $this->reasonType;
@@ -163,10 +176,17 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }
