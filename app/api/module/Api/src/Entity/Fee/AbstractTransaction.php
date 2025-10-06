@@ -302,7 +302,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="txn", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="transaction", cascade={"persist"})
      */
     protected $feeTransactions;
 
