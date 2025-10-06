@@ -3246,4 +3246,34 @@ foreach ($routeConfigs as $routeConfig) {
     $routes = \Laminas\Stdlib\ArrayUtils::merge($routes, include $routeConfig);
 }
 
+// Add static assets redirect route for old snapshot hardcoded html asset paths
+$routes['static-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/static/public[/:path]',
+        'constraints' => [
+            'path' => '.*',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+        ],
+    ],
+];
+
+$routes['styles-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/styles/:path',
+        'constraints' => [
+            'path' => '.+',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+            'prefix' => 'styles',
+        ],
+    ],
+];
+
 return $routes;
