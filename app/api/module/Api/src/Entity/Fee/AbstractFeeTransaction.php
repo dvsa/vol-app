@@ -58,7 +58,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="fee_id", referencedColumnName="id")
      */
     protected $fee;
@@ -68,7 +68,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Transaction", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Transaction", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="txn_id", referencedColumnName="id")
      */
     protected $transaction;

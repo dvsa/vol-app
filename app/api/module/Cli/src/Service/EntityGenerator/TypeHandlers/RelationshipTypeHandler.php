@@ -218,19 +218,27 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getCascadeOptions(ColumnMetadata $column, array $config): array
     {
-        $columnName = $column->getName();
-        $columnConfig = $config[$columnName] ?? null;
-        
+        // First check if there's a fieldConfig key (new format)
+        $columnConfig = $config['fieldConfig'] ?? null;
+
         // Check if it's a FieldConfig object
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
             return $columnConfig->cascade;
         }
-        
+
+        // Fallback to column name lookup (legacy format)
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->cascade;
+        }
+
         // Check array format
         if (is_array($columnConfig) && isset($columnConfig['cascade'])) {
             return $columnConfig['cascade'];
         }
-        
+
         return [];
     }
 
@@ -288,17 +296,25 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getOrphanRemoval(ColumnMetadata $column, array $config): bool
     {
-        $columnName = $column->getName();
-        $columnConfig = $config[$columnName] ?? null;
-        
+        // First check if there's a fieldConfig key (new format)
+        $columnConfig = $config['fieldConfig'] ?? null;
+
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
             return $columnConfig->orphanRemoval;
         }
-        
+
+        // Fallback to column name lookup (legacy format)
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->orphanRemoval;
+        }
+
         if (is_array($columnConfig) && isset($columnConfig['orphanRemoval'])) {
             return (bool) $columnConfig['orphanRemoval'];
         }
-        
+
         return false;
     }
 
@@ -307,17 +323,25 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getIndexBy(ColumnMetadata $column, array $config): ?string
     {
-        $columnName = $column->getName();
-        $columnConfig = $config[$columnName] ?? null;
-        
+        // First check if there's a fieldConfig key (new format)
+        $columnConfig = $config['fieldConfig'] ?? null;
+
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
             return $columnConfig->indexBy;
         }
-        
+
+        // Fallback to column name lookup (legacy format)
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->indexBy;
+        }
+
         if (is_array($columnConfig) && isset($columnConfig['indexBy'])) {
             return $columnConfig['indexBy'];
         }
-        
+
         return null;
     }
 
@@ -326,17 +350,25 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getOrderBy(ColumnMetadata $column, array $config): array
     {
-        $columnName = $column->getName();
-        $columnConfig = $config[$columnName] ?? null;
-        
+        // First check if there's a fieldConfig key (new format)
+        $columnConfig = $config['fieldConfig'] ?? null;
+
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
             return $columnConfig->orderBy;
         }
-        
+
+        // Fallback to column name lookup (legacy format)
+        $columnName = $column->getName();
+        $columnConfig = $config[$columnName] ?? null;
+
+        if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig) {
+            return $columnConfig->orderBy;
+        }
+
         if (is_array($columnConfig) && isset($columnConfig['orderBy'])) {
             return $columnConfig['orderBy'];
         }
-        
+
         return [];
     }
 }
