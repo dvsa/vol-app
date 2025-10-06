@@ -14,15 +14,14 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterType\Create as Cmd;
 final class Create extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
-    
-    protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterTodo', 'LetterAppendix'];
+
+    protected $extraRepos = ['MasterTemplate', 'Category', 'SubCategory', 'LetterTestData'];
 
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
         
         $letterType = new LetterTypeEntity();
-        $letterType->setCode($command->getCode());
         $letterType->setName($command->getName());
         $letterType->setDescription($command->getDescription());
         $letterType->setIsActive($command->getIsActive());
@@ -32,43 +31,29 @@ final class Create extends AbstractCommandHandler
             $masterTemplate = $this->getRepo('MasterTemplate')->fetchById($command->getMasterTemplate());
             $letterType->setMasterTemplate($masterTemplate);
         }
-        
-        // Add sections
-        if ($command->getSections()) {
-            foreach ($command->getSections() as $sectionId) {
-                $section = $this->getRepo('LetterSection')->fetchById($sectionId);
-                $letterType->addSection($section);
-            }
+
+        // Set category if provided
+        if ($command->getCategory()) {
+            $category = $this->getRepo('Category')->fetchById($command->getCategory());
+            $letterType->setCategory($category);
         }
-        
-        // Add issues
-        if ($command->getIssues()) {
-            foreach ($command->getIssues() as $issueId) {
-                $issue = $this->getRepo('LetterIssue')->fetchById($issueId);
-                $letterType->addIssue($issue);
-            }
+
+        // Set sub category if provided
+        if ($command->getSubCategory()) {
+            $subCategory = $this->getRepo('SubCategory')->fetchById($command->getSubCategory());
+            $letterType->setSubCategory($subCategory);
         }
-        
-        // Add todos
-        if ($command->getTodos()) {
-            foreach ($command->getTodos() as $todoId) {
-                $todo = $this->getRepo('LetterTodo')->fetchById($todoId);
-                $letterType->addTodo($todo);
-            }
-        }
-        
-        // Add appendices
-        if ($command->getAppendices()) {
-            foreach ($command->getAppendices() as $appendixId) {
-                $appendix = $this->getRepo('LetterAppendix')->fetchById($appendixId);
-                $letterType->addAppendix($appendix);
-            }
+
+        // Set letter test data if provided
+        if ($command->getLetterTestData()) {
+            $letterTestData = $this->getRepo('LetterTestData')->fetchById($command->getLetterTestData());
+            $letterType->setLetterTestData($letterTestData);
         }
 
         $this->getRepo()->save($letterType);
 
         $this->result->addId('letterType', $letterType->getId());
-        $this->result->addMessage("Letter type '{$letterType->getCode()}' created");
+        $this->result->addMessage("Letter type '{$letterType->getName()}' created");
         
         return $this->result;
     }
