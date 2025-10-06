@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\Collection;
  * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="printer" * )
+ * @ORM\Table(name="printer")
  */
 abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable
 {

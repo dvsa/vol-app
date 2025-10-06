@@ -68,8 +68,9 @@ if (!empty($indexes) || !empty($uniqueConstraints)): ?>,
 <?php endforeach; ?>
  *    }
 <?php endif; ?>
+ * )
+<?php else: ?>)
 <?php endif; ?>
-)
  */
 abstract class <?php echo $className; ?> implements BundleSerializableInterface, JsonSerializable
 {

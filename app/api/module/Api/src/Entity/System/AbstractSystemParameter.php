@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="system_parameter" * )
+ * @ORM\Table(name="system_parameter")
  */
 abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable
 {

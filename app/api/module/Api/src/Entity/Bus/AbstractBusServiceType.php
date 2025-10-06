@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\Collection;
  * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="bus_service_type" * )
+ * @ORM\Table(name="bus_service_type")
  */
 abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable
 {

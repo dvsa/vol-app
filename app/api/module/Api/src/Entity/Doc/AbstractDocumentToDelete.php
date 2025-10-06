@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="document_to_delete" * )
+ * @ORM\Table(name="document_to_delete")
  */
 abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable
 {

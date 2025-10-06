@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
- * @ORM\Table(name="legacy_case_action" * )
+ * @ORM\Table(name="legacy_case_action")
  */
 abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, JsonSerializable
 {
