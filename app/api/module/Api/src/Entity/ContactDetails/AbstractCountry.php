@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\ContactDetails;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Country Abstract Entity
+ * AbstractCountry Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -37,13 +40,14 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     use ModifiedOnTrait;
 
     /**
-     * Country desc
+     * Primary key
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="country_desc", length=50, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="string", name="id", length=2, nullable=false)
      */
-    protected $countryDesc;
+    protected $id = '';
 
     /**
      * Created by
@@ -57,74 +61,27 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Identifier - Id
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $lastModifiedBy;
+
+    /**
+     * Country desc
      *
      * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=2)
+     * @ORM\Column(type="string", name="country_desc", length=50, nullable=true)
      */
-    protected $id;
+    protected $countryDesc;
 
     /**
-     * Irfo psv auth
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth",
-     *     mappedBy="countrys",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $irfoPsvAuths;
-
-    /**
-     * Irhp application
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication",
-     *     mappedBy="countrys",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $irhpApplications;
-
-    /**
-     * Irhp permit stock range
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange",
-     *     mappedBy="countrys",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $irhpPermitStockRanges;
-
-    /**
-     * Is ecmt state
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_ecmt_state", nullable=true, options={"default": 0})
-     */
-    protected $isEcmtState = 0;
-
-    /**
-     * Is eea state
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_eea_state", nullable=false, options={"default": 0})
-     */
-    protected $isEeaState = 0;
-
-    /**
-     * Is member state
+     * Is EU member. Affects transit rules and EU permits
      *
      * @var string
      *
@@ -135,22 +92,29 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Is permit state
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="is_permit_state", nullable=false, options={"default": 0})
      */
     protected $isPermitState = 0;
 
     /**
-     * Last modified by
+     * Is ecmt state
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
+     * @ORM\Column(type="boolean", name="is_ecmt_state", nullable=true, options={"default": 0})
      */
-    protected $lastModifiedBy;
+    protected $isEcmtState = 0;
+
+    /**
+     * Is eea state
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_eea_state", nullable=false, options={"default": 0})
+     */
+    protected $isEeaState = 0;
 
     /**
      * Version
@@ -163,7 +127,34 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Irhp permit stock
+     * IrfoPsvAuths
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth", mappedBy="countrys", fetch="LAZY")
+     */
+    protected $irfoPsvAuths;
+
+    /**
+     * IrhpApplications
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", mappedBy="countrys", fetch="LAZY")
+     */
+    protected $irhpApplications;
+
+    /**
+     * IrhpPermitStockRanges
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange", mappedBy="countrys", fetch="LAZY")
+     */
+    protected $irhpPermitStockRanges;
+
+    /**
+     * IrhpPermitStocks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -173,8 +164,6 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -182,16 +171,84 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->irfoPsvAuths = new ArrayCollection();
         $this->irhpApplications = new ArrayCollection();
         $this->irhpPermitStockRanges = new ArrayCollection();
         $this->irhpPermitStocks = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param string $id new value being set
+     *
+     * @return Country
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return string     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Country
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Country
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -211,65 +268,131 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the country desc
      *
-     * @return string
-     */
+     * @return string     */
     public function getCountryDesc()
     {
         return $this->countryDesc;
     }
 
     /**
-     * Set the created by
+     * Set the is member state
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param string $isMemberState new value being set
      *
      * @return Country
      */
-    public function setCreatedBy($createdBy)
+    public function setIsMemberState($isMemberState)
     {
-        $this->createdBy = $createdBy;
+        $this->isMemberState = $isMemberState;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the is member state
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return string     */
+    public function getIsMemberState()
     {
-        return $this->createdBy;
+        return $this->isMemberState;
     }
 
     /**
-     * Set the id
+     * Set the is permit state
      *
-     * @param string $id new value being set
+     * @param bool $isPermitState new value being set
      *
      * @return Country
      */
-    public function setId($id)
+    public function setIsPermitState($isPermitState)
     {
-        $this->id = $id;
+        $this->isPermitState = $isPermitState;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the is permit state
      *
-     * @return string
-     */
-    public function getId()
+     * @return bool     */
+    public function getIsPermitState()
     {
-        return $this->id;
+        return $this->isPermitState;
     }
 
     /**
-     * Set the irfo psv auth
+     * Set the is ecmt state
      *
-     * @param ArrayCollection $irfoPsvAuths collection being set as the value
+     * @param bool $isEcmtState new value being set
+     *
+     * @return Country
+     */
+    public function setIsEcmtState($isEcmtState)
+    {
+        $this->isEcmtState = $isEcmtState;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ecmt state
+     *
+     * @return bool     */
+    public function getIsEcmtState()
+    {
+        return $this->isEcmtState;
+    }
+
+    /**
+     * Set the is eea state
+     *
+     * @param bool $isEeaState new value being set
+     *
+     * @return Country
+     */
+    public function setIsEeaState($isEeaState)
+    {
+        $this->isEeaState = $isEeaState;
+
+        return $this;
+    }
+
+    /**
+     * Get the is eea state
+     *
+     * @return bool     */
+    public function getIsEeaState()
+    {
+        return $this->isEeaState;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Country
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the irfo psv auths
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuths collection being set as the value
      *
      * @return Country
      */
@@ -283,7 +406,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irfo psv auths
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrfoPsvAuths()
     {
@@ -293,7 +416,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Add a irfo psv auths
      *
-     * @param ArrayCollection|mixed $irfoPsvAuths collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPsvAuths collection being added
      *
      * @return Country
      */
@@ -330,9 +453,9 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the irhp application
+     * Set the irhp applications
      *
-     * @param ArrayCollection $irhpApplications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being set as the value
      *
      * @return Country
      */
@@ -346,7 +469,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irhp applications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpApplications()
     {
@@ -356,7 +479,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Add a irhp applications
      *
-     * @param ArrayCollection|mixed $irhpApplications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpApplications collection being added
      *
      * @return Country
      */
@@ -393,9 +516,9 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the irhp permit stock range
+     * Set the irhp permit stock ranges
      *
-     * @param ArrayCollection $irhpPermitStockRanges collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStockRanges collection being set as the value
      *
      * @return Country
      */
@@ -409,7 +532,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irhp permit stock ranges
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermitStockRanges()
     {
@@ -419,7 +542,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Add a irhp permit stock ranges
      *
-     * @param ArrayCollection|mixed $irhpPermitStockRanges collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStockRanges collection being added
      *
      * @return Country
      */
@@ -456,153 +579,9 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the is ecmt state
+     * Set the irhp permit stocks
      *
-     * @param boolean $isEcmtState new value being set
-     *
-     * @return Country
-     */
-    public function setIsEcmtState($isEcmtState)
-    {
-        $this->isEcmtState = $isEcmtState;
-
-        return $this;
-    }
-
-    /**
-     * Get the is ecmt state
-     *
-     * @return boolean
-     */
-    public function getIsEcmtState()
-    {
-        return $this->isEcmtState;
-    }
-
-    /**
-     * Set the is eea state
-     *
-     * @param boolean $isEeaState new value being set
-     *
-     * @return Country
-     */
-    public function setIsEeaState($isEeaState)
-    {
-        $this->isEeaState = $isEeaState;
-
-        return $this;
-    }
-
-    /**
-     * Get the is eea state
-     *
-     * @return boolean
-     */
-    public function getIsEeaState()
-    {
-        return $this->isEeaState;
-    }
-
-    /**
-     * Set the is member state
-     *
-     * @param string $isMemberState new value being set
-     *
-     * @return Country
-     */
-    public function setIsMemberState($isMemberState)
-    {
-        $this->isMemberState = $isMemberState;
-
-        return $this;
-    }
-
-    /**
-     * Get the is member state
-     *
-     * @return string
-     */
-    public function getIsMemberState()
-    {
-        return $this->isMemberState;
-    }
-
-    /**
-     * Set the is permit state
-     *
-     * @param boolean $isPermitState new value being set
-     *
-     * @return Country
-     */
-    public function setIsPermitState($isPermitState)
-    {
-        $this->isPermitState = $isPermitState;
-
-        return $this;
-    }
-
-    /**
-     * Get the is permit state
-     *
-     * @return boolean
-     */
-    public function getIsPermitState()
-    {
-        return $this->isPermitState;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Country
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Country
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the irhp permit stock
-     *
-     * @param ArrayCollection $irhpPermitStocks collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being set as the value
      *
      * @return Country
      */
@@ -616,7 +595,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irhp permit stocks
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermitStocks()
     {
@@ -626,7 +605,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Add a irhp permit stocks
      *
-     * @param ArrayCollection|mixed $irhpPermitStocks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStocks collection being added
      *
      * @return Country
      */
@@ -660,5 +639,13 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

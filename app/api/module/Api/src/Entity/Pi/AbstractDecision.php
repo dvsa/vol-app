@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Decision Abstract Entity
+ * AbstractDecision Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -41,27 +44,17 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     use SoftDeletableTrait;
 
     /**
-     * Created by
+     * Primary key
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
      */
-    protected $createdBy;
+    protected $id = 0;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Goods or psv
+     * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -71,33 +64,15 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     protected $goodsOrPsv;
 
     /**
-     * Identifier - Id
+     * Created by
      *
-     * @var int
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
      */
-    protected $id;
-
-    /**
-     * Is ni
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false)
-     */
-    protected $isNi;
-
-    /**
-     * Is read only
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_read_only", nullable=false)
-     */
-    protected $isReadOnly;
+    protected $createdBy;
 
     /**
      * Last modified by
@@ -111,35 +86,40 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     protected $lastModifiedBy;
 
     /**
-     * Licence
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     mappedBy="decisions",
-     *     fetch="LAZY"
-     * )
-     */
-    protected $licences;
-
-    /**
-     * Pi
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="decisions", fetch="LAZY")
-     */
-    protected $pis;
-
-    /**
      * Section code
      *
      * @var string
      *
      * @ORM\Column(type="string", name="section_code", length=50, nullable=false)
      */
-    protected $sectionCode;
+    protected $sectionCode = '';
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
+     */
+    protected $description = '';
+
+    /**
+     * Is read only
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_read_only", nullable=false)
+     */
+    protected $isReadOnly = 0;
+
+    /**
+     * Is ni
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_ni", nullable=false)
+     */
+    protected $isNi = 0;
 
     /**
      * Version
@@ -152,9 +132,25 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * Licences
      *
-     * @return void
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", mappedBy="decisions", fetch="LAZY")
+     */
+    protected $licences;
+
+    /**
+     * Pis
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="decisions", fetch="LAZY")
+     */
+    protected $pis;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -162,20 +158,65 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->licences = new ArrayCollection();
         $this->pis = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Decision
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the goods or psv
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
+     *
+     * @return Decision
+     */
+    public function setGoodsOrPsv($goodsOrPsv)
+    {
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        return $this;
+    }
+
+    /**
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
+    }
+
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Decision
      */
@@ -189,11 +230,56 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Decision
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the section code
+     *
+     * @param string $sectionCode new value being set
+     *
+     * @return Decision
+     */
+    public function setSectionCode($sectionCode)
+    {
+        $this->sectionCode = $sectionCode;
+
+        return $this;
+    }
+
+    /**
+     * Get the section code
+     *
+     * @return string     */
+    public function getSectionCode()
+    {
+        return $this->sectionCode;
     }
 
     /**
@@ -213,89 +299,16 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the description
      *
-     * @return string
-     */
+     * @return string     */
     public function getDescription()
     {
         return $this->description;
     }
 
     /**
-     * Set the goods or psv
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
-     *
-     * @return Decision
-     */
-    public function setGoodsOrPsv($goodsOrPsv)
-    {
-        $this->goodsOrPsv = $goodsOrPsv;
-
-        return $this;
-    }
-
-    /**
-     * Get the goods or psv
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getGoodsOrPsv()
-    {
-        return $this->goodsOrPsv;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Decision
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the is ni
-     *
-     * @param boolean $isNi new value being set
-     *
-     * @return Decision
-     */
-    public function setIsNi($isNi)
-    {
-        $this->isNi = $isNi;
-
-        return $this;
-    }
-
-    /**
-     * Get the is ni
-     *
-     * @return boolean
-     */
-    public function getIsNi()
-    {
-        return $this->isNi;
-    }
-
-    /**
      * Set the is read only
      *
-     * @param boolean $isReadOnly new value being set
+     * @param bool $isReadOnly new value being set
      *
      * @return Decision
      */
@@ -309,41 +322,62 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is read only
      *
-     * @return boolean
-     */
+     * @return bool     */
     public function getIsReadOnly()
     {
         return $this->isReadOnly;
     }
 
     /**
-     * Set the last modified by
+     * Set the is ni
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param bool $isNi new value being set
      *
      * @return Decision
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setIsNi($isNi)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->isNi = $isNi;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the is ni
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return bool     */
+    public function getIsNi()
     {
-        return $this->lastModifiedBy;
+        return $this->isNi;
     }
 
     /**
-     * Set the licence
+     * Set the version
      *
-     * @param ArrayCollection $licences collection being set as the value
+     * @param int $version new value being set
+     *
+     * @return Decision
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the licences
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being set as the value
      *
      * @return Decision
      */
@@ -357,7 +391,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the licences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicences()
     {
@@ -367,7 +401,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Add a licences
      *
-     * @param ArrayCollection|mixed $licences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licences collection being added
      *
      * @return Decision
      */
@@ -404,9 +438,9 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Set the pi
+     * Set the pis
      *
-     * @param ArrayCollection $pis collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being set as the value
      *
      * @return Decision
      */
@@ -420,7 +454,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Get the pis
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPis()
     {
@@ -430,7 +464,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     /**
      * Add a pis
      *
-     * @param ArrayCollection|mixed $pis collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $pis collection being added
      *
      * @return Decision
      */
@@ -467,50 +501,10 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
     }
 
     /**
-     * Set the section code
-     *
-     * @param string $sectionCode new value being set
-     *
-     * @return Decision
+     * Get bundle data
      */
-    public function setSectionCode($sectionCode)
+    public function __toString(): string
     {
-        $this->sectionCode = $sectionCode;
-
-        return $this;
-    }
-
-    /**
-     * Get the section code
-     *
-     * @return string
-     */
-    public function getSectionCode()
-    {
-        return $this->sectionCode;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Decision
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

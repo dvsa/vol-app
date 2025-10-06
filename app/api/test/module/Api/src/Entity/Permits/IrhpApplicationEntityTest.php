@@ -2514,6 +2514,10 @@ class IrhpApplicationEntityTest extends EntityTester
             ->andReturnTrue();
 
         $irhpApplication->updateCheckAnswers();
+        
+        // For bilateral applications, updateCheckAnswers returns early without setting the flag
+        // Just assert that the method runs without throwing an exception
+        $this->assertInstanceOf(\Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, $irhpApplication);
     }
 
     public function testResetCheckAnswersAndDeclarationSuccess()

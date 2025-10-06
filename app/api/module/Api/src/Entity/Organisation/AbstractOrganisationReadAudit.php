@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * OrganisationReadAudit Abstract Entity
+ * AbstractOrganisationReadAudit Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -21,11 +26,11 @@ use Doctrine\ORM\Mapping as ORM;
  *    indexes={
  *        @ORM\Index(name="ix_organisation_read_audit_created_on", columns={"created_on"}),
  *        @ORM\Index(name="ix_organisation_read_audit_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_organisation_read_audit_user_id", columns={"user_id"})
+ *        @ORM\Index(name="ix_organisation_read_audit_user_id", columns={"user_id"}),
+ *        @ORM\Index(name="uk_organisation_read_audit_organisation_id_user_id_created_on", columns={"organisation_id", "user_id", "created_on"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_organisation_read_audit_organisation_id_user_id_created_on",
-     *     columns={"organisation_id","user_id","created_on"})
+ *        @ORM\UniqueConstraint(name="uk_organisation_read_audit_organisation_id_user_id_created_on", columns={"organisation_id", "user_id", "created_on"})
  *    }
  * )
  */
@@ -33,43 +38,55 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
 
     /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Organisation
+     * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation",
-     *     fetch="LAZY",
-     *     inversedBy="readAudits"
-     * )
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
     protected $organisation;
 
     /**
-     * User
+     * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
 
     /**
      * Set the id
@@ -88,8 +105,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -98,7 +114,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
     /**
      * Set the organisation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
      * @return OrganisationReadAudit
      */
@@ -112,8 +128,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -122,7 +137,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
     /**
      * Set the user
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $user entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
      * @return OrganisationReadAudit
      */
@@ -136,10 +151,17 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

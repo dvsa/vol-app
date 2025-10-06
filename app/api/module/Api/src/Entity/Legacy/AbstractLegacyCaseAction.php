@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Legacy;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -10,9 +12,10 @@ use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * LegacyCaseAction Abstract Entity
+ * AbstractLegacyCaseAction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="legacy_case_action")
@@ -24,7 +27,17 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     use ClearPropertiesTrait;
 
     /**
-     * Description
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
+
+    /**
+     * Examples, No Action, Warning, Interview
      *
      * @var string
      *
@@ -33,18 +46,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     protected $description;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is driver
+     * isDriver
      *
      * @var string
      *
@@ -52,29 +54,6 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      */
     protected $isDriver = 0;
 
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return LegacyCaseAction
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
 
     /**
      * Set the id
@@ -93,11 +72,33 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return LegacyCaseAction
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
@@ -117,10 +118,17 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
     /**
      * Get the is driver
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsDriver()
     {
         return $this->isDriver;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

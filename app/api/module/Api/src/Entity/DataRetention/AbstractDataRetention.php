@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\DataRetention;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * DataRetention Abstract Entity
+ * AbstractDataRetention Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_delete_confirmation", columns={"action_confirmation"}),
  *        @ORM\Index(name="ix_deleted_date", columns={"deleted_date"}),
  *        @ORM\Index(name="ix_entity_name", columns={"entity_name"}),
- *        @ORM\Index(name="ix_entity_name_entity_pk", columns={"entity_name","entity_pk"}),
+ *        @ORM\Index(name="ix_entity_name_entity_pk", columns={"entity_name", "entity_pk"}),
  *        @ORM\Index(name="ix_lic_no", columns={"lic_no"}),
  *        @ORM\Index(name="ix_organisation_id", columns={"organisation_id"})
  *    }
@@ -41,31 +46,24 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Action confirmation
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="action_confirmation", nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $actionConfirmation;
+    protected $id;
 
     /**
-     * Actioned date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="actioned_date", nullable=true)
-     */
-    protected $actionedDate;
-
-    /**
-     * Assigned to
+     * AssignedTo
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
@@ -73,6 +71,26 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      * @ORM\JoinColumn(name="assigned_to", referencedColumnName="id", nullable=true)
      */
     protected $assignedTo;
+
+    /**
+     * GoodsOrPsv
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
+     */
+    protected $goodsOrPsv;
+
+    /**
+     * FK to data retention rule
+     *
+     * @var \Dvsa\Olcs\Api\Entity\DataRetentionRule
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DataRetentionRule", fetch="LAZY")
+     * @ORM\JoinColumn(name="data_retention_rule_id", referencedColumnName="id")
+     */
+    protected $dataRetentionRule;
 
     /**
      * Created by
@@ -86,55 +104,6 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     protected $createdBy;
 
     /**
-     * Data retention rule
-     *
-     * @var \Dvsa\Olcs\Api\Entity\DataRetentionRule
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DataRetentionRule", fetch="LAZY")
-     * @ORM\JoinColumn(name="data_retention_rule_id", referencedColumnName="id", nullable=false)
-     */
-    protected $dataRetentionRule;
-
-    /**
-     * Entity name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="entity_name", length=64, nullable=false)
-     */
-    protected $entityName;
-
-    /**
-     * Entity pk
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_pk", nullable=false)
-     */
-    protected $entityPk;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -146,40 +115,22 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     protected $lastModifiedBy;
 
     /**
-     * Lic no
+     * Entity name
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="lic_no", length=18, nullable=true)
+     * @ORM\Column(type="string", name="entity_name", length=64, nullable=false)
      */
-    protected $licNo;
+    protected $entityName = '';
 
     /**
-     * Licence id
+     * Entity pk
      *
      * @var int
      *
-     * @ORM\Column(type="integer", name="licence_id", nullable=true)
+     * @ORM\Column(type="integer", name="entity_pk", nullable=false)
      */
-    protected $licenceId;
-
-    /**
-     * Next review date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="next_review_date", nullable=true)
-     */
-    protected $nextReviewDate;
-
-    /**
-     * Organisation id
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="organisation_id", nullable=true)
-     */
-    protected $organisationId;
+    protected $entityPk = 0;
 
     /**
      * Organisation name
@@ -191,64 +142,102 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     protected $organisationName;
 
     /**
-     * Set the action confirmation
+     * Organisation id
      *
-     * @param boolean $actionConfirmation new value being set
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="organisation_id", nullable=true)
+     */
+    protected $organisationId;
+
+    /**
+     * Licence id
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="licence_id", nullable=true)
+     */
+    protected $licenceId;
+
+    /**
+     * Lic no
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="lic_no", length=18, nullable=true)
+     */
+    protected $licNo;
+
+    /**
+     * Action confirmation
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="action_confirmation", nullable=false)
+     */
+    protected $actionConfirmation = 0;
+
+    /**
+     * Next review date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="next_review_date", nullable=true)
+     */
+    protected $nextReviewDate;
+
+    /**
+     * Actioned date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="actioned_date", nullable=true)
+     */
+    protected $actionedDate;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
      *
      * @return DataRetention
      */
-    public function setActionConfirmation($actionConfirmation)
+    public function setId($id)
     {
-        $this->actionConfirmation = $actionConfirmation;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the action confirmation
+     * Get the id
      *
-     * @return boolean
-     */
-    public function getActionConfirmation()
+     * @return int     */
+    public function getId()
     {
-        return $this->actionConfirmation;
-    }
-
-    /**
-     * Set the actioned date
-     *
-     * @param \DateTime $actionedDate new value being set
-     *
-     * @return DataRetention
-     */
-    public function setActionedDate($actionedDate)
-    {
-        $this->actionedDate = $actionedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the actioned date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getActionedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->actionedDate);
-        }
-
-        return $this->actionedDate;
+        return $this->id;
     }
 
     /**
      * Set the assigned to
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo new value being set
      *
      * @return DataRetention
      */
@@ -262,41 +251,39 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the assigned to
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getAssignedTo()
     {
         return $this->assignedTo;
     }
 
     /**
-     * Set the created by
+     * Set the goods or psv
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
      * @return DataRetention
      */
-    public function setCreatedBy($createdBy)
+    public function setGoodsOrPsv($goodsOrPsv)
     {
-        $this->createdBy = $createdBy;
+        $this->goodsOrPsv = $goodsOrPsv;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getGoodsOrPsv()
     {
-        return $this->createdBy;
+        return $this->goodsOrPsv;
     }
 
     /**
      * Set the data retention rule
      *
-     * @param \Dvsa\Olcs\Api\Entity\DataRetentionRule $dataRetentionRule entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\DataRetentionRule $dataRetentionRule new value being set
      *
      * @return DataRetention
      */
@@ -310,11 +297,56 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the data retention rule
      *
-     * @return \Dvsa\Olcs\Api\Entity\DataRetentionRule
-     */
+     * @return \Dvsa\Olcs\Api\Entity\DataRetentionRule     */
     public function getDataRetentionRule()
     {
         return $this->dataRetentionRule;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return DataRetention
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return DataRetention
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -334,8 +366,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the entity name
      *
-     * @return string
-     */
+     * @return string     */
     public function getEntityName()
     {
         return $this->entityName;
@@ -358,107 +389,56 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the entity pk
      *
-     * @return int
-     */
+     * @return int     */
     public function getEntityPk()
     {
         return $this->entityPk;
     }
 
     /**
-     * Set the goods or psv
+     * Set the organisation name
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
+     * @param string $organisationName new value being set
      *
      * @return DataRetention
      */
-    public function setGoodsOrPsv($goodsOrPsv)
+    public function setOrganisationName($organisationName)
     {
-        $this->goodsOrPsv = $goodsOrPsv;
+        $this->organisationName = $organisationName;
 
         return $this;
     }
 
     /**
-     * Get the goods or psv
+     * Get the organisation name
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getGoodsOrPsv()
+     * @return string     */
+    public function getOrganisationName()
     {
-        return $this->goodsOrPsv;
+        return $this->organisationName;
     }
 
     /**
-     * Set the id
+     * Set the organisation id
      *
-     * @param int $id new value being set
+     * @param int $organisationId new value being set
      *
      * @return DataRetention
      */
-    public function setId($id)
+    public function setOrganisationId($organisationId)
     {
-        $this->id = $id;
+        $this->organisationId = $organisationId;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the organisation id
      *
-     * @return int
-     */
-    public function getId()
+     * @return int     */
+    public function getOrganisationId()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return DataRetention
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the lic no
-     *
-     * @param string $licNo new value being set
-     *
-     * @return DataRetention
-     */
-    public function setLicNo($licNo)
-    {
-        $this->licNo = $licNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the lic no
-     *
-     * @return string
-     */
-    public function getLicNo()
-    {
-        return $this->licNo;
+        return $this->organisationId;
     }
 
     /**
@@ -478,11 +458,56 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the licence id
      *
-     * @return int
-     */
+     * @return int     */
     public function getLicenceId()
     {
         return $this->licenceId;
+    }
+
+    /**
+     * Set the lic no
+     *
+     * @param string $licNo new value being set
+     *
+     * @return DataRetention
+     */
+    public function setLicNo($licNo)
+    {
+        $this->licNo = $licNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the lic no
+     *
+     * @return string     */
+    public function getLicNo()
+    {
+        return $this->licNo;
+    }
+
+    /**
+     * Set the action confirmation
+     *
+     * @param bool $actionConfirmation new value being set
+     *
+     * @return DataRetention
+     */
+    public function setActionConfirmation($actionConfirmation)
+    {
+        $this->actionConfirmation = $actionConfirmation;
+
+        return $this;
+    }
+
+    /**
+     * Get the action confirmation
+     *
+     * @return bool     */
+    public function getActionConfirmation()
+    {
+        return $this->actionConfirmation;
     }
 
     /**
@@ -504,9 +529,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getNextReviewDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -517,50 +540,39 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     }
 
     /**
-     * Set the organisation id
+     * Set the actioned date
      *
-     * @param int $organisationId new value being set
+     * @param \DateTime $actionedDate new value being set
      *
      * @return DataRetention
      */
-    public function setOrganisationId($organisationId)
+    public function setActionedDate($actionedDate)
     {
-        $this->organisationId = $organisationId;
+        $this->actionedDate = $actionedDate;
 
         return $this;
     }
 
     /**
-     * Get the organisation id
+     * Get the actioned date
      *
-     * @return int
-     */
-    public function getOrganisationId()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getActionedDate($asDateTime = false)
     {
-        return $this->organisationId;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->actionedDate);
+        }
+
+        return $this->actionedDate;
     }
 
     /**
-     * Set the organisation name
-     *
-     * @param string $organisationName new value being set
-     *
-     * @return DataRetention
+     * Get bundle data
      */
-    public function setOrganisationName($organisationName)
+    public function __toString(): string
     {
-        $this->organisationName = $organisationName;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation name
-     *
-     * @return string
-     */
-    public function getOrganisationName()
-    {
-        return $this->organisationName;
+        return (string) $this->getId();
     }
 }

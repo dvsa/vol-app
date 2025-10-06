@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\ContactDetails;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * PhoneContact Abstract Entity
+ * AbstractPhoneContact Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -24,11 +29,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_phone_contact_contact_details_id", columns={"contact_details_id"}),
  *        @ORM\Index(name="ix_phone_contact_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_phone_contact_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_phone_contact_phone_contact_type", columns={"phone_contact_type"})
+ *        @ORM\Index(name="ix_phone_contact_phone_contact_type", columns={"phone_contact_type"}),
+ *        @ORM\Index(name="uk_phone_contact_olbs_key_olbs_type_phone_contact_type", columns={"olbs_key", "olbs_type", "phone_contact_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_phone_contact_olbs_key_olbs_type_phone_contact_type",
-     *     columns={"olbs_key","olbs_type","phone_contact_type"})
+ *        @ORM\UniqueConstraint(name="uk_phone_contact_olbs_key_olbs_type_phone_contact_type", columns={"olbs_key", "olbs_type", "phone_contact_type"})
  *    }
  * )
  */
@@ -36,21 +41,38 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Contact details
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * PhoneContactType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="phone_contact_type", referencedColumnName="id")
+     */
+    protected $phoneContactType;
+
+    /**
+     * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     inversedBy="phoneContacts"
-     * )
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
     protected $contactDetails;
 
@@ -66,26 +88,6 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     protected $createdBy;
 
     /**
-     * Details
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="details", length=45, nullable=true)
-     */
-    protected $details;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -97,34 +99,6 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
-     */
-    protected $olbsType;
-
-    /**
-     * Phone contact type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="phone_contact_type", referencedColumnName="id", nullable=false)
-     */
-    protected $phoneContactType;
-
-    /**
      * Phone number
      *
      * @var string
@@ -132,6 +106,15 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      * @ORM\Column(type="string", name="phone_number", length=45, nullable=true)
      */
     protected $phoneNumber;
+
+    /**
+     * Details
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="details", length=45, nullable=true)
+     */
+    protected $details;
 
     /**
      * Version
@@ -144,9 +127,89 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return PhoneContact
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the phone contact type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $phoneContactType new value being set
+     *
+     * @return PhoneContact
+     */
+    public function setPhoneContactType($phoneContactType)
+    {
+        $this->phoneContactType = $phoneContactType;
+
+        return $this;
+    }
+
+    /**
+     * Get the phone contact type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getPhoneContactType()
+    {
+        return $this->phoneContactType;
+    }
+
+    /**
      * Set the contact details
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
      * @return PhoneContact
      */
@@ -160,8 +223,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -170,7 +232,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return PhoneContact
      */
@@ -184,11 +246,56 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return PhoneContact
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the phone number
+     *
+     * @param string $phoneNumber new value being set
+     *
+     * @return PhoneContact
+     */
+    public function setPhoneNumber($phoneNumber)
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the phone number
+     *
+     * @return string     */
+    public function getPhoneNumber()
+    {
+        return $this->phoneNumber;
     }
 
     /**
@@ -208,59 +315,33 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the details
      *
-     * @return string
-     */
+     * @return string     */
     public function getDetails()
     {
         return $this->details;
     }
 
     /**
-     * Set the id
+     * Set the version
      *
-     * @param int $id new value being set
+     * @param int $version new value being set
      *
      * @return PhoneContact
      */
-    public function setId($id)
+    public function setVersion($version)
     {
-        $this->id = $id;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the version
      *
-     * @return int
-     */
-    public function getId()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return PhoneContact
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
+        return $this->version;
     }
 
     /**
@@ -280,8 +361,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -304,82 +384,17 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the phone contact type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $phoneContactType entity being set as the value
-     *
-     * @return PhoneContact
+     * Get bundle data
      */
-    public function setPhoneContactType($phoneContactType)
+    public function __toString(): string
     {
-        $this->phoneContactType = $phoneContactType;
-
-        return $this;
-    }
-
-    /**
-     * Get the phone contact type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getPhoneContactType()
-    {
-        return $this->phoneContactType;
-    }
-
-    /**
-     * Set the phone number
-     *
-     * @param string $phoneNumber new value being set
-     *
-     * @return PhoneContact
-     */
-    public function setPhoneNumber($phoneNumber)
-    {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get the phone number
-     *
-     * @return string
-     */
-    public function getPhoneNumber()
-    {
-        return $this->phoneNumber;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return PhoneContact
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }
