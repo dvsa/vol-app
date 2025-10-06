@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * PreviousConviction Abstract Entity
+ * AbstractPreviousConviction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,8 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_previous_conviction_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_previous_conviction_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_previous_conviction_title", columns={"title"}),
- *        @ORM\Index(name="ix_previous_conviction_transport_manager_id",
-     *     columns={"transport_manager_id"})
+ *        @ORM\Index(name="ix_previous_conviction_transport_manager_id", columns={"transport_manager_id"})
  *    }
  * )
  */
@@ -36,24 +40,100 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Application
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="previousConvictions"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
     protected $application;
+
+    /**
+     * Foreign Key to transport_manager
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportManager;
+
+    /**
+     * Title
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
+     */
+    protected $title;
+
+    /**
+     * Created by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
+     */
+    protected $createdBy;
+
+    /**
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $lastModifiedBy;
+
+    /**
+     * Conviction date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="conviction_date", nullable=true)
+     */
+    protected $convictionDate;
+
+    /**
+     * Forename
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
+     */
+    protected $forename;
+
+    /**
+     * Family name
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
+     */
+    protected $familyName;
 
     /**
      * Birth date
@@ -74,13 +154,13 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     protected $categoryText;
 
     /**
-     * Conviction date
+     * Notes
      *
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(type="date", name="conviction_date", nullable=true)
+     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
-    protected $convictionDate;
+    protected $notes;
 
     /**
      * Court fpn
@@ -92,66 +172,6 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     protected $courtFpn;
 
     /**
-     * Created by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
-     */
-    protected $createdBy;
-
-    /**
-     * Family name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
-     */
-    protected $familyName;
-
-    /**
-     * Forename
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
-     */
-    protected $forename;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
-
-    /**
-     * Notes
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
-     */
-    protected $notes;
-
-    /**
      * Penalty
      *
      * @var string
@@ -159,30 +179,6 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      * @ORM\Column(type="string", name="penalty", length=255, nullable=true)
      */
     protected $penalty;
-
-    /**
-     * Title
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
-     */
-    protected $title;
-
-    /**
-     * Transport manager
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="previousConvictions"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
-     */
-    protected $transportManager;
 
     /**
      * Version
@@ -195,9 +191,48 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     protected $version = 1;
 
     /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set the application
      *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
      * @return PreviousConviction
      */
@@ -211,11 +246,177 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the title
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $title new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get the title
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the conviction date
+     *
+     * @param \DateTime $convictionDate new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setConvictionDate($convictionDate)
+    {
+        $this->convictionDate = $convictionDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the conviction date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getConvictionDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->convictionDate);
+        }
+
+        return $this->convictionDate;
+    }
+
+    /**
+     * Set the forename
+     *
+     * @param string $forename new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setForename($forename)
+    {
+        $this->forename = $forename;
+
+        return $this;
+    }
+
+    /**
+     * Get the forename
+     *
+     * @return string     */
+    public function getForename()
+    {
+        return $this->forename;
+    }
+
+    /**
+     * Set the family name
+     *
+     * @param string $familyName new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setFamilyName($familyName)
+    {
+        $this->familyName = $familyName;
+
+        return $this;
+    }
+
+    /**
+     * Get the family name
+     *
+     * @return string     */
+    public function getFamilyName()
+    {
+        return $this->familyName;
     }
 
     /**
@@ -237,9 +438,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -266,186 +465,10 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the category text
      *
-     * @return string
-     */
+     * @return string     */
     public function getCategoryText()
     {
         return $this->categoryText;
-    }
-
-    /**
-     * Set the conviction date
-     *
-     * @param \DateTime $convictionDate new value being set
-     *
-     * @return PreviousConviction
-     */
-    public function setConvictionDate($convictionDate)
-    {
-        $this->convictionDate = $convictionDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the conviction date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getConvictionDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->convictionDate);
-        }
-
-        return $this->convictionDate;
-    }
-
-    /**
-     * Set the court fpn
-     *
-     * @param string $courtFpn new value being set
-     *
-     * @return PreviousConviction
-     */
-    public function setCourtFpn($courtFpn)
-    {
-        $this->courtFpn = $courtFpn;
-
-        return $this;
-    }
-
-    /**
-     * Get the court fpn
-     *
-     * @return string
-     */
-    public function getCourtFpn()
-    {
-        return $this->courtFpn;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return PreviousConviction
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the family name
-     *
-     * @param string $familyName new value being set
-     *
-     * @return PreviousConviction
-     */
-    public function setFamilyName($familyName)
-    {
-        $this->familyName = $familyName;
-
-        return $this;
-    }
-
-    /**
-     * Get the family name
-     *
-     * @return string
-     */
-    public function getFamilyName()
-    {
-        return $this->familyName;
-    }
-
-    /**
-     * Set the forename
-     *
-     * @param string $forename new value being set
-     *
-     * @return PreviousConviction
-     */
-    public function setForename($forename)
-    {
-        $this->forename = $forename;
-
-        return $this;
-    }
-
-    /**
-     * Get the forename
-     *
-     * @return string
-     */
-    public function getForename()
-    {
-        return $this->forename;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return PreviousConviction
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return PreviousConviction
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
     }
 
     /**
@@ -465,11 +488,33 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the notes
      *
-     * @return string
-     */
+     * @return string     */
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Set the court fpn
+     *
+     * @param string $courtFpn new value being set
+     *
+     * @return PreviousConviction
+     */
+    public function setCourtFpn($courtFpn)
+    {
+        $this->courtFpn = $courtFpn;
+
+        return $this;
+    }
+
+    /**
+     * Get the court fpn
+     *
+     * @return string     */
+    public function getCourtFpn()
+    {
+        return $this->courtFpn;
     }
 
     /**
@@ -489,59 +534,10 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the penalty
      *
-     * @return string
-     */
+     * @return string     */
     public function getPenalty()
     {
         return $this->penalty;
-    }
-
-    /**
-     * Set the title
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $title entity being set as the value
-     *
-     * @return PreviousConviction
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get the title
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set the transport manager
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
-     *
-     * @return PreviousConviction
-     */
-    public function setTransportManager($transportManager)
-    {
-        $this->transportManager = $transportManager;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
-    {
-        return $this->transportManager;
     }
 
     /**
@@ -561,10 +557,17 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

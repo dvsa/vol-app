@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * PublicHoliday Abstract Entity
+ * AbstractPublicHoliday Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,9 +36,20 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 
     /**
      * Created by
@@ -45,53 +61,6 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is england
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_england", nullable=true)
-     */
-    protected $isEngland;
-
-    /**
-     * Is ni
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_ni", nullable=true)
-     */
-    protected $isNi;
-
-    /**
-     * Is scotland
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_scotland", nullable=true)
-     */
-    protected $isScotland;
-
-    /**
-     * Is wales
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_wales", nullable=true)
-     */
-    protected $isWales;
 
     /**
      * Last modified by
@@ -114,6 +83,42 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     protected $publicHolidayDate;
 
     /**
+     * isEngland
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_england", nullable=true)
+     */
+    protected $isEngland;
+
+    /**
+     * isWales
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_wales", nullable=true)
+     */
+    protected $isWales;
+
+    /**
+     * isScotland
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_scotland", nullable=true)
+     */
+    protected $isScotland;
+
+    /**
+     * isNi
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="is_ni", nullable=true)
+     */
+    protected $isNi;
+
+    /**
      * Version
      *
      * @var int
@@ -124,28 +129,20 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return PublicHoliday
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -164,113 +161,39 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the is england
+     * Set the created by
      *
-     * @param string $isEngland new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return PublicHoliday
      */
-    public function setIsEngland($isEngland)
+    public function setCreatedBy($createdBy)
     {
-        $this->isEngland = $isEngland;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is england
+     * Get the created by
      *
-     * @return string
-     */
-    public function getIsEngland()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->isEngland;
-    }
-
-    /**
-     * Set the is ni
-     *
-     * @param string $isNi new value being set
-     *
-     * @return PublicHoliday
-     */
-    public function setIsNi($isNi)
-    {
-        $this->isNi = $isNi;
-
-        return $this;
-    }
-
-    /**
-     * Get the is ni
-     *
-     * @return string
-     */
-    public function getIsNi()
-    {
-        return $this->isNi;
-    }
-
-    /**
-     * Set the is scotland
-     *
-     * @param string $isScotland new value being set
-     *
-     * @return PublicHoliday
-     */
-    public function setIsScotland($isScotland)
-    {
-        $this->isScotland = $isScotland;
-
-        return $this;
-    }
-
-    /**
-     * Get the is scotland
-     *
-     * @return string
-     */
-    public function getIsScotland()
-    {
-        return $this->isScotland;
-    }
-
-    /**
-     * Set the is wales
-     *
-     * @param string $isWales new value being set
-     *
-     * @return PublicHoliday
-     */
-    public function setIsWales($isWales)
-    {
-        $this->isWales = $isWales;
-
-        return $this;
-    }
-
-    /**
-     * Get the is wales
-     *
-     * @return string
-     */
-    public function getIsWales()
-    {
-        return $this->isWales;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return PublicHoliday
      */
@@ -284,8 +207,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -310,9 +232,7 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPublicHolidayDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -320,6 +240,98 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
         }
 
         return $this->publicHolidayDate;
+    }
+
+    /**
+     * Set the is england
+     *
+     * @param string $isEngland new value being set
+     *
+     * @return PublicHoliday
+     */
+    public function setIsEngland($isEngland)
+    {
+        $this->isEngland = $isEngland;
+
+        return $this;
+    }
+
+    /**
+     * Get the is england
+     *
+     * @return string     */
+    public function getIsEngland()
+    {
+        return $this->isEngland;
+    }
+
+    /**
+     * Set the is wales
+     *
+     * @param string $isWales new value being set
+     *
+     * @return PublicHoliday
+     */
+    public function setIsWales($isWales)
+    {
+        $this->isWales = $isWales;
+
+        return $this;
+    }
+
+    /**
+     * Get the is wales
+     *
+     * @return string     */
+    public function getIsWales()
+    {
+        return $this->isWales;
+    }
+
+    /**
+     * Set the is scotland
+     *
+     * @param string $isScotland new value being set
+     *
+     * @return PublicHoliday
+     */
+    public function setIsScotland($isScotland)
+    {
+        $this->isScotland = $isScotland;
+
+        return $this;
+    }
+
+    /**
+     * Get the is scotland
+     *
+     * @return string     */
+    public function getIsScotland()
+    {
+        return $this->isScotland;
+    }
+
+    /**
+     * Set the is ni
+     *
+     * @param string $isNi new value being set
+     *
+     * @return PublicHoliday
+     */
+    public function setIsNi($isNi)
+    {
+        $this->isNi = $isNi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is ni
+     *
+     * @return string     */
+    public function getIsNi()
+    {
+        return $this->isNi;
     }
 
     /**
@@ -339,10 +351,17 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

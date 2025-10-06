@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,24 +17,24 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ProposeToRevoke Abstract Entity
+ * AbstractProposeToRevoke Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="propose_to_revoke",
  *    indexes={
  *        @ORM\Index(name="ix_propose_to_revoke_action_to_be_taken", columns={"action_to_be_taken"}),
- *        @ORM\Index(name="ix_propose_to_revoke_approval_submission_presiding_tc",
-     *     columns={"approval_submission_presiding_tc"}),
+ *        @ORM\Index(name="ix_propose_to_revoke_approval_submission_presiding_tc", columns={"approval_submission_presiding_tc"}),
  *        @ORM\Index(name="ix_propose_to_revoke_assigned_caseworker", columns={"assigned_caseworker"}),
  *        @ORM\Index(name="ix_propose_to_revoke_case_id", columns={"case_id"}),
  *        @ORM\Index(name="ix_propose_to_revoke_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_propose_to_revoke_final_submission_presiding_tc",
-     *     columns={"final_submission_presiding_tc"}),
+ *        @ORM\Index(name="ix_propose_to_revoke_final_submission_presiding_tc", columns={"final_submission_presiding_tc"}),
  *        @ORM\Index(name="ix_propose_to_revoke_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_propose_to_revoke_presiding_tc_id", columns={"presiding_tc_id"})
+ *        @ORM\Index(name="ix_propose_to_revoke_presiding_tc_id", columns={"presiding_tc_id"}),
+ *        @ORM\Index(name="uk_propose_to_revoke_case_id", columns={"case_id"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_propose_to_revoke_case_id", columns={"case_id"})
@@ -48,47 +50,38 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Action to be taken
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_to_be_taken", referencedColumnName="id", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $actionToBeTaken;
+    protected $id;
 
     /**
-     * Approval submission issued date
+     * Case
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\Column(type="date", name="approval_submission_issued_date", nullable=true)
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
-    protected $approvalSubmissionIssuedDate;
+    protected $case;
 
     /**
-     * Approval submission presiding tc
+     * Foreign Key to presiding_tc
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="approval_submission_presiding_tc",
-     *     referencedColumnName="id",
-     *     nullable=true)
+     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id")
      */
-    protected $approvalSubmissionPresidingTc;
+    protected $presidingTc;
 
     /**
-     * Approval submission returned date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="approval_submission_returned_date", nullable=true)
-     */
-    protected $approvalSubmissionReturnedDate;
-
-    /**
-     * Assigned caseworker
+     * AssignedCaseworker
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      *
@@ -98,14 +91,65 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     protected $assignedCaseworker;
 
     /**
-     * Case
+     * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="create")
      */
-    protected $case;
+    protected $createdBy;
+
+    /**
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $lastModifiedBy;
+
+    /**
+     * ApprovalSubmissionPresidingTc
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
+     * @ORM\JoinColumn(name="approval_submission_presiding_tc", referencedColumnName="id", nullable=true)
+     */
+    protected $approvalSubmissionPresidingTc;
+
+    /**
+     * FinalSubmissionPresidingTc
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
+     * @ORM\JoinColumn(name="final_submission_presiding_tc", referencedColumnName="id", nullable=true)
+     */
+    protected $finalSubmissionPresidingTc;
+
+    /**
+     * ActionToBeTaken
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="action_to_be_taken", referencedColumnName="id", nullable=true)
+     */
+    protected $actionToBeTaken;
+
+    /**
+     * Ptr agreed date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="ptr_agreed_date", nullable=true)
+     */
+    protected $ptrAgreedDate;
 
     /**
      * Closed date
@@ -126,54 +170,41 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     protected $comment;
 
     /**
-     * Created by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
-     */
-    protected $createdBy;
-
-    /**
-     * Final submission issued date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="final_submission_issued_date", nullable=true)
-     */
-    protected $finalSubmissionIssuedDate;
-
-    /**
-     * Final submission presiding tc
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="final_submission_presiding_tc", referencedColumnName="id", nullable=true)
-     */
-    protected $finalSubmissionPresidingTc;
-
-    /**
-     * Final submission returned date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="final_submission_returned_date", nullable=true)
-     */
-    protected $finalSubmissionReturnedDate;
-
-    /**
-     * Identifier - Id
+     * Version
      *
      * @var int
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
+     * @ORM\Version
      */
-    protected $id;
+    protected $version = 1;
+
+    /**
+     * Is submission required for approval
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_submission_required_for_approval", nullable=true)
+     */
+    protected $isSubmissionRequiredForApproval;
+
+    /**
+     * Approval submission issued date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="approval_submission_issued_date", nullable=true)
+     */
+    protected $approvalSubmissionIssuedDate;
+
+    /**
+     * Approval submission returned date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="approval_submission_returned_date", nullable=true)
+     */
+    protected $approvalSubmissionReturnedDate;
 
     /**
      * Ior letter issued date
@@ -183,44 +214,6 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      * @ORM\Column(type="date", name="ior_letter_issued_date", nullable=true)
      */
     protected $iorLetterIssuedDate;
-
-    /**
-     * Is submission required for action
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_submission_required_for_action", nullable=true)
-     */
-    protected $isSubmissionRequiredForAction;
-
-    /**
-     * Is submission required for approval
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_submission_required_for_approval", nullable=true)
-     */
-    protected $isSubmissionRequiredForApproval;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
-
-    /**
-     * Nfa letter issued date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="nfa_letter_issued_date", nullable=true)
-     */
-    protected $nfaLetterIssuedDate;
 
     /**
      * Operator response due date
@@ -241,13 +234,58 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     protected $operatorResponseReceivedDate;
 
     /**
-     * Other action agreed date
+     * Is submission required for action
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_submission_required_for_action", nullable=true)
+     */
+    protected $isSubmissionRequiredForAction;
+
+    /**
+     * Final submission issued date
      *
      * @var \DateTime
      *
-     * @ORM\Column(type="date", name="other_action_agreed_date", nullable=true)
+     * @ORM\Column(type="date", name="final_submission_issued_date", nullable=true)
      */
-    protected $otherActionAgreedDate;
+    protected $finalSubmissionIssuedDate;
+
+    /**
+     * Final submission returned date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="final_submission_returned_date", nullable=true)
+     */
+    protected $finalSubmissionReturnedDate;
+
+    /**
+     * Revocation letter issued date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="revocation_letter_issued_date", nullable=true)
+     */
+    protected $revocationLetterIssuedDate;
+
+    /**
+     * Nfa letter issued date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="nfa_letter_issued_date", nullable=true)
+     */
+    protected $nfaLetterIssuedDate;
+
+    /**
+     * Warning letter issued date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="warning_letter_issued_date", nullable=true)
+     */
+    protected $warningLetterIssuedDate;
 
     /**
      * Pi agreed date
@@ -259,34 +297,20 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     protected $piAgreedDate;
 
     /**
-     * Presiding tc
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=false)
-     */
-    protected $presidingTc;
-
-    /**
-     * Ptr agreed date
+     * Other action agreed date
      *
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime", name="ptr_agreed_date", nullable=true)
+     * @ORM\Column(type="date", name="other_action_agreed_date", nullable=true)
      */
-    protected $ptrAgreedDate;
+    protected $otherActionAgreedDate;
 
     /**
-     * Reason
+     * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason",
-     *     inversedBy="proposeToRevokes",
-     *     fetch="LAZY"
-     * )
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason", inversedBy="proposeToRevokes", fetch="LAZY")
      * @ORM\JoinTable(name="ptr_reason",
      *     joinColumns={
      *         @ORM\JoinColumn(name="propose_to_revoke_id", referencedColumnName="id")
@@ -299,52 +323,16 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     protected $reasons;
 
     /**
-     * Revocation letter issued date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="revocation_letter_issued_date", nullable=true)
-     */
-    protected $revocationLetterIssuedDate;
-
-    /**
-     * Version
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
-     */
-    protected $version = 1;
-
-    /**
-     * Warning letter issued date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="warning_letter_issued_date", nullable=true)
-     */
-    protected $warningLetterIssuedDate;
-
-    /**
-     * Sla target date
+     * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate",
-     *     mappedBy="proposeToRevoke",
-     *     cascade={"persist"},
-     *     indexBy="sla_id",
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="proposeToRevoke", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
     protected $slaTargetDates;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -352,154 +340,42 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->reasons = new ArrayCollection();
         $this->slaTargetDates = new ArrayCollection();
     }
 
+
     /**
-     * Set the action to be taken
+     * Set the id
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionToBeTaken entity being set as the value
+     * @param int $id new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setActionToBeTaken($actionToBeTaken)
+    public function setId($id)
     {
-        $this->actionToBeTaken = $actionToBeTaken;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the action to be taken
+     * Get the id
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getActionToBeTaken()
+     * @return int     */
+    public function getId()
     {
-        return $this->actionToBeTaken;
-    }
-
-    /**
-     * Set the approval submission issued date
-     *
-     * @param \DateTime $approvalSubmissionIssuedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setApprovalSubmissionIssuedDate($approvalSubmissionIssuedDate)
-    {
-        $this->approvalSubmissionIssuedDate = $approvalSubmissionIssuedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the approval submission issued date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getApprovalSubmissionIssuedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->approvalSubmissionIssuedDate);
-        }
-
-        return $this->approvalSubmissionIssuedDate;
-    }
-
-    /**
-     * Set the approval submission presiding tc
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $approvalSubmissionPresidingTc entity being set as the value
-     *
-     * @return ProposeToRevoke
-     */
-    public function setApprovalSubmissionPresidingTc($approvalSubmissionPresidingTc)
-    {
-        $this->approvalSubmissionPresidingTc = $approvalSubmissionPresidingTc;
-
-        return $this;
-    }
-
-    /**
-     * Get the approval submission presiding tc
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
-    public function getApprovalSubmissionPresidingTc()
-    {
-        return $this->approvalSubmissionPresidingTc;
-    }
-
-    /**
-     * Set the approval submission returned date
-     *
-     * @param \DateTime $approvalSubmissionReturnedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setApprovalSubmissionReturnedDate($approvalSubmissionReturnedDate)
-    {
-        $this->approvalSubmissionReturnedDate = $approvalSubmissionReturnedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the approval submission returned date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getApprovalSubmissionReturnedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->approvalSubmissionReturnedDate);
-        }
-
-        return $this->approvalSubmissionReturnedDate;
-    }
-
-    /**
-     * Set the assigned caseworker
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker entity being set as the value
-     *
-     * @return ProposeToRevoke
-     */
-    public function setAssignedCaseworker($assignedCaseworker)
-    {
-        $this->assignedCaseworker = $assignedCaseworker;
-
-        return $this;
-    }
-
-    /**
-     * Get the assigned caseworker
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getAssignedCaseworker()
-    {
-        return $this->assignedCaseworker;
+        return $this->id;
     }
 
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return ProposeToRevoke
      */
@@ -513,11 +389,200 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
+    }
+
+    /**
+     * Set the presiding tc
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setPresidingTc($presidingTc)
+    {
+        $this->presidingTc = $presidingTc;
+
+        return $this;
+    }
+
+    /**
+     * Get the presiding tc
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+    public function getPresidingTc()
+    {
+        return $this->presidingTc;
+    }
+
+    /**
+     * Set the assigned caseworker
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setAssignedCaseworker($assignedCaseworker)
+    {
+        $this->assignedCaseworker = $assignedCaseworker;
+
+        return $this;
+    }
+
+    /**
+     * Get the assigned caseworker
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getAssignedCaseworker()
+    {
+        return $this->assignedCaseworker;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the approval submission presiding tc
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $approvalSubmissionPresidingTc new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setApprovalSubmissionPresidingTc($approvalSubmissionPresidingTc)
+    {
+        $this->approvalSubmissionPresidingTc = $approvalSubmissionPresidingTc;
+
+        return $this;
+    }
+
+    /**
+     * Get the approval submission presiding tc
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+    public function getApprovalSubmissionPresidingTc()
+    {
+        return $this->approvalSubmissionPresidingTc;
+    }
+
+    /**
+     * Set the final submission presiding tc
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $finalSubmissionPresidingTc new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setFinalSubmissionPresidingTc($finalSubmissionPresidingTc)
+    {
+        $this->finalSubmissionPresidingTc = $finalSubmissionPresidingTc;
+
+        return $this;
+    }
+
+    /**
+     * Get the final submission presiding tc
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc     */
+    public function getFinalSubmissionPresidingTc()
+    {
+        return $this->finalSubmissionPresidingTc;
+    }
+
+    /**
+     * Set the action to be taken
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionToBeTaken new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setActionToBeTaken($actionToBeTaken)
+    {
+        $this->actionToBeTaken = $actionToBeTaken;
+
+        return $this;
+    }
+
+    /**
+     * Get the action to be taken
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getActionToBeTaken()
+    {
+        return $this->actionToBeTaken;
+    }
+
+    /**
+     * Set the ptr agreed date
+     *
+     * @param \DateTime $ptrAgreedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setPtrAgreedDate($ptrAgreedDate)
+    {
+        $this->ptrAgreedDate = $ptrAgreedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the ptr agreed date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getPtrAgreedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->ptrAgreedDate);
+        }
+
+        return $this->ptrAgreedDate;
     }
 
     /**
@@ -539,9 +604,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getClosedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -568,145 +631,114 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the comment
      *
-     * @return string
-     */
+     * @return string     */
     public function getComment()
     {
         return $this->comment;
     }
 
     /**
-     * Set the created by
+     * Set the version
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param int $version new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setCreatedBy($createdBy)
+    public function setVersion($version)
     {
-        $this->createdBy = $createdBy;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the version
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->createdBy;
+        return $this->version;
     }
 
     /**
-     * Set the final submission issued date
+     * Set the is submission required for approval
      *
-     * @param \DateTime $finalSubmissionIssuedDate new value being set
+     * @param bool $isSubmissionRequiredForApproval new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setFinalSubmissionIssuedDate($finalSubmissionIssuedDate)
+    public function setIsSubmissionRequiredForApproval($isSubmissionRequiredForApproval)
     {
-        $this->finalSubmissionIssuedDate = $finalSubmissionIssuedDate;
+        $this->isSubmissionRequiredForApproval = $isSubmissionRequiredForApproval;
 
         return $this;
     }
 
     /**
-     * Get the final submission issued date
+     * Get the is submission required for approval
+     *
+     * @return bool     */
+    public function getIsSubmissionRequiredForApproval()
+    {
+        return $this->isSubmissionRequiredForApproval;
+    }
+
+    /**
+     * Set the approval submission issued date
+     *
+     * @param \DateTime $approvalSubmissionIssuedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setApprovalSubmissionIssuedDate($approvalSubmissionIssuedDate)
+    {
+        $this->approvalSubmissionIssuedDate = $approvalSubmissionIssuedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the approval submission issued date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getFinalSubmissionIssuedDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getApprovalSubmissionIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->finalSubmissionIssuedDate);
+            return $this->asDateTime($this->approvalSubmissionIssuedDate);
         }
 
-        return $this->finalSubmissionIssuedDate;
+        return $this->approvalSubmissionIssuedDate;
     }
 
     /**
-     * Set the final submission presiding tc
+     * Set the approval submission returned date
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $finalSubmissionPresidingTc entity being set as the value
+     * @param \DateTime $approvalSubmissionReturnedDate new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setFinalSubmissionPresidingTc($finalSubmissionPresidingTc)
+    public function setApprovalSubmissionReturnedDate($approvalSubmissionReturnedDate)
     {
-        $this->finalSubmissionPresidingTc = $finalSubmissionPresidingTc;
+        $this->approvalSubmissionReturnedDate = $approvalSubmissionReturnedDate;
 
         return $this;
     }
 
     /**
-     * Get the final submission presiding tc
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
-    public function getFinalSubmissionPresidingTc()
-    {
-        return $this->finalSubmissionPresidingTc;
-    }
-
-    /**
-     * Set the final submission returned date
-     *
-     * @param \DateTime $finalSubmissionReturnedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setFinalSubmissionReturnedDate($finalSubmissionReturnedDate)
-    {
-        $this->finalSubmissionReturnedDate = $finalSubmissionReturnedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the final submission returned date
+     * Get the approval submission returned date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getFinalSubmissionReturnedDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getApprovalSubmissionReturnedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->finalSubmissionReturnedDate);
+            return $this->asDateTime($this->approvalSubmissionReturnedDate);
         }
 
-        return $this->finalSubmissionReturnedDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->approvalSubmissionReturnedDate;
     }
 
     /**
@@ -728,9 +760,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getIorLetterIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -738,109 +768,6 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
         }
 
         return $this->iorLetterIssuedDate;
-    }
-
-    /**
-     * Set the is submission required for action
-     *
-     * @param boolean $isSubmissionRequiredForAction new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setIsSubmissionRequiredForAction($isSubmissionRequiredForAction)
-    {
-        $this->isSubmissionRequiredForAction = $isSubmissionRequiredForAction;
-
-        return $this;
-    }
-
-    /**
-     * Get the is submission required for action
-     *
-     * @return boolean
-     */
-    public function getIsSubmissionRequiredForAction()
-    {
-        return $this->isSubmissionRequiredForAction;
-    }
-
-    /**
-     * Set the is submission required for approval
-     *
-     * @param boolean $isSubmissionRequiredForApproval new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setIsSubmissionRequiredForApproval($isSubmissionRequiredForApproval)
-    {
-        $this->isSubmissionRequiredForApproval = $isSubmissionRequiredForApproval;
-
-        return $this;
-    }
-
-    /**
-     * Get the is submission required for approval
-     *
-     * @return boolean
-     */
-    public function getIsSubmissionRequiredForApproval()
-    {
-        return $this->isSubmissionRequiredForApproval;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return ProposeToRevoke
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the nfa letter issued date
-     *
-     * @param \DateTime $nfaLetterIssuedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setNfaLetterIssuedDate($nfaLetterIssuedDate)
-    {
-        $this->nfaLetterIssuedDate = $nfaLetterIssuedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the nfa letter issued date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getNfaLetterIssuedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->nfaLetterIssuedDate);
-        }
-
-        return $this->nfaLetterIssuedDate;
     }
 
     /**
@@ -862,9 +789,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getOperatorResponseDueDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -893,9 +818,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getOperatorResponseReceivedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -906,34 +829,171 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the other action agreed date
+     * Set the is submission required for action
      *
-     * @param \DateTime $otherActionAgreedDate new value being set
+     * @param bool $isSubmissionRequiredForAction new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setOtherActionAgreedDate($otherActionAgreedDate)
+    public function setIsSubmissionRequiredForAction($isSubmissionRequiredForAction)
     {
-        $this->otherActionAgreedDate = $otherActionAgreedDate;
+        $this->isSubmissionRequiredForAction = $isSubmissionRequiredForAction;
 
         return $this;
     }
 
     /**
-     * Get the other action agreed date
+     * Get the is submission required for action
+     *
+     * @return bool     */
+    public function getIsSubmissionRequiredForAction()
+    {
+        return $this->isSubmissionRequiredForAction;
+    }
+
+    /**
+     * Set the final submission issued date
+     *
+     * @param \DateTime $finalSubmissionIssuedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setFinalSubmissionIssuedDate($finalSubmissionIssuedDate)
+    {
+        $this->finalSubmissionIssuedDate = $finalSubmissionIssuedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the final submission issued date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getOtherActionAgreedDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getFinalSubmissionIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->otherActionAgreedDate);
+            return $this->asDateTime($this->finalSubmissionIssuedDate);
         }
 
-        return $this->otherActionAgreedDate;
+        return $this->finalSubmissionIssuedDate;
+    }
+
+    /**
+     * Set the final submission returned date
+     *
+     * @param \DateTime $finalSubmissionReturnedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setFinalSubmissionReturnedDate($finalSubmissionReturnedDate)
+    {
+        $this->finalSubmissionReturnedDate = $finalSubmissionReturnedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the final submission returned date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getFinalSubmissionReturnedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->finalSubmissionReturnedDate);
+        }
+
+        return $this->finalSubmissionReturnedDate;
+    }
+
+    /**
+     * Set the revocation letter issued date
+     *
+     * @param \DateTime $revocationLetterIssuedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setRevocationLetterIssuedDate($revocationLetterIssuedDate)
+    {
+        $this->revocationLetterIssuedDate = $revocationLetterIssuedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the revocation letter issued date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getRevocationLetterIssuedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->revocationLetterIssuedDate);
+        }
+
+        return $this->revocationLetterIssuedDate;
+    }
+
+    /**
+     * Set the nfa letter issued date
+     *
+     * @param \DateTime $nfaLetterIssuedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setNfaLetterIssuedDate($nfaLetterIssuedDate)
+    {
+        $this->nfaLetterIssuedDate = $nfaLetterIssuedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the nfa letter issued date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getNfaLetterIssuedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->nfaLetterIssuedDate);
+        }
+
+        return $this->nfaLetterIssuedDate;
+    }
+
+    /**
+     * Set the warning letter issued date
+     *
+     * @param \DateTime $warningLetterIssuedDate new value being set
+     *
+     * @return ProposeToRevoke
+     */
+    public function setWarningLetterIssuedDate($warningLetterIssuedDate)
+    {
+        $this->warningLetterIssuedDate = $warningLetterIssuedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the warning letter issued date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getWarningLetterIssuedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->warningLetterIssuedDate);
+        }
+
+        return $this->warningLetterIssuedDate;
     }
 
     /**
@@ -955,9 +1015,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getPiAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -968,64 +1026,38 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the presiding tc
+     * Set the other action agreed date
      *
-     * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc entity being set as the value
+     * @param \DateTime $otherActionAgreedDate new value being set
      *
      * @return ProposeToRevoke
      */
-    public function setPresidingTc($presidingTc)
+    public function setOtherActionAgreedDate($otherActionAgreedDate)
     {
-        $this->presidingTc = $presidingTc;
+        $this->otherActionAgreedDate = $otherActionAgreedDate;
 
         return $this;
     }
 
     /**
-     * Get the presiding tc
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     */
-    public function getPresidingTc()
-    {
-        return $this->presidingTc;
-    }
-
-    /**
-     * Set the ptr agreed date
-     *
-     * @param \DateTime $ptrAgreedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setPtrAgreedDate($ptrAgreedDate)
-    {
-        $this->ptrAgreedDate = $ptrAgreedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the ptr agreed date
+     * Get the other action agreed date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getPtrAgreedDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getOtherActionAgreedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->ptrAgreedDate);
+            return $this->asDateTime($this->otherActionAgreedDate);
         }
 
-        return $this->ptrAgreedDate;
+        return $this->otherActionAgreedDate;
     }
 
     /**
-     * Set the reason
+     * Set the reasons
      *
-     * @param ArrayCollection $reasons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
      * @return ProposeToRevoke
      */
@@ -1039,7 +1071,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the reasons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReasons()
     {
@@ -1049,7 +1081,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Add a reasons
      *
-     * @param ArrayCollection|mixed $reasons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
      * @return ProposeToRevoke
      */
@@ -1086,95 +1118,9 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the revocation letter issued date
+     * Set the sla target dates
      *
-     * @param \DateTime $revocationLetterIssuedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setRevocationLetterIssuedDate($revocationLetterIssuedDate)
-    {
-        $this->revocationLetterIssuedDate = $revocationLetterIssuedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the revocation letter issued date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getRevocationLetterIssuedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->revocationLetterIssuedDate);
-        }
-
-        return $this->revocationLetterIssuedDate;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the warning letter issued date
-     *
-     * @param \DateTime $warningLetterIssuedDate new value being set
-     *
-     * @return ProposeToRevoke
-     */
-    public function setWarningLetterIssuedDate($warningLetterIssuedDate)
-    {
-        $this->warningLetterIssuedDate = $warningLetterIssuedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the warning letter issued date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getWarningLetterIssuedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->warningLetterIssuedDate);
-        }
-
-        return $this->warningLetterIssuedDate;
-    }
-
-    /**
-     * Set the sla target date
-     *
-     * @param ArrayCollection $slaTargetDates collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
      * @return ProposeToRevoke
      */
@@ -1188,7 +1134,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Get the sla target dates
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getSlaTargetDates()
     {
@@ -1198,7 +1144,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Add a sla target dates
      *
-     * @param ArrayCollection|mixed $slaTargetDates collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
      * @return ProposeToRevoke
      */
@@ -1232,5 +1178,13 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

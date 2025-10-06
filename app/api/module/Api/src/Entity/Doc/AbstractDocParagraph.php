@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Doc;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * DocParagraph Abstract Entity
+ * AbstractDocParagraph Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,9 +35,19 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     */
+    protected $id = 0;
 
     /**
      * Created by
@@ -46,17 +61,6 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -68,22 +72,22 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     protected $lastModifiedBy;
 
     /**
-     * Para text
+     * Displayed on UI for user to select paragraph
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="para_title", length=255, nullable=false)
+     */
+    protected $paraTitle = '';
+
+    /**
+     * Text to replace bookmark with.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="para_text", length=1000, nullable=true)
      */
     protected $paraText;
-
-    /**
-     * Para title
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="para_title", length=255, nullable=false)
-     */
-    protected $paraTitle;
 
     /**
      * Version
@@ -96,28 +100,20 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return DocParagraph
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -136,17 +132,39 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return DocParagraph
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return DocParagraph
      */
@@ -160,35 +178,10 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the para text
-     *
-     * @param string $paraText new value being set
-     *
-     * @return DocParagraph
-     */
-    public function setParaText($paraText)
-    {
-        $this->paraText = $paraText;
-
-        return $this;
-    }
-
-    /**
-     * Get the para text
-     *
-     * @return string
-     */
-    public function getParaText()
-    {
-        return $this->paraText;
     }
 
     /**
@@ -208,11 +201,33 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the para title
      *
-     * @return string
-     */
+     * @return string     */
     public function getParaTitle()
     {
         return $this->paraTitle;
+    }
+
+    /**
+     * Set the para text
+     *
+     * @param string $paraText new value being set
+     *
+     * @return DocParagraph
+     */
+    public function setParaText($paraText)
+    {
+        $this->paraText = $paraText;
+
+        return $this;
+    }
+
+    /**
+     * Get the para text
+     *
+     * @return string     */
+    public function getParaText()
+    {
+        return $this->paraText;
     }
 
     /**
@@ -232,10 +247,17 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

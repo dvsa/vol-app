@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Language Abstract Entity
+ * AbstractLanguage Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,9 +35,20 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 
     /**
      * Created by
@@ -44,26 +60,6 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Iso code
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="iso_code", length=20, nullable=true)
-     */
-    protected $isoCode;
 
     /**
      * Last modified by
@@ -86,6 +82,15 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     protected $name;
 
     /**
+     * Iso code
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="iso_code", length=20, nullable=true)
+     */
+    protected $isoCode;
+
+    /**
      * Version
      *
      * @var int
@@ -96,28 +101,20 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     protected $version = 1;
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Language
+     * Initialise the collections
      */
-    public function setCreatedBy($createdBy)
+    public function __construct()
     {
-        $this->createdBy = $createdBy;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
+
 
     /**
      * Set the id
@@ -136,41 +133,39 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the iso code
+     * Set the created by
      *
-     * @param string $isoCode new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Language
      */
-    public function setIsoCode($isoCode)
+    public function setCreatedBy($createdBy)
     {
-        $this->isoCode = $isoCode;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the iso code
+     * Get the created by
      *
-     * @return string
-     */
-    public function getIsoCode()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->isoCode;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Language
      */
@@ -184,8 +179,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -208,11 +202,33 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Get the name
      *
-     * @return string
-     */
+     * @return string     */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the iso code
+     *
+     * @param string $isoCode new value being set
+     *
+     * @return Language
+     */
+    public function setIsoCode($isoCode)
+    {
+        $this->isoCode = $isoCode;
+
+        return $this;
+    }
+
+    /**
+     * Get the iso code
+     *
+     * @return string     */
+    public function getIsoCode()
+    {
+        return $this->isoCode;
     }
 
     /**
@@ -232,10 +248,17 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

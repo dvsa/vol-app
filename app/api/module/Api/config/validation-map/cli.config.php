@@ -118,5 +118,6 @@ return [
     CliQueryHandler\CompaniesHouse\Organisations::class => IsSystemUser::class,
 
     CliCommandHandler\InterimEndDateEnforcement::class => IsSystemUser::class,
+    CliCommandHandler\EntityGenerator\GenerateEntities::class => IsSystemUser::class,
 
 ];

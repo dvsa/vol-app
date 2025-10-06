@@ -1,19 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * MessageFailures Abstract Entity
+ * AbstractMessageFailures Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,22 +33,22 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
 
     /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Organisation
+     * Foreign key to organisation table.
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      *
@@ -53,13 +58,29 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     protected $organisation;
 
     /**
-     * Queue type
+     * FQCN of the queue comsumer.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="queue_type", length=255, nullable=false)
      */
-    protected $queueType;
+    protected $queueType = '';
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
 
     /**
      * Set the id
@@ -78,8 +99,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
@@ -88,7 +108,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Set the organisation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
      * @return MessageFailures
      */
@@ -102,8 +122,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -126,10 +145,17 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the queue type
      *
-     * @return string
-     */
+     * @return string     */
     public function getQueueType()
     {
         return $this->queueType;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }
