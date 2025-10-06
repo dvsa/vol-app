@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Organisation Abstract Entity
+ * AbstractOrganisation Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -27,10 +30,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_organisation_contact_details_id", columns={"contact_details_id"}),
  *        @ORM\Index(name="ix_organisation_cpid", columns={"cpid"}),
- *        @ORM\Index(name="ix_organisation_cpid_name", columns={"cpid","name"}),
+ *        @ORM\Index(name="ix_organisation_cpid_name", columns={"cpid", "name"}),
  *        @ORM\Index(name="ix_organisation_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_organisation_irfo_contact_details_id",
-     *     columns={"irfo_contact_details_id"}),
+ *        @ORM\Index(name="ix_organisation_irfo_contact_details_id", columns={"irfo_contact_details_id"}),
  *        @ORM\Index(name="ix_organisation_irfo_nationality", columns={"irfo_nationality"}),
  *        @ORM\Index(name="ix_organisation_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_organisation_lead_tc_area_id", columns={"lead_tc_area_id"}),
@@ -49,58 +51,18 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     use SoftDeletableTrait;
 
     /**
-     * Allow email
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="yesno", name="allow_email", nullable=false, options={"default": 1})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $allowEmail = 1;
+    protected $id;
 
     /**
-     * Company cert seen
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="company_cert_seen", nullable=false, options={"default": 0})
-     */
-    protected $companyCertSeen = 0;
-
-    /**
-     * Company or llp no
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
-     */
-    protected $companyOrLlpNo;
-
-    /**
-     * Confirm share trailer info
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="confirm_share_trailer_info",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $confirmShareTrailerInfo = 0;
-
-    /**
-     * Confirm share vehicle info
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno",
-     *     name="confirm_share_vehicle_info",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $confirmShareVehicleInfo = 0;
-
-    /**
-     * Contact details
+     * Registered office details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
@@ -108,6 +70,46 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=true)
      */
     protected $contactDetails;
+
+    /**
+     * Separate contact details for IRFO info.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="irfo_contact_details_id", referencedColumnName="id", nullable=true)
+     */
+    protected $irfoContactDetails;
+
+    /**
+     * LLP, LTD company, Sole trader etc.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     */
+    protected $type;
+
+    /**
+     * ISO country code of organisations nationality for International Road Freight.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
+     * @ORM\JoinColumn(name="irfo_nationality", referencedColumnName="id", nullable=true)
+     */
+    protected $irfoNationality;
+
+    /**
+     * For multi licence organisations the lead traffic area.  The one that will deal with the organisation.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="lead_tc_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $leadTcArea;
 
     /**
      * Cpid
@@ -131,83 +133,6 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irfo contact details
-     *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="irfo_contact_details_id", referencedColumnName="id", nullable=true)
-     */
-    protected $irfoContactDetails;
-
-    /**
-     * Irfo nationality
-     *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_nationality", referencedColumnName="id", nullable=true)
-     */
-    protected $irfoNationality;
-
-    /**
-     * Is irfo
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_irfo", nullable=false, options={"default": 0})
-     */
-    protected $isIrfo = 0;
-
-    /**
-     * Is messaging disabled
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_messaging_disabled",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $isMessagingDisabled = 0;
-
-    /**
-     * Is messaging file upload enabled
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_messaging_file_upload_enabled",
-     *     nullable=false,
-     *     options={"default": 1})
-     */
-    protected $isMessagingFileUploadEnabled = 1;
-
-    /**
-     * Is unlicensed
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_unlicensed", nullable=false, options={"default": 0})
-     */
-    protected $isUnlicensed = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -219,23 +144,76 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     protected $lastModifiedBy;
 
     /**
-     * Lead tc area
+     * Registered company number if applicable
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="lead_tc_area_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
      */
-    protected $leadTcArea;
+    protected $companyOrLlpNo;
 
     /**
-     * Name
+     * Organisatin name.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="name", length=160, nullable=true)
      */
     protected $name;
+
+    /**
+     * Certificate of incorpoation has been provided.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="company_cert_seen", nullable=false, options={"default": 0})
+     */
+    protected $companyCertSeen = 0;
+
+    /**
+     * Is an International Road Freight Operator
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_irfo", nullable=false, options={"default": 0})
+     */
+    protected $isIrfo = 0;
+
+    /**
+     * Allow documents to be sent via email.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="allow_email", nullable=false, options={"default": 1})
+     */
+    protected $allowEmail = 1;
+
+    /**
+     * User has confirmed vehicle details can be used in dvsa reporting
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="confirm_share_vehicle_info", nullable=false, options={"default": 0})
+     */
+    protected $confirmShareVehicleInfo = 0;
+
+    /**
+     * User has confirmed trailer details can be used in dvsa reporting
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="confirm_share_trailer_info", nullable=false, options={"default": 0})
+     */
+    protected $confirmShareTrailerInfo = 0;
+
+    /**
+     * Is unlicensed
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_unlicensed", nullable=false, options={"default": 0})
+     */
+    protected $isUnlicensed = 0;
 
     /**
      * Nature of business
@@ -247,14 +225,22 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     protected $natureOfBusiness;
 
     /**
-     * Type
+     * Is messaging disabled
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="boolean", name="is_messaging_disabled", nullable=false, options={"default": 0})
      */
-    protected $type;
+    protected $isMessagingDisabled = 0;
+
+    /**
+     * Is messaging file upload enabled
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_messaging_file_upload_enabled", nullable=true, options={"default": 1})
+     */
+    protected $isMessagingFileUploadEnabled = 1;
 
     /**
      * Version
@@ -267,32 +253,25 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Disqualification
+     * Disqualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification",
-     *     mappedBy="organisation"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification", mappedBy="organisation")
      */
     protected $disqualifications;
 
     /**
-     * Irfo partner
+     * IrfoPartners
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner",
-     *     mappedBy="organisation",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner", mappedBy="organisation", cascade={"persist"})
      */
     protected $irfoPartners;
 
     /**
-     * Licence
+     * Licences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -301,57 +280,43 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     protected $licences;
 
     /**
-     * Organisation person
+     * OrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson",
-     *     mappedBy="organisation"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson", mappedBy="organisation")
      */
     protected $organisationPersons;
 
     /**
-     * Read audit
+     * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit",
-     *     mappedBy="organisation"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit", mappedBy="organisation")
      */
     protected $readAudits;
 
     /**
-     * Organisation user
+     * OrganisationUsers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser",
-     *     mappedBy="organisation"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser", mappedBy="organisation")
      */
     protected $organisationUsers;
 
     /**
-     * Trading name
+     * TradingNames
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\TradingName",
-     *     mappedBy="organisation"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\TradingName", mappedBy="organisation")
      */
     protected $tradingNames;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -359,11 +324,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->disqualifications = new ArrayCollection();
         $this->irfoPartners = new ArrayCollection();
@@ -374,52 +337,212 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
         $this->tradingNames = new ArrayCollection();
     }
 
+
     /**
-     * Set the allow email
+     * Set the id
      *
-     * @param string $allowEmail new value being set
+     * @param int $id new value being set
      *
      * @return Organisation
      */
-    public function setAllowEmail($allowEmail)
+    public function setId($id)
     {
-        $this->allowEmail = $allowEmail;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the allow email
+     * Get the id
      *
-     * @return string
-     */
-    public function getAllowEmail()
+     * @return int     */
+    public function getId()
     {
-        return $this->allowEmail;
+        return $this->id;
     }
 
     /**
-     * Set the company cert seen
+     * Set the contact details
      *
-     * @param string $companyCertSeen new value being set
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
      * @return Organisation
      */
-    public function setCompanyCertSeen($companyCertSeen)
+    public function setContactDetails($contactDetails)
     {
-        $this->companyCertSeen = $companyCertSeen;
+        $this->contactDetails = $contactDetails;
 
         return $this;
     }
 
     /**
-     * Get the company cert seen
+     * Get the contact details
      *
-     * @return string
-     */
-    public function getCompanyCertSeen()
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getContactDetails()
     {
-        return $this->companyCertSeen;
+        return $this->contactDetails;
+    }
+
+    /**
+     * Set the irfo contact details
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $irfoContactDetails new value being set
+     *
+     * @return Organisation
+     */
+    public function setIrfoContactDetails($irfoContactDetails)
+    {
+        $this->irfoContactDetails = $irfoContactDetails;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo contact details
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getIrfoContactDetails()
+    {
+        return $this->irfoContactDetails;
+    }
+
+    /**
+     * Set the type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
+     *
+     * @return Organisation
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get the type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the irfo nationality
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $irfoNationality new value being set
+     *
+     * @return Organisation
+     */
+    public function setIrfoNationality($irfoNationality)
+    {
+        $this->irfoNationality = $irfoNationality;
+
+        return $this;
+    }
+
+    /**
+     * Get the irfo nationality
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+    public function getIrfoNationality()
+    {
+        return $this->irfoNationality;
+    }
+
+    /**
+     * Set the lead tc area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $leadTcArea new value being set
+     *
+     * @return Organisation
+     */
+    public function setLeadTcArea($leadTcArea)
+    {
+        $this->leadTcArea = $leadTcArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the lead tc area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+    public function getLeadTcArea()
+    {
+        return $this->leadTcArea;
+    }
+
+    /**
+     * Set the cpid
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $cpid new value being set
+     *
+     * @return Organisation
+     */
+    public function setCpid($cpid)
+    {
+        $this->cpid = $cpid;
+
+        return $this;
+    }
+
+    /**
+     * Get the cpid
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getCpid()
+    {
+        return $this->cpid;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Organisation
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Organisation
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -439,347 +562,10 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the company or llp no
      *
-     * @return string
-     */
+     * @return string     */
     public function getCompanyOrLlpNo()
     {
         return $this->companyOrLlpNo;
-    }
-
-    /**
-     * Set the confirm share trailer info
-     *
-     * @param string $confirmShareTrailerInfo new value being set
-     *
-     * @return Organisation
-     */
-    public function setConfirmShareTrailerInfo($confirmShareTrailerInfo)
-    {
-        $this->confirmShareTrailerInfo = $confirmShareTrailerInfo;
-
-        return $this;
-    }
-
-    /**
-     * Get the confirm share trailer info
-     *
-     * @return string
-     */
-    public function getConfirmShareTrailerInfo()
-    {
-        return $this->confirmShareTrailerInfo;
-    }
-
-    /**
-     * Set the confirm share vehicle info
-     *
-     * @param string $confirmShareVehicleInfo new value being set
-     *
-     * @return Organisation
-     */
-    public function setConfirmShareVehicleInfo($confirmShareVehicleInfo)
-    {
-        $this->confirmShareVehicleInfo = $confirmShareVehicleInfo;
-
-        return $this;
-    }
-
-    /**
-     * Get the confirm share vehicle info
-     *
-     * @return string
-     */
-    public function getConfirmShareVehicleInfo()
-    {
-        return $this->confirmShareVehicleInfo;
-    }
-
-    /**
-     * Set the contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setContactDetails($contactDetails)
-    {
-        $this->contactDetails = $contactDetails;
-
-        return $this;
-    }
-
-    /**
-     * Get the contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getContactDetails()
-    {
-        return $this->contactDetails;
-    }
-
-    /**
-     * Set the cpid
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $cpid entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setCpid($cpid)
-    {
-        $this->cpid = $cpid;
-
-        return $this;
-    }
-
-    /**
-     * Get the cpid
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getCpid()
-    {
-        return $this->cpid;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Organisation
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the irfo contact details
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $irfoContactDetails entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setIrfoContactDetails($irfoContactDetails)
-    {
-        $this->irfoContactDetails = $irfoContactDetails;
-
-        return $this;
-    }
-
-    /**
-     * Get the irfo contact details
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getIrfoContactDetails()
-    {
-        return $this->irfoContactDetails;
-    }
-
-    /**
-     * Set the irfo nationality
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $irfoNationality entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setIrfoNationality($irfoNationality)
-    {
-        $this->irfoNationality = $irfoNationality;
-
-        return $this;
-    }
-
-    /**
-     * Get the irfo nationality
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     */
-    public function getIrfoNationality()
-    {
-        return $this->irfoNationality;
-    }
-
-    /**
-     * Set the is irfo
-     *
-     * @param string $isIrfo new value being set
-     *
-     * @return Organisation
-     */
-    public function setIsIrfo($isIrfo)
-    {
-        $this->isIrfo = $isIrfo;
-
-        return $this;
-    }
-
-    /**
-     * Get the is irfo
-     *
-     * @return string
-     */
-    public function getIsIrfo()
-    {
-        return $this->isIrfo;
-    }
-
-    /**
-     * Set the is messaging disabled
-     *
-     * @param boolean $isMessagingDisabled new value being set
-     *
-     * @return Organisation
-     */
-    public function setIsMessagingDisabled($isMessagingDisabled)
-    {
-        $this->isMessagingDisabled = $isMessagingDisabled;
-
-        return $this;
-    }
-
-    /**
-     * Get the is messaging disabled
-     *
-     * @return boolean
-     */
-    public function getIsMessagingDisabled()
-    {
-        return $this->isMessagingDisabled;
-    }
-
-    /**
-     * Set the is messaging file upload enabled
-     *
-     * @param boolean $isMessagingFileUploadEnabled new value being set
-     *
-     * @return Organisation
-     */
-    public function setIsMessagingFileUploadEnabled($isMessagingFileUploadEnabled)
-    {
-        $this->isMessagingFileUploadEnabled = $isMessagingFileUploadEnabled;
-
-        return $this;
-    }
-
-    /**
-     * Get the is messaging file upload enabled
-     *
-     * @return boolean
-     */
-    public function getIsMessagingFileUploadEnabled()
-    {
-        return $this->isMessagingFileUploadEnabled;
-    }
-
-    /**
-     * Set the is unlicensed
-     *
-     * @param boolean $isUnlicensed new value being set
-     *
-     * @return Organisation
-     */
-    public function setIsUnlicensed($isUnlicensed)
-    {
-        $this->isUnlicensed = $isUnlicensed;
-
-        return $this;
-    }
-
-    /**
-     * Get the is unlicensed
-     *
-     * @return boolean
-     */
-    public function getIsUnlicensed()
-    {
-        return $this->isUnlicensed;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the lead tc area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $leadTcArea entity being set as the value
-     *
-     * @return Organisation
-     */
-    public function setLeadTcArea($leadTcArea)
-    {
-        $this->leadTcArea = $leadTcArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the lead tc area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getLeadTcArea()
-    {
-        return $this->leadTcArea;
     }
 
     /**
@@ -799,11 +585,148 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the name
      *
-     * @return string
-     */
+     * @return string     */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the company cert seen
+     *
+     * @param string $companyCertSeen new value being set
+     *
+     * @return Organisation
+     */
+    public function setCompanyCertSeen($companyCertSeen)
+    {
+        $this->companyCertSeen = $companyCertSeen;
+
+        return $this;
+    }
+
+    /**
+     * Get the company cert seen
+     *
+     * @return string     */
+    public function getCompanyCertSeen()
+    {
+        return $this->companyCertSeen;
+    }
+
+    /**
+     * Set the is irfo
+     *
+     * @param string $isIrfo new value being set
+     *
+     * @return Organisation
+     */
+    public function setIsIrfo($isIrfo)
+    {
+        $this->isIrfo = $isIrfo;
+
+        return $this;
+    }
+
+    /**
+     * Get the is irfo
+     *
+     * @return string     */
+    public function getIsIrfo()
+    {
+        return $this->isIrfo;
+    }
+
+    /**
+     * Set the allow email
+     *
+     * @param string $allowEmail new value being set
+     *
+     * @return Organisation
+     */
+    public function setAllowEmail($allowEmail)
+    {
+        $this->allowEmail = $allowEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get the allow email
+     *
+     * @return string     */
+    public function getAllowEmail()
+    {
+        return $this->allowEmail;
+    }
+
+    /**
+     * Set the confirm share vehicle info
+     *
+     * @param string $confirmShareVehicleInfo new value being set
+     *
+     * @return Organisation
+     */
+    public function setConfirmShareVehicleInfo($confirmShareVehicleInfo)
+    {
+        $this->confirmShareVehicleInfo = $confirmShareVehicleInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get the confirm share vehicle info
+     *
+     * @return string     */
+    public function getConfirmShareVehicleInfo()
+    {
+        return $this->confirmShareVehicleInfo;
+    }
+
+    /**
+     * Set the confirm share trailer info
+     *
+     * @param string $confirmShareTrailerInfo new value being set
+     *
+     * @return Organisation
+     */
+    public function setConfirmShareTrailerInfo($confirmShareTrailerInfo)
+    {
+        $this->confirmShareTrailerInfo = $confirmShareTrailerInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get the confirm share trailer info
+     *
+     * @return string     */
+    public function getConfirmShareTrailerInfo()
+    {
+        return $this->confirmShareTrailerInfo;
+    }
+
+    /**
+     * Set the is unlicensed
+     *
+     * @param bool $isUnlicensed new value being set
+     *
+     * @return Organisation
+     */
+    public function setIsUnlicensed($isUnlicensed)
+    {
+        $this->isUnlicensed = $isUnlicensed;
+
+        return $this;
+    }
+
+    /**
+     * Get the is unlicensed
+     *
+     * @return bool     */
+    public function getIsUnlicensed()
+    {
+        return $this->isUnlicensed;
     }
 
     /**
@@ -823,35 +746,56 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the nature of business
      *
-     * @return string
-     */
+     * @return string     */
     public function getNatureOfBusiness()
     {
         return $this->natureOfBusiness;
     }
 
     /**
-     * Set the type
+     * Set the is messaging disabled
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type entity being set as the value
+     * @param bool $isMessagingDisabled new value being set
      *
      * @return Organisation
      */
-    public function setType($type)
+    public function setIsMessagingDisabled($isMessagingDisabled)
     {
-        $this->type = $type;
+        $this->isMessagingDisabled = $isMessagingDisabled;
 
         return $this;
     }
 
     /**
-     * Get the type
+     * Get the is messaging disabled
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getType()
+     * @return bool     */
+    public function getIsMessagingDisabled()
     {
-        return $this->type;
+        return $this->isMessagingDisabled;
+    }
+
+    /**
+     * Set the is messaging file upload enabled
+     *
+     * @param bool $isMessagingFileUploadEnabled new value being set
+     *
+     * @return Organisation
+     */
+    public function setIsMessagingFileUploadEnabled($isMessagingFileUploadEnabled)
+    {
+        $this->isMessagingFileUploadEnabled = $isMessagingFileUploadEnabled;
+
+        return $this;
+    }
+
+    /**
+     * Get the is messaging file upload enabled
+     *
+     * @return bool     */
+    public function getIsMessagingFileUploadEnabled()
+    {
+        return $this->isMessagingFileUploadEnabled;
     }
 
     /**
@@ -871,17 +815,16 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the disqualification
+     * Set the disqualifications
      *
-     * @param ArrayCollection $disqualifications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $disqualifications collection being set as the value
      *
      * @return Organisation
      */
@@ -895,7 +838,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the disqualifications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDisqualifications()
     {
@@ -905,7 +848,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a disqualifications
      *
-     * @param ArrayCollection|mixed $disqualifications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $disqualifications collection being added
      *
      * @return Organisation
      */
@@ -942,9 +885,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the irfo partner
+     * Set the irfo partners
      *
-     * @param ArrayCollection $irfoPartners collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irfoPartners collection being set as the value
      *
      * @return Organisation
      */
@@ -958,7 +901,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the irfo partners
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrfoPartners()
     {
@@ -968,7 +911,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a irfo partners
      *
-     * @param ArrayCollection|mixed $irfoPartners collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPartners collection being added
      *
      * @return Organisation
      */
@@ -1005,9 +948,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the licence
+     * Set the licences
      *
-     * @param ArrayCollection $licences collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being set as the value
      *
      * @return Organisation
      */
@@ -1021,7 +964,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the licences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicences()
     {
@@ -1031,7 +974,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a licences
      *
-     * @param ArrayCollection|mixed $licences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licences collection being added
      *
      * @return Organisation
      */
@@ -1068,9 +1011,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the organisation person
+     * Set the organisation persons
      *
-     * @param ArrayCollection $organisationPersons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $organisationPersons collection being set as the value
      *
      * @return Organisation
      */
@@ -1084,7 +1027,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the organisation persons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrganisationPersons()
     {
@@ -1094,7 +1037,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a organisation persons
      *
-     * @param ArrayCollection|mixed $organisationPersons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationPersons collection being added
      *
      * @return Organisation
      */
@@ -1131,9 +1074,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the read audit
+     * Set the read audits
      *
-     * @param ArrayCollection $readAudits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
      * @return Organisation
      */
@@ -1147,7 +1090,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the read audits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReadAudits()
     {
@@ -1157,7 +1100,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a read audits
      *
-     * @param ArrayCollection|mixed $readAudits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
      * @return Organisation
      */
@@ -1194,9 +1137,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the organisation user
+     * Set the organisation users
      *
-     * @param ArrayCollection $organisationUsers collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $organisationUsers collection being set as the value
      *
      * @return Organisation
      */
@@ -1210,7 +1153,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the organisation users
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrganisationUsers()
     {
@@ -1220,7 +1163,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a organisation users
      *
-     * @param ArrayCollection|mixed $organisationUsers collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationUsers collection being added
      *
      * @return Organisation
      */
@@ -1257,9 +1200,9 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     }
 
     /**
-     * Set the trading name
+     * Set the trading names
      *
-     * @param ArrayCollection $tradingNames collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being set as the value
      *
      * @return Organisation
      */
@@ -1273,7 +1216,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Get the trading names
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTradingNames()
     {
@@ -1283,7 +1226,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
     /**
      * Add a trading names
      *
-     * @param ArrayCollection|mixed $tradingNames collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tradingNames collection being added
      *
      * @return Organisation
      */
@@ -1317,5 +1260,13 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

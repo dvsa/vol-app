@@ -176,6 +176,7 @@ return [
     TransferCommand\Cases\Pi\UpdateHearing::class => CommandHandler\Cases\Pi\UpdateHearing::class,
     TransferCommand\Cases\Pi\Close::class => CommandHandler\Cases\Pi\Close::class,
     TransferCommand\Cases\Pi\Reopen::class => CommandHandler\Cases\Pi\Reopen::class,
+    TransferCommand\Cases\Pi\CreatePiSlaException::class => CommandHandler\Cases\Pi\CreateSlaException::class,
 
     // Transfer - Si, Erru
     TransferCommand\Cases\Si\Applied\Delete::class => CommandHandler\Cases\Si\Applied\Delete::class,

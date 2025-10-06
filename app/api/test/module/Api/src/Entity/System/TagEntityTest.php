@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
-use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\System\Tag as Entity;
+use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
 /**
  * Tag Entity Unit Tests

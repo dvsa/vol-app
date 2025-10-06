@@ -1,34 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CommunityLicWithdrawalReason Abstract Entity
+ * AbstractCommunityLicWithdrawalReason Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="community_lic_withdrawal_reason",
  *    indexes={
- *        @ORM\Index(name="ix_community_lic_withdrawal_reason_community_lic_withdrawal_id",
-     *     columns={"community_lic_withdrawal_id"}),
+ *        @ORM\Index(name="ix_community_lic_withdrawal_reason_community_lic_withdrawal_id", columns={"community_lic_withdrawal_id"}),
  *        @ORM\Index(name="ix_community_lic_withdrawal_reason_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_community_lic_withdrawal_reason_last_modified_by",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_community_lic_withdrawal_reason_type_id", columns={"type_id"})
+ *        @ORM\Index(name="ix_community_lic_withdrawal_reason_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_community_lic_withdrawal_reason_type_id", columns={"type_id"}),
+ *        @ORM\Index(name="uk_community_lic_withdrawal_reason_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_community_lic_withdrawal_reason_olbs_key", columns={"olbs_key"})
@@ -39,23 +43,41 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Community lic withdrawal
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to community_lic_withdrawal
      *
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinColumn(name="community_lic_withdrawal_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal", fetch="LAZY")
+     * @ORM\JoinColumn(name="community_lic_withdrawal_id", referencedColumnName="id")
      */
     protected $communityLicWithdrawal;
+
+    /**
+     * Type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    protected $type;
 
     /**
      * Created by
@@ -69,17 +91,6 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -89,25 +100,6 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      * @Gedmo\Blameable(on="update")
      */
     protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $type;
 
     /**
      * Version
@@ -120,52 +112,29 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     protected $version = 1;
 
     /**
-     * Set the community lic withdrawal
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal $communityLicWithdrawal entity being set as the value
+     * @var int
      *
-     * @return CommunityLicWithdrawalReason
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setCommunityLicWithdrawal($communityLicWithdrawal)
-    {
-        $this->communityLicWithdrawal = $communityLicWithdrawal;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the community lic withdrawal
-     *
-     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal
+     * Initialise collections
      */
-    public function getCommunityLicWithdrawal()
+    public function initCollections(): void
     {
-        return $this->communityLicWithdrawal;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return CommunityLicWithdrawalReason
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -184,65 +153,39 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
+     * Set the community lic withdrawal
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal $communityLicWithdrawal new value being set
      *
      * @return CommunityLicWithdrawalReason
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setCommunityLicWithdrawal($communityLicWithdrawal)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->communityLicWithdrawal = $communityLicWithdrawal;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the community lic withdrawal
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal     */
+    public function getCommunityLicWithdrawal()
     {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return CommunityLicWithdrawalReason
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
+        return $this->communityLicWithdrawal;
     }
 
     /**
      * Set the type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
      *
      * @return CommunityLicWithdrawalReason
      */
@@ -256,11 +199,56 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return CommunityLicWithdrawalReason
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return CommunityLicWithdrawalReason
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -280,10 +268,40 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return CommunityLicWithdrawalReason
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

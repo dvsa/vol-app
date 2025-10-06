@@ -224,6 +224,7 @@ return [
             'LvaVariation/Publish' => \Olcs\Controller\Lva\Variation\PublishController::class,
         ],
         'factories' => [
+            \Olcs\Controller\StaticAssetsController::class => \Olcs\Controller\Factory\StaticAssetsControllerFactory::class,
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class => TransportManagerControllerFactories\Details\TransportManagerDetailsResponsibilityControllerFactory::class,
             \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
             LvaApplicationControllers\AddressesController::class => LvaApplicationControllerFactories\AddressesControllerFactory::class,
@@ -371,6 +372,7 @@ return [
             CaseControllers\Overview\OverviewController::class => OverviewControllerfactory::class,
             Olcs\Controller\Cases\PublicInquiry\PiController::class => Olcs\Controller\Cases\PublicInquiry\PiControllerFactory::class,
             Cases\PublicInquiry\HearingController::class => Cases\PublicInquiry\HearingControllerFactory::class,
+            Olcs\Controller\Cases\PublicInquiry\SlaExceptionController::class => Olcs\Controller\Cases\PublicInquiry\SlaExceptionControllerFactory::class,
             Olcs\Controller\IrhpPermits\IrhpApplicationController::class => Olcs\Controller\IrhpPermits\IrhpApplicationControllerFactory::class,
             Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderControllerFactory::class,
             LicenceProcessingInspectionRequestController::class => LicenceProcessingInspectionRequestControllerFactory::class,
@@ -929,6 +931,7 @@ return [
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryReason::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\SubmissionLegislation::class => DataService\AbstractPublicInquiryDataFactory::class,
+            DataService\SlaException::class => CommonDataService\AbstractListDataServiceFactory::class,
         ]
     ],
     'form_service_manager' => [

@@ -1,0 +1,22 @@
+<<?php /* Template Hack */ ?>?php
+
+declare(strict_types=1);
+
+namespace <?php echo $namespace; ?>;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * <?php echo $className; ?> Entity
+ *
+<?php if (isset($repositoryClass) && $repositoryClass !== null): ?>
+ * @ORM\Entity(repositoryClass="<?php echo $repositoryClass; ?>")
+<?php else: ?>
+ * @ORM\Entity
+<?php endif; ?>
+ * @ORM\Table(name="<?php echo $tableName; ?>")
+ */
+class <?php echo $className; ?> extends <?php echo $abstractClassName; ?>
+
+{
+}

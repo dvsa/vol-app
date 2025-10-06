@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Conviction Abstract Entity
+ * AbstractConviction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,7 +33,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_conviction_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_conviction_defendant_type", columns={"defendant_type"}),
  *        @ORM\Index(name="ix_conviction_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_conviction_transport_manager_id", columns={"transport_manager_id"})
+ *        @ORM\Index(name="ix_conviction_transport_manager_id", columns={"transport_manager_id"}),
+ *        @ORM\Index(name="uk_conviction_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_conviction_olbs_key", columns={"olbs_key"})
@@ -39,45 +45,44 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Birth date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $birthDate;
+    protected $id;
+
+    /**
+     * DefendantType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="defendant_type", referencedColumnName="id")
+     */
+    protected $defendantType;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="convictions"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Category text
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="category_text", length=1024, nullable=true)
-     */
-    protected $categoryText;
-
-    /**
-     * Conviction category
+     * ConvictionCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -87,31 +92,14 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $convictionCategory;
 
     /**
-     * Conviction date
+     * Foreign Key to transport_manager
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      *
-     * @ORM\Column(type="datetime", name="conviction_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
-    protected $convictionDate;
-
-    /**
-     * Costs
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="costs", length=255, nullable=true)
-     */
-    protected $costs;
-
-    /**
-     * Court
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="court", length=70, nullable=true)
-     */
-    protected $court;
+    protected $transportManager;
 
     /**
      * Created by
@@ -125,45 +113,6 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $createdBy;
 
     /**
-     * Defendant type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="defendant_type", referencedColumnName="id", nullable=false)
-     */
-    protected $defendantType;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is dealt with
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_dealt_with", nullable=false, options={"default": 0})
-     */
-    protected $isDealtWith = 0;
-
-    /**
-     * Is declared
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_declared", nullable=false, options={"default": 0})
-     */
-    protected $isDeclared = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -175,24 +124,6 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $lastModifiedBy;
 
     /**
-     * Msi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="msi", nullable=true)
-     */
-    protected $msi;
-
-    /**
-     * Notes
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
-     */
-    protected $notes;
-
-    /**
      * Offence date
      *
      * @var \DateTime
@@ -202,22 +133,22 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $offenceDate;
 
     /**
-     * Olbs key
+     * Conviction date
      *
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="datetime", name="conviction_date", nullable=true)
      */
-    protected $olbsKey;
+    protected $convictionDate;
 
     /**
-     * Operator name
+     * Court
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="operator_name", length=70, nullable=true)
+     * @ORM\Column(type="string", name="court", length=70, nullable=true)
      */
-    protected $operatorName;
+    protected $court;
 
     /**
      * Penalty
@@ -229,6 +160,51 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $penalty;
 
     /**
+     * New olcs field?
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="costs", length=255, nullable=true)
+     */
+    protected $costs;
+
+    /**
+     * msi
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="msi", nullable=true)
+     */
+    protected $msi;
+
+    /**
+     * isDealtWith
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_dealt_with", nullable=false, options={"default": 0})
+     */
+    protected $isDealtWith = 0;
+
+    /**
+     * Declared to TC
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_declared", nullable=false, options={"default": 0})
+     */
+    protected $isDeclared = 0;
+
+    /**
+     * Birth date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="birth_date", nullable=true)
+     */
+    protected $birthDate;
+
+    /**
      * Person firstname
      *
      * @var string
@@ -238,13 +214,22 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $personFirstname;
 
     /**
-     * Person lastname
+     * Length 70 because of ETL. Will hold some org names from legacy data.
      *
      * @var string
      *
      * @ORM\Column(type="string", name="person_lastname", length=70, nullable=true)
      */
     protected $personLastname;
+
+    /**
+     * Notes
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
+     */
+    protected $notes;
 
     /**
      * Taken into consideration
@@ -256,14 +241,22 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $takenIntoConsideration;
 
     /**
-     * Transport manager
+     * user entered category for non act
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="category_text", length=1024, nullable=true)
      */
-    protected $transportManager;
+    protected $categoryText;
+
+    /**
+     * Set if defendant type is operator. Copy of op name at time of conviction.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="operator_name", length=70, nullable=true)
+     */
+    protected $operatorName;
 
     /**
      * Version
@@ -276,40 +269,80 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     protected $version = 1;
 
     /**
-     * Set the birth date
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \DateTime $birthDate new value being set
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
      *
      * @return Conviction
      */
-    public function setBirthDate($birthDate)
+    public function setId($id)
     {
-        $this->birthDate = $birthDate;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the birth date
+     * Get the id
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getBirthDate($asDateTime = false)
+     * @return int     */
+    public function getId()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->birthDate);
-        }
+        return $this->id;
+    }
 
-        return $this->birthDate;
+    /**
+     * Set the defendant type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $defendantType new value being set
+     *
+     * @return Conviction
+     */
+    public function setDefendantType($defendantType)
+    {
+        $this->defendantType = $defendantType;
+
+        return $this;
+    }
+
+    /**
+     * Get the defendant type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getDefendantType()
+    {
+        return $this->defendantType;
     }
 
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return Conviction
      */
@@ -323,41 +356,16 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
     }
 
     /**
-     * Set the category text
-     *
-     * @param string $categoryText new value being set
-     *
-     * @return Conviction
-     */
-    public function setCategoryText($categoryText)
-    {
-        $this->categoryText = $categoryText;
-
-        return $this;
-    }
-
-    /**
-     * Get the category text
-     *
-     * @return string
-     */
-    public function getCategoryText()
-    {
-        return $this->categoryText;
-    }
-
-    /**
      * Set the conviction category
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $convictionCategory entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $convictionCategory new value being set
      *
      * @return Conviction
      */
@@ -371,11 +379,108 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the conviction category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getConvictionCategory()
     {
         return $this->convictionCategory;
+    }
+
+    /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return Conviction
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Conviction
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Conviction
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the offence date
+     *
+     * @param \DateTime $offenceDate new value being set
+     *
+     * @return Conviction
+     */
+    public function setOffenceDate($offenceDate)
+    {
+        $this->offenceDate = $offenceDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the offence date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getOffenceDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->offenceDate);
+        }
+
+        return $this->offenceDate;
     }
 
     /**
@@ -397,9 +502,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getConvictionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -407,30 +510,6 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
         }
 
         return $this->convictionDate;
-    }
-
-    /**
-     * Set the costs
-     *
-     * @param string $costs new value being set
-     *
-     * @return Conviction
-     */
-    public function setCosts($costs)
-    {
-        $this->costs = $costs;
-
-        return $this;
-    }
-
-    /**
-     * Get the costs
-     *
-     * @return string
-     */
-    public function getCosts()
-    {
-        return $this->costs;
     }
 
     /**
@@ -450,83 +529,79 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the court
      *
-     * @return string
-     */
+     * @return string     */
     public function getCourt()
     {
         return $this->court;
     }
 
     /**
-     * Set the created by
+     * Set the penalty
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param string $penalty new value being set
      *
      * @return Conviction
      */
-    public function setCreatedBy($createdBy)
+    public function setPenalty($penalty)
     {
-        $this->createdBy = $createdBy;
+        $this->penalty = $penalty;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the penalty
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return string     */
+    public function getPenalty()
     {
-        return $this->createdBy;
+        return $this->penalty;
     }
 
     /**
-     * Set the defendant type
+     * Set the costs
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $defendantType entity being set as the value
+     * @param string $costs new value being set
      *
      * @return Conviction
      */
-    public function setDefendantType($defendantType)
+    public function setCosts($costs)
     {
-        $this->defendantType = $defendantType;
+        $this->costs = $costs;
 
         return $this;
     }
 
     /**
-     * Get the defendant type
+     * Get the costs
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getDefendantType()
+     * @return string     */
+    public function getCosts()
     {
-        return $this->defendantType;
+        return $this->costs;
     }
 
     /**
-     * Set the id
+     * Set the msi
      *
-     * @param int $id new value being set
+     * @param string $msi new value being set
      *
      * @return Conviction
      */
-    public function setId($id)
+    public function setMsi($msi)
     {
-        $this->id = $id;
+        $this->msi = $msi;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the msi
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getMsi()
     {
-        return $this->id;
+        return $this->msi;
     }
 
     /**
@@ -546,8 +621,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the is dealt with
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsDealtWith()
     {
         return $this->isDealtWith;
@@ -570,186 +644,39 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the is declared
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsDeclared()
     {
         return $this->isDeclared;
     }
 
     /**
-     * Set the last modified by
+     * Set the birth date
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \DateTime $birthDate new value being set
      *
      * @return Conviction
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setBirthDate($birthDate)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->birthDate = $birthDate;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the msi
-     *
-     * @param string $msi new value being set
-     *
-     * @return Conviction
-     */
-    public function setMsi($msi)
-    {
-        $this->msi = $msi;
-
-        return $this;
-    }
-
-    /**
-     * Get the msi
-     *
-     * @return string
-     */
-    public function getMsi()
-    {
-        return $this->msi;
-    }
-
-    /**
-     * Set the notes
-     *
-     * @param string $notes new value being set
-     *
-     * @return Conviction
-     */
-    public function setNotes($notes)
-    {
-        $this->notes = $notes;
-
-        return $this;
-    }
-
-    /**
-     * Get the notes
-     *
-     * @return string
-     */
-    public function getNotes()
-    {
-        return $this->notes;
-    }
-
-    /**
-     * Set the offence date
-     *
-     * @param \DateTime $offenceDate new value being set
-     *
-     * @return Conviction
-     */
-    public function setOffenceDate($offenceDate)
-    {
-        $this->offenceDate = $offenceDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the offence date
+     * Get the birth date
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
-    public function getOffenceDate($asDateTime = false)
+     * @return \DateTime     */
+    public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
-            return $this->asDateTime($this->offenceDate);
+            return $this->asDateTime($this->birthDate);
         }
 
-        return $this->offenceDate;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Conviction
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the operator name
-     *
-     * @param string $operatorName new value being set
-     *
-     * @return Conviction
-     */
-    public function setOperatorName($operatorName)
-    {
-        $this->operatorName = $operatorName;
-
-        return $this;
-    }
-
-    /**
-     * Get the operator name
-     *
-     * @return string
-     */
-    public function getOperatorName()
-    {
-        return $this->operatorName;
-    }
-
-    /**
-     * Set the penalty
-     *
-     * @param string $penalty new value being set
-     *
-     * @return Conviction
-     */
-    public function setPenalty($penalty)
-    {
-        $this->penalty = $penalty;
-
-        return $this;
-    }
-
-    /**
-     * Get the penalty
-     *
-     * @return string
-     */
-    public function getPenalty()
-    {
-        return $this->penalty;
+        return $this->birthDate;
     }
 
     /**
@@ -769,8 +696,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the person firstname
      *
-     * @return string
-     */
+     * @return string     */
     public function getPersonFirstname()
     {
         return $this->personFirstname;
@@ -793,11 +719,33 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the person lastname
      *
-     * @return string
-     */
+     * @return string     */
     public function getPersonLastname()
     {
         return $this->personLastname;
+    }
+
+    /**
+     * Set the notes
+     *
+     * @param string $notes new value being set
+     *
+     * @return Conviction
+     */
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    /**
+     * Get the notes
+     *
+     * @return string     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 
     /**
@@ -817,35 +765,56 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the taken into consideration
      *
-     * @return string
-     */
+     * @return string     */
     public function getTakenIntoConsideration()
     {
         return $this->takenIntoConsideration;
     }
 
     /**
-     * Set the transport manager
+     * Set the category text
      *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
+     * @param string $categoryText new value being set
      *
      * @return Conviction
      */
-    public function setTransportManager($transportManager)
+    public function setCategoryText($categoryText)
     {
-        $this->transportManager = $transportManager;
+        $this->categoryText = $categoryText;
 
         return $this;
     }
 
     /**
-     * Get the transport manager
+     * Get the category text
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
+     * @return string     */
+    public function getCategoryText()
     {
-        return $this->transportManager;
+        return $this->categoryText;
+    }
+
+    /**
+     * Set the operator name
+     *
+     * @param string $operatorName new value being set
+     *
+     * @return Conviction
+     */
+    public function setOperatorName($operatorName)
+    {
+        $this->operatorName = $operatorName;
+
+        return $this;
+    }
+
+    /**
+     * Get the operator name
+     *
+     * @return string     */
+    public function getOperatorName()
+    {
+        return $this->operatorName;
     }
 
     /**
@@ -865,10 +834,40 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return Conviction
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

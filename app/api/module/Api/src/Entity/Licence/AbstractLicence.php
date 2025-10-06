@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Licence Abstract Entity
+ * AbstractLicence Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -36,9 +39,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_licence_status", columns={"status"}),
  *        @ORM\Index(name="ix_licence_tachograph_ins", columns={"tachograph_ins"}),
  *        @ORM\Index(name="ix_licence_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_licence_transport_consultant_cd_id",
-     *     columns={"transport_consultant_cd_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_type", columns={"vehicle_type"})
+ *        @ORM\Index(name="ix_licence_transport_consultant_cd_id", columns={"transport_consultant_cd_id"}),
+ *        @ORM\Index(name="ix_licence_vehicle_type", columns={"vehicle_type"}),
+ *        @ORM\Index(name="uk_licence_lic_no", columns={"lic_no"}),
+ *        @ORM\Index(name="uk_licence_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_licence_lic_no", columns={"lic_no"}),
@@ -56,27 +60,125 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     use SoftDeletableTrait;
 
     /**
-     * Cns date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="cns_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $cnsDate;
+    protected $id;
 
     /**
-     * Correspondence cd
+     * FK to vehicle_inspectorate.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="enforcement_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $enforcementArea;
+
+    /**
+     * Organisation that holds the licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
+     */
+    protected $organisation;
+
+    /**
+     * FK to traffic area.  An Operator can have One licence per area.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
+     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
+     */
+    protected $trafficArea;
+
+    /**
+     * Correspondence contact details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="correspondence_cd_id", referencedColumnName="id", nullable=true)
      */
     protected $correspondenceCd;
+
+    /**
+     * Establishment contact details
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\JoinColumn(name="establishment_cd_id", referencedColumnName="id", nullable=true)
+     */
+    protected $establishmentCd;
+
+    /**
+     * Transport consultant contact details
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_consultant_cd_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportConsultantCd;
+
+    /**
+     * Is a licence for goods vehicles or passenger service vehicles
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
+     */
+    protected $goodsOrPsv;
+
+    /**
+     * VehicleType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
+     */
+    protected $vehicleType;
+
+    /**
+     * e.g. Restricted, Standard national.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
+     */
+    protected $licenceType;
+
+    /**
+     * e.g. Granted, Valid, Suspended.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     */
+    protected $status;
+
+    /**
+     * New olcs column values not applicable, external, internal
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="tachograph_ins", referencedColumnName="id", nullable=true)
+     */
+    protected $tachographIns;
 
     /**
      * Created by
@@ -90,134 +192,6 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Curtailed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="curtailed_date", nullable=true)
-     */
-    protected $curtailedDate;
-
-    /**
-     * Decision
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Pi\Decision",
-     *     inversedBy="licences",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="licence_status_decision",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="decision_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $decisions;
-
-    /**
-     * Enforcement area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinColumn(name="enforcement_area_id", referencedColumnName="id", nullable=true)
-     */
-    protected $enforcementArea;
-
-    /**
-     * Establishment cd
-     *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="establishment_cd_id", referencedColumnName="id", nullable=true)
-     */
-    protected $establishmentCd;
-
-    /**
-     * Expiry date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
-     */
-    protected $expiryDate;
-
-    /**
-     * Fabs reference
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="fabs_reference", length=10, nullable=true)
-     */
-    protected $fabsReference;
-
-    /**
-     * Fee date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="fee_date", nullable=true)
-     */
-    protected $feeDate;
-
-    /**
-     * Goods or psv
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
-     */
-    protected $goodsOrPsv;
-
-    /**
-     * Granted date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="granted_date", nullable=true)
-     */
-    protected $grantedDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * In force date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="in_force_date", nullable=true)
-     */
-    protected $inForceDate;
-
-    /**
-     * Is maintenance suitable
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_maintenance_suitable", nullable=true)
-     */
-    protected $isMaintenanceSuitable;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -229,19 +203,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $lastModifiedBy;
 
     /**
-     * Lgv declaration confirmation
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="lgv_declaration_confirmation",
-     *     nullable=false,
-     *     options={"default": 0})
-     */
-    protected $lgvDeclarationConfirmation = 0;
-
-    /**
-     * Lic no
+     * Licence number.  Normally 9 Chars.  First denotes goods/psv, second TA, rest ID.
      *
      * @var string
      *
@@ -250,178 +212,34 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $licNo;
 
     /**
-     * Licence type
+     * User confirms they have read LGV undertakings and declarations and will comply
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var bool
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_type", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="boolean", name="lgv_declaration_confirmation", nullable=false, options={"default": 0})
      */
-    protected $licenceType;
+    protected $lgvDeclarationConfirmation = 0;
 
     /**
-     * Olbs key
+     * C, U or D.  Triggers vehicle inspectorate-mobile compliance export.
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
-    protected $olbsKey;
+    protected $viAction;
 
     /**
      * Opt out tm letter
      *
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="opt_out_tm_letter", nullable=false, options={"default": 0})
      */
     protected $optOutTmLetter = 0;
 
     /**
-     * Organisation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="licences"
-     * )
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=false)
-     */
-    protected $organisation;
-
-    /**
-     * Psv discs to be printed no
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_discs_to_be_printed_no", nullable=true)
-     */
-    protected $psvDiscsToBePrintedNo;
-
-    /**
-     * Review date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="review_date", nullable=true)
-     */
-    protected $reviewDate;
-
-    /**
-     * Revoked date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="revoked_date", nullable=true)
-     */
-    protected $revokedDate;
-
-    /**
-     * Safety ins
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="safety_ins", nullable=false, options={"default": 0})
-     */
-    protected $safetyIns = 0;
-
-    /**
-     * Safety ins trailers
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_ins_trailers", nullable=true)
-     */
-    protected $safetyInsTrailers;
-
-    /**
-     * Safety ins varies
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="safety_ins_varies", nullable=true)
-     */
-    protected $safetyInsVaries;
-
-    /**
-     * Safety ins vehicles
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_ins_vehicles", nullable=true)
-     */
-    protected $safetyInsVehicles;
-
-    /**
-     * Status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
-     */
-    protected $status;
-
-    /**
-     * Surrendered date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="surrendered_date", nullable=true)
-     */
-    protected $surrenderedDate;
-
-    /**
-     * Suspended date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="suspended_date", nullable=true)
-     */
-    protected $suspendedDate;
-
-    /**
-     * Tachograph ins
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tachograph_ins", referencedColumnName="id", nullable=true)
-     */
-    protected $tachographIns;
-
-    /**
-     * Tachograph ins name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="tachograph_ins_name", length=90, nullable=true)
-     */
-    protected $tachographInsName;
-
-    /**
-     * Tot auth hgv vehicles
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_hgv_vehicles", nullable=true)
-     */
-    protected $totAuthHgvVehicles;
-
-    /**
-     * Tot auth lgv vehicles
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_lgv_vehicles", nullable=true)
-     */
-    protected $totAuthLgvVehicles;
-
-    /**
-     * Tot auth trailers
+     * Number of trailers authorised on licence
      *
      * @var int
      *
@@ -430,7 +248,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $totAuthTrailers;
 
     /**
-     * Tot auth vehicles
+     * Number of vehicles authorised on licence
      *
      * @var int
      *
@@ -439,7 +257,25 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $totAuthVehicles;
 
     /**
-     * Tot community licences
+     * Number of HGV vehicles authorised on licence
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="tot_auth_hgv_vehicles", nullable=true)
+     */
+    protected $totAuthHgvVehicles;
+
+    /**
+     * Number of LGV vehicles authorised on licence
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="tot_auth_lgv_vehicles", nullable=true)
+     */
+    protected $totAuthLgvVehicles;
+
+    /**
+     * number of community, (european) licences allowed
      *
      * @var int
      *
@@ -448,17 +284,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $totCommunityLicences;
 
     /**
-     * Traffic area
-     *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
-     */
-    protected $trafficArea;
-
-    /**
-     * Trailers in possession
+     * No of trailers in possession. Should be less than authorised number
      *
      * @var int
      *
@@ -467,7 +293,160 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $trailersInPossession;
 
     /**
-     * Translate to welsh
+     * Fabs reference
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="fabs_reference", length=10, nullable=true)
+     */
+    protected $fabsReference;
+
+    /**
+     * expiry date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="expiry_date", nullable=true)
+     */
+    protected $expiryDate;
+
+    /**
+     * granted date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="granted_date", nullable=true)
+     */
+    protected $grantedDate;
+
+    /**
+     * Date licence is reviewed
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="review_date", nullable=true)
+     */
+    protected $reviewDate;
+
+    /**
+     * Same as expiry date for all new licences.
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="fee_date", nullable=true)
+     */
+    protected $feeDate;
+
+    /**
+     * Date licence is effective
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="in_force_date", nullable=true)
+     */
+    protected $inForceDate;
+
+    /**
+     * Date surrendered by operator
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="surrendered_date", nullable=true)
+     */
+    protected $surrenderedDate;
+
+    /**
+     * Date revoked
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="revoked_date", nullable=true)
+     */
+    protected $revokedDate;
+
+    /**
+     * Date curtailed, i.e. reduced authorisation
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="curtailed_date", nullable=true)
+     */
+    protected $curtailedDate;
+
+    /**
+     * Date suspended.  Temporarily out of use
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="suspended_date", nullable=true)
+     */
+    protected $suspendedDate;
+
+    /**
+     * Continuation not sought date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="cns_date", nullable=true)
+     */
+    protected $cnsDate;
+
+    /**
+     * Max period in weeks between safety inspections.
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="safety_ins_trailers", nullable=true)
+     */
+    protected $safetyInsTrailers;
+
+    /**
+     * Max period in weeks between safety inspections.
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="safety_ins_vehicles", nullable=true)
+     */
+    protected $safetyInsVehicles;
+
+    /**
+     * Does own safety inspections.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="safety_ins", nullable=false, options={"default": 0})
+     */
+    protected $safetyIns = 0;
+
+    /**
+     * New olcs column for when some vehicles inspected more often
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesnonull", name="safety_ins_varies", nullable=true)
+     */
+    protected $safetyInsVaries;
+
+    /**
+     * New olcs column for tachograph inspector
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="tachograph_ins_name", length=90, nullable=true)
+     */
+    protected $tachographInsName;
+
+    /**
+     * Number of psv discs to be printed.  Psv discs are per licence, rather than being assigned to a specific vehicle.
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="psv_discs_to_be_printed_no", nullable=true)
+     */
+    protected $psvDiscsToBePrintedNo;
+
+    /**
+     * Documentation to be in Welsh
      *
      * @var string
      *
@@ -476,24 +455,13 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $translateToWelsh = 0;
 
     /**
-     * Transport consultant cd
+     * Are maintenance facilities/agreements suitable for the vehicles on the licence.
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_consultant_cd_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="yesnonull", name="is_maintenance_suitable", nullable=true)
      */
-    protected $transportConsultantCd;
-
-    /**
-     * Vehicle type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="vehicle_type", referencedColumnName="id", nullable=true)
-     */
-    protected $vehicleType;
+    protected $isMaintenanceSuitable;
 
     /**
      * Version
@@ -506,16 +474,33 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Vi action
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $viAction;
+    protected $olbsKey;
 
     /**
-     * Application
+     * Decisions
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Decision", inversedBy="licences", fetch="LAZY")
+     * @ORM\JoinTable(name="licence_status_decision",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="decision_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $decisions;
+
+    /**
+     * Applications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -524,20 +509,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $applications;
 
     /**
-     * Bus reg
+     * BusRegs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg",
-     *     mappedBy="licence",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="licence", cascade={"persist"})
      */
     protected $busRegs;
 
     /**
-     * Case
+     * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -546,68 +527,52 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $cases;
 
     /**
-     * Change of entity
+     * ChangeOfEntitys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity", mappedBy="licence")
      */
     protected $changeOfEntitys;
 
     /**
-     * Community lic
+     * CommunityLics
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic",
-     *     mappedBy="licence",
-     *     fetch="EXTRA_LAZY"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic", mappedBy="licence", fetch="EXTRA_LAZY")
      */
     protected $communityLics;
 
     /**
-     * Company subsidiarie
+     * CompanySubsidiaries
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary", mappedBy="licence")
      */
     protected $companySubsidiaries;
 
     /**
-     * Condition undertaking
+     * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="licence")
      */
     protected $conditionUndertakings;
 
     /**
-     * Continuation detail
+     * ContinuationDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", mappedBy="licence")
      */
     protected $continuationDetails;
 
     /**
-     * Document
+     * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -616,7 +581,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $documents;
 
     /**
-     * Fee
+     * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -625,7 +590,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $fees;
 
     /**
-     * Grace period
+     * GracePeriods
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -634,7 +599,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $gracePeriods;
 
     /**
-     * Irhp application
+     * IrhpApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -643,19 +608,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $irhpApplications;
 
     /**
-     * Operating centre
+     * OperatingCentres
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre", mappedBy="licence")
      */
     protected $operatingCentres;
 
     /**
-     * Read audit
+     * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -664,19 +626,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $readAudits;
 
     /**
-     * Licence status rule
+     * LicenceStatusRules
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule", mappedBy="licence")
      */
     protected $licenceStatusRules;
 
     /**
-     * Licence vehicle
+     * LicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -685,19 +644,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $licenceVehicles;
 
     /**
-     * Private hire licence
+     * PrivateHireLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence", mappedBy="licence")
      */
     protected $privateHireLicences;
 
     /**
-     * Psv disc
+     * PsvDiscs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -707,19 +663,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $psvDiscs;
 
     /**
-     * Publication link
+     * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="licence")
      */
     protected $publicationLinks;
 
     /**
-     * Trading name
+     * TradingNames
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -728,19 +681,16 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     protected $tradingNames;
 
     /**
-     * Tm licence
+     * TmLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence",
-     *     mappedBy="licence"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence", mappedBy="licence")
      */
     protected $tmLicences;
 
     /**
-     * Workshop
+     * Workshops
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -750,8 +700,6 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -759,11 +707,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->decisions = new ArrayCollection();
         $this->applications = new ArrayCollection();
@@ -790,41 +736,103 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
         $this->workshops = new ArrayCollection();
     }
 
+
     /**
-     * Set the cns date
+     * Set the id
      *
-     * @param \DateTime $cnsDate new value being set
+     * @param int $id new value being set
      *
      * @return Licence
      */
-    public function setCnsDate($cnsDate)
+    public function setId($id)
     {
-        $this->cnsDate = $cnsDate;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the cns date
+     * Get the id
      *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getCnsDate($asDateTime = false)
+     * @return int     */
+    public function getId()
     {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->cnsDate);
-        }
+        return $this->id;
+    }
 
-        return $this->cnsDate;
+    /**
+     * Set the enforcement area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea $enforcementArea new value being set
+     *
+     * @return Licence
+     */
+    public function setEnforcementArea($enforcementArea)
+    {
+        $this->enforcementArea = $enforcementArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the enforcement area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea     */
+    public function getEnforcementArea()
+    {
+        return $this->enforcementArea;
+    }
+
+    /**
+     * Set the organisation
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
+     *
+     * @return Licence
+     */
+    public function setOrganisation($organisation)
+    {
+        $this->organisation = $organisation;
+
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+    public function getOrganisation()
+    {
+        return $this->organisation;
+    }
+
+    /**
+     * Set the traffic area
+     *
+     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
+     *
+     * @return Licence
+     */
+    public function setTrafficArea($trafficArea)
+    {
+        $this->trafficArea = $trafficArea;
+
+        return $this;
+    }
+
+    /**
+     * Get the traffic area
+     *
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+    public function getTrafficArea()
+    {
+        return $this->trafficArea;
     }
 
     /**
      * Set the correspondence cd
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $correspondenceCd entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $correspondenceCd new value being set
      *
      * @return Licence
      */
@@ -838,17 +846,177 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the correspondence cd
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
     public function getCorrespondenceCd()
     {
         return $this->correspondenceCd;
     }
 
     /**
+     * Set the establishment cd
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $establishmentCd new value being set
+     *
+     * @return Licence
+     */
+    public function setEstablishmentCd($establishmentCd)
+    {
+        $this->establishmentCd = $establishmentCd;
+
+        return $this;
+    }
+
+    /**
+     * Get the establishment cd
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getEstablishmentCd()
+    {
+        return $this->establishmentCd;
+    }
+
+    /**
+     * Set the transport consultant cd
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $transportConsultantCd new value being set
+     *
+     * @return Licence
+     */
+    public function setTransportConsultantCd($transportConsultantCd)
+    {
+        $this->transportConsultantCd = $transportConsultantCd;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport consultant cd
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+    public function getTransportConsultantCd()
+    {
+        return $this->transportConsultantCd;
+    }
+
+    /**
+     * Set the goods or psv
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
+     *
+     * @return Licence
+     */
+    public function setGoodsOrPsv($goodsOrPsv)
+    {
+        $this->goodsOrPsv = $goodsOrPsv;
+
+        return $this;
+    }
+
+    /**
+     * Get the goods or psv
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getGoodsOrPsv()
+    {
+        return $this->goodsOrPsv;
+    }
+
+    /**
+     * Set the vehicle type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType new value being set
+     *
+     * @return Licence
+     */
+    public function setVehicleType($vehicleType)
+    {
+        $this->vehicleType = $vehicleType;
+
+        return $this;
+    }
+
+    /**
+     * Get the vehicle type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getVehicleType()
+    {
+        return $this->vehicleType;
+    }
+
+    /**
+     * Set the licence type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
+     *
+     * @return Licence
+     */
+    public function setLicenceType($licenceType)
+    {
+        $this->licenceType = $licenceType;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getLicenceType()
+    {
+        return $this->licenceType;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return Licence
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the tachograph ins
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $tachographIns new value being set
+     *
+     * @return Licence
+     */
+    public function setTachographIns($tachographIns)
+    {
+        $this->tachographIns = $tachographIns;
+
+        return $this;
+    }
+
+    /**
+     * Get the tachograph ins
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getTachographIns()
+    {
+        return $this->tachographIns;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return Licence
      */
@@ -862,11 +1030,489 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Licence
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the lic no
+     *
+     * @param string $licNo new value being set
+     *
+     * @return Licence
+     */
+    public function setLicNo($licNo)
+    {
+        $this->licNo = $licNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the lic no
+     *
+     * @return string     */
+    public function getLicNo()
+    {
+        return $this->licNo;
+    }
+
+    /**
+     * Set the lgv declaration confirmation
+     *
+     * @param bool $lgvDeclarationConfirmation new value being set
+     *
+     * @return Licence
+     */
+    public function setLgvDeclarationConfirmation($lgvDeclarationConfirmation)
+    {
+        $this->lgvDeclarationConfirmation = $lgvDeclarationConfirmation;
+
+        return $this;
+    }
+
+    /**
+     * Get the lgv declaration confirmation
+     *
+     * @return bool     */
+    public function getLgvDeclarationConfirmation()
+    {
+        return $this->lgvDeclarationConfirmation;
+    }
+
+    /**
+     * Set the vi action
+     *
+     * @param string $viAction new value being set
+     *
+     * @return Licence
+     */
+    public function setViAction($viAction)
+    {
+        $this->viAction = $viAction;
+
+        return $this;
+    }
+
+    /**
+     * Get the vi action
+     *
+     * @return string     */
+    public function getViAction()
+    {
+        return $this->viAction;
+    }
+
+    /**
+     * Set the opt out tm letter
+     *
+     * @param bool $optOutTmLetter new value being set
+     *
+     * @return Licence
+     */
+    public function setOptOutTmLetter($optOutTmLetter)
+    {
+        $this->optOutTmLetter = $optOutTmLetter;
+
+        return $this;
+    }
+
+    /**
+     * Get the opt out tm letter
+     *
+     * @return bool     */
+    public function getOptOutTmLetter()
+    {
+        return $this->optOutTmLetter;
+    }
+
+    /**
+     * Set the tot auth trailers
+     *
+     * @param int $totAuthTrailers new value being set
+     *
+     * @return Licence
+     */
+    public function setTotAuthTrailers($totAuthTrailers)
+    {
+        $this->totAuthTrailers = $totAuthTrailers;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot auth trailers
+     *
+     * @return int     */
+    public function getTotAuthTrailers()
+    {
+        return $this->totAuthTrailers;
+    }
+
+    /**
+     * Set the tot auth vehicles
+     *
+     * @param int $totAuthVehicles new value being set
+     *
+     * @return Licence
+     */
+    public function setTotAuthVehicles($totAuthVehicles)
+    {
+        $this->totAuthVehicles = $totAuthVehicles;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot auth vehicles
+     *
+     * @return int     */
+    public function getTotAuthVehicles()
+    {
+        return $this->totAuthVehicles;
+    }
+
+    /**
+     * Set the tot auth hgv vehicles
+     *
+     * @param int $totAuthHgvVehicles new value being set
+     *
+     * @return Licence
+     */
+    public function setTotAuthHgvVehicles($totAuthHgvVehicles)
+    {
+        $this->totAuthHgvVehicles = $totAuthHgvVehicles;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot auth hgv vehicles
+     *
+     * @return int     */
+    public function getTotAuthHgvVehicles()
+    {
+        return $this->totAuthHgvVehicles;
+    }
+
+    /**
+     * Set the tot auth lgv vehicles
+     *
+     * @param int $totAuthLgvVehicles new value being set
+     *
+     * @return Licence
+     */
+    public function setTotAuthLgvVehicles($totAuthLgvVehicles)
+    {
+        $this->totAuthLgvVehicles = $totAuthLgvVehicles;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot auth lgv vehicles
+     *
+     * @return int     */
+    public function getTotAuthLgvVehicles()
+    {
+        return $this->totAuthLgvVehicles;
+    }
+
+    /**
+     * Set the tot community licences
+     *
+     * @param int $totCommunityLicences new value being set
+     *
+     * @return Licence
+     */
+    public function setTotCommunityLicences($totCommunityLicences)
+    {
+        $this->totCommunityLicences = $totCommunityLicences;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot community licences
+     *
+     * @return int     */
+    public function getTotCommunityLicences()
+    {
+        return $this->totCommunityLicences;
+    }
+
+    /**
+     * Set the trailers in possession
+     *
+     * @param int $trailersInPossession new value being set
+     *
+     * @return Licence
+     */
+    public function setTrailersInPossession($trailersInPossession)
+    {
+        $this->trailersInPossession = $trailersInPossession;
+
+        return $this;
+    }
+
+    /**
+     * Get the trailers in possession
+     *
+     * @return int     */
+    public function getTrailersInPossession()
+    {
+        return $this->trailersInPossession;
+    }
+
+    /**
+     * Set the fabs reference
+     *
+     * @param string $fabsReference new value being set
+     *
+     * @return Licence
+     */
+    public function setFabsReference($fabsReference)
+    {
+        $this->fabsReference = $fabsReference;
+
+        return $this;
+    }
+
+    /**
+     * Get the fabs reference
+     *
+     * @return string     */
+    public function getFabsReference()
+    {
+        return $this->fabsReference;
+    }
+
+    /**
+     * Set the expiry date
+     *
+     * @param \DateTime $expiryDate new value being set
+     *
+     * @return Licence
+     */
+    public function setExpiryDate($expiryDate)
+    {
+        $this->expiryDate = $expiryDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the expiry date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getExpiryDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->expiryDate);
+        }
+
+        return $this->expiryDate;
+    }
+
+    /**
+     * Set the granted date
+     *
+     * @param \DateTime $grantedDate new value being set
+     *
+     * @return Licence
+     */
+    public function setGrantedDate($grantedDate)
+    {
+        $this->grantedDate = $grantedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the granted date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getGrantedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->grantedDate);
+        }
+
+        return $this->grantedDate;
+    }
+
+    /**
+     * Set the review date
+     *
+     * @param \DateTime $reviewDate new value being set
+     *
+     * @return Licence
+     */
+    public function setReviewDate($reviewDate)
+    {
+        $this->reviewDate = $reviewDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the review date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getReviewDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->reviewDate);
+        }
+
+        return $this->reviewDate;
+    }
+
+    /**
+     * Set the fee date
+     *
+     * @param \DateTime $feeDate new value being set
+     *
+     * @return Licence
+     */
+    public function setFeeDate($feeDate)
+    {
+        $this->feeDate = $feeDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the fee date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getFeeDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->feeDate);
+        }
+
+        return $this->feeDate;
+    }
+
+    /**
+     * Set the in force date
+     *
+     * @param \DateTime $inForceDate new value being set
+     *
+     * @return Licence
+     */
+    public function setInForceDate($inForceDate)
+    {
+        $this->inForceDate = $inForceDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the in force date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getInForceDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->inForceDate);
+        }
+
+        return $this->inForceDate;
+    }
+
+    /**
+     * Set the surrendered date
+     *
+     * @param \DateTime $surrenderedDate new value being set
+     *
+     * @return Licence
+     */
+    public function setSurrenderedDate($surrenderedDate)
+    {
+        $this->surrenderedDate = $surrenderedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the surrendered date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getSurrenderedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->surrenderedDate);
+        }
+
+        return $this->surrenderedDate;
+    }
+
+    /**
+     * Set the revoked date
+     *
+     * @param \DateTime $revokedDate new value being set
+     *
+     * @return Licence
+     */
+    public function setRevokedDate($revokedDate)
+    {
+        $this->revokedDate = $revokedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the revoked date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getRevokedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->revokedDate);
+        }
+
+        return $this->revokedDate;
     }
 
     /**
@@ -888,9 +1534,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getCurtailedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -901,9 +1545,297 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the decision
+     * Set the suspended date
      *
-     * @param ArrayCollection $decisions collection being set as the value
+     * @param \DateTime $suspendedDate new value being set
+     *
+     * @return Licence
+     */
+    public function setSuspendedDate($suspendedDate)
+    {
+        $this->suspendedDate = $suspendedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the suspended date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getSuspendedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->suspendedDate);
+        }
+
+        return $this->suspendedDate;
+    }
+
+    /**
+     * Set the cns date
+     *
+     * @param \DateTime $cnsDate new value being set
+     *
+     * @return Licence
+     */
+    public function setCnsDate($cnsDate)
+    {
+        $this->cnsDate = $cnsDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the cns date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getCnsDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->cnsDate);
+        }
+
+        return $this->cnsDate;
+    }
+
+    /**
+     * Set the safety ins trailers
+     *
+     * @param int $safetyInsTrailers new value being set
+     *
+     * @return Licence
+     */
+    public function setSafetyInsTrailers($safetyInsTrailers)
+    {
+        $this->safetyInsTrailers = $safetyInsTrailers;
+
+        return $this;
+    }
+
+    /**
+     * Get the safety ins trailers
+     *
+     * @return int     */
+    public function getSafetyInsTrailers()
+    {
+        return $this->safetyInsTrailers;
+    }
+
+    /**
+     * Set the safety ins vehicles
+     *
+     * @param int $safetyInsVehicles new value being set
+     *
+     * @return Licence
+     */
+    public function setSafetyInsVehicles($safetyInsVehicles)
+    {
+        $this->safetyInsVehicles = $safetyInsVehicles;
+
+        return $this;
+    }
+
+    /**
+     * Get the safety ins vehicles
+     *
+     * @return int     */
+    public function getSafetyInsVehicles()
+    {
+        return $this->safetyInsVehicles;
+    }
+
+    /**
+     * Set the safety ins
+     *
+     * @param string $safetyIns new value being set
+     *
+     * @return Licence
+     */
+    public function setSafetyIns($safetyIns)
+    {
+        $this->safetyIns = $safetyIns;
+
+        return $this;
+    }
+
+    /**
+     * Get the safety ins
+     *
+     * @return string     */
+    public function getSafetyIns()
+    {
+        return $this->safetyIns;
+    }
+
+    /**
+     * Set the safety ins varies
+     *
+     * @param string $safetyInsVaries new value being set
+     *
+     * @return Licence
+     */
+    public function setSafetyInsVaries($safetyInsVaries)
+    {
+        $this->safetyInsVaries = $safetyInsVaries;
+
+        return $this;
+    }
+
+    /**
+     * Get the safety ins varies
+     *
+     * @return string     */
+    public function getSafetyInsVaries()
+    {
+        return $this->safetyInsVaries;
+    }
+
+    /**
+     * Set the tachograph ins name
+     *
+     * @param string $tachographInsName new value being set
+     *
+     * @return Licence
+     */
+    public function setTachographInsName($tachographInsName)
+    {
+        $this->tachographInsName = $tachographInsName;
+
+        return $this;
+    }
+
+    /**
+     * Get the tachograph ins name
+     *
+     * @return string     */
+    public function getTachographInsName()
+    {
+        return $this->tachographInsName;
+    }
+
+    /**
+     * Set the psv discs to be printed no
+     *
+     * @param int $psvDiscsToBePrintedNo new value being set
+     *
+     * @return Licence
+     */
+    public function setPsvDiscsToBePrintedNo($psvDiscsToBePrintedNo)
+    {
+        $this->psvDiscsToBePrintedNo = $psvDiscsToBePrintedNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the psv discs to be printed no
+     *
+     * @return int     */
+    public function getPsvDiscsToBePrintedNo()
+    {
+        return $this->psvDiscsToBePrintedNo;
+    }
+
+    /**
+     * Set the translate to welsh
+     *
+     * @param string $translateToWelsh new value being set
+     *
+     * @return Licence
+     */
+    public function setTranslateToWelsh($translateToWelsh)
+    {
+        $this->translateToWelsh = $translateToWelsh;
+
+        return $this;
+    }
+
+    /**
+     * Get the translate to welsh
+     *
+     * @return string     */
+    public function getTranslateToWelsh()
+    {
+        return $this->translateToWelsh;
+    }
+
+    /**
+     * Set the is maintenance suitable
+     *
+     * @param string $isMaintenanceSuitable new value being set
+     *
+     * @return Licence
+     */
+    public function setIsMaintenanceSuitable($isMaintenanceSuitable)
+    {
+        $this->isMaintenanceSuitable = $isMaintenanceSuitable;
+
+        return $this;
+    }
+
+    /**
+     * Get the is maintenance suitable
+     *
+     * @return string     */
+    public function getIsMaintenanceSuitable()
+    {
+        return $this->isMaintenanceSuitable;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Licence
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return Licence
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the decisions
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being set as the value
      *
      * @return Licence
      */
@@ -917,7 +1849,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the decisions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDecisions()
     {
@@ -927,7 +1859,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a decisions
      *
-     * @param ArrayCollection|mixed $decisions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $decisions collection being added
      *
      * @return Licence
      */
@@ -964,1049 +1896,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the enforcement area
+     * Set the applications
      *
-     * @param \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea $enforcementArea entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setEnforcementArea($enforcementArea)
-    {
-        $this->enforcementArea = $enforcementArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the enforcement area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
-     */
-    public function getEnforcementArea()
-    {
-        return $this->enforcementArea;
-    }
-
-    /**
-     * Set the establishment cd
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $establishmentCd entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setEstablishmentCd($establishmentCd)
-    {
-        $this->establishmentCd = $establishmentCd;
-
-        return $this;
-    }
-
-    /**
-     * Get the establishment cd
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getEstablishmentCd()
-    {
-        return $this->establishmentCd;
-    }
-
-    /**
-     * Set the expiry date
-     *
-     * @param \DateTime $expiryDate new value being set
-     *
-     * @return Licence
-     */
-    public function setExpiryDate($expiryDate)
-    {
-        $this->expiryDate = $expiryDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the expiry date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getExpiryDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->expiryDate);
-        }
-
-        return $this->expiryDate;
-    }
-
-    /**
-     * Set the fabs reference
-     *
-     * @param string $fabsReference new value being set
-     *
-     * @return Licence
-     */
-    public function setFabsReference($fabsReference)
-    {
-        $this->fabsReference = $fabsReference;
-
-        return $this;
-    }
-
-    /**
-     * Get the fabs reference
-     *
-     * @return string
-     */
-    public function getFabsReference()
-    {
-        return $this->fabsReference;
-    }
-
-    /**
-     * Set the fee date
-     *
-     * @param \DateTime $feeDate new value being set
-     *
-     * @return Licence
-     */
-    public function setFeeDate($feeDate)
-    {
-        $this->feeDate = $feeDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the fee date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getFeeDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->feeDate);
-        }
-
-        return $this->feeDate;
-    }
-
-    /**
-     * Set the goods or psv
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setGoodsOrPsv($goodsOrPsv)
-    {
-        $this->goodsOrPsv = $goodsOrPsv;
-
-        return $this;
-    }
-
-    /**
-     * Get the goods or psv
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getGoodsOrPsv()
-    {
-        return $this->goodsOrPsv;
-    }
-
-    /**
-     * Set the granted date
-     *
-     * @param \DateTime $grantedDate new value being set
-     *
-     * @return Licence
-     */
-    public function setGrantedDate($grantedDate)
-    {
-        $this->grantedDate = $grantedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the granted date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getGrantedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->grantedDate);
-        }
-
-        return $this->grantedDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return Licence
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the in force date
-     *
-     * @param \DateTime $inForceDate new value being set
-     *
-     * @return Licence
-     */
-    public function setInForceDate($inForceDate)
-    {
-        $this->inForceDate = $inForceDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the in force date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getInForceDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->inForceDate);
-        }
-
-        return $this->inForceDate;
-    }
-
-    /**
-     * Set the is maintenance suitable
-     *
-     * @param string $isMaintenanceSuitable new value being set
-     *
-     * @return Licence
-     */
-    public function setIsMaintenanceSuitable($isMaintenanceSuitable)
-    {
-        $this->isMaintenanceSuitable = $isMaintenanceSuitable;
-
-        return $this;
-    }
-
-    /**
-     * Get the is maintenance suitable
-     *
-     * @return string
-     */
-    public function getIsMaintenanceSuitable()
-    {
-        return $this->isMaintenanceSuitable;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the lgv declaration confirmation
-     *
-     * @param boolean $lgvDeclarationConfirmation new value being set
-     *
-     * @return Licence
-     */
-    public function setLgvDeclarationConfirmation($lgvDeclarationConfirmation)
-    {
-        $this->lgvDeclarationConfirmation = $lgvDeclarationConfirmation;
-
-        return $this;
-    }
-
-    /**
-     * Get the lgv declaration confirmation
-     *
-     * @return boolean
-     */
-    public function getLgvDeclarationConfirmation()
-    {
-        return $this->lgvDeclarationConfirmation;
-    }
-
-    /**
-     * Set the lic no
-     *
-     * @param string $licNo new value being set
-     *
-     * @return Licence
-     */
-    public function setLicNo($licNo)
-    {
-        $this->licNo = $licNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the lic no
-     *
-     * @return string
-     */
-    public function getLicNo()
-    {
-        return $this->licNo;
-    }
-
-    /**
-     * Set the licence type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setLicenceType($licenceType)
-    {
-        $this->licenceType = $licenceType;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getLicenceType()
-    {
-        return $this->licenceType;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Licence
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the opt out tm letter
-     *
-     * @param boolean $optOutTmLetter new value being set
-     *
-     * @return Licence
-     */
-    public function setOptOutTmLetter($optOutTmLetter)
-    {
-        $this->optOutTmLetter = $optOutTmLetter;
-
-        return $this;
-    }
-
-    /**
-     * Get the opt out tm letter
-     *
-     * @return boolean
-     */
-    public function getOptOutTmLetter()
-    {
-        return $this->optOutTmLetter;
-    }
-
-    /**
-     * Set the organisation
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setOrganisation($organisation)
-    {
-        $this->organisation = $organisation;
-
-        return $this;
-    }
-
-    /**
-     * Get the organisation
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     */
-    public function getOrganisation()
-    {
-        return $this->organisation;
-    }
-
-    /**
-     * Set the psv discs to be printed no
-     *
-     * @param int $psvDiscsToBePrintedNo new value being set
-     *
-     * @return Licence
-     */
-    public function setPsvDiscsToBePrintedNo($psvDiscsToBePrintedNo)
-    {
-        $this->psvDiscsToBePrintedNo = $psvDiscsToBePrintedNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the psv discs to be printed no
-     *
-     * @return int
-     */
-    public function getPsvDiscsToBePrintedNo()
-    {
-        return $this->psvDiscsToBePrintedNo;
-    }
-
-    /**
-     * Set the review date
-     *
-     * @param \DateTime $reviewDate new value being set
-     *
-     * @return Licence
-     */
-    public function setReviewDate($reviewDate)
-    {
-        $this->reviewDate = $reviewDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the review date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getReviewDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->reviewDate);
-        }
-
-        return $this->reviewDate;
-    }
-
-    /**
-     * Set the revoked date
-     *
-     * @param \DateTime $revokedDate new value being set
-     *
-     * @return Licence
-     */
-    public function setRevokedDate($revokedDate)
-    {
-        $this->revokedDate = $revokedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the revoked date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getRevokedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->revokedDate);
-        }
-
-        return $this->revokedDate;
-    }
-
-    /**
-     * Set the safety ins
-     *
-     * @param string $safetyIns new value being set
-     *
-     * @return Licence
-     */
-    public function setSafetyIns($safetyIns)
-    {
-        $this->safetyIns = $safetyIns;
-
-        return $this;
-    }
-
-    /**
-     * Get the safety ins
-     *
-     * @return string
-     */
-    public function getSafetyIns()
-    {
-        return $this->safetyIns;
-    }
-
-    /**
-     * Set the safety ins trailers
-     *
-     * @param int $safetyInsTrailers new value being set
-     *
-     * @return Licence
-     */
-    public function setSafetyInsTrailers($safetyInsTrailers)
-    {
-        $this->safetyInsTrailers = $safetyInsTrailers;
-
-        return $this;
-    }
-
-    /**
-     * Get the safety ins trailers
-     *
-     * @return int
-     */
-    public function getSafetyInsTrailers()
-    {
-        return $this->safetyInsTrailers;
-    }
-
-    /**
-     * Set the safety ins varies
-     *
-     * @param string $safetyInsVaries new value being set
-     *
-     * @return Licence
-     */
-    public function setSafetyInsVaries($safetyInsVaries)
-    {
-        $this->safetyInsVaries = $safetyInsVaries;
-
-        return $this;
-    }
-
-    /**
-     * Get the safety ins varies
-     *
-     * @return string
-     */
-    public function getSafetyInsVaries()
-    {
-        return $this->safetyInsVaries;
-    }
-
-    /**
-     * Set the safety ins vehicles
-     *
-     * @param int $safetyInsVehicles new value being set
-     *
-     * @return Licence
-     */
-    public function setSafetyInsVehicles($safetyInsVehicles)
-    {
-        $this->safetyInsVehicles = $safetyInsVehicles;
-
-        return $this;
-    }
-
-    /**
-     * Get the safety ins vehicles
-     *
-     * @return int
-     */
-    public function getSafetyInsVehicles()
-    {
-        return $this->safetyInsVehicles;
-    }
-
-    /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set the surrendered date
-     *
-     * @param \DateTime $surrenderedDate new value being set
-     *
-     * @return Licence
-     */
-    public function setSurrenderedDate($surrenderedDate)
-    {
-        $this->surrenderedDate = $surrenderedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the surrendered date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getSurrenderedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->surrenderedDate);
-        }
-
-        return $this->surrenderedDate;
-    }
-
-    /**
-     * Set the suspended date
-     *
-     * @param \DateTime $suspendedDate new value being set
-     *
-     * @return Licence
-     */
-    public function setSuspendedDate($suspendedDate)
-    {
-        $this->suspendedDate = $suspendedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the suspended date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getSuspendedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->suspendedDate);
-        }
-
-        return $this->suspendedDate;
-    }
-
-    /**
-     * Set the tachograph ins
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $tachographIns entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setTachographIns($tachographIns)
-    {
-        $this->tachographIns = $tachographIns;
-
-        return $this;
-    }
-
-    /**
-     * Get the tachograph ins
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getTachographIns()
-    {
-        return $this->tachographIns;
-    }
-
-    /**
-     * Set the tachograph ins name
-     *
-     * @param string $tachographInsName new value being set
-     *
-     * @return Licence
-     */
-    public function setTachographInsName($tachographInsName)
-    {
-        $this->tachographInsName = $tachographInsName;
-
-        return $this;
-    }
-
-    /**
-     * Get the tachograph ins name
-     *
-     * @return string
-     */
-    public function getTachographInsName()
-    {
-        return $this->tachographInsName;
-    }
-
-    /**
-     * Set the tot auth hgv vehicles
-     *
-     * @param int $totAuthHgvVehicles new value being set
-     *
-     * @return Licence
-     */
-    public function setTotAuthHgvVehicles($totAuthHgvVehicles)
-    {
-        $this->totAuthHgvVehicles = $totAuthHgvVehicles;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot auth hgv vehicles
-     *
-     * @return int
-     */
-    public function getTotAuthHgvVehicles()
-    {
-        return $this->totAuthHgvVehicles;
-    }
-
-    /**
-     * Set the tot auth lgv vehicles
-     *
-     * @param int $totAuthLgvVehicles new value being set
-     *
-     * @return Licence
-     */
-    public function setTotAuthLgvVehicles($totAuthLgvVehicles)
-    {
-        $this->totAuthLgvVehicles = $totAuthLgvVehicles;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot auth lgv vehicles
-     *
-     * @return int
-     */
-    public function getTotAuthLgvVehicles()
-    {
-        return $this->totAuthLgvVehicles;
-    }
-
-    /**
-     * Set the tot auth trailers
-     *
-     * @param int $totAuthTrailers new value being set
-     *
-     * @return Licence
-     */
-    public function setTotAuthTrailers($totAuthTrailers)
-    {
-        $this->totAuthTrailers = $totAuthTrailers;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot auth trailers
-     *
-     * @return int
-     */
-    public function getTotAuthTrailers()
-    {
-        return $this->totAuthTrailers;
-    }
-
-    /**
-     * Set the tot auth vehicles
-     *
-     * @param int $totAuthVehicles new value being set
-     *
-     * @return Licence
-     */
-    public function setTotAuthVehicles($totAuthVehicles)
-    {
-        $this->totAuthVehicles = $totAuthVehicles;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot auth vehicles
-     *
-     * @return int
-     */
-    public function getTotAuthVehicles()
-    {
-        return $this->totAuthVehicles;
-    }
-
-    /**
-     * Set the tot community licences
-     *
-     * @param int $totCommunityLicences new value being set
-     *
-     * @return Licence
-     */
-    public function setTotCommunityLicences($totCommunityLicences)
-    {
-        $this->totCommunityLicences = $totCommunityLicences;
-
-        return $this;
-    }
-
-    /**
-     * Get the tot community licences
-     *
-     * @return int
-     */
-    public function getTotCommunityLicences()
-    {
-        return $this->totCommunityLicences;
-    }
-
-    /**
-     * Set the traffic area
-     *
-     * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setTrafficArea($trafficArea)
-    {
-        $this->trafficArea = $trafficArea;
-
-        return $this;
-    }
-
-    /**
-     * Get the traffic area
-     *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     */
-    public function getTrafficArea()
-    {
-        return $this->trafficArea;
-    }
-
-    /**
-     * Set the trailers in possession
-     *
-     * @param int $trailersInPossession new value being set
-     *
-     * @return Licence
-     */
-    public function setTrailersInPossession($trailersInPossession)
-    {
-        $this->trailersInPossession = $trailersInPossession;
-
-        return $this;
-    }
-
-    /**
-     * Get the trailers in possession
-     *
-     * @return int
-     */
-    public function getTrailersInPossession()
-    {
-        return $this->trailersInPossession;
-    }
-
-    /**
-     * Set the translate to welsh
-     *
-     * @param string $translateToWelsh new value being set
-     *
-     * @return Licence
-     */
-    public function setTranslateToWelsh($translateToWelsh)
-    {
-        $this->translateToWelsh = $translateToWelsh;
-
-        return $this;
-    }
-
-    /**
-     * Get the translate to welsh
-     *
-     * @return string
-     */
-    public function getTranslateToWelsh()
-    {
-        return $this->translateToWelsh;
-    }
-
-    /**
-     * Set the transport consultant cd
-     *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $transportConsultantCd entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setTransportConsultantCd($transportConsultantCd)
-    {
-        $this->transportConsultantCd = $transportConsultantCd;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport consultant cd
-     *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
-    public function getTransportConsultantCd()
-    {
-        return $this->transportConsultantCd;
-    }
-
-    /**
-     * Set the vehicle type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType entity being set as the value
-     *
-     * @return Licence
-     */
-    public function setVehicleType($vehicleType)
-    {
-        $this->vehicleType = $vehicleType;
-
-        return $this;
-    }
-
-    /**
-     * Get the vehicle type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getVehicleType()
-    {
-        return $this->vehicleType;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Licence
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the vi action
-     *
-     * @param string $viAction new value being set
-     *
-     * @return Licence
-     */
-    public function setViAction($viAction)
-    {
-        $this->viAction = $viAction;
-
-        return $this;
-    }
-
-    /**
-     * Get the vi action
-     *
-     * @return string
-     */
-    public function getViAction()
-    {
-        return $this->viAction;
-    }
-
-    /**
-     * Set the application
-     *
-     * @param ArrayCollection $applications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being set as the value
      *
      * @return Licence
      */
@@ -2020,7 +1912,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the applications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplications()
     {
@@ -2030,7 +1922,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a applications
      *
-     * @param ArrayCollection|mixed $applications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applications collection being added
      *
      * @return Licence
      */
@@ -2067,9 +1959,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the bus reg
+     * Set the bus regs
      *
-     * @param ArrayCollection $busRegs collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
      * @return Licence
      */
@@ -2083,7 +1975,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the bus regs
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getBusRegs()
     {
@@ -2093,7 +1985,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a bus regs
      *
-     * @param ArrayCollection|mixed $busRegs collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
      * @return Licence
      */
@@ -2130,9 +2022,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the case
+     * Set the cases
      *
-     * @param ArrayCollection $cases collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $cases collection being set as the value
      *
      * @return Licence
      */
@@ -2146,7 +2038,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the cases
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCases()
     {
@@ -2156,7 +2048,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a cases
      *
-     * @param ArrayCollection|mixed $cases collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $cases collection being added
      *
      * @return Licence
      */
@@ -2193,9 +2085,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the change of entity
+     * Set the change of entitys
      *
-     * @param ArrayCollection $changeOfEntitys collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $changeOfEntitys collection being set as the value
      *
      * @return Licence
      */
@@ -2209,7 +2101,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the change of entitys
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getChangeOfEntitys()
     {
@@ -2219,7 +2111,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a change of entitys
      *
-     * @param ArrayCollection|mixed $changeOfEntitys collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $changeOfEntitys collection being added
      *
      * @return Licence
      */
@@ -2256,9 +2148,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the community lic
+     * Set the community lics
      *
-     * @param ArrayCollection $communityLics collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $communityLics collection being set as the value
      *
      * @return Licence
      */
@@ -2272,7 +2164,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the community lics
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCommunityLics()
     {
@@ -2282,7 +2174,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a community lics
      *
-     * @param ArrayCollection|mixed $communityLics collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLics collection being added
      *
      * @return Licence
      */
@@ -2319,9 +2211,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the company subsidiarie
+     * Set the company subsidiaries
      *
-     * @param ArrayCollection $companySubsidiaries collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $companySubsidiaries collection being set as the value
      *
      * @return Licence
      */
@@ -2335,7 +2227,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the company subsidiaries
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getCompanySubsidiaries()
     {
@@ -2345,7 +2237,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a company subsidiaries
      *
-     * @param ArrayCollection|mixed $companySubsidiaries collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $companySubsidiaries collection being added
      *
      * @return Licence
      */
@@ -2382,9 +2274,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the condition undertaking
+     * Set the condition undertakings
      *
-     * @param ArrayCollection $conditionUndertakings collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
      * @return Licence
      */
@@ -2398,7 +2290,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the condition undertakings
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getConditionUndertakings()
     {
@@ -2408,7 +2300,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a condition undertakings
      *
-     * @param ArrayCollection|mixed $conditionUndertakings collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
      * @return Licence
      */
@@ -2445,9 +2337,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the continuation detail
+     * Set the continuation details
      *
-     * @param ArrayCollection $continuationDetails collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being set as the value
      *
      * @return Licence
      */
@@ -2461,7 +2353,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the continuation details
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getContinuationDetails()
     {
@@ -2471,7 +2363,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a continuation details
      *
-     * @param ArrayCollection|mixed $continuationDetails collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $continuationDetails collection being added
      *
      * @return Licence
      */
@@ -2508,9 +2400,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the document
+     * Set the documents
      *
-     * @param ArrayCollection $documents collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
      * @return Licence
      */
@@ -2524,7 +2416,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocuments()
     {
@@ -2534,7 +2426,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a documents
      *
-     * @param ArrayCollection|mixed $documents collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
      * @return Licence
      */
@@ -2571,9 +2463,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the fee
+     * Set the fees
      *
-     * @param ArrayCollection $fees collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
      * @return Licence
      */
@@ -2587,7 +2479,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the fees
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getFees()
     {
@@ -2597,7 +2489,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a fees
      *
-     * @param ArrayCollection|mixed $fees collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
      * @return Licence
      */
@@ -2634,9 +2526,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the grace period
+     * Set the grace periods
      *
-     * @param ArrayCollection $gracePeriods collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $gracePeriods collection being set as the value
      *
      * @return Licence
      */
@@ -2650,7 +2542,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the grace periods
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getGracePeriods()
     {
@@ -2660,7 +2552,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a grace periods
      *
-     * @param ArrayCollection|mixed $gracePeriods collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $gracePeriods collection being added
      *
      * @return Licence
      */
@@ -2697,9 +2589,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the irhp application
+     * Set the irhp applications
      *
-     * @param ArrayCollection $irhpApplications collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being set as the value
      *
      * @return Licence
      */
@@ -2713,7 +2605,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the irhp applications
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpApplications()
     {
@@ -2723,7 +2615,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a irhp applications
      *
-     * @param ArrayCollection|mixed $irhpApplications collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpApplications collection being added
      *
      * @return Licence
      */
@@ -2760,9 +2652,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the operating centre
+     * Set the operating centres
      *
-     * @param ArrayCollection $operatingCentres collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being set as the value
      *
      * @return Licence
      */
@@ -2776,7 +2668,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the operating centres
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOperatingCentres()
     {
@@ -2786,7 +2678,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a operating centres
      *
-     * @param ArrayCollection|mixed $operatingCentres collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $operatingCentres collection being added
      *
      * @return Licence
      */
@@ -2823,9 +2715,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the read audit
+     * Set the read audits
      *
-     * @param ArrayCollection $readAudits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
      * @return Licence
      */
@@ -2839,7 +2731,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the read audits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReadAudits()
     {
@@ -2849,7 +2741,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a read audits
      *
-     * @param ArrayCollection|mixed $readAudits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
      * @return Licence
      */
@@ -2886,9 +2778,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the licence status rule
+     * Set the licence status rules
      *
-     * @param ArrayCollection $licenceStatusRules collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $licenceStatusRules collection being set as the value
      *
      * @return Licence
      */
@@ -2902,7 +2794,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the licence status rules
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicenceStatusRules()
     {
@@ -2912,7 +2804,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a licence status rules
      *
-     * @param ArrayCollection|mixed $licenceStatusRules collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceStatusRules collection being added
      *
      * @return Licence
      */
@@ -2949,9 +2841,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the licence vehicle
+     * Set the licence vehicles
      *
-     * @param ArrayCollection $licenceVehicles collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being set as the value
      *
      * @return Licence
      */
@@ -2965,7 +2857,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the licence vehicles
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicenceVehicles()
     {
@@ -2975,7 +2867,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a licence vehicles
      *
-     * @param ArrayCollection|mixed $licenceVehicles collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceVehicles collection being added
      *
      * @return Licence
      */
@@ -3012,9 +2904,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the private hire licence
+     * Set the private hire licences
      *
-     * @param ArrayCollection $privateHireLicences collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $privateHireLicences collection being set as the value
      *
      * @return Licence
      */
@@ -3028,7 +2920,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the private hire licences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPrivateHireLicences()
     {
@@ -3038,7 +2930,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a private hire licences
      *
-     * @param ArrayCollection|mixed $privateHireLicences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $privateHireLicences collection being added
      *
      * @return Licence
      */
@@ -3075,9 +2967,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the psv disc
+     * Set the psv discs
      *
-     * @param ArrayCollection $psvDiscs collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $psvDiscs collection being set as the value
      *
      * @return Licence
      */
@@ -3091,7 +2983,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the psv discs
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPsvDiscs()
     {
@@ -3101,7 +2993,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a psv discs
      *
-     * @param ArrayCollection|mixed $psvDiscs collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $psvDiscs collection being added
      *
      * @return Licence
      */
@@ -3138,9 +3030,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the publication link
+     * Set the publication links
      *
-     * @param ArrayCollection $publicationLinks collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
      * @return Licence
      */
@@ -3154,7 +3046,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the publication links
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPublicationLinks()
     {
@@ -3164,7 +3056,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a publication links
      *
-     * @param ArrayCollection|mixed $publicationLinks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
      * @return Licence
      */
@@ -3201,9 +3093,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the trading name
+     * Set the trading names
      *
-     * @param ArrayCollection $tradingNames collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being set as the value
      *
      * @return Licence
      */
@@ -3217,7 +3109,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the trading names
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTradingNames()
     {
@@ -3227,7 +3119,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a trading names
      *
-     * @param ArrayCollection|mixed $tradingNames collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tradingNames collection being added
      *
      * @return Licence
      */
@@ -3264,9 +3156,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the tm licence
+     * Set the tm licences
      *
-     * @param ArrayCollection $tmLicences collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $tmLicences collection being set as the value
      *
      * @return Licence
      */
@@ -3280,7 +3172,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the tm licences
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getTmLicences()
     {
@@ -3290,7 +3182,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a tm licences
      *
-     * @param ArrayCollection|mixed $tmLicences collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmLicences collection being added
      *
      * @return Licence
      */
@@ -3327,9 +3219,9 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Set the workshop
+     * Set the workshops
      *
-     * @param ArrayCollection $workshops collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $workshops collection being set as the value
      *
      * @return Licence
      */
@@ -3343,7 +3235,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Get the workshops
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getWorkshops()
     {
@@ -3353,7 +3245,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Add a workshops
      *
-     * @param ArrayCollection|mixed $workshops collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $workshops collection being added
      *
      * @return Licence
      */
@@ -3387,5 +3279,13 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

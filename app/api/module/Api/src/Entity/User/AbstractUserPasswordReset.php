@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\User;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * UserPasswordReset Abstract Entity
+ * AbstractUserPasswordReset Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -33,19 +38,31 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Confirmation
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="confirmation", length=255, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $confirmation;
+    protected $id;
+
+    /**
+     * User
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $user;
 
     /**
      * Created by
@@ -59,17 +76,6 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -81,28 +87,13 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     protected $lastModifiedBy;
 
     /**
-     * Success
+     * Confirmation
      *
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(type="boolean", name="success", nullable=false, options={"default": 0})
+     * @ORM\Column(type="string", name="confirmation", length=255, nullable=false)
      */
-    protected $success = 0;
-
-    /**
-     * User
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\User\User",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="passwordResets"
-     * )
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
-    protected $user;
+    protected $confirmation = '';
 
     /**
      * Valid to
@@ -112,6 +103,15 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      * @ORM\Column(type="datetime", name="valid_to", nullable=false)
      */
     protected $validTo;
+
+    /**
+     * Success
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="success", nullable=false, options={"default": 0})
+     */
+    protected $success = 0;
 
     /**
      * Version
@@ -124,52 +124,20 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     protected $version = 1;
 
     /**
-     * Set the confirmation
-     *
-     * @param string $confirmation new value being set
-     *
-     * @return UserPasswordReset
+     * Initialise the collections
      */
-    public function setConfirmation($confirmation)
+    public function __construct()
     {
-        $this->confirmation = $confirmation;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the confirmation
-     *
-     * @return string
+     * Initialise collections
      */
-    public function getConfirmation()
+    public function initCollections(): void
     {
-        return $this->confirmation;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return UserPasswordReset
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -188,65 +156,16 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return UserPasswordReset
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the success
-     *
-     * @param boolean $success new value being set
-     *
-     * @return UserPasswordReset
-     */
-    public function setSuccess($success)
-    {
-        $this->success = $success;
-
-        return $this;
-    }
-
-    /**
-     * Get the success
-     *
-     * @return boolean
-     */
-    public function getSuccess()
-    {
-        return $this->success;
-    }
-
-    /**
      * Set the user
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $user entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
      * @return UserPasswordReset
      */
@@ -260,11 +179,79 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return UserPasswordReset
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return UserPasswordReset
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the confirmation
+     *
+     * @param string $confirmation new value being set
+     *
+     * @return UserPasswordReset
+     */
+    public function setConfirmation($confirmation)
+    {
+        $this->confirmation = $confirmation;
+
+        return $this;
+    }
+
+    /**
+     * Get the confirmation
+     *
+     * @return string     */
+    public function getConfirmation()
+    {
+        return $this->confirmation;
     }
 
     /**
@@ -286,9 +273,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getValidTo($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -296,6 +281,29 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
         }
 
         return $this->validTo;
+    }
+
+    /**
+     * Set the success
+     *
+     * @param bool $success new value being set
+     *
+     * @return UserPasswordReset
+     */
+    public function setSuccess($success)
+    {
+        $this->success = $success;
+
+        return $this;
+    }
+
+    /**
+     * Get the success
+     *
+     * @return bool     */
+    public function getSuccess()
+    {
+        return $this->success;
     }
 
     /**
@@ -315,10 +323,17 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

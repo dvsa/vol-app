@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Vehicle;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Vehicle Abstract Entity
+ * AbstractVehicle Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,7 +31,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_vehicle_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_vehicle_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_vehicle_vi_action", columns={"vi_action"}),
- *        @ORM\Index(name="ix_vehicle_vrm", columns={"vrm"})
+ *        @ORM\Index(name="ix_vehicle_vrm", columns={"vrm"}),
+ *        @ORM\Index(name="uk_vehicle_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_vehicle_olbs_key", columns={"olbs_key"})
@@ -45,13 +49,15 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     use SoftDeletableTrait;
 
     /**
-     * Certificate no
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="certificate_no", length=50, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $certificateNo;
+    protected $id;
 
     /**
      * Created by
@@ -65,17 +71,6 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -87,25 +82,16 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     protected $lastModifiedBy;
 
     /**
-     * Make model
+     * Nullable for PSVs
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="make_model", length=100, nullable=true)
+     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
-    protected $makeModel;
+    protected $vrm;
 
     /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Plated weight
+     * Weight in Kg
      *
      * @var int
      *
@@ -114,49 +100,67 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     protected $platedWeight;
 
     /**
-     * Section26
+     * psv only
      *
-     * @var boolean
+     * @var string
+     *
+     * @ORM\Column(type="string", name="certificate_no", length=50, nullable=true)
+     */
+    protected $certificateNo;
+
+    /**
+     * Flag to send vehicle data to mobile compliance system
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
+     */
+    protected $viAction;
+
+    /**
+     * section 26 applied to vehicle.  Section 26 is where a licence is revoked, suspended or curtailed for a period of time.
+     *
+     * @var bool
      *
      * @ORM\Column(type="boolean", name="section_26", nullable=false, options={"default": 0})
      */
     protected $section26 = 0;
 
     /**
-     * Section26 curtail
+     * Vehicle is on curtailed licence, i.e. reduced authorisation
      *
-     * @var boolean
+     * @var bool
      *
-     * @ORM\Column(type="boolean",
-     *     name="section_26_curtail",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="boolean", name="section_26_curtail", nullable=false, options={"default": 0})
      */
     protected $section26Curtail = 0;
 
     /**
-     * Section26 revoked
+     * Vehicle is on revoked licence.
      *
-     * @var boolean
+     * @var bool
      *
-     * @ORM\Column(type="boolean",
-     *     name="section_26_revoked",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="boolean", name="section_26_revoked", nullable=false, options={"default": 0})
      */
     protected $section26Revoked = 0;
 
     /**
-     * Section26 suspend
+     * Vehicle is on suspended licence.
      *
-     * @var boolean
+     * @var bool
      *
-     * @ORM\Column(type="boolean",
-     *     name="section_26_suspend",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="boolean", name="section_26_suspend", nullable=false, options={"default": 0})
      */
     protected $section26Suspend = 0;
+
+    /**
+     * For small PSV vehicles the make and model are recorded.
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="make_model", length=100, nullable=true)
+     */
+    protected $makeModel;
 
     /**
      * Version
@@ -169,25 +173,16 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     protected $version = 1;
 
     /**
-     * Vi action
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $viAction;
+    protected $olbsKey;
 
     /**
-     * Vrm
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
-     */
-    protected $vrm;
-
-    /**
-     * Licence vehicle
+     * LicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -197,8 +192,6 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -206,62 +199,13 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->licenceVehicles = new ArrayCollection();
     }
 
-    /**
-     * Set the certificate no
-     *
-     * @param string $certificateNo new value being set
-     *
-     * @return Vehicle
-     */
-    public function setCertificateNo($certificateNo)
-    {
-        $this->certificateNo = $certificateNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the certificate no
-     *
-     * @return string
-     */
-    public function getCertificateNo()
-    {
-        return $this->certificateNo;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Vehicle
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -280,17 +224,39 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Vehicle
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Vehicle
      */
@@ -304,227 +270,10 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the make model
-     *
-     * @param string $makeModel new value being set
-     *
-     * @return Vehicle
-     */
-    public function setMakeModel($makeModel)
-    {
-        $this->makeModel = $makeModel;
-
-        return $this;
-    }
-
-    /**
-     * Get the make model
-     *
-     * @return string
-     */
-    public function getMakeModel()
-    {
-        return $this->makeModel;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return Vehicle
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the plated weight
-     *
-     * @param int $platedWeight new value being set
-     *
-     * @return Vehicle
-     */
-    public function setPlatedWeight($platedWeight)
-    {
-        $this->platedWeight = $platedWeight;
-
-        return $this;
-    }
-
-    /**
-     * Get the plated weight
-     *
-     * @return int
-     */
-    public function getPlatedWeight()
-    {
-        return $this->platedWeight;
-    }
-
-    /**
-     * Set the section26
-     *
-     * @param boolean $section26 new value being set
-     *
-     * @return Vehicle
-     */
-    public function setSection26($section26)
-    {
-        $this->section26 = $section26;
-
-        return $this;
-    }
-
-    /**
-     * Get the section26
-     *
-     * @return boolean
-     */
-    public function getSection26()
-    {
-        return $this->section26;
-    }
-
-    /**
-     * Set the section26 curtail
-     *
-     * @param boolean $section26Curtail new value being set
-     *
-     * @return Vehicle
-     */
-    public function setSection26Curtail($section26Curtail)
-    {
-        $this->section26Curtail = $section26Curtail;
-
-        return $this;
-    }
-
-    /**
-     * Get the section26 curtail
-     *
-     * @return boolean
-     */
-    public function getSection26Curtail()
-    {
-        return $this->section26Curtail;
-    }
-
-    /**
-     * Set the section26 revoked
-     *
-     * @param boolean $section26Revoked new value being set
-     *
-     * @return Vehicle
-     */
-    public function setSection26Revoked($section26Revoked)
-    {
-        $this->section26Revoked = $section26Revoked;
-
-        return $this;
-    }
-
-    /**
-     * Get the section26 revoked
-     *
-     * @return boolean
-     */
-    public function getSection26Revoked()
-    {
-        return $this->section26Revoked;
-    }
-
-    /**
-     * Set the section26 suspend
-     *
-     * @param boolean $section26Suspend new value being set
-     *
-     * @return Vehicle
-     */
-    public function setSection26Suspend($section26Suspend)
-    {
-        $this->section26Suspend = $section26Suspend;
-
-        return $this;
-    }
-
-    /**
-     * Get the section26 suspend
-     *
-     * @return boolean
-     */
-    public function getSection26Suspend()
-    {
-        return $this->section26Suspend;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Vehicle
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the vi action
-     *
-     * @param string $viAction new value being set
-     *
-     * @return Vehicle
-     */
-    public function setViAction($viAction)
-    {
-        $this->viAction = $viAction;
-
-        return $this;
-    }
-
-    /**
-     * Get the vi action
-     *
-     * @return string
-     */
-    public function getViAction()
-    {
-        return $this->viAction;
     }
 
     /**
@@ -544,17 +293,246 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the vrm
      *
-     * @return string
-     */
+     * @return string     */
     public function getVrm()
     {
         return $this->vrm;
     }
 
     /**
-     * Set the licence vehicle
+     * Set the plated weight
      *
-     * @param ArrayCollection $licenceVehicles collection being set as the value
+     * @param int $platedWeight new value being set
+     *
+     * @return Vehicle
+     */
+    public function setPlatedWeight($platedWeight)
+    {
+        $this->platedWeight = $platedWeight;
+
+        return $this;
+    }
+
+    /**
+     * Get the plated weight
+     *
+     * @return int     */
+    public function getPlatedWeight()
+    {
+        return $this->platedWeight;
+    }
+
+    /**
+     * Set the certificate no
+     *
+     * @param string $certificateNo new value being set
+     *
+     * @return Vehicle
+     */
+    public function setCertificateNo($certificateNo)
+    {
+        $this->certificateNo = $certificateNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the certificate no
+     *
+     * @return string     */
+    public function getCertificateNo()
+    {
+        return $this->certificateNo;
+    }
+
+    /**
+     * Set the vi action
+     *
+     * @param string $viAction new value being set
+     *
+     * @return Vehicle
+     */
+    public function setViAction($viAction)
+    {
+        $this->viAction = $viAction;
+
+        return $this;
+    }
+
+    /**
+     * Get the vi action
+     *
+     * @return string     */
+    public function getViAction()
+    {
+        return $this->viAction;
+    }
+
+    /**
+     * Set the section26
+     *
+     * @param bool $section26 new value being set
+     *
+     * @return Vehicle
+     */
+    public function setSection26($section26)
+    {
+        $this->section26 = $section26;
+
+        return $this;
+    }
+
+    /**
+     * Get the section26
+     *
+     * @return bool     */
+    public function getSection26()
+    {
+        return $this->section26;
+    }
+
+    /**
+     * Set the section26 curtail
+     *
+     * @param bool $section26Curtail new value being set
+     *
+     * @return Vehicle
+     */
+    public function setSection26Curtail($section26Curtail)
+    {
+        $this->section26Curtail = $section26Curtail;
+
+        return $this;
+    }
+
+    /**
+     * Get the section26 curtail
+     *
+     * @return bool     */
+    public function getSection26Curtail()
+    {
+        return $this->section26Curtail;
+    }
+
+    /**
+     * Set the section26 revoked
+     *
+     * @param bool $section26Revoked new value being set
+     *
+     * @return Vehicle
+     */
+    public function setSection26Revoked($section26Revoked)
+    {
+        $this->section26Revoked = $section26Revoked;
+
+        return $this;
+    }
+
+    /**
+     * Get the section26 revoked
+     *
+     * @return bool     */
+    public function getSection26Revoked()
+    {
+        return $this->section26Revoked;
+    }
+
+    /**
+     * Set the section26 suspend
+     *
+     * @param bool $section26Suspend new value being set
+     *
+     * @return Vehicle
+     */
+    public function setSection26Suspend($section26Suspend)
+    {
+        $this->section26Suspend = $section26Suspend;
+
+        return $this;
+    }
+
+    /**
+     * Get the section26 suspend
+     *
+     * @return bool     */
+    public function getSection26Suspend()
+    {
+        return $this->section26Suspend;
+    }
+
+    /**
+     * Set the make model
+     *
+     * @param string $makeModel new value being set
+     *
+     * @return Vehicle
+     */
+    public function setMakeModel($makeModel)
+    {
+        $this->makeModel = $makeModel;
+
+        return $this;
+    }
+
+    /**
+     * Get the make model
+     *
+     * @return string     */
+    public function getMakeModel()
+    {
+        return $this->makeModel;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Vehicle
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return Vehicle
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Set the licence vehicles
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being set as the value
      *
      * @return Vehicle
      */
@@ -568,7 +546,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Get the licence vehicles
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getLicenceVehicles()
     {
@@ -578,7 +556,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
     /**
      * Add a licence vehicles
      *
-     * @param ArrayCollection|mixed $licenceVehicles collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceVehicles collection being added
      *
      * @return Vehicle
      */
@@ -612,5 +590,13 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

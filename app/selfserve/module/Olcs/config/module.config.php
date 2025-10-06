@@ -1367,6 +1367,37 @@ $myAccountNav = [
         ],
     ]
 ];
+
+// Add static assets redirect route for html hardcoded snapshot asset paths
+$routes['static-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/static/public[/:path]',
+        'constraints' => [
+            'path' => '.*',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+        ],
+    ],
+];
+
+$routes['styles-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/styles/:path',
+        'constraints' => [
+            'path' => '.+',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+            'prefix' => 'styles',
+        ],
+    ],
+];
+
 return [
     'router' => [
         'routes' => array_merge($routes, $configRoutes),
@@ -1480,7 +1511,7 @@ return [
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
         ],
         'factories' => [
-
+            \Olcs\Controller\StaticAssetsController::class => \Olcs\Controller\Factory\StaticAssetsControllerFactory::class,
             IndexController::class => IndexControllerFactory::class,
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
@@ -1850,6 +1881,8 @@ return [
                 'verify/process-response' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
+                'static-assets' => ['*'],
+                'styles-assets' => ['*'],
                 'user-registration*' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies*' => ['*'],

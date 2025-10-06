@@ -42,7 +42,9 @@ class Pi extends AbstractRepository
             ->with('tmDecisions')
             ->with('piHearings')
             ->with('case', 'c')
-            ->with('c.transportManager');
+            ->with('c.transportManager')
+            ->with('piSlaExceptions', 's')
+            ->withCreatedBy('createdBy', 's');
 
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byId'))
             ->setParameter('byId', $query->getId());

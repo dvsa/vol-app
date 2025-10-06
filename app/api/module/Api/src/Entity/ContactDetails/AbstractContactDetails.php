@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\ContactDetails;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ContactDetails Abstract Entity
+ * AbstractContactDetails Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,10 +32,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_contact_details_contact_type", columns={"contact_type"}),
  *        @ORM\Index(name="ix_contact_details_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_contact_details_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_contact_details_person_id", columns={"person_id"})
+ *        @ORM\Index(name="ix_contact_details_person_id", columns={"person_id"}),
+ *        @ORM\Index(name="uk_contact_details_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_contact_details_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
+ *        @ORM\UniqueConstraint(name="uk_contact_details_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
  *    }
  * )
  */
@@ -46,29 +50,45 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     use SoftDeletableTrait;
 
     /**
-     * Address
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * ContactType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="contact_type", referencedColumnName="id")
+     */
+    protected $contactType;
+
+    /**
+     * Foreign Key to address
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Address",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="contactDetails"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Address", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true)
      */
     protected $address;
 
     /**
-     * Contact type
+     * Foreign Key to person
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_type", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY", cascade={"persist"})
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true)
      */
-    protected $contactType;
+    protected $person;
 
     /**
      * Created by
@@ -82,13 +102,15 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Description
+     * Last modified by
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
+     * @Gedmo\Blameable(on="update")
      */
-    protected $description;
+    protected $lastModifiedBy;
 
     /**
      * Email address
@@ -109,59 +131,22 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     protected $fao;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Last modified by
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $lastModifiedBy;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
+     * Description
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
+     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
-    protected $olbsType;
+    protected $description;
 
     /**
-     * Person
+     * writtenPermissionToEngage
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Person\Person",
-     *     fetch="LAZY",
-     *     cascade={"persist"},
-     *     inversedBy="contactDetails"
-     * )
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="yesno", name="written_permission_to_engage", nullable=false, options={"default": 0})
      */
-    protected $person;
+    protected $writtenPermissionToEngage = 0;
 
     /**
      * Version
@@ -174,37 +159,35 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Written permission to engage
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
      *
-     * @ORM\Column(type="yesno",
-     *     name="written_permission_to_engage",
-     *     nullable=false,
-     *     options={"default": 0})
+     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
-    protected $writtenPermissionToEngage = 0;
+    protected $olbsType;
 
     /**
-     * Phone contact
+     * PhoneContacts
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact",
-     *     mappedBy="contactDetails",
-     *     cascade={"persist"},
-     *     indexBy="id",
-     *     orphanRemoval=true
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact", mappedBy="contactDetails", cascade={"persist"}, indexBy="id", orphanRemoval=true)
      * @ORM\OrderBy({"id" = "DESC"})
      */
     protected $phoneContacts;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -212,43 +195,41 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->phoneContacts = new ArrayCollection();
     }
 
+
     /**
-     * Set the address
+     * Set the id
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address entity being set as the value
+     * @param int $id new value being set
      *
      * @return ContactDetails
      */
-    public function setAddress($address)
+    public function setId($id)
     {
-        $this->address = $address;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the address
+     * Get the id
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address
-     */
-    public function getAddress()
+     * @return int     */
+    public function getId()
     {
-        return $this->address;
+        return $this->id;
     }
 
     /**
      * Set the contact type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $contactType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $contactType new value being set
      *
      * @return ContactDetails
      */
@@ -262,17 +243,62 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the contact type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getContactType()
     {
         return $this->contactType;
     }
 
     /**
+     * Set the address
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address new value being set
+     *
+     * @return ContactDetails
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    /**
+     * Get the address
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set the person
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
+     *
+     * @return ContactDetails
+     */
+    public function setPerson($person)
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    /**
+     * Get the person
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Person\Person     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return ContactDetails
      */
@@ -286,35 +312,33 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
     }
 
     /**
-     * Set the description
+     * Set the last modified by
      *
-     * @param string $description new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ContactDetails
      */
-    public function setDescription($description)
+    public function setLastModifiedBy($lastModifiedBy)
     {
-        $this->description = $description;
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
 
     /**
-     * Get the description
+     * Get the last modified by
      *
-     * @return string
-     */
-    public function getDescription()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
     {
-        return $this->description;
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -334,8 +358,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the email address
      *
-     * @return string
-     */
+     * @return string     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
@@ -358,59 +381,79 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the fao
      *
-     * @return string
-     */
+     * @return string     */
     public function getFao()
     {
         return $this->fao;
     }
 
     /**
-     * Set the id
+     * Set the description
      *
-     * @param int $id new value being set
+     * @param string $description new value being set
      *
      * @return ContactDetails
      */
-    public function setId($id)
+    public function setDescription($description)
     {
-        $this->id = $id;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the description
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getDescription()
     {
-        return $this->id;
+        return $this->description;
     }
 
     /**
-     * Set the last modified by
+     * Set the written permission to engage
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $writtenPermissionToEngage new value being set
      *
      * @return ContactDetails
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setWrittenPermissionToEngage($writtenPermissionToEngage)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->writtenPermissionToEngage = $writtenPermissionToEngage;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the written permission to engage
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getWrittenPermissionToEngage()
     {
-        return $this->lastModifiedBy;
+        return $this->writtenPermissionToEngage;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return ContactDetails
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -430,8 +473,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -454,89 +496,16 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the person
+     * Set the phone contacts
      *
-     * @param \Dvsa\Olcs\Api\Entity\Person\Person $person entity being set as the value
-     *
-     * @return ContactDetails
-     */
-    public function setPerson($person)
-    {
-        $this->person = $person;
-
-        return $this;
-    }
-
-    /**
-     * Get the person
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Person\Person
-     */
-    public function getPerson()
-    {
-        return $this->person;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return ContactDetails
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the written permission to engage
-     *
-     * @param string $writtenPermissionToEngage new value being set
-     *
-     * @return ContactDetails
-     */
-    public function setWrittenPermissionToEngage($writtenPermissionToEngage)
-    {
-        $this->writtenPermissionToEngage = $writtenPermissionToEngage;
-
-        return $this;
-    }
-
-    /**
-     * Get the written permission to engage
-     *
-     * @return string
-     */
-    public function getWrittenPermissionToEngage()
-    {
-        return $this->writtenPermissionToEngage;
-    }
-
-    /**
-     * Set the phone contact
-     *
-     * @param ArrayCollection $phoneContacts collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $phoneContacts collection being set as the value
      *
      * @return ContactDetails
      */
@@ -550,7 +519,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Get the phone contacts
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getPhoneContacts()
     {
@@ -560,7 +529,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
     /**
      * Add a phone contacts
      *
-     * @param ArrayCollection|mixed $phoneContacts collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $phoneContacts collection being added
      *
      * @return ContactDetails
      */
@@ -594,5 +563,13 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

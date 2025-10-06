@@ -1398,6 +1398,13 @@ return array(
                 'entity' => 'SeriousInfringement',
                 'property' => 'appliedPenaltie'
             )
+        ),
+        'si_penalty_erru_requested_id' => array(
+            'property' => 'erruPenaltyRequested',
+            'inversedBy' => array(
+                'entity' => 'SiPenaltyErruRequested',
+                'property' => 'appliedPenalties'
+            )
         )
     ),
     'si_penalty_erru_imposed' => array(
@@ -1614,6 +1621,14 @@ return array(
             'inversedBy' => array(
                 'entity' => 'Pi',
                 'property' => 'piReason'
+            )
+        )
+    ),
+    'pi_sla_exception' => array(
+        'pi_id' => array(
+            'inversedBy' => array(
+                'entity' => 'Pi',
+                'property' => 'piSlaException'
             )
         )
     ),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Messaging;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,19 +17,19 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * MessagingMessage Abstract Entity
+ * AbstractMessagingMessage Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="messaging_message",
  *    indexes={
  *        @ORM\Index(name="fk_messaging_message_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_messaging_message_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_messaging_message_messaging_conversation_id",
-     *     columns={"messaging_conversation_id"})
+ *        @ORM\Index(name="fk_messaging_message_last_modified_by_user_id", columns={"last_modified_by"}),
+ *        @ORM\Index(name="fk_messaging_message_messaging_conversation_id", columns={"messaging_conversation_id"}),
+ *        @ORM\Index(name="message_content_id", columns={"messaging_content_id"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="message_content_id", columns={"messaging_content_id"})
@@ -43,6 +45,37 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     use ModifiedOnTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * MessagingConversation
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation", fetch="LAZY")
+     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id")
+     */
+    protected $messagingConversation;
+
+    /**
+     * MessagingContent
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
+     *
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingContent", fetch="LAZY", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="messaging_content_id", referencedColumnName="id")
+     */
+    protected $messagingContent;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -52,17 +85,6 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -76,33 +98,6 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     protected $lastModifiedBy;
 
     /**
-     * Messaging content
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingContent",
-     *     fetch="LAZY",
-     *     cascade={"persist","remove"}
-     * )
-     * @ORM\JoinColumn(name="messaging_content_id", referencedColumnName="id", nullable=false)
-     */
-    protected $messagingContent;
-
-    /**
-     * Messaging conversation
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id", nullable=false)
-     */
-    protected $messagingConversation;
-
-    /**
      * Version
      *
      * @var int
@@ -113,7 +108,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     protected $version = 1;
 
     /**
-     * Document
+     * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -122,21 +117,16 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     protected $documents;
 
     /**
-     * User message read
+     * UserMessageReads
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingUserMessageRead",
-     *     mappedBy="messagingMessage"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingUserMessageRead", mappedBy="messagingMessage")
      */
     protected $userMessageReads;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -144,39 +134,14 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->documents = new ArrayCollection();
         $this->userMessageReads = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return MessagingMessage
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -195,65 +160,16 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return MessagingMessage
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the messaging content
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent $messagingContent entity being set as the value
-     *
-     * @return MessagingMessage
-     */
-    public function setMessagingContent($messagingContent)
-    {
-        $this->messagingContent = $messagingContent;
-
-        return $this;
-    }
-
-    /**
-     * Get the messaging content
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
-     */
-    public function getMessagingContent()
-    {
-        return $this->messagingContent;
-    }
-
-    /**
      * Set the messaging conversation
      *
-     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation new value being set
      *
      * @return MessagingMessage
      */
@@ -267,11 +183,79 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the messaging conversation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation     */
     public function getMessagingConversation()
     {
         return $this->messagingConversation;
+    }
+
+    /**
+     * Set the messaging content
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent $messagingContent new value being set
+     *
+     * @return MessagingMessage
+     */
+    public function setMessagingContent($messagingContent)
+    {
+        $this->messagingContent = $messagingContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the messaging content
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent     */
+    public function getMessagingContent()
+    {
+        return $this->messagingContent;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return MessagingMessage
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return MessagingMessage
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -291,17 +275,16 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the document
+     * Set the documents
      *
-     * @param ArrayCollection $documents collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
      * @return MessagingMessage
      */
@@ -315,7 +298,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the documents
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocuments()
     {
@@ -325,7 +308,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Add a documents
      *
-     * @param ArrayCollection|mixed $documents collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
      * @return MessagingMessage
      */
@@ -362,9 +345,9 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the user message read
+     * Set the user message reads
      *
-     * @param ArrayCollection $userMessageReads collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $userMessageReads collection being set as the value
      *
      * @return MessagingMessage
      */
@@ -378,7 +361,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Get the user message reads
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getUserMessageReads()
     {
@@ -388,7 +371,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
     /**
      * Add a user message reads
      *
-     * @param ArrayCollection|mixed $userMessageReads collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $userMessageReads collection being added
      *
      * @return MessagingMessage
      */
@@ -422,5 +405,13 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }
