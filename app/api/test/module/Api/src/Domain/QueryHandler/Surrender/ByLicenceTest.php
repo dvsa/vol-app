@@ -37,6 +37,9 @@ class ByLicenceTest extends QueryHandlerTestCase
             'fetchOneByLicence'
         )->andReturn($surrender);
 
+        $this->repoMap['SystemParameter']->shouldReceive(
+            'getDisableGdsVerifySignatures'
+        )->andReturn(true);
 
         $this->repoMap['GoodsDisc']->shouldReceive('countForLicence')->with($query->getId())
             ->andReturn(9);
@@ -65,6 +68,7 @@ class ByLicenceTest extends QueryHandlerTestCase
                 'signatureType'
             ],
             [
+                'disableSignatures' => true,
                 'goodsDiscsOnLicence' => 9,
                 'psvDiscsOnLicence' => 7,
                 'addressLastModified' => new DateTime(),

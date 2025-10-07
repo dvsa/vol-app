@@ -68,6 +68,11 @@ class DeclarationTest extends QueryHandlerTestCase
             ->with($query)
             ->andReturn($mockApplication);
 
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
+            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
+            ->andReturn(true)
+            ->once();
+
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -107,6 +112,7 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
+            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => 123.45
@@ -139,6 +145,11 @@ class DeclarationTest extends QueryHandlerTestCase
             ->with($query)
             ->andReturn($mockApplication);
 
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
+            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
+            ->andReturn(true)
+            ->once();
+
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -178,6 +189,7 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
+            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [
                 'name' => 'Bob Smith',
@@ -238,6 +250,11 @@ class DeclarationTest extends QueryHandlerTestCase
             ->andReturn('N')
             ->once();
 
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
+            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
+            ->andReturn(true)
+            ->once();
+
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -296,6 +313,7 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
+            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => 123.45
@@ -364,6 +382,11 @@ class DeclarationTest extends QueryHandlerTestCase
             ->andReturn('N')
             ->once();
 
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
+            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
+            ->andReturn(true)
+            ->once();
+
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
             ->with(111, true)
             ->once()
@@ -416,6 +439,7 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
+            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => null
@@ -467,6 +491,11 @@ class DeclarationTest extends QueryHandlerTestCase
             ->shouldReceive('getReference')
             ->with(TrafficAreaEntity::class, TrafficAreaEntity::NORTHERN_IRELAND_TRAFFIC_AREA_CODE)
             ->andReturn('N')
+            ->once();
+
+        $this->repoMap['SystemParameter']->shouldReceive('fetchValue')
+            ->with(SystemParameterEntity::DISABLE_GDS_VERIFY_SIGNATURES)
+            ->andReturn(true)
             ->once();
 
         $this->repoMap['Fee']->shouldReceive('fetchInterimFeesByApplicationId')
@@ -521,6 +550,7 @@ class DeclarationTest extends QueryHandlerTestCase
             'outstandingFeeTotal' => 123.45,
             'sections' => 'bar',
             'variationCompletion' => 'foo',
+            'disableSignatures' => true,
             'declarations' => 'markup',
             'signature' => [],
             'interimFee' => null
