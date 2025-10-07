@@ -79,7 +79,8 @@ class Declaration extends AbstractQueryHandler
                 ),
                 'sections' => $this->sectionAccessService->getAccessibleSections($application),
                 'variationCompletion' => $application->getVariationCompletion(),
-                'disableSignatures' => true,
+                'disableSignatures' =>
+                    (bool)$this->getRepo('SystemParameter')->fetchValue(SystemParameter::DISABLE_GDS_VERIFY_SIGNATURES),
                 'declarations' => $this->getDeclarations($application),
                 'signature' => $signatureDetails,
                 'interimFee' => $interimFeeAmount

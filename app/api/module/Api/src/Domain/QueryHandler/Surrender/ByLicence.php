@@ -57,7 +57,7 @@ final class ByLicence extends AbstractQueryHandler implements ToggleRequiredInte
                 'signatureType'
             ],
             [
-                'disableSignatures' => true,
+                'disableSignatures' => $this->getRepo('SystemParameter')->getDisableGdsVerifySignatures(),
                 'goodsDiscsOnLicence' => $goodsDiscsOnLicence,
                 'psvDiscsOnLicence' => $psvDiscsOnLicence,
                 'addressLastModified' => $surrender->getLicence()->getCorrespondenceCd()->getAddress()->getLastModifiedOn(),
