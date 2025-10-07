@@ -23,7 +23,8 @@ RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl \
     && mysql --version
 # Add extra scirpts for batch jobs
 COPY ./scripts/ /mnt/data/scripts/
-RUN mkdir -p /mnt/data/olcsdump && chmod 755 /mnt/data/olcsdump
+# Create folder for DB dump 
+RUN mkdir -p /mnt/data/olcsdump && chown www-data:www-data /mnt/data/olcsdump && chmod 755 /mnt/data/olcsdump
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
