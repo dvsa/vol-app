@@ -9,7 +9,7 @@ READDB_HOST=${READDB_HOST}
 BATCH_DB_PASSWORD=${BATCH_DB_PASSWORD}
 ENVIRONMENT=${ENVIRONMENT_NAME}
 
-mkdir -p /mnt/data/olcsdump
+sudo mkdir -p /mnt/data/olcsdump
 
 case "${ENVIRONMENT}" in
   "DEV")
