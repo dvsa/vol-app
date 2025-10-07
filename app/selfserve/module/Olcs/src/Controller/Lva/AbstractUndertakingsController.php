@@ -168,13 +168,6 @@ abstract class AbstractUndertakingsController extends AbstractController
                 true
             );
         } elseif ($this->isButtonPressed('sign')) {
-            $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-            if (!$featureEnabled) {
-                return $this->redirect()->toRoute(
-                    'verify/initiate-request',
-                    [$this->getIdentifierIndex() => $this->getIdentifier()]
-                );
-            }
 
             $returnUrl = $this->url()->fromRoute(
                 'lva-application/undertakings',
