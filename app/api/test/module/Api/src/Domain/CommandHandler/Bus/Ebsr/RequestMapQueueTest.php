@@ -13,11 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use LmcRbacMvc\Identity\IdentityInterface;
 use Mockery as m;
-use Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient;
 
-/**
- * RequestMapQueueTest
- */
 class RequestMapQueueTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -42,13 +38,11 @@ class RequestMapQueueTest extends AbstractCommandHandlerTestCase
         $licenceId = 789;
         $regNo = '123/4567';
         $scale = 'small';
-        $fromNewEbsr = true;
 
         $cmd = RequestMapCmd::create(
             [
                 'id' => $busRegId,
                 'scale' => $scale,
-                'fromNewEbsr' => $fromNewEbsr
             ]
         );
 
@@ -77,7 +71,6 @@ class RequestMapQueueTest extends AbstractCommandHandlerTestCase
         $optionData = [
             'scale' => $scale,
             'id' => $busRegId,
-            'fromNewEbsr' => $fromNewEbsr,
             'regNo' => $regNo,
             'licence' => $licenceId,
             'user' => $userId
