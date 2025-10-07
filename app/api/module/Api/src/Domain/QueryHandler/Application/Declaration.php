@@ -79,6 +79,7 @@ class Declaration extends AbstractQueryHandler
                 ),
                 'sections' => $this->sectionAccessService->getAccessibleSections($application),
                 'variationCompletion' => $application->getVariationCompletion(),
+                'disableSignatures' => true,
                 'declarations' => $this->getDeclarations($application),
                 'signature' => $signatureDetails,
                 'interimFee' => $interimFeeAmount

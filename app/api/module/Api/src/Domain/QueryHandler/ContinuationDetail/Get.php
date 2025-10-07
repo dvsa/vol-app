@@ -87,6 +87,7 @@ class Get extends AbstractQueryHandler
                 'documents' => $documents,
                 'organisationTypeId' => $licence->getOrganisation()->getType()->getId(),
                 'declarations' => $this->reviewService->getDeclarationMarkup($continuationDetail),
+                'disableSignatures' => true,
                 'hasOutstandingContinuationFee' => count($continuationFees) > 0,
                 'signature' => $signatureDetails,
                 'reference' => $this->getPaymentReference($licence->getId()),
