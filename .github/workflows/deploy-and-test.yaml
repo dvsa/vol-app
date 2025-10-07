@@ -111,12 +111,31 @@ jobs:
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
+  test_batch:
+    name: Run Batch Jobs
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} == 'int' }}
+    needs:
+      - terraform_env
+      - liquibase
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke@main
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+  permissions:
+    contents: write
+    id-token: write
+
   test_smoke:
     name: Run Smoke Tests on ${{ inputs.environment }}
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} != 'prod' }}
     needs:
       - terraform_env
       - liquibase
+      - test_batch
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
     with:
       platform_env: ${{ inputs.environment }}
