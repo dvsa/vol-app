@@ -44,12 +44,9 @@ class TransExchangeClientFactory implements FactoryInterface
         $tokenProvider = $container->build(Provider::class, $config['oauth2']);
         $headers = ['Authorization' => 'Bearer ' .  $tokenProvider->getToken()];
 
-        $config['uri'] = $config['new_uri'];
-        $method = Request::METHOD_POST;
-
-        $httpClient = new RestClient($config['uri'], $config['options']);
+        $httpClient = new RestClient($config['new_uri'], $config['options']);
         $httpClient->setHeaders($headers);
-        $httpClient->setMethod($method);
+        $httpClient->setMethod(Request::METHOD_POST);
         $wrapper = new ClientAdapterLoggingWrapper();
         $wrapper->wrapAdapter($httpClient);
         /**
