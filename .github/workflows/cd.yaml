@@ -336,7 +336,7 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.terraform_env_dev.result == 'success'
+      needs.deploy_dev.result == 'success'
     needs:
       - get-version
       - orchestrator
@@ -369,16 +369,12 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      needs.test_int_smoke.result == 'success' &&
-      needs.test_int_selfserve.result == 'success' &&
-      needs.test_int_internal.result == 'success'
+      needs.deploy_int == 'success'
     runs-on: ubuntu-24.04-arm
     needs:
       - release-please
       - get-version
-      - test_int_smoke
-      - test_int_selfserve
-      - test_int_internal
+      - deploy_int
     env:
       NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
       PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
@@ -599,7 +595,7 @@ jobs:
     uses: ./.github/workflows/deploy-and-test.yaml
     with:
       account: prod
-      environment: prep
+      environment: prod
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
