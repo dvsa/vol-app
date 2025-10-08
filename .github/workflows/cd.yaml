@@ -599,7 +599,7 @@ jobs:
     uses: ./.github/workflows/deploy-and-test.yaml
     with:
       account: prod
-      environment: prep
+      environment: prod
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
