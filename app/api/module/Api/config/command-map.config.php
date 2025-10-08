@@ -1182,10 +1182,6 @@ return [
     Command\ConditionUndertaking\CreateLightGoodsVehicleCondition::class =>
         CommandHandler\ConditionUndertaking\CreateLightGoodsVehicleCondition::class,
 
-    // GdsVerify
-    TransferCommand\GdsVerify\ProcessSignatureResponse::class =>
-        CommandHandler\GdsVerify\ProcessSignatureResponse::class,
-
     // GovUkAccount
     TransferCommand\GovUkAccount\GetGovUkAccountRedirect::class =>
         CommandHandler\GovUkAccount\GetGovUkAccountRedirectFactory::class,
