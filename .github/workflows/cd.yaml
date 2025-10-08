@@ -329,6 +329,11 @@ jobs:
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      checks: write
 
   deploy_int:
     name: Deploy and test int
@@ -358,6 +363,11 @@ jobs:
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      checks: write
 
   push-to-prod-ecr:
     name: Push Docker Images to PROD ECR
@@ -570,6 +580,11 @@ jobs:
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      checks: write
 
   deploy_prod:
     name: Deploy prod
@@ -606,3 +621,8 @@ jobs:
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      checks: write
