@@ -113,7 +113,7 @@ jobs:
 
   test_batch:
     name: Run Batch Jobs
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} == 'int' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
     needs:
       - terraform_env
       - liquibase
@@ -126,12 +126,12 @@ jobs:
       batch_job_queue: ${{ inputs.batch_job_queue }}
       batch_job_definition: ${{ inputs.batch_job_definition }}
     permissions:
-    contents: write
-    id-token: write
+      contents: write
+      id-token: write
 
   test_smoke:
     name: Run Smoke Tests on ${{ inputs.environment }}
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} != 'prod' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' }}
     needs:
       - terraform_env
       - liquibase
@@ -150,7 +150,7 @@ jobs:
       checks: write
 
   test_selfserve:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} == 'int'}}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
     name: Run Selfserve Regression Tests on ${{ inputs.environment }}
     needs:
       - test_smoke
@@ -168,7 +168,7 @@ jobs:
       checks: write
 
   test_internal:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && ${{ inputs.environment }} == 'int' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
     name: Run Internal Regression Tests on ${{ inputs.environment }}
     needs:
       - test_smoke
