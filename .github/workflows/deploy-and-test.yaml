@@ -125,7 +125,7 @@ jobs:
       bucket_key: ${{ inputs.bucket_key }}
       batch_job_queue: ${{ inputs.batch_job_queue }}
       batch_job_definition: ${{ inputs.batch_job_definition }}
-  permissions:
+    permissions:
     contents: write
     id-token: write
 
