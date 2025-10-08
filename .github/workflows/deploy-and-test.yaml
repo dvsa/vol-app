@@ -117,7 +117,7 @@ jobs:
     needs:
       - terraform_env
       - liquibase
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@main
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
