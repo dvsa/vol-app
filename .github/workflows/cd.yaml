@@ -299,205 +299,65 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform_env_dev:
-    name: Environment (dev)
+  deploy_dev:
+    name: Deploy and test dev
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
       (needs.orchestrator.outputs.should-apply-environment-terraform || needs.docker.result == 'success' || needs.cdn.result == 'success')
-    concurrency:
-      group: terraform-environment-dev
     needs:
       - get-version
       - orchestrator
       - docker
       - cdn-nonprod
       - terraform-account-nonprod
-    uses: ./.github/workflows/deploy-environment.yaml
+    concurrency:
+      group: ${{ github.workflow }}-dev
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: nonprod
       environment: dev
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-dev:
-    name: Liquibase Migrations (dev)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
-    needs:
-      - terraform_env_dev
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: true
-      submit_job: true
-      account: nonprod
-      environment: dev
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_dev:
-    name: Run Tests on DEV
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_dev.result == 'success' }}
-    needs:
-      - terraform_env_dev
-      - liquibase-dev
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-    with:
-      platform_env: dev
+      etl-ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
 
-  terraform_env_int:
-    name: Environment (int)
+  deploy_int:
+    name: Deploy and test int
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.terraform_env_dev.result == 'success'
-    concurrency:
-      group: terraform-environment-int
+      needs.deploy_dev.result == 'success'
     needs:
       - get-version
       - orchestrator
-      - terraform_env_dev
-      - test_dev
-    uses: ./.github/workflows/deploy-environment.yaml
+      - deploy_dev
+    concurrency:
+      group: ${{ github.workflow }}-int
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: nonprod
       environment: int
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-int:
-    name: Database Migrations (int)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    needs:
-      - terraform_env_int
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: nonprod
-      environment: int
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_int_smoke:
-    name: Run Smoke Tests on INT
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    needs:
-      - terraform_env_int
-      - liquibase-int
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
-    with:
-      platform_env: int
+      etl-ref: ${{ needs.release-please.outputs.release_created && needs.release-please.outputs.tag_name || 'main' }}
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  test_int_selfserve:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    name: Run Selfserve Regression Tests on INT
-    needs:
-      - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
-    with:
-      platform_env: int
-      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
-      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
-      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
-      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
-      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  test_int_internal:
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' }}
-    name: Run Internal Regression Tests on INT
-    needs:
-      - test_int_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
-    with:
-      platform_env: int
-      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
-      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
-      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
-      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
-      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
-
-  rollback_int:
-    name: Rollback INT Deployment
-    if: |
-      always() &&
-      (needs.test_int_smoke.result == 'failure' || needs.test_int_smoke.result == 'cancelled' ||
-       needs.test_int_selfserve.result == 'failure' || needs.test_int_selfserve.result == 'cancelled' ||
-       needs.test_int_internal.result == 'failure' || needs.test_int_internal.result == 'cancelled') &&
-       needs.terraform_env_int.result == 'success'
-    needs:
-      - test_int_smoke
-      - test_int_selfserve
-      - test_int_internal
-      - terraform_env_int
-    uses: ./.github/workflows/deploy-environment.yaml
-    with:
-      environment: int
-      rollback: true
-      apply: true
-      api-image-tag: ${{ needs.terraform_env_int.outputs.previous_api_image_tag }}
-      cli-image-tag: ${{ needs.terraform_env_int.outputs.previous_cli_image_tag }}
-      selfserve-image-tag: ${{ needs.terraform_env_int.outputs.previous_selfserve_image_tag }}
-      internal-image-tag: ${{ needs.terraform_env_int.outputs.previous_internal_image_tag }}
-      assets-version: ${{ needs.terraform_env_int.outputs.previous_assets_version }}
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
 
   push-to-prod-ecr:
     name: Push Docker Images to PROD ECR
@@ -645,18 +505,35 @@ jobs:
       contents: read
       id-token: write
 
-  terraform-account-prod:
-    name: Account (prod)
+  terraform-account-prod-plan:
+    name: Account (prod) plan
     if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created }}
     concurrency:
       group: terraform-account-prod
     needs:
       - release-please
       - orchestrator
-      - terraform_env_int
-      - test_int_internal
-      - test_int_selfserve
-      - test_int_smoke
+      - deploy_int
+      - push-to-prod-ecr
+    uses: ./.github/workflows/deploy-account.yaml
+    with:
+      account: prod
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  terraform-account-prod:
+    name: Account (prod)
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && needs.terraform-account-prod-plan.result != 'failure' }}
+    concurrency:
+      group: terraform-account-prod
+    needs:
+      - terraform-account-prod-plan
+      - release-please
+      - orchestrator
+      - deploy_int
       - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
@@ -668,101 +545,39 @@ jobs:
       pull-requests: write
     secrets: inherit
 
-  terraform_env_prep:
-    name: Environment (prep)
+  deploy_prep:
+    name: Deploy and test prep
     if: |
       always() &&
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created
-    concurrency:
-      group: terraform-environment-prep
     needs:
       - release-please
       - get-version
       - orchestrator
       - terraform-account-prod
       - push-to-prod-ecr
-    uses: ./.github/workflows/deploy-environment.yaml
+    concurrency:
+      group: ${{ github.workflow }}-prep
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: prod
       environment: prep
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-prep:
-    name: Database Migrations (prep)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_int.result == 'success' && needs.release-please.outputs.release_created }}
-    needs:
-      - terraform_env_prep
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: prod
-      environment: prep
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
-
-  test_prep_smoke:
-    name: Run Smoke Tests on PREP
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env_prep.result == 'success' }}
-    needs:
-      - terraform_env_prep
-      - liquibase-prep
-    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@main
-    with:
-      platform_env: prep
+      etl-ref: ${{ needs.release-please.outputs.tag_name }}
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
       batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
       batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
 
-  rollback_prep:
-    name: Rollback PREP Deployment
-    if: |
-      always() &&
-      (needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled') &&
-       needs.terraform_env_prep.result == 'success'
-    needs:
-      - test_prep_smoke
-      - terraform_env_prep
-    uses: ./.github/workflows/deploy-environment.yaml
-    with:
-      environment: prep
-      rollback: true
-      apply: true
-      api-image-tag: ${{ needs.terraform_env_prep.outputs.previous_api_image_tag }}
-      cli-image-tag: ${{ needs.terraform_env_prep.outputs.previous_cli_image_tag }}
-      selfserve-image-tag: ${{ needs.terraform_env_prep.outputs.previous_selfserve_image_tag }}
-      internal-image-tag: ${{ needs.terraform_env_prep.outputs.previous_internal_image_tag }}
-      assets-version: ${{ needs.terraform_env_prep.outputs.previous_assets_version }}
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  terraform_env_prod:
-    name: Environment (prod)
+  deploy_prod:
+    name: Deploy prod
     if: |
       always() &&
       !cancelled() &&
@@ -773,49 +588,26 @@ jobs:
       !contains(needs.get-version.outputs.selfserve, 'rc') &&
       !contains(needs.get-version.outputs.internal, 'rc') &&
       !contains(needs.get-version.outputs.assets, 'rc')
-    concurrency:
-      group: terraform-environment-prod
     needs:
       - release-please
       - get-version
       - orchestrator
-      - terraform_env_prep
-      - test_prep_smoke
-    uses: ./.github/workflows/deploy-environment.yaml
+      - terraform-account-prod
+      - push-to-prod-ecr
+    concurrency:
+      group: ${{ github.workflow }}-prod
+    uses: ./.github/workflows/deploy-and-test.yaml
     with:
+      account: prod
       environment: prod
       api-image-tag: ${{ needs.get-version.outputs.api }}
       cli-image-tag: ${{ needs.get-version.outputs.cli }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      apply: true
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
-    secrets: inherit
-
-  liquibase-prod:
-    name: Database Migrations (prod)
-    if: |
-      always() &&
-      !cancelled() &&
-      !failure() &&
-      needs.release-please.outputs.release_created &&
-      !contains(needs.get-version.outputs.api, 'rc')
-    needs:
-      - terraform_env_prod
-    uses: ./.github/workflows/run-liquibase.yaml
-    with:
-      push: false
-      submit_job: true
-      account: prod
-      environment: prod
-      dry_run: false
-      etl_ref: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets:
-      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+      etl-ref: ${{ needs.release-please.outputs.tag_name }}
+      aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_PROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_PROD_BATCH_JOB_DEFINITION }}
