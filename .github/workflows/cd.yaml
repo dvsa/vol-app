@@ -369,16 +369,12 @@ jobs:
       !cancelled() &&
       !failure() &&
       needs.release-please.outputs.release_created &&
-      needs.test_int_smoke.result == 'success' &&
-      needs.test_int_selfserve.result == 'success' &&
-      needs.test_int_internal.result == 'success'
+      needs.deploy_int.result == 'success'
     runs-on: ubuntu-24.04-arm
     needs:
       - release-please
       - get-version
-      - test_int_smoke
-      - test_int_selfserve
-      - test_int_internal
+      - deploy_int
     env:
       NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
       PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
@@ -533,7 +529,6 @@ jobs:
       - terraform-account-prod-plan
       - release-please
       - orchestrator
-      - deploy_int
       - push-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
