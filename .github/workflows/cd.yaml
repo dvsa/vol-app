@@ -336,7 +336,7 @@ jobs:
       always() &&
       !cancelled() &&
       !failure() &&
-      needs.terraform_env_dev.result == 'success'
+      needs.deploy_dev.result == 'success'
     needs:
       - get-version
       - orchestrator
