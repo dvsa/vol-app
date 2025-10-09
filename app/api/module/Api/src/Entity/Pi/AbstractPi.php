@@ -487,7 +487,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\PiSlaException", mappedBy="pi")
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PiSlaException", mappedBy="pi")
      */
     protected $piSlaExceptions;
 

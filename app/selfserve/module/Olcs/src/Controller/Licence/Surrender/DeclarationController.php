@@ -70,16 +70,6 @@ class DeclarationController extends AbstractSurrenderController
         if ($form->isValid()) {
             $data = (array) $this->getRequest()->getPost();
             if (isset($data['sign'])) {
-                $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-                if (!$featureEnabled) {
-                    return $this->redirect()->toRoute(
-                        'verify/surrender',
-                        [
-                            'licenceId' => $this->licenceId,
-                        ]
-                    );
-                }
-
                 $returnUrl = $this->url()->fromRoute(
                     'licence/surrender/confirmation',
                     [

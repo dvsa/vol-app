@@ -14,7 +14,6 @@
     <ignoreFiles allowMissingFiles="true">
       <directory name="vendor" />
       <directory name=".phpstorm.meta" />
-      <directory name="module/GdsVerify" />
       <file name=".phpstorm.meta.php" />
     </ignoreFiles>
   </projectFiles>

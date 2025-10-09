@@ -2,9 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Service\Ebsr;
 
-use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Service\AccessToken\Provider;
-use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\Http\Request;
 use Laminas\Log\Processor\RequestId;
@@ -18,10 +16,6 @@ use Psr\Container\ContainerInterface;
 
 class TransExchangeClientFactory implements FactoryInterface
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggle::BACKEND_TRANSXCHANGE
-    ];
-
     public const PUBLISH_XSD = 'http://naptan.dft.gov.uk/transxchange/publisher/schema/3.1.2/TransXChangePublisherService.xsd';
 
     /**
@@ -50,20 +44,9 @@ class TransExchangeClientFactory implements FactoryInterface
         $tokenProvider = $container->build(Provider::class, $config['oauth2']);
         $headers = ['Authorization' => 'Bearer ' .  $tokenProvider->getToken()];
 
-        /** @var ToggleService $toggleService */
-        $toggleService = $container->get(ToggleService::class);
-
-        if ($toggleService->isEnabled(FeatureToggle::BACKEND_TRANSXCHANGE)) {
-            $config['uri'] = $config['new_uri'];
-            $method = Request::METHOD_POST;
-        } else {
-            //ensure we exactly preserve the old behaviour by removing the new config
-            unset($config['options']['adapter'], $config['options']['proxy_host'], $config['options']['proxy_port']);
-            $method = Request::METHOD_GET;
-        }
-        $httpClient = new RestClient($config['uri'], $config['options']);
+        $httpClient = new RestClient($config['new_uri'], $config['options']);
         $httpClient->setHeaders($headers);
-        $httpClient->setMethod($method);
+        $httpClient->setMethod(Request::METHOD_POST);
         $wrapper = new ClientAdapterLoggingWrapper();
         $wrapper->wrapAdapter($httpClient);
         /**

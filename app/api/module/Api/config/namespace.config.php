@@ -110,6 +110,8 @@ return [
     'PiHearing' => 'Pi',
     'PresidingTc' => 'Pi',
     'Reason' => 'Pi',
+    'PiSlaException' => 'Pi',
+    'SlaException' => 'Pi',
     'Printer' => 'PrintScan',
     'PrintQueue' => 'PrintScan',
     'Scan' => 'PrintScan',

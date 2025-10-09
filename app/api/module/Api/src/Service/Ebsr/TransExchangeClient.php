@@ -20,15 +20,13 @@ class TransExchangeClient implements TransExchangeClientInterface
     public const DVSA_RECORD_TEMPLATE = 'DvsaRecord';
     public const TRANSXCHANGE_INVALID_XML = 'TransXchange response did not validate against the schema: ';
 
-    /**
-     * @param RestClient $restClient
-     * @param MapXmlFile $xmlFilter
-     * @param ParseXmlString $xmlParser
-     * @param Xsd $xsdValidator
-     * @param string $correlationId
-     */
-
-    public function __construct(private readonly RestClient $restClient, private readonly MapXmlFile $xmlFilter, private readonly ParseXmlString $xmlParser, private readonly Xsd $xsdValidator, private readonly string $correlationId)
+    public function __construct(
+        private readonly RestClient $restClient,
+        private readonly MapXmlFile $xmlFilter,
+        private readonly ParseXmlString $xmlParser,
+        private readonly Xsd $xsdValidator,
+        private readonly string $correlationId
+    )
     {
     }
 
