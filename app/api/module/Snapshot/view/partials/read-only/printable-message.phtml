@@ -18,7 +18,11 @@
         ?>
       </h2>
       <h2 class="govuk-summary-card__title govuk-summary-card__date">
-        <?php echo $message->getCreatedOn(true)->format('l j F Y \a\t H:ia'); ?>
+        <?php
+        $createdOn = $message->getCreatedOn(true);
+        $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
+        echo $createdOn->format('l j F Y \a\t H:ia');
+        ?>
       </h2>
     </div>
     <div class="govuk-summary-card__content">
@@ -45,10 +49,12 @@
                   $readBy = $messageRead->getUser()->getLoginId();
                 }
 
+                $createdOn = $messageRead->getCreatedOn(true);
+                $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
                 echo sprintf(
                   'Read by %s on %s',
                   $readBy,
-                  $messageRead->getCreatedOn(true)->format('l j F Y \a\t H:ia')
+                  $createdOn->format('l j F Y \a\t H:ia')
                 ); ?>
               </em>
             </p>
