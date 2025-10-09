@@ -49,6 +49,9 @@ on:
       etl_ref:
         type: string
         required: true
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY:
+        required: true
 
 jobs:
   terraform_env_plan:

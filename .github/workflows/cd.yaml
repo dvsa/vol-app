@@ -334,6 +334,8 @@ jobs:
       id-token: write
       pull-requests: write
       checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   deploy_int:
     name: Deploy and test int
@@ -368,6 +370,8 @@ jobs:
       id-token: write
       pull-requests: write
       checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   push-to-prod-ecr:
     name: Push Docker Images to PROD ECR
@@ -585,6 +589,8 @@ jobs:
       id-token: write
       pull-requests: write
       checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
 
   deploy_prod:
     name: Deploy prod
@@ -626,3 +632,5 @@ jobs:
       id-token: write
       pull-requests: write
       checks: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
