@@ -31,9 +31,6 @@ on:
       assets-version:
         type: string
         required: true
-      etl-ref:
-        type: string
-        required: true
       aws_role:
         type: string
         required: true
@@ -47,6 +44,9 @@ on:
         type: string
         required: true
       batch_job_definition:
+        type: string
+        required: true
+      etl_ref:
         type: string
         required: true
 
@@ -104,7 +104,7 @@ jobs:
       account: ${{ inputs.account }}
       environment: ${{ inputs.environment }}
       dry_run: false
-      etl_ref: ${{ inputs.etl-ref }}
+      etl_ref: ${{ inputs.etl_ref }}
     permissions:
       contents: read
       id-token: write
