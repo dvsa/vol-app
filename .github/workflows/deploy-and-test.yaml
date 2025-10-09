@@ -49,6 +49,9 @@ on:
       batch_job_definition:
         type: string
         required: true
+      etl_ref:
+        type: string
+        required: true
 
 jobs:
   terraform_env_plan:
