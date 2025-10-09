@@ -72,7 +72,7 @@ jobs:
 
   terraform_env:
     name: Environment - ${{ inputs.environment }}
-    if: needs.terraform_env_plan.result != 'failure'
+    if: ${{ always() && !cancelled() && !failure() }}
     needs:
       - terraform_env_plan
     concurrency:
