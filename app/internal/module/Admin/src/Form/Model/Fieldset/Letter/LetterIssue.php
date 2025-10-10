@@ -156,8 +156,31 @@ class LetterIssue
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")
      * @Form\Filter("DateTimeSelectNullifier")
-     * @Form\Validator("Date", options={"format": "Y-m-d H:i:s"})
-     * @Form\Validator("DateTimeCompare", options={"min_operator": ">=", "compare_to":"now", "compare_to_label":"current date/time"})
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "publishFrom",
+     *          "context_values": {"--  ::00"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
+     *              {
+     *                  "name": "Date",
+     *                  "options": {
+     *                      "format": "Y-m-d H:i:s",
+     *                      "messages": {
+     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
+     *                      }
+     *                  },
+     *                  "break_chain_on_failure": true,
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
+     *              }
+     *          }
+     *      }
+     * })
      * @Form\Attributes({"id":"publishFrom"})
      */
     public $publishFrom = null;

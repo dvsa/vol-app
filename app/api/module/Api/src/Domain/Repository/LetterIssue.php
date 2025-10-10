@@ -29,7 +29,8 @@ class LetterIssue extends AbstractVersionedRepository
             'maxLength',
             'requiresInput',
             'isNi',
-            'goodsOrPsv'
+            'goodsOrPsv',
+            'publishFrom'
         ];
     }
 

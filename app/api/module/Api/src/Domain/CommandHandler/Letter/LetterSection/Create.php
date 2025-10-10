@@ -20,11 +20,19 @@ final class Create extends AbstractCommandHandler
         /** @var Cmd $command */
         
         $letterSection = new LetterSectionEntity();
-        
-        // Set working properties - versioning will be handled by repository
+
+        // Set all properties - versioning will be handled by repository
+        $letterSection->setSectionKey($command->getSectionKey());
         $letterSection->setName($command->getName());
+        $letterSection->setSectionType($command->getSectionType());
         $letterSection->setDefaultContent($command->getDefaultContent());
-        $letterSection->setDisplayOrder($command->getDisplayOrder());
+        $letterSection->setHelpText($command->getHelpText());
+        $letterSection->setMinLength($command->getMinLength());
+        $letterSection->setMaxLength($command->getMaxLength());
+        $letterSection->setRequiresInput($command->getRequiresInput());
+        $letterSection->setIsNi($command->getIsNi());
+        $letterSection->setGoodsOrPsv($command->getGoodsOrPsv());
+        $letterSection->setPublishFrom($command->getPublishFrom());
 
         $this->getRepo()->save($letterSection);
 

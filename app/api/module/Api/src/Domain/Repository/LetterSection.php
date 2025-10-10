@@ -28,7 +28,8 @@ class LetterSection extends AbstractVersionedRepository
             'maxLength',
             'sectionType',
             'goodsOrPsv',
-            'isNi'
+            'isNi',
+            'publishFrom'
         ];
     }
 
