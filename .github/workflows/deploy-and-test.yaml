@@ -55,7 +55,7 @@ on:
 
 jobs:
   terraform_env_plan:
-    name: Environment Plan - ${{ inputs.environment }}
+    name: Environment Plan
     if: ${{ inputs.account == 'prod' }}
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
@@ -74,7 +74,7 @@ jobs:
     secrets: inherit
 
   terraform_env:
-    name: Environment - ${{ inputs.environment }}
+    name: Environment Apply
     if: ${{ always() && !cancelled() && !failure() }}
     needs:
       - terraform_env_plan
@@ -96,7 +96,7 @@ jobs:
     secrets: inherit
 
   liquibase:
-    name: Database Migrations ${{ inputs.environment }}
+    name: Database Migrations
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
     needs:
       - terraform_env
@@ -134,7 +134,7 @@ jobs:
       checks: write
 
   test_smoke:
-    name: Run Smoke Tests on ${{ inputs.environment }}
+    name: Smoke Tests
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' }}
     needs:
       - terraform_env
@@ -155,7 +155,7 @@ jobs:
 
   test_selfserve:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
-    name: Run Selfserve Regression Tests on ${{ inputs.environment }}
+    name: Selfserve Regression Tests
     needs:
       - test_smoke
     uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
@@ -173,7 +173,7 @@ jobs:
 
   test_internal:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
-    name: Run Internal Regression Tests on ${{ inputs.environment }}
+    name: Internal Regression Tests
     needs:
       - test_smoke
     uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
@@ -190,7 +190,7 @@ jobs:
       checks: write
 
   rollback:
-    name: Rollback ${{ inputs.environment }} Deployment
+    name: Rollback Deployment
     if: |
       always() &&
       (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
