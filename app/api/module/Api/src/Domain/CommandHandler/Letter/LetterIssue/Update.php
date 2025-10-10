@@ -20,27 +20,20 @@ final class Update extends AbstractCommandHandler
         
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssue $letterIssue */
         $letterIssue = $this->getRepo()->fetchUsingId($command);
-        
-        // Update working properties - versioning will be handled by repository
+
+        // Update all properties - versioning will be handled by repository
+        $letterIssue->setIssueKey($command->getIssueKey());
         $letterIssue->setCategory($command->getCategory());
         $letterIssue->setSubCategory($command->getSubCategory());
         $letterIssue->setHeading($command->getHeading());
-        
-        if ($command->getDefaultBodyContent() \!== null) {
-            $letterIssue->setDefaultBodyContent($command->getDefaultBodyContent());
-        }
-        
-        if ($command->getDefaultReasonsContent() \!== null) {
-            $letterIssue->setDefaultReasonsContent($command->getDefaultReasonsContent());
-        }
-        
-        if ($command->getDefaultCounterMeasuresContent() \!== null) {
-            $letterIssue->setDefaultCounterMeasuresContent($command->getDefaultCounterMeasuresContent());
-        }
-        
-        if ($command->getDisplayOrder() \!== null) {
-            $letterIssue->setDisplayOrder($command->getDisplayOrder());
-        }
+        $letterIssue->setDefaultBodyContent($command->getDefaultBodyContent());
+        $letterIssue->setHelpText($command->getHelpText());
+        $letterIssue->setMinLength($command->getMinLength());
+        $letterIssue->setMaxLength($command->getMaxLength());
+        $letterIssue->setRequiresInput($command->getRequiresInput());
+        $letterIssue->setIsNi($command->getIsNi());
+        $letterIssue->setGoodsOrPsv($command->getGoodsOrPsv());
+        $letterIssue->setPublishFrom($command->getPublishFrom());
 
         $this->getRepo()->save($letterIssue);
 

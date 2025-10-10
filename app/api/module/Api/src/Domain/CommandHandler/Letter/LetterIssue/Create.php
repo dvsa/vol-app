@@ -20,15 +20,20 @@ final class Create extends AbstractCommandHandler
         /** @var Cmd $command */
         
         $letterIssue = new LetterIssueEntity();
-        
-        // Set working properties - versioning will be handled by repository
+
+        // Set all properties - versioning will be handled by repository
+        $letterIssue->setIssueKey($command->getIssueKey());
         $letterIssue->setCategory($command->getCategory());
         $letterIssue->setSubCategory($command->getSubCategory());
         $letterIssue->setHeading($command->getHeading());
         $letterIssue->setDefaultBodyContent($command->getDefaultBodyContent());
-        $letterIssue->setDefaultReasonsContent($command->getDefaultReasonsContent());
-        $letterIssue->setDefaultCounterMeasuresContent($command->getDefaultCounterMeasuresContent());
-        $letterIssue->setDisplayOrder($command->getDisplayOrder());
+        $letterIssue->setHelpText($command->getHelpText());
+        $letterIssue->setMinLength($command->getMinLength());
+        $letterIssue->setMaxLength($command->getMaxLength());
+        $letterIssue->setRequiresInput($command->getRequiresInput());
+        $letterIssue->setIsNi($command->getIsNi());
+        $letterIssue->setGoodsOrPsv($command->getGoodsOrPsv());
+        $letterIssue->setPublishFrom($command->getPublishFrom());
 
         $this->getRepo()->save($letterIssue);
 

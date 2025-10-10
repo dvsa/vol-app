@@ -45,6 +45,8 @@ class LetterIssueController extends AbstractInternalController implements LeftVi
 
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/letter-issue'],
+        'editAction' => ['forms/letter-issue'],
     ];
 
     public function getLeftView(): ViewModel

@@ -45,6 +45,8 @@ class LetterSectionController extends AbstractInternalController implements Left
     
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/letter-section'],
+        'editAction' => ['forms/letter-section'],
     ];
 
     /**

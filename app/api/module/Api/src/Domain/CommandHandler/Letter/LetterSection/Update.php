@@ -20,17 +20,19 @@ final class Update extends AbstractCommandHandler
         
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection */
         $letterSection = $this->getRepo()->fetchUsingId($command);
-        
-        // Update working properties - versioning will be handled by repository
+
+        // Update all properties - versioning will be handled by repository
+        $letterSection->setSectionKey($command->getSectionKey());
         $letterSection->setName($command->getName());
-        
-        if ($command->getDefaultContent() !== null) {
-            $letterSection->setDefaultContent($command->getDefaultContent());
-        }
-        
-        if ($command->getDisplayOrder() !== null) {
-            $letterSection->setDisplayOrder($command->getDisplayOrder());
-        }
+        $letterSection->setSectionType($command->getSectionType());
+        $letterSection->setDefaultContent($command->getDefaultContent());
+        $letterSection->setHelpText($command->getHelpText());
+        $letterSection->setMinLength($command->getMinLength());
+        $letterSection->setMaxLength($command->getMaxLength());
+        $letterSection->setRequiresInput($command->getRequiresInput());
+        $letterSection->setIsNi($command->getIsNi());
+        $letterSection->setGoodsOrPsv($command->getGoodsOrPsv());
+        $letterSection->setPublishFrom($command->getPublishFrom());
 
         $this->getRepo()->save($letterSection);
 
