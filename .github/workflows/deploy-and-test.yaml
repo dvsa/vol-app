@@ -193,6 +193,7 @@ jobs:
     name: Rollback Deployment
     if: |
       always() &&
+      inputs.environment != 'dev' &&
       (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
        needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
        needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled') &&
