@@ -1,0 +1,221 @@
+name: Deploy and Test
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.environment }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      account:
+        type: string
+        required: true
+      api-image-tag:
+        type: string
+        required: true
+      cli-image-tag:
+        type: string
+        required: true
+      selfserve-image-tag:
+        type: string
+        required: true
+      internal-image-tag:
+        type: string
+        required: true
+      assets-version:
+        type: string
+        required: true
+      aws_role:
+        type: string
+        required: true
+      bucket_name:
+        type: string
+        required: true
+      bucket_key:
+        type: string
+        required: true
+      batch_job_queue:
+        type: string
+        required: true
+      batch_job_definition:
+        type: string
+        required: true
+      etl_ref:
+        type: string
+        required: true
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY:
+        required: true
+
+jobs:
+  terraform_env_plan:
+    name: Environment Plan - ${{ inputs.environment }}
+    if: ${{ inputs.account == 'prod' }}
+    concurrency:
+      group: terraform-environment-${{ inputs.environment }}
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      api-image-tag: ${{ inputs.api-image-tag }}
+      cli-image-tag: ${{ inputs.cli-image-tag }}
+      selfserve-image-tag: ${{ inputs.selfserve-image-tag }}
+      internal-image-tag: ${{ inputs.internal-image-tag }}
+      assets-version: ${{ inputs.assets-version }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  terraform_env:
+    name: Environment - ${{ inputs.environment }}
+    if: ${{ always() && !cancelled() && !failure() }}
+    needs:
+      - terraform_env_plan
+    concurrency:
+      group: terraform-environment-${{ inputs.environment }}
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      api-image-tag: ${{ inputs.api-image-tag }}
+      cli-image-tag: ${{ inputs.cli-image-tag }}
+      selfserve-image-tag: ${{ inputs.selfserve-image-tag }}
+      internal-image-tag: ${{ inputs.internal-image-tag }}
+      assets-version: ${{ inputs.assets-version }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  liquibase:
+    name: Database Migrations ${{ inputs.environment }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' }}
+    needs:
+      - terraform_env
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      push: false
+      submit_job: true
+      account: ${{ inputs.account }}
+      environment: ${{ inputs.environment }}
+      dry_run: false
+      etl_ref: ${{ inputs.etl_ref }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
+  test_batch:
+    name: Run Batch Jobs
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+    needs:
+      - terraform_env
+      - liquibase
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@main
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  test_smoke:
+    name: Run Smoke Tests on ${{ inputs.environment }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' }}
+    needs:
+      - terraform_env
+      - liquibase
+      - test_batch
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  test_selfserve:
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
+    name: Run Selfserve Regression Tests on ${{ inputs.environment }}
+    needs:
+      - test_smoke
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  test_internal:
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+    name: Run Internal Regression Tests on ${{ inputs.environment }}
+    needs:
+      - test_smoke
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
+  rollback:
+    name: Rollback ${{ inputs.environment }} Deployment
+    if: |
+      always() &&
+      (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
+       needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
+       needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled') &&
+       needs.terraform_env.result == 'success'
+    concurrency:
+      group: terraform-environment-${{ inputs.environment }}
+    needs:
+      - test_smoke
+      - test_selfserve
+      - test_internal
+      - terraform_env
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      rollback: true
+      apply: true
+      api-image-tag: ${{ needs.terraform_env.outputs.previous_api_image_tag }}
+      cli-image-tag: ${{ needs.terraform_env.outputs.previous_cli_image_tag }}
+      selfserve-image-tag: ${{ needs.terraform_env.outputs.previous_selfserve_image_tag }}
+      internal-image-tag: ${{ needs.terraform_env.outputs.previous_internal_image_tag }}
+      assets-version: ${{ needs.terraform_env.outputs.previous_assets_version }}
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit

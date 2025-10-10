@@ -77,7 +77,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Opposition\Opposer
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposer", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposer", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="opposer_id", referencedColumnName="id")
      */
     protected $opposer;

@@ -93,7 +93,7 @@ readonly class InverseRelationshipProcessor
             'sourceEntity' => $sourceEntityName,
             'sourceTable' => $sourceTable,
             'sourceColumn' => $sourceColumn,
-            'mappedBy' => $this->generatePropertyName($sourceColumn),
+            'mappedBy' => $this->generatePropertyName($sourceColumn, $sourceTable),
             'relationshipType' => $relationshipType,
             'cascade' => $inversedByConfig->cascade,
             'fetch' => $inversedByConfig->fetch,
@@ -163,11 +163,18 @@ readonly class InverseRelationshipProcessor
     /**
      * Generate property name from column name
      */
-    private function generatePropertyName(string $columnName): string
+    private function generatePropertyName(string $columnName, string $sourceTable): string
     {
+        // First check if there's a custom property name in EntityConfig
+        $customPropertyName = $this->configService->getFieldNameForColumn($sourceTable, $columnName);
+        if ($customPropertyName !== null) {
+            return $customPropertyName;
+        }
+
+        // Fallback to generic conversion
         // Remove common suffixes
         $columnName = preg_replace('/_id$/', '', $columnName);
-        
+
         // Convert to camelCase
         return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
     }

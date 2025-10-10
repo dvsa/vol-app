@@ -77,7 +77,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Vehicle\Vehicle", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Vehicle\Vehicle", fetch="LAZY", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
      */
     protected $vehicle;

@@ -65,7 +65,6 @@
       "Dvsa\\Olcs\\Address\\": "module/Address/src",
       "Dvsa\\Olcs\\DvsaAddressService\\": "module/DvsaAddressService/src",
       "Dvsa\\Olcs\\Snapshot\\": "module/Snapshot/src",
-      "Dvsa\\Olcs\\GdsVerify\\": "module/GdsVerify/src",
       "Dvsa\\Olcs\\Queue\\": "module/Queue/src",
       "Dvsa\\Olcs\\AwsSdk\\": "module/AwsSdk/src",
       "Dvsa\\Olcs\\Auth\\": "module/Auth/src",

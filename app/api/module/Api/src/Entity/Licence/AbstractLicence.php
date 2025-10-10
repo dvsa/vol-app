@@ -85,7 +85,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
     protected $organisation;
@@ -105,7 +105,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="correspondence_cd_id", referencedColumnName="id", nullable=true)
      */
     protected $correspondenceCd;

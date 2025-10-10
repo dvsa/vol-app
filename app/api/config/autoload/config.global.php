@@ -323,7 +323,6 @@ return [
 
     'ebsr' => [
         'transexchange_publisher' => [
-            'uri' => 'http://localhost:8080/txc-%transxchange_version%/publisherService',
             'new_uri' => '%transxchange_uri%',
             'options' => [
                 'adapter' => \Laminas\Http\Client\Adapter\Proxy::class,

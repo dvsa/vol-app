@@ -71,7 +71,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
     protected $licence;
