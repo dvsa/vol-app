@@ -196,7 +196,8 @@ jobs:
       (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
        needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
        needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled') &&
-       needs.terraform_env.result == 'success'
+       needs.terraform_env.result == 'success' &&
+       inputs.environment != 'dev'
     concurrency:
       group: terraform-environment-${{ inputs.environment }}
     needs:
