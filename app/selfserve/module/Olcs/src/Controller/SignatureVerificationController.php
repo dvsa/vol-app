@@ -11,10 +11,6 @@ use Permits\Data\Mapper\MapperManager;
 
 class SignatureVerificationController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggle::GOVUK_ACCOUNT
-    ];
-
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
