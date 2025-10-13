@@ -495,28 +495,6 @@ return [
         'gv_vehicle_list_batch_size' => 120,
     ],
 
-    // GDS Verify configuration
-    'gds_verify' => [
-        'msa_metadata_url' => 'http://match.%domain%/matching-service/SAML2/metadata',
-        // Cache settings used to cache the above two metadata documents
-        'cache' => [
-            'adapter' => [
-                'name' => 'filesystem',
-                'options' => ['ttl' => 300],
-            ],
-        ],
-        // Entity identifier
-        'entity_identifier' => '%olcs_ss_uri%',
-        // Key used to sign authentication requests
-        'signature_key' => '/opt/dvsa/gds-verify/certs/gds_verify_sign.pem',
-        // Key used to decrypt data from hub
-        'encryption_keys' => [
-            // Array of encryption keys, they will be tried in order
-            '/opt/dvsa/gds-verify/certs/gds_verify_enc.pem',
-            '/opt/dvsa/gds-verify/certs/gds_secondary_verify_enc.pem'
-        ],
-    ],
-
     // Key used to encrypt data stored in the Doctrine EncryptedStringType
     'olcs-doctrine' => [
         'encryption_key' => '%olcs_doctrine_encryption_key%'
