@@ -53,7 +53,7 @@ RUN mkdir -p /mnt/data/olcsdump \
   # Set directory ownership.
   && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ \
   # Set directory permissions.
-  && chmod 755 /mnt/data/olcsdump /mnt/data/scripts/ \
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ \
   # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
 
