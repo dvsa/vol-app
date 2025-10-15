@@ -116,7 +116,7 @@ jobs:
 
   test_batch:
     name: Run Batch Jobs
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.account == 'nonprod' }}
     needs:
       - terraform_env
       - liquibase
