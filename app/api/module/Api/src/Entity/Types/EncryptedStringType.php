@@ -4,20 +4,13 @@ namespace Dvsa\Olcs\Api\Entity\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\StringType;
-use phpseclib\Crypt;
-use phpseclib\Crypt\Base;
+use phpseclib3\Crypt\AES;
 
-/**
- * Class EncryptedStringType
- */
 class EncryptedStringType extends StringType
 {
     public const TYPE = 'encrypted_string';
 
-    /**
-     * @var Crypt\Base
-     */
-    private $encrypter;
+    private ?AES $encrypter;
 
     /**
      * Get the name of this type
@@ -57,22 +50,15 @@ class EncryptedStringType extends StringType
 
     /**
      * Set the Encrypter to use
-     *
-     * @param Base|null $ciper Cipher to use for encryption
-     *
-     * @return void
      */
-    public function setEncrypter(?Base $ciper)
+    public function setEncrypter(?AES $cipher): self
     {
-        $this->encrypter = $ciper;
+        $this->encrypter = $cipher;
+
+        return $this;
     }
 
-    /**
-     * Get the Encrypter
-     *
-     * @return Crypt\Base
-     */
-    public function getEncrypter()
+    public function getEncrypter(): AES
     {
         if ($this->encrypter === null) {
             throw new \RuntimeException('An encrypter must be set to allow encrypting data');
