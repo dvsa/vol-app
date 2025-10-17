@@ -14,14 +14,13 @@ LIQUIBASE_OPTS="--driver=com.mysql.cj.jdbc.Driver \
   --username=${DB_USER} \
   --password=${DB_PASSWORD} \
   --changelog-file=changesets/OLCS.xml \
-  --context-filter=${CONTEXT} \
   --log-level=info"
 
 if [[ "$1" == "--dry-run" ]]; then
     echo "Running in dry-run mode - showing pending changes:"
-    liquibase ${LIQUIBASE_OPTS} status --verbose
-    liquibase ${LIQUIBASE_OPTS} update-sql
+    liquibase ${LIQUIBASE_OPTS} status --verbose --context-filter=${CONTEXT}
+    liquibase ${LIQUIBASE_OPTS} update-sql --context-filter=${CONTEXT}
 else
     echo "Running migrations..."
-    liquibase ${LIQUIBASE_OPTS} update
+    liquibase ${LIQUIBASE_OPTS} update --context-filter=${CONTEXT}
 fi
