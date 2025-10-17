@@ -2,9 +2,8 @@
 
 namespace Dvsa\Olcs\Api;
 
-use Dvsa\Olcs\Api\Domain\Util\BlockCipher\PhpSecLib;
 use Olcs\Logging\Log\Logger;
-use phpseclib\Crypt;
+use phpseclib3\Crypt;
 use Laminas\EventManager\EventInterface;
 use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
 use Laminas\Mvc\MvcEvent;
@@ -91,20 +90,26 @@ class Module implements BootstrapListenerInterface
     }
 
     /**
-     * Initialise the Doctrine Encrypter Type with a ciper
-     *
-     * @param array $config Module config array
-     *
-     * @return void
+     * Initialise the Doctrine Encrypter Type with a cipher
      */
-    protected function initDoctrineEncrypterType(array $config)
+    protected function initDoctrineEncrypterType(array $config): void
     {
         if (!empty($config['olcs-doctrine']['encryption_key'])) {
             /** @var \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType $encrypterType */
             $encrypterType = \Doctrine\DBAL\Types\Type::getType('encrypted_string');
 
-            // NB OLCS-17482 caused a backwards INCOMPATIBLE change to the way the encryption works
-            $cipher = new Crypt\AES();
+            /**
+             * @link https://dvsa.atlassian.net/browse/OLCS-17482
+             * There was a backwards incompatible change to encryption in September 2017
+             *
+             * @link https://dvsa.atlassian.net/browse/VOL-6634
+             * Following the upgrade to phpseclib v3 (October 2025), Crypt\AES() now requires a mode setting.
+             * Under the previous phpseclib v2 the default was cbc with openssl, which we were using.
+             * Therefore, we're forcing these for now in v3 so we can maintain existing behaviour
+             */
+            $cipher = new Crypt\AES('cbc');
+            $cipher->setPreferredEngine('OpenSSL');
+
             // Force AES 256
             $cipher->setKeyLength(256);
             $cipher->setKey($config['olcs-doctrine']['encryption_key']);
