@@ -137,13 +137,10 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setVisible(true);
         }
 
-        $reputeUrl = $this->getReputeUrl($id);
-
-        if ($reputeUrl !== null && $this->getAuthService()->isGranted(RefData::PERMISSION_INTERNAL_EDIT)) {
+        if ($this->getAuthService()->isGranted(RefData::PERMISSION_INTERNAL_EDIT)) {
             $this->getSidebarNavigation()
                  ->findById('transport-manager-quick-actions-check-repute')
-                 ->setVisible(true)
-                 ->setUri($reputeUrl);
+                 ->setVisible(true);
         }
 
         if (!is_null($data['removedDate'])) {
@@ -202,29 +199,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * Get the TM repute url
-     *
-     * @param int $id Transport Manager ID
-     *
-     * @return array
-     * @throws \RuntimeException
-     */
-    private function getReputeUrl($id)
-    {
-        $query = $this->getAnnotationBuilder()->createQuery(ReputeUrlQry::create(['id' => $id]));
-
-        $response = $this->getQueryService()->send($query);
-
-        //sometimes there will genuinely be no repute url,
-        //in these cases $response->isOk() will still return true
-        if (!$response->isOk()) {
-            throw new \RuntimeException("Error cannot get repute url");
-        }
-
-        return $response->getResult()['reputeUrl'];
     }
 
     /**

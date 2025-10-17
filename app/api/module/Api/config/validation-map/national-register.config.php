@@ -5,9 +5,6 @@ use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
 
 return [
-    // Queries
-    QueryHandler\Nr\ReputeUrl::class => Misc\IsInternalUser::class,
-
     /**
      * This is for ATOS to call when they verify whether a licence exists prior to sending erru requests
      */
