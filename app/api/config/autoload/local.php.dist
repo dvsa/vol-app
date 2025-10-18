@@ -64,10 +64,7 @@ return [
   'asset_path' => 'http://localhost:7001',
   'companies_house' => [
     'http' => [
-      'curloptions' => [
-        CURLOPT_PROXY => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
-        CURLOPT_USERPWD => '',
-      ],
+      'curloptions' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
     ],
     'auth' => [
       // Companies House API key (register one at https://developer.companieshouse.gov.uk/]
