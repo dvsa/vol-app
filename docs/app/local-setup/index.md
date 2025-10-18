@@ -103,6 +103,14 @@ If you have [nvm](https://github.com/nvm-sh/nvm) installed, use `nvm use` to aut
     npm run refresh
     ```
 
+    :::info AWS Configuration Sync
+
+    The refresh script includes an AWS Secrets and Parameters sync step that automatically updates your local PHP configuration files with values from AWS.
+
+    For detailed information about configuring this sync, see [AWS Secrets and Parameters Sync](./aws-secrets-sync.md).
+
+    :::
+
 :::success
 
 All done!
