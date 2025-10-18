@@ -356,6 +356,7 @@ return [
                 'client_secret' => '',
                 'token_url' => '',
                 'scope' => '',
+                'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
             ]
         ],
         'repute_url' => [
