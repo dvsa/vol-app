@@ -680,7 +680,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
     newValue: string,
     lineInfo: any,
   ): string | null {
-    const escapedValue = newValue.replace(/'/g, "\\'");
+    const escapedValue = newValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 
     // Use AST position information for precise replacement
     if (lineInfo && lineInfo.valueNode && lineInfo.valueNode.loc) {
