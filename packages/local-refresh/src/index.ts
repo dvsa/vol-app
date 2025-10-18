@@ -16,36 +16,47 @@ const progressBarFactory = () => {
   );
 };
 
-program.description("Script to refresh the local VOL application").action(async () => {
-  const actions = await Promise.all(
-    fs
-      .readdirSync(path.resolve(__dirname, "actions"))
-      .filter((file) => file.endsWith(".ts") && !file.endsWith("Interface.ts"))
-      .map((file) => import(`./actions/${file}`)),
-  );
+// Define explicit action order
+const actionOrder = [
+  "ComposerInstall",
+  "CopyAppDistFiles",
+  "SyncAwsSecretsAndParameters",
+  "CopyDockerComposeDist",
+  "FlushRedis",
+  "ResetDatabase",
+  "ResetLdap",
+];
 
+program.description("Script to refresh the local VOL application").action(async () => {
   const isActionInterface = (action: any): action is ActionInterface => {
     return "prompt" in action && "execute" in action;
   };
 
-  for (const action of actions) {
-    const instance = new action.default();
+  // Load actions in the specified order
+  for (const actionName of actionOrder) {
+    try {
+      const actionModule = await import(`./actions/${actionName}.ts`);
+      const instance = new actionModule.default();
 
-    if (isActionInterface(instance) === false) {
-      console.warn(chalk.red(`Error: ${instance.name} does not implement ActionInterface`));
-      continue;
-    }
+      if (isActionInterface(instance) === false) {
+        console.warn(chalk.red(`Error: ${actionName} does not implement ActionInterface`));
+        continue;
+      }
 
-    const shouldRun = await instance.prompt();
+      const shouldRun = await instance.prompt();
 
-    if (shouldRun) {
-      try {
-        await instance.execute(progressBarFactory());
-      } catch (e: unknown) {
-        if (e instanceof Error) {
-          console.error(`\n\n${chalk.red(e.message)}\n`);
+      if (shouldRun) {
+        try {
+          await instance.execute(progressBarFactory());
+        } catch (e: unknown) {
+          if (e instanceof Error) {
+            console.error(`\n\n${chalk.red(e.message)}\n`);
+          }
         }
       }
+    } catch (importError) {
+      console.warn(chalk.yellow(`Warning: Could not load action '${actionName}': ${importError}`));
+      continue;
     }
   }
 

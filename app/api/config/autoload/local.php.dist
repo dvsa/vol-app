@@ -64,7 +64,10 @@ return [
   'asset_path' => 'http://localhost:7001',
   'companies_house' => [
     'http' => [
-      'curloptions' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      'curloptions' => [
+        CURLOPT_PROXY => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+        CURLOPT_USERPWD => '',
+      ],
     ],
     'auth' => [
       // Companies House API key (register one at https://developer.companieshouse.gov.uk/]
@@ -346,6 +349,20 @@ return [
             'token_url' => '', //param
             'scope' => '', //param
             'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+        ],
+    ],
+    'nr' => [
+        'inr_service' => [
+            'uri' => '',
+            'oauth2' => [
+                'client_id' => '',
+                'client_secret' => '',
+                'token_url' => '',
+                'scope' => '',
+            ]
+        ],
+        'repute_url' => [
+            'uri' => ''
         ],
     ],
     'data-gov-uk-export' => [

@@ -1,0 +1,266 @@
+[
+  {
+    "service": "api",
+    "basePath": "app/api",
+    "placeholders": {
+      "ENV": "${environment.toUpperCase()}",
+      "env": "${environment}",
+      "SERVICE": "${service.toUpperCase()}",
+      "service": "${service}"
+    },
+    "files": [
+      {
+        "path": "config/autoload/local.php",
+        "mappings": [
+          {
+            "configPath": ["dvsa_address_service", "client", "base_uri"],
+            "awsPath": "/applicationparams/{env}/address_service_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["dvsa_address_service", "oauth2", "client_id"],
+            "awsPath": "/applicationparams/{env}/address_service_azure_client_id",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["dvsa_address_service", "oauth2", "client_secret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "address_service_azure_client_secret"
+          },
+          {
+            "configPath": ["dvsa_address_service", "oauth2", "token_url"],
+            "awsPath": "/applicationparams/{env}/address_service_azure_token_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["dvsa_address_service", "oauth2", "scope"],
+            "awsPath": "/applicationparams/{env}/address_service_azure_token_scope",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "discovery_endpoint"],
+            "awsPath": "/applicationparams/{env}/govuk_account_discovery_endpoint",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "client_id"],
+            "awsPath": "/applicationparams/{env}/govuk_account_client_id",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "keys", "algorithm"],
+            "awsPath": "/applicationparams/{env}/govuk_account_private_key_algorithm",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "keys", "private_key"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "govuk_account_private_key"
+          },
+          {
+            "configPath": ["govuk_account", "keys", "public_key"],
+            "awsPath": "/applicationparams/{env}/govuk_account_public_key",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "core_identity_did_document_url"],
+            "awsPath": "/applicationparams/{env}/govuk_account_core_identity_did_document_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["govuk_account", "expected_core_identity_issuer"],
+            "awsPath": "/applicationparams/{env}/govuk_account_id_assurance_issuer",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["auth", "adapters", "cognito", "clientId"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "aws_cognito_client_id"
+          },
+          {
+            "configPath": ["auth", "adapters", "cognito", "clientSecret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "aws_cognito_client_secret"
+          },
+          {
+            "configPath": ["auth", "adapters", "cognito", "poolId"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "aws_cognito_pool_id"
+          },
+          {
+            "configPath": ["auth", "adapters", "cognito", "region"],
+            "awsPath": "/applicationparams/{env}/aws_cognito_region",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["dvla_search", "base_uri"],
+            "awsPath": "/applicationparams/{env}/olcs_dvla_search_base_uri",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["dvla_search", "api_key"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_dvla_search_api_key"
+          },
+          {
+            "configPath": ["ebsr", "transexchange_publisher", "new_uri"],
+            "awsPath": "/applicationparams/{env}/transxchange_uri",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "transexchange_publisher", "oauth2", "client_id"],
+            "awsPath": "/applicationparams/{env}/olcs_txc_client_id",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "transexchange_publisher", "oauth2", "client_secret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_txc_client_secret"
+          },
+          {
+            "configPath": ["ebsr", "transexchange_publisher", "oauth2", "token_url"],
+            "awsPath": "/applicationparams/{env}/olcs_txc_token_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "transexchange_publisher", "oauth2", "scope"],
+            "awsPath": "/applicationparams/{env}/olcs_txc_scope",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "input_s3_bucket"],
+            "awsPath": "/applicationparams/{env}/transxchange_aws_s3_input_bucket",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "output_s3_bucket"],
+            "awsPath": "/applicationparams/{env}/transxchange_aws_s3_output_bucket",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["ebsr", "txc_consumer_role_arn"],
+            "awsPath": "/applicationparams/{env}/transxchange_aws_consumer_role",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_credentials", "client_id"],
+            "awsPath": "/applicationparams/{env}/olcs_cpmsclientid",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_credentials", "client_secret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_cpmssecret"
+          },
+          {
+            "configPath": ["cpms_credentials", "client_id_ni"],
+            "awsPath": "/applicationparams/{env}/olcs_cpmsclientid_ni",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["cpms_credentials", "client_secret_ni"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_cpmssecret_ni"
+          },
+          {
+            "configPath": ["cpms_api", "rest_client", "options", "domain"],
+            "awsPath": "/applicationparams/{env}/olcs_cpmsserver",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["companies_house", "http", "curloptions", "CURLOPT_USERPWD"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_companieshouseapikey",
+            "append": ":"
+          },
+          {
+            "configPath": ["companies_house", "auth", "username"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_companieshouseapikey"
+          },
+          {
+            "configPath": ["companies_house", "client", "baseuri"],
+            "awsPath": "/applicationparams/{env}/companies_house_api_base_uri",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["companies_house_credentials", "userId"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_companieshousexmluserid"
+          },
+          {
+            "configPath": ["companies_house_credentials", "password"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_companieshousexmlpassword"
+          },
+          {
+            "configPath": ["document_share", "client", "webdav_baseuri"],
+            "awsPath": "/applicationparams/{env}/olcs_webdav",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["document_share", "client", "password"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_api_opendj_password"
+          },
+          {
+            "configPath": ["nr", "inr_service", "uri"],
+            "awsPath": "/applicationparams/{env}/olcs_natreg_uri",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["nr", "inr_service", "oauth2", "client_id"],
+            "awsPath": "/applicationparams/{env}/olcs_natreg_client_id",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["nr", "inr_service", "oauth2", "client_secret"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "olcs_natreg_client_secret"
+          },
+          {
+            "configPath": ["nr", "inr_service", "oauth2", "token_url"],
+            "awsPath": "/applicationparams/{env}/olcs_natreg_token_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["nr", "inr_service", "oauth2", "scope"],
+            "awsPath": "/applicationparams/{env}/olcs_natreg_client_scope",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["nr", "repute_url", "uri"],
+            "awsPath": "/applicationparams/{env}/olcs_natreg_repute",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["top-report-link", "targetUrl"],
+            "awsPath": "/applicationparams/{env}/operator_reports_api_url",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["top-report-link", "apiKey"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "dvsa_reports_api_key"
+          }
+        ]
+      }
+    ]
+  }
+]
