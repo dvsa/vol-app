@@ -14,7 +14,6 @@ LIQUIBASE_OPTS="--driver=com.mysql.cj.jdbc.Driver \
   --username=${DB_USER} \
   --password=${DB_PASSWORD} \
   --changelog-file=changesets/OLCS.xml \
-  --context-filter=${CONTEXT} \
   --log-level=info"
 
 if [[ "$1" == "--dry-run" ]]; then
