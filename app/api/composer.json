@@ -23,7 +23,7 @@
     "league/flysystem-webdav": "1.0.10",
     "monolog/monolog": "^2.10",
     "olcs/olcs-logging": "^8.0",
-    "olcs/olcs-transfer": "^8.0",
+    "olcs/olcs-transfer": "^8.2.0",
     "olcs/olcs-utils": "^7.0",
     "olcs/olcs-xmltools": "^8.0",
     "oro/doctrine-extensions": "^2",
@@ -38,7 +38,6 @@
     "symfony/lock": "^6.1",
     "twig/twig": "^3.21",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "laminas/laminas-mail": "^2.16",
     "laminas/laminas-mvc": "^3.8",
     "laminas/laminas-mvc-i18n": "^1.9",
     "laminas/laminas-servicemanager": "^3.23",
@@ -47,11 +46,10 @@
     "laminas/laminas-i18n": "^2.30",
     "laminas/laminas-eventmanager": "^3.14",
     "psr/container": "^1.1|^2",
-    "laminas/laminas-cli": "^1.5",
-    "doctrine/migrations": "^3.8",
+    "laminas/laminas-cli": "^1.11",
+    "doctrine/migrations": "^3.9",
     "setono/editorjs-php": "^1.3",
-    "symfony/mailer": "^7.3",
-    "symfony/mime": "^7.3"
+    "symfony/mailer": "^7.3"
   },
   "autoload": {
     "psr-4": {
