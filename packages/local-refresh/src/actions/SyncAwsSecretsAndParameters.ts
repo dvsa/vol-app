@@ -924,7 +924,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
 
   private async validatePhpSyntax(configFile: string): Promise<void> {
     try {
-      exec(`php -l "${configFile}"`, debug);
+      await exec(`php -l "${configFile}"`, debug);
       debug(chalk.green(`PHP syntax validation passed for ${path.basename(configFile)}`));
     } catch (error) {
       throw new Error(`PHP syntax validation failed for ${configFile}: ${error}`);
