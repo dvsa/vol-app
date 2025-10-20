@@ -817,21 +817,59 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
     newValue: string,
     lineInfo: any,
   ): string | null {
-    const escapedValue = newValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+    // Helper to escape PHP string for single or double quotes
+    function escapePhpString(value: string, useDoubleQuotes: boolean): string {
+      if (useDoubleQuotes) {
+        // Escape backslashes and double quotes, and common PHP escape sequences
+        return value
+          .replace(/\\/g, "\\\\")
+          .replace(/"/g, '\\"')
+          .replace(/\n/g, "\\n")
+          .replace(/\r/g, "\\r")
+          .replace(/\t/g, "\\t")
+          .replace(/\$/g, "\\$");
+      } else {
+        // Escape backslashes and single quotes
+        return value
+          .replace(/\\/g, "\\\\")
+          .replace(/'/g, "\\'");
+      }
+    }
 
     // Use AST position information for precise replacement
     if (lineInfo && lineInfo.valueNode && lineInfo.valueNode.loc) {
-      const valueStart = lineInfo.valueNode.loc.start;
-      const valueEnd = lineInfo.valueNode.loc.end;
+      const valueNode = lineInfo.valueNode;
+      const valueStart = valueNode.loc.start;
+      const valueEnd = valueNode.loc.end;
 
       if (valueStart && valueEnd) {
         const startPos = this.calculateCharPosition(phpContent, valueStart);
         const endPos = this.calculateCharPosition(phpContent, valueEnd);
 
-        // Replace just the value part with proper quotes
+        // Replace just the value part, preserving original type and quote style
         const beforeValue = phpContent.substring(0, startPos);
         const afterValue = phpContent.substring(endPos);
-        const updatedContent = `${beforeValue}'${escapedValue}'${afterValue}`;
+        let replacement: string;
+        switch (valueNode.kind) {
+          case "string":
+            // Detect quote style: php-parser sets isDoubleQuote for double-quoted strings
+            const useDoubleQuotes = !!valueNode.isDoubleQuote;
+            const quoteChar = useDoubleQuotes ? '"' : "'";
+            replacement = quoteChar + escapePhpString(newValue, useDoubleQuotes) + quoteChar;
+            break;
+          case "number":
+            // Insert as number literal
+            replacement = newValue;
+            break;
+          case "identifier":
+            // Insert as constant/identifier, no quotes
+            replacement = newValue;
+            break;
+          default:
+            // Fallback: treat as string, single-quoted
+            replacement = "'" + escapePhpString(newValue, false) + "'";
+        }
+        const updatedContent = `${beforeValue}${replacement}${afterValue}`;
 
         debug(`Updated ${configPath.join(".")} using precise AST position replacement (chars ${startPos}-${endPos})`);
         return updatedContent;
