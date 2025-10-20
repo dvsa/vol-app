@@ -3,7 +3,7 @@ set -e
 
 cd /liquibase/changelog
 
-# Default to 'all' if ENVIRONMENT not set (maintains backward compatibility)
+# Default to 'all' if ENVIRONMENT not set (maintains backward compatibility) e.g. local envs
 CONTEXT=${ENVIRONMENT:-all}
 
 echo "Liquibase running with context: ${CONTEXT}"
