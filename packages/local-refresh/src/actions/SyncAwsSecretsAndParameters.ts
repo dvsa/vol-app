@@ -516,10 +516,10 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
         }
       }
 
-      const keyValue = cached.parsedJson[secretKey];
-      if (!keyValue) {
+      if (!Object.prototype.hasOwnProperty.call(cached.parsedJson, secretKey)) {
         return { value: null, error: `Key '${secretKey}' not found in secret JSON` };
       }
+      const keyValue = cached.parsedJson[secretKey];
       return { value: keyValue };
     }
 
