@@ -556,11 +556,47 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
           if (valueStart && valueEnd) {
             const startPos = this.calculateCharPosition(phpContent, valueStart);
             const endPos = this.calculateCharPosition(phpContent, valueEnd);
-            const escapedValue = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+            let newValue: string;
+            const valueNode = result.lineInfo.valueNode;
+            if (valueNode && valueNode.kind) {
+              if (valueNode.kind === "string") {
+                // Determine original quote style
+                const rawValue = phpContent.substring(startPos, endPos);
+                const singleQuoted = rawValue.startsWith("'");
+                const doubleQuoted = rawValue.startsWith('"');
+                if (singleQuoted) {
+                  // Escape single quotes and backslashes for single-quoted strings
+                  const escaped = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+                  newValue = `'${escaped}'`;
+                } else if (doubleQuoted) {
+                  // Escape double quotes and backslashes for double-quoted strings
+                  const escaped = operation.finalValue.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+                  newValue = `"${escaped}"`;
+                } else {
+                  // Fallback: treat as single-quoted
+                  const escaped = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+                  newValue = `'${escaped}'`;
+                }
+              } else if (valueNode.kind === "number") {
+                // Insert as-is (no quotes)
+                newValue = operation.finalValue;
+              } else if (valueNode.kind === "constref" || valueNode.kind === "boolean") {
+                // Insert as-is (no quotes)
+                newValue = operation.finalValue;
+              } else {
+                // Fallback: treat as string, single-quoted
+                const escaped = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+                newValue = `'${escaped}'`;
+              }
+            } else {
+              // Fallback: treat as string, single-quoted
+              const escaped = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+              newValue = `'${escaped}'`;
+            }
             updatePositions.push({
               startPos,
               endPos,
-              newValue: `'${escapedValue}'`,
+              newValue,
               configPath: operation.configPath,
             });
           }
