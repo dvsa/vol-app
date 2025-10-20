@@ -106,7 +106,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
       debug(`AWS Account: ${response.Account}, User ARN: ${response.Arn}, Region: ${region}`);
     } catch (error: any) {
       if (error.name === "ExpiredTokenException") {
-        throw new Error("AWS session has expired. Please refresh your credentials: Then try again.");
+        throw new Error("AWS session has expired. Please refresh your credentials and try again.");
       }
       throw new Error(`AWS credential validation failed: ${error.message || error.toString()}`);
     }
