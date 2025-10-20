@@ -55,7 +55,13 @@ program.description("Script to refresh the local VOL application").action(async 
         }
       }
     } catch (importError) {
-      console.warn(chalk.yellow(`Warning: Could not load action '${actionName}': ${importError}`));
+      console.warn(
+        chalk.yellow(
+          `Warning: Could not load action '${actionName}': ${
+            importError instanceof Error ? importError.message : String(importError)
+          }`,
+        ),
+      );
       continue;
     }
   }

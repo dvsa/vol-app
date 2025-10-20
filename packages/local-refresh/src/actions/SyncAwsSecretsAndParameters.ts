@@ -29,7 +29,7 @@ interface ConfigMapping {
 export default class SyncAwsSecretsAndParameters implements ActionInterface {
   private selectedEnvironment: string = "";
   private loadedConfig: any = null;
-  private awsCache: Map<string, { value: any; error?: string }> = new Map();
+  private awsCache: Map<string, { value: any; error?: string; parsedJson?: any }> = new Map();
 
   /**
    * Safely evaluate placeholder expressions like ${environment.toUpperCase()}
@@ -106,12 +106,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
       debug(`AWS Account: ${response.Account}, User ARN: ${response.Arn}, Region: ${region}`);
     } catch (error: any) {
       if (error.name === "ExpiredTokenException") {
-        throw new Error(
-          `AWS session has expired. Please refresh your credentials:\n` +
-            `  source /Users/wraggj/Projects/ShellHelpers/AWSAuthWith1PasswordMfaIntegration/source.sh\n` +
-            `  aws_auth olcs-nonprod\n` +
-            `Then try again.`,
-        );
+        throw new Error("AWS session has expired. Please refresh your credentials: Then try again.");
       }
       throw new Error(`AWS credential validation failed: ${error.message || error.toString()}`);
     }
@@ -317,7 +312,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
     fs.copyFileSync(configFile, backupFile);
 
     try {
-      // Read and parse the PHP file
+      // Read and parse the PHP file once
       const phpContent = fs.readFileSync(configFile, "utf-8");
       const parser = new Engine({
         parser: {
@@ -332,7 +327,15 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
       const ast = parser.parseCode(phpContent, configFile);
       let updatedContent = phpContent;
 
-      // Process each mapping
+      // Collect all update operations first
+      const updateOperations: Array<{
+        configPath: string[];
+        finalValue: string;
+        resourceType: string;
+        mapping: ConfigMapping;
+      }> = [];
+
+      // Process each mapping to collect values
       for (const rawMapping of mappings) {
         // Replace placeholders in AWS path using resolved placeholders
         let resolvedAwsPath = rawMapping.awsPath;
@@ -356,7 +359,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
         const resourceType = mapping.type === "parameter" ? "parameter" : "secret";
         const configPath = mapping.configPath.join(".");
 
-        if (result.value) {
+        if (result.value !== null) {
           // Apply prepend and append if specified
           let finalValue = result.value;
           if (mapping.prepend) {
@@ -368,28 +371,51 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
             debug(`Applied append "${mapping.append}" to ${configPath}`);
           }
 
-          const updateResult = await this.updatePhpConfigValue(updatedContent, mapping.configPath, finalValue);
+          updateOperations.push({
+            configPath: mapping.configPath,
+            finalValue,
+            resourceType,
+            mapping,
+          });
 
-          if (updateResult.success) {
-            console.log(
-              chalk.green(`      ✓ Found ${resourceType} value for ${configPath} in ${serviceName.toUpperCase()}`),
-            );
-            updatedContent = updateResult.content;
-            updatedCount++;
-          } else {
-            console.log(
-              chalk.yellow(
-                `      ⚠️  Found ${resourceType} value for ${configPath} but failed to update: ${updateResult.error}`,
-              ),
-            );
-            debug(`Config update failed for ${configPath}: ${updateResult.error}`);
-            failedCount++;
-          }
+          console.log(
+            chalk.green(`      ✓ Found ${resourceType} value for ${configPath} in ${serviceName.toUpperCase()}`),
+          );
+          updatedCount++;
         } else {
           const errorMsg = result.error || "Unknown error";
           console.log(chalk.red(`      ✗ Failed to get ${resourceType} for ${configPath}: ${errorMsg}`));
           debug(`AWS path: ${mapping.awsPath}`);
           failedCount++;
+        }
+      }
+
+      // Apply all updates in one pass using the pre-parsed AST
+      if (updateOperations.length > 0) {
+        const bulkUpdateResult = this.updatePhpConfigValuesBulk(updatedContent, ast, updateOperations);
+        if (bulkUpdateResult.success) {
+          updatedContent = bulkUpdateResult.content;
+        } else {
+          // Fallback to individual updates if bulk update fails
+          for (const operation of updateOperations) {
+            const updateResult = await this.updatePhpConfigValue(
+              updatedContent,
+              operation.configPath,
+              operation.finalValue,
+            );
+            if (updateResult.success) {
+              updatedContent = updateResult.content;
+            } else {
+              console.log(
+                chalk.yellow(
+                  `      ⚠️  Found ${operation.resourceType} value for ${operation.configPath.join(".")} but failed to update: ${updateResult.error}`,
+                ),
+              );
+              debug(`Config update failed for ${operation.configPath.join(".")}: ${updateResult.error}`);
+              updatedCount--;
+              failedCount++;
+            }
+          }
         }
       }
 
@@ -479,19 +505,94 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
 
     // If it's a secret with a specific key, extract from JSON
     if (type === "secret" && secretKey && cached.value) {
-      try {
-        const secretJson = JSON.parse(cached.value);
-        const keyValue = secretJson[secretKey];
-        if (!keyValue) {
-          return { value: null, error: `Key '${secretKey}' not found in secret JSON` };
+      // Use cached parsed JSON if available
+      if (!cached.parsedJson) {
+        try {
+          cached.parsedJson = JSON.parse(cached.value);
+          // Update cache with parsed JSON
+          this.awsCache.set(cacheKey, cached);
+        } catch (parseError: any) {
+          return { value: null, error: `Error parsing JSON secret: ${parseError.message || parseError.toString()}` };
         }
-        return { value: keyValue };
-      } catch (parseError: any) {
-        return { value: null, error: `Error parsing JSON secret: ${parseError.message || parseError.toString()}` };
       }
+
+      const keyValue = cached.parsedJson[secretKey];
+      if (!keyValue) {
+        return { value: null, error: `Key '${secretKey}' not found in secret JSON` };
+      }
+      return { value: keyValue };
     }
 
     return cached;
+  }
+
+  /**
+   * Update multiple PHP config values in one pass using pre-parsed AST
+   */
+  private updatePhpConfigValuesBulk(
+    phpContent: string,
+    ast: any,
+    operations: Array<{
+      configPath: string[];
+      finalValue: string;
+      resourceType: string;
+      mapping: ConfigMapping;
+    }>,
+  ): { content: string; success: boolean; error?: string } {
+    try {
+      // Find all target locations in the AST
+      const updatePositions: Array<{
+        startPos: number;
+        endPos: number;
+        newValue: string;
+        configPath: string[];
+      }> = [];
+
+      for (const operation of operations) {
+        const result = this.traverseAndUpdateAST(ast, operation.configPath, operation.finalValue);
+        if (result.found && result.lineInfo?.valueNode?.loc) {
+          const valueStart = result.lineInfo.valueNode.loc.start;
+          const valueEnd = result.lineInfo.valueNode.loc.end;
+          if (valueStart && valueEnd) {
+            const startPos = this.calculateCharPosition(phpContent, valueStart);
+            const endPos = this.calculateCharPosition(phpContent, valueEnd);
+            const escapedValue = operation.finalValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+            updatePositions.push({
+              startPos,
+              endPos,
+              newValue: `'${escapedValue}'`,
+              configPath: operation.configPath,
+            });
+          }
+        }
+      }
+
+      if (updatePositions.length === 0) {
+        return { content: phpContent, success: false, error: "No valid update positions found" };
+      }
+
+      // Sort positions by start position in descending order to avoid position shifts
+      updatePositions.sort((a, b) => b.startPos - a.startPos);
+
+      // Apply all updates
+      let updatedContent = phpContent;
+      for (const position of updatePositions) {
+        const beforeValue = updatedContent.substring(0, position.startPos);
+        const afterValue = updatedContent.substring(position.endPos);
+        updatedContent = `${beforeValue}${position.newValue}${afterValue}`;
+        debug(
+          `Updated ${position.configPath.join(".")} using bulk update at position ${position.startPos}-${position.endPos}`,
+        );
+      }
+
+      return { content: updatedContent, success: true };
+    } catch (error: any) {
+      return {
+        content: phpContent,
+        success: false,
+        error: `Bulk update failed: ${error.message || error.toString()}`,
+      };
+    }
   }
 
   private async updatePhpConfigValue(
