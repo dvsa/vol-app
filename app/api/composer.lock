@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "d0172eb95e5eb82fc904b8c47930b908",
+  "content-hash": "3142e03e39424cd2693f696b244db1e1",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -528,6 +528,7 @@
         "issues": "https://github.com/doctrine/annotations/issues",
         "source": "https://github.com/doctrine/annotations/tree/1.14.4"
       },
+      "abandoned": true,
       "time": "2024-09-05T10:15:52+00:00"
     },
     {
@@ -625,6 +626,7 @@
           "type": "tidelift"
         }
       ],
+      "abandoned": true,
       "time": "2022-05-20T20:06:54+00:00"
     },
     {
@@ -12473,7 +12475,7 @@
   ],
   "aliases": [],
   "minimum-stability": "dev",
-  "stability-flags": {},
+  "stability-flags": [],
   "prefer-stable": true,
   "prefer-lowest": false,
   "platform": {
@@ -12484,7 +12486,7 @@
     "ext-redis": "*",
     "ext-pdo": "*"
   },
-  "platform-dev": {},
+  "platform-dev": [],
   "platform-overrides": {
     "ext-redis": "6.2.6"
   },

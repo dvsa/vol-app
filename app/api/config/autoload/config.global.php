@@ -260,7 +260,7 @@ return [
     'email' => [
         // Debugging option forces all email to be sent to an address
         // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
+        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
@@ -494,28 +494,6 @@ return [
         'psv_vehicle_list_batch_size' => 120,
         // Number of GOODS vehicle lists to print for each queue job
         'gv_vehicle_list_batch_size' => 120,
-    ],
-
-    // GDS Verify configuration
-    'gds_verify' => [
-        'msa_metadata_url' => 'http://match.%domain%/matching-service/SAML2/metadata',
-        // Cache settings used to cache the above two metadata documents
-        'cache' => [
-            'adapter' => [
-                'name' => 'filesystem',
-                'options' => ['ttl' => 300],
-            ],
-        ],
-        // Entity identifier
-        'entity_identifier' => '%olcs_ss_uri%',
-        // Key used to sign authentication requests
-        'signature_key' => '/opt/dvsa/gds-verify/certs/gds_verify_sign.pem',
-        // Key used to decrypt data from hub
-        'encryption_keys' => [
-            // Array of encryption keys, they will be tried in order
-            '/opt/dvsa/gds-verify/certs/gds_verify_enc.pem',
-            '/opt/dvsa/gds-verify/certs/gds_secondary_verify_enc.pem'
-        ],
     ],
 
     // Key used to encrypt data stored in the Doctrine EncryptedStringType

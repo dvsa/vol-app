@@ -199,7 +199,8 @@ jobs:
           --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
           --container-overrides "{
            \"environment\": [
-             {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"}
+             {\"name\": \"DRY_RUN\", \"value\": \"${{ inputs.dry_run }}\"},
+             {\"name\": \"ENVIRONMENT\", \"value\": \"${{ inputs.environment }}\"}
            ]
           }" \
           --scheduling-priority-override 1 \
