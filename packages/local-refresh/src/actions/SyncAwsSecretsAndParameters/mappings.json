@@ -2,12 +2,24 @@
   {
     "service": "api",
     "basePath": "app/api",
-    "placeholders": {
-      "ENV": "${environment.toUpperCase()}",
-      "env": "${environment}",
-      "SERVICE": "${service.toUpperCase()}",
-      "service": "${service}"
-    },
+    "placeholders": [
+      {
+        "key": "ENV",
+        "value": "${environment.toUpperCase()}"
+      },
+      {
+        "key": "env",
+        "value": "${environment.toLowerCase()}"
+      },
+      {
+        "key": "SERVICE",
+        "value": "${service.toUpperCase()}"
+      },
+      {
+        "key": "service",
+        "value": "${service.toLowerCase()}"
+      }
+    ],
     "files": [
       {
         "path": "config/autoload/local.php",

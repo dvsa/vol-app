@@ -27,6 +27,35 @@ const actionOrder = [
   "ResetLdap",
 ];
 
+/**
+ * Load an action by name, supporting both single-file and folder-based patterns:
+ * - Single file: actions/ActionName.ts
+ * - Folder module: actions/ActionName/index.ts
+ */
+async function loadAction(actionName: string): Promise<any> {
+  const actionsDir = path.join(__dirname, "actions");
+  const singleFilePath = path.join(actionsDir, `${actionName}.ts`);
+  const folderIndexPath = path.join(actionsDir, actionName, "index.ts");
+
+  // Check if single file exists
+  if (fs.existsSync(singleFilePath)) {
+    return await import(`./actions/${actionName}.ts`);
+  }
+
+  // Check if folder module exists
+  if (fs.existsSync(folderIndexPath)) {
+    return await import(`./actions/${actionName}/index.ts`);
+  }
+
+  // Check if it's a compiled .js file (for compatibility)
+  const singleFileJs = path.join(actionsDir, `${actionName}.js`);
+  if (fs.existsSync(singleFileJs)) {
+    return await import(`./actions/${actionName}.js`);
+  }
+
+  throw new Error(`Action file not found: ${actionName}`);
+}
+
 program.description("Script to refresh the local VOL application").action(async () => {
   const isActionInterface = (action: any): action is ActionInterface => {
     return "prompt" in action && "execute" in action;
@@ -35,7 +64,7 @@ program.description("Script to refresh the local VOL application").action(async 
   // Load actions in the specified order
   for (const actionName of actionOrder) {
     try {
-      const actionModule = await import(`./actions/${actionName}.ts`);
+      const actionModule = await loadAction(actionName);
       const instance = new actionModule.default();
 
       if (isActionInterface(instance) === false) {
