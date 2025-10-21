@@ -6,10 +6,6 @@ on:
       - main
       - prerelease
 
-concurrency:
-  group: ${{ github.workflow }}
-  cancel-in-progress: false
-
 permissions:
   contents: read
 
