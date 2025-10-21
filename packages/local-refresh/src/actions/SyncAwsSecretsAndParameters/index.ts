@@ -231,7 +231,7 @@ export default class SyncAwsSecretsAndParameters implements ActionInterface {
           totalFailed += result.failed;
           filesProcessed++;
         } catch (error) {
-          throw new Error(`Failed to update ${fullPath}: ${error}`);
+          throw new Error(`Failed to update ${fullPath}: ${error instanceof Error ? error.message : String(error)}`);
         }
       }
     }

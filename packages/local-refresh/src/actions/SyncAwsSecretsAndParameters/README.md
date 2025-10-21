@@ -17,7 +17,7 @@ SyncAwsSecretsAndParameters/
 
 1. **Prompts** the user to select an environment (dev/int)
 2. **Validates** AWS credentials using STS
-3. **Loads** `config.json` which defines:
+3. **Loads** `mappings.json` which defines:
     - Services to process
     - File paths relative to service base
     - Mappings from AWS paths to config paths
@@ -27,7 +27,7 @@ SyncAwsSecretsAndParameters/
 
 ## Configuration Format
 
-The `config.json` file defines an array of service configurations:
+The `mappings.json` file defines an array of service configurations:
 
 ```json
 [
@@ -36,7 +36,9 @@ The `config.json` file defines an array of service configurations:
         "basePath": "app/api",
         "placeholders": [
             { "key": "ENV", "value": "${environment.toUpperCase()}" },
-            { "key": "env", "value": "${environment.toLowerCase()}" }
+            { "key": "env", "value": "${environment}" },
+            { "key": "SERVICE", "value": "${service.toUpperCase()}" },
+            { "key": "service", "value": "${service}" }
         ],
         "files": [
             {
