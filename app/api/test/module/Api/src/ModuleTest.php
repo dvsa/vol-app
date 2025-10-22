@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api;
 
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
@@ -12,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
-use phpseclib\Crypt\Base;
+use phpseclib3\Crypt\AES;
 
 /**
  * Tests the Api Module php
@@ -121,13 +123,12 @@ class ModuleTest extends MockeryTestCase
         if (!EncryptedStringType::hasType(EncryptedStringType::TYPE)) {
             EncryptedStringType::addType(EncryptedStringType::TYPE, EncryptedStringType::class);
         }
-        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => 'key']]);
 
-        /** @var Base $ciper */
-        $ciper = \Doctrine\DBAL\Types\Type::getType('encrypted_string')->getEncrypter();
+        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => '32byte32byte32byte32byte32byte32']]);
 
-        $this->assertInstanceOf(Base::class, $ciper);
-        $this->assertSame('key', $ciper->key);
+        $cipher = \Doctrine\DBAL\Types\Type::getType('encrypted_string')->getEncrypter();
+
+        $this->assertInstanceOf(AES::class, $cipher);
     }
 
     /**

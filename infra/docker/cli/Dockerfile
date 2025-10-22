@@ -12,7 +12,7 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
 
 # Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
 # Install PHP extensions: intl, pdo_mysql, opcache, zip
-RUN apk add --no-cache icu-dev libzip-dev cups-client bash \
+RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
@@ -46,7 +46,7 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas 
+  && chmod +x /var/www/html/vendor/bin/laminas
 
   # Create olcsdump directory.
 RUN mkdir -p /mnt/data/olcsdump \
