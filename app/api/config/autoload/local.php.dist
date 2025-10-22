@@ -87,7 +87,7 @@ return [
   'cpms_api' => [
     'rest_client' => [
       'options' => [
-        'domain' => "api.accept.dev.cpms.dvsacloud.uks", // QA
+        'domain' => "api.accept.dev.cpms.dvsacloud.uk", // QA
       ],
     ],
   ],
