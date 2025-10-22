@@ -36,7 +36,7 @@ The `mappings.json` file defines an array of service configurations:
         "basePath": "app/api",
         "placeholders": [
             { "key": "ENV", "value": "${environment.toUpperCase()}" },
-            { "key": "env", "value": "${environment}" },
+            { "key": "env", "value": "${environment.toLowerCase()}" },
             { "key": "SERVICE", "value": "${service.toUpperCase()}" },
             { "key": "service", "value": "${service}" }
         ],
