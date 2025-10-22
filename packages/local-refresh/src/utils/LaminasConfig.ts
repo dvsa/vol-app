@@ -431,8 +431,9 @@ export class LaminasConfig {
 
       case "number":
         // Keep as number if the new value is numeric
-        const numValue = Number(newValue);
-        if (!isNaN(numValue) && numValue.toString() === String(newValue).trim()) {
+        const trimmedValue = String(newValue).trim();
+        const numValue = Number(trimmedValue);
+        if (!isNaN(numValue) && numValue.toString() === trimmedValue) {
           return {
             kind: "number",
             value: numValue,
