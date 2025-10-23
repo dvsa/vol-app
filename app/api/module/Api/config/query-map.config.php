@@ -735,4 +735,22 @@ return [
     TransferQuery\Messaging\Subjects\All::class                                       => QueryHandler\Messaging\Subjects\All::class,
     TransferQuery\Messaging\Messages\UnreadCountByOrganisationAndUser::class          => QueryHandler\Messaging\Message\UnreadCountByOrganisationAndRoles::class,
     TransferQuery\Messaging\Messages\UnreadCountByLicenceAndRoles::class              => QueryHandler\Messaging\Message\UnreadCountByLicenceAndRoles::class,
+
+    // Letter
+    TransferQuery\Letter\LetterType\Get::class => QueryHandler\Letter\LetterType\Get::class,
+    TransferQuery\Letter\LetterType\GetList::class => QueryHandler\Letter\LetterType\GetList::class,
+    TransferQuery\Letter\LetterSection\Get::class => QueryHandler\Letter\LetterSection\Get::class,
+    TransferQuery\Letter\LetterSection\GetList::class => QueryHandler\Letter\LetterSection\GetList::class,
+    TransferQuery\Letter\LetterIssue\Get::class => QueryHandler\Letter\LetterIssue\Get::class,
+    TransferQuery\Letter\LetterIssue\GetList::class => QueryHandler\Letter\LetterIssue\GetList::class,
+    TransferQuery\Letter\LetterTodo\Get::class => QueryHandler\Letter\LetterTodo\Get::class,
+    TransferQuery\Letter\LetterTodo\GetList::class => QueryHandler\Letter\LetterTodo\GetList::class,
+    TransferQuery\Letter\LetterAppendix\Get::class => QueryHandler\Letter\LetterAppendix\Get::class,
+    TransferQuery\Letter\LetterAppendix\GetList::class => QueryHandler\Letter\LetterAppendix\GetList::class,
+    TransferQuery\Letter\LetterInstance\Get::class => QueryHandler\Letter\LetterInstance\Get::class,
+    TransferQuery\Letter\LetterInstance\GetList::class => QueryHandler\Letter\LetterInstance\GetList::class,
+    TransferQuery\Letter\MasterTemplate\Get::class => QueryHandler\Letter\MasterTemplate\Get::class,
+    TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
+    TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,
+    TransferQuery\Letter\LetterTestData\GetList::class => QueryHandler\Letter\LetterTestData\GetList::class,
 ];
