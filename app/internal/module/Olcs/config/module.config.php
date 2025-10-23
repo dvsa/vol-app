@@ -927,6 +927,8 @@ return [
             CommonDataService\Search\Search::class => CommonDataService\Search\SearchFactory::class,
             DataService\ImpoundingLegislation::class => DataService\ImpoundingLegislationFactory::class,
             DataService\LicenceDecisionLegislation::class => DataService\LicenceDecisionLegislationFactory::class,
+            DataService\Letter\MasterTemplate::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterTestData::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryReason::class => DataService\AbstractPublicInquiryDataFactory::class,
