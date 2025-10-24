@@ -26,11 +26,11 @@ return [
   ],
   'address' => [
     'client' => [
-      'baseuri' => 'http://address.reg.olcs.dev-dvsacloud.uk/'
+      'baseuri' => 'http://address.dev.olcs.dev-dvsacloud.uk/'
     ]
   ],
   'elastic_search' => [
-    'host' => 'searchv6.reg.olcs.dev-dvsacloud.uk',
+    'host' => 'searchv6.dev.olcs.dev-dvsacloud.uk',
   ],
   'doctrine' => [
     'connection' => [
@@ -57,7 +57,7 @@ return [
   ],
   'document_share' => [
     'client' => [
-      'webdav_baseuri' => 'http://webdav.qa.olcs.dev-dvsacloud.uk:8080/documents/',
+      'webdav_baseuri' => 'http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/',
       'password' => ''
     ],
   ],
@@ -87,7 +87,7 @@ return [
   'cpms_api' => [
     'rest_client' => [
       'options' => [
-        'domain' => "api.accept.dev.cpms.dvsacloud.uk", // QA
+        'domain' => "api.accept.dev.cpms.dvsacloud.uk",
       ],
     ],
   ],
@@ -346,6 +346,21 @@ return [
             'token_url' => '', //param
             'scope' => '', //param
             'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+        ],
+    ],
+    'nr' => [
+        'inr_service' => [
+            'uri' => '',
+            'oauth2' => [
+                'client_id' => '',
+                'client_secret' => '',
+                'token_url' => '',
+                'scope' => '',
+                'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+            ]
+        ],
+        'repute_url' => [
+            'uri' => ''
         ],
     ],
     'data-gov-uk-export' => [
