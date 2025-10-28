@@ -39,7 +39,7 @@ class Create extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'DocTemplate';
 
-    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User'];
+    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User', 'LetterType'];
 
     /**
      * Execute command

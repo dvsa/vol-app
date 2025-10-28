@@ -34,6 +34,7 @@ class DocumentTemplate implements MapperInterface
         if (!empty($data)) {
             $formData['fields']['category'] = $data['category']['id'];
             $formData['fields']['subCategory'] = $data['subCategory']['id'];
+            $formData['fields']['letterType'] = $data['letterType']['id'] ?? null;
 
             $pathParts = pathinfo($data['document']['identifier']);
             $formData['fields']['templateFolder'] =
