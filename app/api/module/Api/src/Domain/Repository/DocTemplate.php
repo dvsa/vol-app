@@ -30,6 +30,9 @@ class DocTemplate extends AbstractRepository
             $qb->andWhere($qb->expr()->eq('m.subCategory', ':subCategory'))
                 ->setParameter('subCategory', $query->getSubCategory());
         }
+        if (method_exists($query, 'getNewTemplatesFirst') && $query->getNewTemplatesFirst() === true) {
+            $qb->addOrderBy('m.letterType', 'DESC');
+        }
     }
 
     /**

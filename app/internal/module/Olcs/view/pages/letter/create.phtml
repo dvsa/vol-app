@@ -1,0 +1,39 @@
+<?php
+/**
+ * Letter Generation Create Template
+ * Placeholder for database-driven letter creation
+ */
+?>
+<div class="letter-generation">
+    <h2>Create Database-Driven Letter</h2>
+
+    <div class="info-panel">
+        <h3>Template Information</h3>
+        <p><strong>Template ID:</strong> <?= $this->escapeHtml($templateId) ?></p>
+    </div>
+
+    <?php if (!empty($entityContext)): ?>
+    <div class="info-panel">
+        <h3>Entity Context</h3>
+        <p><strong>Type:</strong> <?= $this->escapeHtml($entityContext['type']) ?></p>
+        <p><strong>ID:</strong> <?= $this->escapeHtml($entityContext['id']) ?></p>
+    </div>
+    <?php endif; ?>
+
+    <div class="info-panel">
+        <h3>Query Parameters</h3>
+        <pre><?= $this->escapeHtml(print_r($queryParams, true)) ?></pre>
+    </div>
+
+    <div class="alert alert-info">
+        <p><?= $this->escapeHtml($message) ?></p>
+    </div>
+
+    <div class="actions">
+        <?php if (isset($queryParams['returnUrl'])): ?>
+        <a href="<?= $this->escapeHtml($queryParams['returnUrl']) ?>" class="govuk-button govuk-button--secondary">
+            Return to Documents
+        </a>
+        <?php endif; ?>
+    </div>
+</div>

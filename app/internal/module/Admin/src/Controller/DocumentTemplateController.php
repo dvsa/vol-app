@@ -197,7 +197,8 @@ class DocumentTemplateController extends AbstractInternalController implements L
             'content'    => new FileContent($fileTmpName, $mimeType),
             'suppressFromOp' => $data['fields']['suppressFromOp'],
             'isNi' => $data['fields']['isNi'],
-            'templateSlug' => $data['fields']['templateSlug']
+            'templateSlug' => $data['fields']['templateSlug'],
+            'letterType' => $data['fields']['letterType'] ?? null
         ];
 
         $response = $this->handleCommand(

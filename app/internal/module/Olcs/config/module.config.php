@@ -350,6 +350,8 @@ return [
             DocumentControllers\DocumentRelinkController::class => DocumentControllerFactories\DocumentRelinkControllerFactory::class,
             DocumentControllers\DocumentUploadController::class => DocumentControllerFactories\DocumentUploadControllerFactory::class,
 
+            \Olcs\Controller\Letter\LetterGenerationController::class => \Olcs\Controller\Factory\Letter\LetterGenerationControllerFactory::class,
+
             IrhpPermitsControllers\IrhpApplicationDocsController::class => IrhpPermitsControllerFactories\IrhpApplicationDocsControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationFeesController::class => IrhpPermitsControllerFactories\IrhpApplicationFeesControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationProcessingOverviewController::class => IrhpPermitsControllerFactories\IrhpApplicationProcessingOverviewControllerFactory::class,
@@ -929,6 +931,7 @@ return [
             DataService\LicenceDecisionLegislation::class => DataService\LicenceDecisionLegislationFactory::class,
             DataService\Letter\MasterTemplate::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterTestData::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\LetterType::class => DataService\LetterTypeFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryReason::class => DataService\AbstractPublicInquiryDataFactory::class,
