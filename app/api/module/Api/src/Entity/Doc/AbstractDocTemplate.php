@@ -32,6 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_doc_template_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_doc_template_document_id", columns={"document_id"}),
  *        @ORM\Index(name="ix_doc_template_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_doc_template_letter_type_id", columns={"letter_type_id"}),
  *        @ORM\Index(name="ix_doc_template_sub_category_id", columns={"sub_category_id"})
  *    }
  * )
@@ -85,6 +86,16 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
     protected $document;
+
+    /**
+     * Link to database-driven letter type (optional)
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=true)
+     */
+    protected $letterType;
 
     /**
      * Created by
@@ -270,6 +281,30 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set the letter type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setLetterType($letterType)
+    {
+        $this->letterType = $letterType;
+
+        return $this;
+    }
+
+    /**
+     * Get the letter type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     */
+    public function getLetterType()
+    {
+        return $this->letterType;
     }
 
     /**

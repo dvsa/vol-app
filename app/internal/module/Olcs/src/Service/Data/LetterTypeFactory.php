@@ -2,6 +2,7 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Service\Data\AbstractListDataServiceServices;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
@@ -21,7 +22,7 @@ class LetterTypeFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new LetterType(
-            $container->get('QueryService')
+            $container->get(AbstractListDataServiceServices::class)
         );
     }
 }

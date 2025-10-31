@@ -89,6 +89,14 @@ class Create extends AbstractCommandHandler implements
      */
     protected function createDocTemplateEntity(TransferCmd\DocTemplate\Create $command)
     {
+        $letterType = null;
+        if ($command->getLetterType()) {
+            $letterType = $this->getRepo('LetterType')->getReference(
+                \Dvsa\Olcs\Api\Entity\Letter\LetterType::class,
+                $command->getLetterType()
+            );
+        }
+
         return DocTemplate::createNew(
             $this->getRepo('Category')->getReference(Category::class, $command->getCategory()),
             $this->getRepo('SubCategory')->getReference(SubCategory::class, $command->getSubCategory()),
@@ -97,6 +105,7 @@ class Create extends AbstractCommandHandler implements
             $command->getIsNi(),
             $command->getSuppressFromOp(),
             $command->getTemplateSlug(),
+            $letterType,
             $this->getRepo('User')->getReference(User::class, $this->getCurrentUser())
         );
     }

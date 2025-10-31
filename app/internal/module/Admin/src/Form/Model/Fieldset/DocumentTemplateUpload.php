@@ -84,7 +84,8 @@ class DocumentTemplateUpload
      * @Form\Attributes({"id":"letterType","placeholder":""})
      * @Form\Options({
      *     "label": "Letter Type (optional)",
-     *     "service_name": "Olcs\Service\Data\LetterType"
+     *     "service_name": "Olcs\Service\Data\LetterType",
+     *     "empty_option": "None"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)

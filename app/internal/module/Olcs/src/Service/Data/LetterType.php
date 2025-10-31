@@ -3,16 +3,29 @@
 namespace Olcs\Service\Data;
 
 use Common\Exception\DataServiceException;
-use Dvsa\Olcs\Transfer\Query\LetterType\GetList as GetListQry;
+use Common\Service\Data\AbstractListDataService;
+use Common\Service\Data\AbstractListDataServiceServices;
+use Dvsa\Olcs\Transfer\Query\Letter\LetterType\GetList as GetListQry;
 
 /**
  * LetterType Data Service
  * Provides active letter types for dropdown selection in admin UI
  */
-class LetterType extends AbstractPublicDataServiceServices
+class LetterType extends AbstractListDataService
 {
   protected static $sort = "name";
   protected static $order = "ASC";
+
+  /**
+   * Create service instance
+   *
+   * @param AbstractListDataServiceServices $abstractListDataServiceServices
+   * @return LetterType
+   */
+  public function __construct(AbstractListDataServiceServices $abstractListDataServiceServices)
+  {
+    parent::__construct($abstractListDataServiceServices);
+  }
 
   /**
    * Fetch list data
@@ -34,6 +47,8 @@ class LetterType extends AbstractPublicDataServiceServices
       "sort" => self::$sort,
       "order" => self::$order,
       "isActive" => true,
+      "page" => 1,
+      "limit" => 100, // Fetch all active letter types (should be a small list)
     ];
 
     $response = $this->handleQuery(GetListQry::create($params));
