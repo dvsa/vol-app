@@ -13,6 +13,12 @@ To run these commands locally, run in the following format from the api root dir
 ./vendor/bin/laminas --container=config/container-cli.php -v [command] [options]
 ```
 
+If you are running the app using containers, prefix the command with `docker exec vol-app-cli-1`:
+
+```bash
+docker exec vol-app-cli-1 ./vendor/bin/laminas --container=config/container-cli.php -v [command] [options]
+```
+
 :::
 
 ## CLI Command Structure and Registration
@@ -77,11 +83,11 @@ The `batch:data-dva-ni-export` and `batch:data-gov-uk-export` commands are used 
 
 `batch:data-gov-uk-export` supports the following `report-name` parameters:
 
--   `operator-licence`
--   `bus-registered-only`
--   `bus-variation`
--   `psv-operator-list`
--   `international-goods`
+- `operator-licence`
+- `bus-registered-only`
+- `bus-variation`
+- `psv-operator-list`
+- `international-goods`
 
 Each will create 1 or more CSV files, and upload these directly to an S3 bucket.
 
