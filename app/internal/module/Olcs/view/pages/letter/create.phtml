@@ -1,39 +1,52 @@
-<?php
-/**
- * Letter Generation Create Template
- * Placeholder for database-driven letter creation
- */
-?>
-<div class="letter-generation">
-    <h2>Create Database-Driven Letter</h2>
+<h2 class="govuk-heading-m">Select content options</h2>
+<p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
 
-    <div class="info-panel">
-        <h3>Template Information</h3>
-        <p><strong>Template ID:</strong> <?= $this->escapeHtml($templateId) ?></p>
-    </div>
+<p class="govuk-body">
+    <a href="#" class="govuk-link" id="toggle-all-sections">Show All Sections</a>
+</p>
 
-    <?php if (!empty($entityContext)): ?>
-    <div class="info-panel">
-        <h3>Entity Context</h3>
-        <p><strong>Type:</strong> <?= $this->escapeHtml($entityContext['type']) ?></p>
-        <p><strong>ID:</strong> <?= $this->escapeHtml($entityContext['id']) ?></p>
-    </div>
-    <?php endif; ?>
+<div class="letter-sections">
+    <?php foreach ($accordionData as $section): ?>
+        <?php if (empty($section['issues'])): continue; endif; ?>
+        <div class="letter-section">
+            <div class="letter-section__header" style="cursor: pointer; border-bottom: 1px solid #b1b4b6; padding: 10px 0;">
+                <h3 class="letter-section__title govuk-heading-s" style="display: inline-block; margin: 0;">
+                    <?= $this->escapeHtml($section['issueType']['name']) ?>
+                </h3>
+                <span class="letter-section__toggle govuk-link" style="float: right; font-size: 14px;">
+                    <span class="letter-section__show-hide">Show</span>
+                    <span class="letter-section__icon" style="display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #1d70b8; margin-left: 5px; vertical-align: middle;"></span>
+                </span>
+            </div>
+            <div class="letter-section__content" style="display: none; padding: 15px 0; border-bottom: 1px solid #b1b4b6;">
+                <?php if (!empty($section['issues'])): ?>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <?php foreach ($section['issues'] as $issue): ?>
+                            <div class="govuk-checkboxes__item">
+                                <input
+                                    class="govuk-checkboxes__input"
+                                    id="letter-issue-<?= $issue['id'] ?>"
+                                    name="letterIssues[]"
+                                    type="checkbox"
+                                    value="<?= $issue['id'] ?>"
+                                >
+                                <label class="govuk-label govuk-checkboxes__label govuk-label--s" for="letter-issue-<?= $issue['id'] ?>">
+                                    <?= $this->escapeHtml($issue['currentVersion']['heading'] ?? $issue['issueKey']) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="govuk-body-s">No issues available for this category.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
 
-    <div class="info-panel">
-        <h3>Query Parameters</h3>
-        <pre><?= $this->escapeHtml(print_r($queryParams, true)) ?></pre>
-    </div>
-
-    <div class="alert alert-info">
-        <p><?= $this->escapeHtml($message) ?></p>
-    </div>
-
-    <div class="actions">
-        <?php if (isset($queryParams['returnUrl'])): ?>
-        <a href="<?= $this->escapeHtml($queryParams['returnUrl']) ?>" class="govuk-button govuk-button--secondary">
-            Return to Documents
-        </a>
-        <?php endif; ?>
-    </div>
+<div class="govuk-button-group" style="margin-top: 2rem;">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
+        Create letter
+    </button>
+    <a class="govuk-link" href="#">Cancel</a>
 </div>

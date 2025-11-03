@@ -78,6 +78,16 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     protected $subCategory;
 
     /**
+     * Link to new database-driven letter type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=true)
+     */
+    protected $letterType;
+
+    /**
      * Link to the rtf template
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
@@ -86,16 +96,6 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
     protected $document;
-
-    /**
-     * Link to database-driven letter type (optional)
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=true)
-     */
-    protected $letterType;
 
     /**
      * Created by
@@ -261,6 +261,29 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the letter type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setLetterType($letterType)
+    {
+        $this->letterType = $letterType;
+
+        return $this;
+    }
+
+    /**
+     * Get the letter type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType     */
+    public function getLetterType()
+    {
+        return $this->letterType;
+    }
+
+    /**
      * Set the document
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
@@ -281,30 +304,6 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     public function getDocument()
     {
         return $this->document;
-    }
-
-    /**
-     * Set the letter type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
-     *
-     * @return DocTemplate
-     */
-    public function setLetterType($letterType)
-    {
-        $this->letterType = $letterType;
-
-        return $this;
-    }
-
-    /**
-     * Get the letter type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     */
-    public function getLetterType()
-    {
-        return $this->letterType;
     }
 
     /**

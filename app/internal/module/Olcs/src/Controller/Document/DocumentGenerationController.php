@@ -70,6 +70,17 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public function listTemplateBookmarksAction()
     {
+        $templateId = (int) $this->params('id');
+
+        // Check if this template uses database-driven letter type
+        if ($this->isLettersDatabaseDrivenEnabled() && $this->templateHasLetterType($templateId)) {
+            // Return JSON response indicating redirect is needed
+            return new \Laminas\View\Model\JsonModel([
+                'redirectToNewLetterFlow' => true,
+                'templateId' => $templateId
+            ]);
+        }
+
         $form = new Form();
 
         $fieldset = new Fieldset();
@@ -78,7 +89,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $form->add($fieldset);
 
-        $this->addTemplateBookmarks($this->params('id'), $fieldset);
+        $this->addTemplateBookmarks($templateId, $fieldset);
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');

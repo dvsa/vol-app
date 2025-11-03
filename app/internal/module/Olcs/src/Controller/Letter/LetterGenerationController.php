@@ -82,25 +82,115 @@ class LetterGenerationController extends AbstractInternalController implements T
         // Extract entity context from query params
         $entityContext = $this->extractEntityContext($queryParams);
 
-        // TODO: Implementation in future phases
-        // 1. Load letter template and metadata
-        // 2. Build dynamic form based on letter type configuration
-        // 3. Display letter choices form with sections/appendices/todos
-        // 4. Handle form submission
-        // 5. Generate letter document
-        // 6. Redirect to finalise or return URL
+        // Build accordion data structure with issue types and their issues
+        $accordionData = $this->buildAccordionData();
 
-        // For now, show placeholder with context information
         $view = new ViewModel([
             'templateId' => $templateId,
             'entityContext' => $entityContext,
+            'accordionData' => $accordionData,
             'queryParams' => $queryParams,
-            'message' => 'Database-driven letter creation - Implementation in progress'
         ]);
 
         $view->setTemplate('pages/letter/create');
 
-        return $view;
+        // Set page title for the layout
+        $this->placeholder()->setPlaceholder('contentTitle', 'Create Letter');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Build accordion data structure with issue types and their issues
+     *
+     * @return array Array of ['issueType' => [...], 'issues' => [...]]
+     */
+    protected function buildAccordionData(): array
+    {
+        // Fetch all active issue types ordered by display order
+        $issueTypes = $this->fetchActiveIssueTypes();
+
+        // Fetch all active letter issues
+        $letterIssues = $this->fetchActiveLetterIssues();
+
+        // Group issues by issue type ID
+        $issuesByType = [];
+        foreach ($letterIssues as $issue) {
+            $typeId = $issue['currentVersion']['letterIssueType']['id'] ?? null;
+            if ($typeId) {
+                if (!isset($issuesByType[$typeId])) {
+                    $issuesByType[$typeId] = [];
+                }
+                $issuesByType[$typeId][] = $issue;
+            }
+        }
+
+        // Build final structure
+        $accordionData = [];
+        foreach ($issueTypes as $issueType) {
+            $typeId = $issueType['id'];
+            $accordionData[] = [
+                'issueType' => $issueType,
+                'issues' => $issuesByType[$typeId] ?? [],
+            ];
+        }
+
+        return $accordionData;
+    }
+
+    /**
+     * Fetch active issue types ordered by display order
+     *
+     * @return array
+     */
+    protected function fetchActiveIssueTypes(): array
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssueType\GetList::create([
+            'sort' => 'displayOrder',
+            'order' => 'ASC',
+            'page' => 1,
+            'limit' => 100,
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $result = $response->getResult();
+
+        // Filter active issue types only
+        $issueTypes = array_filter($result['results'] ?? [], function ($issueType) {
+            return !empty($issueType['isActive']);
+        });
+
+        return array_values($issueTypes);
+    }
+
+    /**
+     * Fetch all active letter issues with their current version data
+     *
+     * @return array
+     */
+    protected function fetchActiveLetterIssues(): array
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterIssue\GetList::create([
+            'sort' => 'issueKey',
+            'order' => 'ASC',
+            'page' => 1,
+            'limit' => 100, // Maximum allowed limit
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        $result = $response->getResult();
+
+        return $result['results'] ?? [];
     }
 
     /**
