@@ -82,53 +82,25 @@ return [
             },
         ],
         [
-            'title' => 'Goods/PSV',
-            'name' => 'goodsOrPsv',
+            'title' => 'Issue Type',
+            'name' => 'letterIssueType',
             'formatter' => function($row) {
-                // For versioned entity, get goodsOrPsv from current version
-                if (isset($row['currentVersion']['goodsOrPsv']['description'])) {
-                    return Escape::html($row['currentVersion']['goodsOrPsv']['description']);
+                // For versioned entity, get letterIssueType from current version
+                if (isset($row['currentVersion']['letterIssueType']['name'])) {
+                    return Escape::html($row['currentVersion']['letterIssueType']['name']);
                 }
-                if (isset($row['goodsOrPsv']['description'])) {
-                    return Escape::html($row['goodsOrPsv']['description']);
+                if (isset($row['letterIssueType']['name'])) {
+                    return Escape::html($row['letterIssueType']['name']);
                 }
-                return 'Both';
-            },
-        ],
-        [
-            'title' => 'NI',
-            'name' => 'isNi',
-            'formatter' => function($row) {
-                // For versioned entity, get isNi from current version
-                $isNi = false;
-                if (isset($row['currentVersion']['isNi'])) {
-                    $isNi = $row['currentVersion']['isNi'];
-                } elseif (isset($row['isNi'])) {
-                    $isNi = $row['isNi'];
-                }
-                return $isNi ? '<span class="govuk-tag govuk-tag--blue">NI</span>' : '<span class="govuk-tag govuk-tag--grey">GB</span>';
-            },
-        ],
-        [
-            'title' => 'Requires Input',
-            'name' => 'requiresInput',
-            'formatter' => function($row) {
-                // For versioned entity, get requiresInput from current version
-                $requiresInput = false;
-                if (isset($row['currentVersion']['requiresInput'])) {
-                    $requiresInput = $row['currentVersion']['requiresInput'];
-                } elseif (isset($row['requiresInput'])) {
-                    $requiresInput = $row['requiresInput'];
-                }
-                return $requiresInput ? '<span class="govuk-tag govuk-tag--green">Yes</span>' : '<span class="govuk-tag govuk-tag--grey">No</span>';
+                return 'N/A';
             },
         ],
         [
             'title' => 'Current Version',
             'name' => 'currentVersion',
             'formatter' => function($row) {
-                if (isset($row['currentVersion']['version'])) {
-                    return 'v' . Escape::html($row['currentVersion']['version']);
+                if (isset($row['currentVersion']['versionNumber'])) {
+                    return 'v' . Escape::html($row['currentVersion']['versionNumber']);
                 }
                 return 'v1';
             },
