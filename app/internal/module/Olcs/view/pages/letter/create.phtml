@@ -1,5 +1,10 @@
+<form method="post" id="letter-create-form">
 <h2 class="govuk-heading-m">Select content options</h2>
 <p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
+
+<div id="validation-error" class="govuk-error-message" style="display: none; margin-bottom: 1rem;">
+    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue
+</div>
 
 <p class="govuk-body">
     <a href="#" class="govuk-link" id="toggle-all-sections">Show All Sections</a>
@@ -45,8 +50,16 @@
 </div>
 
 <div class="govuk-button-group" style="margin-top: 2rem;">
-    <button type="submit" class="govuk-button" data-module="govuk-button">
+    <button type="button" id="create-letter-btn" class="govuk-button govuk-button--disabled" data-module="govuk-button" disabled>
         Create letter
     </button>
-    <a class="govuk-link" href="#">Cancel</a>
+    <a class="govuk-link" href="#" id="cancel-letter-btn">Cancel</a>
 </div>
+
+<div id="placeholder-message" class="govuk-inset-text" style="display: none; margin-top: 1rem;">
+    <strong>Preview functionality to be implemented in VOL-5519</strong>
+    <p class="govuk-body-s" style="margin-top: 0.5rem;">
+        Selected issues: <span id="selected-issues-count">0</span>
+    </p>
+</div>
+</form>
