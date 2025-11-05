@@ -38,7 +38,6 @@
     "symfony/lock": "^6.1",
     "twig/twig": "^3.21",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "laminas/laminas-mail": "^2.16",
     "laminas/laminas-mvc": "^3.8",
     "laminas/laminas-mvc-i18n": "^1.9",
     "laminas/laminas-servicemanager": "^3.23",
