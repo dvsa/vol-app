@@ -583,23 +583,23 @@ module "service" {
       },
       {
         name     = "sas-mi-extract",
-        commands = ["/mnt/data/sas_mi_extract.sh"],
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts",
         schedule = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
-        commands = ["/mnt/data/import_anondb.sh"],
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "populate-anondb",
-        commands = ["/mnt/data/populate_anondb.sh"],
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]
