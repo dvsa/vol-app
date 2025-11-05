@@ -44,6 +44,7 @@ class LetterIssue extends AbstractLetterIssue
     private $requiresInput;
     private $isNi;
     private $goodsOrPsv;
+    private $letterIssueType;
 
     /**
      * Initialise collections
@@ -300,6 +301,31 @@ class LetterIssue extends AbstractLetterIssue
     public function setGoodsOrPsv($goodsOrPsv)
     {
         $this->goodsOrPsv = $goodsOrPsv;
+        return $this;
+    }
+
+    /**
+     * Proxy getter for letterIssueType
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType|null
+     */
+    public function getLetterIssueType()
+    {
+        if ($this->letterIssueType !== null) {
+            return $this->letterIssueType;
+        }
+        return $this->currentVersion ? $this->currentVersion->getLetterIssueType() : null;
+    }
+
+    /**
+     * Proxy setter for letterIssueType
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType|null $letterIssueType
+     * @return self
+     */
+    public function setLetterIssueType($letterIssueType)
+    {
+        $this->letterIssueType = $letterIssueType;
         return $this;
     }
 

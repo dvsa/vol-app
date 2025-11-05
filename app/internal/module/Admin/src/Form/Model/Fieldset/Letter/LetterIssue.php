@@ -35,6 +35,19 @@ class LetterIssue
 
     /**
      * @Form\Options({
+     *     "label": "Issue Type",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Letter\LetterIssueType",
+     *     "empty_option": "Please Select"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"letterIssueType","class":"medium"})
+     */
+    public $letterIssueType = null;
+
+    /**
+     * @Form\Options({
      *     "label": "Category",
      *     "disable_inarray_validator": false,
      *     "service_name": "Olcs\Service\Data\Category",
@@ -146,42 +159,4 @@ class LetterIssue
      * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $helpText = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Publish From",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Required(false)
-     * @Form\Type("DateTimeSelect")
-     * @Form\Filter("DateTimeSelectNullifier")
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
-     *          "context_field": "publishFrom",
-     *          "context_values": {"--  ::00"},
-     *          "context_truth": false,
-     *          "allow_empty" : true,
-     *          "validators": {
-     *              {"name": "\Common\Validator\Date"},
-     *              {
-     *                  "name": "Date",
-     *                  "options": {
-     *                      "format": "Y-m-d H:i:s",
-     *                      "messages": {
-     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
-     *                      }
-     *                  },
-     *                  "break_chain_on_failure": true,
-     *              },
-     *              {
-     *                  "name": "DateInFuture",
-     *              }
-     *          }
-     *      }
-     * })
-     * @Form\Attributes({"id":"publishFrom"})
-     */
-    public $publishFrom = null;
 }

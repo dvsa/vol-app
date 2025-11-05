@@ -70,6 +70,16 @@ return [
             'formatter' => fn($row) => Escape::html(ltrim($row['filename'], '/')),
         ],
         [
+            'title' => 'Type',
+            'name' => 'letterType',
+            'formatter' => function ($row) {
+                if (!empty($row['letterType'])) {
+                    return '<span class="govuk-tag">New</span>';
+                }
+                return '<span class="govuk-tag govuk-tag--grey">Legacy</span>';
+            }
+        ],
+        [
             'title' => 'Edited date',
             'name' => 'lastModifiedOn',
             'sort' => 'lastModifiedOn',

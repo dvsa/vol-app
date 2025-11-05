@@ -39,4 +39,24 @@ class LetterType extends AbstractRepository
 
         return $qb->getQuery()->getResult($hydrateMode);
     }
+
+    /**
+     * Apply list filters
+     *
+     * @param \Doctrine\ORM\QueryBuilder $qb Query builder
+     * @param \Dvsa\Olcs\Transfer\Query\QueryInterface $query Query
+     * @return void
+     */
+    protected function applyListFilters($qb, QueryInterface $query)
+    {
+        parent::applyListFilters($qb, $query);
+
+        if (method_exists($query, 'getIsActive')) {
+            $isActive = $query->getIsActive();
+            if ($isActive !== null) {
+                $qb->andWhere($qb->expr()->eq('m.isActive', ':isActive'))
+                   ->setParameter('isActive', $isActive);
+            }
+        }
+    }
 }

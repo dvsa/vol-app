@@ -39,7 +39,7 @@ class Update extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'DocTemplate';
 
-    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User'];
+    protected $extraRepos = ['Category', 'SubCategory', 'Document', 'User', 'LetterType'];
 
     /**
      * Execute command
@@ -76,13 +76,22 @@ class Update extends AbstractCommandHandler implements
 
     public function updateDocTemplate(DocTemplate $docTemplate, CommandInterface $command)
     {
+        $letterType = empty($command->getLetterType()) ? null :
+            $this->getRepo('LetterType')->getReference(
+                \Dvsa\Olcs\Api\Entity\Letter\LetterType::class,
+                $command->getLetterType()
+            );
+
         $docTemplate->updateMeta(
             $this->getRepo('Category')->getReference(Category::class, $command->getCategory()),
             $this->getRepo('SubCategory')->getReference(SubCategory::class, $command->getSubCategory()),
             $command->getDescription(),
             $command->getIsNi(),
-            $command->getSuppressFromOp()
+            $command->getSuppressFromOp(),
+            $letterType
         );
+
+        $docTemplate->setLetterType($letterType);
     }
 
     public function updateDocTemplateWithFile(DocTemplate $docTemplate)

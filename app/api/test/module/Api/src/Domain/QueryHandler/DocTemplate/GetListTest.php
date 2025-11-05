@@ -25,7 +25,7 @@ class GetListTest extends QueryHandlerTestCase
     {
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockResult = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface::class);
-        $mockResult->shouldReceive('serialize')->with([0 => 'document'])->once()->andReturn(['foo' => 'bar']);
+        $mockResult->shouldReceive('serialize')->with([0 => 'document', 1 => 'letterType'])->once()->andReturn(['foo' => 'bar']);
 
         $this->repoMap['DocTemplate']
             ->shouldReceive('fetchList')->with($query, \Doctrine\ORM\Query::HYDRATE_OBJECT)->once()

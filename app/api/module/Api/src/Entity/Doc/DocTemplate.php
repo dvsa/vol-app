@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
  *        @ORM\Index(name="ix_doc_template_document_id", columns={"document_id"}),
  *        @ORM\Index(name="ix_doc_template_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_doc_template_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_doc_template_letter_type_id", columns={"letter_type_id"}),
  *        @ORM\Index(name="ix_doc_template_category_id", columns={"category_id"})
  *    }
  * )
@@ -36,6 +37,7 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
     /**
      * @param SubCategory $subCategory
      * @param string $templateSlug
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType
      * @return DocTemplate
      */
     public static function createNew(
@@ -46,6 +48,7 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
         string $isNi,
         string $suppressFromOp,
         ?string $templateSlug,
+        $letterType,
         User $createdBy
     ) {
         $docTemplate = new self();
@@ -56,6 +59,7 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
         $docTemplate->isNi = $isNi;
         $docTemplate->suppressFromOp = $suppressFromOp;
         $docTemplate->templateSlug = $templateSlug;
+        $docTemplate->letterType = $letterType;
         $docTemplate->category = $category;
         $docTemplate->createdBy = $createdBy;
 
@@ -64,6 +68,7 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
 
     /**
      * @param SubCategory $subCategory
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType
      * @return DocTemplate
      */
     public function updateMeta(
@@ -71,13 +76,15 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
         ?SubCategory $subCategory,
         string $description,
         string $isNi,
-        string $suppressFromOp
+        string $suppressFromOp,
+        $letterType = null
     ) {
         $this->category = $category;
         $this->subCategory = $subCategory;
         $this->description = $description;
         $this->isNi = $isNi;
         $this->suppressFromOp = $suppressFromOp;
+        $this->letterType = $letterType;
 
         return $this;
     }

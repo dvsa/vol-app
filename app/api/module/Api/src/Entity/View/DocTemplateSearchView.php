@@ -84,6 +84,15 @@ class DocTemplateSearchView implements BundleSerializableInterface
     protected $document;
 
     /**
+     * Letter Type ID
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="letter_type_id", nullable=true)
+     */
+    protected $letterType;
+
+    /**
      * Category Name
      *
      * @var string
@@ -100,6 +109,15 @@ class DocTemplateSearchView implements BundleSerializableInterface
      * @ORM\Column(type="string", name="sub_category_name")
      */
     protected $subCategoryName;
+
+    /**
+     * Letter Type Name
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="letter_type_name", nullable=true)
+     */
+    protected $letterTypeName;
 
     /**
      * Deleted date
@@ -198,6 +216,26 @@ class DocTemplateSearchView implements BundleSerializableInterface
     public function getSubCategoryName()
     {
         return $this->subCategoryName;
+    }
+
+    /**
+     * Get the letter type ID
+     *
+     * @return int|null
+     */
+    public function getLetterType()
+    {
+        return $this->letterType;
+    }
+
+    /**
+     * Get the letter type name
+     *
+     * @return string|null
+     */
+    public function getLetterTypeName()
+    {
+        return $this->letterTypeName;
     }
 
     /**

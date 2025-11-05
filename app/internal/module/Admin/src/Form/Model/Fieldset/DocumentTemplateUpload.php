@@ -81,6 +81,19 @@ class DocumentTemplateUpload
     public $templateSlug = null;
 
     /**
+     * @Form\Attributes({"id":"letterType","placeholder":""})
+     * @Form\Options({
+     *     "label": "Letter Type (optional)",
+     *     "service_name": "Olcs\Service\Data\LetterType",
+     *     "empty_option": "None"
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     *
+     */
+    public $letterType = null;
+
+    /**
      * @Form\Options({"label":"File Upload"})
      * @Form\Type("\Laminas\Form\Element\File")
      */

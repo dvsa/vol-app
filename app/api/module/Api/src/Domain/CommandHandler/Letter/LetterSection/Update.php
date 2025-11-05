@@ -24,15 +24,20 @@ final class Update extends AbstractCommandHandler
         // Update all properties - versioning will be handled by repository
         $letterSection->setSectionKey($command->getSectionKey());
         $letterSection->setName($command->getName());
-        $letterSection->setSectionType($command->getSectionType());
+        $letterSection->setSectionType($this->getRepo()->getRefdataReference($command->getSectionType()));
         $letterSection->setDefaultContent($command->getDefaultContent());
         $letterSection->setHelpText($command->getHelpText());
         $letterSection->setMinLength($command->getMinLength());
         $letterSection->setMaxLength($command->getMaxLength());
         $letterSection->setRequiresInput($command->getRequiresInput());
         $letterSection->setIsNi($command->getIsNi());
-        $letterSection->setGoodsOrPsv($command->getGoodsOrPsv());
-        $letterSection->setPublishFrom($command->getPublishFrom());
+
+        // Set goodsOrPsv only if provided
+        if ($command->getGoodsOrPsv()) {
+            $letterSection->setGoodsOrPsv($this->getRepo()->getRefdataReference($command->getGoodsOrPsv()));
+        } else {
+            $letterSection->setGoodsOrPsv(null);
+        }
 
         $this->getRepo()->save($letterSection);
 

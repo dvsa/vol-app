@@ -15,7 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'DocTemplate';
 
-    protected $bundle = ['document'];
+    protected $bundle = ['document', 'letterType'];
 
     public function handleQuery(QueryInterface $query)
     {
