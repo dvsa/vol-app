@@ -338,6 +338,24 @@ module "service" {
         schedule = ["cron(00 02 7 * ? *)"],
       },
       {
+        name     = "tc-bus-variation",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-variation", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-bus-registered",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-registered-only", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-operator-licence",
+        commands = ["batch:data-gov-uk-export", "--report-name", "operator-licence", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
         timeout  = 7200
@@ -565,23 +583,23 @@ module "service" {
       },
       {
         name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        commands = ["source /mnt/data/sas_mi_extract.sh"],
         type     = "scripts",
         schedule = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",
-        commands = ["/mnt/data/scripts/import_anondb.sh"],
+        commands = ["source /mnt/data/import_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "populate-anondb",
-        commands = ["/mnt/data/scripts/populate_anondb.sh"],
+        commands = ["source /mnt/data/populate_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
+        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]
