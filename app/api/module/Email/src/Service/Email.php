@@ -91,7 +91,7 @@ class Email implements FactoryInterface
                 //olcs-14825 we no longer pass in the name, as this occasionally caused problems with postfix
                 $address = new Address($email);
                 $addressList[] = $address;
-            } catch (\Exception) {
+            } catch (\Throwable) {
                 //address is invalid in some way, right now these addresses are ignored
             }
         }
