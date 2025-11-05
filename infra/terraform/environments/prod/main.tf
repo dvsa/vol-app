@@ -338,6 +338,24 @@ module "service" {
         schedule = ["cron(00 02 7 * ? *)"],
       },
       {
+        name     = "tc-bus-variation",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-variation", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-bus-registered",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-registered-only", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-operator-licence",
+        commands = ["batch:data-gov-uk-export", "--report-name", "operator-licence", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
         name     = "data-retention-populate",
         commands = ["batch:data-retention", "--populate"],
         timeout  = 7200
