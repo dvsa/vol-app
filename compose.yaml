@@ -112,7 +112,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   openldap:
-    image: bitnami/openldap:2.6
+    image: bitnamilegacy/openldap:2.6
     ports:
       - "1389:1389"
     environment:
