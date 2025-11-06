@@ -5,7 +5,7 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # Install build dependencies and pnpm
 RUN apk add --no-cache \
-    go=1.24.7-r0 \
+    go=1.24.9-r0 \
     git=2.49.1-r0 \
     nodejs=22.16.0-r2 \
     npm=11.3.0-r1 \
