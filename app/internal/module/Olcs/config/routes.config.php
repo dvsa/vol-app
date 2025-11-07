@@ -173,6 +173,26 @@ $routes = [
             ]
         ]
     ],
+    'letter' => [
+        'type' => 'Literal',
+        'options' => [
+            'route' => '/letter',
+        ],
+        'may_terminate' => false,
+        'child_routes' => [
+            'create' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/create',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'create',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+        ],
+    ],
     'template_lists' => [
         'type' => 'segment',
         'options' => [

@@ -79,19 +79,10 @@ class LetterSection implements MapperInterface
         if (empty($commandData['goodsOrPsv'])) {
             unset($commandData['goodsOrPsv']);
         }
-        
-        // Convert publishFrom array back to string
-        if (!empty($commandData['publishFrom']) && is_array($commandData['publishFrom'])) {
-            $publishFrom = sprintf(
-                '%04d-%02d-%02d %02d:%02d:%02d',
-                $commandData['publishFrom']['year'],
-                $commandData['publishFrom']['month'],
-                $commandData['publishFrom']['day'],
-                $commandData['publishFrom']['hour'] ?? 0,
-                $commandData['publishFrom']['minute'] ?? 0,
-                $commandData['publishFrom']['second'] ?? 0
-            );
-            $commandData['publishFrom'] = $publishFrom;
+
+        // publishFrom field removed from form - unset if present
+        if (isset($commandData['publishFrom'])) {
+            unset($commandData['publishFrom']);
         }
 
         // Add escape false for EditorJs content
