@@ -139,7 +139,11 @@ data "aws_lb_listener" "this" {
   load_balancer_arn = data.aws_lb.this[each.key].arn
   port              = each.key == "API" ? 80 : 443
 }
+data "aws_lb_listener" "renderer" {
 
+  load_balancer_arn = data.aws_lb.this["API"].arn
+  port              = 443
+}
 data "aws_lb" "iuweb-pub" {
   name = "APP-OLCS-PUB-IUWEB-ALB"
 }
