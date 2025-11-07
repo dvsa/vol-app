@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Types\Type;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 use Dvsa\Olcs\Api\Module;
 use Laminas\EventManager\Event;
@@ -124,11 +126,16 @@ class ModuleTest extends MockeryTestCase
             EncryptedStringType::addType(EncryptedStringType::TYPE, EncryptedStringType::class);
         }
 
+        $platform = m::mock(MySQLPlatform::class);
+        $testData = '{"firstname":"STEVE","surname":"FOX","dateofbirth":"1969-06-09"}';
         $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => '32byte32byte32byte32byte32byte32']]);
 
-        $cipher = \Doctrine\DBAL\Types\Type::getType('encrypted_string')->getEncrypter();
+        $doctrineEncryptedString = Type::getType('encrypted_string');
 
-        $this->assertInstanceOf(AES::class, $cipher);
+        $encryptedValue = $doctrineEncryptedString->convertToDatabaseValue($testData, $platform);
+        $decryptedValue = $doctrineEncryptedString->convertToPhpValue($encryptedValue, $platform);
+
+        $this->assertEquals($decryptedValue, $testData);
     }
 
     /**

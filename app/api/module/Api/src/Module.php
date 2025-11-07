@@ -106,12 +106,21 @@ class Module implements BootstrapListenerInterface
              * Following the upgrade to phpseclib v3 (October 2025), Crypt\AES() now requires a mode setting.
              * Under the previous phpseclib v2 the default was cbc with openssl, which we were using.
              * Therefore, we're forcing these for now in v3 so we can maintain existing behaviour
+             *
+             * The old code also didn't set an iv value. Under the previous phpseclib v2 this fell back to a default.
+             * In phpseclib v3 this now causes an error
+             *
+             * For now we're implicitly using the old default iv value. For the future we need to replace this with
+             * something more secure, and ideally, re-encrypt the old data
+             *
+             * @link https://dvsa.atlassian.net/browse/VOL-6803
+             * This is the ticket to improve the code as detailed above
              */
-            $cipher = new Crypt\AES('cbc');
-            $cipher->setPreferredEngine('OpenSSL');
+            $cipher = new Crypt\AES('cbc'); //default from phpseclib v2, change going forward
+            $cipher->setPreferredEngine('OpenSSL'); //default from phpseclib v2, move to libsodium in future
 
-            // Force AES 256
-            $cipher->setKeyLength(256);
+            $iv  = str_repeat("\0", 16); //default from phpseclib v2, needs to be random going forward
+            $cipher->setIV($iv);
             $cipher->setKey($config['olcs-doctrine']['encryption_key']);
 
             $encrypterType->setEncrypter($cipher);
