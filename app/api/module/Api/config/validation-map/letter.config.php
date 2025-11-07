@@ -32,7 +32,14 @@ return [
     CommandHandler\Letter\LetterIssue\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterIssue\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterIssue\Delete::class => IsInternalUser::class,
-    
+
+    // Letter Issue Type
+    QueryHandler\Letter\LetterIssueType\Get::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterIssueType\GetList::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Create::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Update::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Delete::class => IsInternalUser::class,
+
     // Letter Todo
     QueryHandler\Letter\LetterTodo\Get::class => IsInternalUser::class,
     QueryHandler\Letter\LetterTodo\GetList::class => IsInternalUser::class,

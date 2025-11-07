@@ -26,9 +26,9 @@
     "laminas/laminas-view": "^2.42",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.0",
+    "olcs/olcs-common": "^9.3.0",
     "olcs/olcs-logging": "^8.0",
-    "olcs/olcs-transfer": "^8.1.0",
+    "olcs/olcs-transfer": "^8.2.0",
     "olcs/olcs-utils": "^7.0",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.356"
