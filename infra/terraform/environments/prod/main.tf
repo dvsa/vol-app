@@ -94,6 +94,10 @@ data "aws_ecr_repository" "sservice" {
   name = "vol-app/${each.key}"
 }
 
+data "aws_ecr_repository" "dockerhub_gotenberg" {
+  name = "docker-hub/gotenberg/gotenberg"
+}
+
 data "aws_security_group" "this" {
   for_each = toset(local.legacy_service_names)
 
