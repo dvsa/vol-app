@@ -12,10 +12,10 @@ namespace Dvsa\Olcs\Api\Service\Document\Parser;
 class EditorJsParser implements ParserInterface
 {
     /**
-     * Regex pattern to match [[Token Name]] placeholders
-     * Using single quotes to avoid escaping issues
+     * Regex pattern to match [[TOKEN_NAME]] placeholders
+     * Only matches uppercase letters, numbers, and underscores (bookmark token format)
      */
-    private const GRAB_PATTERN = '/\[\[([^\]]+)\]\]/';
+    private const GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
 
     /**
      * Returns the file extension (json)

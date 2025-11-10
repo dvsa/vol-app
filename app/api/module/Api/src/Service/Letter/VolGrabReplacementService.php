@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\DateHelperAwareInterface;
 use Dvsa\Olcs\Api\Service\Document\Parser\EditorJsParser;
 use Dvsa\Olcs\Api\Domain\TranslatorAwareInterface;
 use Laminas\I18n\Translator\TranslatorInterface;
+use Olcs\Logging\Log\Logger;
 
 /**
  * VOL Grab Replacement Service
@@ -73,7 +74,7 @@ class VolGrabReplacementService
             return $parser->replace($editorJsJson, $populatedData);
         } catch (\Exception $e) {
             // Log error but return original content to avoid breaking letters
-            error_log('VOL Grab replacement failed: ' . $e->getMessage());
+            Logger::err('VOL Grab replacement failed: ' . $e->getMessage());
             return $editorJsJson;
         }
     }
@@ -116,7 +117,7 @@ class VolGrabReplacementService
             } catch (\Exception $e) {
                 // Skip bookmarks that can't be created
                 // This allows graceful handling of unknown/invalid placeholders
-                error_log(sprintf(
+                Logger::warn(sprintf(
                     'Failed to create bookmark for token "%s": %s',
                     $token,
                     $e->getMessage()
@@ -163,7 +164,7 @@ class VolGrabReplacementService
                 }
             } catch (\Exception $e) {
                 // Log query errors but continue processing other bookmarks
-                error_log(sprintf(
+                Logger::err(sprintf(
                     'Query failed for bookmark token "%s": %s',
                     $token,
                     $e->getMessage()
@@ -210,7 +211,7 @@ class VolGrabReplacementService
                 }
             } catch (\Exception $e) {
                 // Log render errors but continue processing other bookmarks
-                error_log(sprintf(
+                Logger::warn(sprintf(
                     'Render failed for bookmark token "%s": %s',
                     $token,
                     $e->getMessage()

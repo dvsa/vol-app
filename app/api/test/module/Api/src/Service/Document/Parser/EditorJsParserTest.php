@@ -36,7 +36,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'paragraph',
                     'data' => [
-                        'text' => 'Dear [[Operator Name]], your licence [[Licence Number]]'
+                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NO]]'
                     ]
                 ]
             ]
@@ -45,8 +45,8 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(2, $tokens);
-        $this->assertContains('Operator Name', $tokens);
-        $this->assertContains('Licence Number', $tokens);
+        $this->assertContains('OP_NAME', $tokens);
+        $this->assertContains('LICENCE_NO', $tokens);
     }
 
     public function testExtractTokensFromHeader()
@@ -56,7 +56,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'header',
                     'data' => [
-                        'text' => 'Licence [[Licence Number]]',
+                        'text' => 'Licence [[LICENCE_NO]]',
                         'level' => 2
                     ]
                 ]
@@ -66,7 +66,7 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(1, $tokens);
-        $this->assertContains('Licence Number', $tokens);
+        $this->assertContains('LICENCE_NO', $tokens);
     }
 
     public function testExtractTokensFromList()
@@ -78,9 +78,9 @@ class EditorJsParserTest extends TestCase
                     'data' => [
                         'style' => 'unordered',
                         'items' => [
-                            'Operator: [[Operator Name]]',
-                            'Date: [[Current Date]]',
-                            'Caseworker: [[Caseworker Name]]'
+                            'Operator: [[OP_NAME]]',
+                            'Date: [[TODAYS_DATE]]',
+                            'Caseworker: [[CASEWORKER_NAME]]'
                         ]
                     ]
                 ]
@@ -90,9 +90,9 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(3, $tokens);
-        $this->assertContains('Operator Name', $tokens);
-        $this->assertContains('Current Date', $tokens);
-        $this->assertContains('Caseworker Name', $tokens);
+        $this->assertContains('OP_NAME', $tokens);
+        $this->assertContains('TODAYS_DATE', $tokens);
+        $this->assertContains('CASEWORKER_NAME', $tokens);
     }
 
     public function testExtractTokensFromMultipleBlocks()
@@ -101,17 +101,17 @@ class EditorJsParserTest extends TestCase
             'blocks' => [
                 [
                     'type' => 'paragraph',
-                    'data' => ['text' => 'Dear [[Operator Name]]']
+                    'data' => ['text' => 'Dear [[OP_NAME]]']
                 ],
                 [
                     'type' => 'header',
-                    'data' => ['text' => 'Licence [[Licence Number]]', 'level' => 2]
+                    'data' => ['text' => 'Licence [[LICENCE_NO]]', 'level' => 2]
                 ],
                 [
                     'type' => 'list',
                     'data' => [
                         'style' => 'unordered',
-                        'items' => ['Date: [[Current Date]]']
+                        'items' => ['Date: [[TODAYS_DATE]]']
                     ]
                 ]
             ]
@@ -120,9 +120,9 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(3, $tokens);
-        $this->assertContains('Operator Name', $tokens);
-        $this->assertContains('Licence Number', $tokens);
-        $this->assertContains('Current Date', $tokens);
+        $this->assertContains('OP_NAME', $tokens);
+        $this->assertContains('LICENCE_NO', $tokens);
+        $this->assertContains('TODAYS_DATE', $tokens);
     }
 
     public function testExtractTokensDeduplicates()
@@ -131,7 +131,7 @@ class EditorJsParserTest extends TestCase
             'blocks' => [
                 [
                     'type' => 'paragraph',
-                    'data' => ['text' => '[[Operator Name]] and [[Operator Name]] again']
+                    'data' => ['text' => '[[OP_NAME]] and [[OP_NAME]] again']
                 ]
             ]
         ]);
@@ -139,7 +139,7 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(1, $tokens);
-        $this->assertContains('Operator Name', $tokens);
+        $this->assertContains('OP_NAME', $tokens);
     }
 
     public function testExtractTokensHandlesInvalidJson()
@@ -167,15 +167,15 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'paragraph',
                     'data' => [
-                        'text' => 'Dear [[Operator Name]], your licence [[Licence Number]]'
+                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NO]]'
                     ]
                 ]
             ]
         ]);
 
         $data = [
-            'Operator Name' => ['content' => 'Joe Bloggs Transport Ltd', 'preformatted' => false],
-            'Licence Number' => ['content' => 'OB1234567', 'preformatted' => false]
+            'OP_NAME' => ['content' => 'Joe Bloggs Transport Ltd', 'preformatted' => false],
+            'LICENCE_NO' => ['content' => 'OB1234567', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -192,7 +192,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'header',
                     'data' => [
-                        'text' => 'Licence [[Licence Number]]',
+                        'text' => 'Licence [[LICENCE_NO]]',
                         'level' => 2
                     ]
                 ]
@@ -200,7 +200,7 @@ class EditorJsParserTest extends TestCase
         ]);
 
         $data = [
-            'Licence Number' => ['content' => 'OB1234567', 'preformatted' => false]
+            'LICENCE_NO' => ['content' => 'OB1234567', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -219,8 +219,8 @@ class EditorJsParserTest extends TestCase
                     'data' => [
                         'style' => 'unordered',
                         'items' => [
-                            'Operator: [[Operator Name]]',
-                            'Date: [[Current Date]]'
+                            'Operator: [[OP_NAME]]',
+                            'Date: [[TODAYS_DATE]]'
                         ]
                     ]
                 ]
@@ -228,8 +228,8 @@ class EditorJsParserTest extends TestCase
         ]);
 
         $data = [
-            'Operator Name' => ['content' => 'Joe Bloggs', 'preformatted' => false],
-            'Current Date' => ['content' => '01/01/2025', 'preformatted' => false]
+            'OP_NAME' => ['content' => 'Joe Bloggs', 'preformatted' => false],
+            'TODAYS_DATE' => ['content' => '01/01/2025', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -243,12 +243,12 @@ class EditorJsParserTest extends TestCase
     {
         $json = json_encode([
             'blocks' => [
-                ['type' => 'paragraph', 'data' => ['text' => '[[Token]]']]
+                ['type' => 'paragraph', 'data' => ['text' => '[[TEST_TOKEN]]']]
             ]
         ]);
 
         // Test with simple string instead of array format
-        $data = ['Token' => 'Simple Value'];
+        $data = ['TEST_TOKEN' => 'Simple Value'];
 
         $result = $this->parser->replace($json, $data);
         $decoded = json_decode($result, true);
@@ -260,12 +260,12 @@ class EditorJsParserTest extends TestCase
     {
         $json = json_encode([
             'blocks' => [
-                ['type' => 'paragraph', 'data' => ['text' => '[[Address]]']]
+                ['type' => 'paragraph', 'data' => ['text' => '[[ADDRESS]]']]
             ]
         ]);
 
         $data = [
-            'Address' => ['content' => "Line 1\nLine 2\nLine 3", 'preformatted' => false]
+            'ADDRESS' => ['content' => "Line 1\nLine 2\nLine 3", 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -278,12 +278,12 @@ class EditorJsParserTest extends TestCase
     {
         $json = json_encode([
             'blocks' => [
-                ['type' => 'paragraph', 'data' => ['text' => '[[Content]]']]
+                ['type' => 'paragraph', 'data' => ['text' => '[[CONTENT]]']]
             ]
         ]);
 
         $data = [
-            'Content' => ['content' => "Line 1\nLine 2", 'preformatted' => true]
+            'CONTENT' => ['content' => "Line 1\nLine 2", 'preformatted' => true]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -298,26 +298,26 @@ class EditorJsParserTest extends TestCase
             'blocks' => [
                 [
                     'type' => 'paragraph',
-                    'data' => ['text' => '[[Known]] and [[Unknown]]']
+                    'data' => ['text' => '[[KNOWN]] and [[UNKNOWN]]']
                 ]
             ]
         ]);
 
         $data = [
-            'Known' => ['content' => 'Replaced', 'preformatted' => false]
+            'KNOWN' => ['content' => 'Replaced', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
         $decoded = json_decode($result, true);
 
-        $this->assertEquals('Replaced and [[Unknown]]', $decoded['blocks'][0]['data']['text']);
+        $this->assertEquals('Replaced and [[UNKNOWN]]', $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceHandlesInvalidJson()
     {
         $invalidJson = 'not valid json{';
 
-        $result = $this->parser->replace($invalidJson, ['Token' => 'Value']);
+        $result = $this->parser->replace($invalidJson, ['TEST_TOKEN' => 'Value']);
 
         // Should return original content unchanged
         $this->assertEquals($invalidJson, $result);
@@ -327,7 +327,7 @@ class EditorJsParserTest extends TestCase
     {
         $json = json_encode([
             'blocks' => [
-                ['type' => 'paragraph', 'data' => ['text' => '[[Token]]']]
+                ['type' => 'paragraph', 'data' => ['text' => '[[TEST_TOKEN]]']]
             ]
         ]);
 
@@ -335,7 +335,7 @@ class EditorJsParserTest extends TestCase
         $decoded = json_decode($result, true);
 
         // Token should remain unchanged
-        $this->assertEquals('[[Token]]', $decoded['blocks'][0]['data']['text']);
+        $this->assertEquals('[[TEST_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplacePreservesJsonStructure()
@@ -347,12 +347,12 @@ class EditorJsParserTest extends TestCase
                 [
                     'id' => 'test-id-123',
                     'type' => 'paragraph',
-                    'data' => ['text' => '[[Token]]']
+                    'data' => ['text' => '[[TEST_TOKEN]]']
                 ]
             ]
         ]);
 
-        $data = ['Token' => 'Value'];
+        $data = ['TEST_TOKEN' => 'Value'];
 
         $result = $this->parser->replace($json, $data);
         $decoded = json_decode($result, true);
