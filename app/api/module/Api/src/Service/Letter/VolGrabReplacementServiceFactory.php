@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\BookmarkFactory;
+use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -26,7 +27,7 @@ class VolGrabReplacementServiceFactory implements FactoryInterface
             new BookmarkFactory(),
             $container->get('QueryHandlerManager'),
             $container->get('DateService'),
-            $container->get('Translator')
+            $container->get(TranslatorInterface::class)
         );
     }
 }

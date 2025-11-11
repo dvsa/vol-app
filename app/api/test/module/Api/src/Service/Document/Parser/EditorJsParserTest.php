@@ -36,7 +36,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'paragraph',
                     'data' => [
-                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NO]]'
+                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NUMBER]]'
                     ]
                 ]
             ]
@@ -46,7 +46,7 @@ class EditorJsParserTest extends TestCase
 
         $this->assertCount(2, $tokens);
         $this->assertContains('OP_NAME', $tokens);
-        $this->assertContains('LICENCE_NO', $tokens);
+        $this->assertContains('LICENCE_NUMBER', $tokens);
     }
 
     public function testExtractTokensFromHeader()
@@ -56,7 +56,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'header',
                     'data' => [
-                        'text' => 'Licence [[LICENCE_NO]]',
+                        'text' => 'Licence [[LICENCE_NUMBER]]',
                         'level' => 2
                     ]
                 ]
@@ -66,7 +66,7 @@ class EditorJsParserTest extends TestCase
         $tokens = $this->parser->extractTokens($json);
 
         $this->assertCount(1, $tokens);
-        $this->assertContains('LICENCE_NO', $tokens);
+        $this->assertContains('LICENCE_NUMBER', $tokens);
     }
 
     public function testExtractTokensFromList()
@@ -105,7 +105,7 @@ class EditorJsParserTest extends TestCase
                 ],
                 [
                     'type' => 'header',
-                    'data' => ['text' => 'Licence [[LICENCE_NO]]', 'level' => 2]
+                    'data' => ['text' => 'Licence [[LICENCE_NUMBER]]', 'level' => 2]
                 ],
                 [
                     'type' => 'list',
@@ -121,7 +121,7 @@ class EditorJsParserTest extends TestCase
 
         $this->assertCount(3, $tokens);
         $this->assertContains('OP_NAME', $tokens);
-        $this->assertContains('LICENCE_NO', $tokens);
+        $this->assertContains('LICENCE_NUMBER', $tokens);
         $this->assertContains('TODAYS_DATE', $tokens);
     }
 
@@ -167,7 +167,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'paragraph',
                     'data' => [
-                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NO]]'
+                        'text' => 'Dear [[OP_NAME]], your licence [[LICENCE_NUMBER]]'
                     ]
                 ]
             ]
@@ -175,7 +175,7 @@ class EditorJsParserTest extends TestCase
 
         $data = [
             'OP_NAME' => ['content' => 'Joe Bloggs Transport Ltd', 'preformatted' => false],
-            'LICENCE_NO' => ['content' => 'OB1234567', 'preformatted' => false]
+            'LICENCE_NUMBER' => ['content' => 'OB1234567', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
@@ -192,7 +192,7 @@ class EditorJsParserTest extends TestCase
                 [
                     'type' => 'header',
                     'data' => [
-                        'text' => 'Licence [[LICENCE_NO]]',
+                        'text' => 'Licence [[LICENCE_NUMBER]]',
                         'level' => 2
                     ]
                 ]
@@ -200,7 +200,7 @@ class EditorJsParserTest extends TestCase
         ]);
 
         $data = [
-            'LICENCE_NO' => ['content' => 'OB1234567', 'preformatted' => false]
+            'LICENCE_NUMBER' => ['content' => 'OB1234567', 'preformatted' => false]
         ];
 
         $result = $this->parser->replace($json, $data);
