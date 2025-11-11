@@ -2281,6 +2281,16 @@ $routes = [
                     ],
                 ],
             ],
+            'check-repute' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'check-repute[/]',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'checkRepute'
+                    ],
+                ],
+            ],
             'remove' => [
                 'type' => 'segment',
                 'options' => [

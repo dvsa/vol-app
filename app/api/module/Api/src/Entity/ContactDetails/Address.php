@@ -85,4 +85,9 @@ class Address extends AbstractAddress
             $this->getTown() . $this->getPostcode()
         );
     }
+
+    public function getAddressLines()
+    {
+
+    }
 }

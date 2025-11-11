@@ -249,11 +249,6 @@
             "type": "parameter"
           },
           {
-            "configPath": ["nr", "repute_url", "uri"],
-            "awsPath": "/applicationparams/{env}/olcs_natreg_repute",
-            "type": "parameter"
-          },
-          {
             "configPath": ["top-report-link", "targetUrl"],
             "awsPath": "/applicationparams/{env}/operator_reports_api_url",
             "type": "parameter"
