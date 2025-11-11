@@ -92,6 +92,8 @@ module "cloudwatch_log-metric-filter" {
   metric_transformation_namespace = "vol-app-${var.environment}-batch-errors"
   metric_transformation_value     = "1"
   metric_transformation_name      = each.value.name
+
+  depends_on = [aws_cloudwatch_log_group.this]
 }
 
 resource "aws_cloudwatch_dashboard" "this" {
