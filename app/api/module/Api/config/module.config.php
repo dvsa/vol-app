@@ -158,6 +158,7 @@ return [
             'Document' => \Dvsa\Olcs\Api\Service\Document\DocumentFactory::class,
             'DocumentGenerator' => \Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class,
             'DocumentNamingService' => \Dvsa\Olcs\Api\Service\Document\NamingService::class,
+            \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService::class => \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementServiceFactory::class,
             'UpdateOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\UpdateOperatingCentreHelper::class,
             'OperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\OperatingCentreHelper::class,
             'VariationOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\VariationOperatingCentreHelper::class,
