@@ -23,7 +23,7 @@ class VolGrabReplacementService
     /**
      * Constructor
      *
-     * @param BookmarkFactory       $bookmarkFactory Bookmark factory instance
+     * @param BookmarkFactory       $bookmarkFactory Factory for creating bookmark instances from token names
      * @param QueryHandlerManager   $queryHandler    Query handler manager
      * @param DateService           $dateService     Date helper service
      * @param TranslatorInterface   $translator      Translator service
