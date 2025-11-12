@@ -1,5 +1,20 @@
 # Changelog
 
+## [6.7.0](https://github.com/dvsa/vol-app/compare/v6.6.0...v6.7.0) (2025-11-12)
+
+
+### Features
+
+* enhance existing Parser service to support replacing tokens in … ([#1229](https://github.com/dvsa/vol-app/issues/1229)) ([51174ea](https://github.com/dvsa/vol-app/commit/51174eacf2d0fd6c4a249a6249532701582d2d9d))
+* upgrade govuk frontend to 5.10.0 ([#1230](https://github.com/dvsa/vol-app/issues/1230)) ([1cc0179](https://github.com/dvsa/vol-app/commit/1cc017963105d8b7289858994e3b7e90790dd162))
+
+
+### Bug Fixes
+
+* added depends on ([#1233](https://github.com/dvsa/vol-app/issues/1233)) ([862b553](https://github.com/dvsa/vol-app/commit/862b5531e60f32338a81c04df235a8dafb9c9033))
+* honor field type overrides from EntityConfig ([#1234](https://github.com/dvsa/vol-app/issues/1234)) ([9d8d190](https://github.com/dvsa/vol-app/commit/9d8d1902fef10880ded1314a0bb9f2f91aea7807))
+* resolve issue with Array appearing in route descriptions of TXC imported bus regs ([#1231](https://github.com/dvsa/vol-app/issues/1231)) ([a45ed5d](https://github.com/dvsa/vol-app/commit/a45ed5db981270159c56e271577b1bce7b561d16))
+
 ## [6.6.0](https://github.com/dvsa/vol-app/compare/v6.5.2...v6.6.0) (2025-11-07)
 
 
