@@ -38,7 +38,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
 
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
-        $type = $this->getDoctrineType($column);
+        $type = $this->getDoctrineType($column, $config);
         $options = [];
         $annotations = [];
 
@@ -64,7 +64,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
         if ($column->getDefault() !== null) {
             // Convert string default values to proper types for boolean columns
             $default = $column->getDefault();
-            $doctrineType = $this->getDoctrineType($column);
+            $doctrineType = $this->getDoctrineType($column, $config);
             
             if ($doctrineType === 'boolean' && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
@@ -116,10 +116,10 @@ class DefaultTypeHandler extends AbstractTypeHandler
     public function generateProperty(ColumnMetadata $column, array $config = []): array
     {
         $propertyName = $this->generatePropertyName($column->getName());
-        $phpType = $this->getPhpType($column);
+        $phpType = $this->getPhpType($column, $config);
         $comment = $this->generateComment($column, $config);
-        
-        $defaultValue = $this->generatePropertyDefault($column);
+
+        $defaultValue = $this->generatePropertyDefault($column, $config);
 
         return [
             'name' => $propertyName,
@@ -144,11 +144,18 @@ class DefaultTypeHandler extends AbstractTypeHandler
     /**
      * Get Doctrine type for the column
      */
-    private function getDoctrineType(ColumnMetadata $column): string
+    private function getDoctrineType(ColumnMetadata $column, array $config = []): string
     {
         $dbType = strtolower($column->getType());
-        
-        // Handle tinyint(1) as boolean
+
+        // Check if FieldConfig has an explicit override
+        $fieldConfig = $config['fieldConfig'] ?? ($config[$column->getName()] ?? null);
+        if ($fieldConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig && $fieldConfig->type !== null) {
+            // Use the explicit override from EntityConfig
+            return $fieldConfig->type->getDoctrineType();
+        }
+
+        // Handle tinyint(1) as boolean (only if not overridden)
         if ($dbType === 'tinyint' && $column->getLength() === 1) {
             return 'boolean';
         }
@@ -159,17 +166,24 @@ class DefaultTypeHandler extends AbstractTypeHandler
     /**
      * Get PHP type for the column
      */
-    private function getPhpType(ColumnMetadata $column): string
+    private function getPhpType(ColumnMetadata $column, array $config = []): string
     {
         $dbType = strtolower($column->getType());
-        
-        // Handle tinyint(1) as boolean
+
+        // Check if FieldConfig has an explicit override
+        $fieldConfig = $config['fieldConfig'] ?? ($config[$column->getName()] ?? null);
+        if ($fieldConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig && $fieldConfig->type !== null) {
+            // Use the explicit override from EntityConfig
+            return $fieldConfig->type->getPhpType();
+        }
+
+        // Handle tinyint(1) as boolean (only if not overridden)
         if ($dbType === 'tinyint' && $column->getLength() === 1) {
             return 'bool';
         }
 
         $phpType = self::TYPE_MAPPING[$dbType][0] ?? 'string';
-        
+
         // Make nullable types nullable in PHP 8+
         if ($column->isNullable() && $phpType !== 'mixed') {
             return $phpType;
@@ -181,19 +195,19 @@ class DefaultTypeHandler extends AbstractTypeHandler
     /**
      * Generate property default value
      */
-    private function generatePropertyDefault(ColumnMetadata $column): string
+    private function generatePropertyDefault(ColumnMetadata $column, array $config = []): string
     {
         if ($column->getDefault() !== null) {
             // Convert string default values to proper types for boolean columns
             $default = $column->getDefault();
-            $phpType = $this->getPhpType($column);
-            $doctrineType = $this->getDoctrineType($column);
-            
+            $phpType = $this->getPhpType($column, $config);
+            $doctrineType = $this->getDoctrineType($column, $config);
+
             if (($phpType === 'bool' || $doctrineType === 'boolean') && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
                 return ($default === '1' || $default === 'true') ? '1' : '0';
             }
-            
+
             return $this->generateDefaultValue($default);
         }
 
@@ -202,8 +216,8 @@ class DefaultTypeHandler extends AbstractTypeHandler
         }
 
         // Generate sensible defaults for non-nullable fields
-        $phpType = $this->getPhpType($column);
-        
+        $phpType = $this->getPhpType($column, $config);
+
         return match ($phpType) {
             'int' => '0',
             'float' => '0.0',

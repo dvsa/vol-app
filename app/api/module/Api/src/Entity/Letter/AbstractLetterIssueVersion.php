@@ -26,10 +26,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="letter_issue_version",
  *    indexes={
- *        @ORM\Index(name="fk_letter_issue_version_issue_type", columns={"letter_issue_type_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_category_id", columns={"category_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_letter_issue_version_goods_or_psv", columns={"goods_or_psv"}),
+ *        @ORM\Index(name="ix_letter_issue_version_issue_type_id", columns={"letter_issue_type_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_letter_issue_version_letter_issue_id", columns={"letter_issue_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_sub_category_id", columns={"sub_category_id"})

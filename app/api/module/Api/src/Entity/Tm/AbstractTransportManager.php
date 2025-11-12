@@ -178,9 +178,9 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Merge details
      *
-     * @var string
+     * @var array
      *
-     * @ORM\Column(type="text", name="merge_details", nullable=true)
+     * @ORM\Column(type="json", name="merge_details", nullable=true)
      */
     protected $mergeDetails;
 
@@ -633,7 +633,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Set the merge details
      *
-     * @param string $mergeDetails new value being set
+     * @param array $mergeDetails new value being set
      *
      * @return TransportManager
      */
@@ -647,7 +647,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Get the merge details
      *
-     * @return string     */
+     * @return array     */
     public function getMergeDetails()
     {
         return $this->mergeDetails;
