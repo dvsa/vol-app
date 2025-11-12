@@ -374,9 +374,9 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="financial_evidence_uploaded", nullable=true)
+     * @ORM\Column(type="smallint", name="financial_evidence_uploaded", nullable=true)
      */
     protected $financialEvidenceUploaded;
 
@@ -1732,7 +1732,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the financial evidence uploaded
      *
-     * @param bool $financialEvidenceUploaded new value being set
+     * @param int $financialEvidenceUploaded new value being set
      *
      * @return Application
      */
@@ -1746,7 +1746,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the financial evidence uploaded
      *
-     * @return bool     */
+     * @return int     */
     public function getFinancialEvidenceUploaded()
     {
         return $this->financialEvidenceUploaded;
