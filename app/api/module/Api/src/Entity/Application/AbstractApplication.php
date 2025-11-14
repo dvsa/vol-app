@@ -778,11 +778,11 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Application referred to pi
+     * applicationReferredToPi
      *
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(type="boolean", name="application_referred_to_pi", nullable=true)
+     * @ORM\Column(type="yesnonull", name="application_referred_to_pi", nullable=true)
      */
     protected $applicationReferredToPi;
 
@@ -2809,7 +2809,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the application referred to pi
      *
-     * @param bool $applicationReferredToPi new value being set
+     * @param string $applicationReferredToPi new value being set
      *
      * @return Application
      */
@@ -2823,7 +2823,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the application referred to pi
      *
-     * @return bool     */
+     * @return string     */
     public function getApplicationReferredToPi()
     {
         return $this->applicationReferredToPi;

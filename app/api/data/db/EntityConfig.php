@@ -275,6 +275,9 @@ return array(
         'psv_medium_vhl_confirmation' => array(
             'type' => 'yesnonull'
         ),
+        'application_referred_to_pi' => array(
+            'type' => 'yesnonull'
+        ),
     ),
     's4' => array(
         'application_id' => array(
