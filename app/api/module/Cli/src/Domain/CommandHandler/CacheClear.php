@@ -14,13 +14,6 @@ use Laminas\Cache\Storage\Adapter\Redis as RedisAdapter;
 /**
  * Cache Clear Command Handler
  *
- * Handles Redis cache clearing operations with support for full flush,
- * namespace-based clearing, and pattern-based clearing.
- *
- * Uses the CacheAwareInterface pattern for automatic dependency injection
- * of the CacheEncryption service via AbstractCommandHandler initializer.
- *
- * @author OLCS Team
  */
 class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
 {
@@ -211,9 +204,6 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
     /**
      * Get the cache namespace prefix from configuration
      *
-     * Retrieves the namespace prefix (e.g., 'zfcache') from the Redis cache adapter options.
-     * This is configured in config.global.php and should be the single source of truth.
-     *
      * @param string $namespace The cache namespace identifier (e.g., 'user_account')
      * @return string The full namespace prefix (e.g., 'zfcache:user_account')
      */
@@ -262,9 +252,6 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
     /**
      * Get the underlying Redis resource from CacheEncryption service
      *
-     * The CacheEncryption service wraps a StorageInterface (Redis adapter).
-     * We need to access the underlying Redis connection for direct operations
-     * like FLUSHDB and SCAN that aren't exposed by the abstraction layers.
      *
      * @return \Redis
      * @throws \RuntimeException
