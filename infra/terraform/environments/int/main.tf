@@ -320,6 +320,11 @@ module "service" {
 
     jobs = [
       {
+        name     = "cache-clear",
+        commands = ["batch:cache-clear", "--flush-all", "--force"],
+        timeout  = 300,
+      },
+      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
