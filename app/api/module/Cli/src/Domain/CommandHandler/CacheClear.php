@@ -27,9 +27,9 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
     use CacheAwareTrait;
 
     /**
-     * Cache namespace identifiers from CacheEncryption service
+     * Valid cache namespace identifiers from CacheEncryption service
      */
-    private const NAMESPACES = [
+    private const VALID_NAMESPACES = [
         'user_account',
         'sys_param',
         'sys_param_list',
@@ -37,19 +37,6 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
         'translation_replacement',
         'storage',
         'secretsmanager',
-    ];
-
-    /**
-     * Cache namespace prefixes (zfcache: prefix + identifier)
-     */
-    private const NAMESPACE_PREFIXES = [
-        'user_account' => 'zfcache:user_account',
-        'sys_param' => 'zfcache:sys_param',
-        'sys_param_list' => 'zfcache:sys_param_list',
-        'translation_key' => 'zfcache:translation_key',
-        'translation_replacement' => 'zfcache:translation_replacement',
-        'storage' => 'zfcache:storage',
-        'secretsmanager' => 'zfcache:secretsmanager',
     ];
 
     /**
@@ -127,12 +114,12 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
         $totalDeleted = 0;
 
         foreach ($namespaceList as $namespace) {
-            if (!isset(self::NAMESPACE_PREFIXES[$namespace])) {
+            if (!in_array($namespace, self::VALID_NAMESPACES, true)) {
                 $this->result->addMessage(sprintf('Unknown namespace: %s', $namespace));
                 continue;
             }
 
-            $pattern = self::NAMESPACE_PREFIXES[$namespace] . '*';
+            $pattern = $this->getNamespacePrefix($namespace) . '*';
             $deleted = $this->deleteByPattern($pattern, $dryRun);
             $totalDeleted += $deleted;
 
@@ -222,16 +209,41 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
     }
 
     /**
-     * Get the underlying Redis resource from CacheEncryption service
+     * Get the cache namespace prefix from configuration
      *
-     * The CacheEncryption service wraps a StorageInterface (Redis adapter).
-     * We need to access the underlying Redis connection for direct operations
-     * like FLUSHDB and SCAN that aren't exposed by the abstraction layers.
+     * Retrieves the namespace prefix (e.g., 'zfcache') from the Redis cache adapter options.
+     * This is configured in config.global.php and should be the single source of truth.
      *
-     * @return \Redis
+     * @param string $namespace The cache namespace identifier (e.g., 'user_account')
+     * @return string The full namespace prefix (e.g., 'zfcache:user_account')
+     */
+    private function getNamespacePrefix(string $namespace): string
+    {
+        $options = $this->getCacheOptions();
+        $cacheNamespace = $options->getNamespace() ?? 'zfcache';
+
+        return $cacheNamespace . ':' . $namespace;
+    }
+
+    /**
+     * Get the cache adapter options
+     *
+     * @return \Laminas\Cache\Storage\Adapter\AdapterOptions
      * @throws \RuntimeException
      */
-    private function getRedisResource(): \Redis
+    private function getCacheOptions(): \Laminas\Cache\Storage\Adapter\AdapterOptions
+    {
+        $cacheStorage = $this->getCacheStorage();
+        return $cacheStorage->getOptions();
+    }
+
+    /**
+     * Get the underlying cache storage adapter
+     *
+     * @return RedisAdapter
+     * @throws \RuntimeException
+     */
+    private function getCacheStorage(): RedisAdapter
     {
         // CacheEncryption has a private $cache property of type StorageInterface
         // We need to use reflection to access it since there's no getter
@@ -243,6 +255,23 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
         if (!$cacheStorage instanceof RedisAdapter) {
             throw new \RuntimeException('Cache adapter is not Redis');
         }
+
+        return $cacheStorage;
+    }
+
+    /**
+     * Get the underlying Redis resource from CacheEncryption service
+     *
+     * The CacheEncryption service wraps a StorageInterface (Redis adapter).
+     * We need to access the underlying Redis connection for direct operations
+     * like FLUSHDB and SCAN that aren't exposed by the abstraction layers.
+     *
+     * @return \Redis
+     * @throws \RuntimeException
+     */
+    private function getRedisResource(): \Redis
+    {
+        $cacheStorage = $this->getCacheStorage();
 
         // Get resource manager and ID from options
         $options = $cacheStorage->getOptions();
