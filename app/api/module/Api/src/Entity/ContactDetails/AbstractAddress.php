@@ -106,7 +106,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      *
-     * @ORM\Column(type="integer", name="uprn", nullable=true)
+     * @ORM\Column(type="bigint", name="uprn", nullable=true)
      */
     protected $uprn;
 
