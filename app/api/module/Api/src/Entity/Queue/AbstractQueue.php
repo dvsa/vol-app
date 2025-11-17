@@ -133,7 +133,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
      */
-    protected $attempts = '0';
+    protected $attempts = 0;
 
     /**
      * Last error

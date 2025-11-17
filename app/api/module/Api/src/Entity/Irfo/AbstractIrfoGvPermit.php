@@ -168,7 +168,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @ORM\Column(type="smallint", name="no_of_copies", nullable=false, options={"default": 0})
      */
-    protected $noOfCopies = '0';
+    protected $noOfCopies = 0;
 
     /**
      * Note

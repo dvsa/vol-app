@@ -71,16 +71,18 @@ abstract class AbstractTypeHandler implements TypeHandlerInterface
             return 'null';
         }
 
-        if (is_string($default)) {
-            return $this->escapeString($default);
+        // Check for numeric values FIRST (before string check)
+        // This handles Doctrine DBAL returning '1' as string instead of int
+        if (is_numeric($default)) {
+            return (string) $default;
         }
 
         if (is_bool($default)) {
             return $default ? 'true' : 'false';
         }
 
-        if (is_numeric($default)) {
-            return (string) $default;
+        if (is_string($default)) {
+            return $this->escapeString($default);
         }
 
         return $this->escapeString((string) $default);

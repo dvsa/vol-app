@@ -90,7 +90,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="section_code", length=100, nullable=false)
+     * @ORM\Column(type="string", name="section_code", length=50, nullable=false)
      */
     protected $sectionCode = '';
 

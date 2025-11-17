@@ -220,7 +220,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=false, options={"default": 0})
      */
-    protected $totAuthVehicles = '0';
+    protected $totAuthVehicles = 0;
 
     /**
      * Response time
