@@ -116,9 +116,9 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Is active
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="is_active", nullable=true, options={"default": 1})
+     * @ORM\Column(type="smallint", name="is_active", nullable=true, options={"default": 1})
      */
     protected $isActive = 1;
 
@@ -302,7 +302,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Set the is active
      *
-     * @param bool $isActive new value being set
+     * @param int $isActive new value being set
      *
      * @return MessagingSubject
      */
@@ -316,7 +316,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the is active
      *
-     * @return bool     */
+     * @return int     */
     public function getIsActive()
     {
         return $this->isActive;

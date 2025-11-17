@@ -199,7 +199,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @ORM\Column(type="decimal", name="vat_rate", nullable=false, options={"default": 0.00})
      */
-    protected $vatRate = '0.00';
+    protected $vatRate = 0.00;
 
     /**
      * Dont allow payment after licence expires
