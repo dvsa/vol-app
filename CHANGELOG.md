@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.8.0](https://github.com/dvsa/vol-app/compare/v6.7.0...v6.8.0) (2025-11-17)
+
+
+### Features
+
+* add new bus legislation VOL-6490 ([#1236](https://github.com/dvsa/vol-app/issues/1236)) ([7cdb017](https://github.com/dvsa/vol-app/commit/7cdb017acc04bcedb207df5e082740dda8b9e03d))
+
+
+### Bug Fixes
+
+* applied to PI field now saves correctly VOL-6834 ([#1238](https://github.com/dvsa/vol-app/issues/1238)) ([e9349cf](https://github.com/dvsa/vol-app/commit/e9349cf4d4604b23326c9c110dc447435c18f119))
+
 ## [6.7.0](https://github.com/dvsa/vol-app/compare/v6.6.0...v6.7.0) (2025-11-12)
 
 
