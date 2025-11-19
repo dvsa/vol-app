@@ -4,6 +4,7 @@ use Common\Util\LvaRoute;
 use Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController;
+use Olcs\Controller\Bus\Docs\BusDocsController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
 use Olcs\Controller\Lva\Application\VehiclesDeclarationsController as ApplicationVehiclesDeclarationsController;
@@ -694,7 +695,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/docs[/]',
                     'defaults' => [
-                        'controller' => \Olcs\Controller\Bus\Docs\BusDocsController::class,
+                        'controller' => BusDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -739,7 +740,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'BusDocsController',
+                                'controller' => BusDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],
