@@ -158,7 +158,7 @@ class TransXChangeConsumer extends AbstractConsumer
         $body = $this->parseMessageBody($message);
 
         if (isset($body['error'])) {
-            return [$this->createTaskCmd($busRegistration, $documentDescription, true)];
+            return [$this->createFailureTaskCmd($busRegistration, $documentDescription)];
         }
 
         $uploadDocCmd = $this->generateDocumentCmd(
@@ -183,8 +183,6 @@ class TransXChangeConsumer extends AbstractConsumer
                 );
             }
         }
-
-        $commands[] = $this->createTaskCmd($busRegistration, $documentDescription);
 
         return $commands;
     }
@@ -274,37 +272,14 @@ class TransXChangeConsumer extends AbstractConsumer
         }
     }
 
-    protected function createTaskCmd(
-        BusRegEntity $busRegistration,
-        string $documentDescription,
-        bool $failed = false
-    ): CreateTaskCmd {
-        $message = [];
-
-        if ($busRegistration->isEbsrRefresh()) {
-            $state = 'data refresh';
-        } else {
-            $status = $busRegistration->getStatus()->getId();
-
-            $state = match ($status) {
-                BusRegEntity::STATUS_CANCEL => 'cancellation',
-                BusRegEntity::STATUS_VAR => 'variation',
-                default => 'application',
-            };
-        }
-
-        $message[] = sprintf('New %s created: %s', $state, $busRegistration->getRegNo());
-
-        if ($failed) {
-            $message[] = sprintf('PDF failed to generate: %s', $documentDescription);
-        } else {
-            $message[] = sprintf('PDF was generated: %s', $documentDescription);
-        }
+    protected function createFailureTaskCmd(BusRegEntity $busRegistration, string $documentDescription): CreateTaskCmd
+    {
+        $description = sprintf('%s: PDF failed to generate: %s', $busRegistration->getRegNo(), $documentDescription);
 
         $data = [
             'category' => TaskEntity::CATEGORY_BUS,
             'subCategory' => TaskEntity::SUBCATEGORY_EBSR,
-            'description' => implode("\n", $message),
+            'description' => $description,
             'actionDate' => date('Y-m-d'),
             'busReg' => $busRegistration->getId(),
             'licence' => $busRegistration->getLicence()->getId(),
