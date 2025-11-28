@@ -6,13 +6,12 @@ use Dvsa\Olcs\Email\Service\Email;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Mail\Message;
-use Laminas\Mail\Transport\TransportInterface;
-use Laminas\Mime\Mime as LaminasMime;
-use Laminas\Mime\Part as LaminasMimePart;
-use Laminas\Mail\AddressList;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Olcs\Logging\Log\Logger;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email as SymfonyEmail;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class EmailTest extends MockeryTestCase
 {
@@ -34,7 +33,7 @@ class EmailTest extends MockeryTestCase
 
     public function testCreateServiceMissingConfig()
     {
-        $this->expectException(\Laminas\Mail\Exception\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $config = [];
 
@@ -50,7 +49,16 @@ class EmailTest extends MockeryTestCase
     public function testCreateService()
     {
         $config = [
-            'mail' => []
+            'mail' => [
+                'options' => [
+                    'host' => 'localhost',
+                    'port' => 25,
+                    'connection_config' => [
+                        'username' => null,
+                        'password' => null
+                    ]
+                ]
+            ]
         ];
 
         $sm = m::mock(ContainerInterface::class);
@@ -60,9 +68,9 @@ class EmailTest extends MockeryTestCase
 
         $this->assertSame($this->sut, $service);
 
-        $transport = $this->sut->getMailTransport();
+        $mailer = $this->sut->getMailer();
 
-        $this->assertInstanceOf(TransportInterface::class, $transport);
+        $this->assertInstanceOf(MailerInterface::class, $mailer);
     }
 
     /**
@@ -70,36 +78,40 @@ class EmailTest extends MockeryTestCase
      */
     public function testSendText()
     {
-        $transport = m::mock(TransportInterface::class);
+        $mailer = m::mock(MailerInterface::class);
 
-        $this->sut->setMailTransport($transport);
+        $this->sut->setMailer($mailer);
 
-        $transport->shouldReceive('send')
+        $mailer->shouldReceive('send')
             ->once()
-            ->with(m::type(Message::class))
+            ->with(m::type(SymfonyEmail::class))
             ->andReturnUsing(
-                function (Message $message) {
+                function (SymfonyEmail $email) {
+                    // Verify from address
+                    $from = $email->getFrom();
+                    $this->assertCount(1, $from);
+                    $this->assertEquals('foo@bar.com', $from[0]->getAddress());
 
-                    $content = $message->toString();
+                    // Verify to address
+                    $to = $email->getTo();
+                    $this->assertCount(1, $to);
+                    $this->assertEquals('bar@foo.com', $to[0]->getAddress());
 
-                    $parts = explode("\r\n", $content);
+                    // Verify cc address
+                    $cc = $email->getCc();
+                    $this->assertCount(1, $cc);
+                    $this->assertEquals('cc@foo.com', $cc[0]->getAddress());
 
-                    array_shift($parts);
+                    // Verify bcc address
+                    $bcc = $email->getBcc();
+                    $this->assertCount(1, $bcc);
+                    $this->assertEquals('bcc@foo.com', $bcc[0]->getAddress());
 
-                    $expected = [
-                        'From: foo@bar.com',
-                        'To: bar@foo.com',
-                        'Cc: cc@foo.com',
-                        'Bcc: bcc@foo.com',
-                        'Subject: Subject',
-                        'MIME-Version: 1.0',
-                        'Content-Type: ' . LaminasMime::TYPE_TEXT,
-                        'Content-Transfer-Encoding: ' . LaminasMime::ENCODING_QUOTEDPRINTABLE,
-                        '',
-                        'This is the content'
-                    ];
+                    // Verify subject
+                    $this->assertEquals('Subject', $email->getSubject());
 
-                    $this->assertEquals($expected, $parts);
+                    // Verify body
+                    $this->assertEquals('This is the content', $email->getTextBody());
                 }
             );
 
@@ -120,82 +132,56 @@ class EmailTest extends MockeryTestCase
      */
     public function testSendWithAttachments()
     {
-        $transport = m::mock(TransportInterface::class);
+        $mailer = m::mock(MailerInterface::class);
 
-        $this->sut->setMailTransport($transport);
+        $this->sut->setMailer($mailer);
 
-        $transport->shouldReceive('send')
+        $mailer->shouldReceive('send')
             ->once()
-            ->with(m::type(Message::class))
+            ->with(m::type(SymfonyEmail::class))
             ->andReturnUsing(
-                function (Message $message) {
-                    //expecting 3 parts, multipart text/html followed by two attachments
-                    $parts = $message->getBody()->getParts();
-                    $this->assertCount(3, $parts);
+                function (SymfonyEmail $email) {
+                    // Verify subject
+                    $this->assertEquals('msg subject', $email->getSubject());
 
-                    /**
-                     * @var LaminasMimePart $messagePart
-                     * @var LaminasMimePart $attachmentPart
-                     */
-                    $messagePart = $parts[0];
-                    $attachmentPart1 = $parts[1];
-                    $attachmentPart2 = $parts[2];
+                    // Verify from address
+                    $from = $email->getFrom();
+                    $this->assertCount(1, $from);
+                    $this->assertEquals('foo@bar.com', $from[0]->getAddress());
 
-                    $expectedPlainText = "Content-Type: " . LaminasMime::TYPE_TEXT . "\n" .
-                        "Content-Transfer-Encoding: " . LaminasMime::ENCODING_QUOTEDPRINTABLE . "\n\n" .
-                        "plain content";
+                    // Verify to address
+                    $to = $email->getTo();
+                    $this->assertCount(1, $to);
+                    $this->assertEquals('bar@foo.com', $to[0]->getAddress());
 
-                    $expectedHtml = "Content-Type: " . LaminasMime::TYPE_HTML . "\n" .
-                        "Content-Transfer-Encoding: " . LaminasMime::ENCODING_QUOTEDPRINTABLE . "\n\n" .
-                        "html content";
+                    // Verify cc addresses (invalid-email should be filtered out)
+                    $cc = $email->getCc();
+                    $this->assertCount(2, $cc);
+                    $ccAddresses = array_map(fn($addr) => $addr->getAddress(), $cc);
+                    $this->assertContains('cc1@foo.com', $ccAddresses);
+                    $this->assertContains('cc2@foo.com', $ccAddresses);
 
-                    //test part one (this is a generated multipart message body, so we check both parts are included)
-                    $this->assertStringContainsString($expectedPlainText, $messagePart->getRawContent());
-                    $this->assertStringContainsString($expectedHtml, $messagePart->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $messagePart);
+                    // Verify bcc addresses (null should be filtered out)
+                    $bcc = $email->getBcc();
+                    $this->assertCount(3, $bcc);
+                    $bccAddresses = array_map(fn($addr) => $addr->getAddress(), $bcc);
+                    $this->assertContains('bcc1@foo.com', $bccAddresses);
+                    $this->assertContains('bcc2@foo.com', $bccAddresses);
+                    $this->assertContains('bcc3@foo.com', $bccAddresses);
 
-                    //test part two (the first attachment)
-                    $this->assertEquals(LaminasMime::TYPE_OCTETSTREAM, $attachmentPart1->type);
-                    $this->assertEquals(LaminasMime::ENCODING_BASE64, $attachmentPart1->encoding);
-                    $this->assertEquals(LaminasMime::DISPOSITION_ATTACHMENT, $attachmentPart1->disposition);
-                    $this->assertEquals('docFilename', $attachmentPart1->filename);
-                    $this->assertEquals('docContent', $attachmentPart1->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $attachmentPart1);
+                    // Verify plain and html body
+                    $this->assertEquals('plain content', $email->getTextBody());
+                    $this->assertEquals('html content', $email->getHtmlBody());
 
-                    //test part three (the second attachment)
-                    $this->assertEquals(LaminasMime::TYPE_OCTETSTREAM, $attachmentPart2->type);
-                    $this->assertEquals(LaminasMime::ENCODING_BASE64, $attachmentPart2->encoding);
-                    $this->assertEquals(LaminasMime::DISPOSITION_ATTACHMENT, $attachmentPart2->disposition);
-                    $this->assertEquals('docFilename2', $attachmentPart2->filename);
-                    $this->assertEquals('docContent2', $attachmentPart2->getRawContent());
-                    $this->assertInstanceOf(LaminasMimePart::class, $attachmentPart2);
+                    // Verify attachments
+                    $attachments = $email->getAttachments();
+                    $this->assertCount(2, $attachments);
 
-                    /**
-                     * @var AddressList $from
-                     * @var AddressList $toList
-                     * @var AddressList $ccList
-                     * @var AddressList $bccList
-                     */
-                    $headers = $message->getHeaders();
-                    $from = $headers->get('from')->getAddressList();
-                    $toList = $headers->get('to')->getAddressList();
-                    $ccList = $headers->get('cc')->getAddressList();
-                    $bccList = $headers->get('bcc')->getAddressList();
+                    $this->assertEquals('docFilename', $attachments[0]->getFilename());
+                    $this->assertEquals('docContent', $attachments[0]->getBody());
 
-                    //test mail headers
-                    $this->assertEquals(LaminasMime::MULTIPART_MIXED, $headers->get('content-type')->getType());
-                    $this->assertEquals('msg subject', $headers->get('subject')->getFieldValue());
-                    $this->assertEquals(true, $from->has('foo@bar.com'));
-                    $this->assertEquals(1, $from->count());
-                    $this->assertEquals(true, $toList->has('bar@foo.com'));
-                    $this->assertEquals(1, $toList->count());
-                    $this->assertEquals(true, $ccList->has('cc1@foo.com'));
-                    $this->assertEquals(true, $ccList->has('cc2@foo.com'));
-                    $this->assertEquals(2, $ccList->count());
-                    $this->assertEquals(true, $bccList->has('bcc1@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc2@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc3@foo.com'));
-                    $this->assertEquals(3, $bccList->count());
+                    $this->assertEquals('docFilename2', $attachments[1]->getFilename());
+                    $this->assertEquals('docContent2', $attachments[1]->getBody());
                 }
             );
 
@@ -231,64 +217,50 @@ class EmailTest extends MockeryTestCase
      */
     public function testSendWithoutAttachments()
     {
-        $transport = m::mock(TransportInterface::class);
+        $mailer = m::mock(MailerInterface::class);
 
-        $this->sut->setMailTransport($transport);
+        $this->sut->setMailer($mailer);
 
-        $transport->shouldReceive('send')
+        $mailer->shouldReceive('send')
             ->once()
-            ->with(m::type(Message::class))
+            ->with(m::type(SymfonyEmail::class))
             ->andReturnUsing(
-                function (Message $message) {
-                    //expecting 2 parts, text and html
-                    $parts = $message->getBody()->getParts();
-                    $this->assertCount(2, $parts);
+                function (SymfonyEmail $email) {
+                    // Verify subject
+                    $this->assertEquals('msg subject', $email->getSubject());
 
-                    /**
-                     * @var LaminasMimePart $plainPart
-                     * @var LaminasMimePart $htmlPart
-                     */
-                    $plainPart = $parts[0];
-                    $htmlPart = $parts[1];
+                    // Verify plain and html body
+                    $this->assertEquals('plain content', $email->getTextBody());
+                    $this->assertEquals('html content', $email->getHtmlBody());
 
-                    //test part one (plain text)
-                    $this->assertEquals('plain content', $plainPart->getRawContent());
-                    $this->assertEquals(LaminasMime::TYPE_TEXT, $plainPart->type);
-                    $this->assertEquals(LaminasMime::ENCODING_QUOTEDPRINTABLE, $plainPart->encoding);
-                    $this->assertInstanceOf(LaminasMimePart::class, $plainPart);
+                    // Verify from address
+                    $from = $email->getFrom();
+                    $this->assertCount(1, $from);
+                    $this->assertEquals('foo@bar.com', $from[0]->getAddress());
 
-                    //test part two (html)
-                    $this->assertEquals('html content', $htmlPart->getRawContent());
-                    $this->assertEquals(LaminasMime::TYPE_HTML, $htmlPart->type);
-                    $this->assertEquals(LaminasMime::ENCODING_QUOTEDPRINTABLE, $htmlPart->encoding);
-                    $this->assertInstanceOf(LaminasMimePart::class, $htmlPart);
+                    // Verify to address
+                    $to = $email->getTo();
+                    $this->assertCount(1, $to);
+                    $this->assertEquals('bar@foo.com', $to[0]->getAddress());
 
-                    /**
-                     * @var AddressList $from
-                     * @var AddressList $toList
-                     * @var AddressList $ccList
-                     * @var AddressList $bccList
-                     */
-                    $headers = $message->getHeaders();
-                    $from = $headers->get('from')->getAddressList();
-                    $toList = $headers->get('to')->getAddressList();
-                    $ccList = $headers->get('cc')->getAddressList();
-                    $bccList = $headers->get('bcc')->getAddressList();
+                    // Verify cc addresses (invalid-email should be filtered out)
+                    $cc = $email->getCc();
+                    $this->assertCount(2, $cc);
+                    $ccAddresses = array_map(fn($addr) => $addr->getAddress(), $cc);
+                    $this->assertContains('cc1@foo.com', $ccAddresses);
+                    $this->assertContains('cc2@foo.com', $ccAddresses);
 
-                    //test mail headers
-                    $this->assertEquals(LaminasMime::MULTIPART_ALTERNATIVE, $headers->get('content-type')->getType());
-                    $this->assertEquals('msg subject', $headers->get('subject')->getFieldValue());
-                    $this->assertEquals(true, $from->has('foo@bar.com'));
-                    $this->assertEquals(1, $from->count());
-                    $this->assertEquals(true, $toList->has('bar@foo.com'));
-                    $this->assertEquals(1, $toList->count());
-                    $this->assertEquals(true, $ccList->has('cc1@foo.com'));
-                    $this->assertEquals(true, $ccList->has('cc2@foo.com'));
-                    $this->assertEquals(2, $ccList->count());
-                    $this->assertEquals(true, $bccList->has('bcc1@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc2@foo.com'));
-                    $this->assertEquals(true, $bccList->has('bcc3@foo.com'));
-                    $this->assertEquals(3, $bccList->count());
+                    // Verify bcc addresses (null should be filtered out)
+                    $bcc = $email->getBcc();
+                    $this->assertCount(3, $bcc);
+                    $bccAddresses = array_map(fn($addr) => $addr->getAddress(), $bcc);
+                    $this->assertContains('bcc1@foo.com', $bccAddresses);
+                    $this->assertContains('bcc2@foo.com', $bccAddresses);
+                    $this->assertContains('bcc3@foo.com', $bccAddresses);
+
+                    // Verify no attachments
+                    $attachments = $email->getAttachments();
+                    $this->assertCount(0, $attachments);
                 }
             );
 
@@ -349,13 +321,13 @@ class EmailTest extends MockeryTestCase
         $this->expectException(\Dvsa\Olcs\Email\Exception\EmailNotSentException::class);
         $this->expectExceptionMessage('Email not sent: exception message');
 
-        $transport = m::mock(TransportInterface::class);
+        $mailer = m::mock(MailerInterface::class);
 
-        $this->sut->setMailTransport($transport);
+        $this->sut->setMailer($mailer);
 
-        $transport->shouldReceive('send')
+        $mailer->shouldReceive('send')
             ->once()
-            ->with(m::type(Message::class))
+            ->with(m::type(SymfonyEmail::class))
             ->andThrow(new \Exception('exception message'));
 
         $this->sut->send(
