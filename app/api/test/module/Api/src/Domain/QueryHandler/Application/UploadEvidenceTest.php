@@ -57,7 +57,7 @@ class UploadEvidenceTest extends QueryHandlerTestCase
 
         $aoc1 = m::mock(ApplicationOperatingCentre::class);
         $aoc2 = m::mock(ApplicationOperatingCentre::class);
-        $aoc2->shouldReceive('serialize')->with(['operatingCentre' => ['address', 'adDocuments']])
+        $aoc2->shouldReceive('serialize')->with(['operatingCentre' => ['address', 'adDocuments' => ['application']]])
             ->once()->andReturn(['OC1']);
         $this->repoMap['ApplicationOperatingCentre']->shouldReceive('fetchByApplicationOrderByAddress')
             ->with(111)->once()->andReturn([$aoc1, $aoc2]);

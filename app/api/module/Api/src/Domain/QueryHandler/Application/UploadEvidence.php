@@ -59,7 +59,7 @@ class UploadEvidence extends AbstractQueryHandler
             ],
             'operatingCentres' => $this->resultList(
                 $aocsRequireUpload,
-                ['operatingCentre' => ['address', 'adDocuments']]
+                ['operatingCentre' => ['address', 'adDocuments' => ['application']]]
             ),
             'supportingEvidence' => $this->resultList($supportingEvidenceDocuments)
         ];
