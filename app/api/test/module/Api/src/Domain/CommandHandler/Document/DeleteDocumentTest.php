@@ -17,6 +17,12 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\System\SlaTargetDate as SlaTargetDateEntity;
 use Dvsa\Olcs\Api\Domain\Repository\SlaTargetDate;
 use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
+use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Delete Document Test
@@ -61,6 +67,12 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $document = m::mock(Entity::class)->makePartial();
         $document->setIdentifier('ABC');
         $document->setId($documentId);
+
+        // Mock isExternalUser() to return false (internal user)
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(false);
 
         $this->mockedSmServices['FileUploader']->shouldReceive('remove')
             ->once()
@@ -132,6 +144,12 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $document->shouldReceive('getEbsrSubmission')->andReturn($ebsrSubmission);
         $document->setId($documentId);
 
+        // Mock isExternalUser() to return false (internal user)
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(false);
+
         $this->mockedSmServices['FileUploader']->shouldReceive('remove')
             ->once()
             ->with('ABC');
@@ -183,6 +201,9 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $createdByUser->shouldReceive('getId')->andReturn($userId);
 
         $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(false)
             ->shouldReceive('getIdentity->getUser')
             ->andReturn($user);
 
@@ -246,6 +267,9 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         $createdByUser->shouldReceive('getId')->andReturn($createdByUserId);
 
         $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(false)
             ->shouldReceive('getIdentity->getUser')
             ->andReturn($user);
 
@@ -285,5 +309,186 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         ];
 
         $this->assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * Tests handleCommand as external user successfully deletes document from their own organisation
+     */
+    public function testHandleCommandAsExternalUserWithOwnOrganisationDocument()
+    {
+        $documentId = 123;
+        $organisationId = 456;
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => false]);
+
+        // Mock external user (selfserve)
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(true); // External user!
+
+        // Mock current user's organisation
+        $userOrganisation = m::mock(Organisation::class);
+        $userOrganisation->shouldReceive('getId')->andReturn($organisationId);
+
+        $organisationUser = m::mock(OrganisationUser::class);
+        $organisationUser->shouldReceive('getOrganisation')->andReturn($userOrganisation);
+
+        $currentUser = m::mock(User::class);
+        $currentUser->shouldReceive('getOrganisationUsers')
+            ->andReturn(new ArrayCollection([$organisationUser]));
+
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser')
+            ->andReturn($currentUser);
+
+        // Mock document that belongs to the same organisation
+        $document = m::mock(Entity::class)->makePartial();
+        $document->setIdentifier('ABC');
+        $document->setId($documentId);
+        $document->shouldReceive('getRelatedOrganisation')->andReturn($userOrganisation);
+
+        // Mock application with NOT_SUBMITTED status
+        $application = m::mock(Application::class);
+        $status = m::mock(RefData::class);
+        $status->shouldReceive('getId')
+            ->andReturn(Application::APPLICATION_STATUS_NOT_SUBMITTED);
+        $application->shouldReceive('getStatus')->andReturn($status);
+        $document->shouldReceive('getApplication')->andReturn($application);
+
+        $this->mockedSmServices['FileUploader']->shouldReceive('remove')
+            ->once()
+            ->with('ABC');
+
+        $this->repoMap['Document']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($document)
+            ->shouldReceive('delete')
+            ->with($document);
+
+        $this->repoMap['CorrespondenceInbox']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
+
+        $this->repoMap['SlaTargetDate']->shouldReceive('fetchByDocumentId')
+            ->with($documentId)
+            ->andReturn([])
+            ->once();
+
+        $result = $this->sut->handleCommand($command);
+
+        $expected = [
+            'id' => [],
+            'messages' => [
+                'File removed',
+                'Document deleted'
+            ]
+        ];
+
+        $this->assertEquals($expected, $result->toArray());
+    }
+
+    /**
+     * Tests handleCommand as external user throws ForbiddenException for different organisation
+     */
+    public function testHandleCommandAsExternalUserThrowsForbiddenForDifferentOrganisation()
+    {
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('You do not have permission to delete this document');
+
+        $documentId = 123;
+        $userOrganisationId = 456;
+        $documentOrganisationId = 789; // Different!
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => false]);
+
+        // Mock external user
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(true);
+
+        // Mock current user's organisation
+        $userOrganisation = m::mock(Organisation::class);
+        $userOrganisation->shouldReceive('getId')->andReturn($userOrganisationId);
+
+        $organisationUser = m::mock(OrganisationUser::class);
+        $organisationUser->shouldReceive('getOrganisation')->andReturn($userOrganisation);
+
+        $currentUser = m::mock(User::class);
+        $currentUser->shouldReceive('getOrganisationUsers')
+            ->andReturn(new ArrayCollection([$organisationUser]));
+
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser')
+            ->andReturn($currentUser);
+
+        // Mock document that belongs to a DIFFERENT organisation
+        $documentOrganisation = m::mock(Organisation::class);
+        $documentOrganisation->shouldReceive('getId')->andReturn($documentOrganisationId);
+
+        $document = m::mock(Entity::class)->makePartial();
+        $document->setId($documentId);
+        $document->shouldReceive('getRelatedOrganisation')->andReturn($documentOrganisation);
+
+        $this->repoMap['Document']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($document);
+
+        // Should throw ForbiddenException before getting here
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * Tests handleCommand as external user throws ForbiddenException for submitted application
+     */
+    public function testHandleCommandAsExternalUserThrowsForbiddenForSubmittedApplication()
+    {
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessage('Cannot delete documents from submitted applications');
+
+        $documentId = 123;
+        $organisationId = 456;
+        $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => false]);
+
+        // Mock external user
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('isGranted')
+            ->with(\Dvsa\Olcs\Api\Entity\User\Permission::SELFSERVE_USER, null)
+            ->andReturn(true);
+
+        // Mock current user's organisation
+        $userOrganisation = m::mock(Organisation::class);
+        $userOrganisation->shouldReceive('getId')->andReturn($organisationId);
+
+        $organisationUser = m::mock(OrganisationUser::class);
+        $organisationUser->shouldReceive('getOrganisation')->andReturn($userOrganisation);
+
+        $currentUser = m::mock(User::class);
+        $currentUser->shouldReceive('getOrganisationUsers')
+            ->andReturn(new ArrayCollection([$organisationUser]));
+
+        $this->mockedSmServices[AuthorizationService::class]
+            ->shouldReceive('getIdentity->getUser')
+            ->andReturn($currentUser);
+
+        // Mock document that belongs to same organisation (passes first check)
+        $document = m::mock(Entity::class)->makePartial();
+        $document->setId($documentId);
+        $document->shouldReceive('getRelatedOrganisation')->andReturn($userOrganisation);
+
+        // Mock application with SUBMITTED status (not NOT_SUBMITTED)
+        $application = m::mock(Application::class);
+        $status = m::mock(RefData::class);
+        $status->shouldReceive('getId')
+            ->andReturn(Application::APPLICATION_STATUS_UNDER_CONSIDERATION); // Different status!
+        $application->shouldReceive('getStatus')->andReturn($status);
+        $document->shouldReceive('getApplication')->andReturn($application);
+
+        $this->repoMap['Document']->shouldReceive('fetchUsingId')
+            ->with($command)
+            ->andReturn($document);
+
+        // Should throw ForbiddenException before getting here
+        $this->sut->handleCommand($command);
     }
 }
