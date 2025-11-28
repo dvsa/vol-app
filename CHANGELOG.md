@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.9.0](https://github.com/dvsa/vol-app/compare/v6.8.0...v6.9.0) (2025-11-28)
+
+
+### Features
+
+* bus reg documents page now shows only docs for that bus reg by default VOL-6842 ([#1244](https://github.com/dvsa/vol-app/issues/1244)) ([fd83124](https://github.com/dvsa/vol-app/commit/fd831244184f706fce666231742dfdfeecf368be))
+* single task created for EBSR (unless map fails) VOL-6359 ([#1249](https://github.com/dvsa/vol-app/issues/1249)) ([09a7144](https://github.com/dvsa/vol-app/commit/09a7144efa0bfc01593f0642912d6491b87c9e5c))
+
+
+### Bug Fixes
+
+* documents can now be deleted directly from a bus registration record ([#1243](https://github.com/dvsa/vol-app/issues/1243)) ([be45777](https://github.com/dvsa/vol-app/commit/be45777199471fa1273887b6d5cf5ea525fd5a82))
+
 ## [6.8.0](https://github.com/dvsa/vol-app/compare/v6.7.0...v6.8.0) (2025-11-17)
 
 
