@@ -16,6 +16,7 @@ return [
     CliCommandHandler\DataDvaNiExport::class => IsSystemUser::class,
     CliCommandHandler\CompaniesHouseVsOlcsDiffsExport::class => IsSystemUser::class,
     CliCommandHandler\RemoveReadAudit::class => IsSystemUser::class,
+    CliCommandHandler\CacheClear::class => IsSystemUser::class,
     CliCommandHandler\CleanUpAbandonedVariations::class => IsSystemUser::class,
     CliCommandHandler\Bus\Expire::class => IsSystemUser::class,
     CliCommandHandler\LastTmLetter::class => IsSystemUser::class,
