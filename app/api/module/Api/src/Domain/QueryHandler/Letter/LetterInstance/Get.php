@@ -16,25 +16,17 @@ class Get extends AbstractQueryByIdHandler
         'licence',
         'application',
         'case',
-        'sections' => [
-            'letterSection' => [
-                'currentVersion'
-            ]
+        'letterInstanceSections' => [
+            'letterSectionVersion'
         ],
-        'issues' => [
-            'letterIssue' => [
-                'currentVersion'
-            ]
+        'letterInstanceIssues' => [
+            'letterIssueVersion'
         ],
-        'todos' => [
-            'letterTodo' => [
-                'currentVersion'
-            ]
+        'letterInstanceTodos' => [
+            'letterTodoVersion'
         ],
-        'appendices' => [
-            'letterAppendix' => [
-                'currentVersion'
-            ]
+        'letterInstanceAppendices' => [
+            'letterAppendixVersion'
         ]
     ];
 }
