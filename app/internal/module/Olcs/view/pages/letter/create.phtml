@@ -1,4 +1,5 @@
-<form method="post" id="letter-create-form">
+<form method="post" id="letter-create-form" data-generate-url="/letter/generate?<?= http_build_query($queryParams) ?>">
+<input type="hidden" name="letterType" value="<?= $this->escapeHtmlAttr($templateId) ?>">
 <h2 class="govuk-heading-m">Select content options</h2>
 <p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
 
@@ -63,3 +64,31 @@
     </p>
 </div>
 </form>
+
+<div id="letter-debug-output" style="display: none; margin-top: 2rem;">
+    <div class="govuk-panel govuk-panel--confirmation" style="background-color: #00703c;">
+        <h2 class="govuk-panel__title">Letter Instance Created Successfully</h2>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h3 class="govuk-heading-m">Debug Output</h3>
+        <details class="govuk-details" data-module="govuk-details" open>
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">View Letter Instance Data</span>
+            </summary>
+            <div class="govuk-details__text">
+                <pre id="debug-content" style="background-color: #f3f2f1; padding: 1rem; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 500px; overflow-y: auto; border: 1px solid #b1b4b6;"></pre>
+            </div>
+        </details>
+    </div>
+
+    <div class="govuk-inset-text">
+        <p class="govuk-body">
+            <strong>For Development/Testing:</strong> The letter instance has been created with all selected issues.
+            Sections, todos, and appendices will be added in future tickets.
+        </p>
+        <p class="govuk-body">
+            Review the JSON output above to verify the letter instance was created correctly with all relationships.
+        </p>
+    </div>
+</div>
