@@ -7,11 +7,9 @@ use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
-use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
-use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\DeleteSubmission as DeleteEbsrSubmission;
 use Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox;
 use Dvsa\Olcs\Api\Domain\Repository\SlaTargetDate;
@@ -49,25 +47,6 @@ final class DeleteDocument extends AbstractCommandHandler implements AuthAwareIn
         /** @var Document $document */
         $document = $this->getRepo()->fetchUsingId($command);
         $identifier = $document->getIdentifier();
-
-        if ($this->isExternalUser()) {
-            $documentOrganisation = $document->getRelatedOrganisation();
-            $userOrganisationUsers = $this->getCurrentUser()->getOrganisationUsers();
-
-            $userOrganisation = $userOrganisationUsers->first()->getOrganisation();
-
-            if ($documentOrganisation === null || $documentOrganisation->getId() !== $userOrganisation->getId()) {
-                throw new ForbiddenException('You do not have permission to delete this document');
-            }
-
-            $application = $document->getApplication();
-            if ($application !== null) {
-                $applicationStatus = $application->getStatus()->getId();
-                if ($applicationStatus !== Application::APPLICATION_STATUS_NOT_SUBMITTED) {
-                    throw new ForbiddenException('Cannot delete documents from submitted applications');
-                }
-            }
-        }
 
         if (!empty($identifier)) {
             $this->fileUploader->remove($identifier);
