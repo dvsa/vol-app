@@ -138,7 +138,14 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
 
         /** @var OrganisationUser $orgUser */
         foreach ($this->getAdminOrganisationUsers() as $orgUser) {
-            $email = $orgUser->getUser()->getContactDetails()->getEmailAddress();
+            $contactDetails = $orgUser->getUser()->getContactDetails();
+
+            // Skip users with no contact details
+            if ($contactDetails === null) {
+                continue;
+            }
+
+            $email = $contactDetails->getEmailAddress();
 
             if (
                 !empty($email)
@@ -504,7 +511,14 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
         /** @var OrganisationUserEntity $orgUser */
         foreach ($adminUsers as $orgUser) {
             try {
-                $adminEmails[] = $orgUser->getUser()->getContactDetails()->getEmailAddress();
+                $contactDetails = $orgUser->getUser()->getContactDetails();
+
+                // Skip users with no contact details (similar to soft-deleted users)
+                if ($contactDetails === null) {
+                    continue;
+                }
+
+                $adminEmails[] = $contactDetails->getEmailAddress();
             } catch (EntityNotFoundException) {
                 //soft delete means no organisation user
                 continue;

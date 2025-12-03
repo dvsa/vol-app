@@ -20,6 +20,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence;
 use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
 use Dvsa\Olcs\Email\Data\Message;
+use Olcs\Logging\Log\Logger;
 
 final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInterface
 {
@@ -81,8 +82,20 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
     {
         if (
             is_null($contactDetails = $licence->getCorrespondenceCd()) ||
-            is_null($email = $contactDetails->getEmailAddress())
+            is_null($email = $contactDetails->getEmailAddress()) ||
+            trim($email) === ''
         ) {
+            Logger::crit(
+                'Last TM Letter: Skipping email to operator due to invalid correspondence email',
+                [
+                    'licenceId' => $licence->getId(),
+                    'licenceNo' => $licence->getLicNo(),
+                    'organisationId' => $licence->getOrganisation()?->getId(),
+                    'organisationName' => $licence->getOrganisation()?->getName(),
+                    'correspondenceCdId' => $contactDetails?->getId(),
+                    'emailAddress' => $email ?? 'null',
+                ]
+            );
             return;
         }
 
