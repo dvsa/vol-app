@@ -17,6 +17,12 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\System\SlaTargetDate as SlaTargetDateEntity;
 use Dvsa\Olcs\Api\Domain\Repository\SlaTargetDate;
 use Dvsa\Olcs\Api\Entity\User\User;
+use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
+use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Delete Document Test
