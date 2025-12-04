@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.10.0](https://github.com/dvsa/vol-app/compare/v6.9.0...v6.10.0) (2025-12-04)
+
+
+### Features
+
+* filter advert documents by current application ([#1250](https://github.com/dvsa/vol-app/issues/1250)) ([7eab2af](https://github.com/dvsa/vol-app/commit/7eab2afbcd4807efad4644ab8d2a2fde63c795cc))
+
 ## [6.9.0](https://github.com/dvsa/vol-app/compare/v6.8.0...v6.9.0) (2025-11-28)
 
 
