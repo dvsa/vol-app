@@ -352,8 +352,10 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
     {
         $correspondenceCdWithNullEmail = m::mock(ContactDetails::class);
         $correspondenceCdWithNullEmail->shouldReceive('getEmailAddress')->andReturn(null);
+        $correspondenceCdWithNullEmail->shouldReceive('getId')->andReturn(1);
         $correspondenceCdWithEmail = m::mock(ContactDetails::class);
-        $correspondenceCdWithEmail ->shouldReceive('getEmailAddress')->andReturn("test@email.com");
+        $correspondenceCdWithEmail->shouldReceive('getEmailAddress')->andReturn("test@email.com");
+        $correspondenceCdWithEmail->shouldReceive('getId')->andReturn(1);
 
         $correspondenceCd = $dataProvider['licence']['correspondenceCd'];
 
@@ -361,9 +363,11 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         if ($correspondenceCd !== null && $correspondenceCd['emailAddress'] === null) {
             $mockCorrespondenceCd = m::mock(ContactDetails::class);
             $mockCorrespondenceCd->shouldReceive('getEmailAddress')->andReturn(null);
+            $mockCorrespondenceCd->shouldReceive('getId')->andReturn(1);
         } elseif ($correspondenceCd !== null && $correspondenceCd['emailAddress'] !== null) {
             $mockCorrespondenceCd = m::mock(ContactDetails::class);
             $mockCorrespondenceCd->shouldReceive('getEmailAddress')->andReturn($correspondenceCd['emailAddress']);
+            $mockCorrespondenceCd->shouldReceive('getId')->andReturn(1);
             $licence->shouldReceive('getTranslateToWelsh')->andReturn('N');
         }
 
@@ -457,6 +461,8 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         $licence->shouldReceive('isPsv')->andReturn($dataProvider['licence']['isPsv']);
         $licence->shouldReceive('getOrganisation->getAllowEmail')
             ->andReturn($dataProvider['licence']['organisation']['allowEmail']);
+        $licence->shouldReceive('getOrganisation->getId')->andReturn(1);
+        $licence->shouldReceive('getOrganisation->getName')->andReturn('Test Organisation');
         $licence->shouldReceive('serialize')->with($licenceBundle)->andReturn([]);
 
         return $licence;
