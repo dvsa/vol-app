@@ -56,7 +56,13 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $this->loadScripts(['generate-document']);
 
-        $view = new ViewModel(['form' => $form]);
+        // Extract entity context from route parameters for letter generation flow
+        $entityContext = $this->extractEntityContextFromRoute();
+
+        $view = new ViewModel([
+            'form' => $form,
+            'entityContext' => $entityContext,
+        ]);
 
         $view->setTemplate('pages/form');
 
@@ -458,5 +464,46 @@ class DocumentGenerationController extends AbstractDocumentController
             [],
             ['query' => $queryParams]
         );
+    }
+
+    /**
+     * Extract entity context from route parameters
+     *
+     * @return array Entity context with type and ID, empty array if none found
+     */
+    protected function extractEntityContextFromRoute(): array
+    {
+        $routeParams = $this->params()->fromRoute();
+
+        // Map route parameter names to entity types
+        $entityParamMap = [
+            'licence' => 'licence',
+            'application' => 'application',
+            'case' => 'case',
+            'busRegId' => 'busReg',
+            'transportManager' => 'transportManager',
+            'irhpAppId' => 'irhpApplication',
+            'organisation' => 'irfoOrganisation',
+        ];
+
+        // Check for each entity type in route params
+        foreach ($entityParamMap as $routeParam => $entityType) {
+            if (isset($routeParams[$routeParam]) && $routeParams[$routeParam] !== null) {
+                return [
+                    'type' => $entityType,
+                    'id' => (int) $routeParams[$routeParam],
+                ];
+            }
+        }
+
+        // Check for generic entityType/entityId pattern
+        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+            return [
+                'type' => $routeParams['entityType'],
+                'id' => (int) $routeParams['entityId'],
+            ];
+        }
+
+        return [];
     }
 }

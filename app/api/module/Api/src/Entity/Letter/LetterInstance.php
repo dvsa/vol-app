@@ -15,11 +15,11 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class LetterInstance extends AbstractLetterInstance
 {
-    public const STATUS_DRAFT = 'letter_status_draft';
-    public const STATUS_READY = 'letter_status_ready';
-    public const STATUS_SENT = 'letter_status_sent';
-    public const STATUS_FAILED = 'letter_status_failed';
-    public const STATUS_CANCELLED = 'letter_status_cancelled';
+    public const STATUS_DRAFT = 'ltr_sts_draft';
+    public const STATUS_READY = 'ltr_sts_ready';
+    public const STATUS_SENT = 'ltr_sts_sent';
+    public const STATUS_FAILED = 'ltr_sts_failed';
+    public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
      * Letter instance sections
