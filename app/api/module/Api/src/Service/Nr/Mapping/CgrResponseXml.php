@@ -42,7 +42,7 @@ class CgrResponseXml
     {
         return [
             $this->nsPrefix . 'Header' => [
-                new NodeAttribute('varsion', 'version'),
+                new NodeAttribute('version', 'version'),
                 new NodeAttribute('workflowId', 'workflowId'),
                 new NodeAttribute('technicalId', 'technicalId'),
                 new NodeAttribute('sentAt', 'sentAt')
