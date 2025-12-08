@@ -357,20 +357,17 @@ return [
         'max_queue_messages_per_run' => '100',
     ],
     'nr' => [
-        // @to-do currently waiting on the actual nr address
         'inr_service' => [
             'uri' => '%olcs_natreg_uri%',
+            'options' => [],
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
                 'client_id' => '%olcs_natreg_client_id%', //param
                 'client_secret' => '%olcs_natreg_client_secret%', // secret
                 'token_url' => '%olcs_natreg_token_url%', //param
                 'scope' => '%olcs_natreg_client_scope%', //param
-                'proxy' => 'http://%shd_proxy%',
-            ]
-        ],
-        'repute_url' => [
-            'uri' => '%olcs_natreg_repute%'
+            ],
+            'service_name' => 'INR',
         ],
     ],
 

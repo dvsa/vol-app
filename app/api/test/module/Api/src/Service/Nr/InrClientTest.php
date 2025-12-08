@@ -48,7 +48,7 @@ class InrClientTest extends MockeryTestCase
 
         $sut = new InrClient($mockClient);
 
-        $this->assertEquals($statusCode, $sut->makeRequest($requestBody));
+        $this->assertEquals($statusCode, $sut->makeRequestReturnStatusCode($requestBody));
     }
 
     public function testClose()
