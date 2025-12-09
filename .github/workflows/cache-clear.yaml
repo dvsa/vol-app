@@ -1,0 +1,230 @@
+name: Clear Cache
+permissions:
+  id-token: write
+  contents: read
+on:
+  workflow_dispatch:
+    inputs:
+      account:
+        description: "Target AWS account"
+        required: true
+        type: choice
+        options:
+          - nonprod
+          - prod
+      environment:
+        description: "Environment to target"
+        type: choice
+        options:
+          - dev
+          - int
+          - prep
+          - prod
+        required: true
+      cache_type:
+        description: "Type of cache to clear"
+        required: true
+        type: choice
+        options:
+          - flush-all
+          - user_account
+          - sys_param
+          - sys_param_list
+          - translation_key
+          - translation_replacement
+          - storage
+          - secretsmanager
+          - custom-pattern
+        default: user_account
+      custom_pattern:
+        description: "Custom pattern (only used if cache_type=custom-pattern)"
+        required: false
+        type: string
+      dry_run:
+        description: "Run in dry-run mode (preview only, no actual clearing)"
+        required: true
+        type: boolean
+        default: true
+      force:
+        description: "Skip confirmation prompts (for flush-all)"
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      account:
+        type: string
+        required: true
+      environment:
+        type: string
+        required: true
+      cache_type:
+        type: string
+        required: false
+        default: "user_account"
+      custom_pattern:
+        type: string
+        required: false
+      dry_run:
+        type: boolean
+        required: false
+        default: false
+      force:
+        type: boolean
+        required: false
+        default: false
+env:
+  AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+  AWS_OIDC_ROLE: ${{ inputs.account == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+jobs:
+  clear-cache:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    outputs:
+      job_id: ${{ steps.submit-job.outputs.job_id }}
+      job_status: ${{ steps.check-status.outputs.status }}
+    steps:
+      - name: Validate inputs
+        run: |
+          if [[ "${{ inputs.cache_type }}" == "custom-pattern" && -z "${{ inputs.custom_pattern }}" ]]; then
+            echo "Error: custom_pattern is required when cache_type is custom-pattern"
+            exit 1
+          fi
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build command arguments
+        id: build-args
+        run: |
+          ARGS=""
+
+          # Add cache type specific arguments
+          case "${{ inputs.cache_type }}" in
+            flush-all)
+              ARGS="--flush-all"
+              if [[ "${{ inputs.force }}" == "true" ]]; then
+                ARGS="$ARGS --force"
+              fi
+              ;;
+            custom-pattern)
+              ARGS="--pattern=\"${{ inputs.custom_pattern }}\""
+              ;;
+            *)
+              ARGS="--namespace=${{ inputs.cache_type }}"
+              ;;
+          esac
+
+          # Add dry-run if requested
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            ARGS="$ARGS --dry-run"
+          fi
+
+          # Add verbose flag
+          ARGS="$ARGS -v"
+
+          echo "args=$ARGS" >> $GITHUB_OUTPUT
+          echo "Command arguments: $ARGS"
+
+      - name: Submit AWS Batch job
+        id: submit-job
+        run: |
+          BATCH_QUEUE="vol-app-${{ inputs.environment }}-default"
+          BATCH_JOB_DEF="vol-app-${{ inputs.environment }}-cache-clear"
+
+          echo "Using batch queue: $BATCH_QUEUE"
+          echo "Using job definition: $BATCH_JOB_DEF"
+
+          JOB_ID=$(aws batch submit-job \
+            --job-name "cache-clear-${{ inputs.cache_type }}-${{ github.run_id }}-${{ github.run_attempt }}" \
+            --job-queue "$BATCH_QUEUE" \
+            --job-definition "$BATCH_JOB_DEF" \
+            --container-overrides "{
+              \"command\": [
+                \"/var/www/html/vendor/bin/laminas\",
+                \"--container=/var/www/html/config/container-cli.php\",
+                \"batch:cache-clear\",
+                ${{ steps.build-args.outputs.args }}
+              ]
+            }" \
+            --scheduling-priority-override 1 \
+            --share-identifier "volapp" \
+            --query 'jobId' \
+            --output text)
+          echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
+          echo "Submitted job: $JOB_ID"
+
+      - name: Wait for job completion
+        id: check-status
+        timeout-minutes: 10
+        run: |
+          while true; do
+            STATUS=$(aws batch describe-jobs --jobs ${{ steps.submit-job.outputs.job_id }} --query 'jobs[0].status' --output text)
+
+            echo "Job status: $STATUS"
+
+            if [[ "$STATUS" == "SUCCEEDED" ]]; then
+              echo "status=$STATUS" >> $GITHUB_OUTPUT
+              echo "✅ Cache clear job completed successfully"
+              break
+            elif [[ "$STATUS" == "FAILED" ]]; then
+              echo "status=$STATUS" >> $GITHUB_OUTPUT
+              echo "❌ Cache clear job failed"
+
+              # Get failure reason
+              REASON=$(aws batch describe-jobs --jobs ${{ steps.submit-job.outputs.job_id }} --query 'jobs[0].statusReason' --output text)
+              echo "Failure reason: $REASON"
+
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+      - name: Get job logs
+        if: always()
+        run: |
+          echo "Fetching logs for job ${{ steps.submit-job.outputs.job_id }}..."
+
+          # Get log stream name
+          LOG_STREAM=$(aws batch describe-jobs \
+            --jobs ${{ steps.submit-job.outputs.job_id }} \
+            --query 'jobs[0].container.logStreamName' \
+            --output text)
+
+          if [[ "$LOG_STREAM" != "None" && -n "$LOG_STREAM" ]]; then
+            echo "Log stream: $LOG_STREAM"
+
+            # Get logs
+            aws logs get-log-events \
+              --log-group-name "/aws/batch/vol-app-${{ inputs.environment }}-cache-clear" \
+              --log-stream-name "$LOG_STREAM" \
+              --query 'events[*].message' \
+              --output text || echo "Could not retrieve logs"
+          else
+            echo "No log stream available yet"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Cache Clear Job Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Cache Type**: ${{ inputs.cache_type }}" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ inputs.cache_type }}" == "custom-pattern" ]]; then
+            echo "- **Pattern**: ${{ inputs.custom_pattern }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- **Dry Run**: ${{ inputs.dry_run }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Job ID**: ${{ steps.submit-job.outputs.job_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ steps.check-status.outputs.status }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ steps.check-status.outputs.status }}" == "SUCCEEDED" ]]; then
+            echo "✅ Cache cleared successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Cache clear failed" >> $GITHUB_STEP_SUMMARY
+          fi
