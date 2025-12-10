@@ -1359,6 +1359,7 @@ return [
     TransferCommand\Letter\LetterAppendix\Delete::class => CommandHandler\Letter\LetterAppendix\Delete::class,
     TransferCommand\Letter\LetterInstance\Create::class => CommandHandler\Letter\LetterInstance\Create::class,
     TransferCommand\Letter\LetterInstance\Update::class => CommandHandler\Letter\LetterInstance\Update::class,
+    TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
     TransferCommand\Letter\MasterTemplate\Delete::class => CommandHandler\Letter\MasterTemplate\Delete::class,

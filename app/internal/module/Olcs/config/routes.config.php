@@ -192,6 +192,17 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'generate' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/generate',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'generate',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [
