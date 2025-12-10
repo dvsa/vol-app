@@ -33,6 +33,7 @@ return [
         'canAccessLicenceVehicle' => Validators\CanAccessLicenceVehicle::class,
         'canAccessCorrespondenceInbox' => Validators\CanAccessCorrespondenceInbox::class,
         'canAccessDocument' => Validators\CanAccessDocument::class,
+        'canDeleteDocument' => Validators\CanDeleteDocument::class,
         'canAccessSubmission' => Validators\CanAccessSubmission::class,
         'canAccessCase' => Validators\CanAccessCase::class,
         'canAccessTransportManager' => Validators\CanAccessTransportManager::class,

@@ -5,13 +5,14 @@ use Dvsa\Olcs\Api\Domain\QueryHandler;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentsWithIds;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
+use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanDeleteDocumentWithId;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsInternalUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemAdmin;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUser;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NoValidationRequired;
 
 return [
-    CommandHandler\Document\DeleteDocument::class => CanAccessDocumentWithId::class,
+    CommandHandler\Document\DeleteDocument::class => CanDeleteDocumentWithId::class,
     CommandHandler\Document\DeleteDocuments::class => IsInternalUser::class,
     CommandHandler\Document\CreateDocument::class => CanCreateDocument::class,
     CommandHandler\Document\Upload::class => CanCreateDocument::class,

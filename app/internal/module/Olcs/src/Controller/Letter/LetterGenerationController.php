@@ -71,6 +71,13 @@ class LetterGenerationController extends AbstractInternalController implements T
         // Get query parameters
         $queryParams = $this->getRequest()->getQuery()->toArray();
 
+        // Get route parameters and merge with query params (route params take precedence)
+        $routeParams = $this->extractRouteParams();
+        $allParams = array_merge($queryParams, $routeParams);
+
+        // Add entity context to query params so it's included in generate URL
+        $queryParams = $allParams;
+
         // Validate required parameters
         if (!isset($queryParams['template'])) {
             $this->flashMessengerHelperService->addErrorMessage('Template ID is required');
@@ -79,8 +86,8 @@ class LetterGenerationController extends AbstractInternalController implements T
 
         $templateId = (int) $queryParams['template'];
 
-        // Extract entity context from query params
-        $entityContext = $this->extractEntityContext($queryParams);
+        // Extract entity context from query and route params
+        $entityContext = $this->extractEntityContext($allParams);
 
         // Build accordion data structure with issue types and their issues
         $accordionData = $this->buildAccordionData();
@@ -98,6 +105,111 @@ class LetterGenerationController extends AbstractInternalController implements T
         $this->placeholder()->setPlaceholder('contentTitle', 'Create Letter');
 
         return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Generate action - handles form submission to create letter instance
+     *
+     * @return Response
+     */
+    public function generateAction()
+    {
+        $postData = $this->getRequest()->getPost()->toArray();
+        if (empty($postData)) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $postData = $this->getRequest()->getPost()->toArray();
+        $queryParams = $this->getRequest()->getQuery()->toArray();
+
+        // Get route parameters and merge with query params (route params take precedence)
+        $routeParams = $this->extractRouteParams();
+        $allParams = array_merge($queryParams, $routeParams);
+
+        if (empty($postData['letterType'])) {
+            return $this->jsonError('Template is required');
+        }
+
+        $templateId = (int) $postData['letterType'];
+        $template = $this->fetchTemplateById($templateId);
+
+        if (!$template || empty($template['letterType']['id'])) {
+            return $this->jsonError('Invalid template or template has no letter type');
+        }
+
+        $letterTypeId = $template['letterType']['id'];
+
+        $entityContext = $this->extractEntityContext($allParams);
+
+
+        $commandData = [
+            'letterType' => $letterTypeId,
+            'selectedIssues' => $postData['letterIssues'] ?? [],
+        ];
+
+        if (!empty($entityContext['type'])) {
+            $commandData[$entityContext['type']] = $entityContext['id'];
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate::create($commandData);
+
+        $response = $this->handleCommand($command);
+
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? json_encode($messages) : $messages;
+            return $this->jsonError('Failed to generate letter: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+        $letterInstanceId = $result['id']['letterInstance'] ?? null;
+
+        if (!$letterInstanceId) {
+            return $this->jsonError('Letter generated but ID not returned');
+        }
+
+        $letterInstanceData = $this->fetchLetterInstanceById($letterInstanceId);
+
+        return $this->jsonSuccess([
+            'letterInstanceId' => $letterInstanceId,
+            'message' => $result['messages'][0] ?? 'Letter generated successfully',
+            'redirectUrl' => '#',
+            'letterInstance' => $letterInstanceData,
+        ]);
+    }
+
+    /**
+     * Return JSON error response
+     *
+     * @param string $message Error message
+     * @param int $statusCode HTTP status code
+     * @return Response
+     */
+    protected function jsonError(string $message, int $statusCode = 400): Response
+    {
+        $response = $this->getResponse();
+        $response->setStatusCode($statusCode);
+        $response->setContent(json_encode([
+            'success' => false,
+            'message' => $message,
+        ]));
+        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * Return JSON success response
+     *
+     * @param array $data Response data
+     * @return Response
+     */
+    protected function jsonSuccess(array $data): Response
+    {
+        $response = $this->getResponse();
+        $response->setContent(json_encode(array_merge(['success' => true], $data)));
+        $response->getHeaders()->addHeaderLine('Content-Type', 'application/json');
+        return $response;
     }
 
     /**
@@ -194,6 +306,48 @@ class LetterGenerationController extends AbstractInternalController implements T
     }
 
     /**
+     * Fetch document template by ID
+     *
+     * @param int $templateId Template ID
+     * @return array|null Template data or null if not found
+     */
+    protected function fetchTemplateById(int $templateId): ?array
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\DocTemplate\ById::create([
+            'id' => $templateId,
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return null;
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Fetch letter instance by ID with all related data
+     *
+     * @param int $letterInstanceId Letter instance ID
+     * @return array|null Letter instance data or null if not found
+     */
+    protected function fetchLetterInstanceById(int $letterInstanceId): ?array
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\Get::create([
+            'id' => $letterInstanceId,
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            return null;
+        }
+
+        return $response->getResult();
+    }
+
+    /**
      * Extract entity context from query parameters
      *
      * @param array $queryParams Query parameters
@@ -204,6 +358,7 @@ class LetterGenerationController extends AbstractInternalController implements T
         $entityTypes = [
             'licence',
             'application',
+            'case',
             'busReg',
             'transportManager',
             'irhpApplication',
@@ -220,6 +375,37 @@ class LetterGenerationController extends AbstractInternalController implements T
         }
 
         return [];
+    }
+
+    /**
+     * Extract entity context from route parameters
+     *
+     * Maps actual route parameter names to command parameter names
+     *
+     * @return array Route parameters with entity IDs
+     */
+    protected function extractRouteParams(): array
+    {
+        // Map route parameter names to command parameter names
+        $routeParamMap = [
+            'licence' => 'licence',
+            'application' => 'application',
+            'case' => 'case',
+            'busRegId' => 'busReg',
+            'transportManager' => 'transportManager',
+            'irhpAppId' => 'irhpApplication',
+            'organisation' => 'irfoOrganisation', // May need adjustment
+        ];
+
+        $routeParams = [];
+        foreach ($routeParamMap as $routeParam => $commandParam) {
+            $value = $this->params()->fromRoute($routeParam);
+            if ($value !== null) {
+                $routeParams[$commandParam] = $value;
+            }
+        }
+
+        return $routeParams;
     }
 
     /**
