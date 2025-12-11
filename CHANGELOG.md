@@ -1,5 +1,21 @@
 # Changelog
 
+## [6.10.0](https://github.com/dvsa/vol-app/compare/v6.9.0...v6.10.0) (2025-12-11)
+
+
+### Features
+
+* add skeleton HTML template for letters ([#1254](https://github.com/dvsa/vol-app/issues/1254)) ([08dd057](https://github.com/dvsa/vol-app/commit/08dd057c2ca77fceb50cb97ac7672836c74680e9))
+* filter advert documents by current application ([#1250](https://github.com/dvsa/vol-app/issues/1250)) ([7eab2af](https://github.com/dvsa/vol-app/commit/7eab2afbcd4807efad4644ab8d2a2fde63c795cc))
+* letter instance builder ([#1251](https://github.com/dvsa/vol-app/issues/1251)) ([def999e](https://github.com/dvsa/vol-app/commit/def999eca91da5300bd1095d4c66145a75827ac5))
+* remove old check repute url, replace with request to INR VOL-5804 ([#681](https://github.com/dvsa/vol-app/issues/681)) ([96eaabd](https://github.com/dvsa/vol-app/commit/96eaabdf45c2bfa8049a2b7f1f936b7ae4e89561))
+* replace laminas/mail with symfony/mailer ([#1216](https://github.com/dvsa/vol-app/issues/1216)) ([ff575d1](https://github.com/dvsa/vol-app/commit/ff575d1ac55130d62cb7d30bc58dd1ba9d3aaeb5))
+
+
+### Bug Fixes
+
+* update mail config to remove deprecated MultiTransport and support for non-ecs mail config ([#1255](https://github.com/dvsa/vol-app/issues/1255)) ([5facf41](https://github.com/dvsa/vol-app/commit/5facf41f108889bfef2250e49c1ffabedce59955))
+
 ## [6.9.0](https://github.com/dvsa/vol-app/compare/v6.8.0...v6.9.0) (2025-11-28)
 
 
