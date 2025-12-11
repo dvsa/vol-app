@@ -198,8 +198,12 @@ class Email implements FactoryInterface
 
         // Build DSN from mail config
         $mailConfig = $config['mail'];
-        $host = $mailConfig['options']['host'] ?? 'localhost';
-        $port = $mailConfig['options']['port'] ?? 25;
+        $host = $mailConfig['options']['host'] ?? '';
+        $port = $mailConfig['options']['port'] ?? '';
+
+        if (empty($host) || empty($port)) {
+            throw new \RuntimeException('Mail host and port must be configured');
+        }
         $username = $mailConfig['options']['connection_config']['username'] ?? null;
         $password = $mailConfig['options']['connection_config']['password'] ?? null;
 
