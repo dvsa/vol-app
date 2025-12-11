@@ -280,8 +280,7 @@ return [
             'sts_regional_endpoints' => 'regional'
         ]
     ]),
-    'mail' => ($isProductionAccount && \Aws\Credentials\CredentialProvider::shouldUseEcs())
-    ? [
+    'mail' => [
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [
             'name' => '%olcs_email_host%',
@@ -293,16 +292,7 @@ return [
                 'port' => '%olcs_email_port%',
             ],
         ],
-    ]
-    : ($isProductionAccount ? [] : [
-        'type' => \Dvsa\Olcs\Email\Transport\MultiTransport::class,
-        'options' => [
-            'transport' => [
-                ['type' => 'SMTP', 'options' => ['name' => '%olcs_email_host%', 'host' => '%olcs_email_host%', 'port' => '%olcs_email_port%']],
-                ['type' => \Dvsa\Olcs\Email\Transport\S3File::class, 'options' => ['bucket' => 'devapp-olcs-pri-olcs-autotest-s3', 'key' => '%domain%/email']],
-            ]
-        ],
-    ]),
+    ],
 
     'mailboxes' => [
         // IMAP connection to a the mailbox for reading inspection request emails
