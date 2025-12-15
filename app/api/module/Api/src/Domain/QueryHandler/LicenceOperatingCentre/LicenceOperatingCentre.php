@@ -51,7 +51,9 @@ class LicenceOperatingCentre extends AbstractQueryHandler
                 'address' => [
                     'countryCode'
                 ],
-                'adDocuments'
+                'adDocuments' => [
+                    'application'
+                ]
             ]
         ];
 

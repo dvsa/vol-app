@@ -57,7 +57,8 @@ class OperatingCentres extends AbstractQueryHandler
             /** @var Document $documentRepository */
             $documentRepository = $this->getRepo('Document');
             $documents = $this->resultList(
-                $documentRepository->fetchUnlinkedOcDocumentsForEntity($application)
+                $documentRepository->fetchUnlinkedOcDocumentsForEntity($application),
+                ['application']
             );
         }
 
