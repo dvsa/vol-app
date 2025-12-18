@@ -26,6 +26,7 @@ $commonBatchCommandDeps = [
 return [
     'laminas-cli' => [
         'commands' => [
+            'batch:cache-clear' => Dvsa\Olcs\Cli\Command\Batch\CacheClearCommand::class,
             'batch:ch-vs-olcs-diffs' => Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand::class,
             'batch:clean-up-variations' => Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand::class,
             'batch:cns' => Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand::class,
@@ -206,6 +207,7 @@ return [
         ],
     ],
     ConfigAbstractFactory::class => [
+        BatchCommands\CacheClearCommand::class => $commonBatchCommandDeps,
         BatchCommands\CleanUpAbandonedVariationsCommand::class => $commonBatchCommandDeps,
         BatchCommands\CompaniesHouseVsOlcsDiffsExportCommand::class => $commonBatchCommandDeps,
         BatchCommands\ContinuationNotSoughtCommand::class => $commonBatchCommandDeps,
@@ -400,6 +402,7 @@ return [
     ],
     \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::CONFIG_KEY => [
         'factories' => [
+            Cli\Domain\Command\CacheClear::class => CommandHandler\CacheClear::class,
             Cli\Domain\Command\RemoveReadAudit::class => CommandHandler\RemoveReadAudit::class,
             Cli\Domain\Command\CleanUpAbandonedVariations::class => CommandHandler\CleanUpAbandonedVariations::class,
             Cli\Domain\Command\CreateViExtractFiles::class => CommandHandler\CreateViExtractFiles::class,
