@@ -167,6 +167,7 @@ return [
     TransferQuery\Cases\Pi\HearingList::class => QueryHandler\Cases\Pi\HearingList::class,
     TransferQuery\Cases\Pi\ReportList::class => QueryHandler\Cases\Pi\ReportList::class,
     TransferQuery\Cases\Pi\PiDefinitionList::class => QueryHandler\Cases\Pi\PiDefinitionList::class,
+    TransferQuery\Cases\Pi\SlaExceptionList::class => QueryHandler\Cases\Pi\SlaExceptionList::class,
     TransferQuery\Cases\AnnualTestHistory::class => QueryHandler\Cases\AnnualTestHistory::class,
     TransferQuery\Cases\LegacyOffence::class => QueryHandler\Cases\LegacyOffence::class,
     TransferQuery\Cases\LegacyOffenceList::class => QueryHandler\Cases\LegacyOffenceList::class,
@@ -366,9 +367,6 @@ return [
     // TmEmployment
     TransferQuery\TmEmployment\GetSingle::class => QueryHandler\TmEmployment\GetSingle::class,
     TransferQuery\TmEmployment\GetList::class => QueryHandler\TmEmployment\GetList::class,
-
-    // National Register
-    TransferQuery\Nr\ReputeUrl::class => QueryHandler\Nr\ReputeUrl::class,
 
     // Bus Reg History View
     TransferQuery\Bus\HistoryList::class => QueryHandler\Bus\HistoryList::class,
@@ -627,9 +625,6 @@ return [
     TransferQuery\Si\SiCategoryTypeListData::class => QueryHandler\Si\SiCategoryTypeListData::class,
     TransferQuery\Si\SiPenaltyTypeListData::class => QueryHandler\Si\SiPenaltyTypeListData::class,
 
-    // Gds Verify
-    TransferQuery\GdsVerify\GetAuthRequest::class => QueryHandler\GdsVerify\GetAuthRequest::class,
-
     // Data Service
     TransferQuery\DataService\ApplicationStatus::class => QueryHandler\DataService\ApplicationStatus::class,
 
@@ -737,4 +732,24 @@ return [
     TransferQuery\Messaging\Subjects\All::class                                       => QueryHandler\Messaging\Subjects\All::class,
     TransferQuery\Messaging\Messages\UnreadCountByOrganisationAndUser::class          => QueryHandler\Messaging\Message\UnreadCountByOrganisationAndRoles::class,
     TransferQuery\Messaging\Messages\UnreadCountByLicenceAndRoles::class              => QueryHandler\Messaging\Message\UnreadCountByLicenceAndRoles::class,
+
+    // Letter
+    TransferQuery\Letter\LetterType\Get::class => QueryHandler\Letter\LetterType\Get::class,
+    TransferQuery\Letter\LetterType\GetList::class => QueryHandler\Letter\LetterType\GetList::class,
+    TransferQuery\Letter\LetterSection\Get::class => QueryHandler\Letter\LetterSection\Get::class,
+    TransferQuery\Letter\LetterSection\GetList::class => QueryHandler\Letter\LetterSection\GetList::class,
+    TransferQuery\Letter\LetterIssue\Get::class => QueryHandler\Letter\LetterIssue\Get::class,
+    TransferQuery\Letter\LetterIssue\GetList::class => QueryHandler\Letter\LetterIssue\GetList::class,
+    TransferQuery\Letter\LetterIssueType\Get::class => QueryHandler\Letter\LetterIssueType\Get::class,
+    TransferQuery\Letter\LetterIssueType\GetList::class => QueryHandler\Letter\LetterIssueType\GetList::class,
+    TransferQuery\Letter\LetterTodo\Get::class => QueryHandler\Letter\LetterTodo\Get::class,
+    TransferQuery\Letter\LetterTodo\GetList::class => QueryHandler\Letter\LetterTodo\GetList::class,
+    TransferQuery\Letter\LetterAppendix\Get::class => QueryHandler\Letter\LetterAppendix\Get::class,
+    TransferQuery\Letter\LetterAppendix\GetList::class => QueryHandler\Letter\LetterAppendix\GetList::class,
+    TransferQuery\Letter\LetterInstance\Get::class => QueryHandler\Letter\LetterInstance\Get::class,
+    TransferQuery\Letter\LetterInstance\GetList::class => QueryHandler\Letter\LetterInstance\GetList::class,
+    TransferQuery\Letter\MasterTemplate\Get::class => QueryHandler\Letter\MasterTemplate\Get::class,
+    TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
+    TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,
+    TransferQuery\Letter\LetterTestData\GetList::class => QueryHandler\Letter\LetterTestData\GetList::class,
 ];

@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * FeatureToggle Abstract Entity
+ * AbstractFeatureToggle Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -23,7 +28,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    indexes={
  *        @ORM\Index(name="ix_feature_toggle_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_feature_toggle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_feature_toggle_status", columns={"status"})
+ *        @ORM\Index(name="ix_feature_toggle_status", columns={"status"}),
+ *        @ORM\Index(name="uk_feature_toggle_config_name", columns={"config_name"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_feature_toggle_config_name", columns={"config_name"})
@@ -34,18 +40,30 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Config name
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="config_name", length=255, nullable=false)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $configName;
+    protected $id;
+
+    /**
+     * The refData status of the toggle
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
+     */
+    protected $status;
 
     /**
      * Created by
@@ -59,26 +77,6 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     protected $createdBy;
 
     /**
-     * Friendly name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="friendly_name", length=255, nullable=false)
-     */
-    protected $friendlyName;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -90,14 +88,22 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     protected $lastModifiedBy;
 
     /**
-     * Status
+     * Friendly name for the toggle
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="friendly_name", length=255, nullable=false)
      */
-    protected $status;
+    protected $friendlyName = '';
+
+    /**
+     * Usually the FQDN of a handler, otherwise something descriptive
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="config_name", length=255, nullable=false)
+     */
+    protected $configName = '';
 
     /**
      * Version
@@ -110,33 +116,71 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     protected $version = 1;
 
     /**
-     * Set the config name
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
      *
-     * @param string $configName new value being set
+     * @param int $id new value being set
      *
      * @return FeatureToggle
      */
-    public function setConfigName($configName)
+    public function setId($id)
     {
-        $this->configName = $configName;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the config name
+     * Get the id
      *
-     * @return string
-     */
-    public function getConfigName()
+     * @return int     */
+    public function getId()
     {
-        return $this->configName;
+        return $this->id;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return FeatureToggle
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return FeatureToggle
      */
@@ -150,11 +194,33 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return FeatureToggle
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -174,83 +240,33 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     /**
      * Get the friendly name
      *
-     * @return string
-     */
+     * @return string     */
     public function getFriendlyName()
     {
         return $this->friendlyName;
     }
 
     /**
-     * Set the id
+     * Set the config name
      *
-     * @param int $id new value being set
+     * @param string $configName new value being set
      *
      * @return FeatureToggle
      */
-    public function setId($id)
+    public function setConfigName($configName)
     {
-        $this->id = $id;
+        $this->configName = $configName;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the config name
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getConfigName()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return FeatureToggle
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return FeatureToggle
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
+        return $this->configName;
     }
 
     /**
@@ -270,10 +286,17 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

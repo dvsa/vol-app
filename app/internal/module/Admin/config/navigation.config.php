@@ -392,6 +392,50 @@ return [
                     ],
                 ],
                 [
+                    'label' => 'Letter Management',
+                    'id' => 'admin-dashboard/letter-management',
+                    'class' => 'govuk-link--no-visited-state',
+                    'route' => 'admin-dashboard/admin-master-template',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/letter-management/master-templates',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Master Templates',
+                            'route' => 'admin-dashboard/admin-master-template',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-types',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Types',
+                            'route' => 'admin-dashboard/admin-letter-type',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-sections',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Sections',
+                            'route' => 'admin-dashboard/admin-letter-section',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-issues',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Issues',
+                            'route' => 'admin-dashboard/admin-letter-issue',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-issue-types',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Letter Issue Types',
+                            'route' => 'admin-dashboard/admin-letter-issue-type',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/letter-management/letter-test-data',
+                            'class' => 'govuk-link--no-visited-state',
+                            'label' => 'Test Data',
+                            'route' => 'admin-dashboard/admin-letter-test-data',
+                        ],
+                    ],
+                ],
+                [
                     'label' => 'Data retention',
                     'id' => 'admin-dashboard/admin-data-retention',
                     'class' => 'govuk-link--no-visited-state',

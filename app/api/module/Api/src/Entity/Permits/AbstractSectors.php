@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Sectors Abstract Entity
+ * AbstractSectors Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -32,10 +37,21 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 
     /**
      * Created by
@@ -47,44 +63,6 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Description key
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description_key", length=255, nullable=true)
-     */
-    protected $descriptionKey;
-
-    /**
-     * Display order
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=true)
-     */
-    protected $displayOrder;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -104,7 +82,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
-    protected $name;
+    protected $name = '';
 
     /**
      * Name key
@@ -113,14 +91,32 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @ORM\Column(type="string", name="name_key", length=255, nullable=false)
      */
-    protected $nameKey;
+    protected $nameKey = '';
+
+    /**
+     * Description
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
+     */
+    protected $description = '';
+
+    /**
+     * Description key
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="description_key", length=255, nullable=true)
+     */
+    protected $descriptionKey;
 
     /**
      * Sifting percentage
      *
-     * @var float
+     * @var string
      *
-     * @ORM\Column(type="decimal", name="sifting_percentage", precision=18, scale=9, nullable=true)
+     * @ORM\Column(type="decimal", name="sifting_percentage", nullable=true)
      */
     protected $siftingPercentage;
 
@@ -132,103 +128,32 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      * @ORM\Column(type="smallint", name="version", nullable=true)
      * @ORM\Version
      */
-    protected $version;
+    protected $version = 1;
 
     /**
-     * Set the created by
+     * Display order
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var int
      *
-     * @return Sectors
+     * @ORM\Column(type="integer", name="display_order", nullable=true)
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $displayOrder;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
 
-    /**
-     * Set the description
-     *
-     * @param string $description new value being set
-     *
-     * @return Sectors
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get the description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set the description key
-     *
-     * @param string $descriptionKey new value being set
-     *
-     * @return Sectors
-     */
-    public function setDescriptionKey($descriptionKey)
-    {
-        $this->descriptionKey = $descriptionKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the description key
-     *
-     * @return string
-     */
-    public function getDescriptionKey()
-    {
-        return $this->descriptionKey;
-    }
-
-    /**
-     * Set the display order
-     *
-     * @param int $displayOrder new value being set
-     *
-     * @return Sectors
-     */
-    public function setDisplayOrder($displayOrder)
-    {
-        $this->displayOrder = $displayOrder;
-
-        return $this;
-    }
-
-    /**
-     * Get the display order
-     *
-     * @return int
-     */
-    public function getDisplayOrder()
-    {
-        return $this->displayOrder;
-    }
 
     /**
      * Set the id
@@ -247,17 +172,39 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Sectors
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Sectors
      */
@@ -271,8 +218,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -295,8 +241,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the name
      *
-     * @return string
-     */
+     * @return string     */
     public function getName()
     {
         return $this->name;
@@ -319,17 +264,62 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the name key
      *
-     * @return string
-     */
+     * @return string     */
     public function getNameKey()
     {
         return $this->nameKey;
     }
 
     /**
+     * Set the description
+     *
+     * @param string $description new value being set
+     *
+     * @return Sectors
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set the description key
+     *
+     * @param string $descriptionKey new value being set
+     *
+     * @return Sectors
+     */
+    public function setDescriptionKey($descriptionKey)
+    {
+        $this->descriptionKey = $descriptionKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the description key
+     *
+     * @return string     */
+    public function getDescriptionKey()
+    {
+        return $this->descriptionKey;
+    }
+
+    /**
      * Set the sifting percentage
      *
-     * @param float $siftingPercentage new value being set
+     * @param string $siftingPercentage new value being set
      *
      * @return Sectors
      */
@@ -343,8 +333,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the sifting percentage
      *
-     * @return float
-     */
+     * @return string     */
     public function getSiftingPercentage()
     {
         return $this->siftingPercentage;
@@ -367,10 +356,40 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the display order
+     *
+     * @param int $displayOrder new value being set
+     *
+     * @return Sectors
+     */
+    public function setDisplayOrder($displayOrder)
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get the display order
+     *
+     * @return int     */
+    public function getDisplayOrder()
+    {
+        return $this->displayOrder;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

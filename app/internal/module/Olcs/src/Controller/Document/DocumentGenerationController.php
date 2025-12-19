@@ -16,6 +16,9 @@ use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Logging\Log\Logger;
 use Olcs\Service\Data\DocumentSubCategoryWithDocs;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
+use Dvsa\Olcs\Transfer\Query\DocTemplate\ById as DocTemplateById;
+use Common\FeatureToggle;
 
 class DocumentGenerationController extends AbstractDocumentController
 {
@@ -53,7 +56,13 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $this->loadScripts(['generate-document']);
 
-        $view = new ViewModel(['form' => $form]);
+        // Extract entity context from route parameters for letter generation flow
+        $entityContext = $this->extractEntityContextFromRoute();
+
+        $view = new ViewModel([
+            'form' => $form,
+            'entityContext' => $entityContext,
+        ]);
 
         $view->setTemplate('pages/form');
 
@@ -67,6 +76,17 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     public function listTemplateBookmarksAction()
     {
+        $templateId = (int) $this->params('id');
+
+        // Check if this template uses database-driven letter type
+        if ($this->isLettersDatabaseDrivenEnabled() && $this->templateHasLetterType($templateId)) {
+            // Return JSON response indicating redirect is needed
+            return new \Laminas\View\Model\JsonModel([
+                'redirectToNewLetterFlow' => true,
+                'templateId' => $templateId
+            ]);
+        }
+
         $form = new Form();
 
         $fieldset = new Fieldset();
@@ -75,7 +95,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $form->add($fieldset);
 
-        $this->addTemplateBookmarks($this->params('id'), $fieldset);
+        $this->addTemplateBookmarks($templateId, $fieldset);
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
@@ -115,6 +135,11 @@ class DocumentGenerationController extends AbstractDocumentController
     {
         $data = $data['validData'];
         $routeParams = $this->params()->fromRoute();
+
+        // Check if we should use new database-driven letter pathway
+        if ($this->shouldRedirectToLetterChoices($data)) {
+            return $this->redirectToLetterChoices($data, $routeParams);
+        }
 
         $queryData = array_merge($data, $routeParams);
 
@@ -313,5 +338,172 @@ class DocumentGenerationController extends AbstractDocumentController
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check if template requires new letter choices flow
+     *
+     * @param array $data Form data
+     * @return bool
+     */
+    protected function shouldRedirectToLetterChoices(array $data): bool
+    {
+        // Check feature toggle first (fast exit)
+        if (!$this->isLettersDatabaseDrivenEnabled()) {
+            return false;
+        }
+
+        // Check if template has letterType
+        $templateId = $data['details']['documentTemplate'] ?? null;
+        if (!$templateId) {
+            return false;
+        }
+
+        return $this->templateHasLetterType($templateId);
+    }
+
+    /**
+     * Check if letters database-driven feature is enabled
+     *
+     * @return bool
+     */
+    protected function isLettersDatabaseDrivenEnabled(): bool
+    {
+        $result = $this->handleQuery(
+            IsEnabledQry::create(['ids' => [FeatureToggle::LETTERS_DATABASE_DRIVEN]])
+        );
+
+        return $result->getResult()['isEnabled'] ?? false;
+    }
+
+    /**
+     * Check if template uses database-driven letter type
+     *
+     * @param int $templateId Template ID
+     * @return bool
+     */
+    protected function templateHasLetterType(int $templateId): bool
+    {
+        $response = $this->handleQuery(DocTemplateById::create(['id' => $templateId]));
+
+        if (!$response->isOk()) {
+            return false;
+        }
+
+        $templateData = $response->getResult();
+        return !empty($templateData['letterType']['id']);
+    }
+
+    /**
+     * Redirect to letter generation (database-driven letters)
+     *
+     * @param array $data Form data
+     * @param array $routeParams Route parameters
+     * @return \Laminas\Http\Response
+     */
+    protected function redirectToLetterChoices(array $data, array $routeParams)
+    {
+        $templateId = $data['details']['documentTemplate'];
+
+        // Build query parameters for the new unified letter generation route
+        $queryParams = [
+            'template' => $templateId
+        ];
+
+        // Add entity context based on route type
+        $entityType = $routeParams['type'] ?? null;
+        $entityId = null;
+
+        // Map route type to entity parameter
+        switch ($entityType) {
+            case 'licence':
+                $entityId = $routeParams['licence'] ?? null;
+                if ($entityId) {
+                    $queryParams['licence'] = $entityId;
+                }
+                break;
+            case 'application':
+                $entityId = $routeParams['application'] ?? null;
+                if ($entityId) {
+                    $queryParams['application'] = $entityId;
+                }
+                break;
+            case 'busReg':
+                $entityId = $routeParams['busRegId'] ?? null;
+                if ($entityId) {
+                    $queryParams['busReg'] = $entityId;
+                }
+                break;
+            case 'transportManager':
+                $entityId = $routeParams['transportManager'] ?? null;
+                if ($entityId) {
+                    $queryParams['transportManager'] = $entityId;
+                }
+                break;
+            case 'irhpApplication':
+                $entityId = $routeParams['irhpAppId'] ?? null;
+                if ($entityId) {
+                    $queryParams['irhpApplication'] = $entityId;
+                }
+                break;
+            case 'irfoOrganisation':
+                $entityId = $routeParams['organisation'] ?? null;
+                if ($entityId) {
+                    $queryParams['irfoOrganisation'] = $entityId;
+                }
+                break;
+        }
+
+        // Store current page as return URL for navigation back
+        $currentUrl = $this->getRequest()->getRequestUri();
+        $queryParams['returnUrl'] = $currentUrl;
+
+        // Redirect to new unified letter generation route
+        return $this->redirect()->toRoute(
+            'letter/create',
+            [],
+            ['query' => $queryParams]
+        );
+    }
+
+    /**
+     * Extract entity context from route parameters
+     *
+     * @return array Entity context with type and ID, empty array if none found
+     */
+    protected function extractEntityContextFromRoute(): array
+    {
+        $routeParams = $this->params()->fromRoute();
+
+        // Map route parameter names to entity types
+        $entityParamMap = [
+            'licence' => 'licence',
+            'application' => 'application',
+            'case' => 'case',
+            'busRegId' => 'busReg',
+            'transportManager' => 'transportManager',
+            'irhpAppId' => 'irhpApplication',
+            'organisation' => 'irfoOrganisation',
+        ];
+
+        // Check for each entity type in route params
+        foreach ($entityParamMap as $routeParam => $entityType) {
+            if (isset($routeParams[$routeParam]) && $routeParams[$routeParam] !== null) {
+                return [
+                    'type' => $entityType,
+                    'id' => (int) $routeParams[$routeParam],
+                ];
+            }
+        }
+
+        // Check for generic entityType/entityId pattern
+        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+            return [
+                'type' => $routeParams['entityType'],
+                'id' => (int) $routeParams['entityId'],
+            ];
+        }
+
+        return [];
     }
 }

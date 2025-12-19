@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Submission;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SubmissionAction Abstract Entity
+ * AbstractSubmissionAction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -38,34 +41,25 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     use ModifiedOnTrait;
 
     /**
-     * Action type
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var int
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="submissionActions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="submission_action_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="action_type", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $actionTypes;
+    protected $id;
 
     /**
-     * Comment
+     * Foreign Key to submission
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      *
-     * @ORM\Column(type="text", name="comment", length=16777215, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
+     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id")
      */
-    protected $comment;
+    protected $submission;
 
     /**
      * Created by
@@ -79,26 +73,6 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is decision
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_decision", nullable=false)
-     */
-    protected $isDecision;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -110,39 +84,22 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     protected $lastModifiedBy;
 
     /**
-     * Reason
+     * isDecision
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason",
-     *     inversedBy="submissionActions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="submission_action_reason",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="reason_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Column(type="yesno", name="is_decision", nullable=false)
      */
-    protected $reasons;
+    protected $isDecision = 0;
 
     /**
-     * Submission
+     * Comment
      *
-     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission",
-     *     fetch="LAZY",
-     *     inversedBy="submissionActions"
-     * )
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="text", name="comment", nullable=true)
      */
-    protected $submission;
+    protected $comment;
 
     /**
      * Version
@@ -155,9 +112,41 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * Reasons
      *
-     * @return void
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason", inversedBy="submissionActions", fetch="LAZY")
+     * @ORM\JoinTable(name="submission_action_reason",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="reason_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $reasons;
+
+    /**
+     * ActionTypes
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="submissionActions", fetch="LAZY")
+     * @ORM\JoinTable(name="submission_action_type",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="action_type", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $actionTypes;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -165,126 +154,14 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->reasons = new ArrayCollection();
         $this->actionTypes = new ArrayCollection();
     }
 
-    /**
-     * Set the action type
-     *
-     * @param ArrayCollection $actionTypes collection being set as the value
-     *
-     * @return SubmissionAction
-     */
-    public function setActionTypes($actionTypes)
-    {
-        $this->actionTypes = $actionTypes;
-
-        return $this;
-    }
-
-    /**
-     * Get the action types
-     *
-     * @return ArrayCollection
-     */
-    public function getActionTypes()
-    {
-        return $this->actionTypes;
-    }
-
-    /**
-     * Add a action types
-     *
-     * @param ArrayCollection|mixed $actionTypes collection being added
-     *
-     * @return SubmissionAction
-     */
-    public function addActionTypes($actionTypes)
-    {
-        if ($actionTypes instanceof ArrayCollection) {
-            $this->actionTypes = new ArrayCollection(
-                array_merge(
-                    $this->actionTypes->toArray(),
-                    $actionTypes->toArray()
-                )
-            );
-        } elseif (!$this->actionTypes->contains($actionTypes)) {
-            $this->actionTypes->add($actionTypes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a action types
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being removed
-     *
-     * @return SubmissionAction
-     */
-    public function removeActionTypes($actionTypes)
-    {
-        if ($this->actionTypes->contains($actionTypes)) {
-            $this->actionTypes->removeElement($actionTypes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the comment
-     *
-     * @param string $comment new value being set
-     *
-     * @return SubmissionAction
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get the comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return SubmissionAction
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -303,11 +180,79 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set the submission
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
+     *
+     * @return SubmissionAction
+     */
+    public function setSubmission($submission)
+    {
+        $this->submission = $submission;
+
+        return $this;
+    }
+
+    /**
+     * Get the submission
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission     */
+    public function getSubmission()
+    {
+        return $this->submission;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return SubmissionAction
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return SubmissionAction
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -327,41 +272,62 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Get the is decision
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsDecision()
     {
         return $this->isDecision;
     }
 
     /**
-     * Set the last modified by
+     * Set the comment
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $comment new value being set
      *
      * @return SubmissionAction
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setComment($comment)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->comment = $comment;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the comment
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getComment()
     {
-        return $this->lastModifiedBy;
+        return $this->comment;
     }
 
     /**
-     * Set the reason
+     * Set the version
      *
-     * @param ArrayCollection $reasons collection being set as the value
+     * @param int $version new value being set
+     *
+     * @return SubmissionAction
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the reasons
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
      * @return SubmissionAction
      */
@@ -375,7 +341,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Get the reasons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getReasons()
     {
@@ -385,7 +351,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Add a reasons
      *
-     * @param ArrayCollection|mixed $reasons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
      * @return SubmissionAction
      */
@@ -422,50 +388,73 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     }
 
     /**
-     * Set the submission
+     * Set the action types
      *
-     * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being set as the value
      *
      * @return SubmissionAction
      */
-    public function setSubmission($submission)
+    public function setActionTypes($actionTypes)
     {
-        $this->submission = $submission;
+        $this->actionTypes = $actionTypes;
 
         return $this;
     }
 
     /**
-     * Get the submission
+     * Get the action types
      *
-     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getSubmission()
+    public function getActionTypes()
     {
-        return $this->submission;
+        return $this->actionTypes;
     }
 
     /**
-     * Set the version
+     * Add a action types
      *
-     * @param int $version new value being set
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $actionTypes collection being added
      *
      * @return SubmissionAction
      */
-    public function setVersion($version)
+    public function addActionTypes($actionTypes)
     {
-        $this->version = $version;
+        if ($actionTypes instanceof ArrayCollection) {
+            $this->actionTypes = new ArrayCollection(
+                array_merge(
+                    $this->actionTypes->toArray(),
+                    $actionTypes->toArray()
+                )
+            );
+        } elseif (!$this->actionTypes->contains($actionTypes)) {
+            $this->actionTypes->add($actionTypes);
+        }
 
         return $this;
     }
 
     /**
-     * Get the version
+     * Remove a action types
      *
-     * @return int
+     * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being removed
+     *
+     * @return SubmissionAction
      */
-    public function getVersion()
+    public function removeActionTypes($actionTypes)
     {
-        return $this->version;
+        if ($this->actionTypes->contains($actionTypes)) {
+            $this->actionTypes->removeElement($actionTypes);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

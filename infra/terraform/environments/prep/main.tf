@@ -338,6 +338,11 @@ module "service" {
 
     jobs = [
       {
+        name     = "cache-clear",
+        commands = ["batch:cache-clear", "--flush-all", "--force"],
+        timeout  = 300,
+      },
+      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
@@ -370,6 +375,24 @@ module "service" {
         commands = ["batch:data-gov-uk-export", "--report-name", "international-goods"],
         timeout  = 43200,
         schedule = ["cron(00 13 ? * 1 *)"],
+      },
+      {
+        name     = "tc-bus-variation",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-variation", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-bus-registered",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-registered-only", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-operator-licence",
+        commands = ["batch:data-gov-uk-export", "--report-name", "operator-licence", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
       },
       {
         name     = "data-retention-populate",
@@ -598,22 +621,22 @@ module "service" {
       },
       {
         name     = "sas-mi-extract",
-        commands = ["source /mnt/data/sas_mi_extract.sh"],
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts"
       },
       {
         name     = "import-anondb",
-        commands = ["source /mnt/data/import_anondb.sh"],
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "populate-anondb",
-        commands = ["source /mnt/data/populate_anondb.sh"],
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "ni-compliance",
-        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]

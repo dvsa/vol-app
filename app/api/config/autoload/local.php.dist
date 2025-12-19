@@ -26,11 +26,11 @@ return [
   ],
   'address' => [
     'client' => [
-      'baseuri' => 'http://address.reg.olcs.dev-dvsacloud.uk/'
+      'baseuri' => 'http://address.dev.olcs.dev-dvsacloud.uk/'
     ]
   ],
   'elastic_search' => [
-    'host' => 'searchv6.reg.olcs.dev-dvsacloud.uk',
+    'host' => 'searchv6.dev.olcs.dev-dvsacloud.uk',
   ],
   'doctrine' => [
     'connection' => [
@@ -57,7 +57,7 @@ return [
   ],
   'document_share' => [
     'client' => [
-      'webdav_baseuri' => 'http://webdav.qa.olcs.dev-dvsacloud.uk:8080/documents/',
+      'webdav_baseuri' => 'http://webdav.dev.olcs.dev-dvsacloud.uk:8080/documents/',
       'password' => ''
     ],
   ],
@@ -87,7 +87,7 @@ return [
   'cpms_api' => [
     'rest_client' => [
       'options' => [
-        'domain' => "api.accept.dev.cpms.dvsacloud.uk", // QA
+        'domain' => "api.accept.dev.cpms.dvsacloud.uk",
       ],
     ],
   ],
@@ -213,16 +213,6 @@ return [
         'timeout' => 5
       ]
     ]
-  ],
-  'gds_verify' => [
-    'federation_metadata_url' => 'https://compliance-tool-reference.ida.digital.cabinet-office.gov.uk/SAML2/metadata/sp',
-    'msa_metadata_url' => __DIR__ . '/../../module/GdsVerify/data/compliance-tool/msa-certs/metadata.xml',
-    'cache' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
-    'entity_identifier' => 'http://olcs-selfserve.olcs.gov.uk',
-    'signature_key' => __DIR__ . '/../../module/GdsVerify/data/compliance-tool/signing.key',
-    'encryption_keys' => [
-      __DIR__ . '/../../module/GdsVerify/data/compliance-tool/enc.key',
-    ],
   ],
   'olcs-doctrine' => [
     'encryption_key' => null
@@ -356,6 +346,17 @@ return [
             'token_url' => '', //param
             'scope' => '', //param
             'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+        ],
+    ],
+    'nr' => [
+        'inr_service' => [
+            'uri' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+            'oauth2' => [
+                'client_id' => '',
+                'client_secret' => '',
+                'token_url' => '',
+                'scope' => '',
+            ]
         ],
     ],
     'data-gov-uk-export' => [

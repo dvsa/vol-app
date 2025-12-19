@@ -131,16 +131,6 @@ abstract class AbstractDeclarationController extends AbstractController
     protected function digitalSignatureAction(): \Laminas\Http\Response
     {
         $role = $this->getSignAsRole();
-        // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
-        // isOwner will disambiguate later.
-        $routeParams = ['lva' => $this->lva, 'role' => $role, 'applicationId' => $this->tma['application']['id'], 'transportManagerApplicationId' => $this->tma['id']];
-        $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
-        if (!$featureEnabled) {
-            return $this->redirect()->toRoute(
-                'verify/transport-manager',
-                $routeParams
-            );
-        }
 
         $returnUrl = $this->url()->fromRoute(
             'lva-' . $this->lva . '/transport_manager_confirmation',

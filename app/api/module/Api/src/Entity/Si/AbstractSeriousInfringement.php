@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * SeriousInfringement Abstract Entity
+ * AbstractSeriousInfringement Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -30,8 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_serious_infringement_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_serious_infringement_member_state_code", columns={"member_state_code"}),
  *        @ORM\Index(name="ix_serious_infringement_si_category_id", columns={"si_category_id"}),
- *        @ORM\Index(name="ix_serious_infringement_si_category_type_id",
-     *     columns={"si_category_type_id"})
+ *        @ORM\Index(name="ix_serious_infringement_si_category_type_id", columns={"si_category_type_id"})
  *    }
  * )
  */
@@ -45,27 +47,55 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="seriousInfringements"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Check date
+     * Two letter EU member state code
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
      *
-     * @ORM\Column(type="date", name="check_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
+     * @ORM\JoinColumn(name="member_state_code", referencedColumnName="id", nullable=true)
      */
-    protected $checkDate;
+    protected $memberStateCode;
+
+    /**
+     * Foreign Key to si_category
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiCategory
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategory", fetch="LAZY")
+     * @ORM\JoinColumn(name="si_category_id", referencedColumnName="id")
+     */
+    protected $siCategory;
+
+    /**
+     * Foreign Key to si_category_type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiCategoryType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategoryType", fetch="LAZY")
+     * @ORM\JoinColumn(name="si_category_type_id", referencedColumnName="id")
+     */
+    protected $siCategoryType;
 
     /**
      * Created by
@@ -79,26 +109,6 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Infringement date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="infringement_date", nullable=true)
-     */
-    protected $infringementDate;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -110,17 +120,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $lastModifiedBy;
 
     /**
-     * Member state code
-     *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="member_state_code", referencedColumnName="id", nullable=true)
-     */
-    protected $memberStateCode;
-
-    /**
-     * Notification number
+     * ERRU business case GUID
      *
      * @var string
      *
@@ -129,22 +129,22 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $notificationNumber;
 
     /**
-     * Olbs key
+     * Check date
      *
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="date", name="check_date", nullable=true)
      */
-    protected $olbsKey;
+    protected $checkDate;
 
     /**
-     * Olbs type
+     * Infringement date
      *
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(type="string", name="olbs_type", length=48, nullable=true)
+     * @ORM\Column(type="date", name="infringement_date", nullable=true)
      */
-    protected $olbsType;
+    protected $infringementDate;
 
     /**
      * Reason
@@ -154,26 +154,6 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      * @ORM\Column(type="string", name="reason", length=500, nullable=true)
      */
     protected $reason;
-
-    /**
-     * Si category
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_category_id", referencedColumnName="id", nullable=false)
-     */
-    protected $siCategory;
-
-    /**
-     * Si category type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiCategoryType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategoryType", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_category_type_id", referencedColumnName="id", nullable=false)
-     */
-    protected $siCategoryType;
 
     /**
      * Version
@@ -186,7 +166,25 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $version = 1;
 
     /**
-     * Applied penaltie
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
+     *
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * used to differentiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="olbs_type", length=48, nullable=true)
+     */
+    protected $olbsType;
+
+    /**
+     * AppliedPenalties
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
@@ -195,35 +193,25 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $appliedPenalties;
 
     /**
-     * Imposed erru
+     * ImposedErrus
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruImposed",
-     *     mappedBy="seriousInfringement",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruImposed", mappedBy="seriousInfringement", cascade={"persist"})
      */
     protected $imposedErrus;
 
     /**
-     * Requested erru
+     * RequestedErrus
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested",
-     *     mappedBy="seriousInfringement",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", mappedBy="seriousInfringement", cascade={"persist"})
      */
     protected $requestedErrus;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -231,21 +219,43 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->appliedPenalties = new ArrayCollection();
         $this->imposedErrus = new ArrayCollection();
         $this->requestedErrus = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return SeriousInfringement
      */
@@ -259,11 +269,148 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
+    }
+
+    /**
+     * Set the member state code
+     *
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $memberStateCode new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setMemberStateCode($memberStateCode)
+    {
+        $this->memberStateCode = $memberStateCode;
+
+        return $this;
+    }
+
+    /**
+     * Get the member state code
+     *
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+    public function getMemberStateCode()
+    {
+        return $this->memberStateCode;
+    }
+
+    /**
+     * Set the si category
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiCategory $siCategory new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setSiCategory($siCategory)
+    {
+        $this->siCategory = $siCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get the si category
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategory     */
+    public function getSiCategory()
+    {
+        return $this->siCategory;
+    }
+
+    /**
+     * Set the si category type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiCategoryType $siCategoryType new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setSiCategoryType($siCategoryType)
+    {
+        $this->siCategoryType = $siCategoryType;
+
+        return $this;
+    }
+
+    /**
+     * Get the si category type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategoryType     */
+    public function getSiCategoryType()
+    {
+        return $this->siCategoryType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the notification number
+     *
+     * @param string $notificationNumber new value being set
+     *
+     * @return SeriousInfringement
+     */
+    public function setNotificationNumber($notificationNumber)
+    {
+        $this->notificationNumber = $notificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the notification number
+     *
+     * @return string     */
+    public function getNotificationNumber()
+    {
+        return $this->notificationNumber;
     }
 
     /**
@@ -285,9 +432,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getCheckDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -295,54 +440,6 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
         }
 
         return $this->checkDate;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return SeriousInfringement
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return SeriousInfringement
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -364,9 +461,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getInfringementDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -377,75 +472,49 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     }
 
     /**
-     * Set the last modified by
+     * Set the reason
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param string $reason new value being set
      *
      * @return SeriousInfringement
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setReason($reason)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->reason = $reason;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return string     */
+    public function getReason()
     {
-        return $this->lastModifiedBy;
+        return $this->reason;
     }
 
     /**
-     * Set the member state code
+     * Set the version
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $memberStateCode entity being set as the value
+     * @param int $version new value being set
      *
      * @return SeriousInfringement
      */
-    public function setMemberStateCode($memberStateCode)
+    public function setVersion($version)
     {
-        $this->memberStateCode = $memberStateCode;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the member state code
+     * Get the version
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     */
-    public function getMemberStateCode()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->memberStateCode;
-    }
-
-    /**
-     * Set the notification number
-     *
-     * @param string $notificationNumber new value being set
-     *
-     * @return SeriousInfringement
-     */
-    public function setNotificationNumber($notificationNumber)
-    {
-        $this->notificationNumber = $notificationNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get the notification number
-     *
-     * @return string
-     */
-    public function getNotificationNumber()
-    {
-        return $this->notificationNumber;
+        return $this->version;
     }
 
     /**
@@ -465,8 +534,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -489,113 +557,16 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the reason
+     * Set the applied penalties
      *
-     * @param string $reason new value being set
-     *
-     * @return SeriousInfringement
-     */
-    public function setReason($reason)
-    {
-        $this->reason = $reason;
-
-        return $this;
-    }
-
-    /**
-     * Get the reason
-     *
-     * @return string
-     */
-    public function getReason()
-    {
-        return $this->reason;
-    }
-
-    /**
-     * Set the si category
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SiCategory $siCategory entity being set as the value
-     *
-     * @return SeriousInfringement
-     */
-    public function setSiCategory($siCategory)
-    {
-        $this->siCategory = $siCategory;
-
-        return $this;
-    }
-
-    /**
-     * Get the si category
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategory
-     */
-    public function getSiCategory()
-    {
-        return $this->siCategory;
-    }
-
-    /**
-     * Set the si category type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SiCategoryType $siCategoryType entity being set as the value
-     *
-     * @return SeriousInfringement
-     */
-    public function setSiCategoryType($siCategoryType)
-    {
-        $this->siCategoryType = $siCategoryType;
-
-        return $this;
-    }
-
-    /**
-     * Get the si category type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Si\SiCategoryType
-     */
-    public function getSiCategoryType()
-    {
-        return $this->siCategoryType;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return SeriousInfringement
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the applied penaltie
-     *
-     * @param ArrayCollection $appliedPenalties collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $appliedPenalties collection being set as the value
      *
      * @return SeriousInfringement
      */
@@ -609,7 +580,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the applied penalties
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getAppliedPenalties()
     {
@@ -619,7 +590,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Add a applied penalties
      *
-     * @param ArrayCollection|mixed $appliedPenalties collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $appliedPenalties collection being added
      *
      * @return SeriousInfringement
      */
@@ -656,9 +627,9 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     }
 
     /**
-     * Set the imposed erru
+     * Set the imposed errus
      *
-     * @param ArrayCollection $imposedErrus collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $imposedErrus collection being set as the value
      *
      * @return SeriousInfringement
      */
@@ -672,7 +643,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the imposed errus
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getImposedErrus()
     {
@@ -682,7 +653,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Add a imposed errus
      *
-     * @param ArrayCollection|mixed $imposedErrus collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $imposedErrus collection being added
      *
      * @return SeriousInfringement
      */
@@ -719,9 +690,9 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     }
 
     /**
-     * Set the requested erru
+     * Set the requested errus
      *
-     * @param ArrayCollection $requestedErrus collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $requestedErrus collection being set as the value
      *
      * @return SeriousInfringement
      */
@@ -735,7 +706,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Get the requested errus
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getRequestedErrus()
     {
@@ -745,7 +716,7 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     /**
      * Add a requested errus
      *
-     * @param ArrayCollection|mixed $requestedErrus collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $requestedErrus collection being added
      *
      * @return SeriousInfringement
      */
@@ -779,5 +750,13 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

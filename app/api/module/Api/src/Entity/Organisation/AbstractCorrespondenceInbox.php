@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * CorrespondenceInbox Abstract Entity
+ * AbstractCorrespondenceInbox Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -24,7 +29,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_correspondence_inbox_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_correspondence_inbox_document_id", columns={"document_id"}),
  *        @ORM\Index(name="ix_correspondence_inbox_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_correspondence_inbox_licence_id", columns={"licence_id"})
+ *        @ORM\Index(name="ix_correspondence_inbox_licence_id", columns={"licence_id"}),
+ *        @ORM\Index(name="uk_correspondence_inbox_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_correspondence_inbox_olbs_key", columns={"olbs_key"})
@@ -35,27 +41,40 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
 
     /**
-     * Accessed
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="yesno", name="accessed", nullable=false, options={"default": 0})
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $accessed = 0;
+    protected $id;
 
     /**
-     * Archived
+     * Foreign Key to document
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      *
-     * @ORM\Column(type="yesno", name="archived", nullable=false, options={"default": 0})
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
-    protected $archived = 0;
+    protected $document;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
 
     /**
      * Created by
@@ -69,36 +88,6 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     protected $createdBy;
 
     /**
-     * Document
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
-     */
-    protected $document;
-
-    /**
-     * Email reminder sent
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="email_reminder_sent", nullable=false, options={"default": 0})
-     */
-    protected $emailReminderSent = 0;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -110,26 +99,34 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     protected $lastModifiedBy;
 
     /**
-     * Licence
+     * archived
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="yesno", name="archived", nullable=false, options={"default": 0})
      */
-    protected $licence;
+    protected $archived = 0;
 
     /**
-     * Olbs key
+     * Set true when external user has accessed the file.  If not accessed by x days email sent to user.
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="yesno", name="accessed", nullable=false, options={"default": 0})
      */
-    protected $olbsKey;
+    protected $accessed = 0;
 
     /**
-     * Printed
+     * An email has been sent to user to notify a file has not been accessed. Suppresses duplicate email send
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="email_reminder_sent", nullable=false, options={"default": 0})
+     */
+    protected $emailReminderSent = 0;
+
+    /**
+     * User has printed the document.
      *
      * @var string
      *
@@ -148,27 +145,143 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     protected $version = 1;
 
     /**
-     * Set the accessed
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param string $accessed new value being set
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
      *
      * @return CorrespondenceInbox
      */
-    public function setAccessed($accessed)
+    public function setId($id)
     {
-        $this->accessed = $accessed;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the accessed
+     * Get the id
      *
-     * @return string
-     */
-    public function getAccessed()
+     * @return int     */
+    public function getId()
     {
-        return $this->accessed;
+        return $this->id;
+    }
+
+    /**
+     * Set the document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
+     *
+     * @return CorrespondenceInbox
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get the document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set the licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
+     *
+     * @return CorrespondenceInbox
+     */
+    public function setLicence($licence)
+    {
+        $this->licence = $licence;
+
+        return $this;
+    }
+
+    /**
+     * Get the licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+    public function getLicence()
+    {
+        return $this->licence;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return CorrespondenceInbox
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return CorrespondenceInbox
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -188,59 +301,33 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the archived
      *
-     * @return string
-     */
+     * @return string     */
     public function getArchived()
     {
         return $this->archived;
     }
 
     /**
-     * Set the created by
+     * Set the accessed
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param string $accessed new value being set
      *
      * @return CorrespondenceInbox
      */
-    public function setCreatedBy($createdBy)
+    public function setAccessed($accessed)
     {
-        $this->createdBy = $createdBy;
+        $this->accessed = $accessed;
 
         return $this;
     }
 
     /**
-     * Get the created by
+     * Get the accessed
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
+     * @return string     */
+    public function getAccessed()
     {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document entity being set as the value
-     *
-     * @return CorrespondenceInbox
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get the document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getDocument()
-    {
-        return $this->document;
+        return $this->accessed;
     }
 
     /**
@@ -260,107 +347,10 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the email reminder sent
      *
-     * @return string
-     */
+     * @return string     */
     public function getEmailReminderSent()
     {
         return $this->emailReminderSent;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return CorrespondenceInbox
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return CorrespondenceInbox
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the licence
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
-     *
-     * @return CorrespondenceInbox
-     */
-    public function setLicence($licence)
-    {
-        $this->licence = $licence;
-
-        return $this;
-    }
-
-    /**
-     * Get the licence
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
-    public function getLicence()
-    {
-        return $this->licence;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return CorrespondenceInbox
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**
@@ -380,8 +370,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the printed
      *
-     * @return string
-     */
+     * @return string     */
     public function getPrinted()
     {
         return $this->printed;
@@ -404,10 +393,40 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return CorrespondenceInbox
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

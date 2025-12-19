@@ -176,6 +176,7 @@ return [
     TransferCommand\Cases\Pi\UpdateHearing::class => CommandHandler\Cases\Pi\UpdateHearing::class,
     TransferCommand\Cases\Pi\Close::class => CommandHandler\Cases\Pi\Close::class,
     TransferCommand\Cases\Pi\Reopen::class => CommandHandler\Cases\Pi\Reopen::class,
+    TransferCommand\Cases\Pi\CreatePiSlaException::class => CommandHandler\Cases\Pi\CreateSlaException::class,
 
     // Transfer - Si, Erru
     TransferCommand\Cases\Si\Applied\Delete::class => CommandHandler\Cases\Si\Applied\Delete::class,
@@ -931,6 +932,7 @@ return [
     TransferCommand\OrganisationPerson\DeleteList::class => CommandHandler\OrganisationPerson\DeleteList::class,
 
     // Transfer - TransportManager
+    TransferCommand\Tm\CheckRepute::class => CommandHandler\Tm\CheckReputeFactory::class,
     TransferCommand\Tm\Create::class => CommandHandler\Tm\Create::class,
     TransferCommand\Tm\CreateNewUser::class => CommandHandler\Tm\CreateNewUserFactory::class,
     TransferCommand\Tm\Update::class => CommandHandler\Tm\Update::class,
@@ -1181,10 +1183,6 @@ return [
     Command\ConditionUndertaking\CreateLightGoodsVehicleCondition::class =>
         CommandHandler\ConditionUndertaking\CreateLightGoodsVehicleCondition::class,
 
-    // GdsVerify
-    TransferCommand\GdsVerify\ProcessSignatureResponse::class =>
-        CommandHandler\GdsVerify\ProcessSignatureResponse::class,
-
     // GovUkAccount
     TransferCommand\GovUkAccount\GetGovUkAccountRedirect::class =>
         CommandHandler\GovUkAccount\GetGovUkAccountRedirectFactory::class,
@@ -1339,4 +1337,33 @@ return [
     TransferCommand\LocalAuthority\Update::class => CommandHandler\LocalAuthority\Update::class,
 
     Command\Email\SendBSRNotificationToLTAs::class => CommandHandler\Email\SendBSRNotificationToLTAs::class,
+
+    // Letter
+    TransferCommand\Letter\LetterType\Create::class => CommandHandler\Letter\LetterType\Create::class,
+    TransferCommand\Letter\LetterType\Update::class => CommandHandler\Letter\LetterType\Update::class,
+    TransferCommand\Letter\LetterType\Delete::class => CommandHandler\Letter\LetterType\Delete::class,
+    TransferCommand\Letter\LetterSection\Create::class => CommandHandler\Letter\LetterSection\Create::class,
+    TransferCommand\Letter\LetterSection\Update::class => CommandHandler\Letter\LetterSection\Update::class,
+    TransferCommand\Letter\LetterSection\Delete::class => CommandHandler\Letter\LetterSection\Delete::class,
+    TransferCommand\Letter\LetterIssue\Create::class => CommandHandler\Letter\LetterIssue\Create::class,
+    TransferCommand\Letter\LetterIssue\Update::class => CommandHandler\Letter\LetterIssue\Update::class,
+    TransferCommand\Letter\LetterIssue\Delete::class => CommandHandler\Letter\LetterIssue\Delete::class,
+    TransferCommand\Letter\LetterIssueType\Create::class => CommandHandler\Letter\LetterIssueType\Create::class,
+    TransferCommand\Letter\LetterIssueType\Update::class => CommandHandler\Letter\LetterIssueType\Update::class,
+    TransferCommand\Letter\LetterIssueType\Delete::class => CommandHandler\Letter\LetterIssueType\Delete::class,
+    TransferCommand\Letter\LetterTodo\Create::class => CommandHandler\Letter\LetterTodo\Create::class,
+    TransferCommand\Letter\LetterTodo\Update::class => CommandHandler\Letter\LetterTodo\Update::class,
+    TransferCommand\Letter\LetterTodo\Delete::class => CommandHandler\Letter\LetterTodo\Delete::class,
+    TransferCommand\Letter\LetterAppendix\Create::class => CommandHandler\Letter\LetterAppendix\Create::class,
+    TransferCommand\Letter\LetterAppendix\Update::class => CommandHandler\Letter\LetterAppendix\Update::class,
+    TransferCommand\Letter\LetterAppendix\Delete::class => CommandHandler\Letter\LetterAppendix\Delete::class,
+    TransferCommand\Letter\LetterInstance\Create::class => CommandHandler\Letter\LetterInstance\Create::class,
+    TransferCommand\Letter\LetterInstance\Update::class => CommandHandler\Letter\LetterInstance\Update::class,
+    TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
+    TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
+    TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
+    TransferCommand\Letter\MasterTemplate\Delete::class => CommandHandler\Letter\MasterTemplate\Delete::class,
+    TransferCommand\Letter\LetterTestData\Create::class => CommandHandler\Letter\LetterTestData\Create::class,
+    TransferCommand\Letter\LetterTestData\Update::class => CommandHandler\Letter\LetterTestData\Update::class,
+    TransferCommand\Letter\LetterTestData\Delete::class => CommandHandler\Letter\LetterTestData\Delete::class,
 ];

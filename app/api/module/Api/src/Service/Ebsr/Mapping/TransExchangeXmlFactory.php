@@ -4,26 +4,20 @@ namespace Dvsa\Olcs\Api\Service\Ebsr\Mapping;
 
 use Olcs\XmlTools\Xml\Specification\FixedValue;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Olcs\XmlTools\Xml\Specification\NodeAttribute;
 use Olcs\XmlTools\Xml\Specification\NodeValue;
 use Olcs\XmlTools\Xml\Specification\Recursion;
 use Olcs\XmlTools\Xml\Specification\MultiNodeValue;
 use Psr\Container\ContainerInterface;
 
-/**
- * Class MapXmlFileFactory
- * @package Olcs\Ebsr\Filter
- */
 class TransExchangeXmlFactory implements FactoryInterface
 {
-    protected function getDocuments()
+    protected function getDocuments(): array
     {
         return ['SupportingDocument' => new Recursion('DocumentUri', new MultiNodeValue('documents'))];
     }
 
-    /**
-     * @return array
-     */
-    protected function getStopPoints()
+    protected function getStopPoints(): array
     {
 
         return [
@@ -31,13 +25,10 @@ class TransExchangeXmlFactory implements FactoryInterface
         ];
     }
 
-    /**
-     * @return array
-     */
-    protected function getRoutes()
+    protected function getRoutes(): array
     {
         $route = [
-            'Description' => new MultiNodeValue('routeDescription'),
+            'Description' => new NodeValue('routeDescription'),
             'ReversingManoeuvres' => [
                 new FixedValue('hasManoeuvre', 'Y'),
                 new NodeValue('manoeuvreDetail')
@@ -47,10 +38,7 @@ class TransExchangeXmlFactory implements FactoryInterface
         return ['Routes' => new Recursion('Route', new Recursion($route))];
     }
 
-    /**
-     * @return array
-     */
-    protected function getServicesSpecification()
+    protected function getServicesSpecification(): array
     {
         $standardService = [
             'Origin' => new NodeValue('startPoint'),
@@ -96,10 +84,7 @@ class TransExchangeXmlFactory implements FactoryInterface
         return ['Service' => new Recursion($service)];
     }
 
-    /**
-     * @return array
-     */
-    protected function getOperators()
+    protected function getOperators(): array
     {
         $licencedOperator = [
             'LicenceNumber' => new NodeValue('licNo'),
@@ -109,10 +94,7 @@ class TransExchangeXmlFactory implements FactoryInterface
         return ['LicensedOperator' => new Recursion($licencedOperator)];
     }
 
-    /**
-     * @return array
-     */
-    protected function getRegistrations()
+    protected function getRegistrations(): array
     {
         $trafficAreas = [
             'TrafficArea' => new Recursion('TrafficAreaName', new MultiNodeValue('trafficAreas'))
@@ -157,10 +139,7 @@ class TransExchangeXmlFactory implements FactoryInterface
         return ['Registration' => new Recursion($registration)];
     }
 
-    /**
-     * @return array
-     */
-    protected function getShortNotice()
+    protected function getShortNotice(): array
     {
         $changeImpact = [
             'ChangeDoesNotExceedLimit' => [
@@ -237,17 +216,19 @@ class TransExchangeXmlFactory implements FactoryInterface
             'SpecialOccasion' => $specialOccasion
         ];
     }
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Recursion
     {
         $transXChange = [
-            'Services' => new Recursion($this->getServicesSpecification()),
-            'Operators' => new Recursion($this->getOperators()),
-            'Registrations' => new Recursion($this->getRegistrations()),
-            'Routes' => new Recursion($this->getRoutes()),
-            'StopPoints' => new Recursion($this->getStopPoints()),
+            'TransXChange'        => new NodeAttribute('txcSchemaVersion', 'SchemaVersion'),
+            'Services'            => new Recursion($this->getServicesSpecification()),
+            'Operators'           => new Recursion($this->getOperators()),
+            'Registrations'       => new Recursion($this->getRegistrations()),
+            'Routes'              => new Recursion($this->getRoutes()),
+            'StopPoints'          => new Recursion($this->getStopPoints()),
             'SupportingDocuments' => new Recursion($this->getDocuments()),
         ];
-        $mapping = new Recursion($transXChange);
-        return $mapping;
+
+        return new Recursion($transXChange);
     }
 }

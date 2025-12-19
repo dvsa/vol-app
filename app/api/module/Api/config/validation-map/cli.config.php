@@ -16,6 +16,7 @@ return [
     CliCommandHandler\DataDvaNiExport::class => IsSystemUser::class,
     CliCommandHandler\CompaniesHouseVsOlcsDiffsExport::class => IsSystemUser::class,
     CliCommandHandler\RemoveReadAudit::class => IsSystemUser::class,
+    CliCommandHandler\CacheClear::class => IsSystemUser::class,
     CliCommandHandler\CleanUpAbandonedVariations::class => IsSystemUser::class,
     CliCommandHandler\Bus\Expire::class => IsSystemUser::class,
     CliCommandHandler\LastTmLetter::class => IsSystemUser::class,
@@ -30,6 +31,7 @@ return [
     CliCommandHandler\Permits\CloseExpiredWindows::class => IsSystemUser::class,
     CliCommandHandler\Permits\MarkExpiredPermits::class => IsSystemUser::class,
     CliCommandHandler\Permits\GeneratePermits::class => IsSystemUser::class,
+    CliCommandHandler\Permits\ResetPermitsTestData::class => IsSystemUser::class,
     CliCommandHandler\Permits\WithdrawUnpaidIrhp::class => IsSystemUser::class,
     CliQueryHandler\Util\GetDbValue::class => IsSystemUser::class,
 
@@ -118,5 +120,6 @@ return [
     CliQueryHandler\CompaniesHouse\Organisations::class => IsSystemUser::class,
 
     CliCommandHandler\InterimEndDateEnforcement::class => IsSystemUser::class,
+    CliCommandHandler\EntityGenerator\GenerateEntities::class => IsSystemUser::class,
 
 ];

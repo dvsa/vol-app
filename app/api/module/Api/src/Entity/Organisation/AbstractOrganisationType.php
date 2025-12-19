@@ -1,28 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Organisation;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
- * OrganisationType Abstract Entity
+ * AbstractOrganisationType Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\Table(name="organisation_type",
  *    indexes={
  *        @ORM\Index(name="ix_organisation_type_org_person_type_id", columns={"org_person_type_id"}),
- *        @ORM\Index(name="ix_organisation_type_org_type_id", columns={"org_type_id"})
+ *        @ORM\Index(name="ix_organisation_type_org_type_id", columns={"org_type_id"}),
+ *        @ORM\Index(name="uk_organisation_type_org_type_id_org_person_type_id", columns={"org_type_id", "org_person_type_id"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_organisation_type_org_type_id_org_person_type_id",
-     *     columns={"org_type_id","org_person_type_id"})
+ *        @ORM\UniqueConstraint(name="uk_organisation_type_org_type_id_org_person_type_id", columns={"org_type_id", "org_person_type_id"})
  *    }
  * )
  */
@@ -30,38 +35,54 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
 
     /**
-     * Identifier - Id
+     * Primary key.  Auto incremented if numeric.
      *
      * @var int
      *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
+     * @ORM\Column(type="integer", name="id", nullable=false)
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * Org person type
+     * LTD, Partnership etc.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="org_person_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="org_type_id", referencedColumnName="id")
+     */
+    protected $orgType;
+
+    /**
+     * Type if officers in org. Partners, directors etc.
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="org_person_type_id", referencedColumnName="id")
      */
     protected $orgPersonType;
 
     /**
-     * Org type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="org_type_id", referencedColumnName="id", nullable=false)
+     * Initialise the collections
      */
-    protected $orgType;
+    public function __construct()
+    {
+        $this->initCollections();
+    }
+
+    /**
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
 
     /**
      * Set the id
@@ -80,41 +101,16 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the org person type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgPersonType entity being set as the value
-     *
-     * @return OrganisationType
-     */
-    public function setOrgPersonType($orgPersonType)
-    {
-        $this->orgPersonType = $orgPersonType;
-
-        return $this;
-    }
-
-    /**
-     * Get the org person type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getOrgPersonType()
-    {
-        return $this->orgPersonType;
-    }
-
-    /**
      * Set the org type
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgType new value being set
      *
      * @return OrganisationType
      */
@@ -128,10 +124,40 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get the org type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getOrgType()
     {
         return $this->orgType;
+    }
+
+    /**
+     * Set the org person type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgPersonType new value being set
+     *
+     * @return OrganisationType
+     */
+    public function setOrgPersonType($orgPersonType)
+    {
+        $this->orgPersonType = $orgPersonType;
+
+        return $this;
+    }
+
+    /**
+     * Get the org person type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getOrgPersonType()
+    {
+        return $this->orgPersonType;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

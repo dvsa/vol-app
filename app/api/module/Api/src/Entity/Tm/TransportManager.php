@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Entity\Person\Person;
 use Dvsa\Olcs\Api\Service\Document\ContextProviderInterface;
 use Doctrine\Common\Collections\Criteria;
 use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
@@ -362,11 +363,9 @@ class TransportManager extends AbstractTransportManager implements
     }
 
     /**
-     * Returns whether the entity has all the necessary date for a repute check
-     *
-     * return bool
+     * Does the entity have all address data for a repute check
      */
-    public function hasReputeCheckData()
+    public function hasReputeCheckAddress(): bool
     {
         // mandatory fields
         $fields = [
@@ -378,18 +377,22 @@ class TransportManager extends AbstractTransportManager implements
 
         $person = $this->homeCd->getPerson();
 
+        if (!$person instanceof Person) {
+            return false;
+        }
+
         foreach ($fields as $field) {
             if (empty($person->$field())) {
                 return false;
             }
         }
 
-        //qualifications array collection
-        if ($this->qualifications->isEmpty()) {
-            return false;
-        }
-
         return true;
+    }
+
+    public function hasQualifications(): bool
+    {
+        return !$this->qualifications->isEmpty();
     }
 
     /**
@@ -439,5 +442,16 @@ class TransportManager extends AbstractTransportManager implements
         }
 
         return $organisations;
+    }
+
+    public function getFullName(): string
+    {
+        $person = $this->homeCd->getPerson();
+
+        if (!$person instanceof Person) {
+            return 'unknown name';
+        }
+
+        return $person->getFullName();
     }
 }

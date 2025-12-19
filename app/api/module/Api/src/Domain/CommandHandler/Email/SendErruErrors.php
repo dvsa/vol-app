@@ -2,18 +2,16 @@
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Email;
 
-use Doctrine\ORM\Query;
-use Dvsa\Olcs\Api\Domain\Command\Result;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Api\Domain\Repository\ErruRequestFailure as ErruRequestFailureRepo;
-use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure as ErruRequestFailureEntity;
-use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendErruErrors as SendErruErrorsCmd;
+use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
+use Dvsa\Olcs\Api\Domain\Repository\ErruRequestFailure as ErruRequestFailureRepo;
+use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
+use Dvsa\Olcs\Api\Entity\Si\ErruRequestFailure as ErruRequestFailureEntity;
 use Dvsa\Olcs\Email\Data\Message;
-use Laminas\Json\Json;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
 /**
  * Send Erru Email
@@ -59,14 +57,14 @@ class SendErruErrors extends AbstractCommandHandler implements EmailAwareInterfa
         $erruFailure = $repo->fetchUsingId($command);
 
         //we will always have errors saved
-        $errors = Json::decode($erruFailure->getErrors(), Json::TYPE_ARRAY);
+        $errors = json_decode($erruFailure->getErrors(), true);
 
         //we won't always have input data saved e.g. when the XML file couldn't be parsed
         $jsonInputData = $erruFailure->getInput();
         $input = [];
 
         if (!empty($jsonInputData)) {
-            $input = Json::decode($jsonInputData, Json::TYPE_ARRAY);
+            $input = json_decode($jsonInputData, true);
         }
 
         //get the email message, and assign addresses

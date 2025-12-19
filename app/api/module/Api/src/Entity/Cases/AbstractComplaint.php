@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Complaint Abstract Entity
+ * AbstractComplaint Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -26,8 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="complaint",
  *    indexes={
  *        @ORM\Index(name="ix_complaint_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_complaint_complainant_contact_details_id",
-     *     columns={"complainant_contact_details_id"}),
+ *        @ORM\Index(name="ix_complaint_complainant_contact_details_id", columns={"complainant_contact_details_id"}),
  *        @ORM\Index(name="ix_complaint_complaint_type", columns={"complaint_type"}),
  *        @ORM\Index(name="ix_complaint_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_complaint_last_modified_by", columns={"last_modified_by"}),
@@ -46,53 +48,48 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="complaints"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
 
     /**
-     * Closed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
-     */
-    protected $closedDate;
-
-    /**
-     * Complainant contact details
+     * The person making the complaint
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails",
-     *     fetch="LAZY",
-     *     cascade={"persist"}
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
      * @ORM\JoinColumn(name="complainant_contact_details_id", referencedColumnName="id", nullable=true)
      */
     protected $complainantContactDetails;
 
     /**
-     * Complaint date
+     * Status
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="datetime", name="complaint_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
-    protected $complaintDate;
+    protected $status;
 
     /**
-     * Complaint type
+     * ComplaintType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
@@ -113,53 +110,6 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=4000, nullable=true)
-     */
-    protected $description;
-
-    /**
-     * Driver family name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="driver_family_name", length=40, nullable=true)
-     */
-    protected $driverFamilyName;
-
-    /**
-     * Driver forename
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="driver_forename", length=40, nullable=true)
-     */
-    protected $driverForename;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is compliance
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_compliance", nullable=false)
-     */
-    protected $isCompliance;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -171,44 +121,67 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     protected $lastModifiedBy;
 
     /**
-     * Olbs key
+     * Compliance complaints are against people, environmental against sites (OCs)
      *
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="boolean", name="is_compliance", nullable=false)
      */
-    protected $olbsKey;
+    protected $isCompliance = 0;
 
     /**
-     * Operating centre
+     * Date received
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \DateTime
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre",
-     *     inversedBy="complaints",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="oc_complaint",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="complaint_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Column(type="datetime", name="complaint_date", nullable=true)
      */
-    protected $operatingCentres;
+    protected $complaintDate;
 
     /**
-     * Status
+     * Description
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="description", length=4000, nullable=true)
      */
-    protected $status;
+    protected $description;
+
+    /**
+     * Vrm
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     */
+    protected $vrm;
+
+    /**
+     * Driver forename
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="driver_forename", length=40, nullable=true)
+     */
+    protected $driverForename;
+
+    /**
+     * Driver family name
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="driver_family_name", length=40, nullable=true)
+     */
+    protected $driverFamilyName;
+
+    /**
+     * Closed date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
+     */
+    protected $closedDate;
 
     /**
      * Version
@@ -221,18 +194,33 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     protected $version = 1;
 
     /**
-     * Vrm
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $vrm;
+    protected $olbsKey;
+
+    /**
+     * OperatingCentres
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", inversedBy="complaints", fetch="LAZY")
+     * @ORM\JoinTable(name="oc_complaint",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="complaint_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $operatingCentres;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -240,19 +228,41 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->operatingCentres = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return Complaint
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return Complaint
      */
@@ -266,48 +276,16 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
     }
 
     /**
-     * Set the closed date
-     *
-     * @param \DateTime $closedDate new value being set
-     *
-     * @return Complaint
-     */
-    public function setClosedDate($closedDate)
-    {
-        $this->closedDate = $closedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the closed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getClosedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->closedDate);
-        }
-
-        return $this->closedDate;
-    }
-
-    /**
      * Set the complainant contact details
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $complainantContactDetails entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $complainantContactDetails new value being set
      *
      * @return Complaint
      */
@@ -321,11 +299,125 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the complainant contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
     public function getComplainantContactDetails()
     {
         return $this->complainantContactDetails;
+    }
+
+    /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return Complaint
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the complaint type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $complaintType new value being set
+     *
+     * @return Complaint
+     */
+    public function setComplaintType($complaintType)
+    {
+        $this->complaintType = $complaintType;
+
+        return $this;
+    }
+
+    /**
+     * Get the complaint type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getComplaintType()
+    {
+        return $this->complaintType;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Complaint
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return Complaint
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the is compliance
+     *
+     * @param bool $isCompliance new value being set
+     *
+     * @return Complaint
+     */
+    public function setIsCompliance($isCompliance)
+    {
+        $this->isCompliance = $isCompliance;
+
+        return $this;
+    }
+
+    /**
+     * Get the is compliance
+     *
+     * @return bool     */
+    public function getIsCompliance()
+    {
+        return $this->isCompliance;
     }
 
     /**
@@ -347,9 +439,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getComplaintDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -357,54 +447,6 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
         }
 
         return $this->complaintDate;
-    }
-
-    /**
-     * Set the complaint type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $complaintType entity being set as the value
-     *
-     * @return Complaint
-     */
-    public function setComplaintType($complaintType)
-    {
-        $this->complaintType = $complaintType;
-
-        return $this;
-    }
-
-    /**
-     * Get the complaint type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getComplaintType()
-    {
-        return $this->complaintType;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Complaint
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
     }
 
     /**
@@ -424,35 +466,33 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the description
      *
-     * @return string
-     */
+     * @return string     */
     public function getDescription()
     {
         return $this->description;
     }
 
     /**
-     * Set the driver family name
+     * Set the vrm
      *
-     * @param string $driverFamilyName new value being set
+     * @param string $vrm new value being set
      *
      * @return Complaint
      */
-    public function setDriverFamilyName($driverFamilyName)
+    public function setVrm($vrm)
     {
-        $this->driverFamilyName = $driverFamilyName;
+        $this->vrm = $vrm;
 
         return $this;
     }
 
     /**
-     * Get the driver family name
+     * Get the vrm
      *
-     * @return string
-     */
-    public function getDriverFamilyName()
+     * @return string     */
+    public function getVrm()
     {
-        return $this->driverFamilyName;
+        return $this->vrm;
     }
 
     /**
@@ -472,83 +512,85 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the driver forename
      *
-     * @return string
-     */
+     * @return string     */
     public function getDriverForename()
     {
         return $this->driverForename;
     }
 
     /**
-     * Set the id
+     * Set the driver family name
      *
-     * @param int $id new value being set
+     * @param string $driverFamilyName new value being set
      *
      * @return Complaint
      */
-    public function setId($id)
+    public function setDriverFamilyName($driverFamilyName)
     {
-        $this->id = $id;
+        $this->driverFamilyName = $driverFamilyName;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the driver family name
      *
-     * @return int
-     */
-    public function getId()
+     * @return string     */
+    public function getDriverFamilyName()
     {
-        return $this->id;
+        return $this->driverFamilyName;
     }
 
     /**
-     * Set the is compliance
+     * Set the closed date
      *
-     * @param boolean $isCompliance new value being set
+     * @param \DateTime $closedDate new value being set
      *
      * @return Complaint
      */
-    public function setIsCompliance($isCompliance)
+    public function setClosedDate($closedDate)
     {
-        $this->isCompliance = $isCompliance;
+        $this->closedDate = $closedDate;
 
         return $this;
     }
 
     /**
-     * Get the is compliance
+     * Get the closed date
      *
-     * @return boolean
-     */
-    public function getIsCompliance()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getClosedDate($asDateTime = false)
     {
-        return $this->isCompliance;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->closedDate);
+        }
+
+        return $this->closedDate;
     }
 
     /**
-     * Set the last modified by
+     * Set the version
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param int $version new value being set
      *
      * @return Complaint
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setVersion($version)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the version
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return int     */
+    public function getVersion()
     {
-        return $this->lastModifiedBy;
+        return $this->version;
     }
 
     /**
@@ -568,17 +610,16 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
     }
 
     /**
-     * Set the operating centre
+     * Set the operating centres
      *
-     * @param ArrayCollection $operatingCentres collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being set as the value
      *
      * @return Complaint
      */
@@ -592,7 +633,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Get the operating centres
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOperatingCentres()
     {
@@ -602,7 +643,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Add a operating centres
      *
-     * @param ArrayCollection|mixed $operatingCentres collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $operatingCentres collection being added
      *
      * @return Complaint
      */
@@ -639,74 +680,10 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     }
 
     /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return Complaint
+     * Get bundle data
      */
-    public function setStatus($status)
+    public function __toString(): string
     {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Complaint
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the vrm
-     *
-     * @param string $vrm new value being set
-     *
-     * @return Complaint
-     */
-    public function setVrm($vrm)
-    {
-        $this->vrm = $vrm;
-
-        return $this;
-    }
-
-    /**
-     * Get the vrm
-     *
-     * @return string
-     */
-    public function getVrm()
-    {
-        return $this->vrm;
+        return (string) $this->getId();
     }
 }

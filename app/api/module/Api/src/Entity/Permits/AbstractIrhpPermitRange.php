@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,25 +17,24 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * IrhpPermitRange Abstract Entity
+ * AbstractIrhpPermitRange Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="irhp_permit_range",
  *    indexes={
  *        @ORM\Index(name="fk_irhp_permit_range_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_range_emissions_category_ref_data_id",
-     *     columns={"emissions_category"}),
+ *        @ORM\Index(name="fk_irhp_permit_range_emissions_category_ref_data_id", columns={"emissions_category"}),
  *        @ORM\Index(name="fk_irhp_permit_range_journey_ref_data_id", columns={"journey"}),
- *        @ORM\Index(name="fk_irhp_permit_range_last_modified_by_user_id",
-     *     columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx",
-     *     columns={"irhp_permit_stock_id"})
+ *        @ORM\Index(name="fk_irhp_permit_range_last_modified_by_user_id", columns={"last_modified_by"}),
+ *        @ORM\Index(name="fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx", columns={"irhp_permit_stock_id"}),
+ *        @ORM\Index(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
  *    },
  *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uniqueRange", columns={"irhp_permit_stock_id","prefix","from_no","to_no"})
+ *        @ORM\UniqueConstraint(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
  *    }
  * )
  */
@@ -46,34 +47,45 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     use ModifiedOnTrait;
 
     /**
-     * Cabotage
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="cabotage", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $cabotage;
+    protected $id;
 
     /**
-     * Country
+     * IrhpPermitStock
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country",
-     *     inversedBy="irhpPermitStockRanges",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="irhp_permit_range_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_stock_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", fetch="LAZY")
+     * @ORM\JoinColumn(name="irhp_permit_stock_id", referencedColumnName="id")
      */
-    protected $countrys;
+    protected $irhpPermitStock;
+
+    /**
+     * EmissionsCategory
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="emissions_category", referencedColumnName="id", nullable=true)
+     */
+    protected $emissionsCategory;
+
+    /**
+     * Journey
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="journey", referencedColumnName="id", nullable=true)
+     */
+    protected $journey;
 
     /**
      * Created by
@@ -87,81 +99,6 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     protected $createdBy;
 
     /**
-     * Emissions category
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="emissions_category", referencedColumnName="id", nullable=true)
-     */
-    protected $emissionsCategory;
-
-    /**
-     * From no
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="from_no", nullable=true)
-     */
-    protected $fromNo;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Irhp permit range attribute
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="irhpPermitRanges",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="irhp_permit_range_attribute",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_attribute_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $irhpPermitRangeAttributes;
-
-    /**
-     * Irhp permit stock
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock",
-     *     fetch="LAZY",
-     *     inversedBy="irhpPermitRanges"
-     * )
-     * @ORM\JoinColumn(name="irhp_permit_stock_id", referencedColumnName="id", nullable=false)
-     */
-    protected $irhpPermitStock;
-
-    /**
-     * Journey
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey", referencedColumnName="id", nullable=true)
-     */
-    protected $journey;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -173,15 +110,6 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     protected $lastModifiedBy;
 
     /**
-     * Lost replacement
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="lost_replacement", nullable=true)
-     */
-    protected $lostReplacement;
-
-    /**
      * Prefix
      *
      * @var string
@@ -191,13 +119,13 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     protected $prefix;
 
     /**
-     * Ss reserve
+     * From no
      *
-     * @var boolean
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="ss_reserve", nullable=true)
+     * @ORM\Column(type="integer", name="from_no", nullable=true)
      */
-    protected $ssReserve;
+    protected $fromNo;
 
     /**
      * To no
@@ -207,6 +135,33 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      * @ORM\Column(type="integer", name="to_no", nullable=true)
      */
     protected $toNo;
+
+    /**
+     * Cabotage
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="cabotage", nullable=true)
+     */
+    protected $cabotage;
+
+    /**
+     * Ss reserve
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="ss_reserve", nullable=true)
+     */
+    protected $ssReserve;
+
+    /**
+     * Lost replacement
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="lost_replacement", nullable=true)
+     */
+    protected $lostReplacement;
 
     /**
      * Version
@@ -219,33 +174,59 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     protected $version = 1;
 
     /**
-     * Irhp candidate permit
+     * IrhpPermitRangeAttributes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit",
-     *     mappedBy="irhpPermitRange"
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="irhpPermitRanges", fetch="LAZY")
+     * @ORM\JoinTable(name="irhp_permit_range_attribute",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="irhp_permit_range_attribute_id", referencedColumnName="id")
+     *     }
      * )
+     */
+    protected $irhpPermitRangeAttributes;
+
+    /**
+     * Countrys
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpPermitStockRanges", fetch="LAZY")
+     * @ORM\JoinTable(name="irhp_permit_range_country",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="irhp_permit_stock_range_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $countrys;
+
+    /**
+     * IrhpCandidatePermits
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", mappedBy="irhpPermitRange")
      */
     protected $irhpCandidatePermits;
 
     /**
-     * Irhp permit
+     * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit",
-     *     mappedBy="irhpPermitRange"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpPermitRange")
      */
     protected $irhpPermits;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -253,11 +234,9 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->irhpPermitRangeAttributes = new ArrayCollection();
         $this->countrys = new ArrayCollection();
@@ -265,121 +244,57 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
         $this->irhpPermits = new ArrayCollection();
     }
 
+
     /**
-     * Set the cabotage
+     * Set the id
      *
-     * @param boolean $cabotage new value being set
+     * @param int $id new value being set
      *
      * @return IrhpPermitRange
      */
-    public function setCabotage($cabotage)
+    public function setId($id)
     {
-        $this->cabotage = $cabotage;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the cabotage
+     * Get the id
      *
-     * @return boolean
-     */
-    public function getCabotage()
+     * @return int     */
+    public function getId()
     {
-        return $this->cabotage;
+        return $this->id;
     }
 
     /**
-     * Set the country
+     * Set the irhp permit stock
      *
-     * @param ArrayCollection $countrys collection being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock new value being set
      *
      * @return IrhpPermitRange
      */
-    public function setCountrys($countrys)
+    public function setIrhpPermitStock($irhpPermitStock)
     {
-        $this->countrys = $countrys;
+        $this->irhpPermitStock = $irhpPermitStock;
 
         return $this;
     }
 
     /**
-     * Get the countrys
+     * Get the irhp permit stock
      *
-     * @return ArrayCollection
-     */
-    public function getCountrys()
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock     */
+    public function getIrhpPermitStock()
     {
-        return $this->countrys;
-    }
-
-    /**
-     * Add a countrys
-     *
-     * @param ArrayCollection|mixed $countrys collection being added
-     *
-     * @return IrhpPermitRange
-     */
-    public function addCountrys($countrys)
-    {
-        if ($countrys instanceof ArrayCollection) {
-            $this->countrys = new ArrayCollection(
-                array_merge(
-                    $this->countrys->toArray(),
-                    $countrys->toArray()
-                )
-            );
-        } elseif (!$this->countrys->contains($countrys)) {
-            $this->countrys->add($countrys);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Remove a countrys
-     *
-     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
-     *
-     * @return IrhpPermitRange
-     */
-    public function removeCountrys($countrys)
-    {
-        if ($this->countrys->contains($countrys)) {
-            $this->countrys->removeElement($countrys);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return IrhpPermitRange
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
+        return $this->irhpPermitStock;
     }
 
     /**
      * Set the emissions category
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $emissionsCategory entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $emissionsCategory new value being set
      *
      * @return IrhpPermitRange
      */
@@ -393,11 +308,102 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the emissions category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getEmissionsCategory()
     {
         return $this->emissionsCategory;
+    }
+
+    /**
+     * Set the journey
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $journey new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setJourney($journey)
+    {
+        $this->journey = $journey;
+
+        return $this;
+    }
+
+    /**
+     * Get the journey
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getJourney()
+    {
+        return $this->journey;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the prefix
+     *
+     * @param string $prefix new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Get the prefix
+     *
+     * @return string     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 
     /**
@@ -417,41 +423,131 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the from no
      *
-     * @return int
-     */
+     * @return int     */
     public function getFromNo()
     {
         return $this->fromNo;
     }
 
     /**
-     * Set the id
+     * Set the to no
      *
-     * @param int $id new value being set
+     * @param int $toNo new value being set
      *
      * @return IrhpPermitRange
      */
-    public function setId($id)
+    public function setToNo($toNo)
     {
-        $this->id = $id;
+        $this->toNo = $toNo;
 
         return $this;
     }
 
     /**
-     * Get the id
+     * Get the to no
      *
-     * @return int
-     */
-    public function getId()
+     * @return int     */
+    public function getToNo()
     {
-        return $this->id;
+        return $this->toNo;
     }
 
     /**
-     * Set the irhp permit range attribute
+     * Set the cabotage
      *
-     * @param ArrayCollection $irhpPermitRangeAttributes collection being set as the value
+     * @param bool $cabotage new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setCabotage($cabotage)
+    {
+        $this->cabotage = $cabotage;
+
+        return $this;
+    }
+
+    /**
+     * Get the cabotage
+     *
+     * @return bool     */
+    public function getCabotage()
+    {
+        return $this->cabotage;
+    }
+
+    /**
+     * Set the ss reserve
+     *
+     * @param bool $ssReserve new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setSsReserve($ssReserve)
+    {
+        $this->ssReserve = $ssReserve;
+
+        return $this;
+    }
+
+    /**
+     * Get the ss reserve
+     *
+     * @return bool     */
+    public function getSsReserve()
+    {
+        return $this->ssReserve;
+    }
+
+    /**
+     * Set the lost replacement
+     *
+     * @param bool $lostReplacement new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setLostReplacement($lostReplacement)
+    {
+        $this->lostReplacement = $lostReplacement;
+
+        return $this;
+    }
+
+    /**
+     * Get the lost replacement
+     *
+     * @return bool     */
+    public function getLostReplacement()
+    {
+        return $this->lostReplacement;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return IrhpPermitRange
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Set the irhp permit range attributes
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRangeAttributes collection being set as the value
      *
      * @return IrhpPermitRange
      */
@@ -465,7 +561,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the irhp permit range attributes
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermitRangeAttributes()
     {
@@ -475,7 +571,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Add a irhp permit range attributes
      *
-     * @param ArrayCollection|mixed $irhpPermitRangeAttributes collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRangeAttributes collection being added
      *
      * @return IrhpPermitRange
      */
@@ -512,201 +608,72 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the irhp permit stock
+     * Set the countrys
      *
-     * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
      * @return IrhpPermitRange
      */
-    public function setIrhpPermitStock($irhpPermitStock)
+    public function setCountrys($countrys)
     {
-        $this->irhpPermitStock = $irhpPermitStock;
+        $this->countrys = $countrys;
 
         return $this;
     }
 
     /**
-     * Get the irhp permit stock
+     * Get the countrys
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getIrhpPermitStock()
+    public function getCountrys()
     {
-        return $this->irhpPermitStock;
+        return $this->countrys;
     }
 
     /**
-     * Set the journey
+     * Add a countrys
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $journey entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
      * @return IrhpPermitRange
      */
-    public function setJourney($journey)
+    public function addCountrys($countrys)
     {
-        $this->journey = $journey;
+        if ($countrys instanceof ArrayCollection) {
+            $this->countrys = new ArrayCollection(
+                array_merge(
+                    $this->countrys->toArray(),
+                    $countrys->toArray()
+                )
+            );
+        } elseif (!$this->countrys->contains($countrys)) {
+            $this->countrys->add($countrys);
+        }
 
         return $this;
     }
 
     /**
-     * Get the journey
+     * Remove a countrys
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getJourney()
-    {
-        return $this->journey;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
      * @return IrhpPermitRange
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function removeCountrys($countrys)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        if ($this->countrys->contains($countrys)) {
+            $this->countrys->removeElement($countrys);
+        }
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Set the irhp candidate permits
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the lost replacement
-     *
-     * @param boolean $lostReplacement new value being set
-     *
-     * @return IrhpPermitRange
-     */
-    public function setLostReplacement($lostReplacement)
-    {
-        $this->lostReplacement = $lostReplacement;
-
-        return $this;
-    }
-
-    /**
-     * Get the lost replacement
-     *
-     * @return boolean
-     */
-    public function getLostReplacement()
-    {
-        return $this->lostReplacement;
-    }
-
-    /**
-     * Set the prefix
-     *
-     * @param string $prefix new value being set
-     *
-     * @return IrhpPermitRange
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-
-        return $this;
-    }
-
-    /**
-     * Get the prefix
-     *
-     * @return string
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
-    }
-
-    /**
-     * Set the ss reserve
-     *
-     * @param boolean $ssReserve new value being set
-     *
-     * @return IrhpPermitRange
-     */
-    public function setSsReserve($ssReserve)
-    {
-        $this->ssReserve = $ssReserve;
-
-        return $this;
-    }
-
-    /**
-     * Get the ss reserve
-     *
-     * @return boolean
-     */
-    public function getSsReserve()
-    {
-        return $this->ssReserve;
-    }
-
-    /**
-     * Set the to no
-     *
-     * @param int $toNo new value being set
-     *
-     * @return IrhpPermitRange
-     */
-    public function setToNo($toNo)
-    {
-        $this->toNo = $toNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the to no
-     *
-     * @return int
-     */
-    public function getToNo()
-    {
-        return $this->toNo;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return IrhpPermitRange
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the irhp candidate permit
-     *
-     * @param ArrayCollection $irhpCandidatePermits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being set as the value
      *
      * @return IrhpPermitRange
      */
@@ -720,7 +687,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the irhp candidate permits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpCandidatePermits()
     {
@@ -730,7 +697,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Add a irhp candidate permits
      *
-     * @param ArrayCollection|mixed $irhpCandidatePermits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpCandidatePermits collection being added
      *
      * @return IrhpPermitRange
      */
@@ -767,9 +734,9 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     }
 
     /**
-     * Set the irhp permit
+     * Set the irhp permits
      *
-     * @param ArrayCollection $irhpPermits collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
      * @return IrhpPermitRange
      */
@@ -783,7 +750,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Get the irhp permits
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getIrhpPermits()
     {
@@ -793,7 +760,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     /**
      * Add a irhp permits
      *
-     * @param ArrayCollection|mixed $irhpPermits collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
      * @return IrhpPermitRange
      */
@@ -827,5 +794,13 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

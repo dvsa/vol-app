@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Doc;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * DocTemplate Abstract Entity
+ * AbstractDocTemplate Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -29,6 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_doc_template_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_doc_template_document_id", columns={"document_id"}),
  *        @ORM\Index(name="ix_doc_template_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="ix_doc_template_letter_type_id", columns={"letter_type_id"}),
  *        @ORM\Index(name="ix_doc_template_sub_category_id", columns={"sub_category_id"})
  *    }
  * )
@@ -43,14 +47,55 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     use SoftDeletableTrait;
 
     /**
-     * Category
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      *
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
+
+    /**
+     * Foreign Key to sub_category
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
+     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
+     */
+    protected $subCategory;
+
+    /**
+     * Link to new database-driven letter type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=true)
+     */
+    protected $letterType;
+
+    /**
+     * Link to the rtf template
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
+     */
+    protected $document;
 
     /**
      * Created by
@@ -64,49 +109,6 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Description
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
-     */
-    protected $description;
-
-    /**
-     * Document
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document",
-     *     fetch="LAZY",
-     *     inversedBy="templates"
-     * )
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=false)
-     */
-    protected $document;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is ni
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
-     */
-    protected $isNi = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -118,23 +120,31 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Sub category
+     * Brief description of what the document is
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
-    protected $subCategory;
+    protected $description = '';
 
     /**
-     * Suppress from op
+     * Is a Northern Ireland document
+     *
+     * @var string
+     *
+     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
+     */
+    protected $isNi = 0;
+
+    /**
+     * Do not send to organisation even if they are signed up to receive documents by email.
      *
      * @var string
      *
      * @ORM\Column(type="yesno", name="suppress_from_op", nullable=false)
      */
-    protected $suppressFromOp;
+    protected $suppressFromOp = 0;
 
     /**
      * Template slug
@@ -156,21 +166,16 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Doc template bookmark
+     * DocTemplateBookmarks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark",
-     *     mappedBy="docTemplate"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark", mappedBy="docTemplate")
      */
     protected $docTemplateBookmarks;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -178,19 +183,41 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->docTemplateBookmarks = new ArrayCollection();
+    }
+
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
      * Set the category
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\Category $category entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
      * @return DocTemplate
      */
@@ -204,17 +231,85 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
     public function getCategory()
     {
         return $this->category;
     }
 
     /**
+     * Set the sub category
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setSubCategory($subCategory)
+    {
+        $this->subCategory = $subCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get the sub category
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+    public function getSubCategory()
+    {
+        return $this->subCategory;
+    }
+
+    /**
+     * Set the letter type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setLetterType($letterType)
+    {
+        $this->letterType = $letterType;
+
+        return $this;
+    }
+
+    /**
+     * Get the letter type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType     */
+    public function getLetterType()
+    {
+        return $this->letterType;
+    }
+
+    /**
+     * Set the document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    /**
+     * Get the document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return DocTemplate
      */
@@ -228,11 +323,33 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return DocTemplate
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -252,59 +369,10 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the description
      *
-     * @return string
-     */
+     * @return string     */
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set the document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document entity being set as the value
-     *
-     * @return DocTemplate
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-
-        return $this;
-    }
-
-    /**
-     * Get the document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return DocTemplate
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -324,59 +392,10 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the is ni
      *
-     * @return string
-     */
+     * @return string     */
     public function getIsNi()
     {
         return $this->isNi;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return DocTemplate
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the sub category
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory entity being set as the value
-     *
-     * @return DocTemplate
-     */
-    public function setSubCategory($subCategory)
-    {
-        $this->subCategory = $subCategory;
-
-        return $this;
-    }
-
-    /**
-     * Get the sub category
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
-     */
-    public function getSubCategory()
-    {
-        return $this->subCategory;
     }
 
     /**
@@ -396,8 +415,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the suppress from op
      *
-     * @return string
-     */
+     * @return string     */
     public function getSuppressFromOp()
     {
         return $this->suppressFromOp;
@@ -420,8 +438,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the template slug
      *
-     * @return string
-     */
+     * @return string     */
     public function getTemplateSlug()
     {
         return $this->templateSlug;
@@ -444,17 +461,16 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the doc template bookmark
+     * Set the doc template bookmarks
      *
-     * @param ArrayCollection $docTemplateBookmarks collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $docTemplateBookmarks collection being set as the value
      *
      * @return DocTemplate
      */
@@ -468,7 +484,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Get the doc template bookmarks
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getDocTemplateBookmarks()
     {
@@ -478,7 +494,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Add a doc template bookmarks
      *
-     * @param ArrayCollection|mixed $docTemplateBookmarks collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $docTemplateBookmarks collection being added
      *
      * @return DocTemplate
      */
@@ -512,5 +528,13 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

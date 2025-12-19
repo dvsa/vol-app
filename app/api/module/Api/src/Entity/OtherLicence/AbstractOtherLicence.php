@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\OtherLicence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * OtherLicence Abstract Entity
+ * AbstractOtherLicence Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,11 +33,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_other_licence_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_other_licence_previous_licence_type", columns={"previous_licence_type"}),
  *        @ORM\Index(name="ix_other_licence_role", columns={"role"}),
- *        @ORM\Index(name="ix_other_licence_transport_manager_application_id",
-     *     columns={"transport_manager_application_id"}),
+ *        @ORM\Index(name="ix_other_licence_transport_manager_application_id", columns={"transport_manager_application_id"}),
  *        @ORM\Index(name="ix_other_licence_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_other_licence_transport_manager_licence_id",
-     *     columns={"transport_manager_licence_id"})
+ *        @ORM\Index(name="ix_other_licence_transport_manager_licence_id", columns={"transport_manager_licence_id"})
  *    }
  * )
  */
@@ -40,33 +43,81 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Additional information
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var string
+     * @var int
      *
-     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $additionalInformation;
+    protected $id;
 
     /**
-     * Application
+     * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Application\Application",
-     *     fetch="LAZY",
-     *     inversedBy="otherLicences"
-     * )
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
      * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
     protected $application;
+
+    /**
+     * Foreign Key to transport_manager
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportManager;
+
+    /**
+     * Foreign Key to transport_manager_licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_licence_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportManagerLicence;
+
+    /**
+     * Foreign Key to transport_manager_application
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication", fetch="LAZY")
+     * @ORM\JoinColumn(name="transport_manager_application_id", referencedColumnName="id", nullable=true)
+     */
+    protected $transportManagerApplication;
+
+    /**
+     * Role
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="role", referencedColumnName="id", nullable=true)
+     */
+    protected $role;
+
+    /**
+     * PreviousLicenceType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="previous_licence_type", referencedColumnName="id", nullable=true)
+     */
+    protected $previousLicenceType;
 
     /**
      * Created by
@@ -78,53 +129,6 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Disqualification date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="disqualification_date", nullable=true)
-     */
-    protected $disqualificationDate;
-
-    /**
-     * Disqualification length
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="disqualification_length", length=255, nullable=true)
-     */
-    protected $disqualificationLength;
-
-    /**
-     * Holder name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="holder_name", length=90, nullable=true)
-     */
-    protected $holderName;
-
-    /**
-     * Hours per week
-     *
-     * @var float
-     *
-     * @ORM\Column(type="decimal", name="hours_per_week", precision=3, scale=1, nullable=true)
-     */
-    protected $hoursPerWeek;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
 
     /**
      * Last modified by
@@ -147,23 +151,13 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     protected $licNo;
 
     /**
-     * Operating centres
+     * Holder name
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="operating_centres", length=255, nullable=true)
+     * @ORM\Column(type="string", name="holder_name", length=90, nullable=true)
      */
-    protected $operatingCentres;
-
-    /**
-     * Previous licence type
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="previous_licence_type", referencedColumnName="id", nullable=true)
-     */
-    protected $previousLicenceType;
+    protected $holderName;
 
     /**
      * Purchase date
@@ -175,14 +169,49 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     protected $purchaseDate;
 
     /**
-     * Role
+     * willSurrender
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="role", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="yesnonull", name="will_surrender", nullable=true)
      */
-    protected $role;
+    protected $willSurrender;
+
+    /**
+     * Disqualification date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="disqualification_date", nullable=true)
+     */
+    protected $disqualificationDate;
+
+    /**
+     * Disqualification length
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="disqualification_length", length=255, nullable=true)
+     */
+    protected $disqualificationLength;
+
+    /**
+     * Additional information
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
+     */
+    protected $additionalInformation;
+
+    /**
+     * Operating centres
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="operating_centres", length=255, nullable=true)
+     */
+    protected $operatingCentres;
 
     /**
      * Total auth vehicles
@@ -194,48 +223,13 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     protected $totalAuthVehicles;
 
     /**
-     * Transport manager
+     * If on transport manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var string
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager",
-     *     fetch="LAZY",
-     *     inversedBy="otherLicences"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="decimal", name="hours_per_week", nullable=true)
      */
-    protected $transportManager;
-
-    /**
-     * Transport manager application
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication",
-     *     fetch="LAZY",
-     *     inversedBy="otherLicences"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_application_id",
-     *     referencedColumnName="id",
-     *     nullable=true)
-     */
-    protected $transportManagerApplication;
-
-    /**
-     * Transport manager licence
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence",
-     *     fetch="LAZY",
-     *     inversedBy="otherLicences"
-     * )
-     * @ORM\JoinColumn(name="transport_manager_licence_id", referencedColumnName="id", nullable=true)
-     */
-    protected $transportManagerLicence;
+    protected $hoursPerWeek;
 
     /**
      * Version
@@ -248,42 +242,48 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     protected $version = 1;
 
     /**
-     * Will surrender
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="will_surrender", nullable=true)
+     * Initialise the collections
      */
-    protected $willSurrender;
+    public function __construct()
+    {
+        $this->initCollections();
+    }
 
     /**
-     * Set the additional information
+     * Initialise collections
+     */
+    public function initCollections(): void
+    {
+    }
+
+
+    /**
+     * Set the id
      *
-     * @param string $additionalInformation new value being set
+     * @param int $id new value being set
      *
      * @return OtherLicence
      */
-    public function setAdditionalInformation($additionalInformation)
+    public function setId($id)
     {
-        $this->additionalInformation = $additionalInformation;
+        $this->id = $id;
 
         return $this;
     }
 
     /**
-     * Get the additional information
+     * Get the id
      *
-     * @return string
-     */
-    public function getAdditionalInformation()
+     * @return int     */
+    public function getId()
     {
-        return $this->additionalInformation;
+        return $this->id;
     }
 
     /**
      * Set the application
      *
-     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
      * @return OtherLicence
      */
@@ -297,17 +297,131 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
     public function getApplication()
     {
         return $this->application;
     }
 
     /**
+     * Set the transport manager
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
+     * Set the transport manager licence
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence $transportManagerLicence new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setTransportManagerLicence($transportManagerLicence)
+    {
+        $this->transportManagerLicence = $transportManagerLicence;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager licence
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence     */
+    public function getTransportManagerLicence()
+    {
+        return $this->transportManagerLicence;
+    }
+
+    /**
+     * Set the transport manager application
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication $transportManagerApplication new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setTransportManagerApplication($transportManagerApplication)
+    {
+        $this->transportManagerApplication = $transportManagerApplication;
+
+        return $this;
+    }
+
+    /**
+     * Get the transport manager application
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication     */
+    public function getTransportManagerApplication()
+    {
+        return $this->transportManagerApplication;
+    }
+
+    /**
+     * Set the role
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $role new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get the role
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the previous licence type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $previousLicenceType new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setPreviousLicenceType($previousLicenceType)
+    {
+        $this->previousLicenceType = $previousLicenceType;
+
+        return $this;
+    }
+
+    /**
+     * Get the previous licence type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getPreviousLicenceType()
+    {
+        return $this->previousLicenceType;
+    }
+
+    /**
      * Set the created by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return OtherLicence
      */
@@ -321,11 +435,131 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getCreatedBy()
     {
         return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the lic no
+     *
+     * @param string $licNo new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setLicNo($licNo)
+    {
+        $this->licNo = $licNo;
+
+        return $this;
+    }
+
+    /**
+     * Get the lic no
+     *
+     * @return string     */
+    public function getLicNo()
+    {
+        return $this->licNo;
+    }
+
+    /**
+     * Set the holder name
+     *
+     * @param string $holderName new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setHolderName($holderName)
+    {
+        $this->holderName = $holderName;
+
+        return $this;
+    }
+
+    /**
+     * Get the holder name
+     *
+     * @return string     */
+    public function getHolderName()
+    {
+        return $this->holderName;
+    }
+
+    /**
+     * Set the purchase date
+     *
+     * @param \DateTime $purchaseDate new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setPurchaseDate($purchaseDate)
+    {
+        $this->purchaseDate = $purchaseDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the purchase date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getPurchaseDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->purchaseDate);
+        }
+
+        return $this->purchaseDate;
+    }
+
+    /**
+     * Set the will surrender
+     *
+     * @param string $willSurrender new value being set
+     *
+     * @return OtherLicence
+     */
+    public function setWillSurrender($willSurrender)
+    {
+        $this->willSurrender = $willSurrender;
+
+        return $this;
+    }
+
+    /**
+     * Get the will surrender
+     *
+     * @return string     */
+    public function getWillSurrender()
+    {
+        return $this->willSurrender;
     }
 
     /**
@@ -347,9 +581,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDisqualificationDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -376,131 +608,33 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the disqualification length
      *
-     * @return string
-     */
+     * @return string     */
     public function getDisqualificationLength()
     {
         return $this->disqualificationLength;
     }
 
     /**
-     * Set the holder name
+     * Set the additional information
      *
-     * @param string $holderName new value being set
+     * @param string $additionalInformation new value being set
      *
      * @return OtherLicence
      */
-    public function setHolderName($holderName)
+    public function setAdditionalInformation($additionalInformation)
     {
-        $this->holderName = $holderName;
+        $this->additionalInformation = $additionalInformation;
 
         return $this;
     }
 
     /**
-     * Get the holder name
+     * Get the additional information
      *
-     * @return string
-     */
-    public function getHolderName()
+     * @return string     */
+    public function getAdditionalInformation()
     {
-        return $this->holderName;
-    }
-
-    /**
-     * Set the hours per week
-     *
-     * @param float $hoursPerWeek new value being set
-     *
-     * @return OtherLicence
-     */
-    public function setHoursPerWeek($hoursPerWeek)
-    {
-        $this->hoursPerWeek = $hoursPerWeek;
-
-        return $this;
-    }
-
-    /**
-     * Get the hours per week
-     *
-     * @return float
-     */
-    public function getHoursPerWeek()
-    {
-        return $this->hoursPerWeek;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return OtherLicence
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return OtherLicence
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the lic no
-     *
-     * @param string $licNo new value being set
-     *
-     * @return OtherLicence
-     */
-    public function setLicNo($licNo)
-    {
-        $this->licNo = $licNo;
-
-        return $this;
-    }
-
-    /**
-     * Get the lic no
-     *
-     * @return string
-     */
-    public function getLicNo()
-    {
-        return $this->licNo;
+        return $this->additionalInformation;
     }
 
     /**
@@ -520,90 +654,10 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the operating centres
      *
-     * @return string
-     */
+     * @return string     */
     public function getOperatingCentres()
     {
         return $this->operatingCentres;
-    }
-
-    /**
-     * Set the previous licence type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $previousLicenceType entity being set as the value
-     *
-     * @return OtherLicence
-     */
-    public function setPreviousLicenceType($previousLicenceType)
-    {
-        $this->previousLicenceType = $previousLicenceType;
-
-        return $this;
-    }
-
-    /**
-     * Get the previous licence type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getPreviousLicenceType()
-    {
-        return $this->previousLicenceType;
-    }
-
-    /**
-     * Set the purchase date
-     *
-     * @param \DateTime $purchaseDate new value being set
-     *
-     * @return OtherLicence
-     */
-    public function setPurchaseDate($purchaseDate)
-    {
-        $this->purchaseDate = $purchaseDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the purchase date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getPurchaseDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->purchaseDate);
-        }
-
-        return $this->purchaseDate;
-    }
-
-    /**
-     * Set the role
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $role entity being set as the value
-     *
-     * @return OtherLicence
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get the role
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
@@ -623,83 +677,33 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the total auth vehicles
      *
-     * @return int
-     */
+     * @return int     */
     public function getTotalAuthVehicles()
     {
         return $this->totalAuthVehicles;
     }
 
     /**
-     * Set the transport manager
+     * Set the hours per week
      *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager entity being set as the value
+     * @param string $hoursPerWeek new value being set
      *
      * @return OtherLicence
      */
-    public function setTransportManager($transportManager)
+    public function setHoursPerWeek($hoursPerWeek)
     {
-        $this->transportManager = $transportManager;
+        $this->hoursPerWeek = $hoursPerWeek;
 
         return $this;
     }
 
     /**
-     * Get the transport manager
+     * Get the hours per week
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     */
-    public function getTransportManager()
+     * @return string     */
+    public function getHoursPerWeek()
     {
-        return $this->transportManager;
-    }
-
-    /**
-     * Set the transport manager application
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication $transportManagerApplication entity being set as the value
-     *
-     * @return OtherLicence
-     */
-    public function setTransportManagerApplication($transportManagerApplication)
-    {
-        $this->transportManagerApplication = $transportManagerApplication;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager application
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
-     */
-    public function getTransportManagerApplication()
-    {
-        return $this->transportManagerApplication;
-    }
-
-    /**
-     * Set the transport manager licence
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence $transportManagerLicence entity being set as the value
-     *
-     * @return OtherLicence
-     */
-    public function setTransportManagerLicence($transportManagerLicence)
-    {
-        $this->transportManagerLicence = $transportManagerLicence;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport manager licence
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
-     */
-    public function getTransportManagerLicence()
-    {
-        return $this->transportManagerLicence;
+        return $this->hoursPerWeek;
     }
 
     /**
@@ -719,34 +723,17 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the will surrender
-     *
-     * @param string $willSurrender new value being set
-     *
-     * @return OtherLicence
+     * Get bundle data
      */
-    public function setWillSurrender($willSurrender)
+    public function __toString(): string
     {
-        $this->willSurrender = $willSurrender;
-
-        return $this;
-    }
-
-    /**
-     * Get the will surrender
-     *
-     * @return string
-     */
-    public function getWillSurrender()
-    {
-        return $this->willSurrender;
+        return (string) $this->getId();
     }
 }

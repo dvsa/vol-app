@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>LTR-2024-ABC123 - Letter Preview</title>
+    <style>
+      /* A4 paper sizing */
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      @media print {
+        body {
+          margin: 0;
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 12pt;
+        line-height: 1.5;
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 20mm;
+        box-sizing: border-box;
+        color: #0b0c0c;
+        background: #f3f2f1;
+      }
+
+      .letter-container {
+        background: white;
+        padding: 20mm;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .letter-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10mm;
+      }
+
+      .dvsa-logo img {
+        width: 180px;
+        height: auto;
+      }
+
+      .sender-details {
+        text-align: right;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+
+      .recipient-address {
+        margin: 15mm 0 10mm 0;
+        line-height: 1.4;
+      }
+
+      .date-reference {
+        margin-bottom: 10mm;
+      }
+
+      .date-reference p {
+        margin: 0 0 2mm 0;
+      }
+
+      .salutation {
+        margin-bottom: 5mm;
+      }
+
+      .letter-body {
+        margin-bottom: 10mm;
+      }
+
+      .section {
+        margin-bottom: 8mm;
+      }
+
+      .issue {
+        margin-bottom: 8mm;
+        padding-left: 5mm;
+        border-left: 3px solid #1d70b8;
+      }
+
+      .issue-heading {
+        font-weight: bold;
+        margin-bottom: 3mm;
+      }
+
+      .closing {
+        margin-bottom: 10mm;
+      }
+
+      .signature-block {
+        margin-top: 15mm;
+      }
+
+      .signature-block p {
+        margin: 0 0 2mm 0;
+      }
+
+      .footer {
+        margin-top: 20mm;
+        padding-top: 5mm;
+        border-top: 1px solid #b1b4b6;
+        font-size: 10pt;
+        color: #505a5f;
+      }
+
+      .appendices {
+        page-break-before: always;
+        margin-top: 10mm;
+        padding-top: 10mm;
+        border-top: 2px solid #0b0c0c;
+      }
+
+      .appendix {
+        margin-bottom: 10mm;
+      }
+
+      .appendix-title {
+        font-weight: bold;
+        margin-bottom: 3mm;
+      }
+
+      /* Print styles - remove background */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+        .letter-container {
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="letter-container">
+      <div class="letter-header">
+        <div class="dvsa-logo">
+          <img
+            src="https://assets.publishing.service.gov.uk/media/5a6117ec40f0b652634cc32b/s960_dvsa.jpg"
+            alt="Driver and Vehicle Standards Agency"
+          />
+        </div>
+        <div class="sender-details">
+          Office of the Traffic Commissioner<br />
+          Address 1<br />
+          Address 2<br />
+          City<br />
+          Postcode<br />
+          <br />
+          Tel: 0000 000 0000<br />
+          Email: enquiries@otc.gov.uk
+        </div>
+      </div>
+
+      <div class="recipient-address">
+        Mr John Smith<br />
+        ABC Haulage Ltd<br />
+        Unit 5 Industrial Estate<br />
+        123 Transport Road<br />
+        Manchester<br />
+        M1 2AB
+      </div>
+
+      <div class="date-reference">
+        <p>Date: 9 December 2024</p>
+        <p>Our ref: LTR-2024-ABC123</p>
+      </div>
+
+      <div class="salutation">Dear Mr Smith</div>
+
+      <div class="letter-body">
+        <div class="sections">
+          <div class="section">
+            <p>
+              <strong
+                >Re: Operator Licence OD1234567 - First Warning Letter</strong
+              >
+            </p>
+            <p>Into Content</p>
+          </div>
+
+          <div class="section">
+            <p>Section Content</p>
+          </div>
+        </div>
+
+        <div class="issues">
+          <div class="issue">
+            <div class="issue-heading">Issue 1: Issue Title</div>
+            <p>Issue 1 Content</p>
+          </div>
+
+          <div class="issue">
+            <div class="issue-heading">Issue 2: Issue Title</div>
+            <p>Issue 2 Content</p>
+          </div>
+        </div>
+
+        <div class="closing">
+          <p>Section Content</p>
+        </div>
+      </div>
+
+      <div class="signature-block">
+        <p>Yours sincerely</p>
+        <br />
+        <p>Office of the Traffic Commissioner</p>
+      </div>
+
+      <div class="footer">Vehicle Operator Licensing</div>
+
+      <div class="appendices">
+        <h3>Appendices</h3>
+
+        <div class="appendix">
+          <div class="appendix-title">Appendix A: Relevant Legislation</div>
+          <p>
+            The Goods Vehicles (Licensing of Operators) Act 1995 sets out the
+            requirements for holding an operator's licence. Section 26 provides
+            that the Traffic Commissioner may take regulatory action where an
+            operator fails to comply with the conditions of their licence.
+          </p>
+        </div>
+
+        <div class="appendix">
+          <div class="appendix-title">Appendix B: Your Rights</div>
+          <p>
+            You have the right to make written representations in response to
+            this letter. If a public inquiry is called, you will be given the
+            opportunity to attend and present your case in person or through a
+            legal representative.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

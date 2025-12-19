@@ -12,5 +12,5 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryByIdHandler;
 final class ById extends AbstractQueryByIdHandler
 {
     protected $repoServiceName = 'DocTemplate';
-    protected $bundle = ['document', 'category', 'subCategory' => ['category']];
+    protected $bundle = ['document', 'category', 'subCategory' => ['category'], 'letterType'];
 }

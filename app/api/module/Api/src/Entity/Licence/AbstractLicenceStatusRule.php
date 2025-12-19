@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * LicenceStatusRule Abstract Entity
+ * AbstractLicenceStatusRule Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -34,10 +39,41 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
+
+    /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to licence
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
+     */
+    protected $licence;
+
+    /**
+     * The status the licence will inherit on the start date
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="licence_status", referencedColumnName="id")
+     */
+    protected $licenceStatus;
 
     /**
      * Created by
@@ -51,35 +87,6 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     protected $createdBy;
 
     /**
-     * End date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="end_date", nullable=true)
-     */
-    protected $endDate;
-
-    /**
-     * End processed date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="end_processed_date", nullable=true)
-     */
-    protected $endProcessedDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -91,39 +98,6 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     protected $lastModifiedBy;
 
     /**
-     * Licence
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence",
-     *     fetch="LAZY",
-     *     inversedBy="licenceStatusRules"
-     * )
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=false)
-     */
-    protected $licence;
-
-    /**
-     * Licence status
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_status", referencedColumnName="id", nullable=false)
-     */
-    protected $licenceStatus;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
      * Start date
      *
      * @var \DateTime
@@ -133,13 +107,31 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     protected $startDate;
 
     /**
-     * Start processed date
+     * End date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="end_date", nullable=true)
+     */
+    protected $endDate;
+
+    /**
+     * Date processed by batch job
      *
      * @var \DateTime
      *
      * @ORM\Column(type="datetime", name="start_processed_date", nullable=true)
      */
     protected $startProcessedDate;
+
+    /**
+     * End processed date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="end_processed_date", nullable=true)
+     */
+    protected $endProcessedDate;
 
     /**
      * Version
@@ -152,90 +144,29 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     protected $version = 1;
 
     /**
-     * Set the created by
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
+     * @var int
      *
-     * @return LicenceStatusRule
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
+    protected $olbsKey;
 
-        return $this;
+    /**
+     * Initialise the collections
+     */
+    public function __construct()
+    {
+        $this->initCollections();
     }
 
     /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
+     * Initialise collections
      */
-    public function getCreatedBy()
+    public function initCollections(): void
     {
-        return $this->createdBy;
     }
 
-    /**
-     * Set the end date
-     *
-     * @param \DateTime $endDate new value being set
-     *
-     * @return LicenceStatusRule
-     */
-    public function setEndDate($endDate)
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the end date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEndDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->endDate);
-        }
-
-        return $this->endDate;
-    }
-
-    /**
-     * Set the end processed date
-     *
-     * @param \DateTime $endProcessedDate new value being set
-     *
-     * @return LicenceStatusRule
-     */
-    public function setEndProcessedDate($endProcessedDate)
-    {
-        $this->endProcessedDate = $endProcessedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the end processed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getEndProcessedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->endProcessedDate);
-        }
-
-        return $this->endProcessedDate;
-    }
 
     /**
      * Set the id
@@ -254,41 +185,16 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return LicenceStatusRule
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
      * Set the licence
      *
-     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
      * @return LicenceStatusRule
      */
@@ -302,8 +208,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
     public function getLicence()
     {
         return $this->licence;
@@ -312,7 +217,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Set the licence status
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceStatus entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceStatus new value being set
      *
      * @return LicenceStatusRule
      */
@@ -326,35 +231,56 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the licence status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getLicenceStatus()
     {
         return $this->licenceStatus;
     }
 
     /**
-     * Set the olbs key
+     * Set the created by
      *
-     * @param int $olbsKey new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return LicenceStatusRule
      */
-    public function setOlbsKey($olbsKey)
+    public function setCreatedBy($createdBy)
     {
-        $this->olbsKey = $olbsKey;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the olbs key
+     * Get the created by
      *
-     * @return int
-     */
-    public function getOlbsKey()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->olbsKey;
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return LicenceStatusRule
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -376,9 +302,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -386,6 +310,35 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
         }
 
         return $this->startDate;
+    }
+
+    /**
+     * Set the end date
+     *
+     * @param \DateTime $endDate new value being set
+     *
+     * @return LicenceStatusRule
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the end date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEndDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->endDate);
+        }
+
+        return $this->endDate;
     }
 
     /**
@@ -407,9 +360,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getStartProcessedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -417,6 +368,35 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
         }
 
         return $this->startProcessedDate;
+    }
+
+    /**
+     * Set the end processed date
+     *
+     * @param \DateTime $endProcessedDate new value being set
+     *
+     * @return LicenceStatusRule
+     */
+    public function setEndProcessedDate($endProcessedDate)
+    {
+        $this->endProcessedDate = $endProcessedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the end processed date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getEndProcessedDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->endProcessedDate);
+        }
+
+        return $this->endProcessedDate;
     }
 
     /**
@@ -436,10 +416,40 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set the olbs key
+     *
+     * @param int $olbsKey new value being set
+     *
+     * @return LicenceStatusRule
+     */
+    public function setOlbsKey($olbsKey)
+    {
+        $this->olbsKey = $olbsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get the olbs key
+     *
+     * @return int     */
+    public function getOlbsKey()
+    {
+        return $this->olbsKey;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

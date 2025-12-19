@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Generic;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ApplicationPathGroup Abstract Entity
+ * AbstractApplicationPathGroup Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -37,6 +40,17 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     use ModifiedOnTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -46,29 +60,6 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      * @Gedmo\Blameable(on="create")
      */
     protected $createdBy;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is visible in internal
-     *
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean",
-     *     name="is_visible_in_internal",
-     *     nullable=false,
-     *     options={"default": 1})
-     */
-    protected $isVisibleInInternal = 1;
 
     /**
      * Last modified by
@@ -88,7 +79,16 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
-    protected $name;
+    protected $name = '';
+
+    /**
+     * Is visible in internal
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="is_visible_in_internal", nullable=false, options={"default": 1})
+     */
+    protected $isVisibleInInternal = 1;
 
     /**
      * Version
@@ -101,21 +101,16 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     protected $version = 1;
 
     /**
-     * Application path
+     * ApplicationPaths
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath",
-     *     mappedBy="applicationPathGroup"
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath", mappedBy="applicationPathGroup")
      */
     protected $applicationPaths;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -123,38 +118,13 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->applicationPaths = new ArrayCollection();
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ApplicationPathGroup
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -173,41 +143,39 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the is visible in internal
+     * Set the created by
      *
-     * @param boolean $isVisibleInInternal new value being set
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
      * @return ApplicationPathGroup
      */
-    public function setIsVisibleInInternal($isVisibleInInternal)
+    public function setCreatedBy($createdBy)
     {
-        $this->isVisibleInInternal = $isVisibleInInternal;
+        $this->createdBy = $createdBy;
 
         return $this;
     }
 
     /**
-     * Get the is visible in internal
+     * Get the created by
      *
-     * @return boolean
-     */
-    public function getIsVisibleInInternal()
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
     {
-        return $this->isVisibleInInternal;
+        return $this->createdBy;
     }
 
     /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return ApplicationPathGroup
      */
@@ -221,8 +189,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -245,11 +212,33 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the name
      *
-     * @return string
-     */
+     * @return string     */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set the is visible in internal
+     *
+     * @param bool $isVisibleInInternal new value being set
+     *
+     * @return ApplicationPathGroup
+     */
+    public function setIsVisibleInInternal($isVisibleInInternal)
+    {
+        $this->isVisibleInInternal = $isVisibleInInternal;
+
+        return $this;
+    }
+
+    /**
+     * Get the is visible in internal
+     *
+     * @return bool     */
+    public function getIsVisibleInInternal()
+    {
+        return $this->isVisibleInInternal;
     }
 
     /**
@@ -269,17 +258,16 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the application path
+     * Set the application paths
      *
-     * @param ArrayCollection $applicationPaths collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being set as the value
      *
      * @return ApplicationPathGroup
      */
@@ -293,7 +281,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Get the application paths
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getApplicationPaths()
     {
@@ -303,7 +291,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
     /**
      * Add a application paths
      *
-     * @param ArrayCollection|mixed $applicationPaths collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationPaths collection being added
      *
      * @return ApplicationPathGroup
      */
@@ -337,5 +325,13 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

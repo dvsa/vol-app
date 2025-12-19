@@ -32,7 +32,9 @@ class LicenceOperatingCentreTest extends QueryHandlerTestCase
             'address' => [
                 'countryCode'
             ],
-            'adDocuments'
+            'adDocuments' => [
+                'application'
+            ]
         ]
     ];
 

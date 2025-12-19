@@ -1,13 +1,11 @@
 <?php
 
-/**
- * Process Ebsr pack
- */
-
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
+use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Entity\Task\Task;
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\BusRegistrationInputFactory;
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\ProcessedDataInputFactory;
 use Dvsa\Olcs\Api\Service\Ebsr\InputFilter\ShortNoticeInputFactory;
@@ -54,6 +52,12 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
     use UploaderAwareTrait;
     use FileProcessorAwareTrait;
     use ConfigAwareTrait;
+
+    public const TASK_DESC_REFRESH = 'Data refresh';
+    public const TASK_DESC_NEW = 'New application';
+    public const TASK_DESC_VAR = 'Variation';
+    public const TASK_DESC_CANCEL = 'Cancellation';
+    public const TASK_DESCRIPTION = '%s created: %s';
 
     protected $repoServiceName = 'Bus';
 
@@ -212,6 +216,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         $ebsrSub->setVariationNo($ebsrData['variationNo']);
         $ebsrSub->setRegistrationNo($ebsrData['routeNo']);
         $ebsrSub->setOrganisationEmailAddress($ebsrData['organisationEmail']);
+        $ebsrSub->setTxcVersion($ebsrData['txcSchemaVersion']);
 
         return $ebsrSub;
     }
@@ -307,7 +312,8 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         $busRegId = $busReg->getId();
         $sideEffects = $this->persistDocuments($ebsrData, $busReg, $ebsrSub, $docPath);
         $sideEffects[] = $this->createTxcInboxCmd($busRegId);
-        $sideEffects[] = $this->getRequestMapQueueCmd($busReg->getId());
+        $sideEffects[] = $this->getRequestMapQueueCmd($busRegId);
+        $sideEffects[] = $this->createTaskCmd($busReg);
 
         if ($busReg->isChargeableStatus()) {
             $sideEffects[] = CreateBusFeeCmd::create(['id' => $busRegId]);
@@ -399,14 +405,10 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
 
     /**
      * Returns a command to queue a transxchange map request
-     *
-     * @param int $busRegId bus reg id
-     *
-     * @return RequestMapQueueCmd
      */
-    protected function getRequestMapQueueCmd($busRegId)
+    protected function getRequestMapQueueCmd(int $busRegId): RequestMapQueueCmd
     {
-        return RequestMapQueueCmd::create(['id' => $busRegId, 'scale' => 'auto', 'fromNewEbsr' => true]);
+        return RequestMapQueueCmd::create(['id' => $busRegId, 'scale' => 'auto']);
     }
 
     /**
@@ -443,6 +445,37 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
     protected function getEbsrErrorEmailCmd($ebsrId)
     {
         return $this->emailQueue(SendEbsrErrorsCmd::class, ['id' => $ebsrId], $ebsrId);
+    }
+
+    private function createTaskCmd(BusRegEntity $busReg): CreateTask
+    {
+        $appType = self::TASK_DESC_REFRESH;
+
+        if (!$busReg->isEbsrRefresh()) {
+            $status = $busReg->getStatus()->getId();
+
+            switch ($status) {
+                case BusRegEntity::STATUS_CANCEL:
+                    $appType = self::TASK_DESC_CANCEL;
+                    break;
+                case BusRegEntity::STATUS_VAR:
+                    $appType = self::TASK_DESC_VAR;
+                    break;
+                default:
+                    $appType = self::TASK_DESC_NEW;
+            }
+        }
+
+        $data = [
+            'category' => Task::CATEGORY_BUS,
+            'subCategory' => Task::SUBCATEGORY_EBSR,
+            'description' => sprintf(self::TASK_DESCRIPTION, $appType, $busReg->getRegNo()),
+            'actionDate' => date('Y-m-d'),
+            'busReg' => $busReg->getId(),
+            'licence' => $busReg->getLicence()->getId(),
+        ];
+
+        return CreateTask::create($data);
     }
 
     /**

@@ -28,7 +28,9 @@ class ApplicationOperatingCentreTest extends QueryHandlerTestCase
             'address' => [
                 'countryCode'
             ],
-            'adDocuments'
+            'adDocuments' => [
+                'application'
+            ]
         ]
     ];
 

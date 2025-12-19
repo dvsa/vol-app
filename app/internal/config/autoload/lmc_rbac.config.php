@@ -46,6 +46,8 @@ return [
             'not-found' => ['*'],
             'server-error' => ['*'],
             'create-translation-csv' => ['*'],
+            'static-assets' => ['*'],
+            'styles-assets' => ['*'],
 
             // Admin Module Routes
             'admin-dashboard/admin-report/upload*' => [RefData::PERMISSION_SYSTEM_ADMIN],
@@ -60,6 +62,12 @@ return [
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-feature-toggle*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-master-template*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-letter-type*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-letter-section*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-letter-issue*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-letter-issue-type*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-letter-test-data*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-permits*' => [RefData::PERMISSION_INTERNAL_PERMITS],
             'admin-dashboard/admin-email-templates' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/content-management*' => [RefData::PERMISSION_SYSTEM_ADMIN],

@@ -322,6 +322,11 @@ module "service" {
 
     jobs = [
       {
+        name     = "cache-clear",
+        commands = ["batch:cache-clear", "--flush-all", "--force"],
+        timeout  = 300,
+      },
+      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
@@ -414,7 +419,7 @@ module "service" {
         name     = "flag-urgent-tasks",
         commands = ["batch:flag-urgent-tasks"],
         timeout  = 1800,
-        schedule = ["cron(0 8-17 * * ? *)"],
+        schedule = ["cron(0 6-20 * * ? *)"],
       },
       {
         name     = "import-users-from-csv",
@@ -442,7 +447,7 @@ module "service" {
         name     = "licence-status-rules",
         commands = ["batch:licence-status-rules"],
         timeout  = 1800,
-        schedule = ["cron(0 8-17 * * ? *)"],
+        schedule = ["cron(0 6-20 * * ? *)"],
       },
       {
         name     = "process-cl",
@@ -470,7 +475,7 @@ module "service" {
         name     = "resolve-payments",
         commands = ["batch:resolve-payments"],
         timeout  = 150,
-        schedule = ["cron(0/5 8-17 * * ? *)"],
+        schedule = ["cron(0/5 6-20 * * ? *)"],
       },
       {
         name     = "system-parameter",
@@ -496,85 +501,85 @@ module "service" {
         name     = "process-queue-general",
         commands = ["queue:process-queue", "--exclude", "que_typ_ch_compare,que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing,que_typ_print,que_typ_disc_printing_print,que_typ_create_com_lic,que_typ_remove_deleted_docs,que_typ_permit_generate,que_typ_permit_print,que_typ_run_ecmt_scoring,que_typ_accept_ecmt_scoring,que_typ_irhp_permits_allocate", "--queue-duration", "110", ],
         timeout  = 120,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-community-licences",
         commands = ["queue:process-queue", "--type", "que_typ_create_com_lic"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-disc-generation",
         commands = ["queue:process-queue", "--type", "que_typ_create_gds_vehicle_list,que_typ_create_psv_vehicle_list,que_typ_disc_printing"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-disc-print",
         commands = ["queue:process-queue", "--type", "que_typ_disc_printing_print", "--queue-duration", "840"],
         timeout  = 850,
-        schedule = ["cron(0/15 8-17 * * ? *)"],
+        schedule = ["cron(0/15 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-ecmt-accept",
         commands = ["queue:process-queue", "--type", "que_typ_accept_ecmt_scoring"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-irhp-allocate",
         commands = ["queue:process-queue", "--type", "que_typ_irhp_permits_allocate"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-permit-generation",
         commands = ["queue:process-queue", "--type", "que_typ_permit_generate"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-permit-print",
         commands = ["queue:process-queue", "--type", "que_typ_permit_print", "--queue-duration", "840"],
         timeout  = 850,
-        schedule = ["cron(0/15 8-17 * * ? *)"],
+        schedule = ["cron(0/15 6-20 * * ? *)"],
       },
       {
         name     = "process-queue-print",
         commands = ["queue:process-queue", "--type", "que_typ_print"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name     = "process-company-profile",
         commands = ["queue:process-company-profile", "-v"],
         timeout  = 150,
-        schedule = ["cron(0/5 8-17 * * ? *)"],
+        schedule = ["cron(0/5 6-20 * * ? *)"],
       },
       {
         name     = "company-profile-dlq",
         commands = ["queue:company-profile-dlq", "-v"],
         timeout  = 900,
-        schedule = ["cron(0/30 8-17 * * ? *)"],
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "process-insolvency",
         commands = ["queue:process-insolvency", "-v"],
         timeout  = 900,
-        schedule = ["cron(0/30 8-17 * * ? *)"],
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "process-insolvency-dlq",
         commands = ["queue:process-insolvency-dlq", "-v"],
         timeout  = 900,
-        schedule = ["cron(0/30 8-17 * * ? *)"],
+        schedule = ["cron(0/30 6-20 * * ? *)"],
       },
       {
         name     = "transxchange-consumer",
         commands = ["queue:transxchange-consumer", "-v"],
         timeout  = 90,
-        schedule = ["cron(0/2 8-17 * * ? *)"],
+        schedule = ["cron(0/2 6-20 * * ? *)"],
       },
       {
         name  = "liquibase",
@@ -583,22 +588,22 @@ module "service" {
       },
       {
         name     = "sas-mi-extract",
-        commands = ["source /mnt/data/sas_mi_extract.sh"],
+        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts"
       },
       {
         name     = "import-anondb",
-        commands = ["source /mnt/data/import_anondb.sh"],
+        commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "populate-anondb",
-        commands = ["source /mnt/data/populate_anondb.sh"],
+        commands = ["/mnt/data/scripts/populate_anondb.sh"],
         type     = "scripts"
       },
       {
         name     = "ni-compliance",
-        commands = ["source /mnt/data/ni_dvacomplaince.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]

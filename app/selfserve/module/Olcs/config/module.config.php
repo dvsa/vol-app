@@ -664,74 +664,6 @@ $routes = [
             ],
         ],
     ],
-    'verify' => [
-        'type' => \Laminas\Router\Http\Literal::class,
-        'options' => [
-            'route' => '/verify',
-            'defaults' => [
-                'controller' => Olcs\Controller\GdsVerifyController::class,
-                'action' => 'index',
-            ]
-        ],
-        'may_terminate' => false,
-        'child_routes' => [
-            'initiate-request' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/initiate-request[/application/:application]' .
-                        '[/continuation-detail/:continuationDetailId][/]',
-                    'defaults' => [
-                        'action' => 'initiate-request',
-                    ],
-                ]
-            ],
-            'transport-manager' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/:lva/:applicationId/transport-manager/:transportManagerApplicationId/:role[/]',
-                    'defaults' => [
-                        'action' => 'initiate-request',
-                    ],
-                    'constraints' => [
-                            'lva' => '(application|variation)',
-                            'applicationId' => '[0-9]+',
-                            'transportManagerApplicationId' => '[0-9]+',
-                            'role' => '(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
-                    ],
-                ]
-            ],
-            'surrender' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/surrender/:licenceId[/]',
-                    'defaults' => [
-                        'action' => 'initiate-request',
-                    ],
-                    'constraints' => [
-                        'licenceId' => '[0-9]+',
-                    ],
-                ]
-            ],
-            'process-response' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/process-response[/]',
-                    'defaults' => [
-                        'action' => 'process-response',
-                    ],
-                ],
-            ],
-            'process-signature' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route' => '/process-signature[/]',
-                    'defaults' => [
-                        'action' => 'process-signature',
-                    ],
-                ]
-            ],
-        ]
-    ],
     'session-timeout' => [
         'type' => 'segment',
         'options' =>  [
@@ -1367,6 +1299,37 @@ $myAccountNav = [
         ],
     ]
 ];
+
+// Add static assets redirect route for html hardcoded snapshot asset paths
+$routes['static-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/static/public[/:path]',
+        'constraints' => [
+            'path' => '.*',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+        ],
+    ],
+];
+
+$routes['styles-assets'] = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/styles/:path',
+        'constraints' => [
+            'path' => '.+',
+        ],
+        'defaults' => [
+            'controller' => \Olcs\Controller\StaticAssetsController::class,
+            'action' => 'redirect',
+            'prefix' => 'styles',
+        ],
+    ],
+];
+
 return [
     'router' => [
         'routes' => array_merge($routes, $configRoutes),
@@ -1480,7 +1443,7 @@ return [
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
         ],
         'factories' => [
-
+            \Olcs\Controller\StaticAssetsController::class => \Olcs\Controller\Factory\StaticAssetsControllerFactory::class,
             IndexController::class => IndexControllerFactory::class,
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
@@ -1506,8 +1469,6 @@ return [
             \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class => \Olcs\Controller\Factory\UserRegistrationControllerToggleAwareFactory::class,
 
             Olcs\Controller\Entity\ViewController::class => \Olcs\Controller\Factory\Entity\ViewControllerFactory::class,
-
-            Olcs\Controller\GdsVerifyController::class => \Olcs\Controller\Factory\GdsVerifyControllerFactory::class,
 
             // License - Surrender
             Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsControllerFactory::class,
@@ -1850,6 +1811,8 @@ return [
                 'verify/process-response' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
+                'static-assets' => ['*'],
+                'styles-assets' => ['*'],
                 'user-registration*' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies*' => ['*'],

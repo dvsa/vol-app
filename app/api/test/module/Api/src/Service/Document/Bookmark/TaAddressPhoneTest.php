@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
+use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TaAddressPhone;
 
 /**
@@ -20,12 +23,16 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoPhone()
+    /**
+     * @dataProvider dpAllTrafficAreas
+     */
+    public function testRenderWithNoPhone(string $trafficAreaId): void
     {
         $bookmark = new TaAddressPhone();
         $bookmark->setData(
             [
                 'trafficArea' => [
+                    'id' => $trafficAreaId,
                     'name' => 'TA Address 1',
                     'contactDetails' => [
                         'address' => [
@@ -47,12 +54,16 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithNoMatchingPhone()
+    /**
+     * @dataProvider dpAllTrafficAreas
+     */
+    public function testRenderWithNoMatchingPhone(string $trafficAreaId): void
     {
         $bookmark = new TaAddressPhone();
         $bookmark->setData(
             [
                 'trafficArea' => [
+                    'id' => $trafficAreaId,
                     'name' => 'TA Address 1',
                     'contactDetails' => [
                         'address' => [
@@ -81,12 +92,31 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithMatchingPhone()
+    public function dpAllTrafficAreas(): array
+    {
+        return [
+            [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE],
+            [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE],
+            [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE],
+            [TrafficArea::EASTERN_TRAFFIC_AREA_CODE],
+            [TrafficArea::WELSH_TRAFFIC_AREA_CODE],
+            [TrafficArea::WESTERN_TRAFFIC_AREA_CODE],
+            [TrafficArea::SE_MET_TRAFFIC_AREA_CODE],
+            [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE],
+            [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE],
+        ];
+    }
+
+    /**
+     * @dataProvider dpRenderWithMatchingPhone
+     */
+    public function testRenderWithMatchingPhone(string $trafficAreaId, string $expectedOutput): void
     {
         $bookmark = new TaAddressPhone();
         $bookmark->setData(
             [
                 'trafficArea' => [
+                    'id' => $trafficAreaId,
                     'name' => 'TA Address 1',
                     'contactDetails' => [
                         'address' => [
@@ -110,8 +140,26 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertEquals(
-            "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD\n1234",
+            $expectedOutput,
             $bookmark->render()
         );
+    }
+
+    public function dpRenderWithMatchingPhone(): array
+    {
+        $withPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD\n1234";
+        $withoutPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD";
+
+        return [
+            [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::WELSH_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::SE_MET_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE, $withPhoneNumber],
+            [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE, $withoutPhoneNumber],
+        ];
     }
 }

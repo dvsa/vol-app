@@ -1,34 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Si;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
-use Dvsa\Olcs\Api\Entity\System\RefData;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
-use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesWithCollectionsTrait;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\SoftDeletableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * ErruRequest Abstract Entity
+ * AbstractErruRequest Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
  * @ORM\Table(name="erru_request",
  *    indexes={
+ *        @ORM\Index(name="fk_erru_request_community_licence_status_ref_data_id", columns={"community_licence_status"}),
  *        @ORM\Index(name="ix_erru_request_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_erru_request_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_erru_request_member_state_code", columns={"member_state_code"}),
  *        @ORM\Index(name="ix_erru_request_msi_type", columns={"msi_type"}),
- *        @ORM\Index(name="ix_erru_request_response_user_id", columns={"response_user_id"})
+ *        @ORM\Index(name="ix_erru_request_response_user_id", columns={"response_user_id"}),
+ *        @ORM\Index(name="uk_erru_request_case_id", columns={"case_id"}),
+ *        @ORM\Index(name="uk_erru_request_request_document_id", columns={"request_document_id"}),
+ *        @ORM\Index(name="uk_erru_request_response_document_id", columns={"response_document_id"}),
+ *        @ORM\Index(name="uk_erru_request_workflow_id", columns={"workflow_id"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_erru_request_case_id", columns={"case_id"}),
@@ -42,24 +51,91 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
-    use ClearPropertiesTrait;
+    use ClearPropertiesWithCollectionsTrait;
     use CreatedOnTrait;
     use ModifiedOnTrait;
     use SoftDeletableTrait;
 
     /**
-     * Case
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
+     * Foreign Key to cases
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="erruRequest"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
+
+    /**
+     * Foreign Key to document for the incoming erru xml
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     *
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="request_document_id", referencedColumnName="id", nullable=true)
+     */
+    protected $requestDocument;
+
+    /**
+     * Foreign Key to document for the msi response xml
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     *
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="response_document_id", referencedColumnName="id", nullable=true)
+     */
+    protected $responseDocument;
+
+    /**
+     * Two letter EU member state code
+     *
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
+     * @ORM\JoinColumn(name="member_state_code", referencedColumnName="id")
+     */
+    protected $memberStateCode;
+
+    /**
+     * Most Serious Incident type
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="msi_type", referencedColumnName="id")
+     */
+    protected $msiType;
+
+    /**
+     * CommunityLicenceStatus
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="community_licence_status", referencedColumnName="id", nullable=true)
+     */
+    protected $communityLicenceStatus;
+
+    /**
+     * ResponseUser
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="response_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $responseUser;
 
     /**
      * Created by
@@ -73,17 +149,6 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -95,27 +160,34 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
-     * Member state code
+     * European authority that created/requested the case
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="member_state_code", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="originating_authority", length=50, nullable=false)
      */
-    protected $memberStateCode;
+    protected $originatingAuthority = '';
 
     /**
-     * Msi type
+     * Transport undertaking name
      *
-     * @var RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="msi_type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="transport_undertaking_name", length=100, nullable=false)
      */
-    protected $msiType;
+    protected $transportUndertakingName = '';
 
     /**
-     * Notification number
+     * Vehicle registration mark
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="vrm", length=15, nullable=false)
+     */
+    protected $vrm = '';
+
+    /**
+     * ERRU business case GUID
      *
      * @var string
      *
@@ -124,41 +196,31 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     protected $notificationNumber;
 
     /**
-     * Originating authority
+     * ERRU workflow GUID
      *
      * @var string
      *
-     * @ORM\Column(type="string", name="originating_authority", length=50, nullable=false)
+     * @ORM\Column(type="string", name="workflow_id", length=36, nullable=false)
      */
-    protected $originatingAuthority;
+    protected $workflowId = '';
 
     /**
-     * Request document
+     * Community licence number
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var string
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document",
-     *     fetch="LAZY",
-     *     inversedBy="requestErru"
-     * )
-     * @ORM\JoinColumn(name="request_document_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="community_licence_number", length=32, nullable=false, options={"default": "unknown"})
      */
-    protected $requestDocument;
+    protected $communityLicenceNumber = 'unknown';
 
     /**
-     * Response document
+     * Tot auth vehicles
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var int
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document",
-     *     fetch="LAZY",
-     *     inversedBy="responseErru"
-     * )
-     * @ORM\JoinColumn(name="response_document_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=false, options={"default": 0})
      */
-    protected $responseDocument;
+    protected $totAuthVehicles = 0;
 
     /**
      * Response time
@@ -168,25 +230,6 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @ORM\Column(type="datetime", name="response_time", nullable=true)
      */
     protected $responseTime;
-
-    /**
-     * Response user
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="response_user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $responseUser;
-
-    /**
-     * Transport undertaking name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="transport_undertaking_name", length=100, nullable=false)
-     */
-    protected $transportUndertakingName;
 
     /**
      * Version
@@ -199,98 +242,20 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Vrm
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=15, nullable=false)
+     * Initialise the collections
      */
-    protected $vrm;
-
-    /**
-     * Workflow id
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="workflow_id", length=36, nullable=false)
-     */
-    protected $workflowId;
-
-    /**
-     * Community licence number
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="community_licence_number", length=32, nullable=false, options={"default": "unknown"}))
-     */
-    protected $communityLicenceNumber;
-
-    /**
-     * Community licence status (nullable due to legacy data)
-     *
-     * @var RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="community_licence_status", referencedColumnName="id", nullable=true)
-     */
-    protected $communityLicenceStatus;
-
-    /**
-     * Number of vehicles authorised on the licence
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="tot_auth_vehicles", nullable=false, options={"default": 0})
-     */
-    protected $totAuthVehicles;
-
-    /**
-     * Set the case
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
-     *
-     * @return ErruRequest
-     */
-    public function setCase($case)
+    public function __construct()
     {
-        $this->case = $case;
-
-        return $this;
+        $this->initCollections();
     }
 
     /**
-     * Get the case
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * Initialise collections
      */
-    public function getCase()
+    public function initCollections(): void
     {
-        return $this->case;
     }
 
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return ErruRequest
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
 
     /**
      * Set the id
@@ -309,41 +274,85 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set the last modified by
+     * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return ErruRequest
      */
-    public function setLastModifiedBy($lastModifiedBy)
+    public function setCase($case)
     {
-        $this->lastModifiedBy = $lastModifiedBy;
+        $this->case = $case;
 
         return $this;
     }
 
     /**
-     * Get the last modified by
+     * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+    public function getCase()
     {
-        return $this->lastModifiedBy;
+        return $this->case;
+    }
+
+    /**
+     * Set the request document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $requestDocument new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setRequestDocument($requestDocument)
+    {
+        $this->requestDocument = $requestDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get the request document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getRequestDocument()
+    {
+        return $this->requestDocument;
+    }
+
+    /**
+     * Set the response document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $responseDocument new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setResponseDocument($responseDocument)
+    {
+        $this->responseDocument = $responseDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get the response document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getResponseDocument()
+    {
+        return $this->responseDocument;
     }
 
     /**
      * Set the member state code
      *
-     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $memberStateCode entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $memberStateCode new value being set
      *
      * @return ErruRequest
      */
@@ -357,8 +366,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the member state code
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
     public function getMemberStateCode()
     {
         return $this->memberStateCode;
@@ -367,7 +375,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Set the msi type
      *
-     * @param RefData $msiType entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $msiType new value being set
      *
      * @return ErruRequest
      */
@@ -381,35 +389,102 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the msi type
      *
-     * @return RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getMsiType()
     {
         return $this->msiType;
     }
 
     /**
-     * Set the notification number
+     * Set the community licence status
      *
-     * @param string $notificationNumber new value being set
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $communityLicenceStatus new value being set
      *
      * @return ErruRequest
      */
-    public function setNotificationNumber($notificationNumber)
+    public function setCommunityLicenceStatus($communityLicenceStatus)
     {
-        $this->notificationNumber = $notificationNumber;
+        $this->communityLicenceStatus = $communityLicenceStatus;
 
         return $this;
     }
 
     /**
-     * Get the notification number
+     * Get the community licence status
      *
-     * @return string
-     */
-    public function getNotificationNumber()
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getCommunityLicenceStatus()
     {
-        return $this->notificationNumber;
+        return $this->communityLicenceStatus;
+    }
+
+    /**
+     * Set the response user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $responseUser new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setResponseUser($responseUser)
+    {
+        $this->responseUser = $responseUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the response user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getResponseUser()
+    {
+        return $this->responseUser;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -429,59 +504,148 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the originating authority
      *
-     * @return string
-     */
+     * @return string     */
     public function getOriginatingAuthority()
     {
         return $this->originatingAuthority;
     }
 
     /**
-     * Set the request document
+     * Set the transport undertaking name
      *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $requestDocument entity being set as the value
+     * @param string $transportUndertakingName new value being set
      *
      * @return ErruRequest
      */
-    public function setRequestDocument($requestDocument)
+    public function setTransportUndertakingName($transportUndertakingName)
     {
-        $this->requestDocument = $requestDocument;
+        $this->transportUndertakingName = $transportUndertakingName;
 
         return $this;
     }
 
     /**
-     * Get the request document
+     * Get the transport undertaking name
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getRequestDocument()
+     * @return string     */
+    public function getTransportUndertakingName()
     {
-        return $this->requestDocument;
+        return $this->transportUndertakingName;
     }
 
     /**
-     * Set the response document
+     * Set the vrm
      *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $responseDocument entity being set as the value
+     * @param string $vrm new value being set
      *
      * @return ErruRequest
      */
-    public function setResponseDocument($responseDocument)
+    public function setVrm($vrm)
     {
-        $this->responseDocument = $responseDocument;
+        $this->vrm = $vrm;
 
         return $this;
     }
 
     /**
-     * Get the response document
+     * Get the vrm
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getResponseDocument()
+     * @return string     */
+    public function getVrm()
     {
-        return $this->responseDocument;
+        return $this->vrm;
+    }
+
+    /**
+     * Set the notification number
+     *
+     * @param string $notificationNumber new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setNotificationNumber($notificationNumber)
+    {
+        $this->notificationNumber = $notificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the notification number
+     *
+     * @return string     */
+    public function getNotificationNumber()
+    {
+        return $this->notificationNumber;
+    }
+
+    /**
+     * Set the workflow id
+     *
+     * @param string $workflowId new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setWorkflowId($workflowId)
+    {
+        $this->workflowId = $workflowId;
+
+        return $this;
+    }
+
+    /**
+     * Get the workflow id
+     *
+     * @return string     */
+    public function getWorkflowId()
+    {
+        return $this->workflowId;
+    }
+
+    /**
+     * Set the community licence number
+     *
+     * @param string $communityLicenceNumber new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setCommunityLicenceNumber($communityLicenceNumber)
+    {
+        $this->communityLicenceNumber = $communityLicenceNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the community licence number
+     *
+     * @return string     */
+    public function getCommunityLicenceNumber()
+    {
+        return $this->communityLicenceNumber;
+    }
+
+    /**
+     * Set the tot auth vehicles
+     *
+     * @param int $totAuthVehicles new value being set
+     *
+     * @return ErruRequest
+     */
+    public function setTotAuthVehicles($totAuthVehicles)
+    {
+        $this->totAuthVehicles = $totAuthVehicles;
+
+        return $this;
+    }
+
+    /**
+     * Get the tot auth vehicles
+     *
+     * @return int     */
+    public function getTotAuthVehicles()
+    {
+        return $this->totAuthVehicles;
     }
 
     /**
@@ -503,9 +667,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getResponseTime($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -513,54 +675,6 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
         }
 
         return $this->responseTime;
-    }
-
-    /**
-     * Set the response user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $responseUser entity being set as the value
-     *
-     * @return ErruRequest
-     */
-    public function setResponseUser($responseUser)
-    {
-        $this->responseUser = $responseUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the response user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getResponseUser()
-    {
-        return $this->responseUser;
-    }
-
-    /**
-     * Set the transport undertaking name
-     *
-     * @param string $transportUndertakingName new value being set
-     *
-     * @return ErruRequest
-     */
-    public function setTransportUndertakingName($transportUndertakingName)
-    {
-        $this->transportUndertakingName = $transportUndertakingName;
-
-        return $this;
-    }
-
-    /**
-     * Get the transport undertaking name
-     *
-     * @return string
-     */
-    public function getTransportUndertakingName()
-    {
-        return $this->transportUndertakingName;
     }
 
     /**
@@ -580,91 +694,17 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int
-     */
+     * @return int     */
     public function getVersion()
     {
         return $this->version;
     }
 
     /**
-     * Set the vrm
-     *
-     * @param string $vrm new value being set
-     *
-     * @return ErruRequest
+     * Get bundle data
      */
-    public function setVrm($vrm)
+    public function __toString(): string
     {
-        $this->vrm = $vrm;
-
-        return $this;
-    }
-
-    /**
-     * Get the vrm
-     *
-     * @return string
-     */
-    public function getVrm()
-    {
-        return $this->vrm;
-    }
-
-    /**
-     * Set the workflow id
-     *
-     * @param string $workflowId new value being set
-     *
-     * @return ErruRequest
-     */
-    public function setWorkflowId($workflowId)
-    {
-        $this->workflowId = $workflowId;
-
-        return $this;
-    }
-
-    /**
-     * Get the workflow id
-     *
-     * @return string
-     */
-    public function getWorkflowId()
-    {
-        return $this->workflowId;
-    }
-
-    public function getCommunityLicenceNumber(): ?string
-    {
-        return $this->communityLicenceNumber;
-    }
-
-    public function setCommunityLicenceNumber(string $communityLicenceNumber): ErruRequest
-    {
-        $this->communityLicenceNumber = $communityLicenceNumber;
-        return $this;
-    }
-
-    public function getCommunityLicenceStatus(): ?RefData
-    {
-        return $this->communityLicenceStatus;
-    }
-
-    public function setCommunityLicenceStatus(RefData $communityLicenceStatus): ErruRequest
-    {
-        $this->communityLicenceStatus = $communityLicenceStatus;
-        return $this;
-    }
-
-    public function getTotAuthVehicles(): int|string
-    {
-        return $this->totAuthVehicles;
-    }
-
-    public function setTotAuthVehicles(int|string $totAuthVehicles): ErruRequest
-    {
-        $this->totAuthVehicles = $totAuthVehicles;
-        return $this;
+        return (string) $this->getId();
     }
 }

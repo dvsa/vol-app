@@ -6,6 +6,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -29,12 +30,16 @@ class PiControllerFactory implements FactoryInterface
         $scriptService = $container->get(ScriptFactory::class);
         assert($scriptService instanceof ScriptFactory);
 
+        $tableFactory = $container->get(TableFactory::class);
+        assert($tableFactory instanceof TableFactory);
+
         return new PiController(
             $translationHelper,
             $formHelper,
             $flashMessenger,
             $navigation,
-            $scriptService
+            $scriptService,
+            $tableFactory
         );
     }
 }

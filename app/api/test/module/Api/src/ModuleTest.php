@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Types\Type;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 use Dvsa\Olcs\Api\Module;
 use Laminas\EventManager\Event;
@@ -12,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
-use phpseclib\Crypt\Base;
+use phpseclib3\Crypt\AES;
 
 /**
  * Tests the Api Module php
@@ -121,13 +125,17 @@ class ModuleTest extends MockeryTestCase
         if (!EncryptedStringType::hasType(EncryptedStringType::TYPE)) {
             EncryptedStringType::addType(EncryptedStringType::TYPE, EncryptedStringType::class);
         }
-        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => 'key']]);
 
-        /** @var Base $ciper */
-        $ciper = \Doctrine\DBAL\Types\Type::getType('encrypted_string')->getEncrypter();
+        $platform = m::mock(MySQLPlatform::class);
+        $testData = '{"firstname":"STEVE","surname":"FOX","dateofbirth":"1969-06-09"}';
+        $this->sut->initDoctrineEncrypterType(['olcs-doctrine' => ['encryption_key' => '32byte32byte32byte32byte32byte32']]);
 
-        $this->assertInstanceOf(Base::class, $ciper);
-        $this->assertSame('key', $ciper->key);
+        $doctrineEncryptedString = Type::getType('encrypted_string');
+
+        $encryptedValue = $doctrineEncryptedString->convertToDatabaseValue($testData, $platform);
+        $decryptedValue = $doctrineEncryptedString->convertToPhpValue($encryptedValue, $platform);
+
+        $this->assertEquals($decryptedValue, $testData);
     }
 
     /**

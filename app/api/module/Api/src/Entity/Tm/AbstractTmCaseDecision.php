@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -16,9 +18,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * TmCaseDecision Abstract Entity
+ * AbstractTmCaseDecision Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -28,7 +31,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_tm_case_decision_case_id", columns={"case_id"}),
  *        @ORM\Index(name="ix_tm_case_decision_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_tm_case_decision_decision", columns={"decision"}),
- *        @ORM\Index(name="ix_tm_case_decision_last_modified_by", columns={"last_modified_by"})
+ *        @ORM\Index(name="ix_tm_case_decision_last_modified_by", columns={"last_modified_by"}),
+ *        @ORM\Index(name="uk_tm_case_decision_olbs_key", columns={"olbs_key"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_tm_case_decision_olbs_key", columns={"olbs_key"})
@@ -45,18 +49,35 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     use SoftDeletableTrait;
 
     /**
+     * Primary key.  Auto incremented if numeric.
+     *
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
+
+    /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases",
-     *     fetch="LAZY",
-     *     inversedBy="tmDecisions"
-     * )
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
     protected $case;
+
+    /**
+     * Decision
+     *
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="decision", referencedColumnName="id")
+     */
+    protected $decision;
 
     /**
      * Created by
@@ -70,45 +91,6 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $createdBy;
 
     /**
-     * Decision
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="decision", referencedColumnName="id", nullable=false)
-     */
-    protected $decision;
-
-    /**
-     * Decision date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="decision_date", nullable=true)
-     */
-    protected $decisionDate;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
-     * Is msi
-     *
-     * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_msi", nullable=false, options={"default": 0})
-     */
-    protected $isMsi = 0;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -120,13 +102,13 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $lastModifiedBy;
 
     /**
-     * No further action reason
+     * Decision date
      *
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(type="string", name="no_further_action_reason", length=4000, nullable=true)
+     * @ORM\Column(type="date", name="decision_date", nullable=true)
      */
-    protected $noFurtherActionReason;
+    protected $decisionDate;
 
     /**
      * Notified date
@@ -138,34 +120,13 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $notifiedDate;
 
     /**
-     * Olbs key
+     * isMsi
      *
-     * @var int
+     * @var string
      *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     * @ORM\Column(type="yesno", name="is_msi", nullable=false, options={"default": 0})
      */
-    protected $olbsKey;
-
-    /**
-     * Rehab measure
-     *
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="tmCaseDecisions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="tm_case_decision_rehab",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="rehab_measure_id", referencedColumnName="id")
-     *     }
-     * )
-     */
-    protected $rehabMeasures;
+    protected $isMsi = 0;
 
     /**
      * Repute not lost reason
@@ -177,6 +138,15 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $reputeNotLostReason;
 
     /**
+     * Unfitness start date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="unfitness_start_date", nullable=true)
+     */
+    protected $unfitnessStartDate;
+
+    /**
      * Unfitness end date
      *
      * @var \DateTime
@@ -186,34 +156,13 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $unfitnessEndDate;
 
     /**
-     * Unfitness reason
+     * No further action reason
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var string
      *
-     * @ORM\ManyToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\System\RefData",
-     *     inversedBy="tmCaseDecisions",
-     *     fetch="LAZY"
-     * )
-     * @ORM\JoinTable(name="tm_case_decision_unfitness",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="unfitness_reason_id", referencedColumnName="id")
-     *     }
-     * )
+     * @ORM\Column(type="string", name="no_further_action_reason", length=4000, nullable=true)
      */
-    protected $unfitnessReasons;
-
-    /**
-     * Unfitness start date
-     *
-     * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="unfitness_start_date", nullable=true)
-     */
-    protected $unfitnessStartDate;
+    protected $noFurtherActionReason;
 
     /**
      * Version
@@ -226,9 +175,50 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     protected $version = 1;
 
     /**
-     * Initialise the collections
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @return void
+     * @var int
+     *
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
+     */
+    protected $olbsKey;
+
+    /**
+     * RehabMeasures
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="tmCaseDecisions", fetch="LAZY")
+     * @ORM\JoinTable(name="tm_case_decision_rehab",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="rehab_measure_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $rehabMeasures;
+
+    /**
+     * UnfitnessReasons
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="tmCaseDecisions", fetch="LAZY")
+     * @ORM\JoinTable(name="tm_case_decision_unfitness",
+     *     joinColumns={
+     *         @ORM\JoinColumn(name="tm_case_decision_id", referencedColumnName="id")
+     *     },
+     *     inverseJoinColumns={
+     *         @ORM\JoinColumn(name="unfitness_reason_id", referencedColumnName="id")
+     *     }
+     * )
+     */
+    protected $unfitnessReasons;
+
+    /**
+     * Initialise the collections
      */
     public function __construct()
     {
@@ -236,20 +226,42 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->rehabMeasures = new ArrayCollection();
         $this->unfitnessReasons = new ArrayCollection();
     }
 
+
+    /**
+     * Set the id
+     *
+     * @param int $id new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the id
+     *
+     * @return int     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * Set the case
      *
-     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
      * @return TmCaseDecision
      */
@@ -263,41 +275,16 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
-     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
     public function getCase()
     {
         return $this->case;
     }
 
     /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return TmCaseDecision
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
      * Set the decision
      *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $decision entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $decision new value being set
      *
      * @return TmCaseDecision
      */
@@ -311,11 +298,56 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the decision
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
     public function getDecision()
     {
         return $this->decision;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set the last modified by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setLastModifiedBy($lastModifiedBy)
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the last modified by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
     }
 
     /**
@@ -337,9 +369,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getDecisionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -347,102 +377,6 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
         }
 
         return $this->decisionDate;
-    }
-
-    /**
-     * Set the id
-     *
-     * @param int $id new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the is msi
-     *
-     * @param string $isMsi new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setIsMsi($isMsi)
-    {
-        $this->isMsi = $isMsi;
-
-        return $this;
-    }
-
-    /**
-     * Get the is msi
-     *
-     * @return string
-     */
-    public function getIsMsi()
-    {
-        return $this->isMsi;
-    }
-
-    /**
-     * Set the last modified by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
-     *
-     * @return TmCaseDecision
-     */
-    public function setLastModifiedBy($lastModifiedBy)
-    {
-        $this->lastModifiedBy = $lastModifiedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the last modified by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getLastModifiedBy()
-    {
-        return $this->lastModifiedBy;
-    }
-
-    /**
-     * Set the no further action reason
-     *
-     * @param string $noFurtherActionReason new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setNoFurtherActionReason($noFurtherActionReason)
-    {
-        $this->noFurtherActionReason = $noFurtherActionReason;
-
-        return $this;
-    }
-
-    /**
-     * Get the no further action reason
-     *
-     * @return string
-     */
-    public function getNoFurtherActionReason()
-    {
-        return $this->noFurtherActionReason;
     }
 
     /**
@@ -464,9 +398,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime|string
-
-     */
+     * @return \DateTime     */
     public function getNotifiedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -474,6 +406,156 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
         }
 
         return $this->notifiedDate;
+    }
+
+    /**
+     * Set the is msi
+     *
+     * @param string $isMsi new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setIsMsi($isMsi)
+    {
+        $this->isMsi = $isMsi;
+
+        return $this;
+    }
+
+    /**
+     * Get the is msi
+     *
+     * @return string     */
+    public function getIsMsi()
+    {
+        return $this->isMsi;
+    }
+
+    /**
+     * Set the repute not lost reason
+     *
+     * @param string $reputeNotLostReason new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setReputeNotLostReason($reputeNotLostReason)
+    {
+        $this->reputeNotLostReason = $reputeNotLostReason;
+
+        return $this;
+    }
+
+    /**
+     * Get the repute not lost reason
+     *
+     * @return string     */
+    public function getReputeNotLostReason()
+    {
+        return $this->reputeNotLostReason;
+    }
+
+    /**
+     * Set the unfitness start date
+     *
+     * @param \DateTime $unfitnessStartDate new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setUnfitnessStartDate($unfitnessStartDate)
+    {
+        $this->unfitnessStartDate = $unfitnessStartDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the unfitness start date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getUnfitnessStartDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->unfitnessStartDate);
+        }
+
+        return $this->unfitnessStartDate;
+    }
+
+    /**
+     * Set the unfitness end date
+     *
+     * @param \DateTime $unfitnessEndDate new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setUnfitnessEndDate($unfitnessEndDate)
+    {
+        $this->unfitnessEndDate = $unfitnessEndDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the unfitness end date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getUnfitnessEndDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->unfitnessEndDate);
+        }
+
+        return $this->unfitnessEndDate;
+    }
+
+    /**
+     * Set the no further action reason
+     *
+     * @param string $noFurtherActionReason new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setNoFurtherActionReason($noFurtherActionReason)
+    {
+        $this->noFurtherActionReason = $noFurtherActionReason;
+
+        return $this;
+    }
+
+    /**
+     * Get the no further action reason
+     *
+     * @return string     */
+    public function getNoFurtherActionReason()
+    {
+        return $this->noFurtherActionReason;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return TmCaseDecision
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -493,17 +575,16 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
     }
 
     /**
-     * Set the rehab measure
+     * Set the rehab measures
      *
-     * @param ArrayCollection $rehabMeasures collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $rehabMeasures collection being set as the value
      *
      * @return TmCaseDecision
      */
@@ -517,7 +598,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the rehab measures
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getRehabMeasures()
     {
@@ -527,7 +608,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Add a rehab measures
      *
-     * @param ArrayCollection|mixed $rehabMeasures collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $rehabMeasures collection being added
      *
      * @return TmCaseDecision
      */
@@ -564,64 +645,9 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the repute not lost reason
+     * Set the unfitness reasons
      *
-     * @param string $reputeNotLostReason new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setReputeNotLostReason($reputeNotLostReason)
-    {
-        $this->reputeNotLostReason = $reputeNotLostReason;
-
-        return $this;
-    }
-
-    /**
-     * Get the repute not lost reason
-     *
-     * @return string
-     */
-    public function getReputeNotLostReason()
-    {
-        return $this->reputeNotLostReason;
-    }
-
-    /**
-     * Set the unfitness end date
-     *
-     * @param \DateTime $unfitnessEndDate new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setUnfitnessEndDate($unfitnessEndDate)
-    {
-        $this->unfitnessEndDate = $unfitnessEndDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the unfitness end date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getUnfitnessEndDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->unfitnessEndDate);
-        }
-
-        return $this->unfitnessEndDate;
-    }
-
-    /**
-     * Set the unfitness reason
-     *
-     * @param ArrayCollection $unfitnessReasons collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $unfitnessReasons collection being set as the value
      *
      * @return TmCaseDecision
      */
@@ -635,7 +661,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Get the unfitness reasons
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getUnfitnessReasons()
     {
@@ -645,7 +671,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Add a unfitness reasons
      *
-     * @param ArrayCollection|mixed $unfitnessReasons collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $unfitnessReasons collection being added
      *
      * @return TmCaseDecision
      */
@@ -682,57 +708,10 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the unfitness start date
-     *
-     * @param \DateTime $unfitnessStartDate new value being set
-     *
-     * @return TmCaseDecision
+     * Get bundle data
      */
-    public function setUnfitnessStartDate($unfitnessStartDate)
+    public function __toString(): string
     {
-        $this->unfitnessStartDate = $unfitnessStartDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the unfitness start date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getUnfitnessStartDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->unfitnessStartDate);
-        }
-
-        return $this->unfitnessStartDate;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return TmCaseDecision
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
+        return (string) $this->getId();
     }
 }

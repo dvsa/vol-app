@@ -12,13 +12,15 @@ RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
 
 # Install system packages: icu-dev, libzip-dev, cups-client (provides lpr command for printing)
 # Install PHP extensions: intl, pdo_mysql, opcache, zip
-RUN apk add --no-cache icu-dev libzip-dev cups-client \
+RUN apk add --no-cache icu-dev libzip-dev cups-client poppler-utils bash \
   && docker-php-ext-configure intl \
   && docker-php-ext-configure zip \
   && docker-php-ext-install pdo_mysql opcache intl zip
-
-# Add extra scirpts for batch jobs
-COPY ./scripts/ /mnt/data/scripts/
+RUN apk add --no-cache python3 py3-pip mysql-client groff less bash curl \
+    && python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir awscli \
+    && /opt/venv/bin/aws --version \
+    && mysql --version
 
 # PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/zzzz-php.ini
@@ -28,6 +30,9 @@ EXPOSE 8080
 FROM cli AS production
 
 ADD ./api.tar.gz /var/www/html
+
+# Add bash scripts
+COPY ./scripts/ /mnt/data/scripts/
 
 # `chown` and `chmod` flags do not work with `ADD` command when adding a tarball.
 # https://github.com/docker/docs/issues/7305
@@ -41,8 +46,15 @@ RUN chown -R root:www-data /var/www/html \
   # Add group (`www-data`) write permissions on the cache directories.
   && find /var/www/html/data/cache -type d -exec chmod 775 {} \; \
   # Ensure Laminas binary is executable for CLI jobs.
-  && chmod +x /var/www/html/vendor/bin/laminas \
-  # Ensure scripts are executable
+  && chmod +x /var/www/html/vendor/bin/laminas
+
+  # Create olcsdump directory.
+RUN mkdir -p /mnt/data/olcsdump \
+  # Set directory ownership.
+  && chown root:www-data /mnt/data/olcsdump /mnt/data/scripts/ \
+  # Set directory permissions.
+  && chmod 775 /mnt/data/olcsdump /mnt/data/scripts/ \
+  # Ensure scripts are executable.
   && chmod +x /mnt/data/scripts/*.sh
 
 USER www-data

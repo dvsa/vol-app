@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Entity\Fee;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
@@ -15,9 +17,10 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Transaction Abstract Entity
+ * AbstractTransaction Abstract Entity
  *
  * Auto-Generated
+ * @source OLCS-Entity-Generator-v2
  *
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
@@ -31,7 +34,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_txn_reference", columns={"reference"}),
  *        @ORM\Index(name="ix_txn_status", columns={"status"}),
  *        @ORM\Index(name="ix_txn_type", columns={"type"}),
- *        @ORM\Index(name="ix_txn_waive_recommender_user_id", columns={"waive_recommender_user_id"})
+ *        @ORM\Index(name="ix_txn_waive_recommender_user_id", columns={"waive_recommender_user_id"}),
+ *        @ORM\Index(name="uk_txn_receipt_document_id", columns={"receipt_document_id"})
  *    },
  *    uniqueConstraints={
  *        @ORM\UniqueConstraint(name="uk_txn_receipt_document_id", columns={"receipt_document_id"})
@@ -47,49 +51,75 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     use ModifiedOnTrait;
 
     /**
-     * Cheque po date
+     * Primary key.  Auto incremented if numeric.
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="date", name="cheque_po_date", nullable=true)
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id", nullable=false)
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    protected $chequePoDate;
+    protected $id;
 
     /**
-     * Cheque po number
+     * Failed, Cancelled, Paid or Legacy. Legacy to allow not null.
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="cheque_po_number", length=100, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
-    protected $chequePoNumber;
+    protected $status;
 
     /**
-     * Comment
+     * Type
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="string", name="comment", length=1000, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id")
      */
-    protected $comment;
+    protected $type;
 
     /**
-     * Completed date
+     * PaymentMethod
      *
-     * @var \DateTime
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData
      *
-     * @ORM\Column(type="datetime", name="completed_date", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
+     * @ORM\JoinColumn(name="payment_method", referencedColumnName="id", nullable=true)
      */
-    protected $completedDate;
+    protected $paymentMethod;
 
     /**
-     * Cpms schema
+     * WaiveRecommenderUser
      *
-     * @var string
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      *
-     * @ORM\Column(type="string", name="cpms_schema", length=10, nullable=true)
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="waive_recommender_user_id", referencedColumnName="id", nullable=true)
      */
-    protected $cpmsSchema;
+    protected $waiveRecommenderUser;
+
+    /**
+     * ProcessedByUser
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="processed_by_user_id", referencedColumnName="id", nullable=true)
+     */
+    protected $processedByUser;
+
+    /**
+     * ReceiptDocument
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     *
+     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
+     * @ORM\JoinColumn(name="receipt_document_id", referencedColumnName="id", nullable=true)
+     */
+    protected $receiptDocument;
 
     /**
      * Created by
@@ -103,26 +133,6 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $createdBy;
 
     /**
-     * Gateway url
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="gateway_url", length=1000, nullable=true)
-     */
-    protected $gatewayUrl;
-
-    /**
-     * Identifier - Id
-     *
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
-
-    /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -134,6 +144,24 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $lastModifiedBy;
 
     /**
+     * OLBS payment status
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="legacy_status", nullable=true)
+     */
+    protected $legacyStatus;
+
+    /**
+     * OLBS payment method
+     *
+     * @var int
+     *
+     * @ORM\Column(type="smallint", name="legacy_method", nullable=true)
+     */
+    protected $legacyMethod;
+
+    /**
      * Legacy choice
      *
      * @var int
@@ -143,7 +171,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $legacyChoice;
 
     /**
-     * Legacy guid
+     * OLBS payment reference
      *
      * @var string
      *
@@ -152,88 +180,13 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $legacyGuid;
 
     /**
-     * Legacy method
+     * Completed date
      *
-     * @var int
+     * @var \DateTime
      *
-     * @ORM\Column(type="smallint", name="legacy_method", nullable=true)
+     * @ORM\Column(type="datetime", name="completed_date", nullable=true)
      */
-    protected $legacyMethod;
-
-    /**
-     * Legacy status
-     *
-     * @var int
-     *
-     * @ORM\Column(type="smallint", name="legacy_status", nullable=true)
-     */
-    protected $legacyStatus;
-
-    /**
-     * Olbs key
-     *
-     * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
-     */
-    protected $olbsKey;
-
-    /**
-     * Olbs type
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=45, nullable=true)
-     */
-    protected $olbsType;
-
-    /**
-     * Payer name
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="payer_name", length=100, nullable=true)
-     */
-    protected $payerName;
-
-    /**
-     * Paying in slip number
-     *
-     * @var string
-     *
-     * @ORM\Column(type="string", name="paying_in_slip_number", length=100, nullable=true)
-     */
-    protected $payingInSlipNumber;
-
-    /**
-     * Payment method
-     *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="payment_method", referencedColumnName="id", nullable=true)
-     */
-    protected $paymentMethod;
-
-    /**
-     * Processed by user
-     *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="processed_by_user_id", referencedColumnName="id", nullable=true)
-     */
-    protected $processedByUser;
-
-    /**
-     * Receipt document
-     *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="receipt_document_id", referencedColumnName="id", nullable=true)
-     */
-    protected $receiptDocument;
+    protected $completedDate;
 
     /**
      * Reference
@@ -245,24 +198,76 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $reference;
 
     /**
-     * Status
+     * Cpms schema
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="cpms_schema", length=10, nullable=true)
      */
-    protected $status;
+    protected $cpmsSchema;
 
     /**
-     * Type
+     * Payer name
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", name="payer_name", length=100, nullable=true)
      */
-    protected $type;
+    protected $payerName;
+
+    /**
+     * Cheque po number
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="cheque_po_number", length=100, nullable=true)
+     */
+    protected $chequePoNumber;
+
+    /**
+     * Cheque po date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="date", name="cheque_po_date", nullable=true)
+     */
+    protected $chequePoDate;
+
+    /**
+     * Paying in slip number
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="paying_in_slip_number", length=100, nullable=true)
+     */
+    protected $payingInSlipNumber;
+
+    /**
+     * Comment
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="comment", length=1000, nullable=true)
+     */
+    protected $comment;
+
+    /**
+     * Waive recommendation date
+     *
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="waive_recommendation_date", nullable=true)
+     */
+    protected $waiveRecommendationDate;
+
+    /**
+     * Gateway url
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="gateway_url", length=1000, nullable=true)
+     */
+    protected $gatewayUrl;
 
     /**
      * Version
@@ -275,41 +280,34 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Waive recommendation date
+     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(type="datetime", name="waive_recommendation_date", nullable=true)
+     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
-    protected $waiveRecommendationDate;
+    protected $olbsKey;
 
     /**
-     * Waive recommender user
+     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="waive_recommender_user_id", referencedColumnName="id", nullable=true)
+     * @ORM\Column(type="string", name="olbs_type", length=45, nullable=true)
      */
-    protected $waiveRecommenderUser;
+    protected $olbsType;
 
     /**
-     * Fee transaction
+     * FeeTransactions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction",
-     *     mappedBy="transaction",
-     *     cascade={"persist"}
-     * )
+     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="transaction", cascade={"persist"})
      */
     protected $feeTransactions;
 
     /**
      * Initialise the collections
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -317,196 +315,13 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     }
 
     /**
-     * Initialise the collections
-     *
-     * @return void
+     * Initialise collections
      */
-    public function initCollections()
+    public function initCollections(): void
     {
         $this->feeTransactions = new ArrayCollection();
     }
 
-    /**
-     * Set the cheque po date
-     *
-     * @param \DateTime $chequePoDate new value being set
-     *
-     * @return Transaction
-     */
-    public function setChequePoDate($chequePoDate)
-    {
-        $this->chequePoDate = $chequePoDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the cheque po date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getChequePoDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->chequePoDate);
-        }
-
-        return $this->chequePoDate;
-    }
-
-    /**
-     * Set the cheque po number
-     *
-     * @param string $chequePoNumber new value being set
-     *
-     * @return Transaction
-     */
-    public function setChequePoNumber($chequePoNumber)
-    {
-        $this->chequePoNumber = $chequePoNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get the cheque po number
-     *
-     * @return string
-     */
-    public function getChequePoNumber()
-    {
-        return $this->chequePoNumber;
-    }
-
-    /**
-     * Set the comment
-     *
-     * @param string $comment new value being set
-     *
-     * @return Transaction
-     */
-    public function setComment($comment)
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Get the comment
-     *
-     * @return string
-     */
-    public function getComment()
-    {
-        return $this->comment;
-    }
-
-    /**
-     * Set the completed date
-     *
-     * @param \DateTime $completedDate new value being set
-     *
-     * @return Transaction
-     */
-    public function setCompletedDate($completedDate)
-    {
-        $this->completedDate = $completedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the completed date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getCompletedDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->completedDate);
-        }
-
-        return $this->completedDate;
-    }
-
-    /**
-     * Set the cpms schema
-     *
-     * @param string $cpmsSchema new value being set
-     *
-     * @return Transaction
-     */
-    public function setCpmsSchema($cpmsSchema)
-    {
-        $this->cpmsSchema = $cpmsSchema;
-
-        return $this;
-    }
-
-    /**
-     * Get the cpms schema
-     *
-     * @return string
-     */
-    public function getCpmsSchema()
-    {
-        return $this->cpmsSchema;
-    }
-
-    /**
-     * Set the created by
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get the created by
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set the gateway url
-     *
-     * @param string $gatewayUrl new value being set
-     *
-     * @return Transaction
-     */
-    public function setGatewayUrl($gatewayUrl)
-    {
-        $this->gatewayUrl = $gatewayUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get the gateway url
-     *
-     * @return string
-     */
-    public function getGatewayUrl()
-    {
-        return $this->gatewayUrl;
-    }
 
     /**
      * Set the id
@@ -525,17 +340,177 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int
-     */
+     * @return int     */
     public function getId()
     {
         return $this->id;
     }
 
     /**
+     * Set the status
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
+     *
+     * @return Transaction
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
+     *
+     * @return Transaction
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get the type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the payment method
+     *
+     * @param \Dvsa\Olcs\Api\Entity\System\RefData $paymentMethod new value being set
+     *
+     * @return Transaction
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get the payment method
+     *
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * Set the waive recommender user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $waiveRecommenderUser new value being set
+     *
+     * @return Transaction
+     */
+    public function setWaiveRecommenderUser($waiveRecommenderUser)
+    {
+        $this->waiveRecommenderUser = $waiveRecommenderUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the waive recommender user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getWaiveRecommenderUser()
+    {
+        return $this->waiveRecommenderUser;
+    }
+
+    /**
+     * Set the processed by user
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $processedByUser new value being set
+     *
+     * @return Transaction
+     */
+    public function setProcessedByUser($processedByUser)
+    {
+        $this->processedByUser = $processedByUser;
+
+        return $this;
+    }
+
+    /**
+     * Get the processed by user
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getProcessedByUser()
+    {
+        return $this->processedByUser;
+    }
+
+    /**
+     * Set the receipt document
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $receiptDocument new value being set
+     *
+     * @return Transaction
+     */
+    public function setReceiptDocument($receiptDocument)
+    {
+        $this->receiptDocument = $receiptDocument;
+
+        return $this;
+    }
+
+    /**
+     * Get the receipt document
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+    public function getReceiptDocument()
+    {
+        return $this->receiptDocument;
+    }
+
+    /**
+     * Set the created by
+     *
+     * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
+     *
+     * @return Transaction
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * Get the created by
+     *
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
      * Set the last modified by
      *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy entity being set as the value
+     * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
      * @return Transaction
      */
@@ -549,11 +524,56 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the legacy status
+     *
+     * @param int $legacyStatus new value being set
+     *
+     * @return Transaction
+     */
+    public function setLegacyStatus($legacyStatus)
+    {
+        $this->legacyStatus = $legacyStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the legacy status
+     *
+     * @return int     */
+    public function getLegacyStatus()
+    {
+        return $this->legacyStatus;
+    }
+
+    /**
+     * Set the legacy method
+     *
+     * @param int $legacyMethod new value being set
+     *
+     * @return Transaction
+     */
+    public function setLegacyMethod($legacyMethod)
+    {
+        $this->legacyMethod = $legacyMethod;
+
+        return $this;
+    }
+
+    /**
+     * Get the legacy method
+     *
+     * @return int     */
+    public function getLegacyMethod()
+    {
+        return $this->legacyMethod;
     }
 
     /**
@@ -573,8 +593,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy choice
      *
-     * @return int
-     */
+     * @return int     */
     public function getLegacyChoice()
     {
         return $this->legacyChoice;
@@ -597,59 +616,281 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the legacy guid
      *
-     * @return string
-     */
+     * @return string     */
     public function getLegacyGuid()
     {
         return $this->legacyGuid;
     }
 
     /**
-     * Set the legacy method
+     * Set the completed date
      *
-     * @param int $legacyMethod new value being set
+     * @param \DateTime $completedDate new value being set
      *
      * @return Transaction
      */
-    public function setLegacyMethod($legacyMethod)
+    public function setCompletedDate($completedDate)
     {
-        $this->legacyMethod = $legacyMethod;
+        $this->completedDate = $completedDate;
 
         return $this;
     }
 
     /**
-     * Get the legacy method
+     * Get the completed date
      *
-     * @return int
-     */
-    public function getLegacyMethod()
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getCompletedDate($asDateTime = false)
     {
-        return $this->legacyMethod;
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->completedDate);
+        }
+
+        return $this->completedDate;
     }
 
     /**
-     * Set the legacy status
+     * Set the reference
      *
-     * @param int $legacyStatus new value being set
+     * @param string $reference new value being set
      *
      * @return Transaction
      */
-    public function setLegacyStatus($legacyStatus)
+    public function setReference($reference)
     {
-        $this->legacyStatus = $legacyStatus;
+        $this->reference = $reference;
 
         return $this;
     }
 
     /**
-     * Get the legacy status
+     * Get the reference
      *
-     * @return int
-     */
-    public function getLegacyStatus()
+     * @return string     */
+    public function getReference()
     {
-        return $this->legacyStatus;
+        return $this->reference;
+    }
+
+    /**
+     * Set the cpms schema
+     *
+     * @param string $cpmsSchema new value being set
+     *
+     * @return Transaction
+     */
+    public function setCpmsSchema($cpmsSchema)
+    {
+        $this->cpmsSchema = $cpmsSchema;
+
+        return $this;
+    }
+
+    /**
+     * Get the cpms schema
+     *
+     * @return string     */
+    public function getCpmsSchema()
+    {
+        return $this->cpmsSchema;
+    }
+
+    /**
+     * Set the payer name
+     *
+     * @param string $payerName new value being set
+     *
+     * @return Transaction
+     */
+    public function setPayerName($payerName)
+    {
+        $this->payerName = $payerName;
+
+        return $this;
+    }
+
+    /**
+     * Get the payer name
+     *
+     * @return string     */
+    public function getPayerName()
+    {
+        return $this->payerName;
+    }
+
+    /**
+     * Set the cheque po number
+     *
+     * @param string $chequePoNumber new value being set
+     *
+     * @return Transaction
+     */
+    public function setChequePoNumber($chequePoNumber)
+    {
+        $this->chequePoNumber = $chequePoNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the cheque po number
+     *
+     * @return string     */
+    public function getChequePoNumber()
+    {
+        return $this->chequePoNumber;
+    }
+
+    /**
+     * Set the cheque po date
+     *
+     * @param \DateTime $chequePoDate new value being set
+     *
+     * @return Transaction
+     */
+    public function setChequePoDate($chequePoDate)
+    {
+        $this->chequePoDate = $chequePoDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the cheque po date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getChequePoDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->chequePoDate);
+        }
+
+        return $this->chequePoDate;
+    }
+
+    /**
+     * Set the paying in slip number
+     *
+     * @param string $payingInSlipNumber new value being set
+     *
+     * @return Transaction
+     */
+    public function setPayingInSlipNumber($payingInSlipNumber)
+    {
+        $this->payingInSlipNumber = $payingInSlipNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get the paying in slip number
+     *
+     * @return string     */
+    public function getPayingInSlipNumber()
+    {
+        return $this->payingInSlipNumber;
+    }
+
+    /**
+     * Set the comment
+     *
+     * @param string $comment new value being set
+     *
+     * @return Transaction
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get the comment
+     *
+     * @return string     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Set the waive recommendation date
+     *
+     * @param \DateTime $waiveRecommendationDate new value being set
+     *
+     * @return Transaction
+     */
+    public function setWaiveRecommendationDate($waiveRecommendationDate)
+    {
+        $this->waiveRecommendationDate = $waiveRecommendationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the waive recommendation date
+     *
+     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
+     *
+     * @return \DateTime     */
+    public function getWaiveRecommendationDate($asDateTime = false)
+    {
+        if ($asDateTime === true) {
+            return $this->asDateTime($this->waiveRecommendationDate);
+        }
+
+        return $this->waiveRecommendationDate;
+    }
+
+    /**
+     * Set the gateway url
+     *
+     * @param string $gatewayUrl new value being set
+     *
+     * @return Transaction
+     */
+    public function setGatewayUrl($gatewayUrl)
+    {
+        $this->gatewayUrl = $gatewayUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get the gateway url
+     *
+     * @return string     */
+    public function getGatewayUrl()
+    {
+        return $this->gatewayUrl;
+    }
+
+    /**
+     * Set the version
+     *
+     * @param int $version new value being set
+     *
+     * @return Transaction
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get the version
+     *
+     * @return int     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
@@ -669,8 +910,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs key
      *
-     * @return int
-     */
+     * @return int     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -693,288 +933,16 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the olbs type
      *
-     * @return string
-     */
+     * @return string     */
     public function getOlbsType()
     {
         return $this->olbsType;
     }
 
     /**
-     * Set the payer name
+     * Set the fee transactions
      *
-     * @param string $payerName new value being set
-     *
-     * @return Transaction
-     */
-    public function setPayerName($payerName)
-    {
-        $this->payerName = $payerName;
-
-        return $this;
-    }
-
-    /**
-     * Get the payer name
-     *
-     * @return string
-     */
-    public function getPayerName()
-    {
-        return $this->payerName;
-    }
-
-    /**
-     * Set the paying in slip number
-     *
-     * @param string $payingInSlipNumber new value being set
-     *
-     * @return Transaction
-     */
-    public function setPayingInSlipNumber($payingInSlipNumber)
-    {
-        $this->payingInSlipNumber = $payingInSlipNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get the paying in slip number
-     *
-     * @return string
-     */
-    public function getPayingInSlipNumber()
-    {
-        return $this->payingInSlipNumber;
-    }
-
-    /**
-     * Set the payment method
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $paymentMethod entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setPaymentMethod($paymentMethod)
-    {
-        $this->paymentMethod = $paymentMethod;
-
-        return $this;
-    }
-
-    /**
-     * Get the payment method
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getPaymentMethod()
-    {
-        return $this->paymentMethod;
-    }
-
-    /**
-     * Set the processed by user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $processedByUser entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setProcessedByUser($processedByUser)
-    {
-        $this->processedByUser = $processedByUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the processed by user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getProcessedByUser()
-    {
-        return $this->processedByUser;
-    }
-
-    /**
-     * Set the receipt document
-     *
-     * @param \Dvsa\Olcs\Api\Entity\Doc\Document $receiptDocument entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setReceiptDocument($receiptDocument)
-    {
-        $this->receiptDocument = $receiptDocument;
-
-        return $this;
-    }
-
-    /**
-     * Get the receipt document
-     *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
-     */
-    public function getReceiptDocument()
-    {
-        return $this->receiptDocument;
-    }
-
-    /**
-     * Set the reference
-     *
-     * @param string $reference new value being set
-     *
-     * @return Transaction
-     */
-    public function setReference($reference)
-    {
-        $this->reference = $reference;
-
-        return $this;
-    }
-
-    /**
-     * Get the reference
-     *
-     * @return string
-     */
-    public function getReference()
-    {
-        return $this->reference;
-    }
-
-    /**
-     * Set the status
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $status entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get the status
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set the type
-     *
-     * @param \Dvsa\Olcs\Api\Entity\System\RefData $type entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Get the type
-     *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set the version
-     *
-     * @param int $version new value being set
-     *
-     * @return Transaction
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get the version
-     *
-     * @return int
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * Set the waive recommendation date
-     *
-     * @param \DateTime $waiveRecommendationDate new value being set
-     *
-     * @return Transaction
-     */
-    public function setWaiveRecommendationDate($waiveRecommendationDate)
-    {
-        $this->waiveRecommendationDate = $waiveRecommendationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the waive recommendation date
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-
-     */
-    public function getWaiveRecommendationDate($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->waiveRecommendationDate);
-        }
-
-        return $this->waiveRecommendationDate;
-    }
-
-    /**
-     * Set the waive recommender user
-     *
-     * @param \Dvsa\Olcs\Api\Entity\User\User $waiveRecommenderUser entity being set as the value
-     *
-     * @return Transaction
-     */
-    public function setWaiveRecommenderUser($waiveRecommenderUser)
-    {
-        $this->waiveRecommenderUser = $waiveRecommenderUser;
-
-        return $this;
-    }
-
-    /**
-     * Get the waive recommender user
-     *
-     * @return \Dvsa\Olcs\Api\Entity\User\User
-     */
-    public function getWaiveRecommenderUser()
-    {
-        return $this->waiveRecommenderUser;
-    }
-
-    /**
-     * Set the fee transaction
-     *
-     * @param ArrayCollection $feeTransactions collection being set as the value
+     * @param \Doctrine\Common\Collections\ArrayCollection $feeTransactions collection being set as the value
      *
      * @return Transaction
      */
@@ -988,7 +956,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Get the fee transactions
      *
-     * @return ArrayCollection
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getFeeTransactions()
     {
@@ -998,7 +966,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Add a fee transactions
      *
-     * @param ArrayCollection|mixed $feeTransactions collection being added
+     * @param \Doctrine\Common\Collections\ArrayCollection|mixed $feeTransactions collection being added
      *
      * @return Transaction
      */
@@ -1032,5 +1000,13 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
         }
 
         return $this;
+    }
+
+    /**
+     * Get bundle data
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getId();
     }
 }

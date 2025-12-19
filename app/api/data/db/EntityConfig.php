@@ -65,6 +65,9 @@ return array(
         ),
         'locality' => array(
             'property' => 'addressLine4'
+        ),
+        'uprn' => array(
+            'type' => 'bigint'
         )
     ),
     'contact_details' => array(
@@ -221,6 +224,24 @@ return array(
         'financial_evidence_uploaded' => array(
             'type' => 'smallint'
         ),
+        'small_vehicle_evidence_uploaded' => array(
+            'type' => 'smallint'
+        ),
+        'occupation_evidence_uploaded' => array(
+            'type' => 'smallint'
+        ),
+        'psv_income_records_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'psv_occupation_records_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'psv_total_vehicle_small' => array(
+            'type' => 'smallint'
+        ),
+        'psv_total_vehicle_large' => array(
+            'type' => 'smallint'
+        ),
         'prev_has_licence' => array(
             'type' => 'yesnonull'
         ),
@@ -273,6 +294,9 @@ return array(
             'type' => 'yesnonull'
         ),
         'psv_medium_vhl_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'application_referred_to_pi' => array(
             'type' => 'yesnonull'
         ),
     ),
@@ -1398,6 +1422,13 @@ return array(
                 'entity' => 'SeriousInfringement',
                 'property' => 'appliedPenaltie'
             )
+        ),
+        'si_penalty_erru_requested_id' => array(
+            'property' => 'erruPenaltyRequested',
+            'inversedBy' => array(
+                'entity' => 'SiPenaltyErruRequested',
+                'property' => 'appliedPenalties'
+            )
         )
     ),
     'si_penalty_erru_imposed' => array(
@@ -1614,6 +1645,14 @@ return array(
             'inversedBy' => array(
                 'entity' => 'Pi',
                 'property' => 'piReason'
+            )
+        )
+    ),
+    'pi_sla_exception' => array(
+        'pi_id' => array(
+            'inversedBy' => array(
+                'entity' => 'Pi',
+                'property' => 'piSlaException'
             )
         )
     ),
@@ -2384,6 +2423,11 @@ return array(
                 'entity' => 'MessagingMessage',
                 'property' => 'userMessageRead',
             )
+        ),
+    ),
+    'messaging_subject' => array(
+        'is_active' => array(
+            'type' => 'smallint'
         ),
     ),
 );

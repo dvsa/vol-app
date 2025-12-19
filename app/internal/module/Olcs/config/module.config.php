@@ -224,6 +224,7 @@ return [
             'LvaVariation/Publish' => \Olcs\Controller\Lva\Variation\PublishController::class,
         ],
         'factories' => [
+            \Olcs\Controller\StaticAssetsController::class => \Olcs\Controller\Factory\StaticAssetsControllerFactory::class,
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class => TransportManagerControllerFactories\Details\TransportManagerDetailsResponsibilityControllerFactory::class,
             \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
             LvaApplicationControllers\AddressesController::class => LvaApplicationControllerFactories\AddressesControllerFactory::class,
@@ -349,6 +350,8 @@ return [
             DocumentControllers\DocumentRelinkController::class => DocumentControllerFactories\DocumentRelinkControllerFactory::class,
             DocumentControllers\DocumentUploadController::class => DocumentControllerFactories\DocumentUploadControllerFactory::class,
 
+            \Olcs\Controller\Letter\LetterGenerationController::class => \Olcs\Controller\Factory\Letter\LetterGenerationControllerFactory::class,
+
             IrhpPermitsControllers\IrhpApplicationDocsController::class => IrhpPermitsControllerFactories\IrhpApplicationDocsControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationFeesController::class => IrhpPermitsControllerFactories\IrhpApplicationFeesControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationProcessingOverviewController::class => IrhpPermitsControllerFactories\IrhpApplicationProcessingOverviewControllerFactory::class,
@@ -371,6 +374,7 @@ return [
             CaseControllers\Overview\OverviewController::class => OverviewControllerfactory::class,
             Olcs\Controller\Cases\PublicInquiry\PiController::class => Olcs\Controller\Cases\PublicInquiry\PiControllerFactory::class,
             Cases\PublicInquiry\HearingController::class => Cases\PublicInquiry\HearingControllerFactory::class,
+            Olcs\Controller\Cases\PublicInquiry\SlaExceptionController::class => Olcs\Controller\Cases\PublicInquiry\SlaExceptionControllerFactory::class,
             Olcs\Controller\IrhpPermits\IrhpApplicationController::class => Olcs\Controller\IrhpPermits\IrhpApplicationControllerFactory::class,
             Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderControllerFactory::class,
             LicenceProcessingInspectionRequestController::class => LicenceProcessingInspectionRequestControllerFactory::class,
@@ -925,10 +929,15 @@ return [
             CommonDataService\Search\Search::class => CommonDataService\Search\SearchFactory::class,
             DataService\ImpoundingLegislation::class => DataService\ImpoundingLegislationFactory::class,
             DataService\LicenceDecisionLegislation::class => DataService\LicenceDecisionLegislationFactory::class,
+            DataService\Letter\MasterTemplate::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterTestData::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterIssueType::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\LetterType::class => DataService\LetterTypeFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryReason::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\SubmissionLegislation::class => DataService\AbstractPublicInquiryDataFactory::class,
+            DataService\SlaException::class => CommonDataService\AbstractListDataServiceFactory::class,
         ]
     ],
     'form_service_manager' => [

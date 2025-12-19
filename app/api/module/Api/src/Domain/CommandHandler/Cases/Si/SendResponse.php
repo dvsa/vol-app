@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -50,17 +52,17 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
 
         //here is where we would expect the response from national register.
         try {
-            $responseCode = $this->inrClient->makeRequest($xmlFile->getContent());
+            $responseCode = $this->inrClient->makeRequestReturnStatusCode($xmlFile->getContent());
         } catch (AdapterRuntimeException $e) {
             $this->updateStatus($erruRequest, ErruRequestEntity::FAILED_CASE_TYPE);
-            throw new InrClientException('There was an error sending the INR response ' . $e->getMessage());
+            throw new InrClientException('Sending MSI response: There was an error sending the INR response ' . $e->getMessage());
         }
 
         $this->inrClient->close();
 
         if ($responseCode !== Response::STATUS_CODE_202) {
             $this->updateStatus($erruRequest, ErruRequestEntity::FAILED_CASE_TYPE);
-            throw new InrClientException('INR Http response code was ' . $responseCode);
+            throw new InrClientException('Sending MSI response: INR Http response code was ' . $responseCode);
         }
 
         $this->updateStatus($erruRequest, ErruRequestEntity::SENT_CASE_TYPE);

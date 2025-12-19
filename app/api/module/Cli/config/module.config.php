@@ -26,6 +26,7 @@ $commonBatchCommandDeps = [
 return [
     'laminas-cli' => [
         'commands' => [
+            'batch:cache-clear' => Dvsa\Olcs\Cli\Command\Batch\CacheClearCommand::class,
             'batch:ch-vs-olcs-diffs' => Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand::class,
             'batch:clean-up-variations' => Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand::class,
             'batch:cns' => Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand::class,
@@ -53,6 +54,7 @@ return [
             'permits:cancel-unsubmitted-bilateral' => Dvsa\Olcs\Cli\Command\Permits\CancelUnsubmittedBilateralCommand::class,
             'permits:close-expired-windows' => Dvsa\Olcs\Cli\Command\Permits\CloseExpiredWindowsCommand::class,
             'permits:mark-expired-permits' => Dvsa\Olcs\Cli\Command\Permits\MarkExpiredPermitsCommand::class,
+            'permits:reset-test-data' => Dvsa\Olcs\Cli\Command\Permits\ResetPermitsTestDataCommand::class,
             'permits:withdraw-unpaid' => Dvsa\Olcs\Cli\Command\Permits\WithdrawUnpaidIrhpCommand::class,
             'queue:process-queue' => Dvsa\Olcs\Cli\Command\Queue\ProcessQueueCommand::class,
             'queue:process-company-profile' => Dvsa\Olcs\Cli\Command\Queue\ProcessCompanyProfileSQSQueueCommand::class,
@@ -68,6 +70,7 @@ return [
             'migrations:migrate'    => MigrationCommands\MigrateCommand::class,
             'migrations:status'     => MigrationCommands\StatusCommand::class,
             'migrations:version'    => MigrationCommands\VersionCommand::class,
+            'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
         ],
     ],
     'dependencies' => [
@@ -124,6 +127,9 @@ return [
             MigrationCommands\VersionCommand::class => function (ContainerInterface $container) {
                 return new MigrationCommands\VersionCommand($container->get(DependencyFactory::class));
             },
+            
+            
+            
         ],
     ],
     'service_manager' => [
@@ -138,9 +144,70 @@ return [
             'Queue' => Dvsa\Olcs\Cli\Service\Queue\QueueProcessorFactory::class,
             Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractConsumerServices::class
             => Dvsa\Olcs\Cli\Service\Queue\Consumer\Factory\AbstractConsumerServicesFactory::class,
+            
+            // Entity Generator Services
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector(
+                    $container->get('doctrine.connection.orm_default'),
+                    $container->get('config')['entity_generator'] ?? []
+                );
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry::class => function (ContainerInterface $container) {
+                $registry = new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry();
+                
+                // Register type handlers in priority order
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\PrimaryKeyTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\VersionTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\YesNoTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\EncryptedStringTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler());
+                $registry->register(new \Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler());
+                
+                return $registry;
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService();
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver();
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer(
+                    __DIR__ . '/../src/Service/EntityGenerator/Templates',
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService::class)
+                );
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator(
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry::class),
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer::class),
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class),
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
+                );
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class => function (ContainerInterface $container) {
+                $configPath = __DIR__ . '/../../../data/db/EntityConfig.php';
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService($configPath);
+            },
+            
+            \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor::class => function (ContainerInterface $container) {
+                return new \Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor(
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService::class),
+                    $container->get(\Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver::class)
+                );
+            },
         ],
     ],
     ConfigAbstractFactory::class => [
+        BatchCommands\CacheClearCommand::class => $commonBatchCommandDeps,
         BatchCommands\CleanUpAbandonedVariationsCommand::class => $commonBatchCommandDeps,
         BatchCommands\CompaniesHouseVsOlcsDiffsExportCommand::class => $commonBatchCommandDeps,
         BatchCommands\ContinuationNotSoughtCommand::class => $commonBatchCommandDeps,
@@ -168,6 +235,7 @@ return [
         PermitsCommands\CancelUnsubmittedBilateralCommand::class => $commonBatchCommandDeps,
         PermitsCommands\CloseExpiredWindowsCommand::class => $commonBatchCommandDeps,
         PermitsCommands\MarkExpiredPermitsCommand::class => $commonBatchCommandDeps,
+        PermitsCommands\ResetPermitsTestDataCommand::class => $commonBatchCommandDeps,
         PermitsCommands\WithdrawUnpaidIrhpCommand::class => $commonBatchCommandDeps,
         QueueCommands\ProcessQueueCommand::class => [...$commonCommandDeps, ...['config', 'Queue']],
         QueueCommands\CompanyProfileDlqSQSQueueCommand::class => $commonCommandDeps,
@@ -175,6 +243,7 @@ return [
         QueueCommands\ProcessInsolvencySQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
+        \Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class => $commonCommandDeps,
     ],
     'cache' => [
         'adapter' => [
@@ -333,6 +402,7 @@ return [
     ],
     \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::CONFIG_KEY => [
         'factories' => [
+            Cli\Domain\Command\CacheClear::class => CommandHandler\CacheClear::class,
             Cli\Domain\Command\RemoveReadAudit::class => CommandHandler\RemoveReadAudit::class,
             Cli\Domain\Command\CleanUpAbandonedVariations::class => CommandHandler\CleanUpAbandonedVariations::class,
             Cli\Domain\Command\CreateViExtractFiles::class => CommandHandler\CreateViExtractFiles::class,
@@ -346,7 +416,9 @@ return [
             Cli\Domain\Command\Permits\CloseExpiredWindows::class => CommandHandler\Permits\CloseExpiredWindows::class,
             Cli\Domain\Command\Permits\CancelUnsubmittedBilateral::class => CommandHandler\Permits\CancelUnsubmittedBilateral::class,
             Cli\Domain\Command\Permits\MarkExpiredPermits::class => CommandHandler\Permits\MarkExpiredPermits::class,
+            Cli\Domain\Command\Permits\ResetPermitsTestData::class => CommandHandler\Permits\ResetPermitsTestData::class,
             Cli\Domain\Command\InterimEndDateEnforcement::class => CommandHandler\InterimEndDateEnforcement::class,
+            Cli\Domain\Command\EntityGenerator\GenerateEntities::class => CommandHandler\EntityGenerator\GenerateEntities::class,
         ],
     ],
 
