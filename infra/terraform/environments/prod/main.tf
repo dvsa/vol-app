@@ -641,6 +641,11 @@ module "service" {
         commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
+      {
+        name     = "dvaoplic",
+        commands = ["batch:data-dva-ni-export ", "--report-name", "ni-operator-licence", "-v"],
+        schedule = ["cron(00 23 ? * 1 *)"],
+      },
     ]
   }
 }
