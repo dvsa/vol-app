@@ -185,7 +185,7 @@ module "service" {
       memory          = 4096
       autoscaling_min = 3
 
-      listener_rule_enable = true
+      listener_rule_enable = false
 
       version    = var.api_image_tag
       repository = data.aws_ecr_repository.this["api"].repository_url
@@ -209,7 +209,7 @@ module "service" {
       memory          = 4096
       autoscaling_min = 1
 
-      listener_rule_enable = true
+      listener_rule_enable = false
 
       version    = var.internal_image_tag
       repository = data.aws_ecr_repository.this["internal"].repository_url
@@ -255,7 +255,7 @@ module "service" {
       memory          = 4096
       autoscaling_min = 1
 
-      listener_rule_enable = true
+      listener_rule_enable = false
 
       version    = var.selfserve_image_tag
       repository = data.aws_ecr_repository.this["selfserve"].repository_url
