@@ -49,6 +49,11 @@ on:
       etl_ref:
         type: string
         required: true
+      tests_ref:
+        type: string
+        required: false
+        default: 'v4.16.2'
+        description: 'vol-functional-tests ref (tag/branch/commit)'
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY:
         required: true
@@ -120,7 +125,7 @@ jobs:
     needs:
       - terraform_env
       - liquibase
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@${{ inputs.tests_ref }}
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -140,7 +145,7 @@ jobs:
       - terraform_env
       - liquibase
       - test_batch
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@${{ inputs.tests_ref }}
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -158,7 +163,7 @@ jobs:
     name: Selfserve Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@${{ inputs.tests_ref }}
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -176,7 +181,7 @@ jobs:
     name: Internal Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@main
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@${{ inputs.tests_ref }}
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
