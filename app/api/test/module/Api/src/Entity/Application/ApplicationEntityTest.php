@@ -4951,11 +4951,13 @@ class ApplicationEntityTest extends EntityTester
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getApplicationReference')->once()->andReturn('EXPECTED')
+            ->shouldReceive('getAwaitingGrantFeeId')->once()->andReturn(null)
             ->getMock();
 
         static::assertEquals(
             [
                 'applicationReference' => 'EXPECTED',
+                'awaitingGrantFeeId' => null
             ],
             $sut->getCalculatedBundleValues()
         );

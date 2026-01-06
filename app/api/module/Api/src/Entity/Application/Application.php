@@ -2746,11 +2746,8 @@ class Application extends AbstractApplication implements ContextProviderInterfac
      */
     public function getAwaitingGrantFeeId()
     {
-        $criteria = Criteria::create()
-            ->orderBy(['invoicedDate' => Criteria::DESC]);
-
         /** @var Entity\Fee\Fee $fee */
-        foreach ($this->getFees()->matching($criteria) as $fee) {
+        foreach ($this->getFees()  ?? [] as $fee) {
             if (
                 $fee->isOutstanding()
                 && $fee->getFeeType()->getFeeType()->getId() === FeeTypeEntity::FEE_TYPE_GRANT
