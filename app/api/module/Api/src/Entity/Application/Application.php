@@ -2450,6 +2450,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
     {
         return [
             'applicationReference' => $this->getApplicationReference(),
+            'awaitingGrantFeeId' => $this->getAwaitingGrantFeeId(),
         ];
     }
 
@@ -2736,5 +2737,28 @@ class Application extends AbstractApplication implements ContextProviderInterfac
     {
         $this->interimAuthVehicles = ($this->interimAuthHgvVehicles ?? 0) + ($this->interimAuthLgvVehicles ?? 0);
         return $this;
+    }
+
+    /**
+     * Get Fees Id for Application with Grant Status
+     *
+     * @return int | null
+     */
+    public function getAwaitingGrantFeeId()
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['invoicedDate' => Criteria::DESC]);
+
+        /** @var Entity\Fee\Fee $fee */
+        foreach ($this->getFees()->matching($criteria) as $fee) {
+            if (
+                $fee->isOutstanding()
+                && $fee->getFeeType()->getFeeType()->getId() === FeeTypeEntity::FEE_TYPE_GRANT
+            ) {
+                return $fee->getId();
+            }
+        }
+
+        return null;
     }
 }
