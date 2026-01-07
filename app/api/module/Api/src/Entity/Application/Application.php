@@ -2738,24 +2738,4 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $this->interimAuthVehicles = ($this->interimAuthHgvVehicles ?? 0) + ($this->interimAuthLgvVehicles ?? 0);
         return $this;
     }
-
-    /**
-     * Get Fees Id for Application with Grant Status
-     *
-     * @return int | null
-     */
-    public function getAwaitingGrantFeeId()
-    {
-        /** @var Entity\Fee\Fee $fee */
-        foreach ($this->getFees()  ?? [] as $fee) {
-            if (
-                $fee->isOutstanding()
-                && $fee->getFeeType()->getFeeType()->getId() === FeeTypeEntity::FEE_TYPE_GRANT
-            ) {
-                return $fee->getId();
-            }
-        }
-
-        return null;
-    }
 }
