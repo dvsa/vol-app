@@ -2381,7 +2381,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $grantFees = [];
 
         /** @var Entity\Fee\Fee $fee */
-        foreach ($this->getFees() ?? [] as $fee) {
+        foreach ($this->getFees() as $fee) {
             if ($fee->isGrantFee() && $fee->isOutstanding()) {
                 $grantFees[$fee->getId()] = $fee;
             }
