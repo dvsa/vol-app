@@ -5545,7 +5545,8 @@ class ApplicationEntityTest extends EntityTester
 
         $this->assertEmpty($application->getOutstandingGrantFees());
 
-        $fee = m::mock()
+        /** @var FeeEntity $fee */
+        $fee = m::mock(FeeEntity::class)
             ->shouldReceive('isGrantFee')
             ->andReturn(true)
             ->shouldReceive('isOutstanding')
