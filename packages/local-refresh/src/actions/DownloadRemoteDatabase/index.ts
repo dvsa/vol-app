@@ -727,7 +727,7 @@ export default class DownloadRemoteDatabase implements ActionInterface {
         }
         if (fs.existsSync(tempFile)) {
           const size = fs.statSync(tempFile).size;
-          console.error(chalk.yellow(`  Partial dump file: ${(size / 1024 / 1024).toFixed(2)} MB`));
+          console.error(chalk.yellow(`  Partial dump file: ${(size / 1024 / 1024).toFixed(1)} MB`));
         }
         throw new Error(`Database dump failed with exit code ${exitCode}`);
       }
