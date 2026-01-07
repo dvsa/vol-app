@@ -2450,7 +2450,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
     {
         return [
             'applicationReference' => $this->getApplicationReference(),
-            'awaitingGrantFeeId' => array_key_first($this->getOutstandingGrantFees() ?? []),
+            'awaitingGrantFeeId' => array_key_first($this->getOutstandingGrantFees()),
         ];
     }
 

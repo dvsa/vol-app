@@ -4951,7 +4951,7 @@ class ApplicationEntityTest extends EntityTester
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getApplicationReference')->once()->andReturn('EXPECTED')
-            ->shouldReceive('getOutstandingGrantFees')->once()->andReturn(null)
+            ->shouldReceive('getOutstandingGrantFees')->once()->andReturn([])
             ->getMock();
 
         static::assertEquals(
@@ -5539,7 +5539,7 @@ class ApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetOutstandingGrantFees()
+    public function testGetOutstandingGrantFees(): void
     {
         $application = $this->instantiate(Entity::class);
 
@@ -5556,6 +5556,8 @@ class ApplicationEntityTest extends EntityTester
 
         $application->setFees(new ArrayCollection([$fee]));
 
-        $this->assertSame(array_key_first($application->getOutstandingGrantFees() ?? []), 99);
+        $expected = [99 => $fee];
+
+        $this->assertEquals($expected, $application->getOutstandingGrantFees());
     }
 }
