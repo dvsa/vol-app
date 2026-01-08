@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Validators\EmailAddress as EmailAddressValidator;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser as OrganisationUserEntity;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Create Correspondence Record
@@ -55,7 +56,23 @@ final class CreateCorrespondenceRecord extends AbstractCommandHandler implements
             /** @var OrganisationUserEntity $orgUser */
             $user = $orgUser->getUser();
 
-            $emailAddress = $user->getContactDetails()->getEmailAddress();
+            $contactDetails = $user->getContactDetails();
+            if ($contactDetails === null) {
+                Logger::crit(
+                    'CreateCorrespondenceRecord: Admin user has no contact_details',
+                    [
+                        'userId' => $user->getId(),
+                        'userLoginId' => $user->getLoginId(),
+                        'licenceId' => $licence->getId(),
+                        'licenceNo' => $licence->getLicNo(),
+                        'organisationId' => $licence->getOrganisation()?->getId(),
+                        'organisationName' => $licence->getOrganisation()?->getName(),
+                    ]
+                );
+                continue;
+            }
+
+            $emailAddress = $contactDetails->getEmailAddress();
             if (!$validator->isValid($emailAddress)) {
                 continue;
             }
