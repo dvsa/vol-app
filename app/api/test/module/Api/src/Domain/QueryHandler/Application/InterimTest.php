@@ -44,6 +44,8 @@ class InterimTest extends QueryHandlerTestCase
 
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->shouldReceive('getFees')
+            ->andReturn([]);
         $application->setInterimStatus($statusObj);
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')
