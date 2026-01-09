@@ -98,8 +98,8 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
 
         $results = ['results' => $expectedList];
         $params = [
-            'sort' => 'sectionCode',
-            'order' => 'ASC',
+            'sort' => 'sectionCode, description',
+            'order' => 'ASC, ASC',
             'niFlag' => $niFlag,
             'goodsOrPsv' => $goodsOrPsv,
         ];
