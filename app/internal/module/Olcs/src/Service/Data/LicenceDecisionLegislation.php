@@ -22,12 +22,12 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
     /**
      * @var string
      */
-    protected $sort = 'sectionCode';
+    protected $sort = 'sectionCode, description';
 
     /**
      * @var string
      */
-    protected $order = 'ASC';
+    protected $order = 'ASC, ASC';
 
     /**
      * Create service instance

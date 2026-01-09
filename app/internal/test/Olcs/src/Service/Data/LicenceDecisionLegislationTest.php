@@ -77,8 +77,8 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
             ->once()
             ->andReturnUsing(
                 function ($dto) {
-                    $this->assertEquals('sectionCode', $dto->getSort());
-                    $this->assertEquals('ASC', $dto->getOrder());
+                    $this->assertEquals('sectionCode, description', $dto->getSort());
+                    $this->assertEquals('ASC, ASC', $dto->getOrder());
                     return $this->query;
                 }
             );
