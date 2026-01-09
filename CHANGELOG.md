@@ -1,5 +1,27 @@
 # Changelog
 
+## [6.10.0](https://github.com/dvsa/vol-app/compare/v6.9.0...v6.10.0) (2026-01-09)
+
+
+### Features
+
+* add skeleton HTML template for letters ([#1254](https://github.com/dvsa/vol-app/issues/1254)) ([08dd057](https://github.com/dvsa/vol-app/commit/08dd057c2ca77fceb50cb97ac7672836c74680e9))
+* cache clear cli command and workflow step ([#1239](https://github.com/dvsa/vol-app/issues/1239)) ([1e51c4d](https://github.com/dvsa/vol-app/commit/1e51c4d8b06d8a2183420db96ee3263a9932f655))
+* filter advert documents by current application ([#1250](https://github.com/dvsa/vol-app/issues/1250)) ([7eab2af](https://github.com/dvsa/vol-app/commit/7eab2afbcd4807efad4644ab8d2a2fde63c795cc))
+* letter instance builder ([#1251](https://github.com/dvsa/vol-app/issues/1251)) ([def999e](https://github.com/dvsa/vol-app/commit/def999eca91da5300bd1095d4c66145a75827ac5))
+* letters for NI no longer include phone number VOL-6323 ([#1256](https://github.com/dvsa/vol-app/issues/1256)) ([adc2590](https://github.com/dvsa/vol-app/commit/adc259063529b47626da85778e81804e7a997113))
+* remove old check repute url, replace with request to INR VOL-5804 ([#681](https://github.com/dvsa/vol-app/issues/681)) ([96eaabd](https://github.com/dvsa/vol-app/commit/96eaabdf45c2bfa8049a2b7f1f936b7ae4e89561))
+* replace laminas/mail with symfony/mailer ([#1216](https://github.com/dvsa/vol-app/issues/1216)) ([ff575d1](https://github.com/dvsa/vol-app/commit/ff575d1ac55130d62cb7d30bc58dd1ba9d3aaeb5))
+* send Grant Fee Id to redirect user to payment page when applica… ([#1264](https://github.com/dvsa/vol-app/issues/1264)) ([4539567](https://github.com/dvsa/vol-app/commit/4539567b0d69971bc01ffb0e16949e3391903f7a))
+* use versioning for functional tests ([#1262](https://github.com/dvsa/vol-app/issues/1262)) ([3c9846a](https://github.com/dvsa/vol-app/commit/3c9846a8cccf772d8296dc60916932a26341df68))
+
+
+### Bug Fixes
+
+* op centre ad upload fixes vol 6575 ([#1257](https://github.com/dvsa/vol-app/issues/1257)) ([6d7eb12](https://github.com/dvsa/vol-app/commit/6d7eb12269f8d0b4f9dc9970d23091bcf3f32415))
+* sort the list with two coloumns sectionCode and description VOL-6852 ([#1265](https://github.com/dvsa/vol-app/issues/1265)) ([e3a0a70](https://github.com/dvsa/vol-app/commit/e3a0a70d4ddc8c1147d0f0367c0e335a986f5f9a))
+* update mail config to remove deprecated MultiTransport and support for non-ecs mail config ([#1255](https://github.com/dvsa/vol-app/issues/1255)) ([5facf41](https://github.com/dvsa/vol-app/commit/5facf41f108889bfef2250e49c1ffabedce59955))
+
 ## [6.9.0](https://github.com/dvsa/vol-app/compare/v6.8.0...v6.9.0) (2025-11-28)
 
 
