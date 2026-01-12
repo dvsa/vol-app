@@ -203,6 +203,28 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'preview' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'preview',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'preview-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'previewContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

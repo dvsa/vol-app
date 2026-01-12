@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "25965192b0ced944085c0db6bb0bed83",
+  "content-hash": "10cd006d29e83d45782fd4dd10374d79",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -4534,16 +4534,16 @@
     },
     {
       "name": "olcs/olcs-transfer",
-      "version": "v8.4.0",
+      "version": "v8.5.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/olcs-transfer.git",
-        "reference": "7cce67b80a230b0106f320f65e7c74d6dcd3d57e"
+        "reference": "8765e364304524a0c8f1ad72dbf70e88ede55b23"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/7cce67b80a230b0106f320f65e7c74d6dcd3d57e",
-        "reference": "7cce67b80a230b0106f320f65e7c74d6dcd3d57e",
+        "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/8765e364304524a0c8f1ad72dbf70e88ede55b23",
+        "reference": "8765e364304524a0c8f1ad72dbf70e88ede55b23",
         "shasum": ""
       },
       "require": {
@@ -4586,9 +4586,9 @@
       "notification-url": "https://packagist.org/downloads/",
       "description": "OLCS Transfer",
       "support": {
-        "source": "https://github.com/dvsa/olcs-transfer/tree/v8.4.0"
+        "source": "https://github.com/dvsa/olcs-transfer/tree/v8.5.0"
       },
-      "time": "2025-12-05T11:07:28+00:00"
+      "time": "2026-01-12T12:36:27+00:00"
     },
     {
       "name": "olcs/olcs-utils",

@@ -57,38 +57,35 @@
     <a class="govuk-link" href="#" id="cancel-letter-btn">Cancel</a>
 </div>
 
-<div id="placeholder-message" class="govuk-inset-text" style="display: none; margin-top: 1rem;">
-    <strong>Preview functionality to be implemented in VOL-5519</strong>
-    <p class="govuk-body-s" style="margin-top: 0.5rem;">
-        Selected issues: <span id="selected-issues-count">0</span>
-    </p>
-</div>
 </form>
 
-<div id="letter-debug-output" style="display: none; margin-top: 2rem;">
-    <div class="govuk-panel govuk-panel--confirmation" style="background-color: #00703c;">
-        <h2 class="govuk-panel__title">Letter Instance Created Successfully</h2>
-    </div>
+<!-- Preview or edit letter modal content (hidden until letter is created) -->
+<div id="letter-preview-modal" style="display: none;">
+    <p class="govuk-body">
+        <strong>Category</strong><br>
+        <span id="preview-category">-</span>
+    </p>
+    <p class="govuk-body">
+        <strong>Subcategory</strong><br>
+        <span id="preview-subcategory">-</span>
+    </p>
+    <p class="govuk-body">
+        <strong>Template</strong><br>
+        <span id="preview-template">-</span>
+    </p>
 
-    <div style="margin-top: 2rem;">
-        <h3 class="govuk-heading-m">Debug Output</h3>
-        <details class="govuk-details" data-module="govuk-details" open>
-            <summary class="govuk-details__summary">
-                <span class="govuk-details__summary-text">View Letter Instance Data</span>
-            </summary>
-            <div class="govuk-details__text">
-                <pre id="debug-content" style="background-color: #f3f2f1; padding: 1rem; overflow-x: auto; font-family: monospace; font-size: 12px; max-height: 500px; overflow-y: auto; border: 1px solid #b1b4b6;"></pre>
-            </div>
-        </details>
-    </div>
+    <h3 class="govuk-heading-m">Check and edit your letter</h3>
+    <p class="govuk-inset-text">
+        <a href="#" id="preview-link" class="govuk-link" target="_blank">
+            View or edit letter (opens in new tab)
+        </a>
+    </p>
 
-    <div class="govuk-inset-text">
-        <p class="govuk-body">
-            <strong>For Development/Testing:</strong> The letter instance has been created with all selected issues.
-            Sections, todos, and appendices will be added in future tickets.
-        </p>
-        <p class="govuk-body">
-            Review the JSON output above to verify the letter instance was created correctly with all relationships.
-        </p>
+    <div class="govuk-button-group">
+        <button type="button" id="prepare-to-send-btn" class="govuk-button" disabled title="Coming soon in VOL-5520">
+            Prepare to send
+        </button>
+        <a class="govuk-link" href="#" id="back-to-issues-btn">Back</a>
+        <a class="govuk-link" href="#" id="cancel-preview-btn">Cancel</a>
     </div>
 </div>

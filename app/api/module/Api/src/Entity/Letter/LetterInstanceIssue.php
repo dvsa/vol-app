@@ -59,7 +59,7 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
             return $this->editedContent;
         }
 
-        return $this->letterIssueVersion->getDefaultBodyContent() ?: [];
+        return $this->letterIssueVersion->getDefaultBodyContentAsArray() ?: [];
     }
 
     /**
