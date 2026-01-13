@@ -23,8 +23,12 @@ class LetterPreviewServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterPreviewService
     {
+        $repoManager = $container->get('RepositoryServiceManager');
+
         return new LetterPreviewService(
-            $container->get(SectionRendererPluginManager::class)
+            $container->get(SectionRendererPluginManager::class),
+            $container->get('ContentStore'),
+            $repoManager->get('DocTemplate')
         );
     }
 }

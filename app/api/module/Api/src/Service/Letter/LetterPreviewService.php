@@ -16,9 +16,20 @@ use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
  */
 class LetterPreviewService
 {
+    private const LOGO_TEMPLATE_SLUG = 'otclogo-letters';
+
+    private SectionRendererPluginManager $rendererManager;
+    private $contentStore;
+    private $docTemplateRepo;
+
     public function __construct(
-        private readonly SectionRendererPluginManager $rendererManager
+        SectionRendererPluginManager $rendererManager,
+        $contentStore,
+        $docTemplateRepo
     ) {
+        $this->rendererManager = $rendererManager;
+        $this->contentStore = $contentStore;
+        $this->docTemplateRepo = $docTemplateRepo;
     }
 
     /**
@@ -150,6 +161,7 @@ class LetterPreviewService
         string $closingHtml
     ): array {
         return [
+            '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
             '{{LETTER_REFERENCE}}' => htmlspecialchars($letterInstance->getReference() ?? ''),
             '{{LETTER_DATE}}' => date('jS F Y'),
             '{{SECTIONS_CONTENT}}' => $sectionsHtml,
@@ -246,6 +258,47 @@ class LetterPreviewService
         }
 
         return '<p>Dear Sir or Madam,</p>';
+    }
+
+    /**
+     * Build OTC logo as base64 data URI
+     *
+     * Fetches logo by template slug for reliability across environments
+     *
+     * @return string Base64 data URI or empty string if logo not found
+     */
+    private function buildLogoImage(): string
+    {
+        try {
+            // Fetch DocTemplate by slug
+            $docTemplate = $this->docTemplateRepo->fetchByTemplateSlug(self::LOGO_TEMPLATE_SLUG);
+
+            if ($docTemplate === null) {
+                return '';
+            }
+
+            // Get document identifier (path in content store)
+            $document = $docTemplate->getDocument();
+            if ($document === null) {
+                return '';
+            }
+
+            $identifier = $document->getIdentifier();
+
+            // Read from content store
+            $file = $this->contentStore->read($identifier);
+            if ($file === null) {
+                return '';
+            }
+
+            $content = $file->getContent();
+            $base64 = base64_encode($content);
+
+            return 'data:image/png;base64,' . $base64;
+        } catch (\Exception $e) {
+            // Log error but don't fail rendering
+            return '';
+        }
     }
 
     /**
