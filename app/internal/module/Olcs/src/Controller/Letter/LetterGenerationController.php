@@ -210,6 +210,9 @@ class LetterGenerationController extends AbstractInternalController implements T
      */
     public function previewAction()
     {
+        // Clear any stale flash messages from previous session
+        $this->flashMessenger()->clearCurrentMessagesFromContainer();
+
         $letterInstanceId = $this->params()->fromQuery('id');
 
         if (!$letterInstanceId) {
