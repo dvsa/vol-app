@@ -60,15 +60,17 @@ return [
         ],
         'driver' => [
             'EntityDriver' => [
-                'cache' => 'apcu'
+                'cache' => 'redis'
             ],
             'translatable_metadata_driver' => [
-                'cache' => 'apcu',
+                'cache' => 'redis',
             ]
         ],
         'configuration' => [
             'orm_default' => [
-                'metadata_cache' => 'apcu',
+                'metadata_cache' => 'redis',
+                'query_cache' => 'array',
+                'result_cache' => 'array',
                 'generate_proxies' => true,
                 // Log SQL queries to the OLCS application log file
                 //'sql_logger' => 'DoctrineLogger',
@@ -523,6 +525,43 @@ return [
                 ],
             ],
         ],
+        'doctrinemodule.cache.redis' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+            'options' => [
+                'server' => [
+                    'host' => '127.0.0.1',
+                    'port' => 6379,
+                ],
+                'lib_options' => [
+                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
+                ],
+                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'namespace' => 'zfcache',
+            ],
+            'plugins' => [
+                [
+                    'name' => 'exception_handler',
+                    'options' => [
+                        'throw_exceptions' => false,
+                    ],
+                ],
+            ],
+        ],
+        'doctrinemodule.cache.apcu' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Apcu::class,
+            'options' => [
+                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'namespace' => 'zfcache',
+            ],
+        ],
+        'doctrinemodule.cache.filesystem' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Filesystem::class,
+            'options' => [
+                'cache_dir' => 'data/cache/doctrine',
+                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'namespace' => 'zfcache',
+            ],
+        ]
     ],
 
     'dvla_search' => [
