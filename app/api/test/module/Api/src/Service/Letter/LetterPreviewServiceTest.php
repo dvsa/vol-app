@@ -30,11 +30,26 @@ class LetterPreviewServiceTest extends MockeryTestCase
 {
     private LetterPreviewService $sut;
     private m\MockInterface|SectionRendererPluginManager $mockRendererManager;
+    private m\MockInterface $mockContentStore;
+    private m\MockInterface $mockDocTemplateRepo;
 
     public function setUp(): void
     {
         $this->mockRendererManager = m::mock(SectionRendererPluginManager::class);
-        $this->sut = new LetterPreviewService($this->mockRendererManager);
+        $this->mockContentStore = m::mock();
+        $this->mockDocTemplateRepo = m::mock();
+
+        // Default: logo lookup returns empty (no logo found)
+        $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
+            ->with('otclogo-letters')
+            ->andReturn(null)
+            ->byDefault();
+
+        $this->sut = new LetterPreviewService(
+            $this->mockRendererManager,
+            $this->mockContentStore,
+            $this->mockDocTemplateRepo
+        );
     }
 
     public function testRenderPreviewWithoutTemplate(): void
