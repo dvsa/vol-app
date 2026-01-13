@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<?php
+  $title = 'Tm repute check: ' . $tmName;
+  echo $this->partial('partials/review-header', ['pageTitle' => $title]);
+?>
+<body>
+<div class="printable">
+  <div class="printable__header">
+    <h1><?php echo $this->escapeHtml($title); ?></h1>
+    <a class="hide-print" href="javascript:window.print()">Print this page</a>
+  </div>
+
+  <?php
+    echo $this->partial(
+      'partials/read-only/govuk-summary-list',
+      ['heading' => 'Search details', 'items' => $searchDetails]
+    );
+  ?>
+
+  <?php foreach ($foundCountries as $country):
+
+        echo $this->partial(
+          'partials/read-only/govuk-summary-list',
+          ['heading' => 'Response from ' . $country['name'] . ' (details)', 'items' => $country['details']]
+        );
+
+        $undertakingCount = 0;
+
+        foreach ($country['undertakings'] as $undertaking):
+          $undertakingCount++;
+
+          echo $this->partial(
+            'partials/read-only/govuk-summary-list',
+            ['heading' => 'Response from ' . $country['name'] . ' (undertaking ' . $undertakingCount . ')', 'items' => $undertaking]
+          );
+
+        endforeach;
+  endforeach; ?>
+
+  <?php if (isset($notFoundCountries)): ?>
+    <h1>No response from the following countries</h1>
+    <?php echo $this->escapeHtml($notFoundCountries); ?>
+  <?php endif; ?>
+</div>
+</body>
+</html>

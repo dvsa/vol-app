@@ -8,6 +8,7 @@
     "ext-curl": "*",
     "ext-redis": "*",
     "ext-pdo": "*",
+    "ext-dom": "*",
     "aws/aws-sdk-php": "^3.369",
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",

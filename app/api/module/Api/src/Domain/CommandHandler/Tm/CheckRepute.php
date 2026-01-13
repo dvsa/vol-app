@@ -4,73 +4,96 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Tm;
 
+use Dvsa\Olcs\Api\Domain\Command\Tm\CheckReputeProcessDocument as CheckReputeProcessDocumentCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Api\Domain\Exception\InrClientException;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
+use Dvsa\Olcs\Api\Domain\Repository\TransportManager as TransportManagerRepo;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
 use Dvsa\Olcs\Api\Service\Nr\CheckGoodRepute;
 use Dvsa\Olcs\Api\Service\Nr\InrClient;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Api\Domain\Repository\TransportManager as TransportManagerRepo;
-use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
 use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
-use Laminas\Http\Client\Adapter\Exception\RuntimeException as AdapterRuntimeException;
+use Dvsa\Olcs\Transfer\Command\Tm\CheckRepute as CheckReputeCmd;
 
 class CheckRepute extends AbstractCommandHandler
 {
+    use CheckReputeTrait;
+
+    public const MSG_SUCCESS = 'Repute check response received from INR: %s';
+    public const DESC_XML_RESPONSE = 'Repute check (XML): %s';
+    public const ERR_CREATING_REQUEST = 'Repute check: error creating request %s';
+    public const ERR_SENDING_REQUEST = 'Repute check: error sending request %s';
+    public const ERR_RESPONSE_CODE = 'Repute check: error sending request %s';
+
     protected $repoServiceName = 'TransportManager';
 
-    public function __construct(private readonly InrClient $inrClient, private readonly CheckGoodRepute $checkGoodReputeService)
-    {
+    public function __construct(
+        private readonly InrClient $inrClient,
+        private readonly CheckGoodRepute $checkGoodReputeService
+    ) {
     }
 
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface|CheckReputeCmd $command)
     {
         /* @var $repo TransportManagerRepo */
         $repo = $this->getRepo();
 
         /* @var $transportManager TransportManagerEntity */
-        $transportManagerId = $command->getId();
-        $transportManager = $repo->fetchById($transportManagerId);
+        $tmId = (int)$command->getId();
+        $transportManager = $repo->fetchById($tmId);
+        $tmName = $transportManager->getFullName();
 
-        $xmlRequest = $this->checkGoodReputeService->create($transportManager);
+        try {
+            $xmlRequest = $this->checkGoodReputeService->create($transportManager);
+        } catch (ForbiddenException $e) {
+            $this->logErrorCreateFailureTask($tmId, $tmName, sprintf(self::ERR_CREATING_REQUEST, $e->getMessage()));
+            return $this->result;
+        }
 
         try {
             $responseXml = $this->inrClient->makeRequestReturnResponse($xmlRequest);
-            $statusCode = $this->inrClient->getLastStatusCode();
-        } catch (AdapterRuntimeException $e) {
-            throw new InrClientException('Repute check: error sending the check repute request ' . $e->getMessage());
+        } catch (\Exception $e) {
+            $this->logErrorCreateFailureTask($tmId, $tmName, sprintf(self::ERR_SENDING_REQUEST, $e->getMessage()));
+            return $this->result;
         }
 
+        $statusCode = $this->inrClient->getLastStatusCode();
+
         if ($statusCode !== 200) {
-            throw new InrClientException('Repute check: INR Http response code was ' . $statusCode);
+            $this->logErrorCreateFailureTask($tmId, $tmName, sprintf(self::ERR_RESPONSE_CODE, $statusCode));
+            return $this->result;
         }
 
         $this->inrClient->close();
 
-        $this->result->addMessage('Repute check request sent to INR');
-        $this->result->addId('Transport Manager', $transportManagerId);
+        $this->result->addMessage(sprintf(self::MSG_SUCCESS, $tmName));
+        $this->result->addId('Transport Manager', $tmId);
 
         $this->result->merge(
             $this->handleSideEffect(
-                $this->createDocumentCommand((int) $transportManagerId, $responseXml)
+                $this->createDocumentCommand($tmId, $tmName, $responseXml)
             )
         );
 
-        $this->result->getId('document');
+        $this->result->merge(
+            $this->handleSideEffect(
+                CheckReputeProcessDocumentCmd::create(['id' => $this->result->getId('document')])
+            )
+        );
 
-        /** @todo here we will add code saving repute check data to the new table and trigger a snapshot */
         return $this->result;
     }
 
-    private function createDocumentCommand(int $transportManagerId, string $content): UploadCmd
+    private function createDocumentCommand(int $tmId, string $tmName, string $content): UploadCmd
     {
         $data = [
-            'content' => base64_encode($content),
+            'content' => base64_encode(trim($content)),
             'category' => CategoryEntity::CATEGORY_TRANSPORT_MANAGER,
-            'subCategory' => CategoryEntity::DOC_SUB_CATEGORY_NR,
+            'subCategory' => CategoryEntity::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_REPUTE_CHECK,
             'filename' => 'cgr-response.xml',
-            'description' => sprintf('INR response for transport manager ID: %s', $transportManagerId),
-            'transportManager' => $transportManagerId,
+            'description' => sprintf(self::DESC_XML_RESPONSE, $tmName),
+            'transportManager' => $tmId,
         ];
 
         return UploadCmd::create($data);
