@@ -99,11 +99,30 @@ class LetterSectionVersion extends AbstractLetterSectionVersion
     /**
      * Get default content as array (for EditorJS)
      *
+     * Handles both properly stored arrays and double-encoded JSON strings
+     * (legacy data where JSON was encoded before Doctrine's json type encoded it again)
+     *
      * @return array
      */
-    public function getDefaultContentAsArray()
+    public function getDefaultContentAsArray(): array
     {
-        return $this->defaultContent ?: [];
+        $content = $this->defaultContent;
+
+        if (empty($content)) {
+            return [];
+        }
+
+        // If content is a string, it was double-encoded - decode it
+        if (is_string($content)) {
+            $decoded = json_decode($content, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+            // If decode failed, return empty array
+            return [];
+        }
+
+        return $content;
     }
 
     /**

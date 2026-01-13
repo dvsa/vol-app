@@ -748,6 +748,7 @@ return [
     TransferQuery\Letter\LetterAppendix\GetList::class => QueryHandler\Letter\LetterAppendix\GetList::class,
     TransferQuery\Letter\LetterInstance\Get::class => QueryHandler\Letter\LetterInstance\Get::class,
     TransferQuery\Letter\LetterInstance\GetList::class => QueryHandler\Letter\LetterInstance\GetList::class,
+    TransferQuery\Letter\LetterInstance\Preview::class => QueryHandler\Letter\LetterInstance\Preview::class,
     TransferQuery\Letter\MasterTemplate\Get::class => QueryHandler\Letter\MasterTemplate\Get::class,
     TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
     TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,

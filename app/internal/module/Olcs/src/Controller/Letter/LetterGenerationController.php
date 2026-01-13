@@ -11,13 +11,19 @@ use Laminas\Http\Response;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Letter Generation Controller
  * Handles database-driven letter creation workflow
  */
-class LetterGenerationController extends AbstractInternalController implements ToggleAwareInterface
+class LetterGenerationController extends AbstractInternalController implements ToggleAwareInterface, LeftViewProvider
 {
+    /**
+     * Left sidebar view for preview page
+     */
+    protected ?ViewModel $leftView = null;
+
     /**
      * Feature toggle configuration
      */
@@ -32,7 +38,13 @@ class LetterGenerationController extends AbstractInternalController implements T
      */
     protected $inlineScripts = [
         'createAction' => ['forms/letter-generation'],
+        'previewAction' => ['forms/letter-preview'],
     ];
+
+    /**
+     * Navigation ID for breadcrumbs (set dynamically per action)
+     */
+    protected $navigationId = '';
 
     /**
      * Constructor
@@ -49,6 +61,16 @@ class LetterGenerationController extends AbstractInternalController implements T
             $flashMessengerHelperService,
             $navigation
         );
+    }
+
+    /**
+     * Get left sidebar view (implements LeftViewProvider)
+     *
+     * @return ViewModel|null
+     */
+    public function getLeftView(): ?ViewModel
+    {
+        return $this->leftView;
     }
 
     /**
@@ -119,7 +141,6 @@ class LetterGenerationController extends AbstractInternalController implements T
             return $this->jsonError('Method not allowed', 405);
         }
 
-        $postData = $this->getRequest()->getPost()->toArray();
         $queryParams = $this->getRequest()->getQuery()->toArray();
 
         // Get route parameters and merge with query params (route params take precedence)
@@ -177,6 +198,115 @@ class LetterGenerationController extends AbstractInternalController implements T
             'redirectUrl' => '#',
             'letterInstance' => $letterInstanceData,
         ]);
+    }
+
+    /**
+     * Preview letter action - displays read-only preview in a new tab
+     *
+     * Query parameters expected:
+     * - id: Letter Instance ID (required)
+     *
+     * @return ViewModel|Response
+     */
+    public function previewAction()
+    {
+        $letterInstanceId = $this->params()->fromQuery('id');
+
+        if (!$letterInstanceId) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        // Fetch letter instance data (not the full preview HTML - that's loaded in iframe)
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\Get::create([
+            'id' => (int) $letterInstanceId
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter not found');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        $result = $response->getResult();
+
+        // Build sections list for sidebar
+        $sectionsList = [];
+        foreach ($result['letterInstanceIssues'] ?? [] as $issue) {
+            $sectionsList[] = [
+                'id' => $issue['id'],
+                'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
+                'type' => 'issue',
+            ];
+        }
+
+        // Set left sidebar BEFORE calling viewBuilder (LeftViewProvider interface)
+        $sidebarView = new ViewModel([
+            'letterInstance' => $result,
+            'sectionsList' => $sectionsList,
+        ]);
+        $sidebarView->setTemplate('pages/letter/preview-sidebar');
+        $this->leftView = $sidebarView;
+
+        $view = new ViewModel([
+            'letterInstanceId' => $letterInstanceId,
+            'letterInstance' => $result,
+            'sectionsList' => $sectionsList,
+        ]);
+
+        $view->setTemplate('pages/letter/preview');
+
+        // Set navigation for breadcrumbs
+        $this->navigationId = 'letter_preview';
+        $this->setNavigationCurrentLocation();
+
+        // Set page title in header strip
+        $this->placeholder()->setPlaceholder('pageTitle', 'Preview and edit letter');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Preview content action - returns raw letter HTML for iframe
+     *
+     * Query parameters expected:
+     * - id: Letter Instance ID (required)
+     *
+     * @return ViewModel|Response
+     */
+    public function previewContentAction()
+    {
+        $letterInstanceId = $this->params()->fromQuery('id');
+
+        if (!$letterInstanceId) {
+            $response = $this->getResponse();
+            $response->setStatusCode(400);
+            $response->setContent('<html><body><p>Letter instance ID is required</p></body></html>');
+            return $response;
+        }
+
+        // Fetch letter instance with preview HTML
+        $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterInstance\Preview::create([
+            'id' => (int) $letterInstanceId
+        ]);
+
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            $httpResponse = $this->getResponse();
+            $httpResponse->setStatusCode(404);
+            $httpResponse->setContent('<html><body><p>Letter not found</p></body></html>');
+            return $httpResponse;
+        }
+
+        $result = $response->getResult();
+
+        // Return raw HTML for iframe - this is a complete HTML document
+        $httpResponse = $this->getResponse();
+        $httpResponse->setContent($result['previewHtml'] ?? '');
+        $httpResponse->getHeaders()->addHeaderLine('Content-Type', 'text/html; charset=utf-8');
+        return $httpResponse;
     }
 
     /**

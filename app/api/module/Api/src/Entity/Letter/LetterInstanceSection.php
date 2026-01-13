@@ -25,7 +25,7 @@ class LetterInstanceSection extends AbstractLetterInstanceSection
             return $this->editedContent;
         }
 
-        return $this->letterSectionVersion->getDefaultContent() ?: [];
+        return $this->letterSectionVersion->getDefaultContentAsArray() ?: [];
     }
 
     /**
