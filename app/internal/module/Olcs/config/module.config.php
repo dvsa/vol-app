@@ -36,6 +36,8 @@ use Olcs\Controller\Factory\Bus as BusControllerFactories;
 use Olcs\Controller\Factory\Cases as CaseControllerFactories;
 use Olcs\Controller\Factory\DisqualifyControllerFactory;
 use Olcs\Controller\Factory\Document as DocumentControllerFactories;
+use Olcs\Controller\Document\HtmlEditorController;
+use Olcs\Controller\Factory\Document\HtmlEditorControllerFactory;
 use Olcs\Controller\Factory\IrhpPermits as IrhpPermitsControllerFactories;
 use Olcs\Controller\Factory\Licence as LicenceControllerFactories;
 use Olcs\Controller\Factory\Operator as OperatorControllerFactories;
@@ -349,6 +351,7 @@ return [
             DocumentControllers\DocumentGenerationController::class => DocumentControllerFactories\DocumentGenerationControllerFactory::class,
             DocumentControllers\DocumentRelinkController::class => DocumentControllerFactories\DocumentRelinkControllerFactory::class,
             DocumentControllers\DocumentUploadController::class => DocumentControllerFactories\DocumentUploadControllerFactory::class,
+            HtmlEditorController::class => HtmlEditorControllerFactory::class,
 
             \Olcs\Controller\Letter\LetterGenerationController::class => \Olcs\Controller\Factory\Letter\LetterGenerationControllerFactory::class,
 
