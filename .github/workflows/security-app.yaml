@@ -27,9 +27,22 @@ jobs:
         run: snyk test ${{ matrix.project }} --sarif-file-output=${{ matrix.project }}-snyk-results.sarif
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Fix SARIF security-severity values
+        if: ${{ always() }}
+        run: |
+          if [ -f "${{ matrix.project }}-snyk-results.sarif" ]; then
+            jq '(.runs[].tool.driver.rules // [])[] |= (
+              if .properties["security-severity"] == null or .properties["security-severity"] == "undefined" then
+                .properties["security-severity"] = "5.0"
+              else
+                .
+              end
+            )' "${{ matrix.project }}-snyk-results.sarif" > "${{ matrix.project }}-snyk-results-fixed.sarif"
+            mv "${{ matrix.project }}-snyk-results-fixed.sarif" "${{ matrix.project }}-snyk-results.sarif"
+          fi
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: app/${{ matrix.project }}-snyk-results.sarif
           category: snyk-${{ matrix.project }}
