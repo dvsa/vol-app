@@ -547,21 +547,6 @@ return [
                 ],
             ],
         ],
-        'doctrinemodule.cache.apcu' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Apcu::class,
-            'options' => [
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
-                'namespace' => 'zfcache',
-            ],
-        ],
-        'doctrinemodule.cache.filesystem' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Filesystem::class,
-            'options' => [
-                'cache_dir' => 'data/cache/doctrine',
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
-                'namespace' => 'zfcache',
-            ],
-        ]
     ],
 
     'dvla_search' => [

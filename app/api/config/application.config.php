@@ -10,8 +10,6 @@ return [
         'Laminas\Cache\Module',
         'Laminas\Cache\Storage\Adapter\Memory',
         'Laminas\Cache\Storage\Adapter\Redis',
-        //'Laminas\Cache\Storage\Adapter\Apcu',
-        'Laminas\Cache\Storage\Adapter\Filesystem',
         'Laminas\Filter\Module',
         'Laminas\Validator\Module',
         'Laminas\Mvc\I18n\Module',
