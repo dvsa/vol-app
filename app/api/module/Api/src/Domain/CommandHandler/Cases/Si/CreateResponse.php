@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
+use Dvsa\Olcs\Api\Entity\Si\ErruRequest;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
@@ -22,6 +23,7 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
 
     public const RESPONSE_DOCUMENT_DESCRIPTION = 'ERRU MSI response for business case ID: %s';
     public const MSG_RESPONSE_CREATED = 'Msi Response created';
+    public const MSG_RESPONSE_NOT_REQUIRED = 'No requested penalties - Msi Response not required';
 
     protected $repoServiceName = 'Cases';
 
@@ -48,20 +50,35 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
          * @var CasesEntity $case
          * @var CreateErruResponseCmd $command
          */
-        $case = $this->getRepo()->fetchById($command->getCase());
+        $caseId = $command->getCase();
+        $case = $this->getRepo()->fetchById($caseId);
+        $erruRequest = $case->getErruRequest();
+        $requestId = $erruRequest->getId();
+
+        $this->result->addId('case', $caseId);
+        $this->result->addId('erruRequest', $requestId);
+
+        //if there are no requested penalties, then we mark the case as sent, although a response is not required
+        if (!$case->hasErruRequestedPenalties()) {
+            $erruRequest->setMsiType($this->refData(ErruRequest::SENT_CASE_TYPE));
+            $this->getRepo('ErruRequest')->save($erruRequest);
+            $this->result->addMessage(self::MSG_RESPONSE_NOT_REQUIRED);
+
+            return $this->result;
+        }
 
         //generate the xml to send to national register
         $xml = $this->msiResponseService->create($case);
 
-        $erruRequest = $case->getErruRequest();
-
         //save the xml into the document store
         $xmlDocumentCmd = $this->createDocumentCommand($xml, $erruRequest->getNotificationNumber(), $case);
-        $result = $this->handleSideEffect($xmlDocumentCmd);
+        $this->result->merge(
+            $this->handleSideEffect($xmlDocumentCmd)
+        );
 
         //get the document record so we can link it to the erru request
         $docRepo = $this->getRepo('Document');
-        $responseDocument = $docRepo->fetchById($result->getId('document'));
+        $responseDocument = $docRepo->fetchById($this->result->getId('document'));
 
         $erruRequest->queueErruResponse(
             $this->getCurrentUser(),
@@ -69,17 +86,14 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
             $responseDocument
         );
 
-        $requestId = $erruRequest->getId();
         $this->getRepo('ErruRequest')->save($erruRequest);
 
-        $result->addMessage(self::MSG_RESPONSE_CREATED);
-        $result->addId('case', $case->getId());
-        $result->addId('erruRequest', $requestId);
+        $this->result->addMessage(self::MSG_RESPONSE_CREATED);
 
         $sendResponseCmd = SendResponseCmd::create(['id' => $requestId]);
-        $result->merge($this->handleSideEffect($sendResponseCmd));
+        $this->result->merge($this->handleSideEffect($sendResponseCmd));
 
-        return $result;
+        return $this->result;
     }
 
     /**
@@ -88,17 +102,15 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
      * @param string      $content            this will be xml
      * @param string      $notificationNumber this will be a GUID
      * @param CasesEntity $case               case entity
-     *
-     * @return UploadCmd
      */
-    private function createDocumentCommand($content, $notificationNumber, CasesEntity $case)
+    private function createDocumentCommand(string $content, string $notificationNumber, CasesEntity $case): UploadCmd
     {
         $data = [
             'content' => base64_encode($content),
             'category' => CategoryEntity::CATEGORY_COMPLIANCE,
             'subCategory' => CategoryEntity::DOC_SUB_CATEGORY_NR,
             'filename' => 'msiresponse.xml',
-            'description' => sprintf(CreateResponse::RESPONSE_DOCUMENT_DESCRIPTION, $notificationNumber),
+            'description' => sprintf(self::RESPONSE_DOCUMENT_DESCRIPTION, $notificationNumber),
             'case' => $case->getId(),
             'licence' => $case->getLicence()->getId()
         ];

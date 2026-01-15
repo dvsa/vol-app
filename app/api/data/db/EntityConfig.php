@@ -1424,7 +1424,7 @@ return array(
             )
         ),
         'si_penalty_erru_requested_id' => array(
-            'property' => 'erruPenaltyRequested',
+            'property' => 'siPenaltyErruRequested',
             'inversedBy' => array(
                 'entity' => 'SiPenaltyErruRequested',
                 'property' => 'appliedPenalties'

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Entity\Si\SiPenalty;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested as Entity;
 use Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType;
@@ -27,7 +29,7 @@ class SiPenaltyErruRequestedEntityTest extends EntityTester
     /**
      * Tests entity creation
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $si = m::mock(SeriousInfringement::class);
         $siPenaltyRequestedType = m::mock(SiPenaltyRequestedType::class);
@@ -40,5 +42,24 @@ class SiPenaltyErruRequestedEntityTest extends EntityTester
         $this->assertEquals($siPenaltyRequestedType, $entity->getSiPenaltyRequestedType());
         $this->assertEquals($duration, $entity->getDuration());
         $this->assertEquals($penaltyRequestedIdentifier, $entity->getPenaltyRequestedIdentifier());
+    }
+
+    /**
+     * @dataProvider dpHasRequestedPenalties
+     */
+    public function testHasAppliedPenalty(ArrayCollection $appliedPenalties, bool $expectedResult): void
+    {
+        /** @var Entity|m\LegacyMockInterface $entity */
+        $entity = m::mock(Entity::class)->makePartial();
+        $entity->setAppliedPenalties($appliedPenalties);
+        $this->assertEquals($expectedResult, $entity->hasAppliedPenalty());
+    }
+
+    public function dpHasRequestedPenalties(): array
+    {
+        return [
+            [new ArrayCollection(), false],
+            [new ArrayCollection([m::mock(SiPenalty::class)]), true]
+        ];
     }
 }

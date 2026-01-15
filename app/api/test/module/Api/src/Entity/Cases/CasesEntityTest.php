@@ -46,7 +46,7 @@ class CasesEntityTest extends EntityTester
     /**
      * Tests update
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $caseType = m::mock(RefData::class);
         $openDate = new \DateTime();
@@ -92,7 +92,7 @@ class CasesEntityTest extends EntityTester
     /**
      * Tests create function throws an exception when application can't create cases
      */
-    public function testCreateThrowsExceptionWhenApplicationCantCreate()
+    public function testCreateThrowsExceptionWhenApplicationCantCreate(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -123,7 +123,7 @@ class CasesEntityTest extends EntityTester
     /**
      * Tests update
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $caseType = Entity::LICENCE_CASE_TYPE;
 
@@ -146,15 +146,13 @@ class CasesEntityTest extends EntityTester
         $this->assertEquals($categorys, $this->entity->getCategorys());
         $this->assertEquals($outcomes, $this->entity->getOutcomes());
         $this->assertEquals($ecmsNo, $this->entity->getEcmsNo());
-        $this->assertEquals($description, $this->entity->getDescription());
-
-        return true;
+        $this->assertEquals($description, $this->entity->getDescription());;
     }
 
     /**
      * Tests updateAnnualTestHistory
      */
-    public function testUpdateAnnualTestHistory()
+    public function testUpdateAnnualTestHistory(): void
     {
         $annualTestHistory = 'annual test history';
 
@@ -163,14 +161,12 @@ class CasesEntityTest extends EntityTester
         );
 
         $this->assertEquals($annualTestHistory, $this->entity->getAnnualTestHistory());
-
-        return true;
     }
 
     /**
      * Tests updateConvictionNote
      */
-    public function testUpdateConvictionNote()
+    public function testUpdateConvictionNote(): void
     {
         $convictionNote = 'conviction note';
 
@@ -179,14 +175,12 @@ class CasesEntityTest extends EntityTester
         );
 
         $this->assertEquals($convictionNote, $this->entity->getConvictionNote());
-
-        return true;
     }
 
     /**
      * Tests updateProhibitionNote
      */
-    public function testUpdateProhibitionNote()
+    public function testUpdateProhibitionNote(): void
     {
         $prohibitionNote = 'prohibition note';
 
@@ -195,11 +189,9 @@ class CasesEntityTest extends EntityTester
         );
 
         $this->assertEquals($prohibitionNote, $this->entity->getProhibitionNote());
-
-        return true;
     }
 
-    public function testIsOpen()
+    public function testIsOpen(): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -215,7 +207,7 @@ class CasesEntityTest extends EntityTester
         $this->assertFalse($sut->isOpen());
     }
 
-    public function testHasComplaints()
+    public function testHasComplaints(): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -230,7 +222,7 @@ class CasesEntityTest extends EntityTester
     /**
      * Tests closing a case
      */
-    public function testClose()
+    public function testClose(): void
     {
         $outcome = m::mock(RefData::class);
 
@@ -241,7 +233,7 @@ class CasesEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testCloseThrowsException()
+    public function testCloseThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -250,7 +242,7 @@ class CasesEntityTest extends EntityTester
         $this->entity->close();
     }
 
-    public function testCloseWithOutstandingAppealThrowsValidationException()
+    public function testCloseWithOutstandingAppealThrowsValidationException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -263,7 +255,7 @@ class CasesEntityTest extends EntityTester
         $this->entity->close();
     }
 
-    public function testCloseWithWithdrawnAppeal()
+    public function testCloseWithWithdrawnAppeal(): void
     {
         $outcome = m::mock(RefData::class);
         $appeal = new AppealEntity('1234');
@@ -276,7 +268,7 @@ class CasesEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testCloseWithCompleteAppeal()
+    public function testCloseWithCompleteAppeal(): void
     {
         $outcome = m::mock(RefData::class);
         $appeal = new AppealEntity('1234');
@@ -291,7 +283,7 @@ class CasesEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testCloseWithOutstandingStay()
+    public function testCloseWithOutstandingStay(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -304,7 +296,7 @@ class CasesEntityTest extends EntityTester
         $this->entity->close();
     }
 
-    public function testCloseWithWithdrawnStay()
+    public function testCloseWithWithdrawnStay(): void
     {
         $outcome = m::mock(RefData::class);
         $stay = new StayEntity($this->entity, $outcome);
@@ -317,7 +309,7 @@ class CasesEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testCloseWithCompleteStay()
+    public function testCloseWithCompleteStay(): void
     {
         $outcome = m::mock(RefData::class);
         $stay = new StayEntity($this->entity, $outcome);
@@ -331,7 +323,7 @@ class CasesEntityTest extends EntityTester
         $this->assertInstanceOf('\DateTime', $this->entity->getClosedDate());
     }
 
-    public function testReopen()
+    public function testReopen(): void
     {
         $this->entity->setClosedDate(new \DateTime());
 
@@ -340,7 +332,7 @@ class CasesEntityTest extends EntityTester
         $this->assertEquals(null, $this->entity->getClosedDate());
     }
 
-    public function testReopenThrowsException()
+    public function testReopenThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -350,12 +342,8 @@ class CasesEntityTest extends EntityTester
 
     /**
      * @dataProvider canAddSiProvider
-     *
-     * @param ErruRequestEntity|null $erruRequest
-     * @param \DateTime|null $closedDate
-     * @param bool $expectedResult
      */
-    public function testCanAddSi($erruRequest, $closedDate, $expectedResult)
+    public function testCanAddSi(?m\mockInterface $erruRequest, ?\DateTime $closedDate, bool $expectedResult): void
     {
         $sut = $this->instantiate($this->entityClass);
         $sut->setErruRequest($erruRequest);
@@ -365,11 +353,9 @@ class CasesEntityTest extends EntityTester
     }
 
     /**
-     * data provider for testCanSendMsiResponse
-     *
-     * @return array
+     * data provider for testCanAddSi
      */
-    public function canAddSiProvider()
+    public function canAddSiProvider(): array
     {
         $erruRequestNoModify = m::mock(ErruRequestEntity::class);
         $erruRequestNoModify->shouldReceive('canModify')->andReturn(false);
@@ -391,14 +377,13 @@ class CasesEntityTest extends EntityTester
 
     /**
      * @dataProvider canSendMsiResponseProvider
-     *
-     * @param ErruRequestEntity|null $erruRequest
-     * @param ArrayCollection $si
-     * @param \DateTime|null $closedDate
-     * @param bool $expectedResult
      */
-    public function testCanSendMsiResponse($erruRequest, $si, $closedDate, $expectedResult)
-    {
+    public function testCanSendMsiResponse(
+        ?m\mockInterface $erruRequest,
+        ArrayCollection $si,
+        ?\DateTime $closedDate,
+        bool $expectedResult
+    ): void {
         $sut = $this->instantiate($this->entityClass);
         $sut->setSeriousInfringements($si);
         $sut->setErruRequest($erruRequest);
@@ -409,10 +394,8 @@ class CasesEntityTest extends EntityTester
 
     /**
      * data provider for testCanSendMsiResponse
-     *
-     * @return array
      */
-    public function canSendMsiResponseProvider()
+    public function canSendMsiResponseProvider(): array
     {
         $siResponseSet = m::mock(SeriousInfringement::class);
         $siResponseSet->shouldReceive('responseSet')->andReturn(true);
@@ -440,16 +423,55 @@ class CasesEntityTest extends EntityTester
         ];
     }
 
+    public function testHasErruRequestedPenaltiesTrue(): void
+    {
+        //first infringement has no requested penalties
+        $siEntity1 = m::mock(SeriousInfringement::class);
+        $siEntity1->expects('hasRequestedPenalties')->andReturnFalse();
+
+        //second infringement is checked and has penalties
+        $siEntity2 = m::mock(SeriousInfringement::class);
+        $siEntity2->expects('hasRequestedPenalties')->andReturnTrue();
+
+        //third infringement doesn't need to be checked
+        $siEntity3 = m::mock(SeriousInfringement::class);
+        $siEntity3->expects('hasRequestedPenalties')->never();
+
+        $this->entity->setSeriousInfringements(new ArrayCollection([$siEntity1, $siEntity2, $siEntity3]));
+        $this->assertTrue($this->entity->hasErruRequestedPenalties());
+    }
+
+    public function testHasErruRequestedPenaltiesFalse(): void
+    {
+        //first infringement has no requested penalties
+        $siEntity1 = m::mock(SeriousInfringement::class);
+        $siEntity1->expects('hasRequestedPenalties')->andReturnFalse();
+
+        //second infringement also has no requested penalties
+        $siEntity2 = m::mock(SeriousInfringement::class);
+        $siEntity2->expects('hasRequestedPenalties')->andReturnFalse();
+
+        $this->entity->setSeriousInfringements(new ArrayCollection([$siEntity1, $siEntity2]));
+        $this->assertFalse($this->entity->hasErruRequestedPenalties());
+    }
+
+    public function testHasErruRequestedPenaltiesNoSeriousInfringements(): void
+    {
+        $this->entity->setSeriousInfringements(new ArrayCollection());
+        $this->assertFalse($this->entity->hasErruRequestedPenalties());
+    }
+
     /**
      * Tests getCalculatedBundleValues
      */
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         /** @var Entity | m\MockInterface $sut */
         $sut = m::mock(Entity::class)->makePartial();
         $sut
             ->shouldReceive('canClose')->once()->andReturn('unit_CanClose')
-            ->shouldReceive('canSendMsiResponse')->once()->andReturn('unit_CanSendMsi');
+            ->shouldReceive('canSendMsiResponse')->once()->andReturn('unit_CanSendMsi')
+            ->shouldReceive('hasErruRequestedPenalties')->once()->andReturnFalse();
 
         $expected = [
             'isClosed' => false,
@@ -458,12 +480,13 @@ class CasesEntityTest extends EntityTester
             'canSendMsiResponse' => 'unit_CanSendMsi',
             'canAddSi' => false,
             'isErru' => false,
+            'hasErruRequestedPenalties' => false,
         ];
 
         $this->assertEquals($expected, $sut->getCalculatedBundleValues());
     }
 
-    public function testGetContextValue()
+    public function testGetContextValue(): void
     {
         $this->entity->setId(111);
 
@@ -472,10 +495,8 @@ class CasesEntityTest extends EntityTester
 
     /**
      * Tests getNoteType for given case type
-     *
-     * @dataProvider caseTypeNoteTypeProvider
      */
-    public function testGetNoteType($caseType, $expectedNoteType)
+    public function testGetNoteType(): void
     {
         // check default
         $this->assertEquals(NoteEntity::NOTE_TYPE_CASE, $this->entity->getNoteType());
@@ -490,22 +511,10 @@ class CasesEntityTest extends EntityTester
         $this->assertEquals(NoteEntity::NOTE_TYPE_TRANSPORT_MANAGER, $this->entity->getNoteType());
     }
 
-    public function caseTypeNoteTypeProvider()
-    {
-        return [
-            [
-                [null, NoteEntity::NOTE_TYPE_CASE], // default
-                [Entity::LICENCE_CASE_TYPE, NoteEntity::NOTE_TYPE_LICENCE],
-                [Entity::APP_CASE_TYPE, NoteEntity::NOTE_TYPE_APPLICATION],
-                [Entity::TM_CASE_TYPE, NoteEntity::NOTE_TYPE_TRANSPORT_MANAGER],
-            ]
-        ];
-    }
-
     /**
      * Tests getRelatedOrgnisation
      */
-    public function testGetRelatedOrganisationApplication()
+    public function testGetRelatedOrganisationApplication(): void
     {
         $mockApplication = m::mock(ApplicationEntity::class);
         $mockOrganisation1 = m::mock(OrganisationEntity::class);
@@ -532,7 +541,7 @@ class CasesEntityTest extends EntityTester
         $this->assertEquals($mockOrganisation3, $this->entity->getRelatedOrganisation());
     }
 
-    public function testHasStayType()
+    public function testHasStayType(): void
     {
         $stayType = m::mock(RefData::class);
 
@@ -547,7 +556,6 @@ class CasesEntityTest extends EntityTester
         $application = m::mock(ApplicationEntity::class);
         $application->shouldReceive('canCreateCase')->andReturn(true);
         $application->shouldReceive('getLicence')->andReturn($applicationLicence);
-        $transportManager = null;
 
         $sut = m::mock(Entity::class)->makePartial();
 
@@ -573,7 +581,7 @@ class CasesEntityTest extends EntityTester
         $this->assertTrue($sut->hasStayType($stayType));
     }
 
-    public function testHasAppeal()
+    public function testHasAppeal(): void
     {
         $caseType = m::mock(RefData::class);
         $openDate = new \DateTime();
@@ -611,7 +619,7 @@ class CasesEntityTest extends EntityTester
         $this->assertTrue($sut->hasAppeal());
     }
 
-    public function testIsTm()
+    public function testIsTm(): void
     {
         $caseType = m::mock(RefData::class);
         $openDate = new \DateTime();

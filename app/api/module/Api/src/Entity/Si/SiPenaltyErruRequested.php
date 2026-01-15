@@ -25,9 +25,19 @@ class SiPenaltyErruRequested extends AbstractSiPenaltyErruRequested
         int $duration,
         int $penaltyRequestedIdentifier
     ) {
+        parent::__construct();
+
         $this->seriousInfringement = $seriousInfringement;
         $this->siPenaltyRequestedType = $siPenaltyRequestedType;
         $this->duration = $duration;
         $this->penaltyRequestedIdentifier = $penaltyRequestedIdentifier;
+    }
+
+    /**
+     * Whether the requested penalty has at least one response. This may not necessarily mean the penalty was applied
+     */
+    public function hasAppliedPenalty(): bool
+    {
+        return !$this->appliedPenalties->isEmpty();
     }
 }

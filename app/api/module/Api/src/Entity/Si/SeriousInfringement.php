@@ -43,17 +43,12 @@ class SeriousInfringement extends AbstractSeriousInfringement
         $this->update($checkDate, $infringementDate, $siCategory, $siCategoryType);
     }
 
-    /**
-     * Update
-     *
-     * @return void
-     */
     public function update(
         \DateTime $checkDate,
         \DateTime $infringementDate,
         SiCategoryEntity $siCategory,
         SiCategoryTypeEntity $siCategoryType
-    ) {
+    ): void {
         $this->checkDate = $checkDate;
         $this->infringementDate = $infringementDate;
         $this->siCategory = $siCategory;
@@ -61,22 +56,35 @@ class SeriousInfringement extends AbstractSeriousInfringement
     }
 
     /**
-     * Whether there is a response set for the serious infringement
-     *
-     * @return bool
+     * Ensure that every requested penalty has a response. Will also return true if there are no requested penalties
      */
-    public function responseSet()
+    public function responseSet(): bool
     {
-        return (bool)!$this->appliedPenalties->isEmpty();
+        /**
+         * @var SiPenaltyErruRequested $requestedErru
+         */
+        foreach ($this->requestedErrus as $requestedErru) {
+            if (!$requestedErru->hasAppliedPenalty()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function hasRequestedPenalties(): bool
+    {
+        return !$this->requestedErrus->isEmpty();
     }
 
     /**
      * Calculated values to be added to a bundle
-     *
-     * @return array
      */
-    public function getCalculatedBundleValues()
+    public function getCalculatedBundleValues(): array
     {
-        return ['responseSet' => $this->responseSet()];
+        return [
+            'responseSet' => $this->responseSet(),
+            'hasRequestedPenalties' => $this->hasRequestedPenalties(),
+        ];
     }
 }
