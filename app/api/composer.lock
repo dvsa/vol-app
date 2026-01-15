@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "a99a4eb0526325ba67aaa14ceb01cf79",
+  "content-hash": "af3bf0cd976b32aeafc9641de136b8aa",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -1950,23 +1950,23 @@
     },
     {
       "name": "dvsa/authentication-cognito",
-      "version": "v3.2.0",
+      "version": "v3.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/authentication-cognito.git",
-        "reference": "b77997a71253eefe67819a99ce02310bad6ca974"
+        "reference": "8261471df232f743548d53f0197a7df191584788"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/b77997a71253eefe67819a99ce02310bad6ca974",
-        "reference": "b77997a71253eefe67819a99ce02310bad6ca974",
+        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/8261471df232f743548d53f0197a7df191584788",
+        "reference": "8261471df232f743548d53f0197a7df191584788",
         "shasum": ""
       },
       "require": {
         "aws/aws-sdk-php": "^3.288.1",
         "dvsa/contracts": "^1.1",
         "ext-json": "*",
-        "firebase/php-jwt": "^6.3",
+        "firebase/php-jwt": "^6.3 || ^7.0",
         "guzzlehttp/guzzle": "^7.4.5",
         "guzzlehttp/psr7": "^2.4.5",
         "illuminate/collections": "^8.0 || ^11.0",
@@ -2010,9 +2010,9 @@
       ],
       "support": {
         "issues": "https://github.com/dvsa/authentication-cognito/issues",
-        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.2.0"
+        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.3.0"
       },
-      "time": "2025-09-23T13:18:52+00:00"
+      "time": "2026-01-15T10:47:55+00:00"
     },
     {
       "name": "dvsa/contracts",
@@ -2127,21 +2127,21 @@
     },
     {
       "name": "dvsa/php-govuk-account",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/php-govuk-account.git",
-        "reference": "211bc55e19eaac4b4ee48baec61c76ff70d67b98"
+        "reference": "81ba8ac3b463b418388d8af89fbfc01e7f813860"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/211bc55e19eaac4b4ee48baec61c76ff70d67b98",
-        "reference": "211bc55e19eaac4b4ee48baec61c76ff70d67b98",
+        "url": "https://api.github.com/repos/dvsa/php-govuk-account/zipball/81ba8ac3b463b418388d8af89fbfc01e7f813860",
+        "reference": "81ba8ac3b463b418388d8af89fbfc01e7f813860",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
-        "firebase/php-jwt": "^6.3",
+        "firebase/php-jwt": "^6.3 || ^7.0",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/psr7": "^2.4.5",
         "illuminate/collections": "^8.0",
@@ -2184,9 +2184,9 @@
       ],
       "support": {
         "issues": "https://github.com/dvsa/php-govuk-account/issues",
-        "source": "https://github.com/dvsa/php-govuk-account/tree/3.0.0"
+        "source": "https://github.com/dvsa/php-govuk-account/tree/3.1.0"
       },
-      "time": "2024-10-31T08:30:10+00:00"
+      "time": "2026-01-15T11:40:01+00:00"
     },
     {
       "name": "egulias/email-validator",
@@ -2496,16 +2496,16 @@
     },
     {
       "name": "firebase/php-jwt",
-      "version": "v6.11.1",
+      "version": "v7.0.2",
       "source": {
         "type": "git",
         "url": "https://github.com/firebase/php-jwt.git",
-        "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
+        "reference": "5645b43af647b6947daac1d0f659dd1fbe8d3b65"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
-        "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+        "url": "https://api.github.com/repos/firebase/php-jwt/zipball/5645b43af647b6947daac1d0f659dd1fbe8d3b65",
+        "reference": "5645b43af647b6947daac1d0f659dd1fbe8d3b65",
         "shasum": ""
       },
       "require": {
@@ -2553,9 +2553,9 @@
       ],
       "support": {
         "issues": "https://github.com/firebase/php-jwt/issues",
-        "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
+        "source": "https://github.com/firebase/php-jwt/tree/v7.0.2"
       },
-      "time": "2025-04-09T20:32:01+00:00"
+      "time": "2025-12-16T22:17:28+00:00"
     },
     {
       "name": "gedmo/doctrine-extensions",
@@ -10932,16 +10932,16 @@
     },
     {
       "name": "dvsa/authentication-ldap",
-      "version": "v3.0.0",
+      "version": "v3.1.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/authentication-ldap.git",
-        "reference": "be4dfcfd4362abe97b8f227db1236c4cbb55b608"
+        "reference": "037e96cf6e75e04988f39be23cf63bb85a1a8ee8"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/authentication-ldap/zipball/be4dfcfd4362abe97b8f227db1236c4cbb55b608",
-        "reference": "be4dfcfd4362abe97b8f227db1236c4cbb55b608",
+        "url": "https://api.github.com/repos/dvsa/authentication-ldap/zipball/037e96cf6e75e04988f39be23cf63bb85a1a8ee8",
+        "reference": "037e96cf6e75e04988f39be23cf63bb85a1a8ee8",
         "shasum": ""
       },
       "require": {
@@ -10949,7 +10949,7 @@
         "ext-json": "*",
         "ext-ldap": "*",
         "ext-openssl": "*",
-        "firebase/php-jwt": "^6.3",
+        "firebase/php-jwt": "^6.3 || ^7.0",
         "illuminate/support": "^8.49 || ^11.0",
         "league/oauth2-client": "^2.6.1",
         "nesbot/carbon": "^2.63 || ^3.4",
@@ -10984,9 +10984,9 @@
       ],
       "support": {
         "issues": "https://github.com/dvsa/authentication-ldap/issues",
-        "source": "https://github.com/dvsa/authentication-ldap/tree/v3.0.0"
+        "source": "https://github.com/dvsa/authentication-ldap/tree/v3.1.0"
       },
-      "time": "2024-07-23T09:24:58+00:00"
+      "time": "2026-01-15T10:54:15+00:00"
     },
     {
       "name": "hamcrest/hamcrest-php",
