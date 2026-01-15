@@ -2,6 +2,7 @@
 
 namespace Dvsa\Olcs\Api\Service\Document\Bookmark;
 
+use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle as Qry;
 
@@ -64,6 +65,10 @@ class TaAddressPhone extends DynamicBookmark
      */
     private function fetchTelephone()
     {
+        if ($this->data['trafficArea']['id'] === TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+            return '';
+        }
+
         if (empty($this->data['trafficArea']['contactDetails']['phoneContacts'])) {
             return '';
         }

@@ -374,27 +374,27 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="financial_evidence_uploaded", nullable=true)
+     * @ORM\Column(type="smallint", name="financial_evidence_uploaded", nullable=true)
      */
     protected $financialEvidenceUploaded;
 
     /**
      * Small vehicle evidence uploaded
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="small_vehicle_evidence_uploaded", nullable=true)
+     * @ORM\Column(type="smallint", name="small_vehicle_evidence_uploaded", nullable=true)
      */
     protected $smallVehicleEvidenceUploaded;
 
     /**
      * Occupation evidence uploaded
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="occupation_evidence_uploaded", nullable=true)
+     * @ORM\Column(type="smallint", name="occupation_evidence_uploaded", nullable=true)
      */
     protected $occupationEvidenceUploaded;
 
@@ -615,38 +615,38 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $psvOnlyLimousinesConfirmation;
 
     /**
-     * Psv income records confirmation
+     * psvIncomeRecordsConfirmation
      *
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(type="boolean", name="psv_income_records_confirmation", nullable=true)
+     * @ORM\Column(type="yesnonull", name="psv_income_records_confirmation", nullable=true)
      */
     protected $psvIncomeRecordsConfirmation;
 
     /**
-     * Psv occupation records confirmation
+     * psvOccupationRecordsConfirmation
      *
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(type="boolean", name="psv_occupation_records_confirmation", nullable=true)
+     * @ORM\Column(type="yesnonull", name="psv_occupation_records_confirmation", nullable=true)
      */
     protected $psvOccupationRecordsConfirmation;
 
     /**
      * Psv total vehicle small
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="psv_total_vehicle_small", nullable=true)
+     * @ORM\Column(type="smallint", name="psv_total_vehicle_small", nullable=true)
      */
     protected $psvTotalVehicleSmall;
 
     /**
      * Psv total vehicle large
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="psv_total_vehicle_large", nullable=true)
+     * @ORM\Column(type="smallint", name="psv_total_vehicle_large", nullable=true)
      */
     protected $psvTotalVehicleLarge;
 
@@ -778,11 +778,11 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $version = 1;
 
     /**
-     * Application referred to pi
+     * applicationReferredToPi
      *
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(type="boolean", name="application_referred_to_pi", nullable=true)
+     * @ORM\Column(type="yesnonull", name="application_referred_to_pi", nullable=true)
      */
     protected $applicationReferredToPi;
 
@@ -1732,7 +1732,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the financial evidence uploaded
      *
-     * @param bool $financialEvidenceUploaded new value being set
+     * @param int $financialEvidenceUploaded new value being set
      *
      * @return Application
      */
@@ -1746,7 +1746,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the financial evidence uploaded
      *
-     * @return bool     */
+     * @return int     */
     public function getFinancialEvidenceUploaded()
     {
         return $this->financialEvidenceUploaded;
@@ -1755,7 +1755,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the small vehicle evidence uploaded
      *
-     * @param bool $smallVehicleEvidenceUploaded new value being set
+     * @param int $smallVehicleEvidenceUploaded new value being set
      *
      * @return Application
      */
@@ -1769,7 +1769,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the small vehicle evidence uploaded
      *
-     * @return bool     */
+     * @return int     */
     public function getSmallVehicleEvidenceUploaded()
     {
         return $this->smallVehicleEvidenceUploaded;
@@ -1778,7 +1778,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the occupation evidence uploaded
      *
-     * @param bool $occupationEvidenceUploaded new value being set
+     * @param int $occupationEvidenceUploaded new value being set
      *
      * @return Application
      */
@@ -1792,7 +1792,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the occupation evidence uploaded
      *
-     * @return bool     */
+     * @return int     */
     public function getOccupationEvidenceUploaded()
     {
         return $this->occupationEvidenceUploaded;
@@ -2383,7 +2383,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the psv income records confirmation
      *
-     * @param bool $psvIncomeRecordsConfirmation new value being set
+     * @param string $psvIncomeRecordsConfirmation new value being set
      *
      * @return Application
      */
@@ -2397,7 +2397,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv income records confirmation
      *
-     * @return bool     */
+     * @return string     */
     public function getPsvIncomeRecordsConfirmation()
     {
         return $this->psvIncomeRecordsConfirmation;
@@ -2406,7 +2406,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the psv occupation records confirmation
      *
-     * @param bool $psvOccupationRecordsConfirmation new value being set
+     * @param string $psvOccupationRecordsConfirmation new value being set
      *
      * @return Application
      */
@@ -2420,7 +2420,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv occupation records confirmation
      *
-     * @return bool     */
+     * @return string     */
     public function getPsvOccupationRecordsConfirmation()
     {
         return $this->psvOccupationRecordsConfirmation;
@@ -2429,7 +2429,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the psv total vehicle small
      *
-     * @param bool $psvTotalVehicleSmall new value being set
+     * @param int $psvTotalVehicleSmall new value being set
      *
      * @return Application
      */
@@ -2443,7 +2443,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv total vehicle small
      *
-     * @return bool     */
+     * @return int     */
     public function getPsvTotalVehicleSmall()
     {
         return $this->psvTotalVehicleSmall;
@@ -2452,7 +2452,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the psv total vehicle large
      *
-     * @param bool $psvTotalVehicleLarge new value being set
+     * @param int $psvTotalVehicleLarge new value being set
      *
      * @return Application
      */
@@ -2466,7 +2466,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the psv total vehicle large
      *
-     * @return bool     */
+     * @return int     */
     public function getPsvTotalVehicleLarge()
     {
         return $this->psvTotalVehicleLarge;
@@ -2809,7 +2809,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set the application referred to pi
      *
-     * @param bool $applicationReferredToPi new value being set
+     * @param string $applicationReferredToPi new value being set
      *
      * @return Application
      */
@@ -2823,7 +2823,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get the application referred to pi
      *
-     * @return bool     */
+     * @return string     */
     public function getApplicationReferredToPi()
     {
         return $this->applicationReferredToPi;

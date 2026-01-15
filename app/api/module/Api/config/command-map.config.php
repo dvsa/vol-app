@@ -932,6 +932,7 @@ return [
     TransferCommand\OrganisationPerson\DeleteList::class => CommandHandler\OrganisationPerson\DeleteList::class,
 
     // Transfer - TransportManager
+    TransferCommand\Tm\CheckRepute::class => CommandHandler\Tm\CheckReputeFactory::class,
     TransferCommand\Tm\Create::class => CommandHandler\Tm\Create::class,
     TransferCommand\Tm\CreateNewUser::class => CommandHandler\Tm\CreateNewUserFactory::class,
     TransferCommand\Tm\Update::class => CommandHandler\Tm\Update::class,
@@ -1347,6 +1348,9 @@ return [
     TransferCommand\Letter\LetterIssue\Create::class => CommandHandler\Letter\LetterIssue\Create::class,
     TransferCommand\Letter\LetterIssue\Update::class => CommandHandler\Letter\LetterIssue\Update::class,
     TransferCommand\Letter\LetterIssue\Delete::class => CommandHandler\Letter\LetterIssue\Delete::class,
+    TransferCommand\Letter\LetterIssueType\Create::class => CommandHandler\Letter\LetterIssueType\Create::class,
+    TransferCommand\Letter\LetterIssueType\Update::class => CommandHandler\Letter\LetterIssueType\Update::class,
+    TransferCommand\Letter\LetterIssueType\Delete::class => CommandHandler\Letter\LetterIssueType\Delete::class,
     TransferCommand\Letter\LetterTodo\Create::class => CommandHandler\Letter\LetterTodo\Create::class,
     TransferCommand\Letter\LetterTodo\Update::class => CommandHandler\Letter\LetterTodo\Update::class,
     TransferCommand\Letter\LetterTodo\Delete::class => CommandHandler\Letter\LetterTodo\Delete::class,
@@ -1355,6 +1359,7 @@ return [
     TransferCommand\Letter\LetterAppendix\Delete::class => CommandHandler\Letter\LetterAppendix\Delete::class,
     TransferCommand\Letter\LetterInstance\Create::class => CommandHandler\Letter\LetterInstance\Create::class,
     TransferCommand\Letter\LetterInstance\Update::class => CommandHandler\Letter\LetterInstance\Update::class,
+    TransferCommand\Letter\LetterInstance\Generate::class => CommandHandler\Letter\LetterInstance\Generate::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,
     TransferCommand\Letter\MasterTemplate\Delete::class => CommandHandler\Letter\MasterTemplate\Delete::class,

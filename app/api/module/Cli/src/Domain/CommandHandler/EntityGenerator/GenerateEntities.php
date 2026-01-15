@@ -18,9 +18,9 @@ use Psr\Container\ContainerInterface;
  */
 class GenerateEntities extends AbstractCommandHandler
 {
-    private const ENTITY_RELATIVE_PATH = '/api/module/Api/src/Entity';
-    private const TEST_RELATIVE_PATH = '/api/test/module/Api/src/Entity';
-    private const PROJECT_ROOT_DEPTH = 7; // Depth from this file to project root
+    private const ENTITY_RELATIVE_PATH = '/module/Api/src/Entity';
+    private const TEST_RELATIVE_PATH = '/test/module/Api/src/Entity';
+    private const PROJECT_ROOT_DEPTH = 6; // Depth from this file to project root
     
     private Doctrine3SchemaIntrospector $schemaIntrospector;
     private EntityGenerator $entityGenerator;

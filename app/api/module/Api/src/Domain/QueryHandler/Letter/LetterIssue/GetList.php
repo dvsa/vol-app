@@ -10,8 +10,13 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractListQueryHandler;
 class GetList extends AbstractListQueryHandler
 {
     protected $repoServiceName = 'LetterIssue';
-    
+
     protected $bundle = [
-        'currentVersion'
+        'currentVersion' => [
+            'category',
+            'subCategory',
+            'goodsOrPsv',
+            'letterIssueType'
+        ]
     ];
 }

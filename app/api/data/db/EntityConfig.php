@@ -65,6 +65,9 @@ return array(
         ),
         'locality' => array(
             'property' => 'addressLine4'
+        ),
+        'uprn' => array(
+            'type' => 'bigint'
         )
     ),
     'contact_details' => array(
@@ -221,6 +224,24 @@ return array(
         'financial_evidence_uploaded' => array(
             'type' => 'smallint'
         ),
+        'small_vehicle_evidence_uploaded' => array(
+            'type' => 'smallint'
+        ),
+        'occupation_evidence_uploaded' => array(
+            'type' => 'smallint'
+        ),
+        'psv_income_records_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'psv_occupation_records_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'psv_total_vehicle_small' => array(
+            'type' => 'smallint'
+        ),
+        'psv_total_vehicle_large' => array(
+            'type' => 'smallint'
+        ),
         'prev_has_licence' => array(
             'type' => 'yesnonull'
         ),
@@ -273,6 +294,9 @@ return array(
             'type' => 'yesnonull'
         ),
         'psv_medium_vhl_confirmation' => array(
+            'type' => 'yesnonull'
+        ),
+        'application_referred_to_pi' => array(
             'type' => 'yesnonull'
         ),
     ),
@@ -2399,6 +2423,11 @@ return array(
                 'entity' => 'MessagingMessage',
                 'property' => 'userMessageRead',
             )
+        ),
+    ),
+    'messaging_subject' => array(
+        'is_active' => array(
+            'type' => 'smallint'
         ),
     ),
 );

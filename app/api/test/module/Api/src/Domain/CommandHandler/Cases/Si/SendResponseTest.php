@@ -23,7 +23,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
 
     public function setUp(): void
     {
-        $this->inrService = m::mock(InrClient::class);
+        $this->inrService = m::mock(InrClient::class)->shouldAllowMockingProtectedMethods();
 
         $this->sut = new SendResponse($this->inrService);
         $this->mockRepo('ErruRequest', ErruRequestRepo::class);
@@ -71,7 +71,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
         $this->inrService
-            ->expects('makeRequest')
+            ->expects('makeRequestReturnStatusCode')
             ->with($xml)
             ->andReturn(202);
 
@@ -127,7 +127,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
         $this->inrService
-            ->expects('makeRequest')
+            ->expects('makeRequestReturnStatusCode')
             ->with($xml)
             ->andReturn(400);
 
@@ -171,7 +171,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
         $this->repoMap['ErruRequest']->shouldReceive('save')->once()->with(m::type(ErruRequestEntity::class));
 
         $this->inrService
-            ->expects('makeRequest')
+            ->expects('makeRequestReturnStatusCode')
             ->with($xml)
             ->andThrow(AdapterRuntimeException::class, 'adapter exception message');
 

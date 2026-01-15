@@ -51,15 +51,28 @@ class LetterInstanceIssue extends AbstractLetterInstanceIssue
     /**
      * Get the effective content (edited or default)
      *
+     * Handles both properly stored arrays and double-encoded JSON strings
+     *
      * @return array
      */
     public function getEffectiveContent()
     {
         if (!empty($this->editedContent)) {
-            return $this->editedContent;
+            $content = $this->editedContent;
+
+            // If content is a string, it was double-encoded - decode it
+            if (is_string($content)) {
+                $decoded = json_decode($content, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    return $decoded;
+                }
+                return [];
+            }
+
+            return $content;
         }
 
-        return $this->letterIssueVersion->getDefaultBodyContent() ?: [];
+        return $this->letterIssueVersion->getDefaultBodyContentAsArray() ?: [];
     }
 
     /**

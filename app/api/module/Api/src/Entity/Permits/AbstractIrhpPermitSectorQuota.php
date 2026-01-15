@@ -101,7 +101,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @ORM\Column(type="integer", name="quota_number", nullable=false, options={"default": 0})
      */
-    protected $quotaNumber = '0';
+    protected $quotaNumber = 0;
 
     /**
      * Version

@@ -124,9 +124,9 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     /**
      * An advert has been placed in a suitable publication to notify public of op centre changes.
      *
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(type="boolean", name="ad_placed", nullable=false)
+     * @ORM\Column(type="smallint", name="ad_placed", nullable=false)
      */
     protected $adPlaced = 0;
 
@@ -401,7 +401,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     /**
      * Set the ad placed
      *
-     * @param bool $adPlaced new value being set
+     * @param int $adPlaced new value being set
      *
      * @return ApplicationOperatingCentre
      */
@@ -415,7 +415,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
     /**
      * Get the ad placed
      *
-     * @return bool     */
+     * @return int     */
     public function getAdPlaced()
     {
         return $this->adPlaced;

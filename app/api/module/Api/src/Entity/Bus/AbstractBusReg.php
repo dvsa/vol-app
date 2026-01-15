@@ -408,7 +408,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @ORM\Column(type="smallint", name="variation_no", nullable=false, options={"default": 0})
      */
-    protected $variationNo = '0';
+    protected $variationNo = 0;
 
     /**
      * opNotifiedLaPte

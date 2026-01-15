@@ -44,6 +44,8 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
         );
         $this->translationHelper = $translationHelper;
         $this->docSubCategoryDataService = $docSubCategoryDataService;
+
+        $this->showDocsFilter = FilterOptions::SHOW_SELF_ONLY;
     }
 
     /**

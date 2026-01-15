@@ -35,6 +35,9 @@ class LetterIssue implements MapperInterface
                 'goodsOrPsv' => isset($currentVersion['goodsOrPsv']['id'])
                     ? $currentVersion['goodsOrPsv']['id']
                     : (isset($data['goodsOrPsv']['id']) ? $data['goodsOrPsv']['id'] : null),
+                'letterIssueType' => isset($currentVersion['letterIssueType']['id'])
+                    ? $currentVersion['letterIssueType']['id']
+                    : (isset($data['letterIssueType']['id']) ? $data['letterIssueType']['id'] : null),
                 'defaultBodyContent' => $currentVersion['defaultBodyContent'] ?? $data['defaultBodyContent'] ?? null,
                 'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
@@ -93,18 +96,17 @@ class LetterIssue implements MapperInterface
             unset($commandData['goodsOrPsv']);
         }
 
-        // Convert publishFrom array back to string
-        if (!empty($commandData['publishFrom']) && is_array($commandData['publishFrom'])) {
-            $publishFrom = sprintf(
-                '%04d-%02d-%02d %02d:%02d:%02d',
-                $commandData['publishFrom']['year'],
-                $commandData['publishFrom']['month'],
-                $commandData['publishFrom']['day'],
-                $commandData['publishFrom']['hour'] ?? 0,
-                $commandData['publishFrom']['minute'] ?? 0,
-                $commandData['publishFrom']['second'] ?? 0
-            );
-            $commandData['publishFrom'] = $publishFrom;
+        if (empty($commandData['letterIssueType'])) {
+            unset($commandData['letterIssueType']);
+        } else {
+            // Rename to letterIssueTypeId for the DTO
+            $commandData['letterIssueTypeId'] = $commandData['letterIssueType'];
+            unset($commandData['letterIssueType']);
+        }
+
+        // publishFrom field removed from form - unset if present
+        if (isset($commandData['publishFrom'])) {
+            unset($commandData['publishFrom']);
         }
 
         // Add escape false for EditorJs content

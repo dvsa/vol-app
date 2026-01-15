@@ -32,7 +32,14 @@ return [
     CommandHandler\Letter\LetterIssue\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterIssue\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterIssue\Delete::class => IsInternalUser::class,
-    
+
+    // Letter Issue Type
+    QueryHandler\Letter\LetterIssueType\Get::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterIssueType\GetList::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Create::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Update::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterIssueType\Delete::class => IsInternalUser::class,
+
     // Letter Todo
     QueryHandler\Letter\LetterTodo\Get::class => IsInternalUser::class,
     QueryHandler\Letter\LetterTodo\GetList::class => IsInternalUser::class,
@@ -50,9 +57,11 @@ return [
     // Letter Instance
     QueryHandler\Letter\LetterInstance\Get::class => IsInternalUser::class,
     QueryHandler\Letter\LetterInstance\GetList::class => IsInternalUser::class,
+    QueryHandler\Letter\LetterInstance\Preview::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterInstance\Update::class => IsInternalUser::class,
-    
+    CommandHandler\Letter\LetterInstance\Generate::class => IsInternalUser::class,
+
     // Letter Test Data
     QueryHandler\Letter\LetterTestData\Get::class => IsInternalUser::class,
     QueryHandler\Letter\LetterTestData\GetList::class => IsInternalUser::class,

@@ -280,8 +280,7 @@ return [
             'sts_regional_endpoints' => 'regional'
         ]
     ]),
-    'mail' => ($isProductionAccount && \Aws\Credentials\CredentialProvider::shouldUseEcs())
-    ? [
+    'mail' => [
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [
             'name' => '%olcs_email_host%',
@@ -293,16 +292,7 @@ return [
                 'port' => '%olcs_email_port%',
             ],
         ],
-    ]
-    : ($isProductionAccount ? [] : [
-        'type' => \Dvsa\Olcs\Email\Transport\MultiTransport::class,
-        'options' => [
-            'transport' => [
-                ['type' => 'SMTP', 'options' => ['name' => '%olcs_email_host%', 'host' => '%olcs_email_host%', 'port' => '%olcs_email_port%']],
-                ['type' => \Dvsa\Olcs\Email\Transport\S3File::class, 'options' => ['bucket' => 'devapp-olcs-pri-olcs-autotest-s3', 'key' => '%domain%/email']],
-            ]
-        ],
-    ]),
+    ],
 
     'mailboxes' => [
         // IMAP connection to a the mailbox for reading inspection request emails
@@ -357,20 +347,17 @@ return [
         'max_queue_messages_per_run' => '100',
     ],
     'nr' => [
-        // @to-do currently waiting on the actual nr address
         'inr_service' => [
             'uri' => '%olcs_natreg_uri%',
+            'options' => [],
             'adapter' => Laminas\Http\Client\Adapter\Curl::class,
             'oauth2' => [ // if client['headers']['Authorization'] is not set, then this will be used to get token
                 'client_id' => '%olcs_natreg_client_id%', //param
                 'client_secret' => '%olcs_natreg_client_secret%', // secret
                 'token_url' => '%olcs_natreg_token_url%', //param
                 'scope' => '%olcs_natreg_client_scope%', //param
-                'proxy' => 'http://%shd_proxy%',
-            ]
-        ],
-        'repute_url' => [
-            'uri' => '%olcs_natreg_repute%'
+            ],
+            'service_name' => 'INR',
         ],
     ],
 

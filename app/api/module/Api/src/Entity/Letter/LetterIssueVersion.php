@@ -160,11 +160,30 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
     /**
      * Get default body content as array (for EditorJS)
      *
+     * Handles both properly stored arrays and double-encoded JSON strings
+     * (legacy data where JSON was encoded before Doctrine's json type encoded it again)
+     *
      * @return array
      */
-    public function getDefaultBodyContentAsArray()
+    public function getDefaultBodyContentAsArray(): array
     {
-        return $this->defaultBodyContent ?: [];
+        $content = $this->defaultBodyContent;
+
+        if (empty($content)) {
+            return [];
+        }
+
+        // If content is a string, it was double-encoded - decode it
+        if (is_string($content)) {
+            $decoded = json_decode($content, true);
+            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                return $decoded;
+            }
+            // If decode failed, return empty array
+            return [];
+        }
+
+        return $content;
     }
 
     /**

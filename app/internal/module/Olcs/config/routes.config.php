@@ -4,6 +4,7 @@ use Common\Util\LvaRoute;
 use Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController;
+use Olcs\Controller\Bus\Docs\BusDocsController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
 use Olcs\Controller\Lva\Application\VehiclesDeclarationsController as ApplicationVehiclesDeclarationsController;
@@ -172,6 +173,59 @@ $routes = [
                 'action' => 'entityList'
             ]
         ]
+    ],
+    'letter' => [
+        'type' => 'Literal',
+        'options' => [
+            'route' => '/letter',
+        ],
+        'may_terminate' => false,
+        'child_routes' => [
+            'create' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/create',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'create',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'generate' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/generate',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'generate',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'preview' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'preview',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'preview-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/preview-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'previewContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+        ],
     ],
     'template_lists' => [
         'type' => 'segment',
@@ -674,7 +728,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/docs[/]',
                     'defaults' => [
-                        'controller' => \Olcs\Controller\Bus\Docs\BusDocsController::class,
+                        'controller' => BusDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -719,7 +773,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'BusDocsController',
+                                'controller' => BusDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -2258,6 +2312,16 @@ $routes = [
                     'defaults' => [
                         'controller' => 'TMController',
                         'action' => 'canRemove'
+                    ],
+                ],
+            ],
+            'check-repute' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'check-repute[/]',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'checkRepute'
                     ],
                 ],
             ],

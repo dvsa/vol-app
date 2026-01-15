@@ -368,9 +368,6 @@ return [
     TransferQuery\TmEmployment\GetSingle::class => QueryHandler\TmEmployment\GetSingle::class,
     TransferQuery\TmEmployment\GetList::class => QueryHandler\TmEmployment\GetList::class,
 
-    // National Register
-    TransferQuery\Nr\ReputeUrl::class => QueryHandler\Nr\ReputeUrl::class,
-
     // Bus Reg History View
     TransferQuery\Bus\HistoryList::class => QueryHandler\Bus\HistoryList::class,
 
@@ -743,12 +740,15 @@ return [
     TransferQuery\Letter\LetterSection\GetList::class => QueryHandler\Letter\LetterSection\GetList::class,
     TransferQuery\Letter\LetterIssue\Get::class => QueryHandler\Letter\LetterIssue\Get::class,
     TransferQuery\Letter\LetterIssue\GetList::class => QueryHandler\Letter\LetterIssue\GetList::class,
+    TransferQuery\Letter\LetterIssueType\Get::class => QueryHandler\Letter\LetterIssueType\Get::class,
+    TransferQuery\Letter\LetterIssueType\GetList::class => QueryHandler\Letter\LetterIssueType\GetList::class,
     TransferQuery\Letter\LetterTodo\Get::class => QueryHandler\Letter\LetterTodo\Get::class,
     TransferQuery\Letter\LetterTodo\GetList::class => QueryHandler\Letter\LetterTodo\GetList::class,
     TransferQuery\Letter\LetterAppendix\Get::class => QueryHandler\Letter\LetterAppendix\Get::class,
     TransferQuery\Letter\LetterAppendix\GetList::class => QueryHandler\Letter\LetterAppendix\GetList::class,
     TransferQuery\Letter\LetterInstance\Get::class => QueryHandler\Letter\LetterInstance\Get::class,
     TransferQuery\Letter\LetterInstance\GetList::class => QueryHandler\Letter\LetterInstance\GetList::class,
+    TransferQuery\Letter\LetterInstance\Preview::class => QueryHandler\Letter\LetterInstance\Preview::class,
     TransferQuery\Letter\MasterTemplate\Get::class => QueryHandler\Letter\MasterTemplate\Get::class,
     TransferQuery\Letter\MasterTemplate\GetList::class => QueryHandler\Letter\MasterTemplate\GetList::class,
     TransferQuery\Letter\LetterTestData\Get::class => QueryHandler\Letter\LetterTestData\Get::class,

@@ -218,7 +218,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @ORM\Column(type="decimal", name="vat_amount", nullable=false, options={"default": 0.00})
      */
-    protected $vatAmount = '0.00';
+    protected $vatAmount = 0.00;
 
     /**
      * Invoice line no
@@ -227,7 +227,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @ORM\Column(type="smallint", name="invoice_line_no", nullable=false, options={"default": 1})
      */
-    protected $invoiceLineNo = '1';
+    protected $invoiceLineNo = 1;
 
     /**
      * Invoiced date

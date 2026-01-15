@@ -29,6 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *        @ORM\Index(name="ix_letter_issue_version_category_id", columns={"category_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_created_by", columns={"created_by"}),
  *        @ORM\Index(name="ix_letter_issue_version_goods_or_psv", columns={"goods_or_psv"}),
+ *        @ORM\Index(name="ix_letter_issue_version_issue_type_id", columns={"letter_issue_type_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_last_modified_by", columns={"last_modified_by"}),
  *        @ORM\Index(name="ix_letter_issue_version_letter_issue_id", columns={"letter_issue_id"}),
  *        @ORM\Index(name="ix_letter_issue_version_sub_category_id", columns={"sub_category_id"})
@@ -63,6 +64,16 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      * @ORM\JoinColumn(name="letter_issue_id", referencedColumnName="id")
      */
     protected $letterIssue;
+
+    /**
+     * LetterIssueType
+     *
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType
+     *
+     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueType", fetch="LAZY")
+     * @ORM\JoinColumn(name="letter_issue_type_id", referencedColumnName="id", nullable=true)
+     */
+    protected $letterIssueType;
 
     /**
      * Category
@@ -276,6 +287,29 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     public function getLetterIssue()
     {
         return $this->letterIssue;
+    }
+
+    /**
+     * Set the letter issue type
+     *
+     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType $letterIssueType new value being set
+     *
+     * @return LetterIssueVersion
+     */
+    public function setLetterIssueType($letterIssueType)
+    {
+        $this->letterIssueType = $letterIssueType;
+
+        return $this;
+    }
+
+    /**
+     * Get the letter issue type
+     *
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType     */
+    public function getLetterIssueType()
+    {
+        return $this->letterIssueType;
     }
 
     /**

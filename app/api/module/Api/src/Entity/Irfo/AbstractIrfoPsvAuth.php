@@ -197,7 +197,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="smallint", name="copies_issued", nullable=false, options={"default": 0})
      */
-    protected $copiesIssued = '0';
+    protected $copiesIssued = 0;
 
     /**
      * Copies required
@@ -206,7 +206,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="smallint", name="copies_required", nullable=false, options={"default": 0})
      */
-    protected $copiesRequired = '0';
+    protected $copiesRequired = 0;
 
     /**
      * Copies required total
@@ -215,7 +215,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="smallint", name="copies_required_total", nullable=false, options={"default": 0})
      */
-    protected $copiesRequiredTotal = '0';
+    protected $copiesRequiredTotal = 0;
 
     /**
      * Copies issued total
@@ -224,7 +224,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @ORM\Column(type="smallint", name="copies_issued_total", nullable=false, options={"default": 0})
      */
-    protected $copiesIssuedTotal = '0';
+    protected $copiesIssuedTotal = 0;
 
     /**
      * Last date copies req

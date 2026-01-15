@@ -158,6 +158,7 @@ return [
             'Document' => \Dvsa\Olcs\Api\Service\Document\DocumentFactory::class,
             'DocumentGenerator' => \Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class,
             'DocumentNamingService' => \Dvsa\Olcs\Api\Service\Document\NamingService::class,
+            \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService::class => \Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementServiceFactory::class,
             'UpdateOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\UpdateOperatingCentreHelper::class,
             'OperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\OperatingCentreHelper::class,
             'VariationOperatingCentreHelper' => \Dvsa\Olcs\Api\Domain\Service\VariationOperatingCentreHelper::class,
@@ -199,6 +200,14 @@ return [
             \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager::class =>
                 \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory::class,
 
+            // Letter Section Renderer Plugin System
+            \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManagerFactory::class,
+
+            // Letter Preview Service
+            \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,
@@ -228,6 +237,7 @@ return [
             'ComplianceEpisodeXmlMapping' => \Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXmlFactory::class,
 
             \Dvsa\Olcs\Api\Service\Nr\InrClientInterface::class => Dvsa\Olcs\Api\Service\Nr\InrClientFactory::class,
+            \Dvsa\Olcs\Api\Service\Nr\CheckGoodRepute::class => \Dvsa\Olcs\Api\Service\Nr\CheckGoodReputeFactory::class,
             \Dvsa\Olcs\Api\Service\Nr\MsiResponse::class => \Dvsa\Olcs\Api\Service\Nr\MsiResponseFactory::class,
 
             \Dvsa\Olcs\Api\Mvc\OlcsBlameableListener::class => \Dvsa\Olcs\Api\Mvc\OlcsBlameableListenerFactory::class,
@@ -812,6 +822,7 @@ return [
             Repository\LetterInstance::class => RepositoryFactory::class,
             Repository\MasterTemplate::class => RepositoryFactory::class,
             Repository\LetterTestData::class => RepositoryFactory::class,
+            Repository\LetterIssueType::class => RepositoryFactory::class,
             Repository\LetterTypeSection::class => RepositoryFactory::class,
             Repository\LetterTypeIssue::class => RepositoryFactory::class,
             Repository\LetterTypeTodo::class => RepositoryFactory::class,
@@ -853,6 +864,7 @@ return [
             'LetterInstance' => Repository\LetterInstance::class,
             'MasterTemplate' => Repository\MasterTemplate::class,
             'LetterTestData' => Repository\LetterTestData::class,
+            'LetterIssueType' => Repository\LetterIssueType::class,
             'LetterTypeSection' => Repository\LetterTypeSection::class,
             'LetterTypeIssue' => Repository\LetterTypeIssue::class,
             'LetterTypeTodo' => Repository\LetterTypeTodo::class,

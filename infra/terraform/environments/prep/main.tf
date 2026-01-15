@@ -338,6 +338,11 @@ module "service" {
 
     jobs = [
       {
+        name     = "cache-clear",
+        commands = ["batch:cache-clear", "--flush-all", "--force"],
+        timeout  = 300,
+      },
+      {
         name     = "ch-vs-olcs-diffs",
         commands = ["batch:ch-vs-olcs-diffs"],
       },
@@ -370,6 +375,24 @@ module "service" {
         commands = ["batch:data-gov-uk-export", "--report-name", "international-goods"],
         timeout  = 43200,
         schedule = ["cron(00 13 ? * 1 *)"],
+      },
+      {
+        name     = "tc-bus-variation",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-variation", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-bus-registered",
+        commands = ["batch:data-gov-uk-export", "--report-name", "bus-registered-only", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
+      },
+      {
+        name     = "tc-operator-licence",
+        commands = ["batch:data-gov-uk-export", "--report-name", "operator-licence", "-v"],
+        timeout  = 43200,
+        schedule = ["cron(00 23 7 * ? *)"],
       },
       {
         name     = "data-retention-populate",

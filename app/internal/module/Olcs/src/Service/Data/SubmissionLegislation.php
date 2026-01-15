@@ -19,12 +19,12 @@ class SubmissionLegislation extends AbstractPublicInquiryData
     /**
      * @var string
      */
-    protected $sort = 'sectionCode';
+    protected $sort = 'sectionCode, description';
 
     /**
      * @var string
      */
-    protected $order = 'ASC';
+    protected $order = 'ASC, ASC';
 
     /**
      * Format data for drop down. Note data-in-office-revokation flag used to set attribute against the option. JS

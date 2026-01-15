@@ -28,7 +28,7 @@ class TransExchangeXmlFactory implements FactoryInterface
     protected function getRoutes(): array
     {
         $route = [
-            'Description' => new MultiNodeValue('routeDescription'),
+            'Description' => new NodeValue('routeDescription'),
             'ReversingManoeuvres' => [
                 new FixedValue('hasManoeuvre', 'Y'),
                 new NodeValue('manoeuvreDetail')

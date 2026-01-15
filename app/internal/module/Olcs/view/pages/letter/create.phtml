@@ -1,0 +1,91 @@
+<form method="post" id="letter-create-form" data-generate-url="/letter/generate?<?= http_build_query($queryParams) ?>">
+<input type="hidden" name="letterType" value="<?= $this->escapeHtmlAttr($templateId) ?>">
+<h2 class="govuk-heading-m">Select content options</h2>
+<p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
+
+<div id="validation-error" class="govuk-error-message" style="display: none; margin-bottom: 1rem;">
+    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue
+</div>
+
+<p class="govuk-body">
+    <a href="#" class="govuk-link" id="toggle-all-sections">Show All Sections</a>
+</p>
+
+<div class="letter-sections">
+    <?php foreach ($accordionData as $section): ?>
+        <?php if (empty($section['issues'])): continue; endif; ?>
+        <div class="letter-section">
+            <div class="letter-section__header" style="cursor: pointer; border-bottom: 1px solid #b1b4b6; padding: 10px 0;">
+                <h3 class="letter-section__title govuk-heading-s" style="display: inline-block; margin: 0;">
+                    <?= $this->escapeHtml($section['issueType']['name']) ?>
+                </h3>
+                <span class="letter-section__toggle govuk-link" style="float: right; font-size: 14px;">
+                    <span class="letter-section__show-hide">Show</span>
+                    <span class="letter-section__icon" style="display: inline-block; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 4px solid #1d70b8; margin-left: 5px; vertical-align: middle;"></span>
+                </span>
+            </div>
+            <div class="letter-section__content" style="display: none; padding: 15px 0; border-bottom: 1px solid #b1b4b6;">
+                <?php if (!empty($section['issues'])): ?>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <?php foreach ($section['issues'] as $issue): ?>
+                            <div class="govuk-checkboxes__item">
+                                <input
+                                    class="govuk-checkboxes__input"
+                                    id="letter-issue-<?= $issue['id'] ?>"
+                                    name="letterIssues[]"
+                                    type="checkbox"
+                                    value="<?= $issue['id'] ?>"
+                                >
+                                <label class="govuk-label govuk-checkboxes__label govuk-label--s" for="letter-issue-<?= $issue['id'] ?>">
+                                    <?= $this->escapeHtml($issue['currentVersion']['heading'] ?? $issue['issueKey']) ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="govuk-body-s">No issues available for this category.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<div class="govuk-button-group" style="margin-top: 2rem;">
+    <button type="button" id="create-letter-btn" class="govuk-button govuk-button--disabled" data-module="govuk-button" disabled>
+        Create letter
+    </button>
+    <a class="govuk-link" href="#" id="cancel-letter-btn">Cancel</a>
+</div>
+
+</form>
+
+<!-- Preview or edit letter modal content (hidden until letter is created) -->
+<div id="letter-preview-modal" style="display: none;">
+    <p class="govuk-body">
+        <strong>Category</strong><br>
+        <span id="preview-category">-</span>
+    </p>
+    <p class="govuk-body">
+        <strong>Subcategory</strong><br>
+        <span id="preview-subcategory">-</span>
+    </p>
+    <p class="govuk-body">
+        <strong>Template</strong><br>
+        <span id="preview-template">-</span>
+    </p>
+
+    <h3 class="govuk-heading-m">Check and edit your letter</h3>
+    <p class="govuk-inset-text">
+        <a href="#" id="preview-link" class="govuk-link" target="_blank">
+            View or edit letter (opens in new tab)
+        </a>
+    </p>
+
+    <div class="govuk-button-group">
+        <button type="button" id="prepare-to-send-btn" class="govuk-button" disabled title="Coming soon in VOL-5520">
+            Prepare to send
+        </button>
+        <a class="govuk-link" href="#" id="back-to-issues-btn">Back</a>
+        <a class="govuk-link" href="#" id="cancel-preview-btn">Cancel</a>
+    </div>
+</div>
