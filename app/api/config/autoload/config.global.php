@@ -529,7 +529,7 @@ return [
             'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
-                    'host' => '127.0.0.1',
+                    'host' => '%redis_cache_fqdn%',
                     'port' => 6379,
                 ],
                 'lib_options' => [
