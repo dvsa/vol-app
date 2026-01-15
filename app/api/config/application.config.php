@@ -9,6 +9,7 @@ return [
         'Laminas\Router',
         'Laminas\Cache\Module',
         'Laminas\Cache\Storage\Adapter\Redis',
+        'Laminas\Cache\Storage\Adapter\Memory',
         'Laminas\Filter\Module',
         'Laminas\Validator\Module',
         'Laminas\Mvc\I18n\Module',

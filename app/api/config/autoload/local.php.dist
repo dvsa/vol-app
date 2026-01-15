@@ -237,6 +237,13 @@ return [
         ],
       ],
     ],
+    'doctrinemodule.cache.redis' => [
+      'options' => [
+        'server' => [
+          'host' => 'redis',
+        ],
+      ],
+    ],
   ],
   'dvla_search' => [
     'base_uri' => '',
