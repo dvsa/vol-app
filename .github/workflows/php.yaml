@@ -32,7 +32,7 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
@@ -47,7 +47,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -64,7 +64,7 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
@@ -78,7 +78,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -112,7 +112,7 @@ jobs:
   #     run:
   #       working-directory: app/${{ inputs.project }}
   #   steps:
-  #     - uses: actions/checkout@v4
+  #     - uses: actions/checkout@v6
   #       with:
   #         ref: ${{ inputs.ref || null }}
   #         sparse-checkout: app/${{ inputs.project }}
@@ -127,7 +127,7 @@ jobs:
   #       id: composer-cache
   #       run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
   #     - name: Cache Composer packages
-  #       uses: actions/cache@v4
+  #       uses: actions/cache@v5
   #       with:
   #         path: ${{ steps.composer-cache.outputs.dir }}
   #         key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -147,7 +147,7 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: app/${{ inputs.project }}
@@ -161,7 +161,7 @@ jobs:
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
       - name: Cache Composer packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
@@ -175,7 +175,7 @@ jobs:
         run: tar -czf ${{ inputs.project }}.tar.gz *
       - name: Upload artefact
         if: ${{ inputs.should-upload-artefact }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.artefact-name }}
           path: app/${{ inputs.project }}/${{ inputs.project }}.tar.gz

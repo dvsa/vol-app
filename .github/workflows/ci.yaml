@@ -59,10 +59,10 @@ jobs:
       should-plan-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_modified_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_modified_files, 'infra/terraform/environments/prep') || null }}
       should-plan-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_modified_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_modified_files, 'infra/terraform/environments/prod') || null }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-app-files
         with:
           dir_names: true
@@ -71,14 +71,14 @@ jobs:
             app/selfserve/**
             app/internal/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-asset-files
         with:
           dir_names: true
           files: |
             app/cdn/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-docker-files
         with:
           dir_names: true
@@ -88,7 +88,7 @@ jobs:
             infra/docker/liquibase/**
             infra/docker/printpit/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
         with:
           dir_names: true
@@ -98,7 +98,7 @@ jobs:
           files_ignore: |
             infra/terraform/modules/service/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-environments-terraform-files
         with:
           dir_names: true
@@ -110,7 +110,7 @@ jobs:
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-website-files
         with:
           files: |
@@ -144,28 +144,28 @@ jobs:
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - id: api-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/api
       - id: cli-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/internal infra/docker/internal
       - id: assets-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/cdn
       - name: Add to summary
@@ -281,17 +281,17 @@ jobs:
       run:
         working-directory: infra/terraform
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           sparse-checkout: infra/terraform
       - uses: hashicorp/setup-terraform@v3
       - run: terraform fmt -check -no-color -recursive
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         name: Cache plugin dir
         with:
           path: ~/.tflint.d/plugins
           key: tflint-${{ hashFiles('infra/terraform/.tflint.hcl') }}
-      - uses: terraform-linters/setup-tflint@v4
+      - uses: terraform-linters/setup-tflint@v6
       - run: tflint --init --recursive --config=$(realpath .tflint.hcl)
       - run: tflint --recursive --config=$(realpath .tflint.hcl) -f compact
 
