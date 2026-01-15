@@ -8,7 +8,6 @@ parameters:
     paths:
         # Only scan app code that uses entities or domain logic
         - module/Api/src/Entity
-        #- module/Api/src/Domain
 
     treatPhpDocTypesAsCertain: false
 

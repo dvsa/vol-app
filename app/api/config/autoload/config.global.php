@@ -69,8 +69,6 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'query_cache' => 'array',
-                'result_cache' => 'array',
                 'generate_proxies' => true,
                 // Log SQL queries to the OLCS application log file
                 //'sql_logger' => 'DoctrineLogger',
