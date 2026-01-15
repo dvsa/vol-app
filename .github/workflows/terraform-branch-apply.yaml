@@ -1,0 +1,174 @@
+name: Deploy Terraform from branch
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+
+jobs:
+  approval-check:
+    name: Check Approval
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      # This step checks for two approvals and one code owner
+      - name: Check Approvals and Code Owners
+        id: check
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+
+            // Filter for approved reviews
+            const approvedReviews = reviews.filter(review => review.state === 'APPROVED');
+            // Get the current PR files and their code owners
+            const files = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            const changedFiles = files.data.map(file => file.filename);
+            const { data: codeOwners } = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: 'CODEOWNERS',
+            });
+            const codeOwnersContent = Buffer.from(codeOwners.content, 'base64').toString('utf8');
+            const codeOwnersList = codeOwnersContent.split('\n').filter(line => line.trim() !== '').map(line => line.trim().split(/\s+/).slice(1)).flat();
+
+            // Check if there are at least two approvals
+            const hasTwoApprovals = approvedReviews.length >= 2;
+
+            // Check if at least one approver is a code owner
+            const hasCodeOwnerApproval = approvedReviews.some(review => codeOwnersList.includes(`@${review.user.login}`));
+
+            if (hasTwoApprovals && hasCodeOwnerApproval) {
+              console.log('Approval conditions met. Proceeding with the workflow.');
+              return true;
+            } else {
+              console.log('Approval conditions not met. Workflow will be skipped.');
+              return false;
+            }
+          result-encoding: string
+      - name: Run conditional tf apply if changes are made to env or account directories using orchestrator.
+        if: steps.check.outputs.result == 'true'
+        run: echo "approved=true" >> $GITHUB_OUTPUT
+
+  orchestrator:
+    name: Check for tf changes
+    if: needs.approval-check.check.outputs.result == 'true'
+    needs: approval-check
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    outputs:
+      # Terraform environment
+      should-apply-environment-terraform: ${{ steps.changed-environments-terraform-files.outputs.any_modified == 'true' || null }}
+    steps:
+      - uses: tj-actions/changed-files@v45
+        id: changed-environments-terraform-files
+        with:
+          files: |
+            infra/terraform/environments/{dev,int,prep,prod}/**
+            infra/terraform/modules/**
+          files_ignore: |
+            infra/terraform/modules/account/**
+            infra/terraform/modules/github/**
+            infra/terraform/modules/remote-state/**
+
+  get-version:
+    name: Get latest app versions
+    if: ${{ needs.orchestrator.outputs.should-apply-environment-terraform }}
+    needs: orchestrator
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      cli: ${{ steps.cli-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+      assets: ${{ steps.assets-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: api-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/api infra/docker/api
+      - id: cli-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/api infra/docker/cli
+      - id: selfserve-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/selfserve infra/docker/selfserve
+      - id: internal-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/internal infra/docker/internal
+      - id: assets-version
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        with:
+          project-path: app/cdn
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  terraform-dev-apply:
+    name: Apply Branch to dev
+    needs:
+      - get-version
+    concurrency:
+      group: terraform-environment-dev
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: dev
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  failed-apply:
+    name: Apply main to dev
+    needs:
+      - get-version
+      - terraform-dev-apply
+    if: failure()
+    concurrency:
+      group: terraform-environment-dev
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: dev
+      ref: main
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      cli-image-tag: ${{ needs.get-version.outputs.cli }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      assets-version: ${{ needs.get-version.outputs.assets }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit

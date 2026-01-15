@@ -4,3 +4,4 @@
 /app/cdn/ @dvsa/vol-app @gabrielg2020 @jerotire
 
 /infra @dvsa/vol-platform
+/.github @dvsa/vol-platform @dvsa/vol-app
