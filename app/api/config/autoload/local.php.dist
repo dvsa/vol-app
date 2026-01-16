@@ -299,7 +299,7 @@ return [
         'object_class' => ['inetOrgPerson'],
         'base_dn' => 'ou=users,dc=vol,dc=dvsa',
         'encryption' => 'none',
-        'secret' => 'SUPER_SECRET',
+        'secret' => 'localdev-jwt-secret-key-must-be-at-least-64-characters-for-hs512-algorithm',
       ],
     ],
   ],

@@ -262,5 +262,40 @@
         ]
       }
     ]
+  },
+  {
+    "service": "internal",
+    "basePath": "app/internal",
+    "placeholders": [
+      {
+        "key": "ENV",
+        "value": "${environment.toUpperCase()}"
+      },
+      {
+        "key": "env",
+        "value": "${environment.toLowerCase()}"
+      },
+      {
+        "key": "SERVICE",
+        "value": "${service.toUpperCase()}"
+      },
+      {
+        "key": "service",
+        "value": "${service.toLowerCase()}"
+      }
+    ],
+    "files": [
+      {
+        "path": "config/autoload/local.php",
+        "mappings": [
+          {
+            "configPath": ["webdav", "private_key"],
+            "awsPath": "DEVAPP{ENV}-BASE-SM-APPLICATION-{SERVICE}",
+            "type": "secret",
+            "secretKey": "webdav_jwt_private_key"
+          }
+        ]
+      }
+    ]
   }
 ]
