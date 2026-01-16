@@ -190,25 +190,25 @@ jobs:
       checks: write
       
 test_accessibility:
-    name: Accessibility Tests (Will not fail)
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
-    needs:
-      - terraform_env
-      - test_selfserve
-      - test_internal
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eAccessibility.yaml@v4.17.0
-    with:
-      platform_env: ${{ inputs.environment }}
-      aws_role: ${{ inputs.aws_role }}
-      bucket_name: ${{ inputs.bucket_name }}
-      bucket_key: ${{ inputs.bucket_key }}
-      batch_job_queue: ${{ inputs.batch_job_queue }}
-      batch_job_definition: ${{ inputs.batch_job_definition }}
-      batch_timeout_minutes: 60
-    permissions:
-      contents: write
-      id-token: write
-      checks: write
+  name: Accessibility Tests (Will not fail)
+  if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
+  needs:
+    - terraform_env
+    - test_selfserve
+    - test_internal
+  uses: dvsa/vol-functional-tests/.github/workflows/e2eAccessibility.yaml@v4.17.0
+  with:
+    platform_env: ${{ inputs.environment }}
+    aws_role: ${{ inputs.aws_role }}
+    bucket_name: ${{ inputs.bucket_name }}
+    bucket_key: ${{ inputs.bucket_key }}
+    batch_job_queue: ${{ inputs.batch_job_queue }}
+    batch_job_definition: ${{ inputs.batch_job_definition }}
+    batch_timeout_minutes: 60
+  permissions:
+    contents: write
+    id-token: write
+    checks: write
       
   rollback:
     name: Rollback Deployment
