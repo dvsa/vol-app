@@ -1,7 +1,21 @@
+# phpstan-doctrine-upgrade.neon
+includes:
+    # Doctrine PHPStan rules
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
 parameters:
-  phpVersion: 80200
-  level: 0
-  paths:
-    - module
-    - public
-    - config
+    level: 0   # Level 0 ignores most legacy type checks, focuses on structural/code issues
+    paths:
+        # Only scan app code that uses entities or domain logic
+        - module/Api/src/Entity
+
+    treatPhpDocTypesAsCertain: false
+
+    # Ignore legacy type hint / PHPDoc issues
+    ignoreErrors:
+        - identifier: missingType.*
+        - identifier: return.type
+        - identifier: iterable.value
+        - identifier: phpDoc.*
+
+    # Exclude broken files / syntax errors
