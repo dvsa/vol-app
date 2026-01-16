@@ -188,8 +188,8 @@ jobs:
       contents: write
       id-token: write
       checks: write
-      
-test_accessibility:
+
+  test_accessibility:
     name: Accessibility Tests (Will not fail)
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int' }}
     needs:
