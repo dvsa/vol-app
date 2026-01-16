@@ -11,9 +11,9 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Scan
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           exit-code: 1
           scan-ref: "infra/terraform"
@@ -28,6 +28,6 @@ jobs:
           TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
       - name: Upload Results to GitHub Code Scanning
         if: ${{ always() }}
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: "trivy-results.sarif"

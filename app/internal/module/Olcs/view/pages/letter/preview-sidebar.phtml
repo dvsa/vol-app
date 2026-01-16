@@ -1,0 +1,58 @@
+<?php
+/**
+ * Letter Preview Sidebar
+ *
+ * Left sidebar for the letter preview page showing Issue Types
+ * as checkboxes under "Edit Sections" and action buttons
+ *
+ * @var array $letterInstance Letter instance data
+ * @var array $sectionsList List of unique Issue Types
+ */
+?>
+
+<div class="small-module">
+    <h4 class="title">Edit Sections:</h4>
+    <?php if (!empty($sectionsList)): ?>
+    <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
+        <?php foreach ($sectionsList as $section): ?>
+        <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox"
+                   id="section-<?= $this->escapeHtmlAttr($section['id']) ?>"
+                   name="sections[]"
+                   value="<?= $this->escapeHtmlAttr($section['id']) ?>"
+                   disabled>
+            <label class="govuk-label govuk-checkboxes__label"
+                   for="section-<?= $this->escapeHtmlAttr($section['id']) ?>">
+                <?= $this->escapeHtml($section['name']) ?>
+            </label>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <?php else: ?>
+    <p class="small-module__details">No sections selected</p>
+    <?php endif; ?>
+</div>
+
+<div class="small-module">
+    <h4 class="title">Actions</h4>
+    <p class="small-module__details">
+        <button
+            type="button"
+            class="govuk-button govuk-button--secondary"
+            disabled
+            title="Coming soon in VOL-6403"
+            style="margin-bottom: 10px; width: 100%;"
+        >
+            Continue to editor
+        </button>
+        <button
+            type="button"
+            id="save-letter-exit"
+            class="govuk-button"
+            data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
+            style="width: 100%;"
+        >
+            Save letter and exit
+        </button>
+    </p>
+</div>

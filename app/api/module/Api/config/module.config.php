@@ -200,6 +200,14 @@ return [
             \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager::class =>
                 \Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory::class,
 
+            // Letter Section Renderer Plugin System
+            \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManagerFactory::class,
+
+            // Letter Preview Service
+            \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,

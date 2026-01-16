@@ -86,31 +86,49 @@ OLCS.ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          // Hide the form
-          $form.hide();
-          $("#toggle-all-sections").hide();
+          // Update preview link with letterInstanceId
+          var previewUrl = "/letter/preview?id=" + response.letterInstanceId;
+          $("#preview-link").attr("href", previewUrl);
 
-          // Display the debug output
-          var $debugOutput = $("#letter-debug-output");
-          var $debugContent = $("#debug-content");
+          // Update category/subcategory/template labels from letterInstance data
+          var letterInstance = response.letterInstance || {};
+          var letterType = letterInstance.letterType || {};
+          var category = letterType.category || {};
+          var subCategory = letterType.subCategory || {};
 
-          // Format the letter instance data as readable JSON
-          var formattedData = JSON.stringify(response.letterInstance, null, 2);
-          $debugContent.text(formattedData);
+          $("#preview-category").text(category.description || "Letter");
+          $("#preview-subcategory").text(subCategory.subCategoryName || "-");
+          $("#preview-template").text(letterType.name || "Letter Template");
 
-          // Show the debug section
-          $debugOutput.show();
+          // Get the preview modal content and use OLCS.modal.updateBody()
+          var $previewModal = $("#letter-preview-modal");
+          var newContent = $previewModal.html();
 
-          // Change button to "View in System" that redirects
-          $button
-            .text("View in System")
-            .prop("disabled", false)
-            .off("click")
-            .on("click", function () {
-              if (response.redirectUrl) {
-                window.location.href = response.redirectUrl;
+          if (
+            typeof OLCS !== "undefined" &&
+            OLCS.modal &&
+            OLCS.modal.updateBody
+          ) {
+            OLCS.modal.updateBody(newContent);
+
+            // Update modal title
+            $(".modal__title").text("Preview or edit letter");
+
+            // Re-initialize GOV.UK Frontend components after modal update
+            setTimeout(function () {
+              if (window.GOVUKFrontend) {
+                var modalContent = document.querySelector(".modal__content");
+                if (modalContent) {
+                  window.GOVUKFrontend.initAll({ scope: modalContent });
+                }
               }
-            });
+            }, 100);
+          } else {
+            // Fallback if modal not available - show preview div directly
+            $form.hide();
+            $("#toggle-all-sections").hide();
+            $previewModal.show();
+          }
         } else {
           // Show error message
           $errorDiv
@@ -149,12 +167,34 @@ OLCS.ready(function () {
     $("#placeholder-message").hide(); // Hide placeholder when selection changes
   });
 
-  // Cancel button - close modal
+  // Cancel button - close modal (on create form)
   $("body").on("click", "#cancel-letter-btn", function (e) {
     e.preventDefault();
     if (typeof OLCS !== "undefined" && OLCS.modal && OLCS.modal.hide) {
       OLCS.modal.hide();
     }
+  });
+
+  // Cancel button - close modal (on preview modal)
+  $("body").on("click", "#cancel-preview-btn", function (e) {
+    e.preventDefault();
+    if (typeof OLCS !== "undefined" && OLCS.modal && OLCS.modal.hide) {
+      OLCS.modal.hide();
+    }
+  });
+
+  // Back button - reload the page to go back to issue selection
+  // Note: In a future enhancement, this could preserve state and go back without reload
+  $("body").on("click", "#back-to-issues-btn", function (e) {
+    e.preventDefault();
+    window.location.reload();
+  });
+
+  // Prepare to send button (placeholder - VOL-5520)
+  $("body").on("click", "#prepare-to-send-btn", function (e) {
+    e.preventDefault();
+    // This will be implemented in VOL-5520
+    alert("Prepare to send functionality coming soon (VOL-5520)");
   });
 
   // Set initial button state on page load

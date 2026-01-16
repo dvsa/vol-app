@@ -15,6 +15,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
 use Dvsa\Olcs\Api\Entity\Application\S4;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
+use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -4951,11 +4952,13 @@ class ApplicationEntityTest extends EntityTester
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getApplicationReference')->once()->andReturn('EXPECTED')
+            ->shouldReceive('getOutstandingGrantFees')->once()->andReturn([])
             ->getMock();
 
         static::assertEquals(
             [
                 'applicationReference' => 'EXPECTED',
+                'awaitingGrantFeeId' => null
             ],
             $sut->getCalculatedBundleValues()
         );
@@ -5535,5 +5538,28 @@ class ApplicationEntityTest extends EntityTester
             [RefData::APP_VEHICLE_TYPE_MIXED, 1, true],
             [RefData::APP_VEHICLE_TYPE_LGV, 1, false],
         ];
+    }
+
+    public function testGetOutstandingGrantFees(): void
+    {
+        $application = $this->instantiate(Entity::class);
+
+        $this->assertEmpty($application->getOutstandingGrantFees());
+
+        /** @var FeeEntity $fee */
+        $fee = m::mock(FeeEntity::class)
+            ->shouldReceive('isGrantFee')
+            ->andReturn(true)
+            ->shouldReceive('isOutstanding')
+            ->andReturn(true)
+            ->shouldReceive('getId')
+            ->andReturn(99)
+            ->getMock();
+
+        $application->setFees(new ArrayCollection([$fee]));
+
+        $expected = [99 => $fee];
+
+        $this->assertEquals($expected, $application->getOutstandingGrantFees());
     }
 }

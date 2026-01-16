@@ -1,0 +1,35 @@
+<?php
+/**
+ * Letter Preview Page
+ *
+ * Displays the letter preview in an iframe with VOL layout and sidebar
+ *
+ * @var int $letterInstanceId Letter instance ID
+ * @var array $letterInstance Letter instance data
+ * @var array $sectionsList List of sections for sidebar
+ */
+?>
+
+<div id="success-banner" class="govuk-notification-banner govuk-notification-banner--success" role="alert" style="display: none;">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+        </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+            Your letter has been saved. You can now close this page and return to the previous screen.
+        </p>
+    </div>
+</div>
+
+<h4 class="title">Letter preview</h4>
+
+<div class="letter-preview-frame-container" style="border: 1px solid #b1b4b6; background: #f3f2f1; padding: 10px;">
+    <iframe
+        id="letter-preview-frame"
+        src="/letter/preview-content?id=<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
+        style="width: 100%; height: 70vh; border: none; background: #fff;"
+        title="Letter preview"
+    ></iframe>
+</div>

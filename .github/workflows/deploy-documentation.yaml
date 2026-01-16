@@ -24,14 +24,14 @@ jobs:
       run:
         working-directory: website
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           sparse-checkout: |
             website
             docs
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "lts/*"
           cache: npm
@@ -40,7 +40,7 @@ jobs:
       - run: npm run build
       - name: Upload pages artefact
         if: ${{ inputs.deploy }}
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: website/build
 

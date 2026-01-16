@@ -14,8 +14,8 @@
 
 return [
     'olcs-doctrine' => [
-        // Default encryption key to use if not overridden in local
-        'encryption_key' => 'ASaoW9TQogBu7TgDHoBKtsDPY5BdjF7WFZbLKHgN'
+        // Encryption key is provided by AWS Secrets Manager in deployed environments
+        'encryption_key' => ''
     ],
     'doctrine' => [
         'configuration' => [

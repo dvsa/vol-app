@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-latest # x86_64 runner
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Lint Dockerfile with Hadolint
-        uses: hadolint/hadolint-action@v3.1.0
+        uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: infra/docker/printpit/Dockerfile
           failure-threshold: warning
@@ -58,7 +58,7 @@ jobs:
 
       # Build and push to NONPROD
       - name: Configure AWS credentials (NONPROD)
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -92,7 +92,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=printpit
 
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.33.1
         continue-on-error: true
         with:
           image-ref: printpit:test
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload Trivy results to GitHub Security
         if: always() && success() || failure()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         continue-on-error: true
         with:
           sarif_file: "trivy-results.sarif"
@@ -136,7 +136,7 @@ jobs:
       # Optionally push to PROD
       - name: Configure AWS credentials (PROD)
         if: ${{ inputs.push_to_prod }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
