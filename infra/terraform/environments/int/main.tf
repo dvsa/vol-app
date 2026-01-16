@@ -140,7 +140,6 @@ data "aws_lb_listener" "this" {
 }
 
 data "aws_lb_listener" "renderer" {
-
   load_balancer_arn = data.aws_lb.this["API"].arn
   port              = 443
 }
@@ -285,6 +284,8 @@ module "service" {
       repository = data.aws_ecr_repository.dockerhub_gotenberg.repository_url
 
       set_custom_port = true
+
+      health_check_path = "/health"
 
       listener_rule_enable = true
 

@@ -34,10 +34,11 @@ variable "elasticache_url" {
 }
 variable "services" {
   type = map(object({
-    version    = string
-    repository = string
-    cpu        = number
-    memory     = number
+    version           = string
+    repository        = string
+    health_check_path = optional(string, "/healthcheck")
+    cpu               = number
+    memory            = number
     task_iam_role_statements = list(object({
       effect    = string
       actions   = list(string)
@@ -45,6 +46,7 @@ variable "services" {
     }))
     add_cdn_url_to_env          = optional(bool, false)
     set_custom_port             = optional(bool, false)
+    priority                    = optional(number, 86)
     enable_autoscaling_policies = optional(bool, true)
     lb_arn                      = optional(string)
     lb_listener_arn             = optional(string)
