@@ -21,7 +21,7 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.ref_name }}
           fetch-depth: 0
@@ -72,50 +72,50 @@ jobs:
       # Terraform environment
       should-apply-environment-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-environments-terraform-files.outputs.any_modified == 'true' || null }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-api-files
         with:
           files: |
             app/api/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-selfserve-files
         with:
           files: |
             app/selfserve/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-internal-files
         with:
           files: |
             app/internal/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-assets-files
         with:
           files: |
             app/cdn/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-api-docker-files
         with:
           files: |
             infra/docker/api/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-cli-docker-files
         with:
           files: |
             infra/docker/cli/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-selfserve-docker-files
         with:
           files: |
             infra/docker/selfserve/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-internal-docker-files
         with:
           files: |
             infra/docker/internal/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-accounts-terraform-files
         with:
           files: |
@@ -123,7 +123,7 @@ jobs:
             infra/terraform/modules/**
           files_ignore: |
             infra/terraform/modules/service/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-environments-terraform-files
         with:
           files: |
@@ -133,7 +133,7 @@ jobs:
             infra/terraform/modules/account/**
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
-      - uses: tj-actions/changed-files@v45
+      - uses: tj-actions/changed-files@v47
         id: changed-website-files
         with:
           files: |
@@ -167,27 +167,27 @@ jobs:
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - id: api-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/api
       - id: cli-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/api infra/docker/cli
       - id: selfserve-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/selfserve infra/docker/selfserve
       - id: internal-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/internal infra/docker/internal
       - id: assets-version
-        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.3
+        uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
           project-path: app/cdn
       - name: Add to summary
@@ -407,7 +407,7 @@ jobs:
             repo: vol-qa
     steps:
       - name: Configure AWS credentials for NONPROD
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -452,7 +452,7 @@ jobs:
           fi
 
       - name: Configure AWS credentials for PROD
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}

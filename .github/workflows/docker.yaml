@@ -36,13 +36,13 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: ${{ env.WORKING_DIR }}
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
-      - uses: hadolint/hadolint-action@v3.1.0
+      - uses: hadolint/hadolint-action@v3.3.0
         with:
           dockerfile: ${{ env.WORKING_DIR }}/Dockerfile
 
@@ -50,13 +50,13 @@ jobs:
     name: Build ${{ inputs.push && 'and push' || '' }}
     runs-on: ubuntu-24.04-arm
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref || null }}
           sparse-checkout: ${{ env.WORKING_DIR }}
           fetch-depth: ${{ !inputs.ref && 1 || 0 }}
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: ${{ inputs.app-artefact-name }}
           path: infra/docker/${{ inputs.project }}
@@ -94,7 +94,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ inputs.project }}
 
       - name: Scan
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.33.1
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           skip-dirs: /var/clamav
@@ -105,7 +105,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
