@@ -1,0 +1,52 @@
+# phpstan-doctrine-check.neon
+includes:
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+
+parameters:
+    level: 0
+    paths:
+        - module/Api/src/Entity
+    treatPhpDocTypesAsCertain: false
+
+    ignoreErrors:
+        # === Suppressed legacy getId() errors (VOL-6959) ===
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\AbstractOperatingCentreOpposition::getId\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\AbstractLetterIssueTodo::getId\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\AbstractLetterTypeAppendix::getId\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\AbstractLetterTypeIssue::getId\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\AbstractLetterTypeSection::getId\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Call to an undefined method Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterInstance::isDeleted\\(\\)#"
+          paths:
+            - module/Api/src/Entity
+
+        # === Suppressed legacy undefined property errors (VOL-6959) ===
+        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterIssueTodo::\\$letterTodoVersion#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeAppendix::\\$letterAppendixVersion#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeIssue::\\$letterIssueVersion#"
+          paths:
+            - module/Api/src/Entity
+
+        - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeSection::\\$letterSectionVersion#"
+          paths:
+            - module/Api/src/Entity
