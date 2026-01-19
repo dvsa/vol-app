@@ -534,7 +534,7 @@ return [
                     \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                 ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
-                'namespace' => 'zfcache',
+                'namespace' => 'doctrine',
             ],
             'plugins' => [
                 [
