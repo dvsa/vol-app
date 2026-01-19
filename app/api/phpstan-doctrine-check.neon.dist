@@ -1,6 +1,6 @@
 # phpstan-doctrine-check.neon
 includes:
-    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor-bin/phpstan/vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
     level: 0

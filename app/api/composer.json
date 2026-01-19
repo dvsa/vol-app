@@ -122,9 +122,7 @@
     "johnkary/phpunit-speedtrap": "^4.0",
     "mikey179/vfsstream": "^1.6",
     "dms/phpunit-arraysubset-asserts": "^0.5.0",
-    "dvsa/authentication-ldap": "^3.1",
-    "phpstan/phpstan": "^1.12",
-    "phpstan/phpstan-doctrine": "^1.4"
+    "dvsa/authentication-ldap": "^3.1"
   },
   "extra": {
     "bamarni-bin": {
