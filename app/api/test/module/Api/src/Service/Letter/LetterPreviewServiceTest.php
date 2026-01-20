@@ -19,6 +19,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererInterface;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -32,12 +33,14 @@ class LetterPreviewServiceTest extends MockeryTestCase
     private m\MockInterface|SectionRendererPluginManager $mockRendererManager;
     private m\MockInterface $mockContentStore;
     private m\MockInterface $mockDocTemplateRepo;
+    private m\MockInterface|VolGrabReplacementService $mockVolGrabReplacementService;
 
     public function setUp(): void
     {
         $this->mockRendererManager = m::mock(SectionRendererPluginManager::class);
         $this->mockContentStore = m::mock();
         $this->mockDocTemplateRepo = m::mock();
+        $this->mockVolGrabReplacementService = m::mock(VolGrabReplacementService::class);
 
         // Default: logo lookup returns empty (no logo found)
         $this->mockDocTemplateRepo->shouldReceive('fetchByTemplateSlug')
@@ -45,10 +48,16 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null)
             ->byDefault();
 
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->withAnyArgs()
+            ->andReturnUsing(fn($html, $context) => $html)
+            ->byDefault();
+
         $this->sut = new LetterPreviewService(
             $this->mockRendererManager,
             $this->mockContentStore,
-            $this->mockDocTemplateRepo
+            $this->mockDocTemplateRepo,
+            $this->mockVolGrabReplacementService
         );
     }
 
@@ -56,10 +65,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
     {
         $mockSectionRenderer = m::mock(SectionRendererInterface::class);
         $mockSectionRenderer->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<div class="section">Section content</div>');
 
         $mockIssueRenderer = m::mock(SectionRendererInterface::class);
         $mockIssueRenderer->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<div class="issue">Issue content</div>');
 
         $this->mockRendererManager->shouldReceive('get')
@@ -77,6 +88,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(new ArrayCollection([$mockSection]));
         $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
             ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
 
         $result = $this->sut->renderPreview($mockLetterInstance, null);
 
@@ -91,10 +108,12 @@ class LetterPreviewServiceTest extends MockeryTestCase
     {
         $mockSectionRenderer = m::mock(SectionRendererInterface::class);
         $mockSectionRenderer->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<p>Section HTML</p>');
 
         $mockIssueRenderer = m::mock(SectionRendererInterface::class);
         $mockIssueRenderer->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<div class="issue">Issue HTML</div>');
 
         $this->mockRendererManager->shouldReceive('get')
@@ -121,6 +140,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
 
         $templateContent = '<html>{{LETTER_REFERENCE}} {{SECTIONS_CONTENT}} {{ISSUES_CONTENT}}</html>';
@@ -156,6 +179,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $mockUser = m::mock(User::class);
         $mockUser->shouldReceive('getContactDetails')->andReturn($mockContactDetails);
+        $mockUser->shouldReceive('getId')->andReturn(1);
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
@@ -171,6 +195,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
 
         $templateContent = '{{CASEWORKER_NAME}}';
@@ -209,6 +237,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
 
         $templateContent = '{{CASEWORKER_NAME}}';
@@ -250,6 +282,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
 
         $templateContent = '{{ENTITY_REFERENCE}}';
@@ -297,6 +333,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn($mockLicence);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
 
         $templateContent = '{{ENTITY_REFERENCE}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -322,6 +362,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $mockOrganisation = m::mock(Organisation::class);
         $mockOrganisation->shouldReceive('getName')->andReturn('ACME Transport Ltd');
+        $mockOrganisation->shouldReceive('getId')->andReturn(1);
 
         $mockLetterInstance = m::mock(LetterInstance::class);
         $mockLetterInstance->shouldReceive('getLetterInstanceSections')
@@ -338,6 +379,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn($mockOrganisation);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -384,6 +429,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn($mockLicence);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
 
         $templateContent = '{{SALUTATION}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -421,6 +470,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $mockLetterInstance->shouldReceive('getLicence')
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
             ->andReturn(null);
 
         $templateContent = '{{SALUTATION}}';
@@ -460,6 +513,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
 
         $templateContent = '{{DVSA_ADDRESS}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -480,6 +537,7 @@ class LetterPreviewServiceTest extends MockeryTestCase
 
         $mockIssueRenderer = m::mock(SectionRendererInterface::class);
         $mockIssueRenderer->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<div class="issue">Issue content</div>');
 
         $this->mockRendererManager->shouldReceive('get')
@@ -509,6 +567,10 @@ class LetterPreviewServiceTest extends MockeryTestCase
             ->andReturn(null);
         $mockLetterInstance->shouldReceive('getOrganisation')
             ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
 
         $templateContent = '{{ISSUES_CONTENT}}';
         $mockTemplate = m::mock(MasterTemplate::class);
@@ -524,6 +586,329 @@ class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertStringContainsString('Financial issues with your application', $result);
         // Should have 3 issues rendered
         $this->assertEquals(3, substr_count($result, '<div class="issue">Issue content</div>'));
+    }
+
+    public function testRenderSectionsPassesContextToRenderer(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('getId')->andReturn(123);
+        $mockLicence->shouldReceive('getLicNo')->andReturn('OB123');
+        $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
+
+        $mockApplication = m::mock(Application::class);
+        $mockApplication->shouldReceive('getId')->andReturn(456);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLicence')
+            ->andReturn($mockLicence);
+        $mockLetterInstance->shouldReceive('getApplication')
+            ->andReturn($mockApplication);
+        $mockLetterInstance->shouldReceive('getCreatedBy')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+
+        // Verify context is passed with licence and application IDs
+        $mockSectionRenderer->shouldReceive('render')
+            ->with($mockSection, m::on(function ($context) {
+                return isset($context['licence']) && $context['licence'] === 123
+                    && isset($context['application']) && $context['application'] === 456;
+            }))
+            ->once()
+            ->andReturn('<div class="section">Content</div>');
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('Content', $result);
+    }
+
+    public function testBuildVolGrabContextWithAllEntities(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('getId')->andReturn(111);
+        $mockLicence->shouldReceive('getLicNo')->andReturn('OB111');
+        $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
+
+        $mockApplication = m::mock(Application::class);
+        $mockApplication->shouldReceive('getId')->andReturn(222);
+
+        $mockUser = m::mock(User::class);
+        $mockUser->shouldReceive('getId')->andReturn(333);
+        $mockUser->shouldReceive('getContactDetails')->andReturn(null);
+
+        $mockCase = m::mock(\Dvsa\Olcs\Api\Entity\Cases\Cases::class);
+        $mockCase->shouldReceive('getId')->andReturn(444);
+
+        $mockBusReg = m::mock(\Dvsa\Olcs\Api\Entity\Bus\BusReg::class);
+        $mockBusReg->shouldReceive('getId')->andReturn(555);
+
+        $mockOrganisation = m::mock(Organisation::class);
+        $mockOrganisation->shouldReceive('getId')->andReturn(666);
+        $mockOrganisation->shouldReceive('getName')->andReturn('Test Org');
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLicence')
+            ->andReturn($mockLicence);
+        $mockLetterInstance->shouldReceive('getApplication')
+            ->andReturn($mockApplication);
+        $mockLetterInstance->shouldReceive('getCreatedBy')
+            ->andReturn($mockUser);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn($mockCase);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn($mockBusReg);
+        $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn($mockOrganisation);
+
+        // Verify all context IDs are present
+        $mockSectionRenderer->shouldReceive('render')
+            ->with($mockSection, m::on(function ($context) {
+                return $context['licence'] === 111
+                    && $context['application'] === 222
+                    && $context['user'] === 333
+                    && $context['case'] === 444
+                    && $context['busRegId'] === 555
+                    && $context['organisation'] === 666;
+            }))
+            ->once()
+            ->andReturn('<div class="section">Content</div>');
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('Content', $result);
+    }
+
+    public function testBuildVolGrabContextWithNullEntities(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLicence')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedBy')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+
+        // Verify context is empty when all entities are null
+        $mockSectionRenderer->shouldReceive('render')
+            ->with($mockSection, [])
+            ->once()
+            ->andReturn('<div class="section">Content</div>');
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('Content', $result);
+    }
+
+    public function testRenderIssuesPassesContextToRenderer(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockIssue = $this->createMockIssue('Test Type', 'Test Description', 1);
+
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('getId')->andReturn(789);
+        $mockLicence->shouldReceive('getLicNo')->andReturn('OB789');
+        $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection([$mockIssue]));
+        $mockLetterInstance->shouldReceive('getLicence')
+            ->andReturn($mockLicence);
+        $mockLetterInstance->shouldReceive('getApplication')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedBy')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+
+        // Verify context is passed to issue renderer
+        $mockIssueRenderer->shouldReceive('render')
+            ->with($mockIssue, m::on(function ($context) {
+                return isset($context['licence']) && $context['licence'] === 789;
+            }))
+            ->once()
+            ->andReturn('<div class="issue">Issue content</div>');
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('Issue content', $result);
+    }
+
+    public function testRenderPreviewCallsVolGrabReplacementOnFinalHtml(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockSectionRenderer->shouldReceive('render')
+            ->withAnyArgs()
+            ->andReturn('<p>Section content with [[TODAYS_DATE]]</p>');
+
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('getId')->andReturn(123);
+        $mockLicence->shouldReceive('getLicNo')->andReturn('OB123');
+        $mockLicence->shouldReceive('getOrganisation')->andReturn(null);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getReference')
+            ->andReturn('REF123');
+        $mockLetterInstance->shouldReceive('getCreatedBy')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLicence')
+            ->andReturn($mockLicence);
+        $mockLetterInstance->shouldReceive('getOrganisation')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')
+            ->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')
+            ->andReturn(null);
+
+        $templateContent = '<html>{{SECTIONS_CONTENT}} [[TODAYS_DATE]]</html>';
+        $mockTemplate = m::mock(MasterTemplate::class);
+        $mockTemplate->shouldReceive('getTemplateContent')
+            ->andReturn($templateContent);
+
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->once()
+            ->with(m::on(function ($html) {
+                return strpos($html, '[[TODAYS_DATE]]') !== false;
+            }), m::on(function ($context) {
+                return isset($context['licence']) && $context['licence'] === 123;
+            }))
+            ->andReturn('<html><p>Section content with 23rd January 2026</p> 23rd January 2026</html>');
+
+        $result = $this->sut->renderPreview($mockLetterInstance, $mockTemplate);
+
+        $this->assertStringContainsString('23rd January 2026', $result);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
+    }
+
+    public function testRenderPreviewWithoutTemplateCallsVolGrabReplacement(): void
+    {
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockSectionRenderer->shouldReceive('render')
+            ->withAnyArgs()
+            ->andReturn('<div class="section">Content</div>');
+
+        $mockIssueRenderer = m::mock(SectionRendererInterface::class);
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn($mockIssueRenderer);
+
+        $mockSection = m::mock(LetterInstanceSection::class);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$mockSection]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLicence')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+
+        // Override default mock to verify vol-grab replacement is called even without template
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->once()
+            ->with(m::type('string'), [])
+            ->andReturnUsing(fn($html, $context) => $html);
+
+        $result = $this->sut->renderPreview($mockLetterInstance, null);
+
+        $this->assertStringContainsString('<div class="letter-content">', $result);
     }
 
     private function createMockIssue(string $typeName, string $typeDescription, int $typeId): m\MockInterface

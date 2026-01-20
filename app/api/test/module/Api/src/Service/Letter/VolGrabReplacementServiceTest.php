@@ -319,4 +319,194 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $this->assertNotEmpty($result);
     }
+
+    // Tests for replaceGrabsInHtml method
+
+    public function testReplaceGrabsInHtmlReturnsEmptyStringWhenGivenEmptyString()
+    {
+        $result = $this->service->replaceGrabsInHtml('', []);
+
+        $this->assertEquals('', $result);
+    }
+
+    public function testReplaceGrabsInHtmlReturnsOriginalHtmlWhenNoTokensFound()
+    {
+        $html = '<html><body><p>Hello World</p></body></html>';
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 7]);
+
+        $this->assertEquals($html, $result);
+    }
+
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesStaticBookmark()
+    {
+        $html = '<html><body><p>Date: [[TODAYS_DATE]]</p></body></html>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['user' => 1]);
+
+        $this->assertStringContainsString('23rd January 2026', $result);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesDynamicBookmark()
+    {
+        $html = '<div>Operator: [[OP_NAME]]</div>';
+
+        $mockBookmark = m::mock(DynamicBookmark::class, DateHelperAwareInterface::class);
+        $mockBookmark->shouldReceive('setDateHelper')->with($this->mockDateService)->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(false);
+
+        $mockQuery = m::mock(QueryInterface::class);
+        $mockBookmark->shouldReceive('validateDataAndGetQuery')
+            ->with(['licence' => 7])
+            ->once()
+            ->andReturn($mockQuery);
+
+        $queryResult = ['organisation' => ['name' => 'Test Company Ltd']];
+        $this->mockQueryHandler->shouldReceive('handleQuery')
+            ->with($mockQuery)
+            ->once()
+            ->andReturn($queryResult);
+
+        $mockBookmark->shouldReceive('setData')->with($queryResult)->once();
+        $mockBookmark->shouldReceive('render')->andReturn('Test Company Ltd');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 7]);
+
+        $this->assertStringContainsString('Test Company Ltd', $result);
+        $this->assertStringNotContainsString('[[OP_NAME]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlInjectsTranslatorInterfaceIntoBookmark()
+    {
+        $html = '<p>[[TEST_TOKEN]]</p>';
+
+        $mockBookmark = m::mock(StaticBookmark::class, TranslatorAwareInterface::class);
+        $mockBookmark->shouldReceive('setTranslator')->with($this->mockTranslator)->once();
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('Translated Value');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TEST_TOKEN')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('Translated Value', $result);
+    }
+
+    public function testReplaceGrabsInHtmlHandlesBookmarkCreationException()
+    {
+        $html = '<p>[[UNKNOWN_TOKEN]]</p>';
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('UNKNOWN_TOKEN')
+            ->once()
+            ->andThrow(new \Exception('Bookmark class not found'));
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlHandlesMultipleTokens()
+    {
+        $html = '<html>Date: [[TODAYS_DATE]] Name: [[OP_NAME]]</html>';
+
+        $mockDateBookmark = m::mock(StaticBookmark::class);
+        $mockDateBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockDateBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $mockNameBookmark = m::mock(DynamicBookmark::class);
+        $mockNameBookmark->shouldReceive('isStatic')->andReturn(false);
+
+        $mockQuery = m::mock(QueryInterface::class);
+        $mockNameBookmark->shouldReceive('validateDataAndGetQuery')
+            ->with(['licence' => 123])
+            ->once()
+            ->andReturn($mockQuery);
+
+        $this->mockQueryHandler->shouldReceive('handleQuery')
+            ->with($mockQuery)
+            ->once()
+            ->andReturn(['name' => 'ACME Ltd']);
+
+        $mockNameBookmark->shouldReceive('setData')->once();
+        $mockNameBookmark->shouldReceive('render')->andReturn('ACME Ltd');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockDateBookmark);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('OP_NAME')
+            ->once()
+            ->andReturn($mockNameBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, ['licence' => 123]);
+
+        $this->assertStringContainsString('23rd January 2026', $result);
+        $this->assertStringContainsString('ACME Ltd', $result);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
+        $this->assertStringNotContainsString('[[OP_NAME]]', $result);
+    }
+
+    public function testReplaceGrabsInHtmlPreservesHtmlStructure()
+    {
+        $html = '<div class="header">
+            <h1>Letter</h1>
+            <p>Date: [[TODAYS_DATE]]</p>
+        </div>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn('23rd January 2026');
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TODAYS_DATE')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        // HTML structure should be preserved
+        $this->assertStringContainsString('<div class="header">', $result);
+        $this->assertStringContainsString('<h1>Letter</h1>', $result);
+        $this->assertStringContainsString('23rd January 2026', $result);
+    }
+
+    public function testReplaceGrabsInHtmlConvertsNewlinesToBrTags()
+    {
+        $html = '<div>Address: [[TA_ADDRESS]]</div>';
+
+        $mockBookmark = m::mock(StaticBookmark::class);
+        $mockBookmark->shouldReceive('isStatic')->andReturn(true);
+        $mockBookmark->shouldReceive('render')->andReturn("Line 1\nLine 2\nLine 3");
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('TA_ADDRESS')
+            ->once()
+            ->andReturn($mockBookmark);
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringContainsString('Line 1<br>Line 2<br>Line 3', $result);
+        $this->assertStringNotContainsString("\n", str_replace(['<div>', '</div>'], '', $result));
+    }
 }

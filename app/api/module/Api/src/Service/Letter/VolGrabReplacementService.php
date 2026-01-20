@@ -37,6 +37,12 @@ class VolGrabReplacementService
     }
 
     /**
+     * Regex pattern to match [[TOKEN_NAME]] placeholders
+     * Only matches uppercase letters, numbers, and underscores (bookmark token format)
+     */
+    private const GRAB_PATTERN = '/\[\[([A-Z0-9_]+)\]\]/';
+
+    /**
      * Replace VOL grabs in EditorJS JSON content
      *
      * @param string $editorJsJson EditorJS JSON content as string
@@ -85,12 +91,12 @@ class VolGrabReplacementService
      * Tokens are passed directly to BookmarkFactory which converts them to class names
      * using the same convention as RTF bookmarks (e.g., OP_NAME → OpName).
      *
-     * @param array           $tokens Array of token names from JSON
-     * @param EditorJsParser  $parser Parser instance to inject into bookmarks
+     * @param array                $tokens Array of token names from JSON/HTML
+     * @param EditorJsParser|null  $parser Parser instance to inject into bookmarks (null for HTML processing)
      *
      * @return array Array of bookmark instances keyed by token
      */
-    private function getBookmarks(array $tokens, EditorJsParser $parser): array
+    private function getBookmarks(array $tokens, ?EditorJsParser $parser = null): array
     {
         $bookmarks = [];
 
@@ -100,8 +106,10 @@ class VolGrabReplacementService
                 // e.g., OP_NAME → OpName, CASEWORKER_NAME → CaseworkerName
                 $bookmark = $this->bookmarkFactory->locate($token);
 
-                // Inject dependencies
-                $bookmark->setParser($parser);
+                // Inject parser only for EditorJS processing
+                if ($parser !== null) {
+                    $bookmark->setParser($parser);
+                }
 
                 if ($bookmark instanceof DateHelperAwareInterface) {
                     $bookmark->setDateHelper($this->dateService);
@@ -110,8 +118,6 @@ class VolGrabReplacementService
                 if ($bookmark instanceof TranslatorAwareInterface) {
                     $bookmark->setTranslator($this->translator);
                 }
-
-                // Note: FileStoreAwareInterface not injected - not needed for letters
 
                 $bookmarks[$token] = $bookmark;
             } catch (\Exception $e) {
@@ -180,10 +186,11 @@ class VolGrabReplacementService
      *
      * @param array $bookmarks    Bookmark instances
      * @param array $queryResults Query results for dynamic bookmarks
+     * @param bool  $forHtml      True for HTML output (simple strings), false for EditorJS (structured data)
      *
      * @return array Rendered values keyed by token
      */
-    private function renderBookmarks(array $bookmarks, array $queryResults): array
+    private function renderBookmarks(array $bookmarks, array $queryResults, bool $forHtml = false): array
     {
         $populated = [];
 
@@ -202,12 +209,16 @@ class VolGrabReplacementService
                 }
 
                 if ($result !== null) {
-                    // Note: No RTF encoding needed for EditorJS!
-                    // The parser will handle newline conversion to <br>
-                    $populated[$token] = [
-                        'content' => $result,
-                        'preformatted' => $bookmark->isPreformatted()
-                    ];
+                    if ($forHtml) {
+                        // HTML: Convert newlines to <br>, return simple string
+                        $populated[$token] = str_replace("\n", '<br>', $result);
+                    } else {
+                        // EditorJS: Return structured data for parser
+                        $populated[$token] = [
+                            'content' => $result,
+                            'preformatted' => $bookmark->isPreformatted()
+                        ];
+                    }
                 }
             } catch (\Exception $e) {
                 // Log render errors but continue processing other bookmarks
@@ -220,5 +231,76 @@ class VolGrabReplacementService
         }
 
         return $populated;
+    }
+
+    /**
+     * Replace VOL grabs in HTML content
+     *
+     * Unlike replaceGrabs() which handles EditorJS JSON, this method works on
+     * plain HTML/text content directly. Used for master template processing.
+     *
+     * @param string $html    HTML content containing [[TOKEN]] placeholders
+     * @param array  $context Entity context (licence, application, user, etc.)
+     *
+     * @return string HTML content with placeholders replaced
+     */
+    public function replaceGrabsInHtml(string $html, array $context): string
+    {
+        if (empty($html)) {
+            return $html;
+        }
+
+        try {
+            $tokens = $this->extractTokensFromHtml($html);
+
+            if (empty($tokens)) {
+                return $html;
+            }
+
+            // Use shared methods with no parser (null) and forHtml=true
+            $bookmarks = $this->getBookmarks($tokens, null);
+            $queryResults = $this->executeQueries($bookmarks, $context);
+            $populatedData = $this->renderBookmarks($bookmarks, $queryResults, true);
+
+            return $this->replaceTokensInHtml($html, $populatedData);
+        } catch (\Exception $e) {
+            // Log error but return original content to avoid breaking letters
+            Logger::err('VOL Grab replacement in HTML failed: ' . $e->getMessage());
+            return $html;
+        }
+    }
+
+    /**
+     * Extract [[TOKEN]] placeholders from HTML content
+     *
+     * @param string $html HTML content
+     *
+     * @return array Array of unique token names found
+     */
+    private function extractTokensFromHtml(string $html): array
+    {
+        if (preg_match_all(self::GRAB_PATTERN, $html, $matches)) {
+            return array_unique($matches[1]);
+        }
+
+        return [];
+    }
+
+    /**
+     * Replace tokens in HTML content with their values
+     *
+     * @param string $html HTML content
+     * @param array  $data Associative array of token => value
+     *
+     * @return string HTML with tokens replaced
+     */
+    private function replaceTokensInHtml(string $html, array $data): string
+    {
+        foreach ($data as $token => $value) {
+            $placeholder = '[[' . $token . ']]';
+            $html = str_replace($placeholder, (string)$value, $html);
+        }
+
+        return $html;
     }
 }

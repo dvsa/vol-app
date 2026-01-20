@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
@@ -28,7 +29,8 @@ class LetterPreviewServiceFactory implements FactoryInterface
         return new LetterPreviewService(
             $container->get(SectionRendererPluginManager::class),
             $container->get('ContentStore'),
-            $repoManager->get('DocTemplate')
+            $repoManager->get('DocTemplate'),
+            $container->get(VolGrabReplacementService::class)
         );
     }
 }
