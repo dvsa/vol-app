@@ -1583,7 +1583,7 @@ class IrhpApplicationEntityTest extends EntityTester
             $this->assertNull($latestOutstandingIssueFee);
         }
 
-        $this->assertSame($fees[$expectedIndex], $latestOutstandingIssueFee);
+        $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
     public function dpGetLatestOutstandingApplicationFee()
@@ -1681,7 +1681,7 @@ class IrhpApplicationEntityTest extends EntityTester
             $this->assertNull($latestOutstandingIssueFee);
         }
 
-        $this->assertSame($fees[$expectedIndex], $latestOutstandingIssueFee);
+        $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
     public function dpGetLatestOutstandingIssueFee()
@@ -1779,7 +1779,7 @@ class IrhpApplicationEntityTest extends EntityTester
             $this->assertNull($latestOutstandingIssueFee);
         }
 
-        $this->assertSame($fees[$expectedIndex], $latestOutstandingIssueFee);
+        $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
     public function dpGetLatestIssueFee()

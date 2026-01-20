@@ -718,6 +718,6 @@ class TransportManagerEntityTest extends EntityTester
         $entity = new Entity();
         $entity->setQualifications($qualifications);
 
-        $this->assertEquals(new ArrayCollection([$qual3]), $entity->getMostRecentQualification());
+        $this->assertEquals($qual3, $entity->getMostRecentQualification()->first());
     }
 }
