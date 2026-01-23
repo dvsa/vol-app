@@ -21,4 +21,6 @@ class EventHistoryType extends AbstractEventHistoryType
     public const IRHP_APPLICATION_GRANTED = 'PAG';
     public const USER_EMAIL_ADDRESS_UPDATED = 'UEU';
     public const INTERIM_END = 'INE';
+    public const EVENT_CODE_CONDITION_CHANGED = 'COG';
+    public const EVENT_CODE_UNDERTAKING_CHANGED = 'UTG';
 }

@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
 use Dvsa\Olcs\Api\Entity\User\User;
 use RuntimeException;
 use LmcRbacMvc\Service\AuthorizationService;
+use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertaking;
 
 class Creator
 {
@@ -62,6 +63,12 @@ class Creator
             case $entity instanceof Application:
                 $eventHistory->setApplication($entity);
                 $eventHistory->setEntityType('application');
+                break;
+            case $entity instanceof ConditionUndertaking:
+                $eventHistory->setCase($entity->getCase());
+                $eventHistory->setApplication($entity->getApplication());
+                $eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setEntityType('condition_undertaking');
                 break;
             default:
                 throw new RuntimeException('Cannot create event history for the entity');
