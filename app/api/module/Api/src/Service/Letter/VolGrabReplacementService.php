@@ -210,8 +210,7 @@ class VolGrabReplacementService
 
                 if ($result !== null) {
                     if ($forHtml) {
-                        // HTML: Convert newlines to <br>, return simple string
-                        $populated[$token] = str_replace("\n", '<br>', $result);
+                        $populated[$token] = nl2br($result, false);
                     } else {
                         // EditorJS: Return structured data for parser
                         $populated[$token] = [

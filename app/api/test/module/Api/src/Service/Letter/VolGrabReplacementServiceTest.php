@@ -506,7 +506,6 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $result = $this->service->replaceGrabsInHtml($html, []);
 
-        $this->assertStringContainsString('Line 1<br>Line 2<br>Line 3', $result);
-        $this->assertStringNotContainsString("\n", str_replace(['<div>', '</div>'], '', $result));
+        $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
     }
 }
