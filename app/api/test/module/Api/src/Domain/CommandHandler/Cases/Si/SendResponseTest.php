@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Dvsa\Olcs\Api\Domain\Exception\InrClientException;
+use Dvsa\Olcs\Api\Entity\Cases\Cases;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -43,7 +44,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
     /**
      * Tests sending the Msi response
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $xml = 'xml string';
         $xmlIdentifier = 'identifier';
@@ -59,7 +60,11 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
             ->with($xmlIdentifier)
             ->andReturn($xmlFile);
 
+        $case = m::mock(Cases::class);
+        $case->expects('hasErruRequestedPenalties')->andReturnTrue();
+
         $erruRequest = m::mock(ErruRequestEntity::class)->makePartial();
+        $erruRequest->expects('getCase')->withNoArgs()->andReturn($case);
         $erruRequest->shouldReceive('getId')->once()->andReturn($erruId);
         $erruRequest->shouldReceive('getResponseDocument->getIdentifier')->once()->andReturn($xmlIdentifier);
         $erruRequest
@@ -97,7 +102,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
     /**
      * Tests sending the Msi response when the response code is 400
      */
-    public function testHandleCommandInvalidResponseCode()
+    public function testHandleCommandInvalidResponseCode(): void
     {
         $this->expectException(InrClientException::class);
         $this->expectExceptionMessage('INR Http response code was 400');
@@ -116,7 +121,11 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
             ->with($xmlIdentifier)
             ->andReturn($xmlFile);
 
+        $case = m::mock(Cases::class);
+        $case->expects('hasErruRequestedPenalties')->andReturnTrue();
+
         $erruRequest = m::mock(ErruRequestEntity::class)->makePartial();
+        $erruRequest->expects('getCase')->withNoArgs()->andReturn($case);
         $erruRequest->shouldReceive('getResponseDocument->getIdentifier')->once()->andReturn($xmlIdentifier);
         $erruRequest
             ->shouldReceive('setMsiType')
@@ -141,7 +150,7 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
     /**
      * Tests sending the Msi response when the inr client throws an exception
      */
-    public function testHandleCommandAdapterException()
+    public function testHandleCommandAdapterException(): void
     {
         $this->expectException(InrClientException::class);
         $this->expectExceptionMessage('There was an error sending the INR response adapter exception message');
@@ -160,7 +169,11 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
             ->with($xmlIdentifier)
             ->andReturn($xmlFile);
 
+        $case = m::mock(Cases::class);
+        $case->expects('hasErruRequestedPenalties')->andReturnTrue();
+
         $erruRequest = m::mock(ErruRequestEntity::class)->makePartial();
+        $erruRequest->expects('getCase')->withNoArgs()->andReturn($case);
         $erruRequest->shouldReceive('getResponseDocument->getIdentifier')->once()->andReturn($xmlIdentifier);
         $erruRequest
             ->shouldReceive('setMsiType')
@@ -174,6 +187,28 @@ class SendResponseTest extends AbstractCommandHandlerTestCase
             ->expects('makeRequestReturnStatusCode')
             ->with($xml)
             ->andThrow(AdapterRuntimeException::class, 'adapter exception message');
+
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * Tests no attempt made to send when there are no requested penalties
+     */
+    public function testHandleCommandNoRequestedPenaltiesException(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(SendResponse::MSG_NO_RESPONSE_REQUIRED);
+
+        $erruId = 333;
+        $command = SendResponseCmd::create(['id' => $erruId]);
+
+        $case = m::mock(Cases::class);
+        $case->expects('hasErruRequestedPenalties')->andReturnFalse();
+
+        $erruRequest = m::mock(ErruRequestEntity::class)->makePartial();
+        $erruRequest->expects('getCase')->withNoArgs()->andReturn($case);
+
+        $this->repoMap['ErruRequest']->shouldReceive('fetchUsingId')->once()->with($command)->andReturn($erruRequest);
 
         $this->sut->handleCommand($command);
     }

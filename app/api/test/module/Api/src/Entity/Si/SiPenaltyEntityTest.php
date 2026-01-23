@@ -44,6 +44,6 @@ class SiPenaltyEntityTest extends EntityTester
         $this->assertEquals($endDate, $entity->getEndDate());
         $this->assertEquals($imposed, $entity->getImposed());
         $this->assertEquals($reasonNotImposed, $entity->getReasonNotImposed());
-        $this->assertEquals($erruRequested, $entity->getErruPenaltyRequested());
+        $this->assertEquals($erruRequested, $entity->getSiPenaltyErruRequested());
     }
 }

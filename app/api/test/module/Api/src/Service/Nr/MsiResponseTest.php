@@ -156,7 +156,7 @@ class MsiResponseTest extends MockeryTestCase
         $penalty1->expects('getEndDate')->withNoArgs()->andReturnNull();
         $penalty1->expects('getImposed')->withNoArgs()->andReturn('N');
         $penalty1->expects('getReasonNotImposed')->withNoArgs()->andReturn($reasonNotImposed);
-        $penalty1->expects('getErruPenaltyRequested->getPenaltyRequestedIdentifier')
+        $penalty1->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')
             ->withNoArgs()
             ->andReturn($penaltyImposedIdentifier1);
 
@@ -166,7 +166,7 @@ class MsiResponseTest extends MockeryTestCase
         $penalty2->expects('getEndDate')->withNoArgs()->andReturn($endDate);
         $penalty2->expects('getImposed')->withNoArgs()->andReturn('Y');
         $penalty2->shouldReceive('getReasonNotImposed')->never();
-        $penalty2->expects('getErruPenaltyRequested->getPenaltyRequestedIdentifier')
+        $penalty2->expects('getSiPenaltyErruRequested->getPenaltyRequestedIdentifier')
             ->withNoArgs()
             ->andReturn($penaltyImposedIdentifier2);
 

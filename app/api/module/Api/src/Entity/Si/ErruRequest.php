@@ -33,6 +33,7 @@ class ErruRequest extends AbstractErruRequest
     public const DEFAULT_CASE_TYPE = 'erru_case_t_msinre'; //MSI with no response entered
     public const FAILED_CASE_TYPE = 'erru_case_t_msirsf'; //MSI with response failure
     public const SENT_CASE_TYPE = 'erru_case_t_msirs'; //MSI with no response sent
+
     /**
      * ErruRequest constructor.
      *
@@ -56,6 +57,8 @@ class ErruRequest extends AbstractErruRequest
         $notificationNumber,
         $workflowId
     ) {
+        parent::__construct();
+
         $this->case = $case;
         $this->msiType = $msiType;
         $this->memberStateCode = $memberStateCode;

@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Si;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Cases\Cases as CaseEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiCategory as SiCategoryEntity;
 use Dvsa\Olcs\Api\Entity\Si\SiCategoryType as SiCategoryTypeEntity;
-use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement;
+use Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Si\SeriousInfringement as Entity;
-use Dvsa\Olcs\Api\Entity\Si\SiPenalty as SiPenaltyEntity;
 use Mockery as m;
 
 /**
@@ -29,7 +30,7 @@ class SeriousInfringementEntityTest extends EntityTester
     /**
      * Tests creation of a serious infringement
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $case = m::mock(CaseEntity::class);
         $checkDate = new \DateTime('2015-12-25');
@@ -37,7 +38,7 @@ class SeriousInfringementEntityTest extends EntityTester
         $siCategory = m::mock(SiCategoryEntity::class);
         $siCategoryType = m::mock(SiCategoryTypeEntity::class);
 
-        $entity = new SeriousInfringement(
+        $entity = new Entity(
             $case,
             $checkDate,
             $infringementDate,
@@ -52,41 +53,83 @@ class SeriousInfringementEntityTest extends EntityTester
         $this->assertEquals($siCategoryType, $entity->getSiCategoryType());
     }
 
-    /**
-     * tests responseSet function
-     *
-     * @param ArrayCollection $appliedPenalties
-     * @param bool $expectedResult
-     *
-     * @dataProvider responseSetProvider
-     */
-    public function testResponseSet($appliedPenalties, $expectedResult)
+    public function testResponseSetTrue(): void
     {
-        $entity = m::mock(SeriousInfringement::class)->makePartial();
-        $entity->setAppliedPenalties($appliedPenalties);
-        $this->assertEquals($expectedResult, $entity->responseSet());
+        $requestedErru1 = m::mock(SiPenaltyErruRequested::class);
+        $requestedErru1->expects('hasAppliedPenalty')->withNoArgs()->andReturnTrue();
+
+        $requestedErru2 = m::mock(SiPenaltyErruRequested::class);
+        $requestedErru2->expects('hasAppliedPenalty')->withNoArgs()->andReturnTrue();
+
+        $requestedErruCollection = new ArrayCollection([$requestedErru1, $requestedErru2]);
+
+        /** @var Entity $entity */
+        $entity = $this->instantiate(Entity::class);
+        $entity->setRequestedErrus($requestedErruCollection);
+        $this->assertTrue($entity->responseSet());
+    }
+
+    public function testResponseSetFalse(): void
+    {
+        //has applied penalty so the next one needs to be checked
+        $requestedErru1 = m::mock(SiPenaltyErruRequested::class);
+        $requestedErru1->expects('hasAppliedPenalty')->withNoArgs()->andReturnTrue();
+
+        //no applied penalty so we know not all responses set
+        $requestedErru2 = m::mock(SiPenaltyErruRequested::class);
+        $requestedErru2->expects('hasAppliedPenalty')->withNoArgs()->andReturnFalse();
+
+        //doesn't need to be checked
+        $requestedErru3 = m::mock(SiPenaltyErruRequested::class);
+        $requestedErru3->expects('hasAppliedPenalty')->never();
+
+        $requestedErruCollection = new ArrayCollection([$requestedErru1, $requestedErru2, $requestedErru3]);
+
+        /** @var Entity $entity */
+        $entity = $this->instantiate(Entity::class);
+        $entity->setRequestedErrus($requestedErruCollection);
+        $this->assertFalse($entity->responseSet());
+    }
+
+    public function testResponseSetNoRequestedPenalties(): void
+    {
+        /** @var Entity $entity */
+        $entity = $this->instantiate(Entity::class);
+        $entity->setRequestedErrus(new ArrayCollection());
+        $this->assertTrue($entity->responseSet());
     }
 
     /**
-     * data provide for testResponseSet()
-     *
-     * @return array
+     * @dataProvider dpHasRequestedPenalties
      */
-    public function responseSetProvider()
+    public function testHasRequestedPenalties(ArrayCollection $requestedErrus, bool $expectedResult): void
+    {
+        /** @var Entity $entity */
+        $entity = $this->instantiate(Entity::class);
+        $entity->setRequestedErrus($requestedErrus);
+        $this->assertEquals($expectedResult, $entity->hasRequestedPenalties());
+    }
+
+    public function dpHasRequestedPenalties(): array
     {
         return [
             [new ArrayCollection(), false],
-            [new ArrayCollection([m::mock(SiPenaltyEntity::class)]), true]
+            [new ArrayCollection([m::mock(SiPenaltyErruRequested::class)]), true]
         ];
     }
 
-    /**
-     * Tests getCalculatedBundleValues
-     */
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
-        $entity = m::mock(SeriousInfringement::class)->makePartial();
+        /** @var Entity $entity */
+        $entity = $this->instantiate(Entity::class);
         $entity->setAppliedPenalties(new ArrayCollection());
-        $this->assertEquals(['responseSet' => false], $entity->getCalculatedBundleValues());
+        $entity->setRequestedErrus(new ArrayCollection());
+        $this->assertEquals(
+            [
+                'responseSet' => true,
+                'hasRequestedPenalties' => false,
+            ],
+            $entity->getCalculatedBundleValues()
+        );
     }
 }

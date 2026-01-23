@@ -64,7 +64,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", fetch="LAZY")
      * @ORM\JoinColumn(name="si_penalty_erru_requested_id", referencedColumnName="id", nullable=true)
      */
-    protected $erruPenaltyRequested;
+    protected $siPenaltyErruRequested;
 
     /**
      * Foreign Key to serious_infringement
@@ -203,26 +203,26 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     }
 
     /**
-     * Set the erru penalty requested
+     * Set the si penalty erru requested
      *
-     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested $erruPenaltyRequested new value being set
+     * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested $siPenaltyErruRequested new value being set
      *
      * @return SiPenalty
      */
-    public function setErruPenaltyRequested($erruPenaltyRequested)
+    public function setSiPenaltyErruRequested($siPenaltyErruRequested)
     {
-        $this->erruPenaltyRequested = $erruPenaltyRequested;
+        $this->siPenaltyErruRequested = $siPenaltyErruRequested;
 
         return $this;
     }
 
     /**
-     * Get the erru penalty requested
+     * Get the si penalty erru requested
      *
      * @return \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested     */
-    public function getErruPenaltyRequested()
+    public function getSiPenaltyErruRequested()
     {
-        return $this->erruPenaltyRequested;
+        return $this->siPenaltyErruRequested;
     }
 
     /**

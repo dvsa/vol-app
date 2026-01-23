@@ -30,7 +30,7 @@ return [
             'name' => 'siCategoryType'
         ],
         [
-            'title' => 'Penalty applied',
+            'title' => 'Responded',
             'formatter' => YesNo::class,
             'name' => 'responseSet'
         ],
