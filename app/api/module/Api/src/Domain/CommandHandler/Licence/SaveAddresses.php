@@ -14,6 +14,9 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Save LVA Addresses
@@ -113,6 +116,9 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         if ($correspondenceCd->getVersion() != $version) {
             $result->setFlag('hasChanged', true);
             $result->addMessage('Contact details updated');
+
+            // create Event History record
+            $this->eventHistoryCreator->create($correspondenceCd, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS);
         }
 
         $this->handleSideEffectResult($result);
@@ -185,6 +191,9 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                 } elseif ($contact->getVersion() != $version) {
                     $result->addMessage('Phone contact ' . $phoneType . ' updated');
                     $result->setFlag('hasChanged', true);
+                    
+                    // create Event History record
+                    $this->eventHistoryCreator->create($contact, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS);
                 }
             } elseif ($hasContact && $contact->getId() > 0) {
                 $contactDetails->getPhoneContacts()->removeElement($contact);
@@ -289,5 +298,13 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         }
 
         $this->handleSideEffectResult($result);
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $fullContainer = $container;
+
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }

@@ -23,4 +23,5 @@ class EventHistoryType extends AbstractEventHistoryType
     public const INTERIM_END = 'INE';
     public const EVENT_CODE_CONDITION_CHANGED = 'COG';
     public const EVENT_CODE_UNDERTAKING_CHANGED = 'UTG';
+    public const EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS = 'CCA';
 }

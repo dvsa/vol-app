@@ -13,6 +13,8 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use RuntimeException;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertaking;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContact;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetails;
 
 class Creator
 {
@@ -69,6 +71,18 @@ class Creator
                 $eventHistory->setApplication($entity->getApplication());
                 $eventHistory->setLicence($entity->getLicence());
                 $eventHistory->setEntityType('condition_undertaking');
+                break;
+            case $entity instanceof PhoneContact:
+                //$eventHistory->setCase($entity->getCase());
+                //$eventHistory->setApplication($entity->getApplication());
+                //$eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setEntityType('phone_contact');
+                break;
+            case $entity instanceof ContactDetails:
+                //$eventHistory->setCase($entity->getCase());
+                //$eventHistory->setApplication($entity->getApplication());
+                //$eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setEntityType('contact_details');
                 break;
             default:
                 throw new RuntimeException('Cannot create event history for the entity');
