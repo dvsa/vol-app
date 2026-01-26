@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\IssueSectionRenderer;
+use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -18,11 +19,13 @@ class IssueSectionRendererTest extends MockeryTestCase
 {
     private IssueSectionRenderer $sut;
     private m\MockInterface|ConverterService $mockConverterService;
+    private m\MockInterface|VolGrabReplacementService $mockVolGrabService;
 
     public function setUp(): void
     {
         $this->mockConverterService = m::mock(ConverterService::class);
-        $this->sut = new IssueSectionRenderer($this->mockConverterService);
+        $this->mockVolGrabService = m::mock(VolGrabReplacementService::class);
+        $this->sut = new IssueSectionRenderer($this->mockConverterService, $this->mockVolGrabService);
     }
 
     public function testRenderWithHeadingAndContent(): void
@@ -33,6 +36,7 @@ class IssueSectionRendererTest extends MockeryTestCase
                 ['type' => 'paragraph', 'data' => ['text' => 'Issue content here']],
             ],
         ];
+        $jsonContent = json_encode($content);
 
         $mockIssue = m::mock(LetterInstanceIssue::class);
         $mockIssue->shouldReceive('getHeading')
@@ -40,8 +44,12 @@ class IssueSectionRendererTest extends MockeryTestCase
         $mockIssue->shouldReceive('getEffectiveContent')
             ->andReturn($content);
 
+        $this->mockVolGrabService->shouldReceive('replaceGrabs')
+            ->with($jsonContent, [])
+            ->andReturn($jsonContent);
+
         $this->mockConverterService->shouldReceive('convertJsonToHtml')
-            ->with(json_encode($content))
+            ->with($jsonContent)
             ->andReturn('<p>Issue content here</p>');
 
         $result = $this->sut->render($mockIssue);
@@ -80,6 +88,7 @@ class IssueSectionRendererTest extends MockeryTestCase
                 ['type' => 'paragraph', 'data' => ['text' => 'Issue content here']],
             ],
         ];
+        $jsonContent = json_encode($content);
 
         $mockIssue = m::mock(LetterInstanceIssue::class);
         $mockIssue->shouldReceive('getHeading')
@@ -87,8 +96,12 @@ class IssueSectionRendererTest extends MockeryTestCase
         $mockIssue->shouldReceive('getEffectiveContent')
             ->andReturn($content);
 
+        $this->mockVolGrabService->shouldReceive('replaceGrabs')
+            ->with($jsonContent, [])
+            ->andReturn($jsonContent);
+
         $this->mockConverterService->shouldReceive('convertJsonToHtml')
-            ->with(json_encode($content))
+            ->with($jsonContent)
             ->andReturn('<p>Issue content here</p>');
 
         $result = $this->sut->render($mockIssue);
@@ -169,5 +182,48 @@ class IssueSectionRendererTest extends MockeryTestCase
         // Verify XSS is escaped
         $this->assertStringContainsString('&lt;script&gt;', $result);
         $this->assertStringNotContainsString('<script>', $result);
+    }
+
+    public function testRenderCallsVolGrabReplacement(): void
+    {
+        $heading = 'Issue Heading';
+        $content = [
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Issue for [[OP_NAME]]']],
+            ],
+        ];
+        $jsonContent = json_encode($content);
+        $context = ['licence' => 456];
+
+        $replacedContent = [
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Issue for Test Company']],
+            ],
+        ];
+        $replacedJson = json_encode($replacedContent);
+
+        $mockIssue = m::mock(LetterInstanceIssue::class);
+        $mockIssue->shouldReceive('getHeading')
+            ->andReturn($heading);
+        $mockIssue->shouldReceive('getEffectiveContent')
+            ->andReturn($content);
+
+        $this->mockVolGrabService->shouldReceive('replaceGrabs')
+            ->with($jsonContent, $context)
+            ->once()
+            ->andReturn($replacedJson);
+
+        $this->mockConverterService->shouldReceive('convertJsonToHtml')
+            ->with($replacedJson)
+            ->andReturn('<p>Issue for Test Company</p>');
+
+        $result = $this->sut->render($mockIssue, $context);
+
+        $expected = '<div class="issue">' .
+            '<h4 class="issue-heading">Issue Heading</h4>' .
+            '<div class="issue-body"><p>Issue for Test Company</p></div>' .
+            '</div>';
+
+        $this->assertEquals($expected, $result);
     }
 }

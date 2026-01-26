@@ -19,10 +19,11 @@ class IssueSectionRenderer extends AbstractSectionRenderer
      * Outputs: sub-heading (H4) + body content for individual issue
      *
      * @param object $entity
+     * @param array $context Context for vol-grab replacement (licence, application, etc.)
      * @return string HTML output
      * @throws \InvalidArgumentException if entity is not supported
      */
-    public function render(object $entity): string
+    public function render(object $entity, array $context = []): string
     {
         if (!$this->supports($entity)) {
             throw new \InvalidArgumentException(
@@ -43,7 +44,7 @@ class IssueSectionRenderer extends AbstractSectionRenderer
 
         // Add body content
         if (!empty($content)) {
-            $html .= '<div class="issue-body">' . $this->convertEditorJsToHtml($content) . '</div>';
+            $html .= '<div class="issue-body">' . $this->convertEditorJsToHtml($content, $context) . '</div>';
         }
 
         $html .= '</div>';

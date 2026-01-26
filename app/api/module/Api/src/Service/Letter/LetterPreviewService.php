@@ -21,15 +21,18 @@ class LetterPreviewService
     private SectionRendererPluginManager $rendererManager;
     private $contentStore;
     private $docTemplateRepo;
+    private VolGrabReplacementService $volGrabReplacementService;
 
     public function __construct(
         SectionRendererPluginManager $rendererManager,
         $contentStore,
-        $docTemplateRepo
+        $docTemplateRepo,
+        VolGrabReplacementService $volGrabReplacementService
     ) {
         $this->rendererManager = $rendererManager;
         $this->contentStore = $contentStore;
         $this->docTemplateRepo = $docTemplateRepo;
+        $this->volGrabReplacementService = $volGrabReplacementService;
     }
 
     /**
@@ -46,16 +49,20 @@ class LetterPreviewService
         $issuesHtml = $this->renderIssues($letterInstance);
         $closingHtml = ''; // Closing sections would be rendered similarly when implemented
 
+        $context = $this->buildVolGrabContext($letterInstance);
+
         // If no master template, return just the content
         if ($masterTemplate === null) {
-            return $this->renderWithoutTemplate($sectionsHtml, $issuesHtml);
+            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml);
+        } else {
+            // Build placeholder values
+            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml);
+
+
+            $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
 
-        // Build placeholder values
-        $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml);
-
-        // Replace placeholders in template
-        return $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
+        return $this->volGrabReplacementService->replaceGrabsInHtml($html, $context);
     }
 
     /**
@@ -68,9 +75,10 @@ class LetterPreviewService
     {
         $html = '';
         $sectionRenderer = $this->rendererManager->get('content-section');
+        $context = $this->buildVolGrabContext($letterInstance);
 
         foreach ($letterInstance->getLetterInstanceSections() as $section) {
-            $html .= $sectionRenderer->render($section);
+            $html .= $sectionRenderer->render($section, $context);
         }
 
         return $html;
@@ -85,6 +93,7 @@ class LetterPreviewService
     private function renderIssues(LetterInstance $letterInstance): string
     {
         $issueRenderer = $this->rendererManager->get('issue');
+        $context = $this->buildVolGrabContext($letterInstance);
 
         // Group issues by Issue Type
         $issuesByType = [];
@@ -112,7 +121,7 @@ class LetterPreviewService
 
             // Render each issue under this type
             foreach ($typeData['issues'] as $issue) {
-                $html .= $issueRenderer->render($issue);
+                $html .= $issueRenderer->render($issue, $context);
             }
 
             $html .= '</div>';
@@ -299,6 +308,24 @@ class LetterPreviewService
             // Log error but don't fail rendering
             return '';
         }
+    }
+
+    /**
+     * Build context array for vol-grab replacement
+     *
+     * @param LetterInstance $letterInstance
+     * @return array Context containing entity IDs for bookmark resolution
+     */
+    private function buildVolGrabContext(LetterInstance $letterInstance): array
+    {
+        return array_filter([
+            'licence' => $letterInstance->getLicence()?->getId(),
+            'application' => $letterInstance->getApplication()?->getId(),
+            'user' => $letterInstance->getCreatedBy()?->getId(),
+            'case' => $letterInstance->getCase()?->getId(),
+            'busRegId' => $letterInstance->getBusReg()?->getId(),
+            'organisation' => $letterInstance->getOrganisation()?->getId(),
+        ]);
     }
 
     /**
