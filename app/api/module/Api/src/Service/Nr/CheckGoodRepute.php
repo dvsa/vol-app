@@ -11,11 +11,13 @@ use Olcs\Logging\Log\Logger;
 
 class CheckGoodRepute extends AbstractXmlRequest
 {
+    public const MSG_FORBIDDEN_NO_ADDRESS = 'No Tm address information available for repute check';
+
     public function create(TransportManager $transportManager): string
     {
         //must have address information as a minimum
         if (!$transportManager->hasReputeCheckAddress()) {
-            throw new ForbiddenException('No Tm address information available for repute check');
+            throw new ForbiddenException(self::MSG_FORBIDDEN_NO_ADDRESS);
         }
 
         $xmlData = [
@@ -23,7 +25,7 @@ class CheckGoodRepute extends AbstractXmlRequest
             'Body' => $this->getBody($transportManager)
         ];
 
-        Logger::crit('xml data', $xmlData);
+        Logger::debug('Repute check xml data', $xmlData);
 
         $this->xmlBuilder->setData($xmlData);
         return $this->xmlBuilder->buildTemplate();

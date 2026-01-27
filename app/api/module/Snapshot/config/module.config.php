@@ -7,6 +7,8 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section as Continuat
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Surrender\Section as SurrenderReview;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Permits\IrhpGenerator;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Permits\IrhpGeneratorFactory;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\TmReputeCheck\Generator as TmReputeCheckGenerator;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\TmReputeCheck\GeneratorFactory as TmReputeCheckGeneratorFactory;
 
 return [
     'service_manager' => [
@@ -26,6 +28,7 @@ return [
             ContinuationReview\ConditionsUndertakingsReviewService::class => ContinuationReview\GenericFactory::class,
             ContinuationReview\AbstractReviewServiceServices::class => ContinuationReview\AbstractReviewServiceServicesFactory::class,
             IrhpGenerator::class => IrhpGeneratorFactory::class,
+            TmReputeCheckGenerator::class => TmReputeCheckGeneratorFactory::class,
             'ContinuationReview' => Snapshots\ContinuationReview\GeneratorFactory::class,
             'ReviewSnapshot' => Snapshots\ApplicationReview\GeneratorFactory::class,
             Snapshots\Messaging\Generator::class => Snapshots\Messaging\GeneratorFactory::class,

@@ -933,6 +933,7 @@ return [
 
     // Transfer - TransportManager
     TransferCommand\Tm\CheckRepute::class => CommandHandler\Tm\CheckReputeFactory::class,
+    Command\Tm\CheckReputeProcessDocument::class => CommandHandler\Tm\CheckReputeProcessDocumentFactory::class,
     TransferCommand\Tm\Create::class => CommandHandler\Tm\Create::class,
     TransferCommand\Tm\CreateNewUser::class => CommandHandler\Tm\CreateNewUserFactory::class,
     TransferCommand\Tm\Update::class => CommandHandler\Tm\Update::class,

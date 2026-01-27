@@ -1,0 +1,14 @@
+<div class="govuk-summary-card">
+  <div class="govuk-summary-card__title-wrapper">
+    <h2 class="govuk-summary-card__title">
+      <?php echo $this->escapeHtml($heading); ?>
+    </h2>
+  </div>
+  <div class="govuk-summary-card__content">
+    <dl class="govuk-summary-list">
+      <?php foreach ($items as $key => $value): ?>
+        <?php echo $this->partial('partials/read-only/govuk-summary-list-row', ['key' => $key, 'value' => $value]); ?>
+      <?php endforeach; ?>
+    </dl>
+  </div>
+</div>
