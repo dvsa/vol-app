@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.10.1](https://github.com/dvsa/vol-app/compare/v6.10.0...v6.10.1) (2026-01-27)
+
+
+### Bug Fixes
+
+* disable accessibility to continue pipeline to prod acct ([#1295](https://github.com/dvsa/vol-app/issues/1295)) ([0302c2b](https://github.com/dvsa/vol-app/commit/0302c2bba62aa27f88aa80b748d416050d273d7d))
+
 ## [6.10.0](https://github.com/dvsa/vol-app/compare/v6.9.0...v6.10.0) (2026-01-27)
 
 
