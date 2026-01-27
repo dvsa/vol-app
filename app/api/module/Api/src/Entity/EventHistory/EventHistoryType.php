@@ -24,4 +24,6 @@ class EventHistoryType extends AbstractEventHistoryType
     public const EVENT_CODE_CONDITION_CHANGED = 'COG';
     public const EVENT_CODE_UNDERTAKING_CHANGED = 'UTG';
     public const EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS = 'CCA';
+    public const EVENT_CODE_ADD_SAFETY_INSPECTOR = 'ASI';
+    public const EVENT_CODE_EDIT_SAFETY_INSPECTOR = 'ESI';
 }
