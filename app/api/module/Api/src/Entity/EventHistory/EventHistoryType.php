@@ -26,5 +26,6 @@ class EventHistoryType extends AbstractEventHistoryType
     public const EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS = 'CCA';
     public const EVENT_CODE_ADD_SAFETY_INSPECTOR = 'ASI';
     public const EVENT_CODE_EDIT_SAFETY_INSPECTOR = 'ESI';
+    public const EVENT_CODE_DELETE_SAFETY_INSPECTOR = 'DSI';
     public const EVENT_CODE_EDIT_OPERATING_CENTRE = 'COC';
 }

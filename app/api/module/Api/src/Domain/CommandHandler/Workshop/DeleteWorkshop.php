@@ -14,6 +14,9 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\DeleteContactDetailsAndAddressTra
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Delete Workshop
@@ -39,6 +42,19 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
         $result->addMessage(count($command->getIds()) . ' Workshop(s) removed');
 
+        // create Event History record
+        $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR);
+        $this->eventHistoryCreator->create($workshop->getContactDetails(), EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null,$workshop->getLicence());
+        $this->eventHistoryCreator->create($workshop->getContactDetails()->getAddress(), EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null, $workshop->getLicence());
+
         return $result;
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $fullContainer = $container;
+
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }

@@ -205,6 +205,29 @@ class EventHistory extends AbstractRepository
                 $element['name'] = $keys[$i];
                 $returnValues[] = $element;
             }
+
+            $oldValueDeletedDate = isset($cleanValues[1]['deleted_date'])
+                ? $cleanValues[1]['deleted_date']
+                : null;
+
+            $newValueDeletedDate = isset($cleanValues[0]['deleted_date'])
+                ? $cleanValues[0]['deleted_date']
+                : null;
+
+            if ($oldValueDeletedDate !== null && $newValueDeletedDate !== null) {
+
+                $returnValues = [];
+
+                foreach ($cleanValues[1] as $key => $oldValue) {
+                    $returnValues[] = [
+                        'name' => $key,
+                        'oldValue' => $oldValue,
+                        'newValue' => '',
+                    ];
+                }
+            }
+
+
         }
 
         return $returnValues;
