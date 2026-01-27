@@ -43,7 +43,7 @@ class Creator
      * @param string $eventHistoryType
      * @return void
      */
-    public function create(mixed $entity, $eventHistoryType, $eventData = null)
+    public function create(mixed $entity, $eventHistoryType, $eventData = null, $licence = null)
     {
         // create event history record
         $eventHistory = new EventHistoryEntity(
@@ -76,27 +76,19 @@ class Creator
                 $eventHistory->setEntityType('condition_undertaking');
                 break;
             case $entity instanceof PhoneContact:
-                //$eventHistory->setCase($entity->getCase());
-                //$eventHistory->setApplication($entity->getApplication());
-                //$eventHistory->setLicence($entity->getLicence());
-                $test = $entity->getContactDetails();
+                $eventHistory->setLicence($licence);
                 $eventHistory->setEntityType('phone_contact');
                 break;
             case $entity instanceof ContactDetails:
-                //$eventHistory->setCase($entity->getCase());
-                //$eventHistory->setApplication($entity->getApplication());
-                //$eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setLicence($licence);
                 $eventHistory->setEntityType('contact_details');
                 break;
             case $entity instanceof Workshop:
-                //$eventHistory->setCase($entity->getCase());
-                //$eventHistory->setApplication($entity->getApplication());
-                //$eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setLicence($entity->getLicence());
                 $eventHistory->setEntityType('workshop');
                 break;
             case $entity instanceof Address:
-                //$eventHistory->setApplication($entity->getApplication());
-                //$eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setLicence($licence);
                 $eventHistory->setEntityType('address');
                 break;
             default:
