@@ -32,10 +32,6 @@ final class Delete extends AbstractDeleteCommandHandler
      */
     public function handleCommand(CommandInterface $command)
     {
-        
-        /** @var \Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking $repo */
-        $repo = $this->getRepo();
-
         /* @var $conditionUndertaking ConditionUndertaking */
         $conditionUndertaking = $this->getRepo()->fetchById(
             $command->getId()
