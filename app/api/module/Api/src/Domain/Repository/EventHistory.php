@@ -226,8 +226,6 @@ class EventHistory extends AbstractRepository
                     ];
                 }
             }
-
-
         }
 
         return $returnValues;
