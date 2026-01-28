@@ -19,6 +19,8 @@ use Dvsa\Olcs\Transfer\Command\Workshop\UpdateWorkshop as Cmd;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop as WorkshopEntity;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Update Workshop Test
@@ -31,6 +33,7 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
     {
         $this->sut = new UpdateWorkshop();
         $this->mockRepo('Workshop', Workshop::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
@@ -92,7 +95,11 @@ class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
         $result1 = new Result();
         $result1->addMessage('Address updated');
         $this->expectedSideEffect(SaveAddress::class, $expectedData, $result1);
-
+        
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null,  $workshop->getLicence())
+            ->once();
+        
         $result = $this->sut->handleCommand($command);
 
         $expected = [
