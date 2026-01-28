@@ -62,7 +62,7 @@ final class CreateWorkshop extends AbstractCommandHandler implements Transaction
 
         // create Event History record
         $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR);
-        $this->eventHistoryCreator->create($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null,$workshop->getLicence());
+        $this->eventHistoryCreator->create($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $workshop->getLicence());
         $this->eventHistoryCreator->create($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $workshop->getLicence());
 
         return $result;
