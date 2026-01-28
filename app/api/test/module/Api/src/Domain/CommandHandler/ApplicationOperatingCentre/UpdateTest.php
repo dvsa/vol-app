@@ -23,6 +23,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Update Test
@@ -40,6 +42,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices['OperatingCentreHelper'] = m::mock(OperatingCentreHelper::class);
         $this->mockedSmServices[AuthorizationService::class] = m::mock(AuthorizationService::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
@@ -126,6 +129,10 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             ['id' => 222, 'operatingCentre' => 333],
             (new Result())->addMessage('SET_TA')
         );
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($oc->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_OPERATING_CENTRE, null, $application->getLicence())
+            ->once();
 
         $result = $this->sut->handleCommand($command);
 
