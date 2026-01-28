@@ -67,7 +67,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
             $data = $command->getAddress();
             $this->result->merge($this->handleSideEffect(SaveAddress::create($data)));
             
-            if ($data['version'] != $operatingCentre->getAddress()->getVersion()) {
+            if (isset($data['version']) && $data['version'] != $operatingCentre->getAddress()->getVersion()) {
                 $this->eventHistoryCreator->create($operatingCentre->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_OPERATING_CENTRE, null, $application->getLicence());
             }
         }
