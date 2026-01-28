@@ -36,16 +36,34 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
         foreach ($command->getIds() as $id) {
             /** @var Workshop $workshop */
             $workshop = $this->getRepo()->fetchById($id);
-            $this->maybeDeleteContactDetailsAndAddress($workshop->getContactDetails());
+            $contactDetails = $workshop->getContactDetails();
+            $this->maybeDeleteContactDetailsAndAddress($contactDetails);
             $this->getRepo()->delete($workshop);
+
+            // create Event History record
+            $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR);
+            
+            if ($contactDetails) {
+                
+                $this->eventHistoryCreator->create(
+                    $contactDetails, 
+                    EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
+                    null,
+                    $workshop->getLicence());  
+
+                $address = $contactDetails->getAddress();
+
+                if ($address) {
+                    $this->eventHistoryCreator->create(
+                        $address, 
+                        EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
+                        null, 
+                        $workshop->getLicence());
+                }
+            }
         }
 
         $result->addMessage(count($command->getIds()) . ' Workshop(s) removed');
-
-        // create Event History record
-        $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR);
-        $this->eventHistoryCreator->create($workshop->getContactDetails(), EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null,$workshop->getLicence());
-        $this->eventHistoryCreator->create($workshop->getContactDetails()->getAddress(), EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null, $workshop->getLicence());
 
         return $result;
     }
