@@ -153,6 +153,26 @@ jobs:
       id-token: write
       checks: write
 
+  test_prep_smoke:
+    name: Prep Smoke Tests
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'prep' }}
+    needs:
+      - terraform_env
+      - liquibase
+      - test_batch
+    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.18.1
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ inputs.aws_role }}
+      bucket_name: ${{ inputs.bucket_name }}
+      bucket_key: ${{ inputs.bucket_key }}
+      batch_job_queue: ${{ inputs.batch_job_queue }}
+      batch_job_definition: ${{ inputs.batch_job_definition }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write
+
   test_selfserve:
     if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment == 'int'}}
     name: Selfserve Regression Tests
@@ -216,7 +236,8 @@ jobs:
       always() &&
       (needs.test_smoke.result == 'failure' || needs.test_smoke.result == 'cancelled' ||
        needs.test_selfserve.result == 'failure' || needs.test_selfserve.result == 'cancelled' ||
-       needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled') &&
+       needs.test_internal.result == 'failure' || needs.test_internal.result == 'cancelled' ||
+       needs.test_prep_smoke.result == 'failure' || needs.test_prep_smoke.result == 'cancelled') &&
        needs.terraform_env.result == 'success' &&
        inputs.environment != 'dev'
     concurrency:
@@ -225,6 +246,7 @@ jobs:
       - test_smoke
       - test_selfserve
       - test_internal
+      - test_prep_smoke
       - terraform_env
     uses: ./.github/workflows/deploy-environment.yaml
     with:
