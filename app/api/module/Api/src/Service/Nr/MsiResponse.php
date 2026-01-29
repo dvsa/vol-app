@@ -42,7 +42,7 @@ class MsiResponse extends AbstractXmlRequest
         $erruRequest = $case->getErruRequest();
 
         $xmlData = [
-            'Header' => $this->getHeader($erruRequest->getWorkflowId(), $erruRequest->getMemberStateCode()->getId()),
+            'Header' => $this->getHeader($erruRequest->getWorkflowId(), 'EU'),
             'Body' => $this->getBody($case, $erruRequest, $contactDetails)
         ];
 

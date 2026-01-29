@@ -29,11 +29,11 @@ class AbstractXmlRequest
         $this->authority = self::AUTHORITY_TC;
     }
 
+    /**
+     * Member state code will be EU in the case of MSIs and ZZ in the case of check good repute
+     */
     protected function getHeader(string $workflowId, string $memberStateCode): array
     {
-        //if member state was GB, we need to make this UK
-        $filteredMemberStateCode = ($memberStateCode === 'GB' ? 'UK' : $memberStateCode);
-
         return [
             'name' => 'Header',
             'attributes' => [
@@ -43,7 +43,7 @@ class AbstractXmlRequest
                 'sentAt' => $this->responseDateTime,
                 'timeoutValue' => $this->timeoutDateTime,
                 'from' => 'UK',
-                'to' => $filteredMemberStateCode
+                'to' => $memberStateCode
             ],
         ];
     }
