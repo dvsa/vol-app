@@ -135,7 +135,7 @@ jobs:
 
   test_smoke:
     name: Smoke Tests
-    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.terraform_env.result == 'success' && inputs.environment != 'prod' && inputs.environment != 'prep' }}
     needs:
       - terraform_env
       - liquibase
