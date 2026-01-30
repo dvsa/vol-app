@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.10.2](https://github.com/dvsa/vol-app/compare/v6.10.1...v6.10.2) (2026-01-30)
+
+
+### Bug Fixes
+
+* alter country codes VOL uses to match what INR/EU expects ([#1300](https://github.com/dvsa/vol-app/issues/1300)) ([89be824](https://github.com/dvsa/vol-app/commit/89be824b5339d256f838595085fbaa9aeef012c2))
+* prep smoke ([#1298](https://github.com/dvsa/vol-app/issues/1298)) ([f0ab06c](https://github.com/dvsa/vol-app/commit/f0ab06c7122b14adbb4ad06a3128f8d09e91941d))
+
 ## [6.10.1](https://github.com/dvsa/vol-app/compare/v6.10.0...v6.10.1) (2026-01-27)
 
 
