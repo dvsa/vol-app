@@ -60,7 +60,7 @@ class CheckGoodRepute extends AbstractXmlRequest
                     'attributes' => [
                         'familyName' => $person->getFamilyName(),
                         'firstName' => $person->getForename(),
-                        'dateOfBirth' => date('d/m/Y', strtotime((string) $person->getBirthDate())),
+                        'dateOfBirth' => date('Y-m-d', strtotime((string) $person->getBirthDate())),
                         'placeOfBirth' => $person->getBirthPlace(),
                     ],
                 ],
@@ -68,7 +68,7 @@ class CheckGoodRepute extends AbstractXmlRequest
                     'name' => 'TransportManagerCertificateDetails',
                     'attributes' => [
                         'certificateNumber' => $qualification->getSerialNo() ?? 'Unknown',
-                        'certificateIssueDate' => date('d/m/Y', strtotime((string) $qualification->getIssuedDate())),
+                        'certificateIssueDate' => date('Y-m-d', strtotime((string) $qualification->getIssuedDate())),
                         'certificateIssueCountry' => $countryCode === 'GB' ? 'UK' : $countryCode,
                     ],
                 ],

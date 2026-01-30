@@ -32,10 +32,7 @@ class MsiResponseTest extends MockeryTestCase
         $sut->create($cases);
     }
 
-    /**
-     * @dataProvider createDataProvider
-     */
-    public function testCreateWithLicenceNoContactDetails(string $memberStateCode, string $filteredMemberStateCode): void
+    public function testCreateWithLicenceNoContactDetails(): void
     {
         $licence = m::mock(Licence::class);
         $licence->expects('getContactAddress')->withNoArgs()->andReturnNull();
@@ -43,18 +40,13 @@ class MsiResponseTest extends MockeryTestCase
         $this->commonCreateAssertions(
             $licence,
             MsiResponse::AUTHORITY_TC,
-            $memberStateCode,
-            $filteredMemberStateCode,
             'unknown',
             'unknown',
             'unknown'
         );
     }
 
-    /**
-     * @dataProvider createDataProvider
-     */
-    public function testCreateWithLicenceAndContactDetails(string $memberStateCode, string $filteredMemberStateCode): void
+    public function testCreateWithLicenceAndContactDetails(): void
     {
         $address = 'address';
         $postcode = 'postcode';
@@ -75,18 +67,13 @@ class MsiResponseTest extends MockeryTestCase
         $this->commonCreateAssertions(
             $licence,
             MsiResponse::AUTHORITY_TC,
-            $memberStateCode,
-            $filteredMemberStateCode,
             $city,
             $address,
             $postcode
         );
     }
 
-    /**
-     * @dataProvider createDataProvider
-     */
-    public function testCreateWithLicenceAndEmptyContactDetails(string $memberStateCode, string $filteredMemberStateCode): void
+    public function testCreateWithLicenceAndEmptyContactDetails(): void
     {
         $contactDetails = m::mock(ContactDetails::class);
         $contactDetails->expects('getAddress->toArray')->withNoArgs()->andReturn([]);
@@ -97,38 +84,26 @@ class MsiResponseTest extends MockeryTestCase
         $this->commonCreateAssertions(
             $licence,
             MsiResponse::AUTHORITY_TC,
-            $memberStateCode,
-            $filteredMemberStateCode,
             'unknown',
             'unknown',
             'unknown'
         );
     }
 
-    /**
-     * @dataProvider createDataProvider
-     */
-    public function testCreateWithNoLicence(string $memberStateCode, string $filteredMemberStateCode): void
+    public function testCreateWithNoLicence(): void
     {
         $this->commonCreateAssertions(
             null,
             MsiResponse::AUTHORITY_TRU,
-            $memberStateCode,
-            $filteredMemberStateCode,
             'unknown',
             'unknown',
             'unknown'
         );
     }
 
-    /**
-     * @dataProvider createDataProvider
-     */
     public function commonCreateAssertions(
         ?Licence $licence,
         string $authority,
-        string $memberStateCode,
-        string $filteredMemberStateCode,
         string $city,
         string $address,
         string $postCode,
@@ -184,7 +159,6 @@ class MsiResponseTest extends MockeryTestCase
         $erruRequest = m::mock(ErruRequestEntity::class);
         $erruRequest->expects('getNotificationNumber')->withNoArgs()->andReturn($notificationNumber);
         $erruRequest->expects('getWorkflowId')->withNoArgs()->andReturn($workflowId);
-        $erruRequest->expects('getMemberStateCode->getId')->withNoArgs()->andReturn($memberStateCode);
         $erruRequest->expects('getTransportUndertakingName')->withNoArgs()->andReturn($erruTransportUndertaking);
         $erruRequest->expects('getOriginatingAuthority')->withNoArgs()->andReturn($erruOriginatingAuthority);
         $erruRequest->expects('getCommunityLicenceNumber')->withNoArgs()->andReturn($communityLicenceNumber);
@@ -213,7 +187,7 @@ class MsiResponseTest extends MockeryTestCase
                 'sentAt' => $sut->getResponseDateTime(),
                 'timeoutValue' => $sut->getTimeoutDateTime(),
                 'from' => 'UK',
-                'to' => $filteredMemberStateCode
+                'to' => 'EU',
             ],
         ];
 
@@ -282,13 +256,5 @@ class MsiResponseTest extends MockeryTestCase
 
         $this->assertEquals($expectedXmlData, $sut->getXmlBuilder()->getData());
         $this->assertEquals($expectedXmlResponse, $actualXmlResponse);
-    }
-
-    public function createDataProvider(): array
-    {
-        return [
-            ['GB', 'UK'],
-            ['UK', 'UK'],
-        ];
     }
 }

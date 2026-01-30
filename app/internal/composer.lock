@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "6c02157c7831e86b558a3990beae460e",
+  "content-hash": "d54fbbe72c1d845cae968d37fd58d183",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -2308,16 +2308,16 @@
     },
     {
       "name": "laminas/laminas-form",
-      "version": "3.24.2",
+      "version": "3.23.0",
       "source": {
         "type": "git",
         "url": "https://github.com/laminas/laminas-form.git",
-        "reference": "92d46a8333ca428244cf8b647167477aefbbe891"
+        "reference": "d901cff436516c38c89bdc5eb03b8f4172100214"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/laminas/laminas-form/zipball/92d46a8333ca428244cf8b647167477aefbbe891",
-        "reference": "92d46a8333ca428244cf8b647167477aefbbe891",
+        "url": "https://api.github.com/repos/laminas/laminas-form/zipball/d901cff436516c38c89bdc5eb03b8f4172100214",
+        "reference": "d901cff436516c38c89bdc5eb03b8f4172100214",
         "shasum": ""
       },
       "require": {
@@ -2398,7 +2398,7 @@
           "type": "community_bridge"
         }
       ],
-      "time": "2026-01-12T14:20:53+00:00"
+      "time": "2025-11-07T22:41:15+00:00"
     },
     {
       "name": "laminas/laminas-http",
