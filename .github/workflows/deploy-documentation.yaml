@@ -42,7 +42,7 @@ jobs:
         if: ${{ inputs.deploy }}
         uses: actions/upload-pages-artifact@v4
         with:
-          path: website/build
+          path: website/build/vol-app
 
   deploy:
     name: Deploy
