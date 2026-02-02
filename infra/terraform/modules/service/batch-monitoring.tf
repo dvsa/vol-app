@@ -85,7 +85,7 @@ locals {
 module "cloudwatch_log-metric-filter" {
   for_each                        = { for job in var.batch.jobs : job.name => job }
   source                          = "terraform-aws-modules/cloudwatch/aws//modules/log-metric-filter"
-  version                         = "5.7.0"
+  version                         = "5.7.2"
   name                            = each.value.name
   pattern                         = "%ERROR%"
   log_group_name                  = "/aws/batch/vol-app-${var.environment}-${each.value.name}"
@@ -106,7 +106,7 @@ resource "aws_cloudwatch_dashboard" "this" {
 
 module "eventbridge_sns" {
   source  = "terraform-aws-modules/eventbridge/aws"
-  version = "~> 3.7"
+  version = "~> 4.3"
 
   create_bus  = false
   create_role = true
@@ -151,7 +151,7 @@ module "eventbridge_sns" {
 
 module "sns_batch_failure" {
   source  = "terraform-aws-modules/sns/aws"
-  version = "~> 6.1"
+  version = "~> 7.1"
 
   name            = "vol-app-${var.environment}-batch-failure-topic"
   use_name_prefix = true
