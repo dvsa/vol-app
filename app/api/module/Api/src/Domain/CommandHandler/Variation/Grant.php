@@ -7,6 +7,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\EndInterim as EndInterimCmd;
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\CommonGrant;
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\CreateDiscRecords;
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\ProcessApplicationOperatingCentres;
+use Dvsa\Olcs\Api\Domain\Command\Application\UpdateVariationCompletion as UpdateVariationCompletionCmd;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateSmallVehicleCondition as CreateSvConditionUndertakingCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
@@ -38,7 +39,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
      * handleCommand
      *
      * @param  Cmd $command Command
-     * @return Result                    Result
+     * @return Result       Result
      */
     public function handleCommand(CommandInterface $command)
     {
@@ -49,6 +50,11 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
         $application = $this->getRepo()->fetchUsingId($command);
 
         $this->guardAgainstBadVariationType($application);
+
+        // Auto-complete tracking for auto-granted variations
+        if ($this->isAutoGrant($command)) {
+            $result->merge($this->autoCompleteTracking($application));
+        }
 
         $licence = $application->getLicence();
 
@@ -65,9 +71,19 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
             $result->merge($this->closeTexTask($application));
         }
 
+        // For auto-grants, update status as system user so change history shows "system"
+        // For manual grants from internal, use the actual user who clicked grant
+        if ($this->isAutoGrant($command)) {
+            $this->getIdentityProvider()->setMasqueradedAsSystemUser(true);
+        }
+
         $this->updateStatusAndDate($application, ApplicationEntity::APPLICATION_STATUS_VALID);
         $application->setGrantAuthority($this->refData($command->getGrantAuthority()));
         $this->getRepo()->save($application);
+
+        if ($this->isAutoGrant($command)) {
+            $this->getIdentityProvider()->setMasqueradedAsSystemUser(false);
+        }
 
         if ($application->getCurrentInterimStatus() === ApplicationEntity::INTERIM_STATUS_REQUESTED) {
             $this->maybeRefundInterimFee($application);
@@ -101,6 +117,76 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
 
         $result->addId('Application', $application->getId());
         $result->addMessage('Application ' . $application->getId() . ' granted');
+        return $result;
+    }
+
+    /**
+     * Check if this is an auto-grant (called from selfserve)
+     *
+     * @param Cmd $command
+     * @return bool
+     */
+    protected function isAutoGrant($command)
+    {
+        // Check if the command has an isAutoGrant flag
+        // This will be set to true when called from selfserve auto-grant
+        return method_exists($command, 'getIsAutoGrant') && $command->getIsAutoGrant() === true;
+    }
+
+    /**
+     * Auto-complete all tracking fields to "Accepted" for auto-granted variations
+     *
+     * @param ApplicationEntity $application
+     * @return Result
+     */
+    protected function autoCompleteTracking(ApplicationEntity $application)
+    {
+        $result = new Result();
+
+        try {
+            // Get the application tracking entity
+            $tracking = $application->getApplicationTracking();
+
+            if ($tracking === null) {
+                $result->addMessage('Warning: No tracking entity found');
+                return $result;
+            }
+
+            // Define sections that can be auto-completed for variations
+            $sections = [
+                'addresses',
+                'businessDetails',
+                'businessType',
+                'communityLicences',
+                'conditionsUndertakings',
+                'operatingCentres',
+                'people',
+                'safety',
+                'transportManagers',
+                'typeOfLicence',
+                'declarationsInternal',
+                'vehicles'
+            ];
+
+            // Update completion status for each section using UpdateVariationCompletion
+            foreach ($sections as $section) {
+                $updateCmd = UpdateVariationCompletionCmd::create([
+                    'id' => $application->getId(),
+                    'section' => $section,
+                    'data' => ['status' => \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking::STATUS_ACCEPTED]
+                ]);
+
+                $result->merge($this->handleSideEffectAsSystemUser($updateCmd));
+            }
+
+            $result->addMessage('Auto-completed tracking for auto-grant');
+
+        } catch (\Exception $e) {
+            // Log the error but don't fail the grant
+            error_log('Error auto-completing tracking: ' . $e->getMessage());
+            $result->addMessage('Warning: Could not auto-complete tracking: ' . $e->getMessage());
+        }
+
         return $result;
     }
 

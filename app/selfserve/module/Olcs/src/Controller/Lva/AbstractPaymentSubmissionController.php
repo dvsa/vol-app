@@ -14,6 +14,8 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Variation\Grant as GrantVariationCmd;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -149,6 +151,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      */
     protected function submitApplication($applicationId, $version)
     {
+        // Submit the application (changes status to "Under Consideration")
         $dto = SubmitApplicationCmd::create(
             [
                 'id' => $applicationId,
@@ -158,12 +161,213 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $response = $this->handleCommand($dto);
 
-        if ($response->isOk()) {
-            return $this->redirectToSummary();
+        if (!$response->isOk()) {
+            $this->flashMessengerHelper->addUnknownError();
+            return $this->redirectToOverview();
         }
 
-        $this->flashMessengerHelper->addUnknownError();
-        return $this->redirectToOverview();
+        // Check if this variation qualifies for auto-grant
+        if ($this->lva === 'variation') {
+            $autoGrantEligibility = $this->checkAutoGrantEligibility($applicationId);
+
+            if ($autoGrantEligibility['eligible']) {
+
+                $grantResponse = $this->autoGrantVariation($applicationId);
+
+                if ($grantResponse->isOk()) {
+                    return $this->redirectToOverview();
+                }
+
+                error_log(
+                    'Auto-grant failed for variation ' . $applicationId .
+                    ': ' . print_r($grantResponse->getResult(), true)
+                );
+
+            }
+        }
+
+        // Normal flow: redirect to summary
+        return $this->redirectToSummary();
+    }
+
+    /**
+     * Check if variation is eligible for auto-grant
+     *
+     * @param int $applicationId
+     * @return array ['eligible' => bool, 'reason' => string]
+     */
+    protected function checkAutoGrantEligibility($applicationId)
+    {
+        try {
+            // Fetch application data to check if it's a variation
+            $appQuery = ApplicationQry::create(['id' => $applicationId]);
+            $appResponse = $this->handleQuery($appQuery);
+
+            if (!$appResponse->isOk()) {
+                return ['eligible' => false, 'reason' => 'Failed to fetch application data'];
+            }
+
+            $application = $appResponse->getResult();
+
+            // Must be a variation
+            if (!isset($application['isVariation']) || !$application['isVariation']) {
+                return ['eligible' => false, 'reason' => 'Not a variation'];
+            }
+
+            // Check which sections have been updated using variationCompletion
+            $variationCompletion = $application['variationCompletion'] ?? [];
+
+            $hasOperatingCentreChanges = false;
+            $hasOtherSectionChanges = false;
+
+            foreach ($variationCompletion as $sectionKey => $status) {
+                // Skip undertakings section (always marked as updated when submitting)
+                if ($sectionKey === 'undertakings') {
+                    continue;
+                }
+
+                if ($status == RefData::VARIATION_STATUS_UPDATED) {
+                    if ($sectionKey === 'operating_centres') {
+                        $hasOperatingCentreChanges = true;
+                    } else {
+                        $hasOtherSectionChanges = true;
+                    }
+                }
+            }
+
+            // Only operating centres should have changes
+            if (!$hasOperatingCentreChanges) {
+                return ['eligible' => false, 'reason' => 'No operating centre changes'];
+            }
+
+            if ($hasOtherSectionChanges) {
+                return ['eligible' => false, 'reason' => 'Other sections have changes'];
+            }
+
+            // Fetch operating centres data
+            $ocQuery = \Dvsa\Olcs\Transfer\Query\Application\OperatingCentres::create([
+                'id' => $applicationId,
+                'sort' => 'id',
+                'order' => 'ASC'
+            ]);
+            $ocResponse = $this->handleQuery($ocQuery);
+
+            if (!$ocResponse->isOk()) {
+                return ['eligible' => false, 'reason' => 'Failed to fetch operating centres data'];
+            }
+
+            $ocData = $ocResponse->getResult();
+            $applicationOperatingCentres = $ocData['operatingCentres'] ?? [];
+
+            // Analyze operating centre changes
+            // For variations, OCs are marked with action flags:
+            // 'E' = Existing (unchanged), 'D' = Deletion, 'A' = Addition, 'U' = Update
+            $hasAdditions = false;
+            $hasModifications = false;
+            $removalCount = 0;
+            $remainingCount = 0;
+
+            foreach ($applicationOperatingCentres as $appOC) {
+                $action = $appOC['action'] ?? null;
+
+                if ($action === 'A') {
+                    $hasAdditions = true;
+                } elseif ($action === 'U') {
+                    $hasModifications = true;
+                } elseif ($action === 'D') {
+                    $removalCount++;
+                } elseif ($action === 'E' || $action === null) {
+                    // Existing OC that remains unchanged
+                    $remainingCount++;
+                }
+            }
+
+            // Calculate initial count (before this variation)
+            $initialOCCount = $remainingCount + $removalCount;
+
+            // Validate all criteria
+            if ($initialOCCount <= 1) {
+                return ['eligible' => false, 'reason' => 'Must have more than 1 operating centre initially'];
+            }
+
+            if ($hasAdditions) {
+                return ['eligible' => false, 'reason' => 'Contains operating centre additions'];
+            }
+
+            if ($hasModifications) {
+                return ['eligible' => false, 'reason' => 'Contains operating centre modifications'];
+            }
+
+            if ($removalCount === 0) {
+                return ['eligible' => false, 'reason' => 'No operating centres being removed'];
+            }
+
+            if ($remainingCount < 1) {
+                return ['eligible' => false, 'reason' => 'No operating centres would remain'];
+            }
+
+            // All checks passed - eligible for auto-grant
+            return ['eligible' => true, 'reason' => 'Eligible for auto-grant'];
+
+        } catch (\Exception $e) {
+            error_log('Error checking auto-grant eligibility: ' . $e->getMessage());
+            return ['eligible' => false, 'reason' => 'Exception: ' . $e->getMessage()];
+        }
+    }
+
+    /**
+     * Auto-grant the variation
+     *
+     * The Grant command handler will:
+     * - Automatically complete the tracking history
+     * - Grant/process the application
+     * - Add change history entries with VOL system user
+     *
+     * @param int $applicationId
+     * @return \Common\Service\Cqrs\Response
+     */
+    protected function autoGrantVariation($applicationId)
+    {
+        try {
+            // Fetch the application to get the current version
+            $query = ApplicationQry::create(['id' => $applicationId]);
+            $response = $this->handleQuery($query);
+
+            if (!$response->isOk()) {
+                return $response;
+            }
+
+            $application = $response->getResult();
+
+            // Create and execute the grant command
+            $dto = GrantVariationCmd::create([
+                'id' => $applicationId,
+                'version' => $application['version'],
+                'grantAuthority' => RefData::GRANT_AUTHORITY_DELEGATED,
+                'isAutoGrant' => true,
+            ]);
+
+            $grantResponse = $this->handleCommand($dto);
+
+            return $grantResponse;
+
+        } catch (\Exception $e) {
+            error_log('Error auto-granting variation: ' . $e->getMessage());
+
+            // Create a failed response using the command service's response factory
+            // This ensures we return the correct type
+            $result = new \Dvsa\Olcs\Api\Domain\Command\Result();
+            $result->addMessage('Auto-grant failed: ' . $e->getMessage());
+
+            // Return a proper failed response
+            // The handleCommand method returns a Response, so we need to match that
+            // In case of error, we'll just return a generic error and let normal flow continue
+            $this->flashMessengerHelper->addErrorMessage('Auto-grant encountered an error');
+
+            // Return a mock response that indicates failure
+            // Since we can't easily create a proper Response here, just rethrow
+            throw $e;
+        }
     }
 
     /**
