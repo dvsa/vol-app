@@ -175,13 +175,16 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     public function operatingCentreLoadFileUpload()
     {
+        $startDateTime = new DateTimeImmutable($this->getRequest()->getPost('correlationId', $this->startTime));
         $data = $this->getData();
-        $currentApplicationId = $this->getIdentifier();
+        $currentApplicationId = (int)$this->getIdentifier();
         foreach ($data['operatingCentres'] as $aocData) {
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
                 return array_filter(
                     $aocData['operatingCentre']['adDocuments'],
-                    fn($document) => $document['isPostSubmissionUpload'] && isset($document['application']['id']) && $document['application']['id'] === $currentApplicationId,
+                    fn($document) => $document['isPostSubmissionUpload']
+                        && isset($document['application']['id']) && $document['application']['id'] === $currentApplicationId
+                        && (new DateTimeImmutable($document['createdOn'])) > $startDateTime,
                 );
             }
         }
