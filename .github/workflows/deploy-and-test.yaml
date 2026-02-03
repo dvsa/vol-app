@@ -120,7 +120,7 @@ jobs:
     needs:
       - terraform_env
       - liquibase
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@v4.18.1
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eAwsBatchJobsSmoke.yaml@v4.18.2
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -140,7 +140,7 @@ jobs:
       - terraform_env
       - liquibase
       - test_batch
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.18.1
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.18.2
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -160,7 +160,7 @@ jobs:
       - terraform_env
       - liquibase
       - test_batch
-    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.18.1
+    uses: dvsa/vol-functional-tests/.github/workflows/e2ePrepSmoke.yaml@v4.18.2
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -178,7 +178,7 @@ jobs:
     name: Selfserve Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.18.1
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSelfServeRegression.yaml@v4.18.2
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -196,7 +196,7 @@ jobs:
     name: Internal Regression Tests
     needs:
       - test_smoke
-    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.18.1
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eInternalRegression.yaml@v4.18.2
     with:
       platform_env: ${{ inputs.environment }}
       aws_role: ${{ inputs.aws_role }}
@@ -216,7 +216,7 @@ jobs:
   #      - terraform_env
   #      - test_selfserve
   #      - test_internal
-  #    uses: dvsa/vol-functional-tests/.github/workflows/e2eAccessibility.yaml@v4.18.1
+  #    uses: dvsa/vol-functional-tests/.github/workflows/e2eAccessibility.yaml@v4.18.2
   #    with:
   #      platform_env: ${{ inputs.environment }}
   #      aws_role: ${{ inputs.aws_role }}
