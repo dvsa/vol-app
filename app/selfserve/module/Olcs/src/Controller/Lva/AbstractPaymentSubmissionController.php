@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingF
 use Dvsa\Olcs\Transfer\Command\Variation\Grant as GrantVariationCmd;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Application\Summary as SummaryQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
@@ -175,7 +176,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 $grantResponse = $this->autoGrantVariation($applicationId);
 
                 if ($grantResponse->isOk()) {
-                    return $this->redirectToOverview();
+                    return $this->renderAutoGrantSuccess(
+                        $applicationId,
+                        $autoGrantEligibility['changes']
+                    );
                 }
 
                 error_log(
@@ -194,7 +198,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      * Check if variation is eligible for auto-grant
      *
      * @param int $applicationId
-     * @return array ['eligible' => bool, 'reason' => string]
+     * @return array ['eligible' => bool, 'reason' => string, 'changes' => array]
      */
     protected function checkAutoGrantEligibility($applicationId)
     {
@@ -204,14 +208,14 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $appResponse = $this->handleQuery($appQuery);
 
             if (!$appResponse->isOk()) {
-                return ['eligible' => false, 'reason' => 'Failed to fetch application data'];
+                return ['eligible' => false, 'reason' => 'Failed to fetch application data', 'changes' => []];
             }
 
             $application = $appResponse->getResult();
 
             // Must be a variation
             if (!isset($application['isVariation']) || !$application['isVariation']) {
-                return ['eligible' => false, 'reason' => 'Not a variation'];
+                return ['eligible' => false, 'reason' => 'Not a variation', 'changes' => []];
             }
 
             // Check which sections have been updated using variationCompletion
@@ -237,11 +241,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
             // Only operating centres should have changes
             if (!$hasOperatingCentreChanges) {
-                return ['eligible' => false, 'reason' => 'No operating centre changes'];
+                return ['eligible' => false, 'reason' => 'No operating centre changes', 'changes' => []];
             }
 
             if ($hasOtherSectionChanges) {
-                return ['eligible' => false, 'reason' => 'Other sections have changes'];
+                return ['eligible' => false, 'reason' => 'Other sections have changes', 'changes' => []];
             }
 
             // Fetch operating centres data
@@ -253,7 +257,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $ocResponse = $this->handleQuery($ocQuery);
 
             if (!$ocResponse->isOk()) {
-                return ['eligible' => false, 'reason' => 'Failed to fetch operating centres data'];
+                return ['eligible' => false, 'reason' => 'Failed to fetch operating centres data', 'changes' => []];
             }
 
             $ocData = $ocResponse->getResult();
@@ -266,6 +270,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $hasModifications = false;
             $removalCount = 0;
             $remainingCount = 0;
+            $removedOCs = [];
+            $vehicleReduction = 0;
 
             foreach ($applicationOperatingCentres as $appOC) {
                 $action = $appOC['action'] ?? null;
@@ -276,6 +282,23 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                     $hasModifications = true;
                 } elseif ($action === 'D') {
                     $removalCount++;
+
+                    // Collect address details for the changes array
+                    $address = $appOC['operatingCentre']['address'] ?? [];
+                    $addressParts = array_filter([
+                        $address['addressLine1'] ?? '',
+                        $address['town'] ?? '',
+                        $address['postcode'] ?? ''
+                    ]);
+                    $addressLine = strtoupper(implode(' ', $addressParts));
+
+                    if (!empty($addressLine)) {
+                        $removedOCs[] = $addressLine;
+                    }
+
+                    // Count vehicles being removed
+                    $vehicleReduction += (int)($appOC['noOfVehiclesRequired'] ?? 0);
+
                 } elseif ($action === 'E' || $action === null) {
                     // Existing OC that remains unchanged
                     $remainingCount++;
@@ -285,43 +308,51 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             // Calculate initial count (before this variation)
             $initialOCCount = $remainingCount + $removalCount;
 
-            // Validate all criteria
+            // Validate all criteria for auto-grant eligibility
             if ($initialOCCount <= 1) {
-                return ['eligible' => false, 'reason' => 'Must have more than 1 operating centre initially'];
+                return ['eligible' => false, 'reason' => 'Must have more than 1 operating centre initially', 'changes' => []];
             }
 
             if ($hasAdditions) {
-                return ['eligible' => false, 'reason' => 'Contains operating centre additions'];
+                return ['eligible' => false, 'reason' => 'Contains operating centre additions', 'changes' => []];
             }
 
             if ($hasModifications) {
-                return ['eligible' => false, 'reason' => 'Contains operating centre modifications'];
+                return ['eligible' => false, 'reason' => 'Contains operating centre modifications', 'changes' => []];
             }
 
             if ($removalCount === 0) {
-                return ['eligible' => false, 'reason' => 'No operating centres being removed'];
+                return ['eligible' => false, 'reason' => 'No operating centres being removed', 'changes' => []];
             }
 
             if ($remainingCount < 1) {
-                return ['eligible' => false, 'reason' => 'No operating centres would remain'];
+                return ['eligible' => false, 'reason' => 'No operating centres would remain', 'changes' => []];
+            }
+
+            // Build the changes array for display
+            $changes = [];
+
+            foreach ($removedOCs as $address) {
+                $changes[] = "The operating centre at {$address} has been removed";
+            }
+
+            if ($vehicleReduction > 0) {
+                $currentTotal = $application['totAuthVehicles'] ?? 0;
+                $newTotal = $currentTotal - $vehicleReduction;
+                $changes[] = "The total number of authorised vehicles on your licence has been reduced by {$vehicleReduction}. Your updated authorised vehicle count is now {$newTotal}";
             }
 
             // All checks passed - eligible for auto-grant
-            return ['eligible' => true, 'reason' => 'Eligible for auto-grant'];
+            return ['eligible' => true, 'reason' => 'Eligible for auto-grant', 'changes' => $changes];
 
         } catch (\Exception $e) {
             error_log('Error checking auto-grant eligibility: ' . $e->getMessage());
-            return ['eligible' => false, 'reason' => 'Exception: ' . $e->getMessage()];
+            return ['eligible' => false, 'reason' => 'Exception: ' . $e->getMessage(), 'changes' => []];
         }
     }
 
     /**
-     * Auto-grant the variation
-     *
-     * The Grant command handler will:
-     * - Automatically complete the tracking history
-     * - Grant/process the application
-     * - Add change history entries with VOL system user
+     * Auto-grant the variation and complete tracking history
      *
      * @param int $applicationId
      * @return \Common\Service\Cqrs\Response
@@ -329,7 +360,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected function autoGrantVariation($applicationId)
     {
         try {
-            // Fetch the application to get the current version
             $query = ApplicationQry::create(['id' => $applicationId]);
             $response = $this->handleQuery($query);
 
@@ -355,19 +385,38 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             error_log('Error auto-granting variation: ' . $e->getMessage());
 
             // Create a failed response using the command service's response factory
-            // This ensures we return the correct type
             $result = new \Dvsa\Olcs\Api\Domain\Command\Result();
             $result->addMessage('Auto-grant failed: ' . $e->getMessage());
-
-            // Return a proper failed response
-            // The handleCommand method returns a Response, so we need to match that
-            // In case of error, we'll just return a generic error and let normal flow continue
             $this->flashMessengerHelper->addErrorMessage('Auto-grant encountered an error');
 
             // Return a mock response that indicates failure
-            // Since we can't easily create a proper Response here, just rethrow
             throw $e;
         }
+    }
+
+    /**
+     * Render the auto-grant success page directly
+     * @param int   $applicationId
+     * @param array $changes Readable descriptions of changes made
+     *
+     * @return ViewModel
+     */
+    protected function renderAutoGrantSuccess($applicationId, $changes)
+    {
+        $response = $this->handleQuery(SummaryQry::create(['id' => $applicationId]));
+        $data = $response->getResult();
+
+        $view = new ViewModel([
+            'changes' => $changes,
+            'application' => $data['id'],
+            'licence' => $data['licence']['licNo'],
+            'status' => $data['status']['description'],
+            'submittedDate' => $data['receivedDate'],
+            'lva' => $this->lva,
+        ]);
+        $view->setTemplate('pages/auto-grant-success');
+
+        return $this->render($view);
     }
 
     /**
