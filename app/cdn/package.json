@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@dvsa/cookie-manager": "^1.1.2",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.23",
     "chosen-npm": "^1.4.2",
     "govuk-frontend": "^5.13.0",
     "jquery": "^3.7.1",
