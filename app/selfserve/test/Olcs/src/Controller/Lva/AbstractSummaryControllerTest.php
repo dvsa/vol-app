@@ -28,11 +28,11 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider indexActionProvider
      *
      * @param $niFlag
      * @param $isNi
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionProvider')]
     public function testIndexAction($niFlag, $isNi): void
     {
         $applicationData = [
@@ -97,7 +97,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{'Y', true}, list{'N', false}, list{null, false}}
      */
-    public function indexActionProvider(): array
+    public static function indexActionProvider(): array
     {
         return [
             ['Y', true],
@@ -106,9 +106,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderImportantText
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderImportantText')]
     public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected): void
     {
         $applicationData = [
@@ -147,7 +145,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, 'lcat_gv', 'XX', 'application-summary-important-goods-var'}, list{false, 'lcat_gv', 'XX', 'application-summary-important-goods-app'}, list{true, 'lcat_psv', 'XX', 'application-summary-important-psv-var'}, list{false, 'lcat_psv', 'XX', 'application-summary-important-psv-app'}, list{false, 'lcat_psv', 'ltyp_sr', 'application-summary-important-psv-app-sr'}}
      */
-    public function dataProviderImportantText(): array
+    public static function dataProviderImportantText(): array
     {
         return [
             // isVariation, goodsOrPsv, licence type, expected

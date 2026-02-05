@@ -39,7 +39,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'organisation',
-            [$this, 'onOrganisation'],
+            $this->onOrganisation(...),
             $priority
         );
     }

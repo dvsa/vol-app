@@ -11,10 +11,10 @@ use Olcs\Validator\SubmissionSection;
 class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $expected
      * @param $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($value, $expected)
     {
         $sut = new SubmissionSection();
@@ -22,7 +22,7 @@ class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public function provideIsValid()
+    public static function provideIsValid()
     {
         return [
             [[], false],

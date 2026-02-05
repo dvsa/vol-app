@@ -23,13 +23,13 @@ class MarkerPluginManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createStub(ContainerInterface::class));
         parent::setUp();
     }
 
     public function testConstructor()
     {
-        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
+        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createStub(ContainerInterface::class));
 
         $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
     }

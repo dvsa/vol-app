@@ -67,14 +67,18 @@ class ProcessCommunityLicencesCommandTest extends TestCase
                 }
                 return ['count' => 0, 'result' => []];
             });
+        $matcher = $this->exactly(2);
 
-        $this->mockCommandHandlerManager->expects($this->exactly(2))
-            ->method('handleCommand')
-            ->withConsecutive(
-                [$this->isInstanceOf(SuspendCommunityLic::class)],
-                [$this->isInstanceOf(ActivateCommunityLic::class)]
-            )
-            ->willReturn(new Result());
+        $this->mockCommandHandlerManager->expects($matcher)
+            ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertSame($this->isInstanceOf(SuspendCommunityLic::class), $parameters[0]);
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertSame($this->isInstanceOf(ActivateCommunityLic::class), $parameters[0]);
+            }
+            return new Result();
+        });
 
         $this->commandTester->execute([]);
 

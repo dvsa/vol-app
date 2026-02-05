@@ -36,10 +36,8 @@ use Olcs\XmlTools\Xml\Specification\SpecificationInterface;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
+#[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 {
     protected array $config = [
@@ -81,6 +79,7 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
      */
     private m\MockInterface $s3Client;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TransXChangeConsumer();

@@ -26,15 +26,12 @@ class VariationControllerTraitStub extends AbstractController
     protected $applicationId;
     protected $accessibleSections = [];
 
-    protected StringHelperService $stringHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        StringHelperService $stringHelper
+        protected StringHelperService $stringHelper
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
-        $this->stringHelper = $stringHelper;
     }
 
     public function setAccessibleSections($accessibleSections)
@@ -42,6 +39,7 @@ class VariationControllerTraitStub extends AbstractController
         $this->accessibleSections = $accessibleSections;
     }
 
+    #[\Override]
     public function getAccessibleSections($keysOnly = true)
     {
         return $this->accessibleSections;

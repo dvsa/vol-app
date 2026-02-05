@@ -19,9 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CheckboxGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate($answerValue, $expectedChecked)
     {
         $labelOptions = [
@@ -83,7 +81,7 @@ class CheckboxGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate()
     {
         return [
             [null, false],

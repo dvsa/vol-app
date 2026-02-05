@@ -26,9 +26,7 @@ class SubmissionTest extends TestCase
         $this->sut = new Submission($this->refDataService);
     }
 
-    /**
-     * @dataProvider providerSubmissions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerSubmissions')]
     public function testExtractSelectedSubmissionSectionsData($input, $expected)
     {
         $mockSectionRefData = $this->getMockSectionRefData();
@@ -46,9 +44,7 @@ class SubmissionTest extends TestCase
         $this->assertEquals($result, $expected);
     }
 
-    /**
-     * @dataProvider providerSubmissions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerSubmissions')]
     public function testExtractSelectedTextOnlySubmissionSectionsData($input)
     {
         $mockSectionRefData = $this->getMockSectionRefData();
@@ -139,7 +135,7 @@ class SubmissionTest extends TestCase
         );
     }
 
-    public function providerSubmissions()
+    public static function providerSubmissions()
     {
         return [
             [

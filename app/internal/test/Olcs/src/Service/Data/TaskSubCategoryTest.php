@@ -5,9 +5,7 @@ namespace OlcsTest\Service\Data;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\TaskSubCategory;
 
-/**
- * @covers \Olcs\Service\Data\TaskSubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\TaskSubCategory::class)]
 class TaskSubCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var TaskSubCategory */

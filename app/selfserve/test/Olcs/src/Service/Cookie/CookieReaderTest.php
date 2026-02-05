@@ -33,9 +33,7 @@ class CookieReaderTest extends MockeryTestCase
         $this->sut = new CookieReader($this->cookieStateFactory, $this->preferencesFactory);
     }
 
-    /**
-     * @dataProvider dpFalseCookieStateWhenNotCookieObject
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFalseCookieStateWhenNotCookieObject')]
     public function testFalseCookieStateWhenNotCookieObject($cookie): void
     {
         $this->cookieStateFactory->shouldReceive('create')
@@ -54,7 +52,7 @@ class CookieReaderTest extends MockeryTestCase
      *
      * @psalm-return list{list{null}, list{\stdClass}, list{'cookie'}}
      */
-    public function dpFalseCookieStateWhenNotCookieObject(): array
+    public static function dpFalseCookieStateWhenNotCookieObject(): array
     {
         return [
             [null],

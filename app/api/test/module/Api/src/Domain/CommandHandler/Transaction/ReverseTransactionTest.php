@@ -60,6 +60,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -94,8 +95,8 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
 
     /**
      * @param string $paymentMethod
-     * @dataProvider handleCommandProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($paymentMethod)
     {
         $now = new DateTime();
@@ -229,7 +230,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertSame('Bob', $savedTransaction->getPayerName());
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             'cheque' => [FeeEntity::METHOD_CHEQUE],

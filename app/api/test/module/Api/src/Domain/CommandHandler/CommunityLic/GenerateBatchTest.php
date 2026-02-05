@@ -46,9 +46,7 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider licenceDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceDataProvider')]
     public function testHandleCommand(
         $ukLicenceDisabled,
         $isBatchReprint,
@@ -140,9 +138,7 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider licenceDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceDataProvider')]
     public function testHandleCommandApplication(
         $ukLicenceDisabled,
         $isBatchReprint,
@@ -241,7 +237,7 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceDataProvider()
+    public static function licenceDataProvider()
     {
         return [
             'reprint of PSV with new template switched off' => [

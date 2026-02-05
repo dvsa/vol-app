@@ -10,9 +10,8 @@ use Mockery as m;
 
 /**
  * PiSlaException Entity Unit Tests
- *
- * @covers \Dvsa\Olcs\Api\Entity\Pi\PiSlaException
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Pi\PiSlaException::class)]
 class PiSlaExceptionEntityTest extends EntityTester
 {
     /**

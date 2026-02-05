@@ -23,9 +23,7 @@ class EbsrListTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider getAssertDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertDataProvider')]
     public function testAssert(
         $userType,
         $userData,
@@ -45,7 +43,7 @@ class EbsrListTest extends MockeryTestCase
      *
      * @psalm-return list{list{'local-authority', array<never, never>, true}, list{'operator', array{hasActivePsvLicence: true}, true}, list{'operator', array{hasActivePsvLicence: false}, false}, list{'partner', array<never, never>, false}}
      */
-    public function getAssertDataProvider(): array
+    public static function getAssertDataProvider(): array
     {
         return [
             // local authority

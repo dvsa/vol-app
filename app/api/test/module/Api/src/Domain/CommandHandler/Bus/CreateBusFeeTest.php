@@ -35,6 +35,7 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -48,11 +49,11 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $variationNumber
      * @param string $feeType
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($variationNumber, $feeType)
     {
         $busRegId = 111;
@@ -135,7 +136,7 @@ class CreateBusFeeTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [0, FeeTypeEntity::FEE_TYPE_BUSAPP],

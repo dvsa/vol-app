@@ -40,7 +40,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'stockId', [$this->sut, 'onIrhpPermitAdminFurniture'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'stockId', $this->sut->onIrhpPermitAdminFurniture(...), 1);
 
         $this->sut->attach($mockEventManager);
     }
@@ -79,9 +79,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    /**
-     * @dataProvider dpNoAdditionalNavProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNoAdditionalNavProvider')]
     public function testOnIrhpPermitAdminNoAdditionalNav($permitTypeId)
     {
         $stockId = 1;
@@ -113,7 +111,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function dpNoAdditionalNavProvider()
+    public static function dpNoAdditionalNavProvider()
     {
         return [
             [Refdata::ECMT_PERMIT_TYPE_ID],
@@ -122,9 +120,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpWithAdditionalNavProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWithAdditionalNavProvider')]
     public function testOnIrhpPermitAdminWithAdditionalNav($permitTypeId)
     {
         $stockId = 1;
@@ -157,7 +153,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function dpWithAdditionalNavProvider()
+    public static function dpWithAdditionalNavProvider()
     {
         return [
             [Refdata::IRHP_MULTILATERAL_PERMIT_TYPE_ID],

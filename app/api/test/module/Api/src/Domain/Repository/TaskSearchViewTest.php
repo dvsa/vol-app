@@ -8,9 +8,7 @@ use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TaskSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TaskSearchView::class)]
 class TaskSearchViewTest extends RepositoryTestCase
 {
     public function setUp(): void

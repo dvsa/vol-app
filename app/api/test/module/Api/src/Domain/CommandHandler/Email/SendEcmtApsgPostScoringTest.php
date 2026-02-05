@@ -30,9 +30,7 @@ class SendEcmtApsgPostScoringTest extends AbstractPermitTest
     protected $permitApplicationRepo = 'IrhpApplication';
     protected $applicationEntityClass = IrhpApplication::class;
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
     public function testHandleCommand($translateToWelsh, $expectedLocale)
     {
         $previousLocale = 'aa_DJ';
@@ -140,9 +138,7 @@ class SendEcmtApsgPostScoringTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
     public function testHandleCommandForCreatedByInternalUser($translateToWelsh, $expectedLocale)
     {
         $previousLocale = 'aa_DJ';
@@ -249,7 +245,7 @@ class SendEcmtApsgPostScoringTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpTranslateToWelshLocaleMappings()
+    public static function dpTranslateToWelshLocaleMappings()
     {
         return [
             ['Y', 'cy_GB'],

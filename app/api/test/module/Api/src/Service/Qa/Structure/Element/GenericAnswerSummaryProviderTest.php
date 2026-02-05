@@ -30,9 +30,7 @@ class GenericAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $answerValue = 'foo';
@@ -56,7 +54,7 @@ class GenericAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

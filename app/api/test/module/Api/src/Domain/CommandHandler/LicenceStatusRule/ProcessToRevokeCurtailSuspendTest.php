@@ -31,6 +31,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -54,7 +55,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function dataProviderHandleCommandOtherStatus()
+    public static function dataProviderHandleCommandOtherStatus()
     {
         return [
             [Licence::LICENCE_STATUS_CURTAILED],
@@ -72,9 +73,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandOtherStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
     public function testHandleCommandOtherStatus($status)
     {
         $command = Command::create([]);
@@ -190,7 +189,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dataProviderHandleCommandInvalidToLicence()
+    public static function dataProviderHandleCommandInvalidToLicence()
     {
         return [
             [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -206,9 +205,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandInvalidToLicence
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandInvalidToLicence')]
     public function testHandleCommandInvalidToLicence($status)
     {
         $command = Command::create([]);

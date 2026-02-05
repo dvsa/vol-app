@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CheckboxTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetRepresentation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRepresentation')]
     public function testGetRepresentation($checked)
     {
         $labelTranslateableTextRepresentation = ['labelTranslateableTextRepresentation'];
@@ -49,7 +47,7 @@ class CheckboxTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetRepresentation()
+    public static function dpTestGetRepresentation()
     {
         return [
             [true],

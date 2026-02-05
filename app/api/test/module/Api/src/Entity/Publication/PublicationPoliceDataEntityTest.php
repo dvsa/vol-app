@@ -30,9 +30,8 @@ class PublicationPoliceDataEntityTest extends EntityTester
 
     /**
      * Tests create
-     *
-     * @dataProvider birthDateProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('birthDateProvider')]
     public function testCreate($birthDate)
     {
         $publicationLinkMock = m::mock(PublicationLink::class);
@@ -53,7 +52,7 @@ class PublicationPoliceDataEntityTest extends EntityTester
         $this->assertEquals($familyName, $sut->getFamilyName());
     }
 
-    public function birthDateProvider()
+    public static function birthDateProvider()
     {
         return [
             [null],

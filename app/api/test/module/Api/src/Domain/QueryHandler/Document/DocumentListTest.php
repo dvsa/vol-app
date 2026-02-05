@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Document\DocumentList as Qry;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Doctrine\ORM\Query;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Document\DocumentList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\DocumentList::class)]
 class DocumentListTest extends QueryHandlerTestCase
 {
     public function setUp(): void

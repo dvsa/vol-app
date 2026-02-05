@@ -45,7 +45,7 @@ class BlameableTypeHandler extends AbstractTypeHandler
         
         return [
             'name' => $propertyName,
-            'type' => '\Dvsa\Olcs\Api\Entity\User\User',
+            'type' => \Dvsa\Olcs\Api\Entity\User\User::class,
             'docBlock' => $column->getName() === 'created_by' ? 'Created by' : 'Last modified by',
             'defaultValue' => 'null',
             'nullable' => true,
@@ -53,11 +53,13 @@ class BlameableTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 80; // Higher priority than RelationshipTypeHandler
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return [

@@ -26,9 +26,7 @@ class CanEditLicenceTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($isOwner, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_EDIT, false);
@@ -43,9 +41,7 @@ class CanEditLicenceTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidLicNo($isOwner, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_EDIT, false);
@@ -60,9 +56,7 @@ class CanEditLicenceTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid('XY12345'));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidInternal($isOwner, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_EDIT, true);
@@ -76,7 +70,7 @@ class CanEditLicenceTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

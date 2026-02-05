@@ -28,9 +28,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
 {
     public const ISSUE_FEE_PER_PERMIT = '5.00';
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(
         $maxPermitted,
         $permitsRemaining,
@@ -172,7 +170,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [43, 19, 19, true, true, true, false, 'N/A'],

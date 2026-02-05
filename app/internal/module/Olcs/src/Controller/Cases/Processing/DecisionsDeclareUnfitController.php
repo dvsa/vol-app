@@ -99,6 +99,7 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToDetails();
@@ -109,6 +110,7 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
      *
      * @return null|array
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->redirectToDetails();

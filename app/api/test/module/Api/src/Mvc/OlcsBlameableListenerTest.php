@@ -39,9 +39,7 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         $this->sut = new OlcsBlameableListener($this->serviceLocator);
     }
 
-    /**
-     * @dataProvider getFieldValueDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFieldValueDataProvider')]
     public function testGetFieldValue($currentUser, $expected)
     {
         /** @var AuthorizationService $mockAuth */
@@ -146,7 +144,7 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         );
     }
 
-    public function getFieldValueDataProvider()
+    public static function getFieldValueDataProvider()
     {
         $mockUser = User::create(
             'abc',

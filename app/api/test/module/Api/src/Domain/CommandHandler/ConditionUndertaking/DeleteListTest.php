@@ -10,8 +10,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\DeleteList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\DeleteList::class)]
 class DeleteListTest extends AbstractCommandHandlerTestCase
 {
     public const CU_ID = 8001;

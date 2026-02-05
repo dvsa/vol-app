@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\RemoveDeleteDocuments;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\RemoveDeleteDocuments
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\RemoveDeleteDocuments::class)]
 class RemoveDeletedDocumentsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RemoveDeleteDocuments::class;

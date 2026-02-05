@@ -27,6 +27,7 @@ class UpdateTaxiPhvTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         parent::initReferences();

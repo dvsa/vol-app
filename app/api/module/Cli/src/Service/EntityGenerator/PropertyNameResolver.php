@@ -20,7 +20,7 @@ final readonly class PropertyNameResolver
     /**
      * Known irregular plurals and naming exceptions in OLCS
      */
-    private const PLURAL_OVERRIDES = [
+    private const array PLURAL_OVERRIDES = [
         'rolePermission' => 'rolePermissions',
         'organisationPerson' => 'organisationPersons',
         'transportManagerLicence' => 'transportManagerLicences',
@@ -37,7 +37,7 @@ final readonly class PropertyNameResolver
     /**
      * Properties that should remain singular even for collections
      */
-    private const SINGULAR_COLLECTIONS = [
+    private const array SINGULAR_COLLECTIONS = [
         'operatingCentreTrafficArea',
         'correspondenceAddress',
         'establishmentAddress',
@@ -101,11 +101,8 @@ final readonly class PropertyNameResolver
     {
         // Check reverse overrides
         $reverseOverrides = array_flip(self::PLURAL_OVERRIDES);
-        if (isset($reverseOverrides[$propertyName])) {
-            return $reverseOverrides[$propertyName];
-        }
 
-        return $this->inflector->singularize($propertyName);
+        return $reverseOverrides[$propertyName] ?? $this->inflector->singularize($propertyName);
     }
 
 

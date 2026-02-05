@@ -36,6 +36,7 @@ class ResetToNotYetSubmittedFromCancelledTest extends AbstractCommandHandlerTest
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

@@ -30,6 +30,7 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -61,9 +62,7 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProviderTemplates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTemplates')]
     public function testHandleCommand($expectedTemplate, $goodsOrPsv, $licenceType, $vehicleType, $trafficArea)
     {
         $command = Command::create(['id' => 54, 'user' => 65]);
@@ -120,7 +119,7 @@ class GenerateChecklistDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTemplates()
+    public static function dataProviderTemplates()
     {
         return [
             [

@@ -116,9 +116,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandAYear
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandAYear')]
     public function testHandleCommandQandAYear($irhpPermitTypeId)
     {
         $irhpApplicationId = 5;
@@ -176,9 +174,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandANoYear
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandANoYear')]
     public function testHandleCommandQandANoYear($irhpPermitTypeId)
     {
         $irhpApplicationId = 5;
@@ -245,7 +241,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         );
     }
 
-    public function dpTestHandleCommandQandAYear()
+    public static function dpTestHandleCommandQandAYear()
     {
         return [
             [
@@ -255,7 +251,7 @@ class CreateDefaultIrhpPermitApplicationsTest extends AbstractCommandHandlerTest
         ];
     }
 
-    public function dpTestHandleCommandQandANoYear()
+    public static function dpTestHandleCommandQandANoYear()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL]

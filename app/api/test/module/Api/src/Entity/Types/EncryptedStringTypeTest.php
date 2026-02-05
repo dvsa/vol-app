@@ -9,9 +9,7 @@ use phpseclib3\Crypt\AES;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class)]
 class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**

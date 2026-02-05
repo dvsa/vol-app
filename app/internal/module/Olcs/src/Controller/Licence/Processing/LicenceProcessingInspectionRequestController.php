@@ -90,20 +90,17 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      * @var string
      */
     protected $section = 'inspection-request';
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessenger,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
         protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest,
         protected AnnotationBuilder $annotationBuilderService,
         protected QueryService $queryService
     ) {
-        $this->flashMessengerHelper = $flashMessenger;
-
-        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+        parent::__construct($translationHelper, $formHelper, $this->flashMessengerHelper, $navigation);
     }
 
     /**

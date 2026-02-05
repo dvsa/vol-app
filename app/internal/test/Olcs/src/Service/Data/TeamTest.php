@@ -32,9 +32,7 @@ class TeamTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected)
     {
         $this->sut->setData('teamlist', $input);

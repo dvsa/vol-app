@@ -10,9 +10,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Db\Service\Search\Search
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Db\Service\Search\Search::class)]
 class SearchTest extends MockeryTestCase
 {
     /**
@@ -52,9 +50,8 @@ class SearchTest extends MockeryTestCase
 
     /**
      * Tests the filter methods and functionality.
-     *
-     * @dataProvider filterFunctionalityDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filterFunctionalityDataProvider')]
     public function testFilterFunctionality(array $setFilters, array $getFilters, array $filterNames)
     {
         // Uses fluent interface to test
@@ -70,7 +67,7 @@ class SearchTest extends MockeryTestCase
      *
      * @return array
      */
-    public function filterFunctionalityDataProvider()
+    public static function filterFunctionalityDataProvider()
     {
         return [
             [
@@ -170,7 +167,7 @@ class SearchTest extends MockeryTestCase
         $this->sut->updateVehicleSection26($ids, $section26Value);
     }
 
-    public function internalSearchDataProvider()
+    public static function internalSearchDataProvider()
     {
         return
             [
@@ -180,9 +177,7 @@ class SearchTest extends MockeryTestCase
             ];
     }
 
-    /**
-     * @dataProvider internalSearchDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('internalSearchDataProvider')]
     public function testSearchIndexInternal($excludedTeamIds, $taCheckTimes, $teamId, $trafficAreaId)
     {
         $this->mockUser->shouldReceive('isAnonymous')->zeroOrMoreTimes()->andReturn(false);
@@ -304,9 +299,7 @@ class SearchTest extends MockeryTestCase
         $this->sut->search('FOO', ['MISSING']);
     }
 
-    /**
-     * @dataProvider setDateRangesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('setDateRangesDataProvider')]
     public function testSetDateRanges($data, $expect)
     {
         $this->sut->setDateRanges($data);
@@ -314,7 +307,7 @@ class SearchTest extends MockeryTestCase
         $this->assertSame($expect, $this->sut->getDateRanges());
     }
 
-    public function setDateRangesDataProvider()
+    public static function setDateRangesDataProvider()
     {
         return [
             // valid from string
@@ -348,9 +341,7 @@ class SearchTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidDateProvider')]
     public function testInvalidDateFilter($data)
     {
         $this->expectException(\Dvsa\Olcs\Db\Exceptions\SearchDateFilterParseException::class);
@@ -358,7 +349,7 @@ class SearchTest extends MockeryTestCase
         $this->sut->setDateRanges($data);
     }
 
-    public function invalidDateProvider()
+    public static function invalidDateProvider()
     {
         return    // invalid
             [

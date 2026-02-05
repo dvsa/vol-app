@@ -16,10 +16,10 @@ class VrmTest extends MockeryTestCase
     /**
      * test filter()
      *
-     * @dataProvider dpFilterProvider
      * @param string $initialValue
      * @param string $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFilterProvider')]
     public function testFilter($initialValue, $expectedResult)
     {
         $value = ['vrm' => $initialValue];
@@ -39,7 +39,7 @@ class VrmTest extends MockeryTestCase
      *
      * @return array
      */
-    public function dpFilterProvider()
+    public static function dpFilterProvider()
     {
         return [
             ['icZs', '1CZS'],

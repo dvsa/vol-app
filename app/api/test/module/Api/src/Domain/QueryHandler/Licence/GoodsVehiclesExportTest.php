@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Licence\GoodsVehiclesExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Licence\GoodsVehiclesExport::class)]
 class GoodsVehiclesExportTest extends QueryHandlerTestCase
 {
     public const ID = 1111;

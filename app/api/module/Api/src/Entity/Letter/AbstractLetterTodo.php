@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

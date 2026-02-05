@@ -29,9 +29,7 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $permitsRequired = 45;
@@ -60,7 +58,7 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         return [
             [true],

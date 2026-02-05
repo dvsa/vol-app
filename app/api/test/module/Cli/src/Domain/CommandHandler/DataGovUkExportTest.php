@@ -23,9 +23,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Domain\CommandHandler\DataGovUkExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataGovUkExport::class)]
 class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 {
     /**
@@ -89,6 +87,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->categoryReferences = [

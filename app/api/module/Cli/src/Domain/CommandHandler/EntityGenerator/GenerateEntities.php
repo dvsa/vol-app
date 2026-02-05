@@ -18,13 +18,14 @@ use Psr\Container\ContainerInterface;
  */
 class GenerateEntities extends AbstractCommandHandler
 {
-    private const ENTITY_RELATIVE_PATH = '/module/Api/src/Entity';
-    private const TEST_RELATIVE_PATH = '/test/module/Api/src/Entity';
-    private const PROJECT_ROOT_DEPTH = 6; // Depth from this file to project root
+    private const string ENTITY_RELATIVE_PATH = '/module/Api/src/Entity';
+    private const string TEST_RELATIVE_PATH = '/test/module/Api/src/Entity';
+    private const int PROJECT_ROOT_DEPTH = 6; // Depth from this file to project root
     
     private Doctrine3SchemaIntrospector $schemaIntrospector;
     private EntityGenerator $entityGenerator;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->schemaIntrospector = $container->get(Doctrine3SchemaIntrospector::class);
@@ -149,7 +150,7 @@ class GenerateEntities extends AbstractCommandHandler
         }
 
         // Look for @settings['ignore'] in the comment
-        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', $comment) === 1;
+        return preg_match('/@settings\s*\[\s*[\'"]ignore[\'"]\s*\]/', (string) $comment) === 1;
     }
     
     /**

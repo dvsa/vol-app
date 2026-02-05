@@ -22,9 +22,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpValidate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
     public function testValidate($vehicleType, $totAuthHgvVehicles, $totAuthLgvVehicles, $totAuthTrailers, $data, $expected)
     {
         $this->expectException(ValidationException::class);
@@ -58,7 +56,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpValidate()
+    public static function dpValidate()
     {
         return [
             'LGV without required data' => [

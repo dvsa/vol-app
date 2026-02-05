@@ -36,9 +36,7 @@ class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommand($expectedSection, $isNew, $isNi, $isTrueS4)
     {
         $data = [
@@ -103,7 +101,7 @@ class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand()
     {
         return [
             // expectedSection, isNew, isNi, isTrueS4

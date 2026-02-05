@@ -44,7 +44,7 @@ class SubmissionFurnitureTest extends MockeryTestCase
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onSubmission'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'case', $this->sut->onSubmission(...), 1);
 
         $this->sut->attach($mockEventManager);
     }
@@ -168,18 +168,15 @@ class SubmissionFurnitureTest extends MockeryTestCase
         $this->sut->onSubmission($event);
     }
 
-    /**
-     * @dataProvider getStatusArrayProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStatusArrayProvider')]
     public function testGetStatusArray($case, $expected)
     {
         $method = new \ReflectionMethod($this->sut, 'getStatusArray');
-        $method->setAccessible(true);
 
         $this->assertEquals($expected, $method->invoke($this->sut, $case));
     }
 
-    public function getStatusArrayProvider()
+    public static function getStatusArrayProvider()
     {
         return [
             // open

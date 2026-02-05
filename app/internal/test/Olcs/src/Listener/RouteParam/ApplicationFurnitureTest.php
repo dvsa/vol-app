@@ -54,7 +54,7 @@ class ApplicationFurnitureTest extends TestCase
         $events = m::mock(EventManagerInterface::class);
 
         $events->shouldReceive('attach')->once()
-            ->with('route.param.application', [$this->sut, 'onApplicationFurniture'], 1)
+            ->with('route.param.application', $this->sut->onApplicationFurniture(...), 1)
             ->andReturn('listener');
 
         $this->sut->attach($events);

@@ -17,17 +17,17 @@ class IrhpPermitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $data
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapPermitData($data, $expected)
     {
         $this->assertSame($expected, $this->sut->mapFromResult($data));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider()
     {
         return [
             [

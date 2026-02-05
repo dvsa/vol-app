@@ -75,6 +75,7 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->setPageTitle();
@@ -90,7 +91,7 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
     public function renewAction()
     {
         return $this->processCommand(
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             RenewDto::class
         );
     }
@@ -103,7 +104,7 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
     public function printAction()
     {
         return $this->processCommand(
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             PrintChecklistDto::class,
             'Checklist printed'
         );

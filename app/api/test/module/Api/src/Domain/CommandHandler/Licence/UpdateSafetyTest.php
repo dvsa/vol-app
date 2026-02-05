@@ -31,6 +31,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -42,7 +43,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [
@@ -68,9 +69,7 @@ class UpdateSafetyTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($canHaveTrailer, $totAuthTrailers, $expectedSafetyInsTrailers)
     {
         $data = [

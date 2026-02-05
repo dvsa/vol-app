@@ -33,9 +33,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->sut = new OperatingCentresReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
     public function testGetConfigFromData(
         $canHaveTrailer,
         $isVehicleTypeMixedWithLgv,
@@ -63,7 +61,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData()
     {
         $loc1 = m::mock()
             ->shouldReceive('getOperatingCentre')
@@ -211,9 +209,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetSummaryFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSummaryFromData')]
     public function testGetSummaryFromData($applicableAuthProperties, $expected)
     {
         $continuationDetail = new ContinuationDetail();
@@ -241,7 +237,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getSummaryFromData($continuationDetail));
     }
 
-    public function dpGetSummaryFromData()
+    public static function dpGetSummaryFromData()
     {
         return [
             'vehicles and trailers' => [

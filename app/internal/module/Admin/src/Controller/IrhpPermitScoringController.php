@@ -53,6 +53,7 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
     /**
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $visibilityResult = $this->handleQuery(
@@ -176,7 +177,7 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
             [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length' => strlen($content)
+            'Content-Length' => strlen((string) $content)
             ]
         );
         $response->setContent($content);

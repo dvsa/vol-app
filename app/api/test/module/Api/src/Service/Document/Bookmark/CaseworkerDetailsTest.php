@@ -5,9 +5,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails::class)]
 class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery()
@@ -29,9 +27,7 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(1, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = new CaseworkerDetails();
@@ -40,7 +36,7 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             // testRenderWithContactDetailsAddress

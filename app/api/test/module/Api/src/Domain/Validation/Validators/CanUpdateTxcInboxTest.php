@@ -34,9 +34,7 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canUpdate, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -55,9 +53,7 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidInternal($canUpdate, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, $canUpdate);
@@ -88,7 +84,7 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

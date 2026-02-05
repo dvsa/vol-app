@@ -2,7 +2,7 @@
   "name": "olcs/olcs-selfserve",
   "description": "OLCS Self Service Web Site",
   "require": {
-    "php": "~8.2.0",
+    "php": "~8.3.0",
     "ext-redis": "*",
     "doctrine/doctrine-module": "^6.3",
     "dvsa/laminas-config-cloud-parameters": "^1.0",
@@ -36,11 +36,11 @@
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8",
-    "johnkary/phpunit-speedtrap": "^4.0",
     "laminas/laminas-developer-tools": "*",
     "mockery/mockery": "^1.6",
-    "phpunit/phpunit": "^9.6",
-    "san/san-session-toolbar": "*"
+    "phpunit/phpunit": "^12.5",
+    "san/san-session-toolbar": "*",
+    "rector/rector": "^2.3"
   },
   "autoload": {
     "classmap": [

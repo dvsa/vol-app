@@ -48,9 +48,7 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData($data, $expectedMainItems, $expected)
     {
         $this->mockTranslator->shouldReceive('translate')
@@ -65,7 +63,7 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData()
     {
         return [
             [

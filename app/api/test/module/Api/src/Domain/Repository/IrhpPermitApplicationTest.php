@@ -82,9 +82,7 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment')]
     public function testGetRequiredPermitCountWhereApplicationAwaitingPayment(
         $emissionsCategoryId,
         $fieldName,
@@ -138,7 +136,7 @@ class IrhpPermitApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment()
+    public static function dpTestGetRequiredPermitCountWhereApplicationAwaitingPayment()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, 'requiredEuro5', 33, 33],

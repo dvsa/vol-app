@@ -27,9 +27,6 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
 {
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
-
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
     protected $navigation;
 
     public function __construct(
@@ -41,8 +38,8 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper,
         $navigation
     ) {
         parent::__construct(
@@ -56,8 +53,6 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
             $flashMessengerHelper,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**

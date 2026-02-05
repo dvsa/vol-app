@@ -112,13 +112,13 @@ class BusServiceControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormForEditDataProvider
      *
      * @param $data
      * @param $readonly
      * @param $timetableRemoved
      * @param $opNotifiedLaPteRemoved
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormForEditDataProvider')]
     public function testAlterFormForEdit(
         $data,
         $readonly,
@@ -184,7 +184,7 @@ class BusServiceControllerTest extends MockeryTestCase
         $this->assertSame($mockForm, $result);
     }
 
-    public function alterFormForEditDataProvider()
+    public static function alterFormForEditDataProvider()
     {
         return [
             [

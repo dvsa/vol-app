@@ -15,12 +15,12 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
 class TemplateRendererTest extends MockeryTestCase
 {
     /**
-     * @dataProvider renderBodyProvider
      *
      * @param bool $hasHtml
      * @param int $htmlRenderTimes
      * @param string|null $renderedHtml
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderBodyProvider')]
     public function testRenderBody($hasHtml, $htmlRenderTimes, $renderedHtml)
     {
         $sut = new TemplateRenderer();
@@ -62,7 +62,7 @@ class TemplateRendererTest extends MockeryTestCase
      *
      * @return array
      */
-    public function renderBodyProvider()
+    public static function renderBodyProvider()
     {
         return [
             [true, 1, 'RENDER_HTML_LAYOUT'],

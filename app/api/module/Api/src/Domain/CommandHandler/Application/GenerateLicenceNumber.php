@@ -84,6 +84,7 @@ final class GenerateLicenceNumber extends AbstractCommandHandler
             $licenceNoGen->getId()
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

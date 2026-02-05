@@ -44,7 +44,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->repoMap['User']->shouldReceive('fetchList')->andReturn([$user]);
@@ -72,7 +71,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -95,7 +93,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -166,7 +163,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, 'wrong_user_type');
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -191,7 +187,6 @@ class UserListSelfserveTest extends QueryHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

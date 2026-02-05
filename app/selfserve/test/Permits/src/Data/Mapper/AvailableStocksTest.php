@@ -21,9 +21,7 @@ class AvailableStocksTest extends TestCase
         $this->sut = new AvailableStocks();
     }
 
-    /**
-     * @dataProvider dpTestExceptionNotSupported
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExceptionNotSupported')]
     public function testExceptionNotSupported($typeId): void
     {
         $this->expectException(RuntimeException::class);
@@ -44,7 +42,7 @@ class AvailableStocksTest extends TestCase
      *
      * @psalm-return list{list{1}, list{3}, list{4}, list{5}}
      */
-    public function dpTestExceptionNotSupported(): array
+    public static function dpTestExceptionNotSupported(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],

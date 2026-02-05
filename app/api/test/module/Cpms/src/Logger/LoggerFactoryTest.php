@@ -8,9 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class LoggerFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider dpTestCreateLogger
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreateLogger')]
     public function testCreateLogger($dpData)
     {
         $zendLogLevel = $dpData['zendLogLevel'];
@@ -26,7 +24,7 @@ class LoggerFactoryTest extends TestCase
         $this->assertEquals($dpData['expectedMonologLevel'], $logger->getHandlers()[0]->getLevel());
     }
 
-    public function dpTestCreateLogger()
+    public static function dpTestCreateLogger()
     {
         return [
 

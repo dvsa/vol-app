@@ -69,6 +69,7 @@ class LetterType extends AbstractListDataService
    * @param array $data Data
    * @return array
    */
+  #[\Override]
   public function formatData(array $data)
   {
     $optionData = [];

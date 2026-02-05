@@ -40,10 +40,6 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     protected OppositionHelperService $oppositionHelper;
     protected ComplaintsHelperService $complaintsHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -53,10 +49,10 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper,
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper,
         $navigation
     ) {
         parent::__construct(
@@ -70,10 +66,6 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
             $flashMessengerHelper
         );
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**

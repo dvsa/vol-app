@@ -25,9 +25,7 @@ class QueueAcceptScoringAndPostScoringReportPermittedTest extends QueryHandlerTe
         parent::setUp();
     }
 
-    /**
-     * @dataProvider permittedScenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('permittedScenariosProvider')]
     public function testHandleQuery($prerequisiteResult, $prerequisiteMessage)
     {
         $stockId = 28;
@@ -96,7 +94,7 @@ class QueueAcceptScoringAndPostScoringReportPermittedTest extends QueryHandlerTe
         );
     }
 
-    public function permittedScenariosProvider()
+    public static function permittedScenariosProvider()
     {
         return [
             [true, 'Prerequisites ok'],

@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class QuestionTextTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(
         $questionFilteredTranslateableText,
         $questionSummaryTranslateableText,
@@ -39,7 +37,7 @@ class QuestionTextTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate()
     {
         $questionRepresentation = ['questionRepresentation'];
         $detailsRepresentation = ['detailsRepresentation'];

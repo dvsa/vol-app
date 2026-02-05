@@ -59,19 +59,19 @@ class ApplicationTest extends MockeryTestCase
 
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'application', [$sut, 'onApplication'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'application', $sut->onApplication(...), 1);
 
         $sut->attach($mockEventManager);
     }
 
     /**
-     * @dataProvider onApplicationProvider
      * @param string $status
      * @param string $category
      * @param string $type
      * @param bool $canHaveCases
      * @param int $expectedCallsNo
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('onApplicationProvider')]
     public function testOnApplication($status, $category, $type, $canHaveCases, $expectedCallsNo)
     {
         $applicationId = 69;
@@ -424,7 +424,7 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public function onApplicationProvider()
+    public static function onApplicationProvider()
     {
         return [
             [

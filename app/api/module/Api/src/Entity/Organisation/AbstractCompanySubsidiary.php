@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCompanySubsidiary implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompanySubsidiary implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

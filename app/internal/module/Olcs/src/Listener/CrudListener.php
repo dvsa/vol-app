@@ -54,7 +54,7 @@ class CrudListener implements ListenerAggregateInterface
      */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 20);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, $this->onDispatch(...), 20);
     }
 
     /**
@@ -183,7 +183,7 @@ class CrudListener implements ListenerAggregateInterface
             $action['action'] = key($action['action']);
         }
 
-        return strtolower($action['action']);
+        return strtolower((string) $action['action']);
     }
 
     /**

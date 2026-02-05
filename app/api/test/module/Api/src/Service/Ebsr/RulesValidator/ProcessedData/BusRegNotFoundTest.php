@@ -16,12 +16,12 @@ class BusRegNotFoundTest extends MockeryTestCase
     /**
      * tests whether a bus reg has been found
      *
-     * @dataProvider isValidProvider
      *
      * @param string $txcAppType
      * @param BusRegEntity|null $busReg
      * @param bool $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($txcAppType, $busReg, $valid)
     {
         $sut = new BusRegNotFound();
@@ -41,7 +41,7 @@ class BusRegNotFoundTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         $busMock = m::mock(BusRegEntity::class);
 

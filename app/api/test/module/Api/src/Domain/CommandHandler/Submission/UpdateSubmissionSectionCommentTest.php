@@ -31,6 +31,7 @@ class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -104,9 +105,8 @@ class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
      * Tests the comment is deleted if it's empty
      *
      * @param $comment
-     *
-     * @dataProvider emptyCommentProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyCommentProvider')]
     public function testEmptyCommentDeleted($comment)
     {
         $commandData = [
@@ -129,7 +129,7 @@ class UpdateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function emptyCommentProvider()
+    public static function emptyCommentProvider()
     {
         return [
             [null],

@@ -41,9 +41,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testIsGrantableEmissionsCategories($isGrantable)
     {
         $this->irhpApplication->shouldReceive('getAllocationMode')
@@ -64,9 +62,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testIsGrantableCandidatePermits($isGrantable)
     {
         $this->irhpApplication->shouldReceive('getAllocationMode')
@@ -87,7 +83,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse()
     {
         return [
             [true],
@@ -95,9 +91,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpExceptionUnsupportedBusinessProcess
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedBusinessProcess')]
     public function testExceptionUnsupportedBusinessProcess($businessProcess)
     {
         $this->irhpApplication->shouldReceive('getBusinessProcess')
@@ -110,7 +104,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public function dpExceptionUnsupportedBusinessProcess()
+    public static function dpExceptionUnsupportedBusinessProcess()
     {
         return [
             [RefData::BUSINESS_PROCESS_AG],
@@ -119,9 +113,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpExceptionUnsupportedAllocationMode
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedAllocationMode')]
     public function testExceptionUnsupportedAllocationMode($allocationMode)
     {
         $this->expectException(RuntimeException::class);
@@ -137,7 +129,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public function dpExceptionUnsupportedAllocationMode()
+    public static function dpExceptionUnsupportedAllocationMode()
     {
         return [
             [IrhpPermitStock::ALLOCATION_MODE_STANDARD],

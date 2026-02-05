@@ -20,9 +20,7 @@ class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Qry::class, $bookmark->getQuery(['busRegId' => 123]));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = $this->getBookmark($data);

@@ -33,9 +33,8 @@ class ErruRequestTest extends RepositoryTestCase
      *
      * @param array $result
      * @param bool $recordFound
-     *
-     * @dataProvider existsByWorkflowIdProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('existsByWorkflowIdProvider')]
     public function testExistsByWorkflowId($result, $recordFound)
     {
         $workflowId = '123456';
@@ -61,7 +60,7 @@ class ErruRequestTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function existsByWorkflowIdProvider()
+    public static function existsByWorkflowIdProvider()
     {
         return [
             [[0 => 'Result'], true],

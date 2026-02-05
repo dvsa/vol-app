@@ -34,9 +34,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('It is important that a director of the company (who', $bookmark->render());
     }
 
-    /**
-     * @dataProvider dpRenderPartnershipsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderPartnershipsDataProvider')]
     public function testRenderPartnerships($organisationTypeId)
     {
         $mockParser = m::mock();
@@ -49,7 +47,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('It is important that a partner who can speak and', $bookmark->render());
     }
 
-    public function dpRenderPartnershipsDataProvider()
+    public static function dpRenderPartnershipsDataProvider()
     {
         return [
             [Organisation::ORG_TYPE_PARTNERSHIP],
@@ -57,9 +55,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderOthersDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderOthersDataProvider')]
     public function testRenderOthers($organisationTypeId)
     {
         $bookmark = new Sut();
@@ -68,7 +64,7 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public function dpRenderOthersDataProvider()
+    public static function dpRenderOthersDataProvider()
     {
         return [
             [Organisation::ORG_TYPE_SOLE_TRADER],

@@ -73,12 +73,12 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      *
      * @param $niFlag
      * @param $goodsOrPsv
      * @param $expectedList
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
         $this->licenceDataService->shouldReceive('getId')

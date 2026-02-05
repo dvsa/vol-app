@@ -7,9 +7,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
 
-/**
- * @covers \Olcs\Data\Mapper\TransportManagerApplication
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\TransportManagerApplication::class)]
 class TransportManagerApplicationTest extends MockeryTestCase
 {
     public function testMapFromResultForTable()
@@ -23,9 +21,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResultForTable($data));
     }
 
-    /**
-     * @dataProvider dpTestMapFromResult
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapFromResult')]
     public function testMapFromResult($inputStatus, $outputStatus)
     {
         $data = [
@@ -73,7 +69,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function dpTestMapFromResult()
+    public static function dpTestMapFromResult()
     {
         return [
             [

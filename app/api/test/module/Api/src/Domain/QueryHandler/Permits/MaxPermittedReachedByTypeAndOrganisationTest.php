@@ -39,9 +39,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQueryEcmtAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryEcmtAnnual')]
     public function testHandleQueryEcmtAnnual(
         $stock1Licence1Count,
         $stock1Licence2Count,
@@ -120,7 +118,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryEcmtAnnual()
+    public static function dpHandleQueryEcmtAnnual()
     {
         return [
             'nothing available across all windows and licences' => [0, 0, 0, 0, true],
@@ -129,9 +127,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQueryNotEcmtAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNotEcmtAnnual')]
     public function testHandleQueryNotEcmtAnnual($irhpPermitTypeId)
     {
         $expectedResult = [
@@ -150,7 +146,7 @@ class MaxPermittedReachedByTypeAndOrganisationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryNotEcmtAnnual()
+    public static function dpHandleQueryNotEcmtAnnual()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],

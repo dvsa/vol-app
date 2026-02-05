@@ -32,9 +32,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         $this->assertInstanceOf(SurrenderDetails::class, $this->sut->__invoke($surrenderData));
     }
 
-    /**
-     * @dataProvider dpTestGetDeclarationSignatureText
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetDeclarationSignatureText')]
     public function testGetDeclarationSignatureText($surrenderData, $expectedText)
     {
         $this->assertSame(
@@ -43,7 +41,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetDeclarationSignatureText()
+    public static function dpTestGetDeclarationSignatureText()
     {
         return [
             'digital_signature' => [
@@ -74,9 +72,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestReturnCommunityLicenceDocumentDetailsText
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestReturnCommunityLicenceDocumentDetailsText')]
     public function testReturnCommunityLicenceDocumentDetailsText($surrenderData, $expectedText)
     {
         $this->assertSame(
@@ -85,7 +81,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestReturnCommunityLicenceDocumentDetailsText()
+    public static function dpTestReturnCommunityLicenceDocumentDetailsText()
     {
         return [
             [
@@ -94,7 +90,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                     ],
                 ],
-                'expected' => 'Details of stolen community licence document'
+                'expectedText' => 'Details of stolen community licence document'
             ],
             [
                 'surrenderData' => [
@@ -102,14 +98,12 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_LOST
                     ],
                 ],
-                'expected' => 'Details of lost community licence document'
+                'expectedText' => 'Details of lost community licence document'
             ]
         ];
     }
 
-    /**
-     * @dataProvider dpTestReturnLicenceDocumentDetailsText
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestReturnLicenceDocumentDetailsText')]
     public function testReturnLicenceDocumentDetailsText($surrenderData, $expectedText)
     {
         $this->assertSame(
@@ -118,7 +112,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestReturnLicenceDocumentDetailsText()
+    public static function dpTestReturnLicenceDocumentDetailsText()
     {
         return [
             [
@@ -127,7 +121,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                     ],
                 ],
-                'expected' => 'Details of stolen operator licence document'
+                'expectedText' => 'Details of stolen operator licence document'
             ],
             [
                 'surrenderData' => [
@@ -135,7 +129,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_LOST
                     ],
                 ],
-                'expected' => 'Details of lost operator licence document'
+                'expectedText' => 'Details of lost operator licence document'
             ]
         ];
     }

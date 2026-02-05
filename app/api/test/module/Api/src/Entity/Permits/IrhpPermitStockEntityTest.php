@@ -204,9 +204,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($updatePeriodNameKey, $entity->getPeriodNameKey());
     }
 
-    /**
-     * @dataProvider dpBilateralMoroccoException
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
     public function testCreateBilateralMoroccoException($countryId, $permitCategory, $expectedMessage)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -247,9 +245,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionRaised);
     }
 
-    /**
-     * @dataProvider dpBilateralMoroccoException
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
     public function testUpdateBilateralMoroccoException($countryId, $permitCategory, $expectedMessage)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -305,7 +301,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionRaised);
     }
 
-    public function dpBilateralMoroccoException()
+    public static function dpBilateralMoroccoException()
     {
         return [
             [
@@ -352,9 +348,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpHasOpenWindow
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasOpenWindow')]
     public function testHasOpenWindow($openWindow, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -368,7 +362,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpHasOpenWindow()
+    public static function dpHasOpenWindow()
     {
         return [
             [null, false],
@@ -407,9 +401,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
     public function testCanDelete($data, $expected)
     {
         $status = m::mock(RefData::class);
@@ -437,9 +429,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected, $stock->canDelete());
     }
 
-    /**
-     * @dataProvider emissionsRangeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
     public function testHasEuro5Range($data, $expected)
     {
         $status = m::mock(RefData::class);
@@ -463,9 +453,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected['euro5'], $stock->hasEuro5Range());
     }
 
-    /**
-     * @dataProvider emissionsRangeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
     public function testHasEuro6Range($data, $expected)
     {
         $status = m::mock(RefData::class);
@@ -494,7 +482,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      *
      * @return array
      */
-    public function emissionsRangeProvider()
+    public static function emissionsRangeProvider()
     {
         $euro5Range = m::mock(IrhpPermitRange::class)->makePartial();
         $euro5Range->setEmissionsCategory(new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF));
@@ -525,9 +513,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasCabotageOrStandardRange
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCabotageOrStandardRange')]
     public function testHasCabotageOrStandardRange($data, $expected)
     {
         $status = m::mock(RefData::class);
@@ -549,7 +535,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected['standard'], $stock->hasStandardRange());
     }
 
-    public function dpHasCabotageOrStandardRange()
+    public static function dpHasCabotageOrStandardRange()
     {
         $cabotageRange = m::mock(IrhpPermitRange::class);
         $cabotageRange->shouldReceive('isCabotage')->withNoArgs()->andReturnTrue();
@@ -588,7 +574,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      *
      * @return array
      */
-    public function canDeleteProvider()
+    public static function canDeleteProvider()
     {
         return [
             'valid delete' => [
@@ -622,9 +608,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsQueueRunScoringProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsQueueRunScoringProvider')]
     public function testStatusAllowsQueueRunScoring($statusId, $expectedResult)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -635,7 +619,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsQueueRunScoringProvider()
+    public static function statusAllowsQueueRunScoringProvider()
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, true],
@@ -652,9 +636,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsRunScoringProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsRunScoringProvider')]
     public function testStatusAllowsRunScoring($statusId, $expectedResult)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -665,7 +647,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsRunScoringProvider()
+    public static function statusAllowsRunScoringProvider()
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -682,9 +664,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsQueueAcceptScoringAndPostScoringReportProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsQueueAcceptScoringAndPostScoringReportProvider')]
     public function testStatusAllowsQueueAcceptScoringAndPostScoringReport($statusId, $expectedResult)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -695,7 +675,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsQueueAcceptScoringAndPostScoringReportProvider()
+    public static function statusAllowsQueueAcceptScoringAndPostScoringReportProvider()
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -712,9 +692,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsAcceptScoringProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsAcceptScoringProvider')]
     public function testStatusAllowsAcceptScoring($statusId, $expectedResult)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -725,7 +703,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsAcceptScoringProvider()
+    public static function statusAllowsAcceptScoringProvider()
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -742,9 +720,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToScoringPendingProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingProvider')]
     public function testProceedToScoringPending($statusId)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -754,7 +730,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public function proceedToScoringPendingProvider()
+    public static function proceedToScoringPendingProvider()
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN],
@@ -766,9 +742,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToScoringPendingExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingExceptionProvider')]
     public function testProceedToScoringPendingException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -784,7 +758,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringPendingExceptionProvider()
+    public static function proceedToScoringPendingExceptionProvider()
     {
         return [
             [
@@ -824,9 +798,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringPrerequisiteFailExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPrerequisiteFailExceptionProvider')]
     public function testProceedToScoringPrerequisiteFailException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -842,7 +814,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringPrerequisiteFailExceptionProvider()
+    public static function proceedToScoringPrerequisiteFailExceptionProvider()
     {
         return [
             [
@@ -907,9 +879,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringInProgressExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringInProgressExceptionProvider')]
     public function testProceedToScoringInProgressException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -925,7 +895,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringInProgressExceptionProvider()
+    public static function proceedToScoringInProgressExceptionProvider()
     {
         return [
             [
@@ -990,9 +960,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringSuccessfulExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringSuccessfulExceptionProvider')]
     public function testProceedToScoringSuccessfulException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1008,7 +976,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringSuccessfulExceptionProvider()
+    public static function proceedToScoringSuccessfulExceptionProvider()
     {
         return [
             [
@@ -1073,9 +1041,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringUnexpectedFailExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringUnexpectedFailExceptionProvider')]
     public function testProceedToScoringUnexpectedFailException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1091,7 +1057,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringUnexpectedFailExceptionProvider()
+    public static function proceedToScoringUnexpectedFailExceptionProvider()
     {
         return [
             [
@@ -1147,9 +1113,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToAcceptPendingProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPendingProvider')]
     public function testProceedToAcceptPending($statusId)
     {
         $stock = $this->createEntityWithStatusId($statusId);
@@ -1159,7 +1123,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public function proceedToAcceptPendingProvider()
+    public static function proceedToAcceptPendingProvider()
     {
         return [
             [Entity::STATUS_SCORING_SUCCESSFUL],
@@ -1169,9 +1133,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToAcceptPendingExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPendingExceptionProvider')]
     public function testProceedToAcceptPendingException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1187,7 +1149,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptPendingExceptionProvider()
+    public static function proceedToAcceptPendingExceptionProvider()
     {
         return [
             [
@@ -1237,9 +1199,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptPrerequisiteFailExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPrerequisiteFailExceptionProvider')]
     public function testProceedToAcceptPrerequisiteFailException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1255,7 +1215,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptPrerequisiteFailExceptionProvider()
+    public static function proceedToAcceptPrerequisiteFailExceptionProvider()
     {
         return [
             [
@@ -1320,9 +1280,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptInProgressExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptInProgressExceptionProvider')]
     public function testProceedToAcceptInProgressException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1338,7 +1296,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptInProgressExceptionProvider()
+    public static function proceedToAcceptInProgressExceptionProvider()
     {
         return [
             [
@@ -1403,9 +1361,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptSuccessfulExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptSuccessfulExceptionProvider')]
     public function testProceedToAcceptSuccessfulException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1421,7 +1377,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptSuccessfulExceptionProvider()
+    public static function proceedToAcceptSuccessfulExceptionProvider()
     {
         return [
             [
@@ -1486,9 +1442,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptUnexpectedFailExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptUnexpectedFailExceptionProvider')]
     public function testProceedToAcceptUnexpectedFailException($statusId, $statusDescription, $expectedExceptionMessages)
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
@@ -1504,7 +1458,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptUnexpectedFailExceptionProvider()
+    public static function proceedToAcceptUnexpectedFailExceptionProvider()
     {
         return [
             [
@@ -1799,9 +1753,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $entity->getFirstAvailableRangePreferWithNoCountries($emissionsStandardCriteria);
     }
 
-    /**
-     * @dataProvider dpGetAllocationMode
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAllocationMode')]
     public function testGetAllocationMode($irhpPermitTypeId, $businessProcessId, $validityYear, $expectedAllocationMode)
     {
         $businessProcess = m::mock(RefData::class);
@@ -1828,7 +1780,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetAllocationMode()
+    public static function dpGetAllocationMode()
     {
         return [
             [
@@ -1966,9 +1918,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $entity->getAllocationMode();
     }
 
-    /**
-     * @dataProvider dpGetCandidatePermitCreationMode
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetCandidatePermitCreationMode')]
     public function testGetCandidatePermitCreationMode(
         $businessProcessId,
         $isEcmtShortTerm,
@@ -1996,7 +1946,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetCandidatePermitCreationMode()
+    public static function dpGetCandidatePermitCreationMode()
     {
         return [
             [
@@ -2032,9 +1982,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetPermitUsageList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetPermitUsageList')]
     public function testGetPermitUsageList($irhpPermitRanges, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -2107,9 +2055,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsMorocco
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMorocco')]
     public function testIsMorocco($isMorocco)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -2127,7 +2073,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpIsMorocco()
+    public static function dpIsMorocco()
     {
         return [
             [true],
@@ -2135,9 +2081,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetBilateralAnswerSummaryLabelKey
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralAnswerSummaryLabelKey')]
     public function testGetBilateralAnswerSummaryLabelKey($isMorocco, $isMultiStock, $expectedKey)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -2151,7 +2095,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetBilateralAnswerSummaryLabelKey()
+    public static function dpGetBilateralAnswerSummaryLabelKey()
     {
         return [
             [true, false, 'permits.page.bilateral.permit-needed'],
@@ -2160,9 +2104,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetExcludedRestrictedCountryIds
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetExcludedRestrictedCountryIds')]
     public function testGetExcludedRestrictedCountryIds(
         $isEcmtAnnual,
         $hasEuro5Range,
@@ -2189,7 +2131,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetExcludedRestrictedCountryIds()
+    public static function dpGetExcludedRestrictedCountryIds()
     {
         return [
             [
@@ -2243,9 +2185,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsCertificateOfRoadworthiness
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCertificateOfRoadworthiness')]
     public function testIsCertificateOfRoadworthiness($isCertificateOfRoadworthiness)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -2262,7 +2202,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpIsCertificateOfRoadworthiness()
+    public static function dpIsCertificateOfRoadworthiness()
     {
         return [
             [true],

@@ -23,6 +23,7 @@ class DeleteTaxiPhvTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         parent::initReferences();

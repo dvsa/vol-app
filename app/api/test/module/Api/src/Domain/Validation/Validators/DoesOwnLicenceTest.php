@@ -31,9 +31,7 @@ class DoesOwnLicenceTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidTrue($isOwner, $expected)
     {
         $entity = m::mock(Licence::class);
@@ -46,7 +44,7 @@ class DoesOwnLicenceTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

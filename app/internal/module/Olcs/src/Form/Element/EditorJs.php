@@ -19,11 +19,6 @@ class EditorJs extends Textarea implements InputProviderInterface
     public const EDITORJS_VERSION = '2.28.2';
 
     /**
-     * @var HtmlConverter
-     */
-    private $htmlConverter;
-
-    /**
      * @var array
      */
     protected $attributes = [
@@ -33,9 +28,8 @@ class EditorJs extends Textarea implements InputProviderInterface
     /**
      * Constructor
      */
-    public function __construct(HtmlConverter $htmlConverter, $name = null, iterable $options = [])
+    public function __construct(private readonly HtmlConverter $htmlConverter, $name = null, iterable $options = [])
     {
-        $this->htmlConverter = $htmlConverter;
         parent::__construct($name, $options);
     }
 
@@ -69,6 +63,7 @@ class EditorJs extends Textarea implements InputProviderInterface
      * Set value for the element
      * Can accept JSON (from EditorJS), HTML, or plain text (from database)
      */
+    #[\Override]
     public function setValue($value)
     {
         if ($value && is_string($value)) {
@@ -92,7 +87,7 @@ class EditorJs extends Textarea implements InputProviderInterface
     {
         try {
             return $this->htmlConverter->convertHtmlToJson($content);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return $this->fallbackConversion($content);
         }
     }
@@ -148,6 +143,7 @@ class EditorJs extends Textarea implements InputProviderInterface
     /**
      * Get value for the element
      */
+    #[\Override]
     public function getValue()
     {
         return parent::getValue();

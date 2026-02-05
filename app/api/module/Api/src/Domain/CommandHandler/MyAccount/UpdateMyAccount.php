@@ -208,6 +208,7 @@ final class UpdateMyAccount extends AbstractUserCommandHandler implements
         $this->getRepo('Address')->save($addressEntity);
         return $addressEntity;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

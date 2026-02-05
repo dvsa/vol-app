@@ -29,9 +29,7 @@ class GetGrantabilityTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
     public function testHandleQuery($isGrantable, $canBeGranted, $expected)
     {
         $query = QryClass::create(['id' => 100011]);
@@ -57,7 +55,7 @@ class GetGrantabilityTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQuery()
+    public static function dpTestHandleQuery()
     {
         return [
             [

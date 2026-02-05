@@ -31,9 +31,7 @@ class LvaOverviewTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesEmptySectionsVariable()
     {
         // Setup
@@ -43,10 +41,8 @@ class LvaOverviewTest extends MockeryTestCase
         $this->assertIsArray($this->sut->getVariable(static::SECTIONS_VARIABLE_NAME));
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesEmptySectionsVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesEmptySectionsVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection(): LvaOverviewSection
     {
         // Setup
@@ -59,40 +55,32 @@ class LvaOverviewTest extends MockeryTestCase
         return $sectionsVariable[0];
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithRef(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(static::FIRST_SECTION_ARRAY_KEY, $section->ref);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithMode(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(static::COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY[static::FIRST_SECTION_ARRAY_KEY], $section->mode);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithData(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(array_merge(static::DATA, static::SECTION_NUMBER_DATA), $section->data);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesEmptySectionsVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesEmptySectionsVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection(): LvaOverviewSection
     {
         // Setup
@@ -105,20 +93,16 @@ class LvaOverviewTest extends MockeryTestCase
         return $overviewSection;
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithRef(LvaOverviewSection $overviewSection)
     {
         // Assert
         $this->assertEquals(static::SECTION_REFERENCE, $overviewSection->ref);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithData(LvaOverviewSection $overviewSection)
     {
         // Assert

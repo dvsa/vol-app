@@ -15,7 +15,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class BrReasonForVarTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrReasonForVar::class;
 
     public function testGetQuery()
     {

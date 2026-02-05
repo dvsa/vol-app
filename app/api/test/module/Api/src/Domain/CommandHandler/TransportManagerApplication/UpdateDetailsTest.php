@@ -24,9 +24,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerApplication\UpdateDetails
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerApplication\UpdateDetails::class)]
 class UpdateDetailsTest extends AbstractCommandHandlerTestCase
 {
     protected $loggedInUser;
@@ -51,6 +49,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -75,9 +74,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider commandDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandDataProvider')]
     public function testHandleCommand($commandData)
     {
         $command = Command::create($commandData);
@@ -151,7 +148,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         $commands = [
             'valid_command' => [
@@ -371,7 +368,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         return $commands;
     }
 
-    public function dpHandleCommandWithLgvAcquiredRightsReferenceNumber()
+    public static function dpHandleCommandWithLgvAcquiredRightsReferenceNumber()
     {
         return [
             'NI' => [
@@ -385,9 +382,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithLgvAcquiredRightsReferenceNumber
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithLgvAcquiredRightsReferenceNumber')]
     public function testHandleCommandWithLgvAcquiredRightsReferenceNumber($isNi, $expectedQualificationType)
     {
         $commandData = [
@@ -492,9 +487,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Transport Manager Application ID 863 updated'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithLgvAcquiredRightsReferenceNumber
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithLgvAcquiredRightsReferenceNumber')]
     public function testHandleCommandWithLgvAcquiredRightsReferenceNumberWithCheckDisabled($isNi, $expectedQualificationType)
     {
         $commandData = [
@@ -587,9 +580,7 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Transport Manager Application ID 863 updated'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithLgvAcquiredRightsReferenceNumber
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithLgvAcquiredRightsReferenceNumber')]
     public function testHandleCommandWithLgvAcquiredRightsReferenceNumberWithMissingStatusUpdateOn($isNi, $expectedQualificationType)
     {
         $commandData = [

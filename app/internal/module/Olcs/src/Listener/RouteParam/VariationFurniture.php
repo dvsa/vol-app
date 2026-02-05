@@ -49,7 +49,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
-            [$this, 'onVariationFurniture'],
+            $this->onVariationFurniture(...),
             $priority
         );
     }

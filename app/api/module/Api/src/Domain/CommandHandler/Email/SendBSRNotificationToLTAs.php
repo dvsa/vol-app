@@ -123,6 +123,7 @@ final class SendBSRNotificationToLTAs extends AbstractEmailHandler implements Em
         ];
     }
 
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return 'N';

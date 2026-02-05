@@ -30,9 +30,7 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -42,10 +40,8 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfChangeExpiredPasswordCommandHandler(): void
     {
         // Setup

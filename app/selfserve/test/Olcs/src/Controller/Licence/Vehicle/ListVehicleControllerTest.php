@@ -132,9 +132,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      */
     protected $serviceLocatorMock;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionIsCallable(): void
     {
         $this->setUpSut();
@@ -142,9 +140,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'indexAction']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionIsCallable(): void
     {
         $this->setUpSut();
@@ -152,9 +148,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'postAction']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWhenNoFormatIsProvided(): void
     {
         // Setup
@@ -171,9 +165,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided(): void
     {
         // Setup
@@ -189,9 +181,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWithLicence(): void
     {
         // Setup
@@ -214,11 +204,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertSame($licenceData, $result->getVariables()['licence'] ?? null);
     }
 
-    /**
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     *
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvAction(): void
     {
         // Setup
@@ -233,11 +220,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayHasKey('exportCurrentAndRemovedCsvAction', $result->getVariables());
     }
 
-    /**
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     *
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithFormatQueryParameter(): void
     {
         // Setup
@@ -259,9 +243,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithIncludeRemovedQueryParameter(): void
     {
         // Setup
@@ -283,9 +265,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTableQuery(): void
     {
         // Setup
@@ -312,9 +292,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenNoPageIsSetOnARequest(): void
     {
         // Setup
@@ -333,9 +311,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenEmptyPageIsSetOnARequest(): void
     {
         // Setup
@@ -357,7 +333,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      *
      * @psalm-return array{'title when table total not equal to one': list{2, 'licence.vehicle.list.section.removed.header.title.plural'}, 'title when table total is one': list{1, 'licence.vehicle.list.section.removed.header.title.singular'}}
      */
-    public function setUpRemovedTableTitleData(): array
+    public static function setUpRemovedTableTitleData(): array
     {
         return [
             'title when table total not equal to one' => [2, 'licence.vehicle.list.section.removed.header.title.plural'],
@@ -365,11 +341,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider setUpRemovedTableTitleData
-     *
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('setUpRemovedTableTitleData')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRespondsInHtmlFormatWithCorrectRemovedVehicleTableTitle(int $total, string $expectedTranslationKey): void
     {
         // Setup
@@ -392,11 +365,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedTitle, $title);
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetShowRemovedVehiclesToFalseWhenALicenceHasNoRemovedVehicles(): void
     {
         // Setup
@@ -413,11 +383,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($matcher->matches((array) $result->getVariables()), 'Expected result variables to have a key "showRemovedVehicles" with a value of false');
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -434,11 +401,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($matcher->matches((array) $result->getVariables()), 'Expected result variables to have a key "showRemovedVehicles" with a value of true');
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetsExpandRemovedVehiclesWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -455,11 +419,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertTrue($result->getVariable('showRemovedVehiclesExpanded'));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionDoesNotSetExpandRemovedVehiclesWhenQueryParamIsSetAndThereAreNoRemovedVehicles(): void
     {
         // Setup
@@ -476,9 +437,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('showRemovedVehiclesExpanded', $result->getVariables());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionToggleUrlIncludesFragmentWhenQueryParamIsNotSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -499,11 +458,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
     }
 
-    /**
-     * @test
-     *
-     * @depends indexActionIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionToggleUrlDoesNotIncludeFragmentWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
@@ -528,7 +484,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function buttonTranslationKeyTypes(): array
+    public static function buttonTranslationKeyTypes(): array
     {
         return [
             'title' => ['title'],
@@ -536,9 +492,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenNoRemovedVehicles(): void
     {
         // Setup
@@ -554,9 +508,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenSearching(): void
     {
         // Setup
@@ -571,9 +523,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetToggleRemovedVehiclesActionToShowRemovedVehiclesWhenNoQueryParamIsSet(): void
     {
         // Setup
@@ -592,9 +542,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetToggleRemovedVehiclesActionToHideRemovedVehiclesWhenQueryParamIsSet(): void
     {
         // Setup
@@ -612,11 +560,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertStringNotContainsString($notExpectedString, $variables['toggleRemovedAction'] ?? '', $message);
     }
 
-    /**
-     *
-     * @test
-     * @dataProvider buttonTranslationKeyTypes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buttonTranslationKeyTypes')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionSetToggleRemovedVehiclesActionTitleWithRelevantMessageWhenQueryParamIsSetAndLicenceHasRemovedVehicles(string $type): void
     {
         // Setup
@@ -637,11 +582,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertEquals($expectedTitle, $variables[$expectedKey], sprintf('Expected result variable "%s" to have a value of "%s"', $expectedKey, $expectedTitle));
     }
 
-    /**
-     *
-     * @test
-     * @dataProvider buttonTranslationKeyTypes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('buttonTranslationKeyTypes')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionDoesNotSetToggleRemovedVehiclesActionTitleWhenQueryParamIsNotSetAndLicenceDoesNotHaveRemovedVehicles(string $type): void
     {
         // Setup
@@ -663,7 +605,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidInputDataProvider(): array
+    public static function invalidInputDataProvider(): array
     {
         return [
             // $inputSetName => [$input, $expectedValidationErrorMessage]
@@ -681,7 +623,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function validInputDataProvider(): array
+    public static function validInputDataProvider(): array
     {
         return [
             // $inputSetName => [$input, $expectedValidationErrorMessage]
@@ -697,13 +639,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidInputDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionValidatesInputWhenInvalidReturnsRedirectResponse(array $input): void
     {
         // Setup
@@ -722,14 +660,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     *
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidInputDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionValidatesInputWhenInvalidFlashesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
@@ -745,14 +678,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider invalidInputDataProvider
-     *
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidInputDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionValidatesInputWhenInvalidTranslatesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
@@ -769,13 +697,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     *
-     * @depends indexActionIsCallable
-     *
-     * @dataProvider validInputDataProvider
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('indexActionIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validInputDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionValidatesInputWhenValidReturnsViewModel(array $input): void
     {
         // Setup
@@ -791,9 +715,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $response);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsRemovedVehiclesTableExcludingActiveVehicles(): void
     {
         // Setup
@@ -808,9 +730,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsRemovedVehiclesTableSortedByDefault(): void
     {
         // Setup
@@ -825,9 +745,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsRemovedVehiclesTableOrderedByDefault(): void
     {
         // Setup
@@ -842,9 +760,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsRemovedVehiclesTableLimitsTo10ByDefault(): void
     {
         // Setup
@@ -859,9 +775,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsRemovedVehiclesTableSetsPageToFirstPageByDefault(): void
     {
         // Setup
@@ -876,9 +790,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxValidValuesRunsCommand(): void
     {
         // Setup
@@ -900,9 +812,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->postAction($request, $routeMatch);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxInvalidValuesReturnsIndexActionWithErrors(): void
     {
         // Setup
@@ -922,9 +832,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionHidesRemovedVehiclesWhenSearchingAndLicenceHasRemovedVehicles(): void
     {
         // Setup

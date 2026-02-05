@@ -23,7 +23,7 @@ class TransportManagersTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getCase();
 
@@ -80,6 +80,7 @@ class TransportManagersTest extends AbstractSubmissionSectionTest
         ];
     }
 
+    #[\Override]
     protected function mockSetRepos($sut): void
     {
         $mockTmLicenceRepo = m::mock(TmLicenceRepo::class);

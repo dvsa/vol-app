@@ -17,9 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetCount
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCount')]
     public function testGetCount($emissionsCategoryId)
     {
         $combinedRangeSize = 160;
@@ -58,7 +56,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetCount()
+    public static function dpTestGetCount()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO6_REF],

@@ -16,12 +16,12 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests filter
      *
-     * @dataProvider provideFilter
      *
      * @param $submissionDate
      * @param $rawData
      * @param $expectedData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($submissionDate, $rawData, $expectedData)
     {
         $sut = new SubmissionResult();
@@ -52,7 +52,7 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideFilter()
+    public static function provideFilter()
     {
         $submissionDate = '2015-12-25 00:00:00';
         $submissionDateTime = new \DateTime($submissionDate);

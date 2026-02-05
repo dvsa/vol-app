@@ -61,9 +61,7 @@ class IrhpGeneratorTest extends MockeryTestCase
         $this->sut->generate();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($isCertificateOfRoadworthiness, $expectedGuidanceDeclarationTitle)
     {
         $operatorName = 'operator name';
@@ -147,7 +145,7 @@ class IrhpGeneratorTest extends MockeryTestCase
         $this->sut->generate();
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [false, 'permits.snapshot.declaration.title'],

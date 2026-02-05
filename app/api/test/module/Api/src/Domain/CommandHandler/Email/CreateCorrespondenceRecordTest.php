@@ -39,6 +39,7 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -54,9 +55,7 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
     }
 
 
-    /**
-     * @dataProvider usersProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('usersProvider')]
     public function testHandleCommand($email1, $email2, $times)
     {
         $data = [
@@ -152,7 +151,7 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function usersProvider()
+    public static function usersProvider()
     {
         return [
             ['foo1@bar.com', 'foo2@bar.com', 2],

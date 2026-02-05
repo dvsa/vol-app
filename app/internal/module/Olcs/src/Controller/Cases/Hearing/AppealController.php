@@ -103,6 +103,7 @@ class AppealController extends AbstractInternalController implements CaseControl
      *
      * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);

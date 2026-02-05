@@ -52,9 +52,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         $this->noOfPermitsGenerator = new NoOfPermitsGenerator($noOfPermitsFactory, $this->noOfPermitsTextFactory);
     }
 
-    /**
-     * @dataProvider dpGenerateOneTextbox
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateOneTextbox')]
     public function testGenerateOneTextbox(
         $permitUsageSelection,
         $cabotageSelection,
@@ -90,7 +88,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerateOneTextbox()
+    public static function dpGenerateOneTextbox()
     {
         return [
             'single, standard only, not associated with bilateral only application group' => [
@@ -186,9 +184,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateTwoTextboxes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateTwoTextboxes')]
     public function testGenerateTwoTextboxes($permitUsageSelection, $required, $expectedText1, $expectedText2)
     {
         $this->irhpPermitApplication->shouldReceive('getBilateralPermitUsageSelection')
@@ -239,7 +235,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerateTwoTextboxes()
+    public static function dpGenerateTwoTextboxes()
     {
         return [
             'single' => [

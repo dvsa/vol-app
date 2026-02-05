@@ -32,9 +32,7 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected)
     {
         $this->sut->setData('SiPenaltyType', $input);

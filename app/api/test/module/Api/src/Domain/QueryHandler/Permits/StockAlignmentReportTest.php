@@ -33,9 +33,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($ranges, $candidatePermits, $expected)
     {
         $stockId = 99;
@@ -78,7 +76,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
         $this->assertEquals(['rows' => $expected], $result);
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery()
     {
         $euro5Desc = 'Euro 5';
         $euro5 = new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF);

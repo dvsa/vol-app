@@ -8,11 +8,11 @@ use Olcs\Data\Mapper\Submission as Sut;
 class SubmissionTest extends MockeryTestCase
 {
     /**
-     * @dataProvider assignedDateDataProvider
      *
      * @param $expected
      * @param $inData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('assignedDateDataProvider')]
     public function testReadOnlyFields($expected, $inData)
     {
         $actual = Sut::mapFromResult($inData);
@@ -30,7 +30,7 @@ class SubmissionTest extends MockeryTestCase
         $this->assertEquals((new \DateTime('now'))->format('Y-m-d'), $actual['fields']['assignedDate']);
     }
 
-    public function assignedDateDataProvider()
+    public static function assignedDateDataProvider()
     {
 
         return [

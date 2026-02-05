@@ -57,7 +57,7 @@ class ApplicationFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
-            [$this, 'onApplicationFurniture'],
+            $this->onApplicationFurniture(...),
             $priority
         );
     }

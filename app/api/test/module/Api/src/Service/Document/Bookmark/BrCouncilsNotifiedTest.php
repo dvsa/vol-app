@@ -15,7 +15,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class BrCouncilsNotifiedTest extends \PHPUnit\Framework\TestCase
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrCouncilsNotified::class;
 
     public function testGetQuery()
     {

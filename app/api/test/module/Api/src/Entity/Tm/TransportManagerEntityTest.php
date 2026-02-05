@@ -249,9 +249,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame(12, $total);
     }
 
-    /**
-     * @dataProvider dpTestHasValidSiGbQualification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasValidSiGbQualification')]
     public function testHasValidSiGbQualification($expected, array $qualificationTypes)
     {
         $entity = new Entity();
@@ -265,7 +263,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiGbQualification());
     }
 
-    public function dpTestHasValidSiGbQualification()
+    public static function dpTestHasValidSiGbQualification()
     {
         return [
             [false, []],
@@ -277,9 +275,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestHasValidSiNiQualification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasValidSiNiQualification')]
     public function testHasValidSiNiQualification($expected, array $qualificationTypes)
     {
         $entity = new Entity();
@@ -293,7 +289,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiNiQualification());
     }
 
-    public function dpTestHasValidSiNiQualification()
+    public static function dpTestHasValidSiNiQualification()
     {
         return [
             [false, []],
@@ -305,9 +301,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLgvAcquiredRightsQualificationReturnsNull
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsNull')]
     public function testGetLgvAcquiredRightsQualificationReturnsNull(array $qualificationTypes)
     {
         $entity = new Entity();
@@ -321,7 +315,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertNull($entity->getLgvAcquiredRightsQualification());
     }
 
-    public function dpGetLgvAcquiredRightsQualificationReturnsNull()
+    public static function dpGetLgvAcquiredRightsQualificationReturnsNull()
     {
         return [
             [[]],
@@ -329,9 +323,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLgvAcquiredRightsQualificationReturnsTmQualification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsTmQualification')]
     public function testGetLgvAcquiredRightsQualificationReturnsTmQualification($expected, array $qualificationTypes)
     {
         $entity = new Entity();
@@ -348,7 +340,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals($expected, $lgvAcquiredRightsQualification->getQualificationType()->getId());
     }
 
-    public function dpGetLgvAcquiredRightsQualificationReturnsTmQualification()
+    public static function dpGetLgvAcquiredRightsQualificationReturnsTmQualification()
     {
         return [
             [
@@ -362,9 +354,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasLgvAcquiredRightsQualification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLgvAcquiredRightsQualification')]
     public function testHasLgvAcquiredRightsQualification($expected, array $qualificationTypes)
     {
         $entity = new Entity();
@@ -378,7 +368,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasLgvAcquiredRightsQualification());
     }
 
-    public function dpHasLgvAcquiredRightsQualification()
+    public static function dpHasLgvAcquiredRightsQualification()
     {
         return [
             [false, []],
@@ -388,9 +378,7 @@ class TransportManagerEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
     public function testIsSiQualificationRequiredNotSi($niFlag)
     {
         $entity = new Entity();
@@ -423,9 +411,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame(false, $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
     public function testIsSiQualificationRequiredAppSi($niFlag)
     {
         $entity = new Entity();
@@ -458,9 +444,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
     public function testIsSiQualificationRequiredLic($niFlag)
     {
         $entity = new Entity();
@@ -493,9 +477,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
     public function testIsSiQualificationRequiredGbSi($niFlag)
     {
         $entity = new Entity();
@@ -528,7 +510,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    public function dpNiFlag()
+    public static function dpNiFlag()
     {
         return [
             ['N'],
@@ -587,9 +569,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals(111, $entity->getContextValue());
     }
 
-    /**
-     * @dataProvider dpNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
     public function testIsSiQualificationRequiredOnVariation($niFlag)
     {
         $entity = new Entity();
@@ -631,9 +611,7 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequiredOnVariation($niFlag));
     }
 
-    /**
-     * @dataProvider dpHasReputeCheckDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasReputeCheckDataProvider')]
     public function testHasReputeCheckAddress(
         ?string $forename,
         ?string $familyName,
@@ -678,7 +656,7 @@ class TransportManagerEntityTest extends EntityTester
     /**
      * Data provider for testHasReputeCheckAddress
      */
-    public function dpHasReputeCheckDataProvider(): array
+    public static function dpHasReputeCheckDataProvider(): array
     {
         $forename = 'forename';
         $familyName = 'family name';

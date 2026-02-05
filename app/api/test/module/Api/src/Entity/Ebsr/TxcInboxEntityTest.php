@@ -27,11 +27,11 @@ class TxcInboxEntityTest extends EntityTester
     /**
      * Tests create
      *
-     * @dataProvider validDataProvider
      *
      * @param $localAuthority
      * @param $organisation
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validDataProvider')]
     public function testCreate($localAuthority, $organisation)
     {
         $variationNo = 999;
@@ -55,7 +55,7 @@ class TxcInboxEntityTest extends EntityTester
      *
      * @return array
      */
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             [new LocalAuthorityEntity(), null],
@@ -76,11 +76,11 @@ class TxcInboxEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider createValidationErrorProvider
      *
      * @param $localAuthority
      * @param $organisation
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('createValidationErrorProvider')]
     public function testCreateValidationError($localAuthority, $organisation)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
@@ -97,7 +97,7 @@ class TxcInboxEntityTest extends EntityTester
      *
      * @return array
      */
-    public function createValidationErrorProvider()
+    public static function createValidationErrorProvider()
     {
         return [
             [new LocalAuthorityEntity(), new OrganisationEntity()],

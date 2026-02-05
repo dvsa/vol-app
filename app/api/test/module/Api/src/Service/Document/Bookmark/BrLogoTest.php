@@ -23,9 +23,7 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_null($bookmark->getQuery([])));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $image)
     {
         $bookmark = new BrLogo();
@@ -63,7 +61,7 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [

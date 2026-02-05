@@ -37,7 +37,6 @@ class ViOcViewTest extends \PHPUnit\Framework\TestCase
         $ref = new \ReflectionObject($this->entity);
         foreach (array_keys($this->testData) as $property) {
             $refProperty = $ref->getProperty($property);
-            $refProperty->setAccessible(true);
             $refProperty->setValue($this->entity, $this->testData[$property]);
         }
     }
@@ -45,7 +44,7 @@ class ViOcViewTest extends \PHPUnit\Framework\TestCase
     public function testGetters()
     {
         foreach ($this->testData as $property => $value) {
-            $getter = 'get' . ucfirst($property);
+            $getter = 'get' . ucfirst((string) $property);
             $this->assertEquals($value, $this->entity->$getter());
         }
     }

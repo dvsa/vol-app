@@ -107,9 +107,7 @@ class ClientTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetCompanyProfileErrorResponse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCompanyProfileErrorResponse')]
     public function testGetCompanyProfileErrorResponse($statusCode, $content, $errClass, $errMsg)
     {
         //  expect
@@ -129,7 +127,7 @@ class ClientTest extends MockeryTestCase
         $this->sut->getCompanyProfile(self::COMPANY_NO);
     }
 
-    public function dpTestGetCompanyProfileErrorResponse()
+    public static function dpTestGetCompanyProfileErrorResponse()
     {
         return [
             [

@@ -10,9 +10,7 @@ use Dvsa\Olcs\Snapshot\Service\Formatter\Address;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected)
     {
         $this->assertEquals($expected, Address::format($data, $column));
@@ -23,7 +21,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         $address = new AddressEntity();
         $address->setAddressLine1('foo');

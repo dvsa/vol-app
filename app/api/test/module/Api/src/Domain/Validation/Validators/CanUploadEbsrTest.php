@@ -28,9 +28,8 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
 
     /**
      * Test that the result of isValid is the same as hasActiveLicences, whether the result is true or false
-     *
-     * @dataProvider hasActiveLicencesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasActiveLicencesProvider')]
     public function testIsValid($hasActiveLicences)
     {
         $entityId = 111;
@@ -50,7 +49,7 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
     /**
      * @return array
      */
-    public function hasActiveLicencesProvider()
+    public static function hasActiveLicencesProvider()
     {
         return [
             [true],

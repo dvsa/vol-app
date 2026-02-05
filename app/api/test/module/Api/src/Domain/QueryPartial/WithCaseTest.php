@@ -23,9 +23,7 @@ class WithCaseTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery($expectedDql, $arguments)
     {
         $this->sut->modifyQuery($this->qb, $arguments);
@@ -35,7 +33,7 @@ class WithCaseTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['SELECT a, c FROM foo a LEFT JOIN a.case c', []],

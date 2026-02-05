@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSiCategoryType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSiCategoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

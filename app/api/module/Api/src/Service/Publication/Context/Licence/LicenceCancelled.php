@@ -13,9 +13,9 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationSection as PublicationSectionEnt
  */
 final class LicenceCancelled extends AbstractContext
 {
-    public const LIC_TERMINATED = 'Licence terminated WEF ';
-    public const LIC_SURRENDERED = 'Licence surrendered WEF ';
-    public const LIC_CNS = 'Licence not continued WEF ';
+    public const string LIC_TERMINATED = 'Licence terminated WEF ';
+    public const string LIC_SURRENDERED = 'Licence surrendered WEF ';
+    public const string LIC_CNS = 'Licence not continued WEF ';
 
     /**
      * @var string $date

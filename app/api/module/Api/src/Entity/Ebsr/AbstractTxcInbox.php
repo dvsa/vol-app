@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

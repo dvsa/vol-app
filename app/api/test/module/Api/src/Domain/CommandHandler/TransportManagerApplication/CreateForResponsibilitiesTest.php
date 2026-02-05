@@ -47,6 +47,7 @@ class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [TransportManagerApplicationEntity::STATUS_POSTAL_APPLICATION];

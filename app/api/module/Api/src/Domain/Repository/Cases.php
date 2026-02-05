@@ -172,6 +172,7 @@ class Cases extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function buildDefaultListQuery(
         \Doctrine\ORM\QueryBuilder $qb,
         \Dvsa\Olcs\Transfer\Query\QueryInterface $query,

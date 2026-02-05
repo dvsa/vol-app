@@ -55,9 +55,7 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpEmissionsCategories
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategories')]
     public function testCreateOneOrMoreRequired($emissionsCategoryId)
     {
         $permitsRequired = 3;
@@ -100,9 +98,7 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         $this->apggEmissionsCatCandidatePermitsCreator->createIfRequired($this->irhpApplication, $emissionsCategoryId);
     }
 
-    /**
-     * @dataProvider dpEmissionsCategories
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEmissionsCategories')]
     public function testZeroRequired($emissionsCategoryId)
     {
         $permitsRequired = 0;
@@ -114,7 +110,7 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         $this->apggEmissionsCatCandidatePermitsCreator->createIfRequired($this->irhpApplication, $emissionsCategoryId);
     }
 
-    public function dpEmissionsCategories()
+    public static function dpEmissionsCategories()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],

@@ -4,9 +4,7 @@ namespace Dvsa\OlcsTest\Api\Entity\View;
 
 use Dvsa\Olcs\Api\Entity\View\VehicleHistoryView;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\View\VehicleHistoryView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\View\VehicleHistoryView::class)]
 class VehicleHistoryViewTest extends \PHPUnit\Framework\TestCase
 {
     /** @var VehicleHistoryView */
@@ -36,11 +34,10 @@ class VehicleHistoryViewTest extends \PHPUnit\Framework\TestCase
 
         // test all teh getters
         foreach ($this->testData as $property => $value) {
-            $methodName = ucfirst($property);
+            $methodName = ucfirst((string) $property);
 
             if (!method_exists($this->sut, 'set' . $methodName)) {
                 $refProperty = $ref->getProperty($property);
-                $refProperty->setAccessible(true);
                 $refProperty->setValue($this->sut, $value);
             } else {
                 $this->sut->{'set' . $methodName}($value);

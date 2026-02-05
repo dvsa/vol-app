@@ -9,9 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Lva\AbstractGoodsVehiclesExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Lva\AbstractGoodsVehiclesExport::class)]
 class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
 {
     /** @var  DummyAbstractGoodsVehiclesExport */

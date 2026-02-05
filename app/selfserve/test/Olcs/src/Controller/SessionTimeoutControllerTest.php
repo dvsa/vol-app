@@ -32,9 +32,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     protected Redirect $redirectHelperMock;
     protected SessionTimeoutController $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionIsCallable(): void
     {
         $this->setUpSut();
@@ -42,9 +40,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertTrue(method_exists($this->sut, 'indexAction') && is_callable($this->sut->indexAction(...)));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelIfIdentityIsAnonymous(): void
     {
         $this->setUpSut();
@@ -60,9 +56,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionReturnsViewModelIfIdentityIsNull(): void
     {
         $this->setUpSut();
@@ -76,9 +70,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionLogsOutUserIfLoggedIn(): void
     {
         $this->setUpSut();
@@ -100,11 +92,8 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Response::class, $response);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider dpIdentityProviderClass
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIdentityProviderClass')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function indexActionRedirectsUserIfLoggedIn(string $identityProviderClass): void
     {
         $this->setUpSut();

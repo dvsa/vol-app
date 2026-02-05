@@ -28,6 +28,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * Init references
      */
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -56,8 +57,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
      * @param string $goodsOrPsv
      * @param string $mlh
      * @param bool $expected
-     * @dataProvider mlhProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mlhProvider')]
     public function testHandleCommandAllParams($goodsOrPsv, $mlh, $expected)
     {
         $command = Cmd::create(
@@ -103,7 +104,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function mlhProvider()
+    public static function mlhProvider()
     {
         return [
             ['lcat_gv', 'Y', true],

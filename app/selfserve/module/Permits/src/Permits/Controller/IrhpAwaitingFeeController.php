@@ -80,6 +80,7 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    #[\Override]
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['DeclineButton'])) {
@@ -96,6 +97,7 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
      *
      * @return \Common\Form\Form
      */
+    #[\Override]
     public function alterForm($form)
     {
         if (!$this->data[IrhpAppDataSource::DATA_KEY]['hasOutstandingFees']) {
@@ -114,6 +116,7 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();

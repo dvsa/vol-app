@@ -41,9 +41,7 @@ class VariationControllerTraitTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetSectionsForView
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSectionsForView')]
     public function testGetSectionsForView(
         $goodsOrPsv,
         $vehicleTypeId,
@@ -137,7 +135,7 @@ class VariationControllerTraitTest extends MockeryTestCase
         $this->assertEquals($expected, $response);
     }
 
-    public function dpGetSectionsForView()
+    public static function dpGetSectionsForView()
     {
         return [
             [

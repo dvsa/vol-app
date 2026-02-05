@@ -10,9 +10,7 @@ use RuntimeException;
 
 class CookieStateTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($isValid): void
     {
         $sut = new CookieState($isValid, m::mock(Preferences::class));
@@ -28,7 +26,7 @@ class CookieStateTest extends MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): array
     {
         return [
             [true],

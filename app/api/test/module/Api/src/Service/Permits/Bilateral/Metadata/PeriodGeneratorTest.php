@@ -51,9 +51,7 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($irhpPermitApplication)
     {
         $fieldsResponse = [
@@ -87,7 +85,7 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [m::mock(IrhpPermitApplication::class)],

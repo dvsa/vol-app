@@ -41,9 +41,7 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($isOwner, $expected)
     {
         $entity = m::mock(Application::class);
@@ -60,7 +58,7 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

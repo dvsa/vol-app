@@ -25,11 +25,11 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -42,11 +42,11 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidWithIdentifier($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -57,7 +57,7 @@ class CanAccessDocumentWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

@@ -22,9 +22,7 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Application
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Application::class)]
 class ApplicationTest extends RepositoryTestCase
 {
     public const APP_ID = 8001;

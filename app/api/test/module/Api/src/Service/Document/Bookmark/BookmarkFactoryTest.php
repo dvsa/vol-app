@@ -34,9 +34,7 @@ class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider allBookmarksProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('allBookmarksProvider')]
     public function testGetClassNameFromToken($token, $expected)
     {
         $sut = new BookmarkFactory();
@@ -51,7 +49,7 @@ class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
      * where they exist in the Dvsa\OlcsTest\Api\Service\Document\Bookmark
      * namespace.
      */
-    public function allBookmarksProvider()
+    public static function allBookmarksProvider()
     {
         return [
             ['AandD_stored_publication_date', 'AandDStoredPublicationDate'],

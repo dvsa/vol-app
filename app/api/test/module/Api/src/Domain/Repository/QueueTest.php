@@ -259,9 +259,8 @@ class QueueTest extends RepositoryTestCase
     /**
      * @param array $results
      * @param bool  $expected
-     *
-     * @dataProvider dpIsItemInQueue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsItemInQueue')]
     public function testIsItemInQueue($results, $expected)
     {
         $qb = $this->createMockQb('BLAH');
@@ -285,7 +284,7 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpIsItemInQueue()
+    public static function dpIsItemInQueue()
     {
         return [
             'exists in the queue' => [['RESULTS'], true],

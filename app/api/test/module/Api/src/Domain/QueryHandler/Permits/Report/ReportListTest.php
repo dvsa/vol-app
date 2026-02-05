@@ -9,18 +9,14 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
 class ReportListTest extends QueryHandlerTestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleQueryIsCallable()
     {
         $this->assertIsCallable($this->sut->handleQuery(...));
     }
 
-    /**
-     * @test
-     * @depends handleQueryIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleQueryReturnsArrayFormat()
     {
         $result = $this->sut->handleQuery(Qry::create([]));
@@ -30,20 +26,16 @@ class ReportListTest extends QueryHandlerTestCase
         $this->assertArrayHasKey('count', $result);
     }
 
-    /**
-     * @test
-     * @depends handleQueryReturnsArrayFormat
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryReturnsArrayFormat')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleQueryReturnsListOfAvailableReportsFromPermitReportService()
     {
         $result = $this->sut->handleQuery(Qry::create([]));
         $this->assertEquals(PermitsReportService::REPORT_TYPES, $result['result']);
     }
 
-    /**
-     * @test
-     * @depends handleQueryReturnsListOfAvailableReportsFromPermitReportService
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleQueryReturnsListOfAvailableReportsFromPermitReportService')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleQueryReturnsValidCountOfAvailableReportsFromPermitReportService()
     {
         $result = $this->sut->handleQuery(Qry::create([]));

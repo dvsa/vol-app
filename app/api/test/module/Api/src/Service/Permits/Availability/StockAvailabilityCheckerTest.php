@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockAvailabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestHasAvailability
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
     public function testHasAvailability($stockAvailabilityCount, $expected)
     {
         $irhpPermitStockId = 48;
@@ -34,7 +32,7 @@ class StockAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestHasAvailability()
+    public static function dpTestHasAvailability()
     {
         return [
             [0, false],

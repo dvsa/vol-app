@@ -13,9 +13,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Domain\CommandHandler\DataDvaNiExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataDvaNiExport::class)]
 class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
 {
     public $mockDbalResult;

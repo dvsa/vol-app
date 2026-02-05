@@ -10,6 +10,7 @@ class ProcessInsolvencySQSQueueCommand extends AbstractSQSCommand
 {
     protected static $defaultName = 'queue:process-insolvency';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Processes the Process Insolvency queue items.')
@@ -22,6 +23,7 @@ class ProcessInsolvencySQSQueueCommand extends AbstractSQSCommand
         return ProcessInsolvency::create([]);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

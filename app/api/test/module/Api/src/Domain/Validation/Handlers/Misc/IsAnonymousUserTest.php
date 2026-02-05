@@ -27,10 +27,10 @@ class IsAnonymousUserTest extends AbstractHandlerTestCase
     /**
      * Tests whether the user is anonymous
      *
-     * @dataProvider isAnonymousUserProvider
      *
      * @param bool $isAnonymous whether the user is anonymous
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isAnonymousUserProvider')]
     public function testIsAnonymousUser($isAnonymous)
     {
         /** @var CommandInterface $dto */
@@ -49,7 +49,7 @@ class IsAnonymousUserTest extends AbstractHandlerTestCase
      *
      * @return array
      */
-    public function isAnonymousUserProvider()
+    public static function isAnonymousUserProvider()
     {
         return[
             [true],

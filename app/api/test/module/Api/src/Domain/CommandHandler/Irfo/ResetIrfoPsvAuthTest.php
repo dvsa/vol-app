@@ -28,6 +28,7 @@ class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -45,10 +46,10 @@ class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand for all status's
      *
-     * @dataProvider statusProvider
      * @param $status
      * @param $newStatus
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testHandleCommandOtherStatus($status, $newStatus)
     {
         $id = 99;
@@ -103,7 +104,7 @@ class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
      * Data provider, current status and new status expected to be set by resetting
      * @return array
      */
-    public function statusProvider()
+    public static function statusProvider()
     {
         return [
             [IrfoPsvAuthEntity::STATUS_REFUSED, IrfoPsvAuthEntity::STATUS_PENDING],

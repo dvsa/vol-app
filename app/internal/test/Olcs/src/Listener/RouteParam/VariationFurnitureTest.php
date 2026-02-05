@@ -50,7 +50,7 @@ class VariationFurnitureTest extends TestCase
         $events = m::mock(EventManagerInterface::class);
 
         $events->shouldReceive('attach')->once()
-            ->with('route.param.application', [$this->sut, 'onVariationFurniture'], 1)
+            ->with('route.param.application', $this->sut->onVariationFurniture(...), 1)
             ->andReturn('listener');
 
         $this->sut->attach($events);

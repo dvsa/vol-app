@@ -26,7 +26,7 @@ class BusRegMarkerTest extends TestCase
 
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$sut, 'onBusRegMarker'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'busRegId', $sut->onBusRegMarker(...), 1);
 
         $sut->attach($mockEventManager);
     }

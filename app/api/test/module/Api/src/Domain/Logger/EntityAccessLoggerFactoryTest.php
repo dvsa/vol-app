@@ -25,9 +25,7 @@ class EntityAccessLoggerFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable()
     {
         // Setup
@@ -37,9 +35,7 @@ class EntityAccessLoggerFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsInstanceOfFactoryProduct()
     {
         // Setup

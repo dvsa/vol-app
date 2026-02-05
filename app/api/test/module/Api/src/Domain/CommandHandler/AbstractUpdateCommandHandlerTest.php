@@ -24,6 +24,7 @@ abstract class AbstractUpdateCommandHandlerTest extends AbstractCommandHandlerTe
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         if ($this->sut->isRefData()) {

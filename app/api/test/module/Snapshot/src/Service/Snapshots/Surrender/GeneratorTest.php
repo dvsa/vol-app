@@ -91,9 +91,7 @@ class GeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dbLicenceType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dbLicenceType')]
     public function testGenerate($licenceType, $expected)
     {
         $licence = m::mock(Licence::class);
@@ -144,7 +142,7 @@ class GeneratorTest extends MockeryTestCase
             ->once()->with($surrender)->andReturn('signature');
     }
 
-    public function dbLicenceType()
+    public static function dbLicenceType()
     {
         return [
             [

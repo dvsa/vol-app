@@ -24,8 +24,8 @@ class StayEntityTest extends EntityTester
     /**
      * @param array $valuesForEntity          Values to set into Entity
      * @param array $expectedValuesFromEntity Expected values from Entity
-     * @dataProvider stayValuesDataProvided
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stayValuesDataProvided')]
     public function testValuesSetReturnsExpectedEntity(
         $valuesForEntity,
         $expectedValuesFromEntity
@@ -83,7 +83,7 @@ class StayEntityTest extends EntityTester
      *
      * @return array
      */
-    public function stayValuesDataProvided()
+    public static function stayValuesDataProvided()
     {
         return [
             'all values null to return null' => [

@@ -17,15 +17,13 @@ class IrhpCandidatePermitTest extends MockeryTestCase
         $this->sut = new IrhpCandidatePermit();
     }
 
-    /**
-     * @dataProvider dpMapApplicationData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapApplicationData')]
     public function testMapApplicationData($data, $expected)
     {
         $this->assertSame($expected, $this->sut->mapApplicationData($data));
     }
 
-    public function dpMapApplicationData()
+    public static function dpMapApplicationData()
     {
         return [
             [

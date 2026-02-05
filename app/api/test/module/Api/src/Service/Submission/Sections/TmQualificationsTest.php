@@ -15,7 +15,7 @@ class TmQualificationsTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getCase();
 

@@ -20,9 +20,7 @@ class SubjectAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = new SubjectAddress();
@@ -31,7 +29,7 @@ class SubjectAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             // no results

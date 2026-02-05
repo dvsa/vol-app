@@ -28,7 +28,7 @@ final class UpdateUserSelfserve extends AbstractUserCommandHandler implements
     use CacheAwareTrait;
     use ConfigAwareTrait;
 
-    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
+    public const string ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 

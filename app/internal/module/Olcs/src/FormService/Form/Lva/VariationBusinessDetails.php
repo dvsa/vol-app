@@ -21,6 +21,7 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails
         parent::__construct($formHelper, $formServiceLocator);
     }
 
+    #[\Override]
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);

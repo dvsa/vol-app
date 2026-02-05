@@ -42,6 +42,7 @@ class VariationOperatingCentres extends CommonVariationOperatingCentres
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);
@@ -57,6 +58,7 @@ class VariationOperatingCentres extends CommonVariationOperatingCentres
         $this->formHelper->remove($form, 'form-actions->cancel');
     }
 
+    #[\Override]
     protected function alterFormForPsvLicences(Form $form, array $params)
     {
         parent::alterFormForPsvLicences($form, $params);

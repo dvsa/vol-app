@@ -38,7 +38,7 @@ class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand()
     {
         return [
             [0, 'application'],
@@ -46,9 +46,7 @@ class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommand($isVariation, $uriPart)
     {
         $userId = 111;

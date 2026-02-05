@@ -16,9 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralCriteriaTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpMatches
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
     public function testMatches(
         $rangeCabotage,
         $rangeJourneyId,
@@ -42,7 +40,7 @@ class BilateralCriteriaTest extends MockeryTestCase
         );
     }
 
-    public function dpMatches()
+    public static function dpMatches()
     {
         return [
             [

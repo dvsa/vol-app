@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\DateDayMonthYear;
  */
 class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testFormat($date, $expected)
     {
         $data = ['validFrom' => $date];
@@ -22,7 +20,7 @@ class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider()
     {
         return [
             ['2018-02-01 15:10:11', '01 February 2018'],

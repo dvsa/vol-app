@@ -30,9 +30,7 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->validateStockRanges($irhpPermitStock);
     }
 
-    /**
-     * @dataProvider dpValidateStockRangesBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidateStockRangesBilateral')]
     public function testValidateStockRangesBilateral(
         $isBilateralCabotageOnly,
         $isBilateralStandardOnly,
@@ -74,7 +72,7 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->validateStockRanges($irhpPermitStock);
     }
 
-    public function dpValidateStockRangesBilateral()
+    public static function dpValidateStockRangesBilateral()
     {
         return
             [

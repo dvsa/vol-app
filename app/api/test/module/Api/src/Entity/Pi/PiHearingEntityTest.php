@@ -37,9 +37,7 @@ class PiHearingEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    /**
-     * @dataProvider dataProviderHearingBeforeAgreedDateValidate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHearingBeforeAgreedDateValidate')]
     public function testCreateValidationHearingBeforeAgreedDate($expectException, $hearingDate, $piAgreedDate)
     {
         $piEntity = m::mock(PiEntity::class);
@@ -84,9 +82,7 @@ class PiHearingEntityTest extends EntityTester
         }
     }
 
-    /**
-     * @dataProvider dataProviderHearingBeforeAgreedDateValidate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHearingBeforeAgreedDateValidate')]
     public function testUpdateValidationDecisionBeforeHearing($expectException, $hearingDate, $piAgreedDate)
     {
         $sut = $this->instantiate($this->entityClass);
@@ -193,9 +189,9 @@ class PiHearingEntityTest extends EntityTester
     /**
      * test update with different adjourned dates to also test date processing
      *
-     * @dataProvider adjournedDateProvider
      * @param string|null $adjournedDate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('adjournedDateProvider')]
     public function testUpdateWithAdjournedOrCancelled($adjournedDate)
     {
         $piEntity = m::mock(PiEntity::class);
@@ -318,7 +314,7 @@ class PiHearingEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function adjournedDateProvider()
+    public static function adjournedDateProvider()
     {
         return [
             [null],
@@ -326,7 +322,7 @@ class PiHearingEntityTest extends EntityTester
         ];
     }
 
-    public function dataProviderHearingBeforeAgreedDateValidate()
+    public static function dataProviderHearingBeforeAgreedDateValidate()
     {
         return [
             // $expectException, $hearingDate, $piAgreedDate

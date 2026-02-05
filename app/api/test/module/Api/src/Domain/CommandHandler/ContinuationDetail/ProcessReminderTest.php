@@ -29,9 +29,7 @@ class ProcessReminderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider detailsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('detailsProvider')]
     public function testHandleCommand($isGoods, $template)
     {
         $command = Command::create(['id' => 1, 'user' => 2]);
@@ -92,7 +90,7 @@ class ProcessReminderTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['document' => 101], $result->getIds());
     }
 
-    public function detailsProvider()
+    public static function detailsProvider()
     {
         return [
             [true, 'LIC_CONTD_NO_CHECKLIST_GV'],

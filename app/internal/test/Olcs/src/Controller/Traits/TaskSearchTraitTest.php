@@ -8,9 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\Service\Data\SubCategory as SubCategoryDS;
 
-/**
- * @covers \Olcs\Controller\Traits\TaskSearchTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\TaskSearchTrait::class)]
 class TaskSearchTraitTest extends MockeryTestCase
 {
     public const ID = 99999;
@@ -71,9 +69,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         $this->sut->traitUpdateSelectValueOptions($mockEl, $changeOptions);
     }
 
-    /**
-     * @dataProvider dpTestMapTaskFilters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapTaskFilters')]
     public function testMapTaskFilters($extra, $expect)
     {
         $userData = [
@@ -100,7 +96,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestMapTaskFilters()
+    public static function dpTestMapTaskFilters()
     {
         return [
             [
@@ -177,9 +173,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         $this->sut->traitGetTaskForm($filters);
     }
 
-    /**
-     * @dataProvider dpTestProcessTasksActions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProcessTasksActions')]
     public function testProcessTasksActions($type, $action, $id, $paramName, $expected)
     {
         $query = ['query' => 'unit_Query'];
@@ -206,7 +200,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProcessTasksActions()
+    public static function dpTestProcessTasksActions()
     {
         return [
             [

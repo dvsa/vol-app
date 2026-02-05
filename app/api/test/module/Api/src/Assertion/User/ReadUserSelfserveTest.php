@@ -27,9 +27,7 @@ class ReadUserSelfserveTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider getAssertForOperatorDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertForOperatorDataProvider')]
     public function testAssertForOperator(
         $currentUserType,
         $currentUserEntityId,
@@ -56,7 +54,7 @@ class ReadUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForOperatorDataProvider()
+    public static function getAssertForOperatorDataProvider()
     {
         return [
             // operator manages operator

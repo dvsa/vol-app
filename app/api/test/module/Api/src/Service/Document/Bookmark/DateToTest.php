@@ -21,9 +21,7 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query[1]);
     }
 
-    /**
-     * @dataProvider expiryDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('expiryDateProvider')]
     public function testRender($expiryDate)
     {
         $bookmark = new DateTo();
@@ -46,7 +44,7 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function expiryDateProvider()
+    public static function expiryDateProvider()
     {
         return [
             [new \DateTime('2014-02-03 11:12:34')],
@@ -54,9 +52,7 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider interimEndDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('interimEndDateProvider')]
     public function testRenderWithInterim($interimEnd)
     {
         $bookmark = new DateTo();
@@ -82,7 +78,7 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function interimEndDateProvider()
+    public static function interimEndDateProvider()
     {
         return [
             [new \DateTime('2011-01-01 10:10:10')],

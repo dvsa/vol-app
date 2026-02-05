@@ -38,9 +38,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($country, $results, $expected)
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
@@ -73,7 +71,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         $this->assertEquals($country, $this->sut->getCountry());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions()
     {
         return [
             'with validity dates' => [

@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EndDate;
  */
 class EndDateTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($txcApp, $endDate, $isValid)
     {
         $value = [
@@ -28,7 +26,7 @@ class EndDateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dpIsValid()
+    public static function dpIsValid()
     {
         $date = '2017-12-25';
 

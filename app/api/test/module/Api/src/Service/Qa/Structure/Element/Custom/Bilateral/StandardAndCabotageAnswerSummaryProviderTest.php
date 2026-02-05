@@ -29,9 +29,7 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($cabotageSelection, $isSnapshot, $expectedTemplateVariables)
     {
         $qaContext = m::mock(QaContext::class);
@@ -47,7 +45,7 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         $expectedCabotageOnlyTemplateVariables = [
             'yesNo' => 'qanda.bilaterals.cabotage.yes-answer',

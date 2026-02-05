@@ -14,12 +14,12 @@ class MissingSectionTest extends \PHPUnit\Framework\TestCase
     /**
      * tests whether the short notice section exists correctly
      *
-     * @dataProvider isValidProvider
      *
      * @param string $isShortNotice
      * @param array $value
      * @param bool $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($isShortNotice, $value, $valid)
     {
         $sut = new MissingSection();
@@ -36,7 +36,7 @@ class MissingSectionTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             ['N', [], true],

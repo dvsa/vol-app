@@ -35,6 +35,7 @@ class UpdateVehiclesPsvStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->refData = [

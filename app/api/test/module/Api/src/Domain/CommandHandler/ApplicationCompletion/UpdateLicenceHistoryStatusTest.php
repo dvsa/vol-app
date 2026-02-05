@@ -32,6 +32,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->refData = [
@@ -56,6 +57,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithoutAnAnswer()
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -71,6 +73,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithAllNos()
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -86,6 +89,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithYesWithoutOtherLicences()
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);

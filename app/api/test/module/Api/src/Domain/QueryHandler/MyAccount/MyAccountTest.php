@@ -43,9 +43,7 @@ class MyAccountTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpUserIdProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUserIdProvider')]
     public function testHandleQueryFromCache($userId, $searchUserId): void
     {
         $cacheResult = ['result'];
@@ -73,7 +71,7 @@ class MyAccountTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpUserIdProvider(): array
+    public static function dpUserIdProvider(): array
     {
         return [
             [999, 999],
@@ -81,9 +79,7 @@ class MyAccountTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($isSelfservePromptEnabled, $isEligibleForPermits, $expectedEligibleForPrompt, $canDeleteAdmin): void
     {
         $userId = 1;
@@ -221,26 +217,26 @@ class MyAccountTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQuery(): array
+    public static function dpHandleQuery(): array
     {
         return [
             [
                 'isSelfservePromptEnabled' => false,
                 'isEligibleForPermits' => true,
                 'expectedEligibleForPrompt' => false,
-                'expectedDeleteAdmin' => false,
+                'canDeleteAdmin' => false,
             ],
             [
                 'isSelfservePromptEnabled' => true,
                 'isEligibleForPermits' => false,
                 'expectedEligibleForPrompt' => false,
-                'expectedDeleteAdmin' => false,
+                'canDeleteAdmin' => false,
             ],
             [
                 'isSelfservePromptEnabled' => true,
                 'isEligibleForPermits' => true,
                 'expectedEligibleForPrompt' => true,
-                'expectedDeleteAdmin' => true,
+                'canDeleteAdmin' => true,
             ],
         ];
     }

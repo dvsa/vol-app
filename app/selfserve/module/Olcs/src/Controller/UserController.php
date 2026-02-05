@@ -32,9 +32,6 @@ class UserController extends AbstractController
     use Lva\Traits\ExternalControllerTrait;
     use CrudTableTrait;
 
-    protected FormHelperService $formHelper;
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -50,14 +47,11 @@ class UserController extends AbstractController
         AuthorizationService $authService,
         protected User $user,
         protected ScriptFactory $scriptFactory,
-        FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FormHelperService $formHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected TranslationHelperService $translationHelper,
         protected GuidanceHelperService $guidanceHelper
     ) {
-        $this->formHelper = $formHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
@@ -66,6 +60,7 @@ class UserController extends AbstractController
      *
      * @return User|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $crudAction = $this->checkForCrudAction();

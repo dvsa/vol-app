@@ -32,6 +32,7 @@ class DeleteApplicationOperatingCentreTest extends AbstractCommandHandlerTestCas
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [

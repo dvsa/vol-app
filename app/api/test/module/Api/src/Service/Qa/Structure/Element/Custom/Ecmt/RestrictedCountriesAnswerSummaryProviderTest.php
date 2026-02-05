@@ -54,9 +54,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariablesWithCountries($isSnapshot)
     {
         $hasRestrictedCountries = true;
@@ -99,9 +97,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariablesWithoutCountries($isSnapshot)
     {
         $hasRestrictedCountries = false;
@@ -127,7 +123,7 @@ class RestrictedCountriesAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

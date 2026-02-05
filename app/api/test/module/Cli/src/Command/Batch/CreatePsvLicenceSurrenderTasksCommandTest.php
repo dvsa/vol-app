@@ -52,6 +52,7 @@ class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCase
         $this->executeCommand(['--dry-run' => true]);
     }
 
+    #[\Override]
     public function testExecuteSuccess()
     {
         $this->mockQueryHandlerManager->expects($this->once())

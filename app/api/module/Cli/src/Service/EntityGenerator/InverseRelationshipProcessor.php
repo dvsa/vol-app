@@ -176,7 +176,7 @@ readonly class InverseRelationshipProcessor
         $columnName = preg_replace('/_id$/', '', $columnName);
 
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($columnName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $columnName, '_')));
     }
 
     /**
@@ -219,7 +219,7 @@ readonly class InverseRelationshipProcessor
         $optionsStr = implode(', ', $options);
 
         return sprintf('@ORM\\%s(%s)', 
-            ucfirst($relationshipType->value), 
+            ucfirst((string) $relationshipType->value), 
             $optionsStr
         );
     }
@@ -235,7 +235,7 @@ readonly class InverseRelationshipProcessor
 
         $orderPairs = [];
         foreach ($orderBy as $field => $direction) {
-            $orderPairs[] = sprintf('"%s" = "%s"', $field, strtoupper($direction));
+            $orderPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
         }
 
         return sprintf('@ORM\\OrderBy({%s})', implode(', ', $orderPairs));

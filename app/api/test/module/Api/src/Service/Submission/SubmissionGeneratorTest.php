@@ -177,9 +177,7 @@ class SubmissionGeneratorTest extends MockeryTestCase
         static::assertNotContains('people', $actualSectionData);
     }
 
-    /**
-     * @dataProvider dpTestGenerateSubmissionSectionData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateSubmissionSectionData')]
     public function testGenerateSubmissionSectionData($subSection, $data, $expect)
     {
         $sectionId = 8888;
@@ -203,16 +201,16 @@ class SubmissionGeneratorTest extends MockeryTestCase
         static::assertEquals($expect, $sut->generateSubmissionSectionData($mockSubmission, $sectionId, $subSection));
     }
 
-    public function dpTestGenerateSubmissionSectionData()
+    public static function dpTestGenerateSubmissionSectionData()
     {
         return [
             [
-                'subsection' => null,
+                'subSection' => null,
                 'data' => ['EXPECTED'],
                 'expect' => ['EXPECTED'],
             ],
             [
-                'subsection' => 'unit_SubSectKey',
+                'subSection' => 'unit_SubSectKey',
                 'data' => [
                     'unit_SubSectKey' => 'SUB_EXPECTED',
                 ],

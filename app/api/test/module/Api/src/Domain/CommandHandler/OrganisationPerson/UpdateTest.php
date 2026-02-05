@@ -13,8 +13,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\Update
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\Update::class)]
 class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public const ORG_ID = 9001;
@@ -41,6 +41,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

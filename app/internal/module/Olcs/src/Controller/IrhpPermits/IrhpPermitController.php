@@ -65,6 +65,7 @@ class IrhpPermitController extends AbstractInternalController implements
     /**
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $request = $this->getRequest();
@@ -157,6 +158,7 @@ class IrhpPermitController extends AbstractInternalController implements
      * @return                                        \Common\Service\Table\TableBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         // Get Permit Type from route, switch columns if required

@@ -14,10 +14,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class MarkersTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
     public function testInvoke($input, $expected)
     {
         $sut = new Markers();
@@ -42,7 +42,7 @@ class MarkersTest extends MockeryTestCase
         }
     }
 
-    public function provideInvoke()
+    public static function provideInvoke()
     {
         return [
             [

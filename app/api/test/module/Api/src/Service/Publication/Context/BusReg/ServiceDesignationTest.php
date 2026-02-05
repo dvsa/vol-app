@@ -16,11 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ServiceDesignationTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the bus reg service designation filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the bus reg service designation filter')]
     public function testProvide()
     {
         $serviceNo = 12345;

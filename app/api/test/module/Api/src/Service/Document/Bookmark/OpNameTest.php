@@ -19,7 +19,7 @@ class OpNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider()
     {
         return [
             [
@@ -47,9 +47,7 @@ class OpNameTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
     public function testRender($expected, $results)
     {
         $bookmark = new OpName();

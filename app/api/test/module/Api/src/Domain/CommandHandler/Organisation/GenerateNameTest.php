@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Organisation\GenerateName
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Organisation\GenerateName::class)]
 class GenerateNameTest extends AbstractCommandHandlerTestCase
 {
     public const PERSON_ID = 8001;
@@ -57,6 +55,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -84,9 +83,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         static::assertEquals(['Unable to generate name'], $actual->getMessages());
     }
 
-    /**
-     * @dataProvider dpTestGenerateName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateName')]
     public function testGenerateName($type, $orgPersons, $expect)
     {
         $cmd = TransferCmd\Organisation\GenerateName::create(['organisation' => self::ORG_ID]);
@@ -157,9 +154,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         return $mockRel;
     }
 
-    /**
-     * @dataProvider dpTestHandleOk
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleOk')]
     public function testHandleOk($cmdData)
     {
         $cmd = TransferCmd\Organisation\GenerateName::create($cmdData);
@@ -187,7 +182,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         static::assertEquals(['Name succesfully generated'], $actual->getMessages());
     }
 
-    public function dpTestHandleOk()
+    public static function dpTestHandleOk()
     {
         return [
             [

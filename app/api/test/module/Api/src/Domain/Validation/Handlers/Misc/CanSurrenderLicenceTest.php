@@ -28,9 +28,7 @@ class CanSurrenderLicenceTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $isSurrenderable, $expected)
     {
         $licenceId = 1;
@@ -43,7 +41,7 @@ class CanSurrenderLicenceTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             'case_01' => [

@@ -40,7 +40,7 @@ class ConversationTest extends TestCase
                          ->once()
                          ->with(
                              RouteParams::EVENT_PARAM . 'licence',
-                             [$this->sut, 'onConversation'],
+                             $this->sut->onConversation(...),
                              1,
                          );
 
@@ -154,7 +154,7 @@ class ConversationTest extends TestCase
         $sut->onConversation($e);
     }
 
-    public function testInvoke()
+    public function testInvoke(): never
     {
         /** @todo skipped for now, refactor ticket https://dvsa.atlassian.net/browse/VOL-5357 */
         $this->markTestSkipped();

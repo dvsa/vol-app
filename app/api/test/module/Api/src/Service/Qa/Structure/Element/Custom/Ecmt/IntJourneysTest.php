@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IntJourneysTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGetRepresentation($showNiWarning)
     {
         $radioRepresentation = [
@@ -41,7 +39,7 @@ class IntJourneysTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse()
     {
         return [
             [true],

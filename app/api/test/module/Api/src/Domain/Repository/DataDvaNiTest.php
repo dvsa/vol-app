@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DataDvaNi;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataDvaNi
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataDvaNi::class)]
 class DataDvaNiTest extends MockeryTestCase
 {
     public $mockResult;

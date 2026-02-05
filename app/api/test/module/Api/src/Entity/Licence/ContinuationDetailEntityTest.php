@@ -47,7 +47,7 @@ class ContinuationDetailEntityTest extends EntityTester
         $this->assertEquals('ORG', $continuationDetail->getRelatedOrganisation());
     }
 
-    public function dpGetAmountDeclaredDataProvider(): array
+    public static function dpGetAmountDeclaredDataProvider(): array
     {
         return [
             [0.00, null, null, null, null],
@@ -61,9 +61,7 @@ class ContinuationDetailEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetAmountDeclaredDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAmountDeclaredDataProvider')]
     public function testGetAmountDeclared(
         $expected,
         $averageBalanceAmount,

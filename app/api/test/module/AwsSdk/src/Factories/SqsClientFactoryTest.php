@@ -33,9 +33,7 @@ class SqsClientFactoryTest extends TestCase
         $this->sm = $sm;
     }
 
-    /**
-     * @dataProvider dpTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
     public function testInvoke($sqsOptions)
     {
         // Params
@@ -59,11 +57,11 @@ class SqsClientFactoryTest extends TestCase
         $this->assertInstanceOf(SqsClient::class, $sqsClient);
     }
 
-    public function dpTestInvoke()
+    public static function dpTestInvoke()
     {
         return [
             [
-                'with_sqs_options' => [
+                'sqsOptions' => [
                     'sqsOptions' => [
                         'credentials' => [
                             'key' => 'some_key',

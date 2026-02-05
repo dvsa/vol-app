@@ -28,10 +28,10 @@ class VariationOperatingCentresReviewService extends AbstractOperatingCentresRev
      */
     public function __construct(
         AbstractReviewServiceServices $abstractReviewServiceServices,
-        private PsvOperatingCentreReviewService $psvOperatingCentreReviewService,
-        private VariationPsvOcTotalAuthReviewService $variationPsvOcTotalAuthReviewService,
-        private GoodsOperatingCentreReviewService $goodsOperatingCentreReviewService,
-        private VariationGoodsOcTotalAuthReviewService $variationGoodsOcTotalAuthReviewService
+        private readonly PsvOperatingCentreReviewService $psvOperatingCentreReviewService,
+        private readonly VariationPsvOcTotalAuthReviewService $variationPsvOcTotalAuthReviewService,
+        private readonly GoodsOperatingCentreReviewService $goodsOperatingCentreReviewService,
+        private readonly VariationGoodsOcTotalAuthReviewService $variationGoodsOcTotalAuthReviewService
     ) {
         parent::__construct($abstractReviewServiceServices);
     }

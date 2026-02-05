@@ -20,11 +20,11 @@ class PublicationSectionEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     /**
-     * @dataProvider dataProviderTestIsSection3
      *
      * @param bool $isSection3
      * @param int  $section
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsSection3')]
     public function testIsSection3($isSection3, $section)
     {
         $sut = new Entity();
@@ -33,7 +33,7 @@ class PublicationSectionEntityTest extends EntityTester
         $this->assertSame($isSection3, $sut->isSection3());
     }
 
-    public function dataProviderTestIsSection3()
+    public static function dataProviderTestIsSection3()
     {
         for ($i = 1; $i < 35; $i++) {
             $params[$i] = [false, $i];
@@ -50,11 +50,11 @@ class PublicationSectionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dataProviderTestIsDecision
      *
      * @param bool $isDecisionSection
      * @param int  $section
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsDecision')]
     public function testIsDecision($isDecisionSection, $section)
     {
         $sut = new Entity();
@@ -63,7 +63,7 @@ class PublicationSectionEntityTest extends EntityTester
         $this->assertSame($isDecisionSection, $sut->isDecisionSection());
     }
 
-    public function dataProviderTestIsDecision()
+    public static function dataProviderTestIsDecision()
     {
         for ($i = 1; $i < 35; $i++) {
             $params[$i] = [false, $i];

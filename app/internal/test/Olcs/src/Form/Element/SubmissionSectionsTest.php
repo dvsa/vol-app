@@ -27,9 +27,7 @@ class SubmissionSectionsTest extends TestCase
         $this->assertArrayHasKey('filters', $sut->getInputSpecification());
     }
 
-    /**
-     * @dataProvider getSubmissionSectionsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSubmissionSectionsProvider')]
     public function testSetValue($submissionType, $submissionTypeSubmit, $sections)
     {
         $data = [
@@ -166,7 +164,7 @@ class SubmissionSectionsTest extends TestCase
         $this->assertNotEmpty($sut->getSubmissionType());
     }
 
-    public function getSubmissionSectionsProvider()
+    public static function getSubmissionSectionsProvider()
     {
         return [
             [

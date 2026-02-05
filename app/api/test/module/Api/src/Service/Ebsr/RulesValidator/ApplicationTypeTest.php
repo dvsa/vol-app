@@ -14,12 +14,12 @@ use PHPUnit\Framework\TestCase as TestCase;
 class ApplicationTypeTest extends TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $input
      * @param $context
      * @param $valid
      * @param string $error
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($input, $context, $valid, $error = '')
     {
         $sut = new ApplicationType();
@@ -35,7 +35,7 @@ class ApplicationTypeTest extends TestCase
      *
      * @return array
      */
-    public function provideIsValid()
+    public static function provideIsValid()
     {
         return [
             [

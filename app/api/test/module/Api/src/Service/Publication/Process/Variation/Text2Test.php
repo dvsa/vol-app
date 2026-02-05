@@ -82,9 +82,7 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    /**
-     * @dataProvider dataProviderTestPeople
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestPeople')]
     public function testPeople($organisationTypeId, $peoplePrefix)
     {
         $publicationLink = $this->getPublicationLink($organisationTypeId);
@@ -104,7 +102,7 @@ class Text2Test extends MockeryTestCase
         $this->assertSame($expectedText2, $publicationLink->getText2());
     }
 
-    public function dataProviderTestPeople()
+    public static function dataProviderTestPeople()
     {
         return [
             [Organisation::ORG_TYPE_LLP, 'Partner(s): '],

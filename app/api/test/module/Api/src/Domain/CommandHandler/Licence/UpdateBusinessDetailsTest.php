@@ -92,9 +92,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $actual->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCmdTaskNotCreated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCmdTaskNotCreated')]
     public function testHandleCmdTaskNotCreated($hasChanged, $isGranted)
     {
         $saveCmdResult = new Result();
@@ -122,7 +120,7 @@ class UpdateBusinessDetailsTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $actual->toArray());
     }
 
-    public function dpTestHandleCmdTaskNotCreated()
+    public static function dpTestHandleCmdTaskNotCreated()
     {
         return [
             [

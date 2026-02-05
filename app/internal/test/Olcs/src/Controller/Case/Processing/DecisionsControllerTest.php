@@ -26,9 +26,7 @@ class DecisionsControllerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider indexActionDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionDataProvider')]
     public function testIndexAction(
         $id,
         $data,
@@ -69,7 +67,7 @@ class DecisionsControllerTest extends MockeryTestCase
         $this->assertEquals('redirectResponse', $this->sut->indexAction());
     }
 
-    public function indexActionDataProvider()
+    public static function indexActionDataProvider()
     {
         return [
             // non-TM

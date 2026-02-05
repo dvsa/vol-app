@@ -78,9 +78,7 @@ class UserPasswordResetEntityTest extends EntityTester
         $this->assertFalse($sut->isValid('user2'));
     }
 
-    /**
-     * @dataProvider dpTrueFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalseProvider')]
     public function testCanResetPassword(bool $canResetPassword): void
     {
         $loginId = 'user';
@@ -98,7 +96,7 @@ class UserPasswordResetEntityTest extends EntityTester
         $this->assertEquals($canResetPassword, $sut->isValid($loginId));
     }
 
-    public function dpTrueFalseProvider(): array
+    public static function dpTrueFalseProvider(): array
     {
         return [
             [true],

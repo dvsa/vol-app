@@ -8,8 +8,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication::class)]
 class TransportManagerApplicationTest extends RepositoryTestCase
 {
     public const APP_ID = 9001;

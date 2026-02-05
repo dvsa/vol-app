@@ -221,9 +221,7 @@ class CommunityLicTest extends RepositoryTestCase
         $this->assertIsCallable([$this->sut, 'countActiveByLicenceId']);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdFiltersResultsByLicenceId()
     {
         // Set Up
@@ -239,9 +237,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdSetsALicenceIdParameterWithTheProvidedLicenceIdValue()
     {
         // Set Up
@@ -258,9 +254,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId($expectedLicenceId);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesByStatus()
     {
         // Set Up
@@ -276,9 +270,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesThatAreActive()
     {
         // Set Up
@@ -294,9 +286,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdFiltersResultsByIssueNumber()
     {
         // Set Up
@@ -312,9 +302,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdFiltersResultsToCommunityLicencesWithAZeroIssueNumber()
     {
         // Set Up
@@ -330,9 +318,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdCountsCommunityLicenceIds()
     {
         // Set Up
@@ -348,9 +334,7 @@ class CommunityLicTest extends RepositoryTestCase
         $sut->countActiveByLicenceId(1);
     }
 
-    /**
-     * @depends testCountActiveByLicenceIdIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testCountActiveByLicenceIdIsDefined')]
     public function testCountActiveByLicenceIdReturnsTheIntegerFromTheExecutedQueryResult()
     {
         // Set Up

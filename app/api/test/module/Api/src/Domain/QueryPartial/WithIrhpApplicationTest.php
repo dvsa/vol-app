@@ -18,9 +18,7 @@ class WithIrhpApplicationTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery($expectedDql, $arguments): void
     {
         $this->sut->modifyQuery($this->qb, $arguments);
@@ -30,7 +28,7 @@ class WithIrhpApplicationTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             ['SELECT a, ia FROM foo a LEFT JOIN a.irhpApplication ia', []],

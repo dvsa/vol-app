@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRegistered;
 
 /**
  * Send Ebsr Registered Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrRegisteredTest extends SendEbsrRegCancelEmailTestAbstract
 {
     protected $template = 'ebsr-registered';

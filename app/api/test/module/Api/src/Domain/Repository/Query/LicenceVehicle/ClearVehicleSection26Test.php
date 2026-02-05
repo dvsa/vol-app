@@ -49,7 +49,7 @@ class ClearVehicleSection26Test extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider()
     {
         return [
             [

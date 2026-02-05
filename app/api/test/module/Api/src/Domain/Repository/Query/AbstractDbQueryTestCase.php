@@ -15,11 +15,9 @@ use Mockery as m;
  */
 abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
 {
-    abstract public function paramProvider();
+    abstract public static function paramProvider();
 
-    /**
-     * @dataProvider paramProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
     public function testExecuteWithException($inputParams, $inputTypes, $expectedParams, $expectedTypes)
     {
         $this->mockIdentityProvider
@@ -39,9 +37,7 @@ abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
         $this->sut->execute($inputParams, $inputTypes);
     }
 
-    /**
-     * @dataProvider paramProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
     public function testExecute($inputParams, $inputTypes, $expectedParams, $expectedTypes)
     {
         $this->mockIdentityProvider
@@ -61,9 +57,7 @@ abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
         $this->assertEquals($result, $this->sut->execute($inputParams, $inputTypes));
     }
 
-    /**
-     * @dataProvider paramProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
     public function testExecuteAsSystemUser($inputParams, $inputTypes, $expectedParams, $expectedTypes)
     {
         $this->mockIdentityProvider

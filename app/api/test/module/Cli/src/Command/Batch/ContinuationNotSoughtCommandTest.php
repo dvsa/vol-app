@@ -43,6 +43,7 @@ class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
         $this->executeCommand(['--dry-run' => true]);
     }
 
+    #[\Override]
     public function testExecuteSuccess()
     {
         $this->mockCommandHandlerManager->expects($this->once())

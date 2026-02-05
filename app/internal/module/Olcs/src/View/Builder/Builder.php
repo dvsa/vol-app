@@ -15,7 +15,7 @@ final class Builder extends AbstractBuilder
      * @param $headerViewTemplate
      * @param string $baseTemplate
      */
-    public function __construct(private OlcsViewModel $layout)
+    public function __construct(private readonly OlcsViewModel $layout)
     {
     }
 

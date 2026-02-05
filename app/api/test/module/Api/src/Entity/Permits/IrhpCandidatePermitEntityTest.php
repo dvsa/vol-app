@@ -181,9 +181,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $candidatePermit->markAsSuccessful($assignedEmissionsCategory);
     }
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
     public function testCanDelete($isUc, $expected)
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
@@ -201,7 +199,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public function canDeleteProvider()
+    public static function canDeleteProvider()
     {
         return [
             [true, true],
@@ -257,9 +255,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $entity->updateIrhpPermitRange($newRange);
     }
 
-    /**
-     * @dataProvider isApplicationUnderConsiderationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApplicationUnderConsiderationProvider')]
     public function testIsApplicationUnderConsideration($uc, $expected)
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplicationEntity::class);
@@ -279,7 +275,7 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isApplicationUnderConsideration());
     }
 
-    public function isApplicationUnderConsiderationProvider()
+    public static function isApplicationUnderConsiderationProvider()
     {
         return [
             [false, false],

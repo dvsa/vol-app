@@ -40,6 +40,7 @@ class ContinuationChecklist extends AbstractCommandConsumer
      * @param string $reason
      * @return string
      */
+    #[\Override]
     public function failed(QueueEntity $item, $reason = null)
     {
         $dtoData = [

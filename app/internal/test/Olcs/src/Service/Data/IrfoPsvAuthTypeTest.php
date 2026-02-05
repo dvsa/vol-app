@@ -33,10 +33,10 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected)
     {
         $this->sut->setData('IrfoPsvAuthType', $input);

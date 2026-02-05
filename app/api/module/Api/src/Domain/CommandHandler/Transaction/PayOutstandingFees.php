@@ -48,11 +48,11 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
     use CpmsAwareTrait;
     use ConfigAwareTrait;
 
-    public const ERR_WAIT = 'ERR_WAIT';
+    public const string ERR_WAIT = 'ERR_WAIT';
 
-    public const ERR_NO_FEES = 'ERR_NO_FEES';
+    public const string ERR_NO_FEES = 'ERR_NO_FEES';
 
-    public const DEFAULT_PENDING_PAYMENTS_TIMEOUT = 3600;
+    public const int DEFAULT_PENDING_PAYMENTS_TIMEOUT = 3600;
 
     /**
      * @var \Dvsa\Olcs\Api\Service\FeesHelperService
@@ -638,6 +638,7 @@ final class PayOutstandingFees extends AbstractCommandHandler implements
 
         return $extraParams;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

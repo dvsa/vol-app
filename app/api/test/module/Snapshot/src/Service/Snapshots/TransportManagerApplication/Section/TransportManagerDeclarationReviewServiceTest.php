@@ -35,9 +35,7 @@ class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerDeclarationReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testGetConfig(
         $isTypeInternal,
         $niFlag,
@@ -80,7 +78,7 @@ class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['markup' => $expectedMarkup], $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [

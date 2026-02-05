@@ -40,9 +40,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpGenerateFeeBreakdownAvailable
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateFeeBreakdownAvailable')]
     public function testGenerateFeeBreakdownAvailable($irhpPermitTypeId, $expectedServiceName)
     {
         $feeBreakdown = [
@@ -71,7 +69,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpGenerateFeeBreakdownAvailable()
+    public static function dpGenerateFeeBreakdownAvailable()
     {
         return [
             [
@@ -85,9 +83,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateFeeBreakdownNotAvailable
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateFeeBreakdownNotAvailable')]
     public function testGenerateFeeBreakdownNotAvailable($irhpPermitTypeId)
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->getId')
@@ -100,7 +96,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpGenerateFeeBreakdownNotAvailable()
+    public static function dpGenerateFeeBreakdownNotAvailable()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

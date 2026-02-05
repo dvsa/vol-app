@@ -24,9 +24,7 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable()
     {
         // Setup
@@ -36,10 +34,8 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
         $this->assertIsCallable($sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsInstanceOfDispatcherWithSwitchBoardController()
     {
         // Setup

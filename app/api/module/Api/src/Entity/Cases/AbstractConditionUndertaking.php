@@ -48,7 +48,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractConditionUndertaking implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractConditionUndertaking implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

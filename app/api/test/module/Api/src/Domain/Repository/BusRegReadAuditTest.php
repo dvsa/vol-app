@@ -26,11 +26,13 @@ class BusRegReadAuditTest extends AbstractReadAuditTest
         $this->setUpSut(BusRegReadAudit::class, true);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchOneOrMore()
     {
         parent::commonTestFetchOneOrMore('busReg');
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchList()
     {
         parent::commonTestFetchList(
@@ -39,6 +41,7 @@ class BusRegReadAuditTest extends AbstractReadAuditTest
         );
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testDeleteOlderThan()
     {
         parent::commonTestDeleteOlderThan(BusRegReadAuditEntity::class);

@@ -245,9 +245,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandA
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandA')]
     public function testHandleCommandQandA($irhpPermitTypeId)
     {
         $licenceId = 2;
@@ -326,9 +324,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandQandA
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandQandA')]
     public function testHandleCommandQandAWithDeclaration($irhpPermitTypeId)
     {
         $licenceId = 2;
@@ -421,7 +417,7 @@ class UpdateFullTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommandQandA()
+    public static function dpTestHandleCommandQandA()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],

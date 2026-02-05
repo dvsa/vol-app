@@ -35,6 +35,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -92,9 +93,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider countryProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('countryProvider')]
     public function testHandleCommandUpdateWithChange($countryCode)
     {
         if ($countryCode === '') {
@@ -144,7 +143,7 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function countryProvider()
+    public static function countryProvider()
     {
         return [
             [''],

@@ -68,9 +68,7 @@ class ApiServiceFactoryTest extends TestCase
         $this->assertInstanceOf(CpmsIdentityProvider::class, $apiService->getIdentity());
     }
 
-    /**
-     * @dataProvider dpTestCreateApiServiceExceptionsThrown
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreateApiServiceExceptionsThrown')]
     public function testCreateApiServiceExceptionsThrown($dpData)
     {
         $config = [
@@ -107,7 +105,7 @@ class ApiServiceFactoryTest extends TestCase
         $sut->createApiService();
     }
 
-    public function dpTestCreateApiServiceExceptionsThrown()
+    public static function dpTestCreateApiServiceExceptionsThrown()
     {
         return [
             'no-credentials' => [

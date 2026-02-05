@@ -52,6 +52,7 @@ class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTest
         $this->sut->maybeDeleteContactDetailsAndAddressStub($contactDetails);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testMaybeDeleteContactDetailsAndAddressWithCdNull()
     {
         $contactDetails = null;

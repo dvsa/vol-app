@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

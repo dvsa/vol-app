@@ -42,6 +42,7 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -61,12 +62,12 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param $isTm
      * @param $extraTaskKey
      * @param $venue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($isTm, $extraTaskKey, $venue)
     {
         $piId = 99;
@@ -191,7 +192,7 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [true, 'transportManager', null],

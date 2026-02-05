@@ -27,14 +27,13 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider provideHasTargetBeenMetCases
      *
      * @param $date
      * @param $target
      * @param $result
-     *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideHasTargetBeenMetCases')]
     public function testHasTargetBeenMet($date, $target, $result)
     {
         $sut = new SlaIndicator();
@@ -44,7 +43,7 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provideHasTargetBeenMetCases()
+    public static function provideHasTargetBeenMetCases()
     {
         return [
             [
@@ -81,13 +80,12 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider provideGenerateItemCases
      *
      * @param      $queryResult
      * @param bool $html
-     *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGenerateItemCases')]
     public function testGenerateItem($queryResult, $html)
     {
         $sut = new SlaIndicator();

@@ -32,9 +32,7 @@ class OperatingCentresTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestProvideAdded
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideAdded')]
     public function testProvideAdded($isVehicleTypeMixedWithLgv, $expectedContext)
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
@@ -66,7 +64,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideAdded()
+    public static function dpTestProvideAdded()
     {
         return [
             [
@@ -98,9 +96,7 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestProvideS4Ignored
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideS4Ignored')]
     public function testProvideS4Ignored($isVehicleTypeMixedWithLgv, $expectedContext)
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
@@ -133,7 +129,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideS4Ignored()
+    public static function dpTestProvideS4Ignored()
     {
         return [
             [
@@ -161,9 +157,7 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestProvideUpdated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideUpdated')]
     public function testProvideUpdated($isVehicleTypeMixedWithLgv, $expectedContext)
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
@@ -200,7 +194,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideUpdated()
+    public static function dpTestProvideUpdated()
     {
         return [
             [
@@ -254,7 +248,6 @@ class OperatingCentresTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestProvideUpdatedIncreaseDecrease
      *
      * @param type $aocVehicles
      * @param type $aocTrailers
@@ -262,6 +255,7 @@ class OperatingCentresTest extends MockeryTestCase
      * @param type $locTrailers
      * @param type $inc
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProvideUpdatedIncreaseDecrease')]
     public function testProvideUpdatedIncreaseDecrease($aocVehicles, $aocTrailers, $locVehicles, $locTrailers, $inc)
     {
         $publicationLink = $this->getPublicationLink(false);
@@ -291,7 +285,7 @@ class OperatingCentresTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProvideUpdatedIncreaseDecrease()
+    public static function dataProviderTestProvideUpdatedIncreaseDecrease()
     {
         return [
             [11, 20, 10, 20, true],

@@ -23,7 +23,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('json', $this->parser->getFileExtension());
     }
 
-    public function testRenderImageThrowsException()
+    public function testRenderImageThrowsException(): never
     {
         $this->expectException(\RuntimeException::class);
         $this->parser->renderImage('data', 100, 100, 'png');

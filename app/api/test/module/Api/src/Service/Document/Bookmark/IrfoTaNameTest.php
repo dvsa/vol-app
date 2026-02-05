@@ -17,9 +17,7 @@ class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
     public function testRender($results, $expected)
     {
         $bookmark = new Sut();
@@ -28,7 +26,7 @@ class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider()
     {
         return [
             [

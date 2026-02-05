@@ -42,9 +42,7 @@ class TransportManagerMainReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerMainReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testGetConfig($tma, $expected)
     {
         $this->mockTranslator->shouldReceive('translate')
@@ -55,7 +53,7 @@ class TransportManagerMainReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider()
     {
         /** @var RefData $title */
         $title = m::mock(RefData::class)->makePartial();

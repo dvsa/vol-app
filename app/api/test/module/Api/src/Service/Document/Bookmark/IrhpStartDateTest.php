@@ -13,6 +13,7 @@ class IrhpStartDateTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = IrhpStartDate::class;
 
+    #[\Override]
     public function testRender()
     {
         $sutClassName = static::SUT_CLASS_NAME;

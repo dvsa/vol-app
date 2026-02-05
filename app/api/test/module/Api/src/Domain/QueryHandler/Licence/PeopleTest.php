@@ -12,9 +12,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Licence\People
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Licence\People::class)]
 class PeopleTest extends QueryHandlerTestCase
 {
     /** @var People */

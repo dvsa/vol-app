@@ -14,9 +14,8 @@ use Mockery as m;
 
 /**
  * Create Unlicensed Operator Licence Vehicle Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle::class)]
 class CreateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void

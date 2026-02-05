@@ -259,9 +259,7 @@ EOT;
         static::assertEquals($expected, $this->sut->fetchChecklistReminders(['A', 'B'], 1, 2016, [1]));
     }
 
-    /**
-     * @dataProvider statusProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testFetchDetails($method, $allowEmail): void
     {
         $mockQb = m::mock(QueryBuilder::class);
@@ -314,7 +312,7 @@ EOT;
         );
     }
 
-    public function statusProvider(): array
+    public static function statusProvider(): array
     {
         return [
             [Entity::METHOD_EMAIL, 1],

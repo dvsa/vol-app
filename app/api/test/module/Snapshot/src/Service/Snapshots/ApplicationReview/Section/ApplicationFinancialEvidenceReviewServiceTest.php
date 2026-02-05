@@ -42,9 +42,7 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider uploadProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('uploadProvider')]
     public function testGetConfigFromDataWithoutDocs($uploaded, $reviewText)
     {
         $data = [
@@ -92,7 +90,7 @@ class ApplicationFinancialEvidenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function uploadProvider()
+    public static function uploadProvider()
     {
         return [
             [

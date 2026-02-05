@@ -29,9 +29,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpShouldIncludeSlug
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShouldIncludeSlug')]
     public function testShouldIncludeSlug($permitUsageList, $expected)
     {
         $qaEntity = m::mock(QaEntityInterface::class);
@@ -45,7 +43,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpShouldIncludeSlug()
+    public static function dpShouldIncludeSlug()
     {
         $emptyList = [];
         $oneRecord = [['id' => 1]];
@@ -58,9 +56,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $answer = 'answer';
@@ -80,7 +76,7 @@ class PermitUsageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         return [
             [true],

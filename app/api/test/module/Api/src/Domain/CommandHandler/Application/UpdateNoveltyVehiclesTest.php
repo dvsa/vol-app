@@ -22,6 +22,7 @@ class UpdateNoveltyVehiclesTest extends AbstractUpdateApplicationTest
         'psvOperateNovelty',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

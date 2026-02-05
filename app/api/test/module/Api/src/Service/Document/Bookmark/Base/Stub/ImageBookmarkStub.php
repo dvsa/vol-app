@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark;
 
 class ImageBookmarkStub extends ImageBookmark
 {
+    #[\Override]
     public function getImage($name, $width = null, $height = null)
     {
         return parent::getImage($name, $width, $height);

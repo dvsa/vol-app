@@ -35,7 +35,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $preLgvExpectedResult = [
             'data' => [
@@ -178,6 +178,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
          ];
     }
 
+    #[\Override]
     protected function getCase()
     {
         $case = parent::getCase();

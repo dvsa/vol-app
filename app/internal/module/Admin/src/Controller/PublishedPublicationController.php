@@ -43,6 +43,7 @@ class PublishedPublicationController extends AbstractInternalController implemen
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters = parent::modifyListQueryParameters($parameters);

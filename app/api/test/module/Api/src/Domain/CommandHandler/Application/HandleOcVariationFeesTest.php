@@ -35,6 +35,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -204,7 +205,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees()
+    public static function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees()
     {
         return [
             'HGV auth increased' => [
@@ -225,9 +226,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandForGoodsWithIncreasedAuthWithoutFees
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForGoodsWithIncreasedAuthWithoutFees')]
     public function testHandleCommandForGoodsWithIncreasedAuthWithoutFees($hasHgvAuthorisationIncreased, $hasLgvAuthorisationIncreased, $hasAuthTrailersIncrease)
     {
         $data = [];
@@ -283,7 +282,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForPsvWithUpdatedAuthWithoutFees()
+    public static function dpHandleCommandForPsvWithUpdatedAuthWithoutFees()
     {
         return [
             'HGV auth increased' => [
@@ -295,9 +294,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandForPsvWithUpdatedAuthWithoutFees
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForPsvWithUpdatedAuthWithoutFees')]
     public function testHandleCommandForPsvWithUpdatedAuthWithoutFees($hasHgvAuthorisationIncreased)
     {
         $data = [];

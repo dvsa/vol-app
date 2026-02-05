@@ -59,6 +59,7 @@ class InformationChangedController extends AbstractSurrenderController
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->surrenderState = $this->surrenderStateService->setSurrenderData($this->data['surrender'])->getState();
@@ -108,6 +109,7 @@ class InformationChangedController extends AbstractSurrenderController
         return '';
     }
 
+    #[\Override]
     public function alterForm($form)
     {
         if ($this->hasApplicationExpired()) {

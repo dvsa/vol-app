@@ -12,10 +12,10 @@ use PHPUnit\Framework\TestCase as TestCase;
 class ViaTest extends TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $expected
      * @param $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($expected, $value)
     {
         $sut = new Via();
@@ -24,7 +24,7 @@ class ViaTest extends TestCase
         $this->assertEquals($expected, $result['via']);
     }
 
-    public function provideFilter()
+    public static function provideFilter()
     {
         return [
             ['via1, via2', ['via1', 'via2']],

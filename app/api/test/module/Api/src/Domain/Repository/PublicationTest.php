@@ -169,11 +169,11 @@ class PublicationTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider providePublishedListCases
      *
      * @param $withPubType
      * @param $withTrafficArea
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providePublishedListCases')]
     public function testFetchPublishedList($withPubType, $withTrafficArea)
     {
         /** @var QueryInterface|m\Mock $query */
@@ -300,7 +300,7 @@ class PublicationTest extends RepositoryTestCase
         );
     }
 
-    public function providePublishedListCases()
+    public static function providePublishedListCases()
     {
         return [
             [false, true],

@@ -35,9 +35,8 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
      *
      * @param $config
      * @param $errorMsg
-     *
-     * @dataProvider invokeFailProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invokeFailProvider')]
     public function testInvokeMissingConfig($config, $errorMsg)
     {
         $this->expectException(\RuntimeException::class);
@@ -58,7 +57,7 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
     /**
      * data provider for testing service creation failures
      */
-    public function invokeFailProvider()
+    public static function invokeFailProvider()
     {
         return [
             [['uri' => 'address'], 'Missing nysiis rest client options'],

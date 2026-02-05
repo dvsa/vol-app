@@ -22,9 +22,7 @@ class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($surrender, $expected)
     {
         $statusEntity = m::mock(RefData::class);
@@ -55,7 +53,7 @@ class CanDeleteSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid(1));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             'is_withdrawn' => [

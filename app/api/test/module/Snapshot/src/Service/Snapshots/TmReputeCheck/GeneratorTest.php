@@ -29,9 +29,8 @@ class GeneratorTest extends MockeryTestCase
     /**
      * Tests the snapshot generation process. Currently tests the XML data is translated into what the snapshot
      * code expects, next step is to also validate output
-     *
-     * @dataProvider dpGenerate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($input, $expectedConfig, $expectedOutput)
     {
         $this->viewRenderer->shouldReceive('render')

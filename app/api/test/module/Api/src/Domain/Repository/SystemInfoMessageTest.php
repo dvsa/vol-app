@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetListActive as Qry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemInfoMessage::class)]
 class SystemInfoMessageTest extends RepositoryTestCase
 {
     /** @var  Repository\SystemInfoMessage */

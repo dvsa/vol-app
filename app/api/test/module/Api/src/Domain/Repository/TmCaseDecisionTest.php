@@ -25,23 +25,21 @@ class TmCaseDecisionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function dpFetchLatestUsingCaseDataProvider()
+    public static function dpFetchLatestUsingCaseDataProvider()
     {
         return [
             'Decision exists' => [
-                'exepected' => 'result',
+                'expected' => 'result',
                 'mockResult' => [0 => 'result']
             ],
             'Decision does not exist' => [
-                'exepected' => false ,
+                'expected' => false ,
                 'mockResult' => []
             ],
         ];
     }
 
-    /**
-     * @dataProvider dpFetchLatestUsingCaseDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchLatestUsingCaseDataProvider')]
     public function testFetchLatestUsingCase($expected, $mockResult)
     {
         $case = 24;

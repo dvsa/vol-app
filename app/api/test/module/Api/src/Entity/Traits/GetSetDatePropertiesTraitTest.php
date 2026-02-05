@@ -9,9 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class GetSetDatePropertiesTraitTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dataProviderAsDateTime
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAsDateTime')]
     public function testGetDates($expected, $dateTime)
     {
         $dateProperties = ['createdOn', 'lastModifiedOn', 'deletedDate'];
@@ -24,7 +22,7 @@ class GetSetDatePropertiesTraitTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderAsDateTime()
+    public static function dataProviderAsDateTime()
     {
         return [
             [new \DateTime('2017-09-29'), '2017-09-29'],

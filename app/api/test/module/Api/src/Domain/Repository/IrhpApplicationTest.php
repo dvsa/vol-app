@@ -226,9 +226,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHasInScopeUnderConsiderationApplications
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasInScopeUnderConsiderationApplications')]
     public function testHasInScopeUnderConsiderationApplications($applicationIds, $expected)
     {
         $stockId = 47;
@@ -243,7 +241,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function dpHasInScopeUnderConsiderationApplications()
+    public static function dpHasInScopeUnderConsiderationApplications()
     {
         return [
             [

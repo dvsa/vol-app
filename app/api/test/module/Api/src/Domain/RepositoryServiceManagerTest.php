@@ -33,13 +33,13 @@ class RepositoryServiceManagerTest extends MockeryTestCase
         $this->sut->validate($invalidClass);
     }
 
-    /** @dataProvider dpValidate */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
     public function testValidate($instance): void
     {
         $this->assertNull($this->sut->validate(m::mock($instance)));
     }
 
-    public function dpValidate(): array
+    public static function dpValidate(): array
     {
         return [
             [RepositoryInterface::class],

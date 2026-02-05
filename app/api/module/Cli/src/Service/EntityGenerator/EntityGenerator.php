@@ -32,9 +32,7 @@ class EntityGenerator implements EntityGeneratorInterface
         $result = new GenerationResult();
 
         // Filter out tables that should be ignored
-        $filteredTables = array_filter($tables, function (TableMetadata $table): bool {
-            return !$this->entityConfigService->shouldIgnoreTable($table->getTableName());
-        });
+        $filteredTables = array_filter($tables, fn(TableMetadata $table): bool => !$this->entityConfigService->shouldIgnoreTable($table->getTableName()));
 
         // First pass: Generate base entities
         foreach ($filteredTables as $table) {
@@ -274,7 +272,7 @@ class EntityGenerator implements EntityGeneratorInterface
             // Create inverse relationship field
             // Determine the proper type for the relationship
             $propertyType = $relationship['relationshipType']->isCollection() 
-                ? '\\Doctrine\\Common\\Collections\\ArrayCollection'
+                ? \Doctrine\Common\Collections\ArrayCollection::class
                 : '\\Dvsa\\Olcs\\Api\\Entity\\' . $relationship['sourceEntity'];
             
             // Generate annotations
@@ -418,12 +416,9 @@ class EntityGenerator implements EntityGeneratorInterface
     {
         // Check for custom class name mapping
         $classMapping = $config['mappingConfig']['classNameForTable'] ?? [];
-        if (isset($classMapping[$tableName])) {
-            return $classMapping[$tableName];
-        }
 
         // Convert snake_case to PascalCase
-        return str_replace('_', '', ucwords($tableName, '_'));
+        return $classMapping[$tableName] ?? str_replace('_', '', ucwords($tableName, '_'));
     }
 
     /**
@@ -448,14 +443,9 @@ class EntityGenerator implements EntityGeneratorInterface
     private function getRelativeNamespace(string $className, array $config): string
     {
         $namespaces = $config['namespaces'] ?? [];
-        
-        // Check if the className is directly mapped to a namespace
-        if (isset($namespaces[$className])) {
-            return $namespaces[$className];
-        }
 
         // Default to empty string (root Entity folder)
-        return '';
+        return $namespaces[$className] ?? '';
     }
 
     /**
@@ -512,7 +502,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
                 if ($inverseJoinColumn) {
                     // Remove _id suffix if present, otherwise use whole column name
-                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    $basePropertyName = preg_replace('/_id$/', '', (string) $inverseJoinColumn);
                     // Convert snake_case to camelCase (e.g., action_type -> actionType)
                     $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
@@ -526,7 +516,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 $inverseJoinColumn = $relationship['inverse_join_columns'][0] ?? null;
                 if ($inverseJoinColumn) {
                     // Remove _id suffix and convert snake_case to camelCase
-                    $basePropertyName = preg_replace('/_id$/', '', $inverseJoinColumn);
+                    $basePropertyName = preg_replace('/_id$/', '', (string) $inverseJoinColumn);
                     $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                     $propertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
                 } else {
@@ -547,13 +537,13 @@ class EntityGenerator implements EntityGeneratorInterface
         } else {
             // Fallback to original logic for backwards compatibility
             $firstJoinColumn = $relationship['join_columns'][0] ?? null;
-            if ($firstJoinColumn && preg_match('/^(.+?)_id$/', $firstJoinColumn, $matches)) {
+            if ($firstJoinColumn && preg_match('/^(.+?)_id$/', (string) $firstJoinColumn, $matches)) {
                 // Check if the first column's table name matches our current table
                 $firstColumnTable = $matches[1];
                 $isOwning = ($firstColumnTable === $tableName);
             } else {
                 // Fallback to alphabetical ordering if we can't determine from columns
-                $isOwning = strcmp($tableName, $foreignTable) < 0;
+                $isOwning = strcmp($tableName, (string) $foreignTable) < 0;
             }
         }
         
@@ -571,7 +561,7 @@ class EntityGenerator implements EntityGeneratorInterface
             $joinColumn = $relationship['join_columns'][0] ?? null;
             if ($joinColumn) {
                 // Remove _id suffix and convert snake_case to camelCase
-                $basePropertyName = preg_replace('/_id$/', '', $joinColumn);
+                $basePropertyName = preg_replace('/_id$/', '', (string) $joinColumn);
                 $basePropertyName = lcfirst(str_replace('_', '', ucwords($basePropertyName, '_')));
                 $inversePropertyName = $this->propertyNameResolver->resolvePropertyName($basePropertyName, true);
             } else {
@@ -665,7 +655,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'annotation' => $annotation,
             'property' => [
                 'name' => $propertyName,
-                'type' => '\\Doctrine\\Common\\Collections\\ArrayCollection',
+                'type' => \Doctrine\Common\Collections\ArrayCollection::class,
                 'docBlock' => ucfirst(str_replace('_', ' ', $propertyName)),
                 'defaultValue' => 'null',
                 'nullable' => false,

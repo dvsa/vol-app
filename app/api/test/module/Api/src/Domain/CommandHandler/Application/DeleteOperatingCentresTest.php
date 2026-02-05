@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Application\DeleteOperatingCentres as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteOperatingCentres
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteOperatingCentres::class)]
 class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Application\DeleteOperatingCentres  */
@@ -30,6 +28,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

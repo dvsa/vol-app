@@ -10,20 +10,20 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class ProcessDateTimeTraitTest extends MockeryTestCase
 {
     /**
-     * @dataProvider dataProviderTestProcessDate
      *
      * @param $expected
      * @param $date
      * @param $format
      * @param $zeroTime
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessDate')]
     public function testProcessDate($expected, $date, $format, $zeroTime)
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->processDate($date, $format, $zeroTime));
     }
 
-    public function dataProviderTestProcessDate()
+    public static function dataProviderTestProcessDate()
     {
         return [
             [null, '2017-02-18', 'Y', true],
@@ -36,18 +36,18 @@ class ProcessDateTimeTraitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestProcessDateDefaults
      *
      * @param $expected
      * @param $date
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessDateDefaults')]
     public function testProcessDateDefaults($expected, $date)
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->processDate($date));
     }
 
-    public function dataProviderTestProcessDateDefaults()
+    public static function dataProviderTestProcessDateDefaults()
     {
         return [
             [null, '18/02/2017'],
@@ -57,18 +57,18 @@ class ProcessDateTimeTraitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestAsDateTime
      *
      * @param $expected
      * @param $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestAsDateTime')]
     public function testAsDateTime($expected, $value)
     {
         $sut = new StubProcessDateTime();
         $this->assertEquals($expected, $sut->asDateTime($value));
     }
 
-    public function dataProviderTestAsDateTime()
+    public static function dataProviderTestAsDateTime()
     {
         return [
             [new \DateTime('2017-02-12'), new \DateTime('2017-02-12')],

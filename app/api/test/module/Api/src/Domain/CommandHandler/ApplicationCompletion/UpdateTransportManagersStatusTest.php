@@ -31,6 +31,7 @@ class UpdateTransportManagersStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->refData = [

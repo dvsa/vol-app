@@ -15,7 +15,7 @@ class User extends ViewModel
      */
     protected $template = 'user';
 
-    public function __construct(private UrlHelperService $urlHelper, private readonly TableFactory $tableService)
+    public function __construct(private readonly UrlHelperService $urlHelper, private readonly TableFactory $tableService)
     {
     }
 

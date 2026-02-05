@@ -16,9 +16,7 @@ class BrRegStatusTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Qry::class, $bookmark->getQuery(['busRegId' => 123]));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = new BrRegStatus();
@@ -29,7 +27,7 @@ class BrRegStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [

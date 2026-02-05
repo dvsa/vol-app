@@ -31,9 +31,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProviderTestProvideOnlyRecievedOrGrantSections
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProvideOnlyRecievedOrGrantSections')]
     public function testProvideOnlyRecievedOrGrantSections($publicationSectionId)
     {
         $publicationLink = $this->getPublicationLink();
@@ -56,7 +54,7 @@ class ConditionUndertakingTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProvideOnlyRecievedOrGrantSections()
+    public static function dataProviderTestProvideOnlyRecievedOrGrantSections()
     {
         return [
             [PublicationSection::VAR_GRANTED_SECTION],

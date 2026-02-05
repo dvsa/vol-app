@@ -21,9 +21,7 @@ class ScanEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpIsBackScan
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBackScan')]
     public function testIsBackScan($dateReceived, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -35,7 +33,7 @@ class ScanEntityTest extends EntityTester
         );
     }
 
-    public function dpIsBackScan()
+    public static function dpIsBackScan()
     {
         return [
             [null, false],

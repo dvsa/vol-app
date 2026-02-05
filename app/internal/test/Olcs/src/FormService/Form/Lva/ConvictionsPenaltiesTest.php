@@ -31,6 +31,7 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function testGetForm()
     {
         // Mocks

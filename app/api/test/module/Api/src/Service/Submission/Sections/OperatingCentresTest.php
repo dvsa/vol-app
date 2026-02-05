@@ -4,9 +4,7 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class)]
 class OperatingCentresTest extends AbstractSubmissionSectionTest
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class;
@@ -16,7 +14,7 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getApplicationCase();
 

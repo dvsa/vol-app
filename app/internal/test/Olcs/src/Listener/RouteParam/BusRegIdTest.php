@@ -52,7 +52,7 @@ class BusRegIdTest extends MockeryTestCase
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegId'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'busRegId', $this->sut->onBusRegId(...), 1);
 
         $this->sut->attach($mockEventManager);
     }

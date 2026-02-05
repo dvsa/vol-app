@@ -88,6 +88,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -98,9 +99,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpSubmissionStatuses
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmissionStatuses')]
     public function testHandleCommandWithAllocation($submissionStatus)
     {
         $this->irhpApplication->shouldReceive('shouldAllocatePermitsOnSubmission')
@@ -152,9 +151,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(self::IRHP_APPLICATION_ID, $result->getId('irhpApplication'));
     }
 
-    /**
-     * @dataProvider dpSubmissionStatuses
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmissionStatuses')]
     public function testHandleCommandWithoutAllocation($submissionStatus)
     {
         $this->irhpApplication->shouldReceive('shouldAllocatePermitsOnSubmission')
@@ -200,7 +197,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(self::IRHP_APPLICATION_ID, $result->getId('irhpApplication'));
     }
 
-    public function dpSubmissionStatuses()
+    public static function dpSubmissionStatuses()
     {
         return [
             [IrhpInterface::STATUS_ISSUING],

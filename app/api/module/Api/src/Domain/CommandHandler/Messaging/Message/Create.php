@@ -35,8 +35,8 @@ final class Create extends AbstractCommandHandler implements ToggleRequiredInter
     use ToggleAwareTrait;
     use AuthAwareTrait;
 
-    public const TASK_DESCRIPTION_ON_EXTERNAL_REPLY = 'New message';
-    public const TASK_DESCRIPTION_ON_INTERNAL_REPLY = 'Awaiting external response';
+    public const string TASK_DESCRIPTION_ON_EXTERNAL_REPLY = 'New message';
+    public const string TASK_DESCRIPTION_ON_INTERNAL_REPLY = 'Awaiting external response';
 
     protected $toggleConfig = [FeatureToggle::MESSAGING];
     protected $extraRepos = [

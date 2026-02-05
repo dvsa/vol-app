@@ -8,9 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\OrganisationUser
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationUser::class)]
 class OrganisationUserTest extends RepositoryTestCase
 {
     /**

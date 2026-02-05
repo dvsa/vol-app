@@ -7,9 +7,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument::class)]
 class CanCreateDocumentTest extends AbstractHandlerTestCase
 {
     /**
@@ -166,11 +164,11 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestIsValidExtensionInternal
      *
      * @param $valid
      * @param $extension
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValidExtensionInternal')]
     public function testIsValidExtensionInternal($valid, $extension)
     {
         $this->auth->shouldReceive('isGranted')
@@ -186,7 +184,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dataProviderTestIsValidExtensionInternal()
+    public static function dataProviderTestIsValidExtensionInternal()
     {
         return [
             [true, 'jpg'],
@@ -206,11 +204,11 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestIsValidExtensionExternal
      *
      * @param $valid
      * @param $extension
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValidExtensionExternal')]
     public function testIsValidExtensionExternal($valid, $extension)
     {
         $this->auth->shouldReceive('isGranted')
@@ -243,7 +241,7 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dataProviderTestIsValidExtensionExternal()
+    public static function dataProviderTestIsValidExtensionExternal()
     {
         return [
             [true, 'jpg'],

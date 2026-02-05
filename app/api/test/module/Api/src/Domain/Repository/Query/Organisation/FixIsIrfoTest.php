@@ -53,7 +53,7 @@ class FixIsIrfoTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider()
     {
         return [
             [

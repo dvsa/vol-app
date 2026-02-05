@@ -22,9 +22,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpGetActiveApplicationPath
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetActiveApplicationPath')]
     public function testGetActiveApplicationPath($applicationPaths, $dateToCheck, $expected)
     {
         $sut = new Entity();
@@ -33,7 +31,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getActiveApplicationPath($dateToCheck));
     }
 
-    public function dpGetActiveApplicationPath()
+    public static function dpGetActiveApplicationPath()
     {
         $inPast = new DateTime('last year');
         $lastWeek = new DateTime('-1 week');
@@ -85,9 +83,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsBilateralCabotageOnly
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateralCabotageOnly')]
     public function testIsBilateralCabotageOnly($applicationPathGroupId, $expected)
     {
         $sut = new Entity();
@@ -99,7 +95,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public function dpIsBilateralCabotageOnly()
+    public static function dpIsBilateralCabotageOnly()
     {
         return [
             [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, true],
@@ -108,9 +104,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsBilateralStandardOnly
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateralStandardOnly')]
     public function testIsBilateralStandardOnly($applicationPathGroupId, $expected)
     {
         $sut = new Entity();
@@ -122,7 +116,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public function dpIsBilateralStandardOnly()
+    public static function dpIsBilateralStandardOnly()
     {
         return [
             [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false],
@@ -131,9 +125,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsBilateralStandardAndCabotage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateralStandardAndCabotage')]
     public function testIsBilateralStandardAndCabotage($applicationPathGroupId, $expected)
     {
         $sut = new Entity();
@@ -145,7 +137,7 @@ class ApplicationPathGroupEntityTest extends EntityTester
         );
     }
 
-    public function dpIsBilateralStandardAndCabotage()
+    public static function dpIsBilateralStandardAndCabotage()
     {
         return [
             [Entity::BILATERALS_CABOTAGE_PERMITS_ONLY_ID, false],

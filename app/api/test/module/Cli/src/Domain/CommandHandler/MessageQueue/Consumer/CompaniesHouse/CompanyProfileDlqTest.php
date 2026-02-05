@@ -24,6 +24,7 @@ class CompanyProfileDlqTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CompanyProfileDlq();

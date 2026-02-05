@@ -6,9 +6,7 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases\Report;
 
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTest;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList::class)]
 class OpenListTest extends AbstractListQueryHandlerTest
 {
     protected $sutClass = \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Report\OpenList::class;

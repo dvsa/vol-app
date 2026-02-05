@@ -22,9 +22,7 @@ class TranslationKeyEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
     public function testCanDelete($transKeyTexts, $expected)
     {
         $entity = Entity::create(
@@ -35,7 +33,7 @@ class TranslationKeyEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public function canDeleteProvider()
+    public static function canDeleteProvider()
     {
         $noTexts = new ArrayCollection();
         $texts = new ArrayCollection([m::mock(TranslationKeyText::class)]);

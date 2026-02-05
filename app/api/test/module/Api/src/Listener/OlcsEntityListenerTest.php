@@ -14,9 +14,7 @@ use Dvsa\Olcs\Api\Domain\Repository\User as UserRepo;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Listener\OlcsEntityListener
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Listener\OlcsEntityListener::class)]
 class OlcsEntityListenerTest extends MockeryTestCase
 {
     /** @var  OlcsEntityListener */
@@ -143,9 +141,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    /**
-     * @dataProvider dpTestModifiedBy
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifiedBy')]
     public function testModifiedBy($currentUser, $expect)
     {
         $mockEntity = new EntityStub();
@@ -188,7 +184,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         $this->sut->preSoftDelete($lifecycleEvent);
     }
 
-    public function dpTestModifiedBy()
+    public static function dpTestModifiedBy()
     {
         $mockUser = Entity\User\User::create(
             'abc',
@@ -199,7 +195,7 @@ class OlcsEntityListenerTest extends MockeryTestCase
         return [
             [
                 'currentUser' => $mockUser,
-                'expectUpdate' => $mockUser,
+                'expect' => $mockUser,
             ],
             [
                 'currentUser' => Entity\User\User::anon(),

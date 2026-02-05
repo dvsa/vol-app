@@ -27,15 +27,13 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $this->mockPlatform->shouldReceive('getDateTimeFormatString')->andReturn('d-m-Y H:i:s');
     }
 
-    /**
-     * @dataProvider dpConvertToPhpValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToPhpValue')]
     public function testConvertToPhpValue($value, $expected)
     {
         static::assertSame($expected, $this->sut->convertToPHPValue($value, $this->mockPlatform));
     }
 
-    public function dpConvertToPhpValue()
+    public static function dpConvertToPhpValue()
     {
         return [
             [null, null],
@@ -58,15 +56,13 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $this->sut->convertToPHPValue($value, $this->mockPlatform);
     }
 
-    /**
-     * @dataProvider dpConvertToDatabaseValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToDatabaseValue')]
     public function testConvertToDatabaseValue($value, $expected)
     {
         static::assertSame($expected, $this->sut->convertToDatabaseValue($value, $this->mockPlatform));
     }
 
-    public function dpConvertToDatabaseValue()
+    public static function dpConvertToDatabaseValue()
     {
         return [
             [null, null],

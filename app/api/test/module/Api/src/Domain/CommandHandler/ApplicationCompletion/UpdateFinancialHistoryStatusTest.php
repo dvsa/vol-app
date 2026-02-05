@@ -63,6 +63,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandShortInsolvencyDetails()
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -80,6 +81,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithLongDetails()
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -97,6 +99,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithNos()
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);

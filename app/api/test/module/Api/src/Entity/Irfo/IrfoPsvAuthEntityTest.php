@@ -213,10 +213,10 @@ class IrfoPsvAuthEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isRefusableStates
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRefusableStates')]
     public function testIsRefusable($input, $expected)
     {
         $status = new RefData();
@@ -263,9 +263,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->refuse($newStatus);
     }
 
-    /**
-     * @dataProvider isWithdrawableStates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isWithdrawableStates')]
     public function testIsWithdrawable($input, $expected)
     {
         $status = new RefData();
@@ -303,7 +301,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->withdraw($newStatus);
     }
 
-    public function isWithdrawableStates()
+    public static function isWithdrawableStates()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -316,7 +314,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    public function isRefusableStates()
+    public static function isRefusableStates()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -329,9 +327,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider isCnsableStates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isCnsableStates')]
     public function testIsCnsable($input, $expected)
     {
         $status = new RefData();
@@ -341,7 +337,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCnsable());
     }
 
-    public function isCnsableStates()
+    public static function isCnsableStates()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -382,9 +378,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->continuationNotSought($newStatus);
     }
 
-    /**
-     * @dataProvider isApprovableStates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApprovableStates')]
     public function testIsApprovable($statusId, $outstandingFees, $expected)
     {
         $status = new RefData();
@@ -394,7 +388,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isApprovable($outstandingFees));
     }
 
-    public function isApprovableStates()
+    public static function isApprovableStates()
     {
         return [
             [Entity::STATUS_PENDING, [], false],
@@ -439,9 +433,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->approve($newStatus, ['FEE']);
     }
 
-    /**
-     * @dataProvider isRenewableStates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRenewableStates')]
     public function testIsRenewable($input, $expected)
     {
         $status = new RefData();
@@ -451,7 +443,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isRenewable());
     }
 
-    public function isRenewableStates()
+    public static function isRenewableStates()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -492,9 +484,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->entity->renew($newStatus);
     }
 
-    /**
-     * @dataProvider isGeneratableDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isGeneratableDataProvider')]
     public function testIsGeneratable($statusId, $outstandingFees, $expected)
     {
         $status = new RefData();
@@ -504,7 +494,7 @@ class IrfoPsvAuthEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isGeneratable($outstandingFees));
     }
 
-    public function isGeneratableDataProvider()
+    public static function isGeneratableDataProvider()
     {
         return [
             [Entity::STATUS_PENDING, [], false],

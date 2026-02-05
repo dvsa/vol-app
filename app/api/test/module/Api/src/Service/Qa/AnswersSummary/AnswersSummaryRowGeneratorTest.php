@@ -82,9 +82,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerateNotSupported($isSnapshot)
     {
         $this->expectException(RuntimeException::class);
@@ -105,7 +103,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],
@@ -113,9 +111,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($isSnapshot, $questionSlug, $shouldIncludeSlug, $expectedSlug)
     {
         $questionTranslationKey = 'question.translation.key';
@@ -205,7 +201,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [false, 'no-of-permits', true, 'no-of-permits'],

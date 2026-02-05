@@ -23,6 +23,7 @@ class LicencePsvVehiclesTest extends AbstractLvaFormServiceTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function testGetForm()
     {
         $formActions = m::mock()

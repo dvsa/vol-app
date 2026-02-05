@@ -44,6 +44,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -61,9 +62,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($fromInternal, $source, $withStockId)
     {
         $irhpAppId = 11;
@@ -185,7 +184,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         self::assertEquals($expectedResult, $this->sut->handleCommand($command)->toArray());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return
             [
@@ -196,9 +195,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
             ];
     }
 
-    /**
-     * @dataProvider dpLicenceNotEligible
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLicenceNotEligible')]
     public function testHandleCommandLicenceNotEligible($withStockId)
     {
         $permitDescription = 'permit description';
@@ -263,7 +260,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpLicenceNotEligible()
+    public static function dpLicenceNotEligible()
     {
         return [
             [true],

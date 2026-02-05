@@ -7,9 +7,7 @@ use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-/**
- * @covers \Olcs\Service\Data\DocumentSubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentSubCategory::class)]
 class DocumentSubCategoryTest extends AbstractListDataServiceTestCase
 {
     public const CAT_ID = 8001;

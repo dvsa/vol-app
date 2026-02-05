@@ -48,6 +48,7 @@ class OperatorLicenceController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         return $this->createView();
@@ -71,6 +72,7 @@ class OperatorLicenceController extends AbstractSurrenderController
         return $this->createView();
     }
 
+    #[\Override]
     public function alterForm($form)
     {
         $form->get('form-actions')->get('submit')->setLabel($this->translationHelper->translate('lva.external.save_and_continue.button'));

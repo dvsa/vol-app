@@ -81,13 +81,13 @@ class ImpoundingEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider updateHearingProvider
      *
      * @param $inputVenue
      * @param $inputOther
      * @param $savedVenue
      * @param $savedOther
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('updateHearingProvider')]
     public function testUpdateHearing($inputVenue, $inputOther, $savedVenue, $savedOther)
     {
         $impoundingType = m::mock(RefDataEntity::class);
@@ -129,7 +129,7 @@ class ImpoundingEntityTest extends EntityTester
         $this->assertSame($notes, $entity->getNotes());
     }
 
-    public function updateHearingProvider()
+    public static function updateHearingProvider()
     {
         $mockVenue = m::mock(Venue::class);
 

@@ -34,9 +34,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityThrowsBadRequestExceptionWhenHeaderIncorrect()
     {
         // Setup
@@ -56,9 +54,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityThrowsInvalidTokenExceptionWhenTokenIncorrect()
     {
         // Setup
@@ -82,9 +78,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->sut->getIdentity();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityReturnsAnonUserWhenTokenExpired()
     {
         // Setup
@@ -106,9 +100,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityReturnsAnonUserWhenHeaderMissing()
     {
         // Setup
@@ -121,9 +113,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityReturnsAnonUserWhenNoUserFound()
     {
         // Setup
@@ -146,9 +136,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame('anon', $identity->getUser()->getLoginId());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityReturnsExpectedUserWhenUserExists()
     {
         // Setup
@@ -175,9 +163,7 @@ class JWTIdentityProviderTest extends MockeryTestCase
         $this->assertSame(UserEntity::USER_TYPE_OPERATOR, $identity->getUser()->getUserType());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getIdentityReturnsSystemUserWhenConsoleRequest()
     {
         // Setup

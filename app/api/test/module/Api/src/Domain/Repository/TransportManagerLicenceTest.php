@@ -7,8 +7,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence::class)]
 class TransportManagerLicenceTest extends RepositoryTestCase
 {
     /** @var  Repository\TransportManagerLicence */

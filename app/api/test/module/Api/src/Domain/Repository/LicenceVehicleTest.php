@@ -23,9 +23,7 @@ use Hamcrest\Core\IsEqual;
 use Hamcrest\Core\IsIdentical;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle::class)]
 class LicenceVehicleTest extends RepositoryTestCase
 {
     /** @var  LicenceVehicleRepo */
@@ -722,9 +720,7 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame('result', $this->sut->fetchForRemoval());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createPaginatedVehiclesDataForLicenceQueryIsCallable()
     {
         // Setup
@@ -735,10 +731,8 @@ class LicenceVehicleTest extends RepositoryTestCase
         $this->assertIsCallable([$sut, 'createPaginatedVehiclesDataForLicenceQuery']);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createPaginatedVehiclesDataForLicenceQueryWhenQueryImplementsNotCorrectInterfaceDoesNotFilterByVehicleId()
     {
         // Setup
@@ -755,10 +749,8 @@ class LicenceVehicleTest extends RepositoryTestCase
         $sut->createPaginatedVehiclesDataForLicenceQuery($query, 1);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdAddsQueryCondition()
     {
         // Setup
@@ -780,7 +772,7 @@ class LicenceVehicleTest extends RepositoryTestCase
     /**
      * @return array
      */
-    public function vehiclesIdsDataProvider(): array
+    public static function vehiclesIdsDataProvider(): array
     {
         return [
             'integer array of vehicle ids' => [[1, 2, 3, 4]],
@@ -789,11 +781,9 @@ class LicenceVehicleTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     * @dataProvider vehiclesIdsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('vehiclesIdsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createPaginatedVehiclesDataForLicenceQueryFiltersByVehicleIdSetsAParameterForVehicleIds(array $vehicleIds)
     {
         // Setup
@@ -814,10 +804,8 @@ class LicenceVehicleTest extends RepositoryTestCase
         $sut->createPaginatedVehiclesDataForLicenceQuery($query, 1);
     }
 
-    /**
-     * @test
-     * @depends createPaginatedVehiclesDataForLicenceQueryIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createPaginatedVehiclesDataForLicenceQueryFiltersByRemovedVehiclesAddsQueryCondition()
     {
         // Setup

@@ -43,6 +43,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -508,9 +509,9 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider feeAmountsProvider
      * @param $amount
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeAmountsProvider')]
     public function testHandleCommandForZeroAmountFee($amount, $status)
     {
 
@@ -578,7 +579,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][101], $savedFee->getFeeType());
     }
 
-    public function feeAmountsProvider()
+    public static function feeAmountsProvider()
     {
         return [
             [0, FeeEntity::STATUS_PAID],

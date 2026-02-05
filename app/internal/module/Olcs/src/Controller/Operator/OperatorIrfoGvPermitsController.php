@@ -59,7 +59,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         FormHelperService $formHelperService,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        private Permission $permissionService
+        private readonly Permission $permissionService
     ) {
         parent::__construct($translationHelperService, $formHelperService, $flashMessengerHelperService, $navigation);
     }
@@ -115,6 +115,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         'irfoPermitStatus' => 'irfo_perm_s_pending'
     ];
 
+    #[\Override]
     public function detailsAction()
     {
         $this->placeholder()->setPlaceholder('isInternalReadOnly', $this->permissionService->isInternalReadOnly());
@@ -126,6 +127,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      *
      * @return array
      */
+    #[\Override]
     public function editAction()
     {
         return $this->notFoundAction();
@@ -136,6 +138,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      *
      * @return array
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

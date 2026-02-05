@@ -91,6 +91,7 @@ final class Snapshot extends AbstractCommandHandler implements TransactionedInte
         };
         return $status;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

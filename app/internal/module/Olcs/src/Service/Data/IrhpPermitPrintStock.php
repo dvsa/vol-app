@@ -38,7 +38,7 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
      */
     public function __construct(
         AbstractDataServiceServices $abstractDataServiceServices,
-        private TranslationHelperService $translator
+        private readonly TranslationHelperService $translator
     ) {
         parent::__construct($abstractDataServiceServices);
     }

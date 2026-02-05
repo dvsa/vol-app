@@ -13,10 +13,10 @@ use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
 class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param array $expected
      * @param array $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($expected, $value)
     {
         $sut = new MiscSnJustification();
@@ -30,7 +30,7 @@ class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideFilter()
+    public static function provideFilter()
     {
         $unforseenDetailValue = 'unforseen detail text';
         $unforseenDetailKey = 'unforseenDetail';

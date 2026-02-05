@@ -8,10 +8,8 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Olcs\Logging\Log\Logger;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class InitialDataLoadTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = InitialDataLoad::class;

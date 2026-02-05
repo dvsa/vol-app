@@ -282,9 +282,8 @@ class EmailTest extends MockeryTestCase
 
     /**
      * Tests sending an email without attachments
-     *
-     * @dataProvider toFromAddressProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toFromAddressProvider')]
     public function testToFromAddressException($fromEmail, $fromName, $toEmail, $exceptionMessage)
     {
         $this->expectException(EmailNotSentException::class);
@@ -306,7 +305,7 @@ class EmailTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function toFromAddressProvider()
+    public static function toFromAddressProvider()
     {
         return [
             ['foo@bar.com', 'from name', null, Email::MISSING_TO_ERROR],

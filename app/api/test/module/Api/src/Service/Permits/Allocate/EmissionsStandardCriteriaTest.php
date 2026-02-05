@@ -15,9 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardCriteriaTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpMatches
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
     public function testMatches($rangeEmissionsCategoryId, $criteriaEmissionsCategoryId, $expected)
     {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
@@ -33,7 +31,7 @@ class EmissionsStandardCriteriaTest extends MockeryTestCase
         );
     }
 
-    public function dpMatches()
+    public static function dpMatches()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::EMISSIONS_CATEGORY_EURO5_REF, true],

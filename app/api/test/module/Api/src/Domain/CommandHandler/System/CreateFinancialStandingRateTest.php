@@ -26,9 +26,7 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($goodsOrPsv, $licenceType, $vehicleType)
     {
         $params = [
@@ -71,7 +69,7 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-09-10', $savedRate->getEffectiveFrom()->format('Y-m-d'));
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [
@@ -147,9 +145,7 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandInputRulesViolation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandInputRulesViolation')]
     public function testHandleCommandInputRulesViolation(
         $goodsOrPsv,
         $licenceType,
@@ -173,7 +169,7 @@ class CreateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandInputRulesViolation()
+    public static function dpHandleCommandInputRulesViolation()
     {
         return [
             [

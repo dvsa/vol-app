@@ -8,9 +8,7 @@ use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList as Qry;
 use Mockery as m;
 use Olcs\Service\Data\SubCategoryDescription;
 
-/**
- * @covers \Olcs\Service\Data\SubCategoryDescription
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\SubCategoryDescription::class)]
 class SubCategoryDescriptionTest extends AbstractListDataServiceTestCase
 {
     /** @var SubCategoryDescription */

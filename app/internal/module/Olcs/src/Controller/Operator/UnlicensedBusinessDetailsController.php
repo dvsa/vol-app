@@ -24,6 +24,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('operator-unlicensed/business-details', [], [], true);
@@ -34,6 +35,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $operator = $this->params()->fromRoute('organisation');

@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefused;
 
 /**
  * Send Ebsr Refused Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrRefusedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-refused';

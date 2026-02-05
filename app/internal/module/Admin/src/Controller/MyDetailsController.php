@@ -63,6 +63,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToIndex();
@@ -73,6 +74,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
      *
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function editAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Your account');

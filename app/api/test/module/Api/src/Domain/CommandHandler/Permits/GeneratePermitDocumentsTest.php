@@ -311,7 +311,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForBilateralWithSuppressedCoverLetter()
+    public static function dpHandleCommandForBilateralWithSuppressedCoverLetter()
     {
         return [
             [CountryEntity::ID_BELARUS],
@@ -325,9 +325,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-    * @dataProvider dpHandleCommandForBilateralWithSuppressedCoverLetter
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForBilateralWithSuppressedCoverLetter')]
     public function testHandleCommandForBilateralWithSuppressedCoverLetter($countryId)
     {
         $irhpPermitId1 = 1;

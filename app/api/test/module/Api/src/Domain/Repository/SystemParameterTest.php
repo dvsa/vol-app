@@ -11,9 +11,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter as SystemParameterEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\SystemParameter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemParameter::class)]
 class SystemParameterTest extends RepositoryTestCase
 {
     /** @var  SystemParameterRepo */
@@ -128,52 +126,42 @@ class SystemParameterTest extends RepositoryTestCase
         $this->assertSame('VALUE', $this->sut->fetchValue('system.foo'));
     }
 
-    /**
-     * @dataProvider boolDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('boolDataProvider')]
     public function testGetDisableSelfServeCardPayments($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DISABLED_SELFSERVE_CARD_PAYMENTS, $value);
         $this->assertSame($expected, $this->sut->getDisableSelfServeCardPayments());
     }
 
-    /**
-     * @dataProvider boolDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('boolDataProvider')]
     public function testIsSelfservePromptEnabled($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::ENABLE_SELFSERVE_PROMPT, $value);
         $this->assertSame($expected, $this->sut->isSelfservePromptEnabled());
     }
 
-    /**
-     * @dataProvider boolDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('boolDataProvider')]
     public function testGetDisabledDigitalContinuations($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DISABLE_DIGITAL_CONTINUATIONS, $value);
         $this->assertSame($expected, $this->sut->getDisabledDigitalContinuations());
     }
 
-    /**
-     * @dataProvider boolDataProviderDeletes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('boolDataProviderDeletes')]
     public function testGetDisableDataRetentionDocumentDelete($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DISABLE_DATA_RETENTION_DOCUMENT_DELETE, $value);
         $this->assertSame($expected, $this->sut->getDisableDataRetentionDocumentDelete());
     }
 
-    /**
-     * @dataProvider boolDataProviderDeletes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('boolDataProviderDeletes')]
     public function testGetDisableDataRetentionDelete($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DISABLE_DATA_RETENTION_DELETE, $value);
         $this->assertSame($expected, $this->sut->getDisableDataRetentionDelete());
     }
 
-    public function boolDataProvider()
+    public static function boolDataProvider()
     {
         return [
             [true, true],
@@ -188,7 +176,7 @@ class SystemParameterTest extends RepositoryTestCase
         ];
     }
 
-    public function boolDataProviderDeletes()
+    public static function boolDataProviderDeletes()
     {
         return [
             [true, true],
@@ -203,16 +191,14 @@ class SystemParameterTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestGetDigitalContinuationReminderPeriod
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetDigitalContinuationReminderPeriod')]
     public function testGetDigitalContinuationReminderPeriod($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DIGITAL_CONTINUATION_REMINDER_PERIOD, $value);
         $this->assertSame($expected, $this->sut->getDigitalContinuationReminderPeriod());
     }
 
-    public function dataProviderTestGetDigitalContinuationReminderPeriod()
+    public static function dataProviderTestGetDigitalContinuationReminderPeriod()
     {
         return [
             [20, 20],
@@ -224,9 +210,7 @@ class SystemParameterTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestGetSystemDataRetentionUser
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetSystemDataRetentionUser')]
     public function testGetSystemDataRetentionUser($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::SYSTEM_DATA_RETENTION_USER, $value);
@@ -241,7 +225,7 @@ class SystemParameterTest extends RepositoryTestCase
         }
     }
 
-    public function dataProviderTestGetSystemDataRetentionUser()
+    public static function dataProviderTestGetSystemDataRetentionUser()
     {
         return [
             [20, 20],
@@ -253,9 +237,7 @@ class SystemParameterTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestGetDataRetentionDeleteLimit
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetDataRetentionDeleteLimit')]
     public function testGetDataRetentionDeleteLimit($expected, $value)
     {
         $this->setupFetchValue(SystemParameterEntity::DR_DELETE_LIMIT, $value);
@@ -263,7 +245,7 @@ class SystemParameterTest extends RepositoryTestCase
         $this->assertSame($expected, $this->sut->getDataRetentionDeleteLimit());
     }
 
-    public function dataProviderTestGetDataRetentionDeleteLimit()
+    public static function dataProviderTestGetDataRetentionDeleteLimit()
     {
         return [
             [20, 20],

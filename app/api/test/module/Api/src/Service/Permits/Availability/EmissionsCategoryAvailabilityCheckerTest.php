@@ -15,9 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestHasAvailability
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
     public function testHasAvailability($irhpPermitStockId, $emissionsCategoryId, $availableCount, $expectedReturn)
     {
         $emissionsCategoryAvailabilityCounter = m::mock(EmissionsCategoryAvailabilityCounter::class);
@@ -35,7 +33,7 @@ class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestHasAvailability()
+    public static function dpTestHasAvailability()
     {
         return [
             [1, RefData::EMISSIONS_CATEGORY_EURO5_REF, 0, false],

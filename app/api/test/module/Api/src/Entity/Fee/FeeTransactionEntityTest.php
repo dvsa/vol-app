@@ -32,8 +32,8 @@ class FeeTransactionEntityTest extends EntityTester
 
     /**
      * @param boolean $expected
-     * @dataProvider isRefundedProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isRefundedProvider')]
     public function testIsRefundedOrReversed(array $feeTransactions, $expected)
     {
         $this->sut->setReversingFeeTransactions(new ArrayCollection($feeTransactions));
@@ -41,7 +41,7 @@ class FeeTransactionEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isRefundedOrReversed());
     }
 
-    public function isRefundedProvider()
+    public static function isRefundedProvider()
     {
         return [
             [

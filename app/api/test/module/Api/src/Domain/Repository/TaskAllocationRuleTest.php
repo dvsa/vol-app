@@ -32,13 +32,13 @@ class TaskAllocationRuleTest extends RepositoryTestCase
     /**
      * Test fetch by parameters
      *
-     * @dataProvider fetchByParametersDataProvider
      * @param int $category
      * @param string $operatorType
      * @param string $trafficArea
      * @param bool $isMlh
      * @param string $query
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchByParametersDataProvider')]
     public function testFetchByParameters($category, $subCategory, $operatorType, $trafficArea, $isMlh, $query)
     {
         $qb = $this->createMockQb('[QUERY]');
@@ -73,7 +73,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function fetchByParametersDataProvider(): array
+    public static function fetchByParametersDataProvider(): array
     {
         return [
             // category, operatorType, trafficArea, isMlh, query
@@ -125,9 +125,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider')]
     public function testFetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResults(array $returnValues, bool $expectSubsequentCall)
     {
         $qb = $this->createMockQb('[QUERY]');
@@ -153,7 +151,7 @@ class TaskAllocationRuleTest extends RepositoryTestCase
         );
     }
 
-    public function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): array
+    public static function fetchByParametersAttemptsLookupWithoutSubCategoryWhenCallReturnsNoResultsDataProvider(): array
     {
         return [
             'Subcategory returns result' => [

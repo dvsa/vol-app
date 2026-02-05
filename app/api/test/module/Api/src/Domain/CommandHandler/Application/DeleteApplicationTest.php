@@ -24,6 +24,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         parent::initReferences();
@@ -46,9 +47,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandWrongStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandWrongStatus')]
     public function testHandleCommandWrongStatus($status)
     {
         $data = [
@@ -67,7 +66,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandleCommandWrongStatus()
+    public static function dpTestHandleCommandWrongStatus()
     {
         return [
             [Application::APPLICATION_STATUS_CURTAILED],

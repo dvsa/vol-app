@@ -152,9 +152,7 @@ class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
             ]), $result->getFlag('error'));
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(string $sideEffectClass, array $sideEffectData, string $journey): void
     {
         $id = 999;
@@ -196,7 +194,7 @@ class ProcessAuthResponseTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($redirectUrl, $result->getFlag('redirect_url'));
     }
 
-    public function dpHandleCommand(): array
+    public static function dpHandleCommand(): array
     {
         $id = 999;
         $digitalSignatureId = 666;

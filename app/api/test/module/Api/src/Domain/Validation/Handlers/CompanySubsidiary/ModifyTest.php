@@ -47,9 +47,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider licenceProviderProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProviderProvider')]
     public function testIsValidWithContextNoAccess($applicationId, $licenceId, $provider)
     {
         $data = [
@@ -68,9 +66,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider licenceProviderProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProviderProvider')]
     public function testIsValidWithContextNoOwnership($applicationId, $licenceId, $provider)
     {
         $data = [
@@ -90,9 +86,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider licenceProviderProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProviderProvider')]
     public function testIsValidWithContextAndOwnership($applicationId, $licenceId, $provider)
     {
         $data = [
@@ -118,9 +112,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals(true, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider licenceProviderProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProviderProvider')]
     public function testIsValidWithContextAndOwnershipWithoutMatching($applicationId, $licenceId, $provider)
     {
         $data = [
@@ -148,7 +140,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals(false, $this->sut->isValid($dto));
     }
 
-    public function licenceProviderProvider()
+    public static function licenceProviderProvider()
     {
         return [
             [222, null, 'getLicenceFromApplication'],

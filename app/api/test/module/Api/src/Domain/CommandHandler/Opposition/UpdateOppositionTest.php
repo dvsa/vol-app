@@ -145,6 +145,7 @@ class UpdateOppositionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

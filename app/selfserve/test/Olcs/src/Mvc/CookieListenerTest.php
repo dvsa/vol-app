@@ -41,7 +41,7 @@ class CookieListenerTest extends MockeryTestCase
     public function testAttach(): void
     {
         $em = m::mock(EventManagerInterface::class);
-        $em->shouldReceive('attach')->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1)->once();
+        $em->shouldReceive('attach')->with(MvcEvent::EVENT_ROUTE, $this->sut->onRoute(...), 1)->once();
 
         $this->sut->attach($em);
     }

@@ -65,6 +65,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $hlpFlashMsgr);
     }
 
+    #[\Override]
     public function indexAction()
     {
          return $this->createView();
@@ -86,6 +87,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         return $this->createView();
     }
 
+    #[\Override]
     public function alterForm($form)
     {
         $form->get('form-actions')->get('submit')->setLabel($this->translationHelper->translate('lva.external.save_and_continue.button'));

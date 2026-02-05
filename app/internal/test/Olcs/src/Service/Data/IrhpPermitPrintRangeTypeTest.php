@@ -47,9 +47,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($results, $expected)
     {
         $irhpPermitStockId = 100;
@@ -66,7 +64,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($irhpPermitStockId, $this->sut->getIrhpPermitStock());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions()
     {
         return [
             'with data' => [

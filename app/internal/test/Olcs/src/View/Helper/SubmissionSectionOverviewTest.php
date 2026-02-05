@@ -13,10 +13,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionOverviewTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
     public function testInvoke($input, $expected)
     {
         $sut = new SubmissionSectionOverview();
@@ -41,10 +41,10 @@ class SubmissionSectionOverviewTest extends TestCase
     }
 
     /**
-     * @dataProvider provideInvokeNotPluggable
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvokeNotPluggable')]
     public function testInvokeNotPluggable($input, $expected)
     {
         $sut = new SubmissionSectionOverview();
@@ -64,7 +64,7 @@ class SubmissionSectionOverviewTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke()
     {
         return [
             [['submissionSection' => '', 'data' => []], ''],
@@ -77,7 +77,7 @@ class SubmissionSectionOverviewTest extends TestCase
         ];
     }
 
-    public function provideInvokeNotPluggable()
+    public static function provideInvokeNotPluggable()
     {
         return [
             [['submissionSection' => 'rubbish', 'data' => []], ''],

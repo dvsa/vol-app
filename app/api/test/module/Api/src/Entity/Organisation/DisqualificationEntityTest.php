@@ -121,9 +121,7 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame(Entity::STATUS_INACTIVE, $this->sut->getStatus());
     }
 
-    /**
-     * @dataProvider dpGetStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetStatus')]
     public function testGetStatus($expectedStatus, $startDate, $period)
     {
         $this->sut->setStartDate((new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime($startDate))->format('Y-m-d'));
@@ -133,7 +131,7 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame($expectedStatus, $this->sut->getStatus());
     }
 
-    public function dpGetStatus()
+    public static function dpGetStatus()
     {
         return [
             [Entity::STATUS_INACTIVE, '-2 month', 1],

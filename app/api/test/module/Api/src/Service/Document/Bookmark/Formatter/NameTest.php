@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Name;
  */
 class NameTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider nameProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('nameProvider')]
     public function testFormat($input, $expected)
     {
         $this->assertEquals(
@@ -22,7 +20,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function nameProvider()
+    public static function nameProvider()
     {
         return [
             [

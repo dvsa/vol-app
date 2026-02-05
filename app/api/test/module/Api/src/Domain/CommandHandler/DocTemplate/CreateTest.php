@@ -23,9 +23,7 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Create::class)]
 class CreateTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -59,6 +57,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [

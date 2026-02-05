@@ -16,9 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AbstractStandardConditionsTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetQuery')]
     public function testGetQuery($service, $expectClass)
     {
         eval(
@@ -43,27 +41,25 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         }
     }
 
-    public function dpTestGetQuery()
+    public static function dpTestGetQuery()
     {
         return [
             [
-                'SERVICE' => 'application',
+                'service' => 'application',
                 'expectClass' => DomainQry\Bookmark\ApplicationBundle::class,
             ],
             [
-                'SERVICE' => 'licence',
+                'service' => 'licence',
                 'expectClass' => DomainQry\Bookmark\LicenceBundle::class,
             ],
             [
-                'SERVICE' => 'invalid',
+                'service' => 'invalid',
                 'expectClass' => null,
             ],
         ];
     }
 
-    /**
-     * @dataProvider dbTestRender
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dbTestRender')]
     public function testRender($licType, $vehType, $expect)
     {
         /** @var m\MockInterface|AbstractStandardConditionsStub $sut */
@@ -88,7 +84,7 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         $sut->render();
     }
 
-    public function dbTestRender()
+    public static function dbTestRender()
     {
         return [
             [

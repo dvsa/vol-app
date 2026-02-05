@@ -22,6 +22,7 @@ class UpdateWrittenExplanationTest extends AbstractUpdateApplicationTest
         'psvSmallPartWritten',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

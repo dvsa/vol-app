@@ -35,9 +35,7 @@ class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handleCommandDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandDataProvider')]
     public function testHandleCommand($isInternal, $expectedUrl)
     {
         $userId = 111;
@@ -98,7 +96,7 @@ class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function handleCommandDataProvider()
+    public static function handleCommandDataProvider()
     {
         return [
             [false, 'http://selfserve/'],

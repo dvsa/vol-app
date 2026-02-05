@@ -7,10 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class AccessTokenTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider isExpiredDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isExpiredDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isExpired(int $issuedAt, int $expiresIn, bool $isExpired)
     {
         $accessToken = new AccessToken(
@@ -24,9 +22,7 @@ class AccessTokenTest extends TestCase
         $this->assertEquals($isExpired, $accessToken->isExpired());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getAuthorisationHeader()
     {
         $accessToken = new AccessToken(
@@ -41,7 +37,7 @@ class AccessTokenTest extends TestCase
     }
 
 
-    public function isExpiredDataProvider()
+    public static function isExpiredDataProvider()
     {
         return [
             'has expired' => [

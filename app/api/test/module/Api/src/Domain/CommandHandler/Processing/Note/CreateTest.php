@@ -32,6 +32,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -72,9 +73,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($data, $expected)
     {
         $command = CreateCommand::create($data);
@@ -148,7 +147,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             [

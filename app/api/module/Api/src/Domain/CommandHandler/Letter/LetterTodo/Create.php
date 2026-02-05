@@ -18,9 +18,11 @@ final class Create extends AbstractCommandHandler
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         $entity = new LetterTodoEntity();
-        
+
         // Set working properties - versioning will be handled by repository
         $entity->setDescription($command->getDescription());
         $entity->setHelpText($command->getHelpText());
+    }
+}

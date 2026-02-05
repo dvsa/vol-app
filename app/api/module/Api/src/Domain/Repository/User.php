@@ -36,6 +36,7 @@ class User extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function initService(RepositoryServiceManager $serviceManager)
     {
         $this->roleRepo = $serviceManager->get('Role');
@@ -49,6 +50,7 @@ class User extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         parent::buildDefaultQuery($qb, $id);
@@ -69,6 +71,7 @@ class User extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         parent::buildDefaultListQuery($qb, $query, $compositeFields);

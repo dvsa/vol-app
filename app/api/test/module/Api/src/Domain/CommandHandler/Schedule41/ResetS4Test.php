@@ -27,6 +27,7 @@ class ResetS4Test extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [

@@ -48,9 +48,7 @@ class PoliceTest extends MockeryTestCase
         $this->assertSame($publicationLink->getPoliceDatas()[1]->getPerson(), $person3);
     }
 
-    /**
-     * @dataProvider dataProviderTestProcessNewApplication
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessNewApplication')]
     public function testProcessNewApplication($expectTmAdded, $sectionId)
     {
         $sut = new \Dvsa\Olcs\Api\Service\Publication\Process\Application\Police();
@@ -86,7 +84,7 @@ class PoliceTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProcessNewApplication()
+    public static function dataProviderTestProcessNewApplication()
     {
         return [
             [true, PublicationSection::APP_NEW_SECTION],

@@ -37,6 +37,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->categoryReferences = [

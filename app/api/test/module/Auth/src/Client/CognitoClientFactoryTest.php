@@ -32,9 +32,7 @@ class CognitoClientFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -44,10 +42,8 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfClient()
     {
         // Setup
@@ -61,10 +57,8 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(Client::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigCognitoNamespaceNotDefined(): void
     {
         // Setup
@@ -79,11 +73,9 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @dataProvider incorrectSettingsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('incorrectSettingsProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigSettingsNotDefined(array $config): void
     {
         // Setup
@@ -108,7 +100,7 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->sut = new CognitoClientFactory();
     }
 
-    public function incorrectSettingsProvider()
+    public static function incorrectSettingsProvider()
     {
         return [
             'Missing clientId' => [

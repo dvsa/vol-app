@@ -12,7 +12,7 @@ use Olcs\XmlTools\Xml\Specification\RecursionValue;
 
 class CgrResponseXml
 {
-    private ?string $nsPrefix;
+    private ?string $nsPrefix = null;
 
     public function __construct(private readonly MapXmlFile $mapXmlFile, private readonly string $xmlNs)
     {

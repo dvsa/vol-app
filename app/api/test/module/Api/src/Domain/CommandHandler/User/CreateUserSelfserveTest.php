@@ -54,6 +54,7 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -172,7 +173,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_PARTNER);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -196,7 +196,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_LOCAL_AUTHORITY);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
@@ -297,7 +296,6 @@ class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($currentUser, 'wrong');
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

@@ -116,6 +116,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      *
      * @return Response|TableBuilder|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /**
@@ -176,7 +177,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        $this->formPost($form, [$this, 'processAddForm']);
+        $this->formPost($form, $this->processAddForm(...));
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -298,9 +299,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $processed = $this->processFiles(
             $form,
             'details->file',
-            [$this, 'processAdditionalInformationFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getDocuments']
+            $this->processAdditionalInformationFileUpload(...),
+            $this->deleteFile(...),
+            $this->getDocuments(...)
         );
 
         /**
@@ -371,9 +372,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $processed = $this->processFiles(
             $form,
             'details->file',
-            [$this, 'processAdditionalInformationFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getDocuments']
+            $this->processAdditionalInformationFileUpload(...),
+            $this->deleteFile(...),
+            $this->getDocuments(...)
         );
 
         if ($request->isPost()) {
@@ -912,7 +913,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         $this->otherLicenceForm = $form;
-        $this->formPost($form, [$this, 'processOtherLicenceForm']);
+        $this->formPost($form, $this->processOtherLicenceForm(...));
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();

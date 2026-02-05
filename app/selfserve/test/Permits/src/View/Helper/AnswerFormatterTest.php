@@ -130,9 +130,8 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
     public function testInvokeOther($questionType): void
     {
         $input = [
@@ -166,9 +165,8 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Tests answer rendered as expected for string/custom
-     *
-     * @dataProvider dpInvokeOther
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvokeOther')]
     public function testInvokeOtherNoEscape($questionType): void
     {
         $input = [
@@ -201,7 +199,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{'question_type_string'}, list{'question_type_custom'}}
      */
-    public function dpInvokeOther(): array
+    public static function dpInvokeOther(): array
     {
         return [
             [RefData::QUESTION_TYPE_STRING],

@@ -46,13 +46,13 @@ class BusRegEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     /**
-     * @dataProvider shouldCreateFeeProvider
      *
      * @param $receivedDate
      * @param $status
      * @param $fees
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shouldCreateFeeProvider')]
     public function testShouldCreateFee($receivedDate, $status, $fees, $expectedResult)
     {
         $statusRefData = new RefData($status);
@@ -69,7 +69,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function shouldCreateFeeProvider()
+    public static function shouldCreateFeeProvider()
     {
         $outstandingFee = m::mock(FeeEntity::class);
         $outstandingFee->shouldReceive('isPaid')->andReturn(false);
@@ -143,9 +143,8 @@ class BusRegEntityTest extends EntityTester
      * @param bool   $isLatestVariation
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider isReadOnlyProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isReadOnlyProvider')]
     public function testIsReadOnly($isLatestVariation, $status, $expected)
     {
         $busRegStatus = new RefDataEntity($status);
@@ -163,7 +162,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isReadOnlyProvider()
+    public static function isReadOnlyProvider()
     {
         return [
             [false, Entity::STATUS_NEW, true],
@@ -192,9 +191,8 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider isCancellationProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isCancellationProvider')]
     public function testIsCancellation($status, $expected)
     {
         $busRegStatus = new RefDataEntity($status);
@@ -209,7 +207,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isCancellationProvider()
+    public static function isCancellationProvider()
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -229,9 +227,8 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $status
      * @param bool   $expected
-     *
-     * @dataProvider dpIsCancelled
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCancelled')]
     public function testIsCancelled($status, $expected)
     {
         $busRegStatus = new RefDataEntity($status);
@@ -246,7 +243,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function dpIsCancelled()
+    public static function dpIsCancelled()
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -266,9 +263,8 @@ class BusRegEntityTest extends EntityTester
      *
      * @param string $isTxcApp
      * @param bool   $expected
-     *
-     * @dataProvider isFromEbsrProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isFromEbsrProvider')]
     public function testIsFromEbsr($isTxcApp, $expected)
     {
         $busReg = new Entity();
@@ -282,7 +278,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isFromEbsrProvider()
+    public static function isFromEbsrProvider()
     {
         return [
             ['Y', true],
@@ -294,9 +290,8 @@ class BusRegEntityTest extends EntityTester
      * Tests whether bus reg is from a data refresh
      *
      * @param $isDataRefresh
-     *
-     * @dataProvider isEbsrRefreshProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isEbsrRefreshProvider')]
     public function testIsEbsrRefresh($isDataRefresh)
     {
         $ebsrSubmission = m::mock(EbsrSubmission::class);
@@ -313,7 +308,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isEbsrRefreshProvider()
+    public static function isEbsrRefreshProvider()
     {
         return [
             [true],
@@ -326,9 +321,8 @@ class BusRegEntityTest extends EntityTester
      *
      * @param int  $noticePeriodId
      * @param bool $expected
-     *
-     * @dataProvider isScottishRulesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isScottishRulesProvider')]
     public function testIsScottishRules($noticePeriodId, $expected)
     {
         $noticePeriod = new BusNoticePeriodEntity();
@@ -344,7 +338,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isScottishRulesProvider()
+    public static function isScottishRulesProvider()
     {
         return [
             [BusNoticePeriodEntity::NOTICE_PERIOD_SCOTLAND, true],
@@ -702,12 +696,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider createVariationProvider
      *
      * @param $statusId
-     *
      * @return bool
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('createVariationProvider')]
     public function testCreateVariation($statusId)
     {
         $id = 15;
@@ -807,7 +800,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function createVariationProvider()
+    public static function createVariationProvider()
     {
         return [
             [Entity::STATUS_VAR],
@@ -933,7 +926,7 @@ class BusRegEntityTest extends EntityTester
         $this->expectException(ForbiddenException::class);
 
         $this->getAssertionsForCanMakeDecisionIsFalse();
-        $this->entity->resetStatus(null);
+        $this->entity->resetStatus();
 
         return true;
     }
@@ -1108,12 +1101,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCalculateNoticeDate
      *
      * @param array  $busNoticePeriodData
      * @param array  $busRegData
      * @param string $expectedEffectiveDate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCalculateNoticeDate')]
     public function testRefuseByShortNotice($busNoticePeriodData, $busRegData, $expectedEffectiveDate)
     {
         $this->getAssertionsForCanMakeDecisionIsTrue();
@@ -1128,12 +1121,12 @@ class BusRegEntityTest extends EntityTester
                 $parent->setEffectiveDate($value['effectiveDate']);
                 $value = $parent;
             }
-            $this->entity->{'set' . ucwords($key)}($value);
+            $this->entity->{'set' . ucwords((string) $key)}($value);
         }
 
         $busNoticePeriod = new BusNoticePeriodEntity();
         foreach ($busNoticePeriodData as $key => $value) {
-            $busNoticePeriod->{'set' . ucwords($key)}($value);
+            $busNoticePeriod->{'set' . ucwords((string) $key)}($value);
         }
         $this->entity->setBusNoticePeriod($busNoticePeriod);
 
@@ -1148,7 +1141,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedEffectiveDate, $this->entity->getEffectiveDate());
     }
 
-    public function provideCalculateNoticeDate()
+    public static function provideCalculateNoticeDate()
     {
         $scotRules = [
             'standardPeriod' => 42,
@@ -1400,11 +1393,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider getStatusForGrantDataProvider
      *
      * @param string $statusId
      * @param array  $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStatusForGrantDataProvider')]
     public function testGetStatusForGrant($statusId, $expected)
     {
         $status = new RefDataEntity();
@@ -1414,7 +1407,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getStatusForGrant());
     }
 
-    public function getStatusForGrantDataProvider()
+    public static function getStatusForGrantDataProvider()
     {
         return [
             [Entity::STATUS_NEW, Entity::STATUS_REGISTERED],
@@ -1424,11 +1417,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isShortNoticeRefusedDataProvider
      *
      * @param string $shortNoticeRefused
      * @param array  $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeRefusedDataProvider')]
     public function testIsShortNoticeRefused($shortNoticeRefused, $expected)
     {
         $this->entity->setShortNoticeRefused($shortNoticeRefused);
@@ -1436,7 +1429,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isShortNoticeRefused());
     }
 
-    public function isShortNoticeRefusedDataProvider()
+    public static function isShortNoticeRefusedDataProvider()
     {
         return [
             [null, false],
@@ -1446,13 +1439,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider getDecisionDataProvider
      *
      * @param string $statusId
      * @param string $shortNoticeRefused
      * @param bool   $withWithdrawnReason
      * @param array  $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDecisionDataProvider')]
     public function testGetDecision($statusId, $shortNoticeRefused, $withWithdrawnReason, $expected)
     {
         $status = new RefDataEntity();
@@ -1475,7 +1468,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getDecision());
     }
 
-    public function getDecisionDataProvider()
+    public static function getDecisionDataProvider()
     {
         return [
             // registered
@@ -1568,11 +1561,11 @@ class BusRegEntityTest extends EntityTester
      * Tests that timetable and supplied map don't need to be set to yes for granting a cancellation.
      * New and variation should return false
      *
-     * @dataProvider dpIsGrantableForCancellation
      *
      * @param $status
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGrantableForCancellation')]
     public function testIsGrantableForCancellation($status, $expected)
     {
         $this->getAssertionsForIsGrantableCancellation();
@@ -1586,11 +1579,11 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests that grant is only possible when in certain statuses
      *
-     * @dataProvider provideIsGrantableForStatusCases
      *
      * @param $status
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsGrantableForStatusCases')]
     public function testIsGrantableForStatus($status, $expected)
     {
         $this->getAssertionsForIsGrantable();
@@ -1610,7 +1603,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpIsGrantableForCancellation()
+    public static function dpIsGrantableForCancellation()
     {
         return [
             [Entity::STATUS_NEW, false],
@@ -1723,9 +1716,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertFalse($this->entity->isGrantable());
     }
 
-    /**
-     * @dataProvider dpTestIsGrantableServiceNo
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsGrantableServiceNo')]
     public function testIsGrantableServiceNo(?string $serviceNo, bool $expectedResult): void
     {
         $this->getAssertionsForIsGrantable();
@@ -1734,7 +1725,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $this->entity->isGrantable());
     }
 
-    public function dpTestIsGrantableServiceNo(): array
+    public static function dpTestIsGrantableServiceNo(): array
     {
         return [
             ['serviceNo' => null, 'expectedResult' => false],
@@ -2164,13 +2155,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpGetPublicationSectionForGrantEmailProvider
      *
      * @param string $status
      * @param string $revertStatus
      * @param string $shortNotice
      * @param string $section
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetPublicationSectionForGrantEmailProvider')]
     public function testGetPublicationSectionForGrantEmail($status, $revertStatus, $shortNotice, $section)
     {
         $entity = new Entity();
@@ -2183,7 +2174,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($section, $entity->getPublicationSectionForGrantEmail());
     }
 
-    public function dpGetPublicationSectionForGrantEmailProvider()
+    public static function dpGetPublicationSectionForGrantEmailProvider()
     {
         return [
             [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'Y', PublicationSection::BUS_NEW_SHORT_SECTION],
@@ -2198,10 +2189,10 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests the method throws exception if status is incorrect
      *
-     * @dataProvider publicationSectionForGrantEmailInvalidStatusProvider
      *
      * @param string $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionForGrantEmailInvalidStatusProvider')]
     public function testPublicationSectionForGrantEmailStatusException($status)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
@@ -2218,7 +2209,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationSectionForGrantEmailInvalidStatusProvider()
+    public static function publicationSectionForGrantEmailInvalidStatusProvider()
     {
         return [
             [Entity::STATUS_NEW],
@@ -2234,11 +2225,11 @@ class BusRegEntityTest extends EntityTester
     /**
      * Tests the method throws exception if revertStatus is incorrect
      *
-     * @dataProvider publicationSectionForGrantEmailInvalidRevertStatusProvider
      *
      * @param        $status
      * @param string $revertStatus
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionForGrantEmailInvalidRevertStatusProvider')]
     public function testPublicationSectionForGrantEmailRevertStatusException($status, $revertStatus)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
@@ -2257,7 +2248,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationSectionForGrantEmailInvalidRevertStatusProvider()
+    public static function publicationSectionForGrantEmailInvalidRevertStatusProvider()
     {
         return [
             [Entity::STATUS_REGISTERED, Entity::STATUS_CANCEL],
@@ -2335,12 +2326,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider getFormattedServiceNumbersProvider
      *
      * @param string          $serviceNo
      * @param ArrayCollection $otherServiceNumbers
      * @param string          $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormattedServiceNumbersProvider')]
     public function testGetFormattedServiceNumbers($serviceNo, $otherServiceNumbers, $expected)
     {
         $busReg = new Entity();
@@ -2355,7 +2346,7 @@ class BusRegEntityTest extends EntityTester
      *
      * @return array
      */
-    public function getFormattedServiceNumbersProvider()
+    public static function getFormattedServiceNumbersProvider()
     {
         $serviceNo1 = '4567';
         $serviceNo2 = '8910';
@@ -2388,9 +2379,8 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeStandardProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeStandardProvider')]
     public function testIsShortNoticeStandardRules($variationNo, $receivedDate, $effectiveDate, $expected)
     {
         /** @var m\Mock|BusNoticePeriodEntity $standardRules */
@@ -2412,7 +2402,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeStandardProvider()
+    public static function isShortNoticeStandardProvider()
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2439,9 +2429,8 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeNewScottishProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeNewScottishProvider')]
     public function testIsShortNoticeNewScottishRules($variationNo, $receivedDate, $effectiveDate, $expected)
     {
         /** @var m\Mock|BusNoticePeriodEntity $standardRules */
@@ -2463,7 +2452,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeNewScottishProvider()
+    public static function isShortNoticeNewScottishProvider()
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2480,9 +2469,8 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $expected
-     *
-     * @dataProvider isShortNoticeWalesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeWalesProvider')]
     public function testIsShortNoticeNewWalesRules($variationNo, $receivedDate, $effectiveDate, $expected)
     {
         $standardRules = m::mock(BusNoticePeriodEntity::class);
@@ -2504,7 +2492,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeWalesProvider()
+    public static function isShortNoticeWalesProvider()
     {
         return [
             [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
@@ -2524,9 +2512,8 @@ class BusRegEntityTest extends EntityTester
      * @param $parentDate
      * @param $standardPeriodCalled
      * @param $expected
-     *
-     * @dataProvider isShortNoticeVariationScottishProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isShortNoticeVariationScottishProvider')]
     public function testIsShortNoticeVariationScottishRules(
         $receivedDate,
         $effectiveDate,
@@ -2557,7 +2544,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isShortNoticeVariationScottishProvider()
+    public static function isShortNoticeVariationScottishProvider()
     {
         return [
             ['2014-07-15', '2014-07-21', '2014-06-11', 0, 'Y'], //parent less than 90 days
@@ -2574,9 +2561,8 @@ class BusRegEntityTest extends EntityTester
      * @param $effectiveDate
      * @param $receivedDate
      * @param $parent
-     *
-     * @dataProvider shortNoticeScottishRulesWithMissingParentProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shortNoticeScottishRulesWithMissingParentProvider')]
     public function testShortNoticeScottishRulesWithMissingParent($effectiveDate, $receivedDate, $parent)
     {
         /** @var m\Mock|BusNoticePeriodEntity $scottishRules */
@@ -2597,7 +2583,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function shortNoticeScottishRulesWithMissingParentProvider()
+    public static function shortNoticeScottishRulesWithMissingParentProvider()
     {
         return [
             ['2016-12-25', '2016-12-26', null],
@@ -2610,9 +2596,8 @@ class BusRegEntityTest extends EntityTester
      *
      * @param $effectiveDate
      * @param $receivedDate
-     *
-     * @dataProvider shortNoticeMissingDatesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shortNoticeMissingDatesProvider')]
     public function testShortNoticeMissingDates($effectiveDate, $receivedDate)
     {
         $scottishRules = m::mock(BusNoticePeriodEntity::class);
@@ -2630,7 +2615,7 @@ class BusRegEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function shortNoticeMissingDatesProvider()
+    public static function shortNoticeMissingDatesProvider()
     {
         return [
             ['2016-12-25', null],
@@ -2761,11 +2746,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanWithdrawCases
      *
      * @param $status
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanWithdrawCases')]
     public function testCanWithdraw($status, $expected)
     {
         $busReg = new Entity();
@@ -2782,11 +2767,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanRefuseCases
      *
      * @param $status
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRefuseCases')]
     public function testCanRefuse($status, $expected)
     {
         $busReg = new Entity();
@@ -2803,13 +2788,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanRefuseByShortNoticeCases
      *
      * @param $status
      * @param $isShortNotice
      * @param $isShortNoticeRefused
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRefuseByShortNoticeCases')]
     public function testCanRefuseByShortNotice($status, $isShortNotice, $isShortNoticeRefused, $expected)
     {
         $busReg = new Entity();
@@ -2848,12 +2833,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCreateCancellationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCreateCancellationCases')]
     public function testCanCreateCancellation($status, $isLatestVariation, $expected)
     {
         /** @var Entity|m\Mock $busReg */
@@ -2883,11 +2868,11 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanPrintCases
      *
      * @param $status
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanPrintCases')]
     public function testCanPrint($status, $expected)
     {
         $busReg = new Entity();
@@ -2904,13 +2889,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanRequestNewRouteMapCases
      *
      * @param $isFromEbsr
      * @param $expected
-     *
      * @internal     param $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRequestNewRouteMapCases')]
     public function testRequestNewRouteMapPrint($isFromEbsr, $expected)
     {
         /** @var Entity|m\Mock $busReg */
@@ -2919,7 +2903,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canRequestNewRouteMap());
     }
 
-    public function provideCanRequestNewRouteMapCases()
+    public static function provideCanRequestNewRouteMapCases()
     {
         return [
             ['isFromEbsr' => true, 'expected' => true],
@@ -2928,12 +2912,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanRepublishCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanRepublishCases')]
     public function testCanRepublish($status, $isLatestVariation, $expected)
     {
         /** @var Entity|m\Mock $busReg */
@@ -2963,12 +2947,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCancelByAdminCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCancelByAdminCases')]
     public function testCanCancelByAdmin($status, $isLatestVariation, $expected)
     {
         /** @var Entity|m\Mock $busReg */
@@ -2998,12 +2982,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanResetRegistrationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanResetRegistrationCases')]
     public function testCanResetRegistration($status, $isLatestVariation, $expected)
     {
         /** @var Entity|m\Mock $busReg */
@@ -3041,12 +3025,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider provideCanCreateVariationCases
      *
      * @param $status
      * @param $isLatestVariation
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCanCreateVariationCases')]
     public function testCantCreateVariation($status, $isLatestVariation, $expected)
     {
         /** @var Entity|m\Mock $busReg */

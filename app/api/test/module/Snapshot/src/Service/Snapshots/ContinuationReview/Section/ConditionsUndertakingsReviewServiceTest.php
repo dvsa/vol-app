@@ -32,9 +32,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new ConditionsUndertakingsReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider licenceProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
     public function testGetConfigFromData($isPsv, $isRestricted, $variables)
     {
         $continuationDetail = new ContinuationDetail();
@@ -66,7 +64,7 @@ class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function licenceProvider()
+    public static function licenceProvider()
     {
         return [
             'isPsvRestricted' => [

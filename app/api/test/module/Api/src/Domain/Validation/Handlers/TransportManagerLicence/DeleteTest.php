@@ -37,9 +37,8 @@ class DeleteTest extends AbstractHandlerTestCase
      * @param $canAccess
      * @param $expected
      * @param $userId
-     *
-     * @dataProvider dpIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($canAccess, $expected, $userId)
     {
         $mockUser = $this->mockUser();
@@ -64,7 +63,7 @@ class DeleteTest extends AbstractHandlerTestCase
      *
      * @return array
      */
-    public function dpIsValid()
+    public static function dpIsValid()
     {
         return [
             [true, true, 10],

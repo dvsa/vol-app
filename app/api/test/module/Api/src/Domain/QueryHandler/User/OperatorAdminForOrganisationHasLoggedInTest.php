@@ -28,7 +28,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): array
+    public static function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): array
     {
         return [
             'HasLoggedIn' => [
@@ -42,9 +42,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn')]
     public function testHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(int $fetchCountResult, bool $expectedOperatorAdminHasLoggedIn): void
     {
         $organisationId = 1;
@@ -61,7 +59,7 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $this->assertEquals($expectedOperatorAdminHasLoggedIn, $result['operatorAdminHasLoggedIn']);
     }
 
-    public function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): array
+    public static function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): array
     {
         return [
             'LastLoggedInFrom not specified' => [
@@ -75,16 +73,12 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided')]
     public function testHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(string $expectedLastLoggedInFrom, Query $query): void
     {
         $repo = $this->repoMap[Repository\User::class];
         $repo->shouldReceive('fetchCount')
-            ->withArgs(function (ListDto $dto) use ($expectedLastLoggedInFrom) {
-                return $dto->getLastLoggedInFrom() === $expectedLastLoggedInFrom;
-            })
+            ->withArgs(fn(ListDto $dto) => $dto->getLastLoggedInFrom() === $expectedLastLoggedInFrom)
             ->andReturn(0);
 
         $result = $this->sut->handleQuery($query);

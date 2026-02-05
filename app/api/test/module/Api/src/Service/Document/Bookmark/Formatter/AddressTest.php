@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Address;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider addressProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('addressProvider')]
     public function testFormat($input, $expected)
     {
         $this->assertEquals(
@@ -22,7 +20,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function addressProvider()
+    public static function addressProvider()
     {
         return [
             [

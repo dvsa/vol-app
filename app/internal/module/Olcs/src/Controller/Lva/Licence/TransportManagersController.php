@@ -90,6 +90,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
      *
      * @return string The modal message key.
      */
+    #[\Override]
     protected function getDeleteMessage()
     {
 
@@ -108,6 +109,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         return parent::getDeleteConfirmationForm();
     }
 
+    #[\Override]
     protected function delete()
     {
 
@@ -131,7 +133,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
         if ($form->isValid()) {
             $data = $form->getData();
-            $ids = explode(',', $this->params('child_id'));
+            $ids = explode(',', (string) $this->params('child_id'));
 
             return $this->handleCommand(
                 Delete::create(

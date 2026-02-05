@@ -15,9 +15,7 @@ class CompanyStatusTest extends TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dptestRender
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestRender')]
     public function testRender($companyStatus)
     {
         $bookmark = new CompanyStatus();
@@ -31,7 +29,7 @@ class CompanyStatusTest extends TestCase
         );
     }
 
-    public function dptestRender()
+    public static function dptestRender()
     {
         return [
             [

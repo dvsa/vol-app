@@ -76,9 +76,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals(true, $licence->canBecomeSpecialRestricted());
     }
 
-    /**
-     * @dataProvider licenceTypeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceTypeProvider')]
     public function testCanBecomeSpecialRestricted($goodsOrPsv, $licenceType, $expected)
     {
         /** @var Entity $licence */
@@ -89,9 +87,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $licence->canBecomeSpecialRestricted());
     }
 
-    /**
-     * @dataProvider updateSafetyDetails
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('updateSafetyDetails')]
     public function testUpdateSafetyDetails(
         $safetyInsVehicles,
         $safetyInsTrailers,
@@ -253,7 +249,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertTrue($otherActiveLicences->contains($otherLicence2));
     }
 
-    public function updateSafetyDetails()
+    public static function updateSafetyDetails()
     {
         return [
             [
@@ -299,7 +295,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    public function licenceTypeProvider()
+    public static function licenceTypeProvider()
     {
         return [
             [
@@ -332,9 +328,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals(10, $sut->getTotCommunityLicences());
     }
 
-    /**
-     * @dataProvider trafficAreaProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trafficAreaProvider')]
     public function testGetSerialNoPrefixFromTrafficArea($isNi, $expected)
     {
         $sut = m::mock(Entity::class)->makePartial();
@@ -352,7 +346,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getSerialNoPrefixFromTrafficArea());
     }
 
-    public function trafficAreaProvider()
+    public static function trafficAreaProvider()
     {
         return [
             [true, CommunityLicEntity::PREFIX_NI],
@@ -360,9 +354,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasCommunityLicenceOfficeCopy
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCommunityLicenceOfficeCopy')]
     public function testHasCommunityLicenceOfficeCopy($status, $expected)
     {
         $communityLic1 = new CommunityLicEntity();
@@ -385,7 +377,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->hasCommunityLicenceOfficeCopy([1]));
     }
 
-    public function dpHasCommunityLicenceOfficeCopy()
+    public static function dpHasCommunityLicenceOfficeCopy()
     {
         return [
             [CommunityLicEntity::STATUS_ANNUL, false],
@@ -421,9 +413,8 @@ class LicenceEntityTest extends EntityTester
     /**
      * Note: We've already tested the isValid and isGoods in our other tests - so we can safely assume these
      * parts are valid and only check they work together against a list of licence types
-     *
-     * @dataProvider dpValidSiGoods
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSiGoods')]
     public function testIsValidSiGoods($licenceType, $expectedResult)
     {
         /** @var Entity $licence */
@@ -435,7 +426,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $licence->isValidSiGoods());
     }
 
-    public function dpValidSiGoods()
+    public static function dpValidSiGoods()
     {
         return [
             [Entity::LICENCE_TYPE_RESTRICTED, false],
@@ -446,11 +437,11 @@ class LicenceEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpIsValid
      *
      * @param $status
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($status, $expectedResult)
     {
         /** @var Entity $licence */
@@ -460,7 +451,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $licence->isValid());
     }
 
-    public function dpIsValid()
+    public static function dpIsValid()
     {
         return [
             [Entity::LICENCE_STATUS_SUSPENDED, true],
@@ -483,9 +474,8 @@ class LicenceEntityTest extends EntityTester
 
     /**
      * eligible for permits check currently calls isValidGoods directly
-     *
-     * @dataProvider dpIsValidGoods
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidGoods')]
     public function testIsValidGoodsAndIsEligibleForPermits($status, $goodsOrPsv, $expectedResult)
     {
         /** @var Entity $licence */
@@ -497,7 +487,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $licence->isEligibleForPermits()); //should call isValidGoods
     }
 
-    public function dpIsValidGoods()
+    public static function dpIsValidGoods()
     {
         return [
             //licence statuses with a GV licence
@@ -535,9 +525,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpZeroCoalesced
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpZeroCoalesced')]
     public function testGetTotAuthHgvVehiclesZeroCoalesced($totAuthHgvVehicles, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -551,9 +539,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpZeroCoalesced
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpZeroCoalesced')]
     public function testGetTotAuthLgvVehiclesZeroCoalesced($totAuthLgvVehicles, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -567,7 +553,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpZeroCoalesced()
+    public static function dpZeroCoalesced()
     {
         return [
             [8, 8],
@@ -575,9 +561,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanHaveLgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveLgv')]
     public function testCanHaveLgv($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -589,7 +573,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpCanHaveLgv()
+    public static function dpCanHaveLgv()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, false],
@@ -599,9 +583,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpMustHaveLgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMustHaveLgv')]
     public function testMustHaveLgv($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -613,7 +595,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpMustHaveLgv()
+    public static function dpMustHaveLgv()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, false],
@@ -623,9 +605,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsLgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLgv')]
     public function testIsLgv($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -637,7 +617,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpIsLgv()
+    public static function dpIsLgv()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, false],
@@ -647,9 +627,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanHaveHgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveHgv')]
     public function testCanHaveHgv($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -661,7 +639,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpCanHaveHgv()
+    public static function dpCanHaveHgv()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, true],
@@ -671,9 +649,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanHaveOperatingCentre
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveOperatingCentre')]
     public function testCanHaveOperatingCentre($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -685,7 +661,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpCanHaveOperatingCentre()
+    public static function dpCanHaveOperatingCentre()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, true],
@@ -695,9 +671,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpMustHaveOperatingCentre
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMustHaveOperatingCentre')]
     public function testMustHaveOperatingCentre($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -709,7 +683,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpMustHaveOperatingCentre()
+    public static function dpMustHaveOperatingCentre()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, true],
@@ -719,9 +693,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanHaveTrailer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveTrailer')]
     public function testCanHaveTrailer($vehicleType, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -733,7 +705,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpCanHaveTrailer()
+    public static function dpCanHaveTrailer()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_HGV, true],
@@ -1074,9 +1046,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertFalse($licence->canHaveCommunityLicences());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function copyInformationFromApplicationIsCallable()
     {
         // Setup
@@ -1086,9 +1056,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertIsCallable([$this->sut, 'copyInformationFromApplication']);
     }
 
-    /**
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
     public function testCopyInformationFromNewApplication()
     {
         /** @var Application $application */
@@ -1123,10 +1091,8 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals(12, $licence->getTotAuthVehicles());
     }
 
-    /**
-     * @test
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function copyInformationFromNewApplicationSetsHgvTotalForApplication()
     {
         // Setup
@@ -1141,10 +1107,8 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expectedNumber, $this->sut->getTotAuthHgvVehicles());
     }
 
-    /**
-     * @test
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function copyInformationFromNewApplicationSetsLgvTotalForApplication()
     {
         // Setup
@@ -1159,9 +1123,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expectedNumber, $this->sut->getTotAuthLgvVehicles());
     }
 
-    /**
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
     public function testCopyInformationFromVariationApplication()
     {
         $appCompletion = m::mock(ApplicationCompletion::class);
@@ -1198,9 +1160,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($totAuthVehicles, $licence->getTotAuthVehicles());
     }
 
-    /**
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
     public function testCopyInformationFromUnchangedVariationApplication()
     {
         $appCompletion = m::mock(ApplicationCompletion::class);
@@ -1243,10 +1203,8 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($originalTotAuthVehicles, $licence->getTotAuthVehicles());
     }
 
-    /**
-     * @test
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function copyInformationFromNewApplicationSetsHgvTotalForVariationWithUpdatedOperatingCentres()
     {
         // Setup
@@ -1261,10 +1219,8 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expectedNumber, $this->sut->getTotAuthHgvVehicles());
     }
 
-    /**
-     * @test
-     * @depends copyInformationFromApplicationIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('copyInformationFromApplicationIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function copyInformationFromNewApplicationSetsLgvTotalForVariationWithUpdatedOperatingCentres()
     {
         // Setup
@@ -1301,9 +1257,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($psvDiscsNotCeasedCollection, $licence->getPsvDiscsNotCeased());
     }
 
-    /**
-     * @dataProvider dpCanHaveVariationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveVariationProvider')]
     public function testCanHaveVariation($status, $expected)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -1314,7 +1268,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($licence->canHaveVariation(), $expected);
     }
 
-    public function dpCanHaveVariationProvider()
+    public static function dpCanHaveVariationProvider()
     {
         return [
             [
@@ -1339,8 +1293,8 @@ class LicenceEntityTest extends EntityTester
     /**
      * @param string $categoryId 'lcat_psv'|'lcat_gv'
      * @param string $expected 'O'|'P'
-     * @dataProvider categoryPrefixDp
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('categoryPrefixDp')]
     public function testGetCategoryPrefix($categoryId, $expected)
     {
         $category = new RefData($categoryId);
@@ -1351,7 +1305,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $licence->getCategoryPrefix());
     }
 
-    public function categoryPrefixDp()
+    public static function categoryPrefixDp()
     {
         return [
             [Entity::LICENCE_CATEGORY_PSV, 'P'],
@@ -1373,9 +1327,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals(-1, $licence->getRemainingSpacesPsv());
     }
 
-    /**
-     * @dataProvider dpTestGetAuthorisations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAuthorisations')]
     public function testGetAuthorisations($vehicleTypeId, $licenceTypeId, $expectedAuthorisations)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -1397,7 +1349,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetAuthorisations()
+    public static function dpTestGetAuthorisations()
     {
         return [
             'goods/standard international/lgv' => [
@@ -1450,10 +1402,10 @@ class LicenceEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpTestGetLicenceTypeShortCode
      * @param string $licenceType
      * @param string $shortCode
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetLicenceTypeShortCode')]
     public function testGetLicenceTypeShortCode($licenceType, $shortCode)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -1462,7 +1414,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($shortCode, $licence->getLicenceTypeShortCode());
     }
 
-    public function dpTestGetLicenceTypeShortCode()
+    public static function dpTestGetLicenceTypeShortCode()
     {
         return [
             ['ltyp_r', 'R'],
@@ -1601,9 +1553,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $licence->getLicenceDocuments('category', 'subCategory'));
     }
 
-    /**
-     * @dataProvider dpGetOutstandingOrganisations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetOutstandingOrganisations')]
     public function testGetOutstandingOrganisations($status, $includeNotSubmitted, $expected)
     {
         $application = m::mock(Application::class)->makePartial();
@@ -1619,7 +1569,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $licence->getOutstandingApplications($includeNotSubmitted)->contains($application));
     }
 
-    public function dpGetOutstandingOrganisations()
+    public static function dpGetOutstandingOrganisations()
     {
         return [
             // exclude Not Submitted
@@ -1646,9 +1596,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider firstApplicationIdProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('firstApplicationIdProvider')]
     public function testGetFirstApplicationId($status, $firstApplicationId)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -1673,7 +1621,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($firstApplicationId, $licence->getFirstApplicationId());
     }
 
-    public function firstApplicationIdProvider()
+    public static function firstApplicationIdProvider()
     {
         return [
             [Entity::LICENCE_STATUS_NOT_SUBMITTED, 1],
@@ -1842,9 +1790,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertTrue($licence->isGoodsApplication());
     }
 
-    /**
-     * @dataProvider expiryDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('expiryDateProvider')]
     public function testGetExpiryDateAsDate($expiryDate, $expected)
     {
         /** @var Entity $sut */
@@ -1857,7 +1803,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($sut->getExpiryDateAsDate(), $expected);
     }
 
-    public function expiryDateProvider()
+    public static function expiryDateProvider()
     {
         $today = new DateTime('now');
         $date2017 = \DateTime::createFromFormat('Y-m-d', '2017-01-01');
@@ -1975,9 +1921,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($busReg7, $licence->getLatestBusVariation('123', [BusRegEntity::STATUS_REFUSED]));
     }
 
-    /**
-     * @dataProvider operatorLocationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatorLocationProvider')]
     public function testGetOperatorLocation($niFlag, $expected)
     {
         $mockLicence = m::mock(Entity::class)->makePartial();
@@ -1989,7 +1933,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertEquals($expected, $mockLicence->getOperatorLocation());
     }
 
-    public function operatorLocationProvider()
+    public static function operatorLocationProvider()
     {
         return [
             [
@@ -2020,11 +1964,11 @@ class LicenceEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpIsExpiredDataProvider
      *
      * @param bool     $expected   Is Expiring
      * @param DateTime $expiryDate Licence expiry date
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExpiredDataProvider')]
     public function testIsExpired($expected, $expiryDate)
     {
         /** @var Entity $licence */
@@ -2033,7 +1977,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->isExpired());
     }
 
-    public function dpIsExpiredDataProvider()
+    public static function dpIsExpiredDataProvider()
     {
         return [
             'Null expiry date' => [false, null],
@@ -2048,11 +1992,11 @@ class LicenceEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpIsExpiringDataProvider
      *
      * @param bool     $expected   Is Expiring
      * @param DateTime $expiryDate Licence expiry date
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExpiringDataProvider')]
     public function testIsExpiringNoContinuation($expected, $expiryDate)
     {
         /** @var Entity $licence */
@@ -2063,11 +2007,11 @@ class LicenceEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpIsExpiringDataProvider
      *
      * @param bool     $expected   Is Expiring
      * @param DateTime $expiryDate Licence expiry date
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExpiringDataProvider')]
     public function testIsExpiringCurrentContinuation($expected, $expiryDate)
     {
         /** @var Entity $licence */
@@ -2092,7 +2036,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->isExpiring());
     }
 
-    public function dpIsExpiringDataProvider()
+    public static function dpIsExpiringDataProvider()
     {
         return [
             '-2 years 4 monsth' => [false, (new DateTime())->sub(new \DateInterval('P2Y4M'))],
@@ -2662,9 +2606,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertTrue($result->contains($applications[Application::APPLICATION_STATUS_UNDER_CONSIDERATION . '-1']));
     }
 
-    /**
-     * @dataProvider dataProviderTestDetermineNpNumber
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestDetermineNpNumber')]
     public function testDetermineNpNumber($expected, $publication)
     {
         $licence = m::mock(Entity::class)->makePartial();
@@ -2674,7 +2616,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->determineNpNumber());
     }
 
-    public function dataProviderTestDetermineNpNumber()
+    public static function dataProviderTestDetermineNpNumber()
     {
         $publication = m::mock(Publication::class);
         $publication->shouldReceive('getPublicationNo')->with()->andReturn(99);
@@ -2698,9 +2640,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame(2, $licence->getPiRecordCount());
     }
 
-    /**
-     * @dataProvider dataProviderTestAllowFeePayments
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestAllowFeePayments')]
     public function testAllowFeePayments($expected, $licenceStatusId)
     {
         $licence = $this->instantiate(Entity::class);
@@ -2708,7 +2648,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->allowFeePayments());
     }
 
-    public function dataProviderTestAllowFeePayments()
+    public static function dataProviderTestAllowFeePayments()
     {
         return [
             [true, Licence::LICENCE_STATUS_CANCELLED],
@@ -2773,9 +2713,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($cu4, $result->current());
     }
 
-    /**
-     * @dataProvider dataProviderTestGetNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetNiFlag')]
     public function testGetNiFlag($expected, $trafficArea)
     {
         /** @var Licence $licence */
@@ -2785,9 +2723,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->getNiFlag());
     }
 
-    /**
-     * @dataProvider dataProviderTestGetNiFlag
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetNiFlag')]
     public function testIsNi($expected, $trafficArea)
     {
         /** @var Licence $licence */
@@ -2797,7 +2733,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected === 'Y', $licence->isNi());
     }
 
-    public function dataProviderTestGetNiFlag()
+    public static function dataProviderTestGetNiFlag()
     {
         return [
             ['Y', (new TrafficArea())->setIsNi(true)],
@@ -2892,9 +2828,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertNull($licence->getLocByOc($oc3));
     }
 
-    /**
-     * @dataProvider dataProviderTestHasQueuedRevocation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHasQueuedRevocation')]
     public function testHasQueuedRevocation($expected, ArrayCollection $licenceStatusRules)
     {
         /** @var Licence $licence */
@@ -2903,7 +2837,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertSame($expected, $licence->hasQueuedRevocation());
     }
 
-    public function dataProviderTestHasQueuedRevocation()
+    public static function dataProviderTestHasQueuedRevocation()
     {
         $lsr1 = m::mock(LicenceStatusRule::class)->makePartial()
             ->setLicenceStatus(new RefData(Licence::LICENCE_STATUS_VALID));
@@ -3053,9 +2987,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertTrue($licence->canMakeIrhpApplication($stock, null));
     }
 
-    /**
-     * @dataProvider dpCanMakeIrhpApplicationCertificateOfRoadworthiness
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanMakeIrhpApplicationCertificateOfRoadworthiness')]
     public function testCanMakeIrhpApplicationCertificateOfRoadworthiness($irhpApplication)
     {
         $stock = m::mock(IrhpPermitStock::class);
@@ -3068,7 +3000,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertTrue($licence->canMakeIrhpApplication($stock, $irhpApplication));
     }
 
-    public function dpCanMakeIrhpApplicationCertificateOfRoadworthiness()
+    public static function dpCanMakeIrhpApplicationCertificateOfRoadworthiness()
     {
         return [
             [null],
@@ -3085,9 +3017,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertFalse($licence->canMakeIrhpApplication($stock, $irhpApplication));
     }
 
-    /**
-     * @dataProvider dpValidSuspendedOrCurtailed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSuspendedOrCurtailed')]
     public function testHasStatusRequiredForCommunityLicenceReprint($status, $expected)
     {
         $sut = m::mock(Licence::class)->makePartial();
@@ -3100,9 +3030,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpValidSuspendedOrCurtailed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidSuspendedOrCurtailed')]
     public function testHasStatusRequiredForPostScoringEmail($status, $expected)
     {
         $sut = m::mock(Licence::class)->makePartial();
@@ -3115,7 +3043,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpValidSuspendedOrCurtailed()
+    public static function dpValidSuspendedOrCurtailed()
     {
         return [
             [Licence::LICENCE_STATUS_UNDER_CONSIDERATION, false],
@@ -3210,9 +3138,7 @@ class LicenceEntityTest extends EntityTester
         $this->assertContains($irhpApplication3, $validIrhpApplications);
     }
 
-    /**
-     * @dataProvider dpHasUnderConsiderationOrAwaitingFeeApplicationForStock
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasUnderConsiderationOrAwaitingFeeApplicationForStock')]
     public function testHasUnderConsiderationOrAwaitingFeeApplicationForStock(
         $irhpPermitStock,
         $irhpApplications,
@@ -3227,7 +3153,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpHasUnderConsiderationOrAwaitingFeeApplicationForStock()
+    public static function dpHasUnderConsiderationOrAwaitingFeeApplicationForStock()
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
 
@@ -3272,9 +3198,7 @@ class LicenceEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasValidCertificateOfRoadworthinessApplications
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasValidCertificateOfRoadworthinessApplications')]
     public function testHasValidCertificateOfRoadworthinessApplications($irhpApplications, $expected)
     {
         $licence = $this->instantiate(Entity::class);
@@ -3289,7 +3213,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpHasValidCertificateOfRoadworthinessApplications()
+    public static function dpHasValidCertificateOfRoadworthinessApplications()
     {
         $irhpApplicationValidCor = m::mock(IrhpApplication::class);
         $irhpApplicationValidCor->shouldReceive('isValidCertificateOfRoadworthiness')
@@ -3362,9 +3286,7 @@ class LicenceEntityTest extends EntityTester
         return $instance;
     }
 
-    /**
-     * @dataProvider dpGetApplicableAuthProperties
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicableAuthProperties')]
     public function testGetApplicableAuthProperties(
         $vehicleTypeId,
         $licenceTypeId,
@@ -3387,7 +3309,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpGetApplicableAuthProperties()
+    public static function dpGetApplicableAuthProperties()
     {
         return [
             'goods/standard international/lgv/null lgv count' => [
@@ -3473,9 +3395,7 @@ class LicenceEntityTest extends EntityTester
         $licence->getApplicableAuthProperties();
     }
 
-    /**
-     * @dataProvider dpIsVehicleTypeMixedWithLgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsVehicleTypeMixedWithLgv')]
     public function testIsVehicleTypeMixedWithLgv($vehicleTypeId, $totAuthLgvVehicles, $expected)
     {
         $licence = $this->instantiate(Entity::class);
@@ -3492,7 +3412,7 @@ class LicenceEntityTest extends EntityTester
         );
     }
 
-    public function dpIsVehicleTypeMixedWithLgv()
+    public static function dpIsVehicleTypeMixedWithLgv()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_PSV, null, false],

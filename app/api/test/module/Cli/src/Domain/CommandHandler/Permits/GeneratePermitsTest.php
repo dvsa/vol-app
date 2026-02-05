@@ -55,9 +55,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleButIssueWithDocs
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleButIssueWithDocs')]
     public function testHandleButIssueWithDocs($permitDocs, $letterDocs, $expected)
     {
         $ids = [1, 2, 3];
@@ -119,7 +117,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleButIssueWithDocs()
+    public static function dpHandleButIssueWithDocs()
     {
         return [
             'no docs generated' => [

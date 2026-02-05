@@ -5,9 +5,7 @@ namespace Dvsa\OlcsTest\DocumentShare\Object;
 use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\DocumentShare\Data\Object\File
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Data\Object\File::class)]
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \org\bovigo\vfs\vfsStreamDirectory */

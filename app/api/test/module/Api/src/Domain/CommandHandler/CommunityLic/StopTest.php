@@ -47,6 +47,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -72,9 +73,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testHandleCommandSuspension($startDate, $message)
     {
         $licenceId = 1;
@@ -186,7 +185,7 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason', $communityLicSuspensionReason->getType()->getId());
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [(new \DateTime())->format('Y-m-d'), 'The licence 10 have been suspended'],

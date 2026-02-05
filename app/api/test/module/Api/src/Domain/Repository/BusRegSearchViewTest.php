@@ -99,9 +99,9 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param $context
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
     public function testFetchDistinctList($context, $expected)
     {
         $qb = m::mock(QueryBuilder::class);
@@ -122,9 +122,9 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param $context
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
     public function testFetchDistinctListWithOrganisationId($context, $expected)
     {
         $organisationId = 1;
@@ -151,9 +151,9 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param string $context to determine what data to return
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
     public function testFetchDistinctListWithLocalAuthorityId($context, $expected)
     {
         $localAuthorityId = 1;
@@ -184,7 +184,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function provideContextGroupBys()
+    public static function provideContextGroupBys()
     {
         return [
             [

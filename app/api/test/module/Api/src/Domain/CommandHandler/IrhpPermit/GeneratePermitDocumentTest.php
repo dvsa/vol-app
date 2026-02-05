@@ -34,9 +34,7 @@ class GeneratePermitDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(
         $irhpPermitTypeId,
         $countryId,
@@ -131,7 +129,7 @@ class GeneratePermitDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'ECMT Annual' => [

@@ -32,6 +32,7 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -43,11 +44,11 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param $isEbsr
      * @param $hasOutstandingFee
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommandWithFee($isEbsr, $hasOutstandingFee)
     {
         $id = 99;
@@ -131,7 +132,7 @@ class WithdrawBusRegTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [true, true],

@@ -56,6 +56,7 @@ class BusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->ta1 = m::mock(TrafficAreaEntity::class);
@@ -185,10 +186,10 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleCommandCreateProvider
      * @param string $revertStatus
      * @param string $shortNotice
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandCreateProvider')]
     public function testHandleCommandCreate($revertStatus, $shortNotice)
     {
         $id = 99;
@@ -270,7 +271,7 @@ class BusTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandCreateProvider()
+    public static function handleCommandCreateProvider()
     {
         return [
             [BusRegEntity::STATUS_NEW, 'Y'],

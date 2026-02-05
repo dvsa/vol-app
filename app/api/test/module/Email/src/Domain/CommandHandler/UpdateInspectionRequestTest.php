@@ -43,6 +43,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->refData = [
@@ -54,9 +55,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider successProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('successProvider')]
     public function testHandleCommandSuccess($id, $status, $expectedResultType, $expectedTaskDescription)
     {
         $licence = m::mock(Licence::class)->makePartial();
@@ -114,7 +113,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public function successProvider()
+    public static function successProvider()
     {
         return [
             'satisfactory' => [

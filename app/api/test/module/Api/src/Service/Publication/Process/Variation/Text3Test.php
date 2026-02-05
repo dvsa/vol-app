@@ -101,9 +101,7 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    /**
-     * @dataProvider dpAuthorisationsWhereNoOperatingCentres
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAuthorisationsWhereNoOperatingCentres')]
     public function testAuthorisationsWhereNoOperatingCentres($contextArray)
     {
         $authorisationText = "AUTHORISATION_TEXT1\nAUTHORISATION_TEXT2";
@@ -119,7 +117,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function dpAuthorisationsWhereNoOperatingCentres()
+    public static function dpAuthorisationsWhereNoOperatingCentres()
     {
         return [
             [
@@ -151,9 +149,7 @@ class Text3Test extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres')]
     public function testAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres(
         $operatingCentres,
         $expectedText
@@ -175,7 +171,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres()
+    public static function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres()
     {
         return [
             [
@@ -235,9 +231,7 @@ class Text3Test extends MockeryTestCase
         $this->assertSame($expectedText3, $publicationLink->getText3());
     }
 
-    /**
-     * @dataProvider dataProviderTestUpgrade
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestUpgrade')]
     public function testUpgrade($licenceTypeId, $applicationLicenceTypeId, $isUpgrade)
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
@@ -256,7 +250,7 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestUpgrade()
+    public static function dataProviderTestUpgrade()
     {
         return [
             [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL, true],

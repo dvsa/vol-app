@@ -28,11 +28,11 @@ final class DataGovUkExport extends AbstractDataExport
     public const ERR_INVALID_REPORT = 'Invalid report name';
     public const ERR_NO_TRAFFIC_AREAS = 'Traffic areas is empty';
 
-    public const OPERATOR_LICENCE = 'operator-licence';
-    public const BUS_REGISTERED_ONLY = 'bus-registered-only';
-    public const BUS_VARIATION = 'bus-variation';
-    public const PSV_OPERATOR_LIST = 'psv-operator-list';
-    public const INTERNATIONAL_GOODS = 'international-goods';
+    public const string OPERATOR_LICENCE = 'operator-licence';
+    public const string BUS_REGISTERED_ONLY = 'bus-registered-only';
+    public const string BUS_VARIATION = 'bus-variation';
+    public const string PSV_OPERATOR_LIST = 'psv-operator-list';
+    public const string INTERNATIONAL_GOODS = 'international-goods';
 
     public const FILE_DATETIME_FORMAT = 'Ymd_His';
 
@@ -245,13 +245,14 @@ final class DataGovUkExport extends AbstractDataExport
         $this->makeCsvsFromDbalResult($dbalResult, 'Current Traffic Area', 'Bus_Variation');
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
         $exportCfg = $config['data-gov-uk-export'] ?? [];
 
         if (isset($exportCfg['s3_uri'])) {
-            $parsedUrl = parse_url($exportCfg['s3_uri']);
+            $parsedUrl = parse_url((string) $exportCfg['s3_uri']);
             $this->s3Bucket = $parsedUrl['host'];
             $this->path = ltrim($parsedUrl['path'], '/');
         }

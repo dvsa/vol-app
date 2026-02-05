@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="system_parameter")
  */
-abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

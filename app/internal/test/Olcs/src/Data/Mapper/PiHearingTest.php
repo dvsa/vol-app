@@ -13,11 +13,11 @@ use Laminas\Form\FormInterface;
 class PiHearingTest extends MockeryTestCase
 {
     /**
-     * @dataProvider mapFromFormDataProvider
      *
      * @param $inData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
     public function testMapFromForm($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
@@ -28,7 +28,7 @@ class PiHearingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider()
     {
         $venueOther = 'pi venue other';
         $adjournedReason = 'cancelled reason';
@@ -104,13 +104,13 @@ class PiHearingTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $inData
      * @param $expected
      *
      * Tests mapFromResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
@@ -121,7 +121,7 @@ class PiHearingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider()
     {
         $venueOther = 'pi venue other';
         $otherFieldId = 99;

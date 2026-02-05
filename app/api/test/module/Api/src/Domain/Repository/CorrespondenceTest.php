@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Correspondence
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Correspondence::class)]
 class CorrespondenceTest extends RepositoryTestCase
 {
     /** @var  Repository\Correspondence */

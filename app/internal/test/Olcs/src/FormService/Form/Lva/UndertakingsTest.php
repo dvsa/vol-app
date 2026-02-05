@@ -21,6 +21,7 @@ class UndertakingsTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Undertakings::class;
 
+    #[\Override]
     public function testGetForm()
     {
         // Mocks

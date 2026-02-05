@@ -16,14 +16,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class GrantVarText3Test extends MockeryTestCase
 {
     /**
-     * @group publicationFilter
-     * @dataProvider processTestProvider
-     *
      * @param string $variationReasons
      * @param string $text
      *
      * Test the Bus Reg GrantVarText3 filter
      */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('processTestProvider')]
     public function testProcess($variationReasons, $text)
     {
         $sut = new GrantVarText3();
@@ -66,7 +65,7 @@ class GrantVarText3Test extends MockeryTestCase
      *
      * @return array
      */
-    public function processTestProvider()
+    public static function processTestProvider()
     {
         return [
             ['var reasons', 'Operating between %s and %s given service number %s effective from %s. To amend %s.'],

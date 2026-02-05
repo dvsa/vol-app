@@ -14,9 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Task\UpdateTask as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\UpdateTask
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\UpdateTask::class)]
 class UpdateTaskTest extends AbstractCommandHandlerTestCase
 {
     public const TASK_ID = 999;
@@ -53,6 +51,7 @@ class UpdateTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

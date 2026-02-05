@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList::class)]
 class BusRegSearchViewListTest extends MockeryTestCase
 {
     public function testGetSet()

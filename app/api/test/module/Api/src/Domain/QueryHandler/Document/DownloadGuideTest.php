@@ -12,9 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DocTemplate as DocTemplateRepo;
 use Laminas\Http\Response\Stream;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Document\DownloadGuide
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\DownloadGuide::class)]
 class DownloadGuideTest extends QueryHandlerTestCase
 {
     /** @var  m\MockInterface */

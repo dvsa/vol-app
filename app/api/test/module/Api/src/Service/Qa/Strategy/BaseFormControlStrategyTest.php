@@ -113,9 +113,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         $this->baseFormControlStrategy->getElement($elementGeneratorContext);
     }
 
-    /**
-     * @dataProvider dpSaveFormData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveFormData')]
     public function testSaveFormData($inDestinationName, $outDestinationName)
     {
         $qaEntity = m::mock(QaEntityInterface::class);
@@ -145,7 +143,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public function dpSaveFormData()
+    public static function dpSaveFormData()
     {
         return [
             [null, BaseFormControlStrategy::FRONTEND_DESTINATION_NEXT_STEP],

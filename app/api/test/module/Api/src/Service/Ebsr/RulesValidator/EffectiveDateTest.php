@@ -12,16 +12,14 @@ use PHPUnit\Framework\TestCase;
  */
 class EffectiveDateTest extends TestCase
 {
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($data, $validity)
     {
         $sut = new EffectiveDate();
         $this->assertEquals($validity, $sut->isValid($data));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         $today = strtotime(date('Y-m-d'));
 

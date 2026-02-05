@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

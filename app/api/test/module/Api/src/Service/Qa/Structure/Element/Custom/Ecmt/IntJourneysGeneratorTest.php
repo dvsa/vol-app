@@ -19,9 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IntJourneysGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGenerate($isNi)
     {
         $irhpApplication = m::mock(IrhpApplicationEntity::class);
@@ -56,7 +54,7 @@ class IntJourneysGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse()
     {
         return [
             [true],

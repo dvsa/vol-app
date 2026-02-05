@@ -14,8 +14,8 @@ class RegistrationTest extends TestCase
     /**
      * @param $xml
      * @param $valid
-     * @dataProvider isValidProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($xml, $valid)
     {
         $dom = new \DOMDocument();
@@ -26,7 +26,7 @@ class RegistrationTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             ['<Registrations></Registrations>', false],

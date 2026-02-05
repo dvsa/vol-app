@@ -39,9 +39,7 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         $this->noOfPermitsConditionalUpdater = new NoOfPermitsConditionalUpdater($this->noOfPermitsUpdater);
     }
 
-    /**
-     * @dataProvider dpUpdateValueChanged
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateValueChanged')]
     public function testUpdateValueChanged($updatedAnswers)
     {
         $this->noOfPermitsUpdater->shouldReceive('update')
@@ -51,7 +49,7 @@ class NoOfPermitsConditionalUpdaterTest extends MockeryTestCase
         $this->noOfPermitsConditionalUpdater->update($this->irhpPermitApplication, $updatedAnswers);
     }
 
-    public function dpUpdateValueChanged()
+    public static function dpUpdateValueChanged()
     {
         return [
             [

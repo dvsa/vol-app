@@ -18,9 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class BilateralNoOfPermitsCombinedTotalValidatorTest extends TestCase
 {
-    /**
-     * @dataProvider dpValidateNonZeroValuePresent
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidateNonZeroValuePresent')]
     public function testValidateNonZeroValuePresent($context, $expected)
     {
         $this->assertEquals(
@@ -29,7 +27,7 @@ class BilateralNoOfPermitsCombinedTotalValidatorTest extends TestCase
         );
     }
 
-    public function dpValidateNonZeroValuePresent()
+    public static function dpValidateNonZeroValuePresent()
     {
         return [
             'incorrectly named field contains valid value' => [

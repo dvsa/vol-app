@@ -32,6 +32,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -51,9 +52,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpWitnessProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWitnessProvider')]
     public function testHandleCommand($inputWitnesses, $outputWitnesses)
     {
         $data = [
@@ -106,7 +105,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
     /**
      * expected witness input and output values
      */
-    public function dpWitnessProvider()
+    public static function dpWitnessProvider()
     {
         return [
             [4, 4],

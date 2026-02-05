@@ -19,9 +19,7 @@ class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider expiryDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('expiryDateProvider')]
     public function testRender($expiredDate, $expected)
     {
         $bookmark = new FStandingProvedDate();
@@ -29,7 +27,7 @@ class FStandingProvedDateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function expiryDateProvider()
+    public static function expiryDateProvider()
     {
         return [
             ['2016-03-31', '29/02/2016'],

@@ -21,6 +21,7 @@ class SearchController extends AbstractController
      *
      * @return \Laminas\Http\Response $response http response
      */
+    #[\Override]
     public function getList()
     {
         $params = array_merge((array)$this->params()->fromRoute(), (array)$this->params()->fromQuery());

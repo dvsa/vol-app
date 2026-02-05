@@ -19,9 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerate($isSnapshot)
     {
         $irhpApplicationEntity = m::mock(IrhpApplicationEntity::class);
@@ -71,7 +69,7 @@ class AnswersSummaryRowsAdderTest extends MockeryTestCase
         $answersSummaryRowsAdder->addRows($answersSummary, $irhpApplicationEntity, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

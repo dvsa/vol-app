@@ -62,6 +62,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -572,9 +573,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider handleCommandThrowsNoOrgExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandThrowsNoOrgExceptionProvider')]
     public function testHandleCommandThrowsNoOrgException($userType)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
@@ -609,7 +608,7 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandThrowsNoOrgExceptionProvider()
+    public static function handleCommandThrowsNoOrgExceptionProvider()
     {
         return [
             [UserEntity::USER_TYPE_OPERATOR],

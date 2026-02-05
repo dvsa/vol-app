@@ -60,9 +60,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @dataProvider validateWithErrors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrors')]
     public function testValidateWithErrorsInternal(bool $isPsv, bool $isRestricted, array $commandData, array $expected)
     {
         $entity = m::mock();
@@ -87,9 +85,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->sut->validate($entity, $command, false);
     }
 
-    /**
-     * @dataProvider validateWithErrorsExternal
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrorsExternal')]
     public function testValidateWithErrorsExternal($isPsv, $isRestricted, $commandData, $expected)
     {
         $entity = m::mock();
@@ -120,9 +116,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         }
     }
 
-    /**
-     * @dataProvider validateWithErrors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateWithErrors')]
     public function testValidateUpdateWithErrors($isPsv, $isRestricted, $commandData, $expected)
     {
         $entity = m::mock();
@@ -558,7 +552,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals('2015-01-01', $loc->getAdPlacedDate()->format('Y-m-d'));
     }
 
-    public function validateWithErrors()
+    public static function validateWithErrors()
     {
         return [
             [
@@ -649,7 +643,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    public function validateWithErrorsExternal()
+    public static function validateWithErrorsExternal()
     {
         return [
             [

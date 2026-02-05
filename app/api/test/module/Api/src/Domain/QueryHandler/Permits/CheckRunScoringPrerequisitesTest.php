@@ -27,9 +27,7 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
         $lastOpenWindow,
         $applicationIds,
@@ -75,7 +73,7 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider()
     {
         return [
             [

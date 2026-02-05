@@ -21,13 +21,13 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
      */
     protected $sut;
 
-    private const IS_SYSTEM_USER = 0;
-    private const IS_INTERNAL_USER = 1;
-    private const IS_EXTERNAL_USER = 2;
-    private const IS_LOCAL_AUTHORITY_USER = 3;
-    private const IS_LOCAL_AUTHORITY_ADMIN = 4;
-    private const IS_TRANSPORT_MANAGER_USER = 5;
-    private const DOCUMENT_ID = "123";
+    private const int IS_SYSTEM_USER = 0;
+    private const int IS_INTERNAL_USER = 1;
+    private const int IS_EXTERNAL_USER = 2;
+    private const int IS_LOCAL_AUTHORITY_USER = 3;
+    private const int IS_LOCAL_AUTHORITY_ADMIN = 4;
+    private const int IS_TRANSPORT_MANAGER_USER = 5;
+    private const string DOCUMENT_ID = "123";
 
     public function setUp(): void
     {
@@ -219,11 +219,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCanAccessTxcDocumentForTheirAuthority(int $localAuthorityUserType): void
     {
         $mockLocalAuthority = m::mock(Entity\Bus\LocalAuthority::class);
@@ -250,11 +250,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCanAccessTxcDocumentForTheirAuthorityMultipleTxcRecordsMatchingCurrentAuthority(int $localAuthorityUserType): void
     {
         $mockLocalAuthority = m::mock(Entity\Bus\LocalAuthority::class);
@@ -285,11 +285,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCanAccessTxcDocumentForTheirAuthorityMultipleTxcRecordsOneMatchingCurrentAuthorityAnotherNoAuthority(int $localAuthorityUserType): void
     {
         $mockLocalAuthority = m::mock(Entity\Bus\LocalAuthority::class);
@@ -320,11 +320,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCannotAccessTxcDocumentForDifferentAuthority(int $localAuthorityUserType): void
     {
         $mockLocalAuthorityA = m::mock(Entity\Bus\LocalAuthority::class);
@@ -356,11 +356,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCannotAccessTxcDocumentForDocumentWithNoAuthority(int $localAuthorityUserType): void
     {
         $mockLocalAuthority = m::mock(Entity\Bus\LocalAuthority::class);
@@ -387,11 +387,11 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @dataProvider localAuthorityTypeProvider
      *
      * @throws NotFoundException
      * @throws Exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('localAuthorityTypeProvider')]
     public function testLocalAuthorityUserCannotAccessDocumentIfNoTxcInboxRecordsFoundForDocumentId(int $localAuthorityUserType): void
     {
         $mockLocalAuthority = m::mock(Entity\Bus\LocalAuthority::class);
@@ -548,7 +548,7 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
         return $mockOrganisation;
     }
 
-    public function localAuthorityTypeProvider(): array
+    public static function localAuthorityTypeProvider(): array
     {
         return [
             'LOCAL AUTHORITY USER' => [static::IS_LOCAL_AUTHORITY_USER],

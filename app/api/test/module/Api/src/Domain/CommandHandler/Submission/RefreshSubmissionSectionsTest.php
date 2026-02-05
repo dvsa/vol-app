@@ -38,6 +38,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new RefreshSubmissionSections();
@@ -81,6 +82,7 @@ class RefreshSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

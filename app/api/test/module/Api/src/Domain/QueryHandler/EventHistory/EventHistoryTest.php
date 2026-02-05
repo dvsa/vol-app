@@ -30,8 +30,8 @@ class EventHistoryTest extends QueryHandlerTestCase
      * @param string $entityType
      * @param int $entityPk
      * @param int $entityVersion
-     * @dataProvider eventHistoryDetailsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('eventHistoryDetailsProvider')]
     public function testHandleQuery($details, $entityType, $entityPk, $entityVersion)
     {
         $query = Qry::create(['id' => 69]);
@@ -85,7 +85,7 @@ class EventHistoryTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function eventHistoryDetailsProvider()
+    public static function eventHistoryDetailsProvider()
     {
         return [
             [['foo' => 'bar'], 'application', 1, 2],

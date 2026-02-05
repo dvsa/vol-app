@@ -43,7 +43,7 @@ class ConfirmItem extends AbstractParameterProvider
 
     private function extractMultiples($data)
     {
-        $array = explode(',', $data);
+        $array = explode(',', (string) $data);
         if (count($array) > 1) {
             return $array;
         }

@@ -5,9 +5,7 @@ namespace OlcsTest\Service\Data;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\DocumentCategoryWithDocs;
 
-/**
- * @covers \Olcs\Service\Data\DocumentCategoryWithDocs
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentCategoryWithDocs::class)]
 class DocumentCategoryWithDocsTest extends AbstractListDataServiceTestCase
 {
     /** @var DocumentCategoryWithDocs */

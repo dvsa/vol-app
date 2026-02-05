@@ -35,8 +35,6 @@ class VehiclesController extends AbstractGoodsVehiclesController
         'application' => Query\Application\GoodsVehiclesExport::class,
     ];
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -64,7 +62,7 @@ class VehiclesController extends AbstractGoodsVehiclesController
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         protected ResponseHelperService $responseHelper,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -79,9 +77,9 @@ class VehiclesController extends AbstractGoodsVehiclesController
             $variationLvaService,
             $goodsVehiclesVehicleMapper
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 
+    #[\Override]
     protected function getScripts(): array
     {
         $scripts  = parent::getScripts();

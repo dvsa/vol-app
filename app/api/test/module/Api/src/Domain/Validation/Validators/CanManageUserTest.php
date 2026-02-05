@@ -24,9 +24,7 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canManageUser, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -41,9 +39,7 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidWithoutId($canManageUser, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -60,7 +56,7 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

@@ -92,9 +92,7 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $qaAnswer = 'item2Value';
@@ -120,9 +118,7 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariablesException($isSnapshot)
     {
         $this->expectException(RuntimeException::class);
@@ -137,7 +133,7 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         $this->radioAnswerSummaryProvider->getTemplateVariables($this->qaContext, $this->element, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

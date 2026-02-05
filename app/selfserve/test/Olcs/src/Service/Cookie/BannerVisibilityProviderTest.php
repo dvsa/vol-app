@@ -27,9 +27,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
         $this->sut = new BannerVisibilityProvider($this->cookieReader);
     }
 
-    /**
-     * @dataProvider dpFalseOnExemptRoute
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFalseOnExemptRoute')]
     public function testFalseOnExemptRoute($routeName): void
     {
         $this->mvcEvent->shouldReceive('getRouteMatch->getMatchedRouteName')
@@ -46,16 +44,14 @@ class BannerVisibilityProviderTest extends MockeryTestCase
      *
      * @psalm-return list{list{'cookies/settings'}}
      */
-    public function dpFalseOnExemptRoute(): array
+    public static function dpFalseOnExemptRoute(): array
     {
         return [
             ['cookies/settings'],
         ];
     }
 
-    /**
-     * @dataProvider dpNonExemptRoute
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNonExemptRoute')]
     public function testNonExemptRoute($cookieStateIsValid, $expected): void
     {
         $cookie = m::mock(Cookie::class);
@@ -88,7 +84,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, false}, list{false, true}}
      */
-    public function dpNonExemptRoute(): array
+    public static function dpNonExemptRoute(): array
     {
         return [
             [true, false],

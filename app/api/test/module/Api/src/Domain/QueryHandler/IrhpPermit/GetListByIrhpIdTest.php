@@ -179,9 +179,7 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpHandleQueryWithEmptyList
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryWithEmptyList')]
     public function testHandleQueryWithEmptyList($isConstrainedCountriesType)
     {
         $irhpApplicationId = 10;
@@ -247,7 +245,7 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryWithEmptyList()
+    public static function dpHandleQueryWithEmptyList()
     {
         return [
             [true],

@@ -42,6 +42,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -94,9 +95,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider requireReset
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('requireReset')]
     public function testHandleCommandWithReset($command, $applicationData, $resetData)
     {
         // Calling getApplication needs to be deferred to here rather than in the dataProvider to avoid initialising
@@ -586,9 +585,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithAllowedUpdateGb
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithAllowedUpdateGb')]
     public function testHandleCommandWithAllowedUpdateGb(
         $command,
         $applicationData,

@@ -66,9 +66,7 @@ class EmissionsByYearTest extends QueryHandlerTestCase
     }
 
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedType')]
     public function testHandleQueryUnsupportedType($unsupportedTypeId)
     {
         $query = EmissionsByYearQuery::create(
@@ -86,7 +84,7 @@ class EmissionsByYearTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryUnsupportedType()
+    public static function dpTestHandleQueryUnsupportedType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],

@@ -42,7 +42,7 @@ class RemoveAllForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider()
     {
         $today = new DateTime();
 

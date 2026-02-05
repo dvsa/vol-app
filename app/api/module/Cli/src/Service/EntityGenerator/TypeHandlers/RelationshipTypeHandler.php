@@ -97,7 +97,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             if (!empty($orderBy)) {
                 $orderByPairs = [];
                 foreach ($orderBy as $field => $direction) {
-                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper($direction));
+                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
                 }
                 $annotations[] = sprintf('@ORM\OrderBy({%s})', implode(', ', $orderByPairs));
             }
@@ -144,6 +144,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 50; // Medium priority
@@ -196,7 +197,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         // Fallback to RefData for unrecognized patterns
-        return 'Dvsa\\Olcs\\Api\\Entity\\System\\RefData';
+        return \Dvsa\Olcs\Api\Entity\System\RefData::class;
     }
 
     /**
@@ -204,13 +205,8 @@ class RelationshipTypeHandler extends AbstractTypeHandler
      */
     private function getReferencedColumn(ColumnMetadata $column, array $config): string
     {
-        // Check config for custom referenced column
-        if (isset($config['referencedColumn'][$column->getName()])) {
-            return $config['referencedColumn'][$column->getName()];
-        }
-
         // Default to 'id'
-        return 'id';
+        return $config['referencedColumn'][$column->getName()] ?? 'id';
     }
 
     /**

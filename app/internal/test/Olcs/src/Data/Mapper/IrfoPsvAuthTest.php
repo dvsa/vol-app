@@ -13,17 +13,17 @@ use Laminas\Form\FormInterface;
 class IrfoPsvAuthTest extends MockeryTestCase
 {
     /**
-    * @dataProvider mapFromResultDataProvider
-    *
-    * @param $inData
-    * @param $expected
-    */
+     *
+     * @param $inData
+     * @param $expected
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider()
     {
         return [
             // add

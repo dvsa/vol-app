@@ -47,9 +47,8 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Test organisation recipients when there is no user, or when the user has no contact details
-     *
-     * @dataProvider emptyUserProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyUserProvider')]
     public function testOrganisationRecipientsNoUserDetails($user)
     {
         $orgEmail1 = 'orgEmail1@test.com';
@@ -73,7 +72,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals($expected, $sut->organisationRecipients($organisation, $user));
     }
 
-    public function emptyUserProvider()
+    public static function emptyUserProvider()
     {
         $userWithoutEmail = m::mock(User::class);
         $userWithoutEmail->shouldReceive('isInternal')->withNoArgs()->andReturn(false);

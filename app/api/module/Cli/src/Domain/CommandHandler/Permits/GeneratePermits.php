@@ -188,6 +188,7 @@ final class GeneratePermits extends AbstractCommandHandler
         }
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->transMngr = $container->get('TransactionManager');

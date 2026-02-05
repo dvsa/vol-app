@@ -41,9 +41,8 @@ class InitialLoadTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handleCommand method happy path
-     *
-     * @dataProvider successProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('successProvider')]
     public function testHandleCommandSuccess($companyNumber, $stubResponse, $expectedSaveData)
     {
         // expectations
@@ -73,7 +72,7 @@ class InitialLoadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedSaveData, $company->toArray());
     }
 
-    public function successProvider()
+    public static function successProvider()
     {
         return [
             'real example' => [

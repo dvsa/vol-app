@@ -39,9 +39,7 @@ class DateTypeTest extends MockeryTestCase
         $this->sut->convertToPHPValue($value, $this->mockPlatform);
     }
 
-    /**
-     * @dataProvider dpTestConvertToPhpValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConvertToPhpValue')]
     public function testConvertToPhpValue($value, $expect)
     {
         $this->mockPlatform->shouldReceive('getDateFormatString')->atMost(1)->andReturn('d-m-Y');
@@ -51,7 +49,7 @@ class DateTypeTest extends MockeryTestCase
         static::assertEquals($expect, $actual);
     }
 
-    public function dpTestConvertToPhpValue()
+    public static function dpTestConvertToPhpValue()
     {
         return [
             [
@@ -70,9 +68,7 @@ class DateTypeTest extends MockeryTestCase
     }
 
 
-    /**
-     * @dataProvider dpTestConvertToDatabaseValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConvertToDatabaseValue')]
     public function testConvertToDatabaseValue($value, $expect)
     {
         /** @var AbstractPlatform | m\MockInterface $mockPlatform */
@@ -87,7 +83,7 @@ class DateTypeTest extends MockeryTestCase
         static::assertEquals($expect, $actual);
     }
 
-    public function dpTestConvertToDatabaseValue()
+    public static function dpTestConvertToDatabaseValue()
     {
         return [
             [

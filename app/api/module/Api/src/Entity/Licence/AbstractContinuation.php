@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractContinuation implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractContinuation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

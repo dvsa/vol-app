@@ -31,9 +31,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater = new CheckedValueUpdater($this->taskRepo);
     }
 
-    /**
-     * @dataProvider dpCheckNotRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCheckNotRequired')]
     public function testCheckNotRequired($checked)
     {
         $this->checkableApplication->shouldReceive('requiresPreAllocationCheck')
@@ -43,7 +41,7 @@ class CheckedValueUpdaterTest extends MockeryTestCase
         $this->checkedValueUpdater->updateIfRequired($this->checkableApplication, $checked);
     }
 
-    public function dpCheckNotRequired()
+    public static function dpCheckNotRequired()
     {
         return [
             [true],

@@ -75,11 +75,11 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
     /**
      * test handle query
      *
-     * @dataProvider queryStatusProvider
      *
      * @param string $status         initial search status
      * @param array  $mappedStatuses array of mapped statuses expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('queryStatusProvider')]
     public function testHandleQuery($status, $mappedStatuses)
     {
         $query = Qry::create(['status' => $status]);
@@ -117,7 +117,7 @@ class EbsrSubmissionListTest extends QueryHandlerTestCase
      *
      * @return array
      */
-    public function queryStatusProvider()
+    public static function queryStatusProvider()
     {
         return [
             [

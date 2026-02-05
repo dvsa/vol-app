@@ -23,6 +23,7 @@ class AssignItemsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $user = m::mock(UserEntity::class);

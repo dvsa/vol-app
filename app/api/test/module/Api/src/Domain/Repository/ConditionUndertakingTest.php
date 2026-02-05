@@ -9,8 +9,8 @@ use Doctrine\ORM\QueryBuilder;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking::class)]
 class ConditionUndertakingTest extends RepositoryTestCase
 {
     /** @var Repository\ConditionUndertaking | m\MockInterface */
@@ -223,9 +223,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals('results', $this->sut->fetchSmallVehilceUndertakings($licenceId));
     }
 
-    /**
-     * @dataProvider dpHasLightGoodsVehicleUndertakings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLightGoodsVehicleUndertakings')]
     public function testHasLightGoodsVehicleUndertakings($resultCount, $expected)
     {
         $licenceId = 42;
@@ -291,7 +289,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         );
     }
 
-    public function dpHasLightGoodsVehicleUndertakings()
+    public static function dpHasLightGoodsVehicleUndertakings()
     {
         return [
             [0, false],
@@ -314,7 +312,7 @@ class ConditionUndertakingTest extends RepositoryTestCase
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn([$mockEnt, $mockEnt2, $mockEnt3]);
         $this->sut
             ->shouldReceive('delete')
-            ->with(m::any([$mockEnt, $mockEnt2, $mockEnt3]))
+            ->with(m::any())
             ->times(3);
 
         static::assertEquals(3, $this->sut->deleteFromVariations($ids));

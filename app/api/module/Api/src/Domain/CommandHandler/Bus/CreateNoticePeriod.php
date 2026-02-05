@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Repository\BusNoticePeriod as BusNoticePeriodRepo;
 
 final class CreateNoticePeriod extends AbstractCommandHandler
 {
-    public const SUCCESS_MSG = 'Bus Notice Period created';
+    public const string SUCCESS_MSG = 'Bus Notice Period created';
 
     protected $repoServiceName = 'BusNoticePeriod';
 

@@ -15,9 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\GenerateCoverLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\GenerateCoverLetter::class)]
 class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
 {
     /** @var GenerateCoverLetter */
@@ -32,9 +30,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommandForGoods
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForGoods')]
     public function testHandleCommandForGoods($isNi, $expectedTemplate)
     {
         $licenceId = 100;
@@ -111,7 +107,7 @@ class GenerateCoverLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForGoods()
+    public static function dpHandleCommandForGoods()
     {
         return [
             'GB' => [

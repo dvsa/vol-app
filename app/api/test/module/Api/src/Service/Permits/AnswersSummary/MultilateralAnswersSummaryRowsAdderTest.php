@@ -18,9 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MultilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testAddRows($isSnapshot)
     {
         $formattedAnswer = 'line 1<br>line 2';
@@ -99,7 +97,7 @@ class MultilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
         $multilateralAnswersSummaryRowsAdder->addRows($answersSummary, $irhpApplication, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

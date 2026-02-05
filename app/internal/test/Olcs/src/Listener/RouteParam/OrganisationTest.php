@@ -103,7 +103,7 @@ class OrganisationTest extends MockeryTestCase
         $mockEventManager
             ->shouldReceive('attach')
             ->once()
-            ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'organisation', $this->sut->onOrganisation(...), 1);
 
         $this->sut->attach($mockEventManager);
     }

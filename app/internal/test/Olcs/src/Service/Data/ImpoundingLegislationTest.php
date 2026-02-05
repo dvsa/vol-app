@@ -48,12 +48,12 @@ class ImpoundingLegislationTest extends RefDataTestCase
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      *
      * @param $niFlag
      * @param $goodsOrPsv
      * @param $expectedList
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
         $this->licenceDataService->shouldReceive('fetchLicenceData')
@@ -98,7 +98,7 @@ class ImpoundingLegislationTest extends RefDataTestCase
      *
      * @return array
      */
-    public function provideFetchListOptions()
+    public static function provideFetchListOptions()
     {
         return [
             ['Y', 'lcat_psv', 'impound_legislation_psv_gb'],

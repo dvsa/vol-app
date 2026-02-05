@@ -78,6 +78,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
         return $response;
     }
 
+    #[\Override]
     protected function alterDeclarationForm(Form $form): void
     {
         if ($this->tma['tmDigitalSignature'] === null) {

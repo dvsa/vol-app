@@ -35,12 +35,12 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getViewDataProvider
      * @param array $licenceData licence overview data
      * @param array $cases
      * @param array $applications organisation applications
      * @param array $expectedViewData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getViewDataProvider')]
     public function testGetViewData($licenceData, $expectedViewData)
     {
         $this->urlHelperService->shouldReceive('fromRoute')
@@ -63,7 +63,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expectedViewData, $this->sut->getViewData($licenceData));
     }
 
-    public function getViewDataProvider()
+    public static function getViewDataProvider()
     {
         return [
             'valid goods licence' => [

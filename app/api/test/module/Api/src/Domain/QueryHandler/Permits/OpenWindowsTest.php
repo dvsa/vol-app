@@ -26,6 +26,7 @@ class OpenWindowsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->references = [

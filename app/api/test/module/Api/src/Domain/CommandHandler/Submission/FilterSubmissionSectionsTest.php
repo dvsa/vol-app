@@ -36,6 +36,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new FilterSubmissionSections();
@@ -77,6 +78,7 @@ class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

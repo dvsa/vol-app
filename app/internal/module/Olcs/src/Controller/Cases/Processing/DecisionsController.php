@@ -46,6 +46,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $case = $this->getCase($this->params()->fromRoute('case'));
@@ -68,6 +69,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function addAction()
     {
         return $this->redirectToDetails();
@@ -78,6 +80,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function editAction()
     {
         return $this->redirectToDetails();
@@ -88,6 +91,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->redirectToDetails();
@@ -113,6 +117,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      *
      * @return ViewModel
      */
+    #[\Override]
     public function notFoundAction()
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);

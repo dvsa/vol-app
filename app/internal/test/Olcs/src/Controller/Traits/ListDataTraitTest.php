@@ -5,9 +5,7 @@ namespace OlcsTest\Controller\Traits;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Olcs\Controller\Traits\ListDataTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\ListDataTrait::class)]
 class ListDataTraitTest extends MockeryTestCase
 {
     /**

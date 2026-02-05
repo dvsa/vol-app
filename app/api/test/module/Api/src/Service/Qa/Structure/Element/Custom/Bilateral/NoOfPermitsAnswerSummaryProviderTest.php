@@ -40,9 +40,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($bilateralPermitUsageSelection, $bilateralRequired, $expectedTemplateVariables)
     {
         $isSnapshot = false;
@@ -71,7 +69,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         $requiredStandard = 5;
         $requiredCabotage = 7;

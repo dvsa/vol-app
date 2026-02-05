@@ -59,7 +59,7 @@ class CreateGoodsDiscsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider()
     {
         return [
             [

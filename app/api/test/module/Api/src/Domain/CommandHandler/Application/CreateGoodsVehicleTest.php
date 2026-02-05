@@ -15,9 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateGoodsVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateGoodsVehicle::class)]
 class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public const APP_ID = 9001;

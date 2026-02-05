@@ -20,7 +20,7 @@ final class CreateSubmissionSectionComment extends AbstractCommandHandler implem
 {
     use EditorJsConversionTrait;
 
-    public const ERR_COMMENT_EXISTS = 'Comment already exists';
+    public const string ERR_COMMENT_EXISTS = 'Comment already exists';
 
     protected $repoServiceName = 'SubmissionSectionComment';
 

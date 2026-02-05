@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
 class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testStructure($bookmarkClass)
     {
         $id = 1;
@@ -25,7 +23,7 @@ class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($bundle, $query->getBundle());
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [Bookmark\BusFeeTypeBundle::class],

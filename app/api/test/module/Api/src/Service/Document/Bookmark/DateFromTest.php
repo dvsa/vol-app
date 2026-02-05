@@ -21,9 +21,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query[1]);
     }
 
-    /**
-     * @dataProvider specifiedDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('specifiedDateProvider')]
     public function testRender($specifiedDate)
     {
         $bookmark = new DateFrom();
@@ -44,7 +42,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function specifiedDateProvider()
+    public static function specifiedDateProvider()
     {
         return [
             [new \DateTime('2014-02-03 11:12:34')],
@@ -52,9 +50,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider interimStartDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('interimStartDateProvider')]
     public function testRenderWithInterim($interimStartDate)
     {
         $bookmark = new DateFrom();
@@ -78,7 +74,7 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function interimStartDateProvider()
+    public static function interimStartDateProvider()
     {
         return [
             [new \DateTime('2011-01-01 10:10:10')],

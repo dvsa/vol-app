@@ -43,7 +43,6 @@ class SlaCalculatorTest extends MockeryTestCase
     /**
      * Test the SLA date calculator given a set of params
      *
-     * @dataProvider slaDateProvider
      *
      * @param $date String date to start from
      * @param $days Integer offset days from $date
@@ -51,6 +50,7 @@ class SlaCalculatorTest extends MockeryTestCase
      * @param $publicHolidays Boolean if true, public holidays are taken into account
      * @param $expected String expected result
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('slaDateProvider')]
     public function testApplySla(
         $date,
         $days,
@@ -94,7 +94,7 @@ class SlaCalculatorTest extends MockeryTestCase
         return $sla;
     }
 
-    public function slaDateProvider()
+    public static function slaDateProvider()
     {
         return [
             ['2015-12-18', -35, true, false, 'B', '2015-10-30'],

@@ -51,6 +51,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -206,16 +207,14 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand()
     {
         return [
             [false, 'application'],
             [true, 'variation']
         ];
     }
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommandSendEmailToAdminsRemoveDuplicate($isVariation, $uriSegment)
     {
         $command = Command::create(['id' => 863]);
@@ -325,9 +324,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommandSendEmailToCreator($isVariation, $uriSegment)
     {
         $command = Command::create(['id' => 863]);

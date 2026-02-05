@@ -17,11 +17,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class LicenceAddressTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
     public function testProvide()
     {
         $licenceAddress = 'licence address';
@@ -51,11 +48,8 @@ class LicenceAddressTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
     public function testProvideWithNoAddress()
     {
         $licenceEntityMock = m::mock(LicenceEntity::class);
@@ -75,11 +69,8 @@ class LicenceAddressTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
     public function testProvideWithNoLicence()
     {
         $publicationLink = m::mock(PublicationLink::class);

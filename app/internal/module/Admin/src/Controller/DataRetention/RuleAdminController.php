@@ -65,6 +65,7 @@ class RuleAdminController extends AbstractInternalController implements LeftView
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');

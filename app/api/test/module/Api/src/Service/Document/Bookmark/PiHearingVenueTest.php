@@ -17,9 +17,7 @@ class PiHearingVenueTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_null($bookmark->getQuery([])));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = new PiHearingVenue();
@@ -28,7 +26,7 @@ class PiHearingVenueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [

@@ -28,16 +28,14 @@ class LicenceNoGenEntityTest extends EntityTester
         $this->assertSame($licence, $sut->getLicence());
     }
 
-    /**
-     * @dataProvider dataProviderTestGetCategoryPrefix
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetCategoryPrefix')]
     public function testGetCategoryPrefix($expected, $goodsOrPsv)
     {
         $refData = new RefData($goodsOrPsv);
         $this->assertSame($expected, Entity::getCategoryPrefix($refData));
     }
 
-    public function dataProviderTestGetCategoryPrefix()
+    public static function dataProviderTestGetCategoryPrefix()
     {
         return [
             ['P', Licence::LICENCE_CATEGORY_PSV],

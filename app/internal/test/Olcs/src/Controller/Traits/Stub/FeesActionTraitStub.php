@@ -12,11 +12,8 @@ class FeesActionTraitStub
 {
     use Traits\FeesActionTrait;
 
-    protected FormHelperService $formHelper;
-
-    public function __construct(FormHelperService $formHelper)
+    public function __construct(protected FormHelperService $formHelper)
     {
-        $this->formHelper = $formHelper;
     }
 
     protected function renderLayout($view)

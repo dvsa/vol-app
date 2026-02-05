@@ -34,8 +34,8 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
 
     protected $extraRepos = ['FeeType'];
 
-    public const ERR_IRHP_GRANT_CANNOT_GRANT = 'ERR_IRHP_GRANT_CANNOT_GRANT';
-    public const ERR_IRHP_GRANT_TOO_MANY_PERMITS = 'ERR_IRHP_GRANT_TOO_MANY_PERMITS';
+    public const string ERR_IRHP_GRANT_CANNOT_GRANT = 'ERR_IRHP_GRANT_CANNOT_GRANT';
+    public const string ERR_IRHP_GRANT_TOO_MANY_PERMITS = 'ERR_IRHP_GRANT_TOO_MANY_PERMITS';
 
     /** @var GrantabilityChecker */
     private $grantabilityChecker;
@@ -125,6 +125,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
             ]
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

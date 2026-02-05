@@ -34,12 +34,12 @@ class LicenceTest extends MockeryTestCase
     /**
      * Returns whether a licence is allowed to receive ebsr submissions based on the status
      *
-     * @dataProvider isValidProvider
      *
      * @param $status
      * @param $goodsOrPsv
      * @param $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($status, $goodsOrPsv, $valid)
     {
         $sut = new Licence();
@@ -66,7 +66,7 @@ class LicenceTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, LicenceEntity::LICENCE_CATEGORY_PSV, false],

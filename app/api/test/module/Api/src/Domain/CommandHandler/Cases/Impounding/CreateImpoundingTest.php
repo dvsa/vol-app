@@ -38,6 +38,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -124,10 +125,10 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideImpoundingLicencePublishCommands
      * @param $licType Goods or PSV
      * @param $commandData Expected Command Data for publish
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideImpoundingLicencePublishCommands')]
     public function testHandleCommandWithPublishForLicenceCases($licType, $commandData)
     {
         $command = Cmd::create(
@@ -184,10 +185,10 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideImpoundingApplicationPublishCommands
      * @param $licType Goods or PSV
      * @param $commandData Expected Command Data for publish
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideImpoundingApplicationPublishCommands')]
     public function testHandleCommandWithPublishForApplicationCases($licType, $commandData)
     {
         $command = Cmd::create(
@@ -252,7 +253,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
      * Provides licence type and expected publish command data for cases attached to licence
      * @return array
      */
-    public function provideImpoundingLicencePublishCommands()
+    public static function provideImpoundingLicencePublishCommands()
     {
         return [
             [
@@ -282,7 +283,7 @@ class CreateImpoundingTest extends AbstractCommandHandlerTestCase
      * Provides licence type and expected publish command data for cases attached to application
      * @return array
      */
-    public function provideImpoundingApplicationPublishCommands()
+    public static function provideImpoundingApplicationPublishCommands()
     {
         return [
             [

@@ -32,6 +32,7 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -46,9 +47,7 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpReasonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpReasonProvider')]
     public function testHandleCommandWithEmail($withdrawReason, $isInternalUser, $expectedCheckReasonAgainstStatus)
     {
         $id = 4096;
@@ -117,9 +116,7 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         $this->assertEquals(['Application withdrawn'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpReasonProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpReasonProvider')]
     public function testHandleCommandWithoutEmail($withdrawReason, $isInternalUser, $expectedCheckReasonAgainstStatus)
     {
         $id = 4096;
@@ -183,7 +180,7 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         $this->assertEquals(['Application withdrawn'], $result->getMessages());
     }
 
-    public function dpReasonProvider()
+    public static function dpReasonProvider()
     {
         return [
             [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, false, true],

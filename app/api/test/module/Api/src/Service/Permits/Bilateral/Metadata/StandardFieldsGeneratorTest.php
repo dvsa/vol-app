@@ -34,9 +34,7 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
         $this->standardFieldsGenerator = new StandardFieldsGenerator($this->currentFieldValuesGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($applicationPathGroupId, $permitUsageList, $currentFieldValues, $expected)
     {
         $this->irhpPermitStock->shouldReceive('getApplicationPathGroup->getId')
@@ -58,7 +56,7 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         $singlePermitUsage = m::mock(RefData::class);
         $singlePermitUsage->shouldReceive('getId')

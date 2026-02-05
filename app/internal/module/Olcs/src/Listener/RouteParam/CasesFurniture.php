@@ -38,7 +38,7 @@ class CasesFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onCase'],
+            $this->onCase(...),
             $priority
         );
     }

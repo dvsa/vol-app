@@ -24,9 +24,7 @@ class CanCreateMessageWithConversationTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
     public function testIsValid($canAccess, $hasPermission, $isOpen, $expected)
     {
         /** @var CommandInterface $dto */
@@ -54,7 +52,7 @@ class CanCreateMessageWithConversationTest extends AbstractHandlerTestCase
         }
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid()
     {
         return [
             [true, true, true, true],

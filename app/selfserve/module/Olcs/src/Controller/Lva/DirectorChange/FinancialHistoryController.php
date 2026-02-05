@@ -120,6 +120,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      *
      * @return FormInterface
      */
+    #[\Override]
     protected function getFinancialHistoryForm(array $data = [])
     {
         $data['variationType'] = $this->getVariationType();

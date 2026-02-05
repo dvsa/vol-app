@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="bus_service_type")
  */
-abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractBusServiceType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

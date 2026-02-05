@@ -50,7 +50,7 @@ class TransportManagerFurnitureTest extends TestCase
         $events = m::mock(EventManagerInterface::class);
 
         $events->shouldReceive('attach')->once()
-            ->with('route.param.transportManager', [$this->sut, 'onTransportManager'], 1)
+            ->with('route.param.transportManager', $this->sut->onTransportManager(...), 1)
             ->andReturn('listener');
 
         $this->sut->attach($events);

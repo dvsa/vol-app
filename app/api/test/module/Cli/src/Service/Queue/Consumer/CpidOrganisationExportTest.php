@@ -51,6 +51,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function instantiate()
     {
         $this->sut = m::mock(
@@ -62,9 +63,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         )->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider dpTestMessageProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMessageProvider')]
     public function testProcessMessage($shouldThrowException)
     {
         /** @var m\MockInterface $sut */
@@ -102,7 +101,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         );
     }
 
-    public function dpTestMessageProvider()
+    public static function dpTestMessageProvider()
     {
         return [
             [

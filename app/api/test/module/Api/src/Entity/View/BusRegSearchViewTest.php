@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Entity\View\BusRegSearchView;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\View\BusRegSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\View\BusRegSearchView::class)]
 class BusRegSearchViewTest extends MockeryTestCase
 {
     /** @var  BusRegSearchView */
@@ -44,7 +42,7 @@ class BusRegSearchViewTest extends MockeryTestCase
     {
         // test all teh getters
         foreach ($this->testData as $property => $value) {
-            $methodName = ucfirst($property);
+            $methodName = ucfirst((string) $property);
 
             $this->sut->{'set' . $methodName}($value);
 

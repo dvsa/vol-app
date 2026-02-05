@@ -29,7 +29,7 @@ final class Letter extends AbstractCommandHandler implements
     use AuthAwareTrait;
     use UploaderAwareTrait;
 
-    public const EXPECTED_ITEMS_IN_ROW = 1;
+    public const int EXPECTED_ITEMS_IN_ROW = 1;
 
     protected $repoServiceName = 'DocTemplate';
 

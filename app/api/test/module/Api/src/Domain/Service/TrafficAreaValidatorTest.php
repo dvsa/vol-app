@@ -270,9 +270,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    /**
-     * @dataProvider dataProviderActiveLicenceStatusTypes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveLicenceStatusTypes')]
     public function testValidateErrorWithGoodsLicenceStatus($licenceStatus, $expectValidationMessage)
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
@@ -421,9 +419,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         $this->assertSame(true, $result);
     }
 
-    /**
-     * @dataProvider dataProviderActiveApplicationStatusTypes
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveApplicationStatusTypes')]
     public function testValidateErrorWithGoodsApplicationStatus($status, $expectValidationMessage)
     {
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
@@ -459,7 +455,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderActiveLicenceStatusTypes()
+    public static function dataProviderActiveLicenceStatusTypes()
     {
         return [
             [Licence::LICENCE_STATUS_VALID, true],
@@ -479,7 +475,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         ];
     }
 
-    public function dataProviderActiveApplicationStatusTypes()
+    public static function dataProviderActiveApplicationStatusTypes()
     {
         return [
             [Application::APPLICATION_STATUS_NOT_SUBMITTED, true],

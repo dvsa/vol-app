@@ -23,9 +23,7 @@ class WithApplicationTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery($expectedDql, $arguments)
     {
         $this->sut->modifyQuery($this->qb, $arguments);
@@ -35,7 +33,7 @@ class WithApplicationTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['SELECT a, app FROM foo a LEFT JOIN a.application app', []],

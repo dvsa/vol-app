@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

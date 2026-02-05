@@ -20,7 +20,7 @@ class RouteParamsTest extends TestCase
 
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$sut, 'onDispatch'], 20);
+            ->with(MvcEvent::EVENT_DISPATCH, $sut->onDispatch(...), 20);
 
         $sut->attach($mockEventManager);
     }

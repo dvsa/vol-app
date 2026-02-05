@@ -56,9 +56,7 @@ class ContactDetailsEntityTest extends EntityTester
         $this->assertEquals('email@address.com', $entity->getEmailAddress());
     }
 
-    /**
-     * @dataProvider dpTestCreate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreate')]
     public function testCreate($contactType, $data = [], $expect = [])
     {
         $cdTypeEntity = (new RefData())->setId($contactType);
@@ -89,7 +87,7 @@ class ContactDetailsEntityTest extends EntityTester
         static::assertEmpty($phoneContacts);
     }
 
-    public function dpTestCreate()
+    public static function dpTestCreate()
     {
         return [
             [
@@ -219,9 +217,7 @@ class ContactDetailsEntityTest extends EntityTester
         static::assertEquals($phoneContacts, $sut->getPhoneContacts());
     }
 
-    /**
-     * @dataProvider dpTestUpdate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestUpdate')]
     public function testUpdate($contactType, $data, $expect, $fromInternal)
     {
         $cdTypeEntity = (new RefData())->setId($contactType);
@@ -281,7 +277,7 @@ class ContactDetailsEntityTest extends EntityTester
         );
     }
 
-    public function dpTestUpdate()
+    public static function dpTestUpdate()
     {
         return [
             //  test CONTACT_TYPE_IRFO_OPERATOR
@@ -339,7 +335,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_PARTNER
             [
@@ -375,7 +371,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_OBJECTOR
             [
@@ -430,7 +426,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_STATEMENT_REQUESTOR
             [
@@ -475,7 +471,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_USER FROM SelfServe
             [
@@ -523,7 +519,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             [
                 'contactType' => ContactDetails::CONTACT_TYPE_USER,
@@ -570,7 +566,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                true
+                "fromInternal" => true
             ],
             'TM from internal' => [
                 'contactType' => ContactDetails::CONTACT_TYPE_TRANSPORT_MANAGER,
@@ -617,7 +613,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                true
+                "fromInternal" => true
             ],
             //  test update of CONTACT_TYPE_COMPLAINANT
             [
@@ -662,7 +658,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
             //  test update of CONTACT_TYPE_
             [
@@ -715,7 +711,7 @@ class ContactDetailsEntityTest extends EntityTester
                         ],
                     ],
                 ],
-                false
+                "fromInternal" => false
             ],
         ];
     }

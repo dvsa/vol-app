@@ -74,9 +74,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
      */
     protected $financialStandingHelper;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable()
     {
         // Setup
@@ -815,10 +813,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand(
         $section,
         ApplicationEntity $application,
@@ -919,10 +915,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid()
     {
         // Setup
@@ -947,10 +941,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertSame(ApplicationCompletion::STATUS_VARIATION_REQUIRES_ATTENTION, $application->getApplicationCompletion()->getOperatingCentresStatus());
     }
 
-    /**
-     * @test
-     * @depends handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandMarksOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreNotValid')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandDoesNotMarkOperatingCentresSectionAsRequiringAttentionIfVehicleAuthorizationsAreValid()
     {
         // Setup
@@ -968,10 +960,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->assertNotSame(Application::VARIATION_STATUS_REQUIRES_ATTENTION, $application->getApplicationCompletion()->getOperatingCentresStatus());
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicences()
     {
         // Setup
@@ -994,11 +984,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends handleCommandValidatesTotAuthHgvVehiclesForPsvLicences
-     * @dataProvider operatingCentreVehicleAuthorisationConstraintsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandValidatesTotAuthHgvVehiclesForPsvLicences')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingCentreVehicleAuthorisationConstraintsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandValidatesTotAuthHgvVehiclesForPsvLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints)
     {
         // Setup
@@ -1036,10 +1024,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandValidatesHgvsForGoodsVehicleLicences()
     {
         // Setup
@@ -1062,11 +1048,9 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($this->commandToUpdateOperatingCentresSectionForApplication($application));
     }
 
-    /**
-     * @test
-     * @depends      handleCommandValidatesHgvsForGoodsVehicleLicences
-     * @dataProvider operatingCentreVehicleAuthorisationConstraintsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandValidatesHgvsForGoodsVehicleLicences')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingCentreVehicleAuthorisationConstraintsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandValidatesTotAuthHgvVehiclesForGoodsVehicleLicencesAgainstCorrectOperatingCentreConstraints(array $operatingCentresVehicleCapacities, array $expectedVehicleConstraints)
     {
         // Setup
@@ -1114,9 +1098,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
             ->andReturn(2000);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
     public function testMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountExceedsLicenceAmount()
     {
         // Setup
@@ -1148,10 +1130,8 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     * @dataProvider dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount')]
     public function testMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount(
         $applicationRequiredFinance
     ) {
@@ -1184,7 +1164,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount()
+    public static function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount()
     {
         return [
             [2000],
@@ -1192,6 +1172,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -1314,6 +1295,7 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

@@ -116,9 +116,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         $elementGeneratorContext->getAnswerValue();
     }
 
-    /**
-     * @dataProvider dpIsSelfservePageContainer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsSelfservePageContainer')]
     public function testIsSelfservePageContainer($elementContainer, $expected)
     {
         $elementGeneratorContext = new ElementGeneratorContext(
@@ -133,7 +131,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function dpIsSelfservePageContainer()
+    public static function dpIsSelfservePageContainer()
     {
         return [
             [ElementContainer::FORM_FRAGMENT, false],

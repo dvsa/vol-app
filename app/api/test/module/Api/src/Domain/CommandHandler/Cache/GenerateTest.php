@@ -29,9 +29,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($uniqueId, $messages)
     {
         $cacheId = 'cacheId';
@@ -56,7 +54,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($messages, $result->getMessages());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [null, ['Cache updated for cacheId without a unique id']],

@@ -14,6 +14,7 @@ class AbstractReviewServiceStub extends ReviewService
     {
     }
 
+    #[\Override]
     public function translate($string)
     {
         return parent::translate($string);

@@ -27,9 +27,6 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
 
-    protected TranslationHelperService $translationHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -37,8 +34,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
         HelperPluginManager $viewHelperManager,
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
-        TranslationHelperService $translationHelper,
-        DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService,
         $navigation,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
@@ -52,8 +49,6 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
             $navigation,
             $flashMessengerHelper
         );
-        $this->translationHelper = $translationHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**

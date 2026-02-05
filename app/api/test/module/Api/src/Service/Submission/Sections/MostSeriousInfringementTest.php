@@ -31,7 +31,7 @@ class MostSeriousInfringementTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getCase();
 
@@ -42,6 +42,7 @@ class MostSeriousInfringementTest extends AbstractSubmissionSectionTest
         ];
     }
 
+    #[\Override]
     protected function getCase()
     {
         $case = parent::getCase();

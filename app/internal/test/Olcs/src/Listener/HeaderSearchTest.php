@@ -63,14 +63,12 @@ class HeaderSearchTest extends TestCase
         /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
+            ->with(MvcEvent::EVENT_DISPATCH, $this->sut->onDispatch(...), 20);
 
         $this->sut->attach($mockEventManager);
     }
 
-    /**
-     * @dataProvider dpOnDispatch
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOnDispatch')]
     public function testOnDispatch($userData, $setTimes)
     {
         $index = 'licence';
@@ -137,7 +135,7 @@ class HeaderSearchTest extends TestCase
         $this->sut->onDispatch($mockEvent);
     }
 
-    public function dpOnDispatch(): array
+    public static function dpOnDispatch(): array
     {
         return [
             'loggedin' => [

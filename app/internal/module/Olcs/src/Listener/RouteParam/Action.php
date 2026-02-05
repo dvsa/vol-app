@@ -24,7 +24,7 @@ class Action implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'action',
-            [$this, 'onAction'],
+            $this->onAction(...),
             $priority
         );
     }

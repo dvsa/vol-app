@@ -19,6 +19,7 @@ abstract class AbstractVersionedRepository extends AbstractRepository
      * @return void
      * @throws Exception\RuntimeException
      */
+    #[\Override]
     public function save($entity)
     {
         if (!($entity instanceof $this->entity)) {
@@ -59,7 +60,7 @@ abstract class AbstractVersionedRepository extends AbstractRepository
             
             // Set all versioned fields
             foreach ($currentState as $field => $value) {
-                $setter = 'set' . ucfirst($field);
+                $setter = 'set' . ucfirst((string) $field);
                 if (method_exists($newVersion, $setter)) {
                     $newVersion->$setter($value);
                 }
@@ -90,9 +91,10 @@ abstract class AbstractVersionedRepository extends AbstractRepository
      * @param int $id Entity ID
      * @return mixed
      */
+    #[\Override]
     public function fetchById($id, $hydrateMode = null, $version = null)
     {
-        $qb = $this->createQueryBuilder($this->alias);
+        $qb = $this->createQueryBuilder();
         
         // Eager load current version
         $qb->select($this->alias, 'cv')
@@ -119,7 +121,7 @@ abstract class AbstractVersionedRepository extends AbstractRepository
     {
         $state = [];
         foreach ($this->getVersionedFields() as $field) {
-            $getter = 'get' . ucfirst($field);
+            $getter = 'get' . ucfirst((string) $field);
             if (method_exists($entity, $getter)) {
                 $state[$field] = $entity->$getter();
             }
@@ -137,7 +139,7 @@ abstract class AbstractVersionedRepository extends AbstractRepository
     protected function hasChanges($currentVersion, array $newState): bool
     {
         foreach ($newState as $field => $newValue) {
-            $getter = 'get' . ucfirst($field);
+            $getter = 'get' . ucfirst((string) $field);
             if (!method_exists($currentVersion, $getter)) {
                 continue;
             }

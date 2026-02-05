@@ -34,9 +34,7 @@ class CommunityLicencesTest extends QueryHandlerTestCase
         $this->assertIsCallable($this->sut->handleQuery(...));
     }
 
-    /**
-     * @depends testHandleQueryIsDefined
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testHandleQueryIsDefined')]
     public function testHandleQuery()
     {
         $this->mockRepo('CommunityLic', CommunityLicRepo::class);

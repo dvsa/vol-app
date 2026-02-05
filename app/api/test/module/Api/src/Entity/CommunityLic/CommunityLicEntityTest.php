@@ -247,9 +247,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertTrue($sut->isActive());
     }
 
-    /**
-     * @dataProvider dpTestIsActiveFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsActiveFalse')]
     public function testIsActiveFalse($status)
     {
         $sut = m::mock(CommunityLicEntity::class)->makePartial();
@@ -259,7 +257,7 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertFalse($sut->isActive());
     }
 
-    public function dpTestIsActiveFalse()
+    public static function dpTestIsActiveFalse()
     {
         return [
             [CommunityLicEntity::STATUS_PENDING],

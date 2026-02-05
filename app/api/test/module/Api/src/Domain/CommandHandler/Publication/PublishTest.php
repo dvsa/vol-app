@@ -33,6 +33,7 @@ class PublishTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [PublicationEntity::PUB_PRINTED_STATUS];

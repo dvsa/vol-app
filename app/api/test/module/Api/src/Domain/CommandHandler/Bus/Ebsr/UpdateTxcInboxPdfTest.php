@@ -33,6 +33,7 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -46,9 +47,8 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
 
     /**
      * Tests that the correct method is called for each PDF type
-     *
-     * @dataProvider handleCommandProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($pdfType, $method)
     {
         $id = 99;
@@ -91,7 +91,7 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
     /**
      * data provider for handleCommand
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             ['Pdf', 'setPdfDocument'],

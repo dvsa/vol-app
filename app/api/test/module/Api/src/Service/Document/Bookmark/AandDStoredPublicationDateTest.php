@@ -25,16 +25,14 @@ class AandDStoredPublicationDateTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider publicationsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationsProvider')]
     public function testRender($data, $result)
     {
         $this->sut->setData($data);
         $this->assertEquals($result, $this->sut->render());
     }
 
-    public function publicationsProvider()
+    public static function publicationsProvider()
     {
         return [
             [

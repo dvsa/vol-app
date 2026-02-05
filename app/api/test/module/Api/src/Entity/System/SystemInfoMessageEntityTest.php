@@ -19,9 +19,7 @@ class SystemInfoMessageEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProviderTestCalculated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestCalculated')]
     public function testCalculated(Entity $entity, $expect)
     {
         $actual = $entity->getCalculatedBundleValues();
@@ -29,7 +27,7 @@ class SystemInfoMessageEntityTest extends EntityTester
         static::assertEquals($expect, $actual);
     }
 
-    public function dataProviderTestCalculated()
+    public static function dataProviderTestCalculated()
     {
         $now = time();
 

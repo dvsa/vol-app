@@ -36,9 +36,7 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -62,7 +60,7 @@ class ModifyTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

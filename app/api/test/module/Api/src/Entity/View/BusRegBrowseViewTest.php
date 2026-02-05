@@ -49,7 +49,6 @@ class BusRegBrowseViewTest extends \PHPUnit\Framework\TestCase
         $ref = new \ReflectionObject($this->entity);
         foreach (array_keys($this->testData) as $property) {
             $refProperty = $ref->getProperty($property);
-            $refProperty->setAccessible(true);
             $refProperty->setValue($this->entity, $this->testData[$property]);
         }
     }
@@ -57,7 +56,7 @@ class BusRegBrowseViewTest extends \PHPUnit\Framework\TestCase
     public function testGetters()
     {
         foreach ($this->testData as $property => $value) {
-            $getter = ($property === 'isShortNotice') ? $property : 'get' . ucfirst($property);
+            $getter = ($property === 'isShortNotice') ? $property : 'get' . ucfirst((string) $property);
             $this->assertEquals($value, $this->entity->$getter());
         }
     }

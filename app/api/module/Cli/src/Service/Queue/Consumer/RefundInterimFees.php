@@ -34,6 +34,7 @@ class RefundInterimFees extends AbstractCommandConsumer
         return ['id' => $item->getEntityId()];
     }
 
+    #[\Override]
     public function processMessage(QueueEntity $item)
     {
         /** @var FeeEntity $fee */

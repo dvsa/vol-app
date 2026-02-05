@@ -218,11 +218,11 @@ class UserAccessTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider selfServeMessageDataProvider
      *
      * @param $isAdministrator
      * @param $expectedMessage
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('selfServeMessageDataProvider')]
     public function testSelfServeMessage($isAdministrator, $expectedMessage)
     {
         $bookmark = m::mock(UserAccess::class)
@@ -266,7 +266,7 @@ class UserAccessTest extends MockeryTestCase
         $this->assertEquals('replacedstring', $bookmark->render());
     }
 
-    public function selfServeMessageDataProvider()
+    public static function selfServeMessageDataProvider()
     {
         return [
             [

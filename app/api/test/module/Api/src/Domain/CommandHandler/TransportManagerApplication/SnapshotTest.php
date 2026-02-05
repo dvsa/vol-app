@@ -38,9 +38,7 @@ class SnapshotTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($tmaStatus, $expectedString)
     {
         $command = Command::create(['id' => 111, 'user' => 1]);
@@ -97,7 +95,7 @@ class SnapshotTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             [

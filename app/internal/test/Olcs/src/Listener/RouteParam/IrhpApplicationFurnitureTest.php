@@ -37,7 +37,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         $mockEventManager->shouldReceive('attach')->once()
             ->with(
                 RouteParams::EVENT_PARAM . 'irhpAppId',
-                [$this->sut, 'onIrhpApplicationFurniture'],
+                $this->sut->onIrhpApplicationFurniture(...),
                 1
             );
 
@@ -64,9 +64,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider dpOnIrhpApplicationFurniture
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOnIrhpApplicationFurniture')]
     public function testOnIrhpApplicationFurniture($data, $expected)
     {
         $irhpApplicationId = 2;
@@ -211,7 +209,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         $this->sut->onIrhpApplicationFurniture($event);
     }
 
-    public function dpOnIrhpApplicationFurniture()
+    public static function dpOnIrhpApplicationFurniture()
     {
         return [
             [

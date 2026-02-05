@@ -87,6 +87,7 @@ class PartnerController extends AbstractInternalController implements LeftViewPr
         $this->placeholder()->setPlaceholder('pageTitle', 'User management');
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->setPageTitle();
@@ -94,6 +95,7 @@ class PartnerController extends AbstractInternalController implements LeftViewPr
         return parent::indexAction();
     }
 
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();

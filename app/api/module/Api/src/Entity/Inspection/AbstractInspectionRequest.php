@@ -44,7 +44,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -21,9 +21,7 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         $this->permitUsageSelectionGenerator = new PermitUsageSelectionGenerator();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($requiredPermits, $expected)
     {
         $this->assertEquals(
@@ -32,7 +30,7 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [

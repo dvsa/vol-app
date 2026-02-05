@@ -20,7 +20,7 @@ class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
      *
      * @return array
      */
-    public function paramProvider()
+    public static function paramProvider()
     {
         return [
             [

@@ -37,6 +37,7 @@ class RecommendWaiveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     public function initReferences()
     {
         $this->refData = [

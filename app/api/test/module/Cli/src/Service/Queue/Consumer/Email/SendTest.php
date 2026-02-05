@@ -13,10 +13,8 @@ use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class SendTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Send::class;

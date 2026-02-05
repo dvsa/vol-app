@@ -37,11 +37,11 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterFormForService($data, $readonly)
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
@@ -51,11 +51,11 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterFormForTa($data, $readonly)
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
@@ -65,11 +65,11 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterFormForStop($data, $readonly)
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
@@ -79,11 +79,11 @@ class BusDetailsControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormProvider
      *
      * @param array $data
      * @param bool  $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterFormForQuality($data, $readonly)
     {
         $mockForm = $this->getAlterFormAssertions($data, $readonly);
@@ -131,7 +131,7 @@ class BusDetailsControllerTest extends MockeryTestCase
         return $mockForm;
     }
 
-    public function alterFormProvider()
+    public static function alterFormProvider()
     {
         return [
             [

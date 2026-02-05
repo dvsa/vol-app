@@ -29,10 +29,10 @@ class ApplicationOperatingCentresReviewService extends AbstractOperatingCentresR
      */
     public function __construct(
         AbstractReviewServiceServices $abstractReviewServiceServices,
-        private PsvOperatingCentreReviewService $psvOperatingCentreReviewService,
-        private ApplicationPsvOcTotalAuthReviewService $applicationPsvOcTotalAuthReviewService,
-        private GoodsOperatingCentreReviewService $goodsOperatingCentreReviewService,
-        private ApplicationGoodsOcTotalAuthReviewService $applicationGoodsOcTotalAuthReviewService,
+        private readonly PsvOperatingCentreReviewService $psvOperatingCentreReviewService,
+        private readonly ApplicationPsvOcTotalAuthReviewService $applicationPsvOcTotalAuthReviewService,
+        private readonly GoodsOperatingCentreReviewService $goodsOperatingCentreReviewService,
+        private readonly ApplicationGoodsOcTotalAuthReviewService $applicationGoodsOcTotalAuthReviewService,
         private readonly TrafficAreaReviewService $trafficAreaReviewService
     ) {
         parent::__construct($abstractReviewServiceServices);

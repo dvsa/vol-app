@@ -16,9 +16,7 @@ class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpLicencePermissions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLicencePermissions')]
     public function testIsValidExternalUserLicenceOwner(
         $permission,
         $isOwner,
@@ -71,7 +69,7 @@ class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid($entityId));
     }
 
-    public function dpLicencePermissions()
+    public static function dpLicencePermissions()
     {
         return [
             'selfservice-user-owner' => [

@@ -28,8 +28,8 @@ class OperatorProcessingTasksControllerTest extends MockeryTestCase
 
     /**
      * Test the index action
-     * @group task
      */
+    #[\PHPUnit\Framework\Attributes\Group('task')]
     public function testIndexActionWithDefaultParams()
     {
         $organisationId  = 69;
@@ -86,8 +86,8 @@ class OperatorProcessingTasksControllerTest extends MockeryTestCase
 
     /**
      * Test the index action
-     * @group task
      */
+    #[\PHPUnit\Framework\Attributes\Group('task')]
     public function testIndexActionWithRedir()
     {
         $this->sut->shouldReceive('processTasksActions')->once()->with('organisation')->andReturn('redir');

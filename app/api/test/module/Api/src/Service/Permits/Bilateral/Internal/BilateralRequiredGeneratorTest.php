@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralRequiredGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($permitUsageSelection, $postData, $expected)
     {
         $bilateralRequiredGenerator = new BilateralRequiredGenerator();
@@ -27,7 +25,7 @@ class BilateralRequiredGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [

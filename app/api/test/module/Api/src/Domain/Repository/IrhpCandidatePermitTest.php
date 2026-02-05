@@ -26,9 +26,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->setUpSut(IrhpCandidatePermit::class);
     }
 
-    /**
-     * @dataProvider dpGetListByIrhpApplicationVariants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationVariants')]
     public function testFetchListForGetListByIrhpApplication($query, $paginateCallCount)
     {
         $this->setUpSut(IrhpCandidatePermit::class, true);
@@ -54,7 +52,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpGetListByIrhpApplicationVariants()
+    public static function dpGetListByIrhpApplicationVariants()
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -70,9 +68,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetListByIrhpApplicationWantedOnlyVariants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationWantedOnlyVariants')]
     public function testFetchListForGetListByIrhpApplicationWantedOnly($query, $paginateCallCount)
     {
         $this->setUpSut(IrhpCandidatePermit::class, true);
@@ -99,7 +95,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpGetListByIrhpApplicationWantedOnlyVariants()
+    public static function dpGetListByIrhpApplicationWantedOnlyVariants()
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -116,9 +112,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetListByIrhpApplicationPreGrantVariants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetListByIrhpApplicationPreGrantVariants')]
     public function testFetchListForGetListByIrhpApplicationPreGrant($query, $paginateCallCount)
     {
         $this->setUpSut(IrhpCandidatePermit::class, true);
@@ -143,7 +137,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpGetListByIrhpApplicationPreGrantVariants()
+    public static function dpGetListByIrhpApplicationPreGrantVariants()
     {
         $params = [
             'irhpApplication' => self::IRHP_APPLICATION_ID,
@@ -160,9 +154,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpFetchCountInRangeWhereApplicationAwaitingFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInRangeWhereApplicationAwaitingFee')]
     public function testFetchCountInRangeWhereApplicationAwaitingFee($countInRange, $expectedResult)
     {
         $rangeId = 22;
@@ -212,7 +204,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         );
     }
 
-    public function dpFetchCountInRangeWhereApplicationAwaitingFee()
+    public static function dpFetchCountInRangeWhereApplicationAwaitingFee()
     {
         return [
             [null, 0],
@@ -220,9 +212,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpFetchCountInStockWhereApplicationAwaitingFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchCountInStockWhereApplicationAwaitingFee')]
     public function testFetchCountInStockWhereApplicationAwaitingFee($emissionsCategoryId, $countInStock, $expectedResult)
     {
         $stockId = 22;
@@ -284,7 +274,7 @@ class IrhpCandidatePermitTest extends RepositoryTestCase
         );
     }
 
-    public function dpFetchCountInStockWhereApplicationAwaitingFee()
+    public static function dpFetchCountInStockWhereApplicationAwaitingFee()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF, null, 0],

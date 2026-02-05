@@ -8,9 +8,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\DataService\ApplicationStatus
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\DataService\ApplicationStatus::class)]
 class ApplicationStatusTest extends QueryHandlerTestCase
 {
     /** @var QueryHandler\DataService\ApplicationStatus  */

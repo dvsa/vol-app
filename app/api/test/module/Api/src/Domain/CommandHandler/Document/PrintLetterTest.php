@@ -12,9 +12,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter::class)]
 class PrintLetterTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 8001;
@@ -55,9 +53,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($method, array $canDo, array $expect)
     {
         $data = [
@@ -92,7 +88,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expect['result'], $actual->getMessages());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             'method:Email;canEmail&Print;' => [

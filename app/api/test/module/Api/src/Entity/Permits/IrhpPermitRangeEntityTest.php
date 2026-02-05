@@ -98,9 +98,8 @@ class IrhpPermitRangeEntityTest extends EntityTester
 
     /**
      * Test the canDelete method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testCanDelete($data, $expected)
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
@@ -135,7 +134,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
      *
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         return [
             'valid delete' => [
@@ -234,9 +233,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals(76, $entity->getSize());
     }
 
-    /**
-     * @dataProvider dpHasCountries
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCountries')]
     public function testHasCountries(array $countries, $expectedHasCountries)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -248,7 +245,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         );
     }
 
-    public function dpHasCountries()
+    public static function dpHasCountries()
     {
         return [
             [
@@ -266,9 +263,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsCabotage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCabotage')]
     public function testIsCabotage($cabotage, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -277,7 +272,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isCabotage());
     }
 
-    public function dpIsCabotage()
+    public static function dpIsCabotage()
     {
         return [
             [false, false],
@@ -285,9 +280,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsStandard
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsStandard')]
     public function testIsStandard($cabotage, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -296,7 +289,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isStandard());
     }
 
-    public function dpIsStandard()
+    public static function dpIsStandard()
     {
         return [
             [false, true],

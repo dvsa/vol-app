@@ -19,6 +19,7 @@ class ApplicationOverviewSubmission extends AbstractOverviewSubmission
      * @return void
      * @inheritdoc
      */
+    #[\Override]
     protected function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
         parent::alterForm($form, $data, $params);

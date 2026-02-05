@@ -23,9 +23,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Update
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Update::class)]
 class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -59,6 +57,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [

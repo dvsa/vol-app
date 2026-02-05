@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs::class)]
 class CompaniesHouseVsOlcsDiffsTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */

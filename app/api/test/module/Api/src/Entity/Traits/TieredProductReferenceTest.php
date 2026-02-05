@@ -57,10 +57,7 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    /**
-     *
-     * @dataProvider productRefMonthProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('productRefMonthProvider')]
     public function testGenericGetProdRefForTierMonths($expected, $validFrom, $validTo, $now, $refs)
     {
         $sut = new StubTieredProductReference();
@@ -75,7 +72,7 @@ class TieredProductReferenceTest extends MockeryTestCase
         );
     }
 
-    public function productRefMonthProvider()
+    public static function productRefMonthProvider()
     {
         $validFrom = new DateTime('first day of January next year');
         $validTo = new DateTime('last day of December next year');

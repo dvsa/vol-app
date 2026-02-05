@@ -12,9 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardsTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGetRepresentation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
     public function testGetRepresentation($yesNo)
     {
         $emissionsStandards = new EmissionsStandards($yesNo);
@@ -27,7 +25,7 @@ class EmissionsStandardsTest extends MockeryTestCase
         );
     }
 
-    public function dpGetRepresentation()
+    public static function dpGetRepresentation()
     {
         return [
             ['Y'],

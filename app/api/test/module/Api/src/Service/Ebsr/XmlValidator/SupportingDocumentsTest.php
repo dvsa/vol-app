@@ -15,8 +15,8 @@ class SupportingDocumentsTest extends TestCase
     /**
      * @param $xml
      * @param $valid
-     * @dataProvider isValidProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($xml, $valid)
     {
         vfsStream::setup('root');
@@ -32,7 +32,7 @@ class SupportingDocumentsTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom, $context));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             ['<DocumentUri></DocumentUri>', false],

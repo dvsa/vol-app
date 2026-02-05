@@ -19,9 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MotExpiryDateGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate($isSelfservePageContainer, $isNi, $expectedEnableFileUploads)
     {
         $irhpApplication = m::mock(IrhpApplication::class);
@@ -61,7 +59,7 @@ class MotExpiryDateGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate()
     {
         return [
             [false, false, false],

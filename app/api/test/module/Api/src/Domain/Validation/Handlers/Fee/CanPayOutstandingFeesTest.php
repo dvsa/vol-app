@@ -25,11 +25,11 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValidOrganisation($expected, $isValid)
     {
         /** @var CommandInterface $dto */
@@ -42,11 +42,11 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValidApplication($expected, $isValid)
     {
         /** @var CommandInterface $dto */
@@ -60,11 +60,11 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValidIrhpApplication($expected, $isValid)
     {
         /** @var CommandInterface $dto */
@@ -79,11 +79,11 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValidFees($expected, $isValid)
     {
         /** @var CommandInterface $dto */
@@ -127,7 +127,7 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [true, true],

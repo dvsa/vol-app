@@ -27,9 +27,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryEcmtShortTerm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryEcmtShortTerm')]
     public function testHandleQueryEcmtShortTerm($queryParams, $expectedRepoMethod, $expectedRepoParams)
     {
         $ips1Id = 20;
@@ -126,7 +124,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryEcmtShortTerm()
+    public static function dpTestHandleQueryEcmtShortTerm()
     {
         $irhpPermitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM;
         $year = 2020;
@@ -159,9 +157,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryEcmtAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryEcmtAnnual')]
     public function testHandleQueryEcmtAnnual($queryParams, $expectedRepoMethod, $expectedRepoParams)
     {
         $ips1Id = 20;
@@ -210,7 +206,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryEcmtAnnual()
+    public static function dpTestHandleQueryEcmtAnnual()
     {
         $irhpPermitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT;
         $year = 2020;
@@ -244,9 +240,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
     }
 
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedType')]
     public function testHandleQueryUnsupportedType($irhpPermitType)
     {
         $query = AvailableStocksQuery::create(
@@ -265,7 +259,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryUnsupportedType()
+    public static function dpTestHandleQueryUnsupportedType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
@@ -274,9 +268,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQueryNoStocks
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNoStocks')]
     public function testHandleQueryNoStocks($irhpPermitType)
     {
         $query = AvailableStocksQuery::create(
@@ -305,7 +297,7 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQueryNoStocks()
+    public static function dpHandleQueryNoStocks()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

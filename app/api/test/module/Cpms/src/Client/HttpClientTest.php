@@ -39,9 +39,7 @@ class HttpClientTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function testGet()
     {
         $queryData = [
@@ -125,9 +123,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals([], $clientOptions->getHeaders());
     }
 
-    /**
-     * @dataProvider dpTestLogResponseOnSuccess
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnSuccess')]
     public function testLogResponseOnSuccess($statusCode)
     {
         $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample'];
@@ -147,7 +143,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($expectedDebugLogMessage, $this->logger->getHandlers()[0]->getRecords()[1]['message']);
     }
 
-    public function dpTestLogResponseOnSuccess()
+    public static function dpTestLogResponseOnSuccess()
     {
         return [
             [
@@ -178,9 +174,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($badJson, $actual);
     }
 
-    /**
-     * @dataProvider dpTestLogResponseOnFailure
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnFailure')]
     public function testLogResponseOnFailure($dpData)
     {
         $statusCode = $dpData['statusCode'];
@@ -218,7 +212,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals($dpData['expectedResponse'], $result);
     }
 
-    public function dpTestLogResponseOnFailure()
+    public static function dpTestLogResponseOnFailure()
     {
         return [
             'client_error' => [

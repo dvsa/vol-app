@@ -140,6 +140,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @return \Olcs\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Teams');
@@ -165,6 +166,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @return array|mixed|\Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function deleteAction()
     {
         // validate if we can remove the team
@@ -366,6 +368,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     public function getForm($name)
     {
         $formHelper = $this->formHelperService;
@@ -427,6 +430,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function editAction()
     {
         $params = [];

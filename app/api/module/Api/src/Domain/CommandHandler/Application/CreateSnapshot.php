@@ -29,14 +29,14 @@ final class CreateSnapshot extends AbstractCommandHandler implements AuthAwareIn
 {
     use AuthAwareTrait;
 
-    public const CODE_GV_APP             = 'GV79';
-    public const CODE_GV_VAR_UPGRADE     = 'GV80A';
-    public const CODE_GV_VAR_NO_UPGRADE  = 'GV81';
+    public const string CODE_GV_APP             = 'GV79';
+    public const string CODE_GV_VAR_UPGRADE     = 'GV80A';
+    public const string CODE_GV_VAR_NO_UPGRADE  = 'GV81';
 
-    public const CODE_PSV_APP = 'PSV421';
-    public const CODE_PSV_APP_SR = 'PSV356';
-    public const CODE_PSV_VAR_UPGRADE    = 'PSV431A';
-    public const CODE_PSV_VAR_NO_UPGRADE = 'PSV431';
+    public const string CODE_PSV_APP = 'PSV421';
+    public const string CODE_PSV_APP_SR = 'PSV356';
+    public const string CODE_PSV_VAR_UPGRADE    = 'PSV431A';
+    public const string CODE_PSV_VAR_NO_UPGRADE = 'PSV431';
 
     protected $repoServiceName = 'Application';
 
@@ -157,6 +157,7 @@ final class CreateSnapshot extends AbstractCommandHandler implements AuthAwareIn
             default => throw new ValidationException(['Unexpected event']),
         };
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

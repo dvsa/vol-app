@@ -7,9 +7,7 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataService::class)]
 class DataServiceTest extends RepositoryTestCase
 {
     public const ORG_ID = 9001;

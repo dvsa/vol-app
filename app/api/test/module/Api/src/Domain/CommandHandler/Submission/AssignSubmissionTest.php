@@ -56,6 +56,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AssignSubmission();
@@ -100,6 +101,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -611,7 +613,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function informationCompleteDateDataProvider()
+    public static function informationCompleteDateDataProvider()
     {
         return [
             ['2017-01-31', true],
@@ -619,9 +621,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider  informationCompleteDateDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('informationCompleteDateDataProvider')]
     public function testSavesWhenAssignedDateEqualToOrAfter($informationCompleteDate)
     {
         $data = [
@@ -728,9 +728,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider  assignToTcDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('assignToTcDataProvider')]
     public function testHandleCommandAssignToTc($tcSlaStarted, $assignDateTimes)
     {
         $data = [
@@ -844,7 +842,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function assignToTcDataProvider()
+    public static function assignToTcDataProvider()
     {
         return [
             [0, 1],

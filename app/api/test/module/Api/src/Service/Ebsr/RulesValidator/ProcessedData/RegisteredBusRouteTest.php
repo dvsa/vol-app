@@ -15,12 +15,12 @@ class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
     /**
      * tests whether the bus route has a status of registered
      *
-     * @dataProvider isValidProvider
      *
      * @param string $txcAppType
      * @param string $status
      * @param bool $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($txcAppType, $status, $valid)
     {
         $sut = new RegisteredBusRoute();
@@ -41,7 +41,7 @@ class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_NEW, true],

@@ -22,7 +22,7 @@ abstract class AbstractUpdateApplicationTest extends AbstractCommandHandlerTestC
     protected string $confirmationMessage = '';
     protected array $commandData = [];
     protected array $sections = [];
-    private const APP_COMPLETION_RESULT = 'app completion message: %s';
+    private const string APP_COMPLETION_RESULT = 'app completion message: %s';
 
     public function setUp(): void
     {

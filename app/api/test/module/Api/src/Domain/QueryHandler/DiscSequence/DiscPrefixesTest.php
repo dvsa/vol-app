@@ -30,16 +30,14 @@ class DiscPrefixesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider emptyParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyParamsProvider')]
     public function testHandleQueryEmpty($params)
     {
         $query = Qry::create($params);
         $this->assertEquals(['result' => [], 'count' => 0], $this->sut->handleQuery($query));
     }
 
-    public function emptyParamsProvider()
+    public static function emptyParamsProvider()
     {
         return [
             [['niFlag' => 'N', 'licenceType' => 'ltyp_r']],

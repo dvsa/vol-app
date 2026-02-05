@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicenceVehicle implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

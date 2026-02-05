@@ -25,9 +25,7 @@ class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
         $this->sut = new IrhpPermitPrintCountry($this->abstractDataServiceServices);
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($results, $expected)
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
@@ -57,7 +55,7 @@ class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
         $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $this->sut->getIrhpPermitType());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions()
     {
         return [
             'with data' => [

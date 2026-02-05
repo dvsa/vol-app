@@ -23,9 +23,7 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -35,10 +33,8 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsInstanceWhenItImplementsIdentityProviderInterface()
     {
         // Setup
@@ -53,10 +49,8 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(JWTIdentityProvider::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigIsMissing()
     {
         // Setup
@@ -71,10 +65,8 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenContainerDoesNotHaveRequestedInstance()
     {
         // Setup
@@ -89,10 +81,8 @@ class IdentityProviderFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenInstanceDoesNotImplementIdentityProviderInterface()
     {
         // Setup

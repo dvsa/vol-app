@@ -13,9 +13,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Application\People
-
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\People::class)]
 class PeopleTest extends QueryHandlerTestCase
 {
     /** @var  People */

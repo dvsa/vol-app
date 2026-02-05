@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Transfer\Command\Licence\CreatePeople as Command;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreatePeople
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreatePeople::class)]
 class CreatePeopleTest extends AbstractCommandHandlerTestCase
 {
     public const ORG_PERSON_ID = 9001;
@@ -32,6 +30,7 @@ class CreatePeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

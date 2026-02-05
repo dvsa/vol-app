@@ -28,9 +28,7 @@ class LetterSection implements MapperInterface
                 'name' => $currentVersion['name'] ?? $data['name'] ?? null,
                 'sectionType' => $currentVersion['sectionType'] ?? $data['sectionType'] ?? null,
                 'defaultContent' => $currentVersion['defaultContent'] ?? $data['defaultContent'] ?? null,
-                'goodsOrPsv' => isset($currentVersion['goodsOrPsv']['id']) 
-                    ? $currentVersion['goodsOrPsv']['id'] 
-                    : (isset($data['goodsOrPsv']['id']) ? $data['goodsOrPsv']['id'] : null),
+                'goodsOrPsv' => $currentVersion['goodsOrPsv']['id'] ?? $data['goodsOrPsv']['id'] ?? null,
                 'isNi' => $currentVersion['isNi'] ?? $data['isNi'] ?? false,
                 'requiresInput' => $currentVersion['requiresInput'] ?? $data['requiresInput'] ?? false,
                 'minLength' => $currentVersion['minLength'] ?? $data['minLength'] ?? null,

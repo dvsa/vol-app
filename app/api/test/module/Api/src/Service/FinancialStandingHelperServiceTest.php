@@ -70,16 +70,16 @@ class FinancialStandingHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider financeCalculationProvider
      * @param array $auths
      * @param int $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('financeCalculationProvider')]
     public function testGetFinanceCalculation($auths, $expected)
     {
         $this->assertEquals($expected, $this->sut->getFinanceCalculation($auths));
     }
 
-    public function financeCalculationProvider()
+    public static function financeCalculationProvider()
     {
         // For an operator:
         //  * with a goods standard international application with 3 vehicles,

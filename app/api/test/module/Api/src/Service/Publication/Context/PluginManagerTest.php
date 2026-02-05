@@ -18,7 +18,7 @@ class PluginManagerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = new PluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new PluginManager($this->createStub(ContainerInterface::class));
     }
 
     public function testValidate()

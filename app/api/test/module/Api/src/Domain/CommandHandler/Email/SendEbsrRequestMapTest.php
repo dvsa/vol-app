@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRequestMap;
 
 /**
  * Send Ebsr Request Map Test
- * @group ebsrEmails
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrRequestMapTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-request-map';

@@ -9,9 +9,7 @@ use Olcs\Service\Data\ApplicationStatus;
 use Dvsa\Olcs\Transfer\Query\DataService\ApplicationStatus as Qry;
 use Laminas\Http\Response;
 
-/**
- * @covers \Olcs\Service\Data\ApplicationStatus
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ApplicationStatus::class)]
 class ApplicationStatusTest extends AbstractListDataServiceTestCase
 {
     public const ORG_ID = 9999;

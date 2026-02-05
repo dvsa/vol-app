@@ -65,9 +65,7 @@ class CountryGeneratorTest extends MockeryTestCase
         $this->countryGenerator = new CountryGenerator($this->periodArrayGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($isMorocco, $behaviour, $periodLabel)
     {
         $selectedPeriodId = 42;
@@ -105,9 +103,7 @@ class CountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerateNoPeriodSelected($isMorocco, $behaviour, $periodLabel)
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitApplicationByStockCountryId')
@@ -138,7 +134,7 @@ class CountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [false, Behaviour::STANDARD, 'Select period'],

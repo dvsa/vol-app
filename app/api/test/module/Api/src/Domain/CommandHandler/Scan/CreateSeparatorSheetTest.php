@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateSeparatorSheet
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateSeparatorSheet::class)]
 class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
 {
     public const SUB_CAT_ID = 8001;
@@ -59,6 +57,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('fetchByLicNo')->with('entityIdentifier')->andReturn($this->mockLic);
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];
@@ -774,9 +773,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Create Document', 'Scan ID ' . self::SCAN_ID . ' created'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpHandleCommandCategoryPermitsBadIdentifierFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandCategoryPermitsBadIdentifierFormat')]
     public function testHandleCommandCategoryPermitsBadIdentifierFormat($entityIdentifier)
     {
         $this->expectException(NotFoundException::class);
@@ -797,7 +794,7 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandCategoryPermitsBadIdentifierFormat()
+    public static function dpHandleCommandCategoryPermitsBadIdentifierFormat()
     {
         return [
             ['OB1234567 100007'],

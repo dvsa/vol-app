@@ -19,7 +19,7 @@ use Doctrine\ORM\Query;
  */
 final class UpdateRecipient extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERROR_INVALID_SUBSCRIPTION = 'PUB-REC-1';
+    public const string ERROR_INVALID_SUBSCRIPTION = 'PUB-REC-1';
 
     protected $repoServiceName = 'Recipient';
 

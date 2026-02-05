@@ -15,11 +15,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TransportManagerNameTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the transport manager name filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the transport manager name filter')]
     public function testProvideWithTitle()
     {
         $title = 'title';
@@ -47,11 +44,8 @@ class TransportManagerNameTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publication, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the transport manager name filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the transport manager name filter')]
     public function testProvideNoTitle()
     {
         $forename = 'forename';

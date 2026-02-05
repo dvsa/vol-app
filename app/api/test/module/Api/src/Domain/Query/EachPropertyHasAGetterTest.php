@@ -7,9 +7,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
 class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testEachPropertyHasGetter($bookmarkClass)
     {
         $reflectionClass = new \ReflectionClass($bookmarkClass);
@@ -20,7 +18,7 @@ class EachPropertyHasAGetterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             Bookmark\ApplicationBundle::class => [Bookmark\ApplicationBundle::class],

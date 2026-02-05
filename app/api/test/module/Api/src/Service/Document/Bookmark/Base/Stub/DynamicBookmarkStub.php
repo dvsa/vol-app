@@ -10,6 +10,7 @@ class DynamicBookmarkStub extends DynamicBookmark
 
     protected $params = ['bar'];
 
+    #[\Override]
     public function validateDataAndGetQuery($data)
     {
         return parent::validateDataAndGetQuery($data);

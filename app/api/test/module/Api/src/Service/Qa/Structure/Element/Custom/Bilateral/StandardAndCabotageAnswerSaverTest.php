@@ -77,9 +77,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         $this->standardAndCabotageAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    /**
-     * @dataProvider dpSaveCabotageRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveCabotageRequired')]
     public function testSaveCabotageRequired($answerValue)
     {
         $this->namedAnswerFetcher->shouldReceive('fetch')
@@ -99,7 +97,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         $this->standardAndCabotageAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    public function dpSaveCabotageRequired()
+    public static function dpSaveCabotageRequired()
     {
         return [
             [Answer::BILATERAL_STANDARD_AND_CABOTAGE],

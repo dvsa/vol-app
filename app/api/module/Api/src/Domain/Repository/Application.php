@@ -122,6 +122,7 @@ class Application extends AbstractRepository
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)->withRefdata()->with('licence')->byId($id);

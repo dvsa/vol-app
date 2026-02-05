@@ -6,9 +6,7 @@ use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base\Stub\ImageBookmarkStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark::class)]
 class ImageBookmarkTest extends MockeryTestCase
 {
     public function testGetImageFail()

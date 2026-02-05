@@ -45,6 +45,7 @@ class RefundInterimFeesTest extends AbstractConsumerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function instantiate()
     {
         $this->feeRepo = m::mock(FeeRepo::class);

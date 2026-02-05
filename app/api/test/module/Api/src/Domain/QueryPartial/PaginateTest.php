@@ -16,9 +16,7 @@ class PaginateTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestModifyQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifyQuery')]
     public function testModifyQuery($page, $limit, $expect)
     {
         foreach ($expect as $method => $value) {
@@ -28,7 +26,7 @@ class PaginateTest extends QueryPartialTestCase
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public function dpTestModifyQuery()
+    public static function dpTestModifyQuery()
     {
         return [
             [
@@ -66,16 +64,14 @@ class PaginateTest extends QueryPartialTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestModifyQueryEmptyExpect
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestModifyQueryEmptyExpect')]
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testModifyQueryEmptyExpect($page, $limit, $expect)
     {
         $this->sut->modifyQuery($this->qb, [$page, $limit]);
     }
 
-    public function dpTestModifyQueryEmptyExpect()
+    public static function dpTestModifyQueryEmptyExpect()
     {
         return [
             [

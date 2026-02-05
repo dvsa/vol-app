@@ -38,9 +38,7 @@ class LicenceBusinessTypeTest extends MockeryTestCase
         $this->sut = new LicenceBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
-    /**
-     * @dataProvider dpGetForm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetForm')]
     public function testGetForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication): void
     {
         $mockElement = m::mock(Element::class);
@@ -105,7 +103,7 @@ class LicenceBusinessTypeTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, true}, list{true, false}, list{false, true}, list{false, false}}
      */
-    public function dpGetForm(): array
+    public static function dpGetForm(): array
     {
         return [
             [

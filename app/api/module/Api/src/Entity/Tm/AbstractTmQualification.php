@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTmQualification implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTmQualification implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -20,9 +20,7 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccessOrganisation, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -52,7 +50,7 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

@@ -73,9 +73,7 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpHandleQueryEcmtAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryEcmtAnnual')]
     public function testHandleQueryEcmtAnnual($maxPermittedCount, $expectedMaxPermittedReached)
     {
         $this->irhpPermitType->shouldReceive('isEcmtAnnual')
@@ -112,7 +110,7 @@ class MaxPermittedReachedByStockAndLicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryEcmtAnnual()
+    public static function dpHandleQueryEcmtAnnual()
     {
         return [
             [2, false],

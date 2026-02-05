@@ -53,9 +53,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         $this->restrictedCountriesGenerator = new RestrictedCountriesGenerator($this->questionTextGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(
         $irhpPermitTypeId,
         $applicationPathGroupId,
@@ -111,7 +109,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [
@@ -165,9 +163,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateExceptionOnUnsupportedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateExceptionOnUnsupportedType')]
     public function testGenerateExceptionOnUnsupportedType($irhpPermitTypeId)
     {
         $this->expectException(RuntimeException::class);
@@ -180,7 +176,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         $this->restrictedCountriesGenerator->generate($this->qaContext);
     }
 
-    public function dpGenerateExceptionOnUnsupportedType()
+    public static function dpGenerateExceptionOnUnsupportedType()
     {
         return [
             [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],

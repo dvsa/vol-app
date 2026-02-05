@@ -81,9 +81,7 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
     public function testHandleQuery(
         $queryData,
         $bundledIrhpCandidatePermits,
@@ -150,7 +148,7 @@ class GetListByIrhpApplicationTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpTestHandleQuery()
+    public static function dpTestHandleQuery()
     {
         return [
             'page 1' => [

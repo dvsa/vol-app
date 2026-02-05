@@ -43,6 +43,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

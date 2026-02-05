@@ -22,6 +22,7 @@ class CreateContinuationSeparatorSheetTest extends AbstractCommandHandlerTestCas
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

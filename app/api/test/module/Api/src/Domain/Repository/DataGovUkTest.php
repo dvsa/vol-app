@@ -9,9 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DataGovUk;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataGovUk
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataGovUk::class)]
 class DataGovUkTest extends MockeryTestCase
 {
     public $mockResult;

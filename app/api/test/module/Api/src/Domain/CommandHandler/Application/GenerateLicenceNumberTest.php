@@ -36,6 +36,7 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -52,9 +53,7 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider cantGenerateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('cantGenerateProvider')]
     public function testHandleCommandCantGenerate(ApplicationEntity $application)
     {
         $data = [
@@ -84,9 +83,7 @@ class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider gvOrPsvProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('gvOrPsvProvider')]
     public function testHandleCommandWithoutLicenceNo(ApplicationEntity $application, $expectedLicNo)
     {
         $data = [

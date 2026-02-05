@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractOpposition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOpposition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

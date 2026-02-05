@@ -60,9 +60,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertTrue($organisation->hasInforceLicences());
     }
 
-    /**
-     * @dataProvider organisationDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('organisationDataProvider')]
     public function testUpdateOrganisation($isIrfo, $lastName, $expectedName, $allowEmail)
     {
         $organisation = new Entity();
@@ -86,7 +84,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($organisation->getAllowEmail(), $allowEmail);
     }
 
-    public function organisationDataProvider()
+    public static function organisationDataProvider()
     {
         return [
             ['Y', 'lname', 'fname lname', 'Y'],
@@ -173,9 +171,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals(new ArrayCollection(), $sut->getAdminOrganisationUsers());
     }
 
-    /**
-     * @dataProvider dpTestHasAdminEmailAddresses
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAdminEmailAddresses')]
     public function testHasAdminEmailAddresses(array $emailsMap, $expect)
     {
         /** @var Entity | m\MockInterface $sut */
@@ -196,7 +192,7 @@ class OrganisationEntityTest extends EntityTester
         static::assertEquals($expect, $sut->hasAdminEmailAddresses());
     }
 
-    public function dpTestHasAdminEmailAddresses()
+    public static function dpTestHasAdminEmailAddresses()
     {
         return [
             [
@@ -217,7 +213,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    public function dpOrgTypes()
+    public static function dpOrgTypes()
     {
         return [
             [Entity::ORG_TYPE_SOLE_TRADER],
@@ -230,10 +226,9 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpOrgTypes
-     *
      * @param string $typeId
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOrgTypes')]
     public function testIsSoleTrader($typeId)
     {
         $type = new \Dvsa\Olcs\Api\Entity\System\RefData();
@@ -245,10 +240,9 @@ class OrganisationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpOrgTypes
-     *
      * @param string $typeId
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOrgTypes')]
     public function testIsPartnership($typeId)
     {
         $type = new \Dvsa\Olcs\Api\Entity\System\RefData();
@@ -307,9 +301,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpActiveLicences
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpActiveLicences')]
     public function testGetActiveLicences($goodsOrPsv, $status, $expectedAny, $expectedGoods, $expectedPsv)
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -338,7 +330,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpActiveLicences()
+    public static function dpActiveLicences()
     {
         return [
             [null, LicenceEntity::LICENCE_STATUS_VALID, true, false, false],
@@ -362,9 +354,7 @@ class OrganisationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpActiveLicences
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpActiveLicences')]
     public function testHasActiveLicences($goodsOrPsv, $status, $expectedAny, $expectedGoods, $expectedPsv)
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -393,9 +383,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpEligibleIrhpLicences
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEligibleIrhpLicences')]
     public function testGetEligibleIrhpLicences($goodsOrPsv, $status, $licenceType, $expected)
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -415,7 +403,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpEligibleIrhpLicences()
+    public static function dpEligibleIrhpLicences()
     {
         return [
             [LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE, LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
@@ -540,9 +528,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertSame(Disqualification::STATUS_ACTIVE, $organisation->getDisqualificationStatus());
     }
 
-    /**
-     * @dataProvider dpGetLinkedLicences
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLinkedLicences')]
     public function testGetLinkedLicences($status, $expected)
     {
         $licence = m::mock(LicenceEntity::class)->makePartial();
@@ -558,7 +544,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals($expected, $organisation->getLinkedLicences()->contains($licence));
     }
 
-    public function dpGetLinkedLicences()
+    public static function dpGetLinkedLicences()
     {
         return [
             [LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION, false],
@@ -694,8 +680,8 @@ class OrganisationEntityTest extends EntityTester
      *
      * @param int $niFlag
      * @param string $allowedOperatorLocation
-     * @dataProvider allowedOperatorLocationProviderApplications
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowedOperatorLocationProviderApplications')]
     public function testGetAllowedOperatorLocationFromApplications($niFlag, $allowedOperatorLocation)
     {
         $mockOutstandingApplications = new ArrayCollection();
@@ -720,7 +706,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (applications)
      */
-    public function allowedOperatorLocationProviderApplications()
+    public static function allowedOperatorLocationProviderApplications()
     {
         return [
             ['N', 'GB'],
@@ -733,8 +719,8 @@ class OrganisationEntityTest extends EntityTester
      *
      * @param string $trafficArea
      * @param string $allowedOperatorLocation
-     * @dataProvider allowedOperatorLocationProviderLicences
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowedOperatorLocationProviderLicences')]
     public function testGetAllowedOperatorLocationFromLicences($trafficArea, $allowedOperatorLocation, $licenceStatus)
     {
         $mockTrafficArea = m::mock()
@@ -775,7 +761,7 @@ class OrganisationEntityTest extends EntityTester
     /**
      * Allowed operator location provider (licences)
      */
-    public function allowedOperatorLocationProviderLicences()
+    public static function allowedOperatorLocationProviderLicences()
     {
         return [
             ['N', 'NI', LicenceEntity::LICENCE_STATUS_GRANTED],
@@ -979,9 +965,7 @@ class OrganisationEntityTest extends EntityTester
         $this->assertEquals(false, $entity->isEligibleForPermits());
     }
 
-    /**
-     * @dataProvider dpHasSubmittedLicenceApplication
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasSubmittedLicenceApplication')]
     public function testHasSubmittedLicenceApplication($status, $expected)
     {
         if (!is_null($status)) {
@@ -1002,7 +986,7 @@ class OrganisationEntityTest extends EntityTester
         );
     }
 
-    public function dpHasSubmittedLicenceApplication(): array
+    public static function dpHasSubmittedLicenceApplication(): array
     {
         return [
             [null, false],

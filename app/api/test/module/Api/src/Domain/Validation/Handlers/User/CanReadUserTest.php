@@ -21,9 +21,7 @@ class CanReadUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         $dto = m::mock(CommandInterface::class);
@@ -34,7 +32,7 @@ class CanReadUserTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

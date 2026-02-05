@@ -12,8 +12,8 @@ use Psr\Container\ContainerInterface;
 /**
  * Class ComplianceEpisodeInputFactoryTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @covers \Dvsa\Olcs\Api\Service\Nr\InputFilter\ComplianceEpisodeInputFactory
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Nr\InputFilter\ComplianceEpisodeInputFactory::class)]
 class ComplianceEpisodeInputFactoryTest extends MockeryTestCase
 {
     public function testCreateService()

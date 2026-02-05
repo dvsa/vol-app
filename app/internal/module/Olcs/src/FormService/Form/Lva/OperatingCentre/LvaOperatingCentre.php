@@ -30,6 +30,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
      *
      * @return void
      */
+    #[\Override]
     public function alterForm(Form $form, array $params)
     {
         $this->formHelper->removeValidator($form, 'data->permission->permission', ValidatorIdentical::class);

@@ -22,9 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text3Test extends MockeryTestCase
 {
-    /**
-     * @dataProvider dataProviderTestProcessSection
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessSection')]
     public function testProcessSection($expectTextSet, $sectionId)
     {
         $sut = new ApplicationText3();
@@ -54,7 +52,7 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProcessSection()
+    public static function dataProviderTestProcessSection()
     {
         return [
             [true, PublicationSection::APP_NEW_SECTION],

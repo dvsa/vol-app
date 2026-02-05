@@ -85,7 +85,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     {
         return $this->add(
             AssignItemForm::class,
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             DataRetentionActions\AssignItems::class,
             AssignItemMapper::class,
             'pages/crud-form',
@@ -103,7 +103,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     {
         return $this->add(
             DelayItemForm::class,
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id'))]),
             DataRetentionActions\DelayItems::class,
             DelayItems::class,
             'pages/crud-form',
@@ -133,6 +133,7 @@ class DataRetentionController extends AbstractInternalController implements Left
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $ruleId = $this->params('dataRetentionRuleId');
@@ -143,7 +144,7 @@ class DataRetentionController extends AbstractInternalController implements Left
 
         $this->placeholder()->setPlaceholder(
             'pageTitle',
-            ucwords($dataRetentionRule['description'])
+            ucwords((string) $dataRetentionRule['description'])
         );
 
         return parent::indexAction();

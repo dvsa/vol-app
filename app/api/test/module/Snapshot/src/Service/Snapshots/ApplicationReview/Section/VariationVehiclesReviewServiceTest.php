@@ -35,15 +35,13 @@ class VariationVehiclesReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationVehiclesReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData($data, $expected)
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData()
     {
         return [
             [

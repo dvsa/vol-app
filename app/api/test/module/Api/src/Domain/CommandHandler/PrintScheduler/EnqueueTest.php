@@ -29,6 +29,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -37,9 +38,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-    * @dataProvider dpHandleCommandMissingDocumentsParam
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandMissingDocumentsParam')]
     public function testHandleCommandMissingDocumentsParam($params)
     {
         $command = Cmd::create($params);
@@ -49,7 +48,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandMissingDocumentsParam()
+    public static function dpHandleCommandMissingDocumentsParam()
     {
         return [
             'no params' => [
@@ -114,9 +113,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($cmdData, $expectedData, $expectedMsgs)
     {
         $command = Cmd::create($cmdData);
@@ -145,7 +142,7 @@ class EnqueueTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'with list of documents' => [

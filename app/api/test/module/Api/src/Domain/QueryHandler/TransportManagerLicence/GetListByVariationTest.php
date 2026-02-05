@@ -26,11 +26,11 @@ class GetListByVariationTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider dpHandleQuery
      *
      * @param $licenceType Application licence type id . eg Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($licenceType, $expected)
     {
         $query = Query::create(['variation' => 1]);
@@ -79,7 +79,7 @@ class GetListByVariationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery()
     {
         return [
             [

@@ -21,15 +21,13 @@ class OtherLicenceTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    /**
-     * @dataProvider mapFromFormProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormProvider')]
     public function testMapFromForm($data, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function mapFromFormProvider()
+    public static function mapFromFormProvider()
     {
         return [
             [

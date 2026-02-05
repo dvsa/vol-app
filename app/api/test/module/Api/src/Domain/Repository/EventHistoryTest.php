@@ -329,9 +329,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertSame($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider fetchPreviousLicenceStatusDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchPreviousLicenceStatusDataProvider')]
     public function testFetchPreviousLicenceStatusReturn($eventTypeId, $expectedStatus)
     {
         $qb = $this->createMockQb('QUERY');
@@ -346,7 +344,7 @@ class EventHistoryTest extends RepositoryTestCase
         self::assertEquals($expectedResult, $result);
     }
 
-    public function fetchPreviousLicenceStatusDataProvider()
+    public static function fetchPreviousLicenceStatusDataProvider()
     {
         return [
             'case_curtailed' => [

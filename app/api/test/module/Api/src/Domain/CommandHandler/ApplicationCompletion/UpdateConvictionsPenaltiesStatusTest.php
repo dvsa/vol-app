@@ -55,6 +55,7 @@ class UpdateConvictionsPenaltiesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandNoConvictions()
     {
         $this->applicationCompletion->setConvictionsPenaltiesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -66,6 +67,7 @@ class UpdateConvictionsPenaltiesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandNoConvictionsRequired()
     {
         $this->applicationCompletion->setConvictionsPenaltiesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -77,6 +79,7 @@ class UpdateConvictionsPenaltiesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommand()
     {
         $this->applicationCompletion->setConvictionsPenaltiesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);

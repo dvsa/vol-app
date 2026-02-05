@@ -17,9 +17,9 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class Schedule41Approve extends AbstractQueryHandler
 {
-    private const ERROR_MUST_COMPETE_OC = 'S41_APP_APPROVE_OC';
-    private const ERROR_MUST_COMPETE_TM = 'S41_APP_APPROVE_TM';
-    private const ERROR_OUSTANDING_FEE = 'S41_APP_OUSTANDING_FEE';
+    private const string ERROR_MUST_COMPETE_OC = 'S41_APP_APPROVE_OC';
+    private const string ERROR_MUST_COMPETE_TM = 'S41_APP_APPROVE_TM';
+    private const string ERROR_OUSTANDING_FEE = 'S41_APP_OUSTANDING_FEE';
 
     protected $repoServiceName = 'Application';
 
@@ -85,6 +85,7 @@ class Schedule41Approve extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

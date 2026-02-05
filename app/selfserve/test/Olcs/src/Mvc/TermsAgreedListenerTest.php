@@ -50,9 +50,7 @@ class TermsAgreedListenerTest extends MockeryTestCase
         $this->sut->onDispatch($event);
     }
 
-    /**
-     * @dataProvider dpExcludedRoute
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExcludedRoute')]
     public function testOnDispatchExcludedRoute($route): void
     {
         $this->sut->onDispatch(
@@ -60,7 +58,7 @@ class TermsAgreedListenerTest extends MockeryTestCase
         );
     }
 
-    public function dpExcludedRoute(): array
+    public static function dpExcludedRoute(): array
     {
         return [
             [TermsAgreedListener::ROUTE_WELCOME],

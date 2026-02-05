@@ -14,11 +14,11 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  */
 final class BusNote extends AbstractContext
 {
-    public const BUS_STRING = 'Registered Bus Services running under this licence have also been %s with immediate effect.';
+    public const string BUS_STRING = 'Registered Bus Services running under this licence have also been %s with immediate effect.';
 
-    public const BUS_REVOKED = 'revoked';
-    public const BUS_SURRENDERED = 'surrendered';
-    public const BUS_CNS = 'set to CNS';
+    public const string BUS_REVOKED = 'revoked';
+    public const string BUS_SURRENDERED = 'surrendered';
+    public const string BUS_CNS = 'set to CNS';
 
     /**
      * @param PublicationLink $publication

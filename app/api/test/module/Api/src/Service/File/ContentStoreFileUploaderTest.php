@@ -13,9 +13,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class)]
 class ContentStoreFileUploaderTest extends MockeryTestCase
 {
     public const IDENTIFIER = 'unit_Identifier';
@@ -44,7 +42,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
             );
 
         $sm->setService('ContentStore', $this->mockContentStoreCli);
-        $sm->setService('Logger', $this->createMock(Logger::class));
+        $sm->setService('Logger', $this->createStub(Logger::class));
 
         static::assertSame($this->sut, $this->sut->__invoke($sm, null));
     }

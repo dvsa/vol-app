@@ -10,8 +10,8 @@ use Mockery as m;
 
 /**
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList::class)]
 class OppositionListTest extends QueryHandlerTestCase
 {
     /** @var  OppositionList */

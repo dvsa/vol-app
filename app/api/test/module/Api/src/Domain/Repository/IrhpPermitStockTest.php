@@ -108,9 +108,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFetchOpenBilateralStocksByCountryNotMorocco
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchOpenBilateralStocksByCountryNotMorocco')]
     public function testFetchOpenBilateralStocksByCountryNotMorocco($countryId)
     {
         $qb = $this->createMockQb('BLAH');
@@ -154,7 +152,7 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchOpenBilateralStocksByCountryNotMorocco()
+    public static function dpFetchOpenBilateralStocksByCountryNotMorocco()
     {
         return [
             [Country::ID_NORWAY],

@@ -31,9 +31,7 @@ class CreateUserFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -44,10 +42,8 @@ class CreateUserFactoryTest extends MockeryTestCase
     }
 
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsWrappedCreateUserCommandHandler(): void
     {
         // Setup

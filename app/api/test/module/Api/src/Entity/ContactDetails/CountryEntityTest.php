@@ -19,9 +19,7 @@ class CountryEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpIsMorocco
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMorocco')]
     public function testIsMorocco($countryId, $expectedIsMorocco)
     {
         $entity = new Entity();
@@ -33,7 +31,7 @@ class CountryEntityTest extends EntityTester
         );
     }
 
-    public function dpIsMorocco()
+    public static function dpIsMorocco()
     {
         return [
             [Entity::ID_NORWAY, false],

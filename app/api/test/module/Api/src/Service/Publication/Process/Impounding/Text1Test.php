@@ -21,15 +21,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class Text1Test extends MockeryTestCase
 {
     /**
-     * @dataProvider processTestProvider
      *
      * @param $organisationType
      * @param $personPrefix
      *
-     * @group publicationFilter
-     *
-     * Test the hearing text1 filter
      */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing text1 filter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('processTestProvider')]
     public function testProcess($organisationType, $personPrefix)
     {
 
@@ -120,7 +119,7 @@ class Text1Test extends MockeryTestCase
      *
      * @return array
      */
-    public function processTestProvider()
+    public static function processTestProvider()
     {
         return [
             [OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): ']

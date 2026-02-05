@@ -26,6 +26,7 @@ final class SendNewMessageNotificationToOperators extends AbstractEmailHandler i
     }
 
     /** @param LicenceEntity $recordObject */
+    #[\Override]
     protected function getTranslateToWelsh($recordObject)
     {
         return $recordObject->getTranslateToWelsh();

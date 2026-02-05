@@ -53,9 +53,7 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         $this->answersSummaryGenerator->registerCustomRowsAdder(3, m::mock(AnswersSummaryRowsAdderInterface::class));
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerateWithDefaultRowsAdder($isSnapshot)
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpApplication->getIrhpPermitType->getId')
@@ -72,9 +70,7 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerateWithCustomRowsAdder($isSnapshot)
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpApplication->getIrhpPermitType->getId')
@@ -94,7 +90,7 @@ class IpaAnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

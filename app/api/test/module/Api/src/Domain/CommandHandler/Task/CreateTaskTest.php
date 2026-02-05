@@ -27,9 +27,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\CreateTask
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\CreateTask::class)]
 class CreateTaskTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CreateTask */
@@ -79,6 +77,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Init references
      */
+    #[\Override]
     protected function initReferences()
     {
         $this->categoryReferences = [
@@ -207,9 +206,8 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handle command with assign by category
-     *
-     * @dataProvider rulesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('rulesProvider')]
     public function testHandleCommandWithAssignByCategory($rules)
     {
         $command = Cmd::create($this->getData(null));
@@ -242,7 +240,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function rulesProvider()
+    public static function rulesProvider()
     {
         return [
             [
@@ -580,8 +578,8 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      * Test handle command with auto assignment with goods licence, alpha split, organisation type - sole trader
      *
      * @param string $orgType
-     * @dataProvider orgTypeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('orgTypeProvider')]
     public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitOrgTypeSoleTraderOrPartnership($orgType)
     {
         $command = Cmd::create($this->getData());
@@ -651,7 +649,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function orgTypeProvider()
+    public static function orgTypeProvider()
     {
         return [
             [Organisation::ORG_TYPE_SOLE_TRADER],

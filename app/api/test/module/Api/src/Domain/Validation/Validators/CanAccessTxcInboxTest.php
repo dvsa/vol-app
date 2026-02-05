@@ -23,9 +23,7 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidForOperatorAdmin(bool $canAccess): void
     {
         $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN, null)->andReturnTrue();
@@ -39,9 +37,7 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertEquals($canAccess, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidForOperatorTc(bool $canAccess): void
     {
         $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN, null)->andReturnFalse();
@@ -56,9 +52,7 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertEquals($canAccess, $this->sut->isValid(111));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidForOperatorUser(bool $canAccess): void
     {
         $this->auth->expects('isGranted')->with(Permission::OPERATOR_ADMIN, null)->andReturnFalse();
@@ -79,9 +73,7 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidForLocalAuthority($canAccess): void
     {
         $this->auth->shouldReceive('isGranted')->with(Permission::OPERATOR_USER, null)
@@ -107,7 +99,7 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(5));
     }
 
-    public function provider(): array
+    public static function provider(): array
     {
         return [
             [true],

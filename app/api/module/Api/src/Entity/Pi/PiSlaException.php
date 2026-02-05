@@ -29,6 +29,7 @@ class PiSlaException extends AbstractPiSlaException
      *
      * @return int
      */
+    #[\Override]
     public function getId()
     {
         return $this->id;
@@ -61,7 +62,8 @@ class PiSlaException extends AbstractPiSlaException
      *
      * @return string
      */
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
         $piId = $this->getPi() ? $this->getPi()->getId() : 'Unknown';
         $exceptionDesc = $this->getSlaException() ? $this->getSlaException()->getSlaDescription() : 'Unknown';

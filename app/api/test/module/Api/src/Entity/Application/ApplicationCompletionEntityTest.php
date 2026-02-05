@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion
- * @covers \Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationCompletion::class)]
 class ApplicationCompletionEntityTest extends EntityTester
 {
     /**
@@ -31,11 +29,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertSame($application, $ac->getApplication());
     }
 
-    /**
-     * @dataProvider dpVariationSectionUpdated
-     *
-     * test variation section updated (use the two sections likely to be tested in the real world as examples)
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpVariationSectionUpdated')]
     public function testVariationSectionUpdated($status, $expected)
     {
         $entity = $this->instantiate(Entity::class);
@@ -47,7 +41,7 @@ class ApplicationCompletionEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->variationSectionUpdated('typeOfLicence'));
     }
 
-    public function dpVariationSectionUpdated()
+    public static function dpVariationSectionUpdated()
     {
         return [
             [Entity::STATUS_NOT_STARTED, false],

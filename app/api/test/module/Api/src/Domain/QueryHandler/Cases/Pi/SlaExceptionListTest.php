@@ -11,9 +11,8 @@ use Mockery as m;
 
 /**
  * SLA Exception List Query Handler Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi\SlaExceptionList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Cases\Pi\SlaExceptionList::class)]
 class SlaExceptionListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -146,7 +145,6 @@ class SlaExceptionListTest extends QueryHandlerTestCase
         $reflection = new \ReflectionClass($this->sut);
         
         $repoServiceNameProperty = $reflection->getProperty('repoServiceName');
-        $repoServiceNameProperty->setAccessible(true);
         $this->assertEquals('SlaException', $repoServiceNameProperty->getValue($this->sut));
     }
 

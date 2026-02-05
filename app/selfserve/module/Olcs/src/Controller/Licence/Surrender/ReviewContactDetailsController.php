@@ -30,6 +30,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         return $this->renderView($this->getViewVariables());

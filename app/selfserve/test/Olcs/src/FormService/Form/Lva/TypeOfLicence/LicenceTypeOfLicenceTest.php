@@ -33,9 +33,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
         $this->sut = new LicenceTypeOfLicence($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
-    /**
-     * @dataProvider paramsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramsProvider')]
     public function testAlterForm($params, $removeElement, $accessToLicenceType): void
     {
 
@@ -73,7 +71,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: true}, 'form-actions', 2}, list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: false}, 'form-actions', 3}}
      */
-    public function paramsProvider(): array
+    public static function paramsProvider(): array
     {
         return [
             [

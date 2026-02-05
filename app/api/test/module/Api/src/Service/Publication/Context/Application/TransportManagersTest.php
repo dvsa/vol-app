@@ -29,11 +29,8 @@ class TransportManagersTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the application transport managers filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application transport managers filter')]
     public function testProvide()
     {
         $tma1 = $this->setupTransportManagerApplication('Bill', 'Clinton', 'A');

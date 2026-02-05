@@ -12,10 +12,10 @@ use PHPUnit\Framework\TestCase as TestCase;
 class SubsidyTest extends TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $expected
      * @param $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($expected, $value)
     {
         $sut = new Subsidy();
@@ -24,7 +24,7 @@ class SubsidyTest extends TestCase
         $this->assertEquals($expected, $result['subsidised']);
     }
 
-    public function provideFilter()
+    public static function provideFilter()
     {
         return [
             ['bs_no', 'none'],

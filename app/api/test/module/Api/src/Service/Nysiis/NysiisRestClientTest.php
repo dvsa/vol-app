@@ -31,9 +31,8 @@ class NysiisRestClientTest extends MockeryTestCase
      * tests makeRequest
      *
      * @param $outputJson
-     *
-     * @dataProvider makeRequestProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('makeRequestProvider')]
     public function testMakeRequest($outputJson)
     {
         $volFirstName = 'vol first name';
@@ -62,7 +61,7 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * data provider for makeRequest
      */
-    public function makeRequestProvider()
+    public static function makeRequestProvider()
     {
         return [
             ['38{"nysiisFirstName":"nysiis first name","nysiisFamilyName":"nysiis family name"}0'],
@@ -74,9 +73,8 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * @param $response
      * @param $errorMessage
-     *
-     * @dataProvider invalidResponseProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidResponseProvider')]
     public function testMakeRequestInvalidResponse($response, $errorMessage)
     {
         $volFirstName = 'vol first name';
@@ -96,7 +94,7 @@ class NysiisRestClientTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidResponseProvider()
+    public static function invalidResponseProvider()
     {
         $invalidResponse1 = new HttpResponse();
         $invalidResponse1->setStatusCode(400);

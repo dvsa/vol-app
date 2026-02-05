@@ -6,9 +6,7 @@ use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\Factory\VersionFactory;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \OLCS\View\Helper\Factory\VersionFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Factory\VersionFactory::class)]
 class VersionFactoryTest extends TestCase
 {
     public function testFactoryWithNoVersionWillReturnNotSpecified()

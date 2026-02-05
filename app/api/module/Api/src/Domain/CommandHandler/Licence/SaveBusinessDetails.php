@@ -26,8 +26,8 @@ final class SaveBusinessDetails extends AbstractCommandHandler implements AuthAw
 {
     use AuthAwareTrait;
 
-    public const ERR_NOT_ALLOW_UPDATE_ORG_NAME = 'You are not allowed to update the organisation name';
-    public const ERR_NOT_ALLOW_UPDATE_ORG_NUM = 'You are not allowed to update the company number';
+    public const string ERR_NOT_ALLOW_UPDATE_ORG_NAME = 'You are not allowed to update the organisation name';
+    public const string ERR_NOT_ALLOW_UPDATE_ORG_NUM = 'You are not allowed to update the company number';
 
     protected $repoServiceName = 'Licence';
 

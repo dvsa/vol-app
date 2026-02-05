@@ -78,7 +78,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
+            ->with(MvcEvent::EVENT_DISPATCH, $this->sut->onDispatch(...), 20);
 
         $this->sut->attach($mockEventManager);
     }
@@ -135,9 +135,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpDispatchNoReferer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatchNoReferer')]
     public function testOnDispatchWithNoReferal($eligibleForPermits): void
     {
         $this->mockAuthService->shouldReceive('getIdentity->isAnonymous')->once()->withNoArgs()->andReturn(false);
@@ -181,7 +179,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpDispatchNoReferer(): array
+    public static function dpDispatchNoReferer(): array
     {
         return [
             [true],
@@ -229,9 +227,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpDispatchWithoutMatchedReferer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpDispatchWithoutMatchedReferer')]
     public function testOnDispatchWithNoGovUkReferal($eligibleForPermits): void
     {
         $this->mockAuthService->shouldReceive('getIdentity->isAnonymous')
@@ -279,7 +275,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpDispatchWithoutMatchedReferer(): array
+    public static function dpDispatchWithoutMatchedReferer(): array
     {
         return [
             [true],

@@ -112,9 +112,7 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->organisation->shouldReceive('getAdminEmailAddresses')->once()->andReturn($this->orgEmails);
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
     public function testHandleCommand($translateToWelsh, $expectedLocale)
     {
         $this->mockedSmServices['translator']->shouldReceive('getLocale')
@@ -174,9 +172,7 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    /**
-     * @dataProvider dpTranslateToWelshLocaleMappings
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTranslateToWelshLocaleMappings')]
     public function testHandleCommandForCreatedByInternalUser($translateToWelsh, $expectedLocale)
     {
         $this->mockedSmServices['translator']->shouldReceive('getLocale')
@@ -235,7 +231,7 @@ class SendEcmtShortTermSuccessfulTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpTranslateToWelshLocaleMappings()
+    public static function dpTranslateToWelshLocaleMappings()
     {
         return [
             ['Y', 'cy_GB'],

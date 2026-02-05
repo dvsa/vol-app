@@ -43,6 +43,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -380,7 +381,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceStatusNotAllowed()
+    public static function licenceStatusNotAllowed()
     {
         return [
             [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -396,9 +397,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceStatusNotAllowed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusNotAllowed')]
     public function testHandleCommandContinuationNotAllowedLicenceStatus($status)
     {
         $command = PayFeeCommand::create(['id' => 111]);
@@ -462,7 +461,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceStatusAllowed()
+    public static function licenceStatusAllowed()
     {
         return [
             [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED],
@@ -471,9 +470,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceStatusAllowed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusAllowed')]
     public function testHandleCommandContinuationHasOutstandingFees($status)
     {
         $command = PayFeeCommand::create(['id' => 111]);
@@ -500,9 +497,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider licenceStatusAllowed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusAllowed')]
     public function testHandleCommandContinuation($status)
     {
         $command = PayFeeCommand::create(['id' => 111]);

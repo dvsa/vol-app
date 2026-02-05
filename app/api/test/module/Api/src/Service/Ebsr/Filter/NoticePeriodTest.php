@@ -12,10 +12,10 @@ use PHPUnit\Framework\TestCase as TestCase;
 class NoticePeriodTest extends TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param $data
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
     public function testFilter($data, $expected)
     {
         $sut = new NoticePeriod();
@@ -24,7 +24,7 @@ class NoticePeriodTest extends TestCase
         $this->assertEquals($expected, $result['busNoticePeriod']);
     }
 
-    public function provideFilter()
+    public static function provideFilter()
     {
         return [
             [['trafficAreas' => ['English']], 2],

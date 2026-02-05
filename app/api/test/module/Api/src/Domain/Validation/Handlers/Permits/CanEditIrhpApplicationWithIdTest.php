@@ -24,9 +24,7 @@ class CanEditIrhpApplicationWithIdTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
     public function testIsValid($canEdit, $expected)
     {
         /** @var CommandInterface $dto */
@@ -39,7 +37,7 @@ class CanEditIrhpApplicationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid()
     {
         return [
             [true, true],

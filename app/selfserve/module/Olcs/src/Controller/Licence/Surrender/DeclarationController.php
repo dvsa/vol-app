@@ -40,6 +40,7 @@ class DeclarationController extends AbstractSurrenderController
     /**
      * @return Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {

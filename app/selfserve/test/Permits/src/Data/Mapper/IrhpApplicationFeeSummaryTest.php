@@ -559,9 +559,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestMapForDisplayEcmtAnnualAndShortTerm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapForDisplayEcmtAnnualAndShortTerm')]
     public function testMapForDisplayEcmtAnnualAndShortTerm($permitTypeId): void
     {
         $isUnderConsideration = false;
@@ -710,7 +708,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
      *
      * @psalm-return list{list{1}, list{2}}
      */
-    public function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
+    public static function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],

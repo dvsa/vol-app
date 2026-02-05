@@ -14,12 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PreviousApplicationPublicationNoTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     * @dataProvider CheckByApplicationAppStatusProvider
-     *
-     * Test the previous hearing date filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('CheckByApplicationAppStatusProvider')]
     public function testProvideByApplication($appStatus)
     {
         $pubType = 'A&D';
@@ -55,12 +51,8 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publication, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     * @dataProvider CheckByLicenceAppStatusProvider
-     *
-     * Test the previous hearing date filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('CheckByLicenceAppStatusProvider')]
     public function testProvideByLicence($appStatus)
     {
         $pubType = 'A&D';
@@ -100,7 +92,7 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
      * data provider for application status where we get previous publications by application id
      * @return array
      */
-    public function checkByLicenceAppStatusProvider()
+    public static function checkByLicenceAppStatusProvider()
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_GRANTED],
@@ -114,7 +106,7 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
      * data provider for application status where we get previous publications by application id
      * @return array
      */
-    public function checkByApplicationAppStatusProvider()
+    public static function checkByApplicationAppStatusProvider()
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN],

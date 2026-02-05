@@ -32,9 +32,7 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-    * @dataProvider dpHandleCommand
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($irhpPermitTypeId, $expectedTemplate, $expectedDescription, $expectedMessages)
     {
         $irhpPermitId = 1;
@@ -106,7 +104,7 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'ECMT Annual' => [

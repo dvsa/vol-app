@@ -7,8 +7,8 @@ use Olcs\View\Helper\Version;
 /**
  * Class VersionTest
  * @package OlcsTest\View\Helper
- * @covers \OLCS\View\Helper\Version
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Version::class)]
 class VersionTest extends \PHPUnit\Framework\TestCase
 {
     public function testVersionViewHelper()

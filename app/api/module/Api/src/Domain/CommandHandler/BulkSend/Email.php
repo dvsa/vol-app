@@ -22,7 +22,7 @@ final class Email extends AbstractCommandHandler implements UploaderAwareInterfa
     use EmailAwareTrait;
     use UploaderAwareTrait;
 
-    public const EXPECTED_ITEMS_IN_ROW = 1;
+    public const int EXPECTED_ITEMS_IN_ROW = 1;
 
     /** @var array */
     private $licenceIds  = [];

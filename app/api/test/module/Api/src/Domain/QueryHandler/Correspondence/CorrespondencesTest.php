@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Correspondence\Correspondences
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Correspondence\Correspondences::class)]
 class CorrespondencesTest extends QueryHandlerTestCase
 {
     public const ORG_ID = 9999;

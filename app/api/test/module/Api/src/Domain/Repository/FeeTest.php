@@ -16,9 +16,7 @@ use Dvsa\Olcs\Api\Entity\Fee\FeeType as FeeTypeEntity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
 use Doctrine\ORM\Query;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Fee
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Fee::class)]
 class FeeTest extends RepositoryTestCase
 {
     /** @var   FeeRepo */
@@ -307,8 +305,8 @@ class FeeTest extends RepositoryTestCase
 
     /**
      * @param string $status
-     * @dataProvider statusProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testFetchList($status)
     {
         // in practice this query would never return results, but it covers all
@@ -413,7 +411,7 @@ class FeeTest extends RepositoryTestCase
         );
     }
 
-    public function statusProvider()
+    public static function statusProvider()
     {
         return [
             ['all'],

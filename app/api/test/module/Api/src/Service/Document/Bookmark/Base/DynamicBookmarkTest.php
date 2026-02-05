@@ -6,9 +6,7 @@ use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base\Stub\DynamicBookmarkStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark::class)]
 class DynamicBookmarkTest extends MockeryTestCase
 {
     public function testValidateDataAndGetQuery()

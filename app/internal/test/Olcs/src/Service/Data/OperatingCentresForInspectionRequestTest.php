@@ -35,9 +35,8 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test get / set type
-     *
-     * @group operatingCentresForInspectionRequest
      */
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest')]
     public function testGetSetType()
     {
         $this->sut->setType('application');
@@ -46,9 +45,8 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test get / set identifier
-     *
-     * @group operatingCentresForInspectionRequest
      */
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest')]
     public function testGetSetIdentifier()
     {
         $this->sut->setIdentifier(1);
@@ -57,10 +55,9 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     /**
      * Test fetch list options
-     *
-     * @dataProvider providerListOptions
-     * @group operatingCentresForInspectionRequest1
      */
+    #[\PHPUnit\Framework\Attributes\Group('operatingCentresForInspectionRequest1')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerListOptions')]
     public function testFetchListOptions($data, $expected)
     {
         $this->sut->setData('OperatingCentres', $data);
@@ -71,7 +68,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
     /**
      * Data provider
      */
-    public function providerListOptions()
+    public static function providerListOptions()
     {
         return [
             [

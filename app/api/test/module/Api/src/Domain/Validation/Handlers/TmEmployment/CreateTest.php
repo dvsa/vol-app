@@ -35,9 +35,7 @@ class CreateTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -56,9 +54,7 @@ class CreateTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValidTm($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -95,7 +91,7 @@ class CreateTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

@@ -20,9 +20,7 @@ class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
         unset($sut);
     }
 
-    /**
-     * @dataProvider queryTemplateDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('queryTemplateDataProvider')]
     public function testQueryTemplate($query, $filters, $filterTypes, $dates, $searchTypes, $expected)
     {
         $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', $query, $filters, $filterTypes, $dates, $searchTypes);

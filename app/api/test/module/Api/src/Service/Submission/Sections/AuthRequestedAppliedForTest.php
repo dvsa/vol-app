@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
+
+use Dvsa\Olcs\Api\Service\Submission\Sections\AuthRequestedAppliedFor;
 
 /**
  * Class AuthRequestedAppliedForTest
@@ -8,14 +12,9 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  */
 class AuthRequestedAppliedForTest extends AbstractSubmissionSectionTest
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\AuthRequestedAppliedFor::class;
+    protected $submissionSection = AuthRequestedAppliedFor::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getCase();
 

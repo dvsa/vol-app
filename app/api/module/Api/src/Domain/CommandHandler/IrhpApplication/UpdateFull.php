@@ -144,6 +144,7 @@ final class UpdateFull extends AbstractCommandHandler implements TransactionedIn
             default => throw new RuntimeException('Unsupported permit type ' . $permitTypeId),
         };
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -291,16 +291,14 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($licence, $entity->getRelatedLicence());
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
     public function testIsValid($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isValid());
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -315,16 +313,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsUnderConsideration
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsUnderConsideration')]
     public function testIsUnderConsideration($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isUnderConsideration());
     }
 
-    public function dpTestIsUnderConsideration()
+    public static function dpTestIsUnderConsideration()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -339,16 +335,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsAwaitingFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsAwaitingFee')]
     public function testIsAwaitingFee($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isAwaitingFee());
     }
 
-    public function dpTestIsAwaitingFee()
+    public static function dpTestIsAwaitingFee()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -363,16 +357,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsFeePaid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsFeePaid')]
     public function testIsFeePaid($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isFeePaid());
     }
 
-    public function dpTestIsFeePaid()
+    public static function dpTestIsFeePaid()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -387,16 +379,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsIssueInProgress
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsIssueInProgress')]
     public function testIsIssueInProgress($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isIssueInProgress());
     }
 
-    public function dpTestIsIssueInProgress()
+    public static function dpTestIsIssueInProgress()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -411,16 +401,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsActive
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsActive')]
     public function testIsActive($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isActive());
     }
 
-    public function dpTestIsActive()
+    public static function dpTestIsActive()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -448,9 +436,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals(date('Y-m-d'), $entity->getCancellationDate()->format('Y-m-d'));
     }
 
-    /**
-     * @dataProvider dpCancelException
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCancelException')]
     public function testCancelException($status)
     {
         $this->expectException(ForbiddenException::class);
@@ -465,7 +451,7 @@ class IrhpApplicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpCancelException()
+    public static function dpCancelException()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED],
@@ -479,16 +465,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCanBeCancelled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanBeCancelled')]
     public function testCanBeCancelled($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->canBeCancelled());
     }
 
-    public function dpTestCanBeCancelled()
+    public static function dpTestCanBeCancelled()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -528,9 +512,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->terminate(m::mock(RefData::class));
     }
 
-    /**
-     * @dataProvider dpCanBeTerminated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeTerminated')]
     public function testCanBeTerminated($isValidCertificateOfRoadworthiness, $expected)
     {
         $this->sut->shouldReceive('isValidCertificateOfRoadworthiness')
@@ -543,7 +525,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeTerminated()
+    public static function dpCanBeTerminated()
     {
         return [
             [false, false],
@@ -551,9 +533,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsValidCertificateOfRoadworthiness
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidCertificateOfRoadworthiness')]
     public function testIsValidCertificateOfRoadworthiness($isValid, $isCertificateOfRoadworthiness, $expected)
     {
         $this->sut->shouldReceive('isValid')
@@ -569,7 +549,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsValidCertificateOfRoadworthiness()
+    public static function dpIsValidCertificateOfRoadworthiness()
     {
         return [
             [false, false, false],
@@ -579,16 +559,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsCancelled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsCancelled')]
     public function testIsCancelled($status, $expected)
     {
         $this->sut->setStatus(new RefData($status));
         $this->assertSame($expected, $this->sut->isCancelled());
     }
 
-    public function dpTestIsCancelled()
+    public static function dpTestIsCancelled()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, true],
@@ -603,9 +581,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanBeWithdrawn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeWithdrawn')]
     public function testCanBeWithdrawn($reasonRefData, $isUnderConsideration, $isAwaitingFee, $expected)
     {
         $this->sut->shouldReceive('isUnderConsideration')
@@ -622,7 +598,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeWithdrawn()
+    public static function dpCanBeWithdrawn()
     {
         return [
             [null, false, false, false],
@@ -643,9 +619,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanBeWithdrawnReasonDeclined
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeWithdrawnReasonDeclined')]
     public function testCanBeWithdrawnReasonDeclined($canBeDeclined)
     {
         $declinedReasonRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_DECLINED);
@@ -660,7 +634,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeWithdrawnReasonDeclined()
+    public static function dpCanBeWithdrawnReasonDeclined()
     {
         return [
             [true],
@@ -668,16 +642,14 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsWithdrawn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsWithdrawn')]
     public function testIsWithdrawn($status, $expected)
     {
         $entity = $this->createNewEntity(null, new RefData($status));
         $this->assertSame($expected, $entity->isWithdrawn());
     }
 
-    public function dpTestIsWithdrawn()
+    public static function dpTestIsWithdrawn()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -692,9 +664,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsDeclined
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsDeclined')]
     public function testIsDeclined($reason, $expected)
     {
         $entity = $this->createNewEntity(null, new RefData(IrhpInterface::STATUS_WITHDRAWN));
@@ -702,7 +672,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isDeclined());
     }
 
-    public function dpTestIsDeclined()
+    public static function dpTestIsDeclined()
     {
         return [
             [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, true],
@@ -711,9 +681,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpWithdraw
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdraw')]
     public function testWithdraw($withdrawReason, $checkReasonAgainstStatus, $expectedValidationWithdrawReason)
     {
         $withdrawStatus = m::mock(RefData::class);
@@ -744,7 +712,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpWithdraw()
+    public static function dpWithdraw()
     {
         $withdrawReason = m::mock(RefData::class);
 
@@ -754,9 +722,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpWithdrawException
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdrawException')]
     public function testWithdrawException(
         $withdrawReasonRefData,
         $checkReasonAgainstStatus,
@@ -779,7 +745,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpWithdrawException()
+    public static function dpWithdrawException()
     {
         $notSuccessRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS);
         $unpaidRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID);
@@ -851,9 +817,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider trueOrFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trueOrFalseProvider')]
     public function testIsBilateral($isBilateral)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -862,9 +826,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($isBilateral, $entity->isBilateral());
     }
 
-    /**
-     * @dataProvider trueOrFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trueOrFalseProvider')]
     public function testIsCertificateOfRoadworthiness($isCertificateOfRoadworthiness)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -873,9 +835,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($isCertificateOfRoadworthiness, $entity->isCertificateOfRoadworthiness());
     }
 
-    /**
-     * @dataProvider trueOrFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trueOrFalseProvider')]
     public function testIsCertificateOfRoadworthinessVehicle($isCertificateOfRoadworthinessVehicle)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -891,9 +851,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider trueOrFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trueOrFalseProvider')]
     public function testIsCertificateOfRoadworthinessTrailer($isCertificateOfRoadworthinessTrailer)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -910,9 +868,7 @@ class IrhpApplicationEntityTest extends EntityTester
     }
 
 
-    /**
-     * @dataProvider trueOrFalseProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trueOrFalseProvider')]
     public function testIsMultiStock($isMultiStock)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -921,7 +877,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($isMultiStock, $entity->isMultiStock());
     }
 
-    public function trueOrFalseProvider()
+    public static function trueOrFalseProvider()
     {
         return [
             [true],
@@ -961,9 +917,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->getAssociatedStock();
     }
 
-    /**
-     * @dataProvider dpIsNotYetSubmitted
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsNotYetSubmitted')]
     public function testIsNotYetSubmitted($status, $expectedNotYetSubmitted)
     {
         $statusRefData = m::mock(RefData::class);
@@ -979,7 +933,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsNotYetSubmitted()
+    public static function dpIsNotYetSubmitted()
     {
         return [
             [IrhpInterface::STATUS_CANCELLED, false],
@@ -994,9 +948,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsOverviewAccessible
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOverviewAccessible')]
     public function testIsOverviewAccessible($isNotYetSubmitted, $expected)
     {
         $this->sut->shouldReceive('isBilateral')
@@ -1013,7 +965,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsOverviewAccessible()
+    public static function dpIsOverviewAccessible()
     {
         return [
             [true, true],
@@ -1021,9 +973,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsOverviewAccessibleBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOverviewAccessibleBilateral')]
     public function testIsOverviewAccessibleBilateral($isNotYetSubmitted, $countries, $expected)
     {
         $this->sut->shouldReceive('isBilateral')
@@ -1042,7 +992,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsOverviewAccessibleBilateral()
+    public static function dpIsOverviewAccessibleBilateral()
     {
         $emptyCountries = new ArrayCollection();
 
@@ -1061,9 +1011,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsSubmittedForConsideration
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsSubmittedForConsideration')]
     public function testIsSubmittedForConsideration($irhpPermitTypeId, $status, $expected)
     {
         $irhpPermitType = new IrhpPermitType();
@@ -1083,7 +1031,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsSubmittedForConsideration()
+    public static function dpIsSubmittedForConsideration()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_CANCELLED, false],
@@ -1134,9 +1082,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanBeUpdated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeUpdated')]
     public function testCanBeUpdated(
         $isNotYetSubmitted,
         $isUnderConsideration,
@@ -1163,7 +1109,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeUpdated()
+    public static function dpCanBeUpdated()
     {
         return [
             [false, false, false, false, false],
@@ -1188,9 +1134,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertTrue($this->sut->hasCheckedAnswers());
     }
 
-    /**
-     * @dataProvider dpHasCheckedAnswersBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCheckedAnswersBilateral')]
     public function testHasCheckedAnswersBilateral($checkedAnswers)
     {
         $this->sut->shouldReceive('isBilateral')
@@ -1202,7 +1146,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertFalse($this->sut->hasCheckedAnswers());
     }
 
-    public function dpHasCheckedAnswersBilateral()
+    public static function dpHasCheckedAnswersBilateral()
     {
         return [
             [true],
@@ -1218,9 +1162,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertTrue($this->sut->hasMadeDeclaration());
     }
 
-    /**
-     * @dataProvider dpCanBeSubmitted
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeSubmitted')]
     public function testCanBeSubmittedFalseIfAlreadySubmittedOrNotEligible(
         $isNotYetSubmitted,
         $isEligibleForPermits,
@@ -1249,7 +1191,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeSubmitted()
+    public static function dpCanBeSubmitted()
     {
         return [
             'not yet submitted, not eligible, incomplete' => [true, false, false, false],
@@ -1261,9 +1203,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCanUpdateCountries
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanUpdateCountries')]
     public function testCanUpdateCountries($canBeUpdated, $irhpPermitTypeId, $isFieldReadyToComplete, $expected)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -1281,7 +1221,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canUpdateCountries());
     }
 
-    public function dpTestCanUpdateCountries()
+    public static function dpTestCanUpdateCountries()
     {
         return [
             'cannot be updated' => [
@@ -1311,9 +1251,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsReadyForNoOfPermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsReadyForNoOfPermits')]
     public function testIsReadyForNoOfPermits(
         $canBeUpdated,
         $irhpPermitApplications,
@@ -1334,7 +1272,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsReadyForNoOfPermits()
+    public static function dpIsReadyForNoOfPermits()
     {
         return [
             [
@@ -1360,9 +1298,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasOutstandingFees
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasOutstandingFees')]
     public function testHasOutstandingFees($feesData, $expectedResult)
     {
         $this->sut->setFees(
@@ -1372,11 +1308,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $this->sut->hasOutstandingFees());
     }
 
-    public function dpHasOutstandingFees()
+    public static function dpHasOutstandingFees()
     {
         return [
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1396,7 +1332,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedResult' => false
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1411,7 +1347,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedResult' => false
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1431,7 +1367,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedResult' => true
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1451,7 +1387,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedResult' => true
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1473,17 +1409,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIssueFeeOverdue
-     *
-     * Tests logic for finding overdue issue fees
-     *
-     * $fee1 isn't overdue, so is ignored
-     * $fee2 is overdue, but doesn't need to be checked because $fee5 is more recent and will match
-     * $fee3 is overdue, is outstanding, but isn't an issue fee
-     * $fee4 would be overdue, but is not outstanding, so the fee type is not checked
-     * $fee5 is overdue, outstanding and the correct fee type, causes the method to return true
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIssueFeeOverdue')]
     public function testIssueFeeOverdue($thresholdDays, $dateAfterThreshold, $dateOfThreshold, $dateBeforeThreshold)
     {
         $fee1 = m::mock(Fee::class)->makePartial();
@@ -1520,7 +1446,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertTrue($this->sut->issueFeeOverdue($thresholdDays));
     }
 
-    public function dpIssueFeeOverdue()
+    public static function dpIssueFeeOverdue()
     {
         return [
             [
@@ -1538,9 +1464,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIssueFeeOverdueBoundary
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIssueFeeOverdueBoundary')]
     public function testIssueFeeOverdueBoundary($days, $expected)
     {
         $invoiceDate = new \DateTime('-' . $days . ' weekdays');
@@ -1560,7 +1484,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIssueFeeOverdueBoundary()
+    public static function dpIssueFeeOverdueBoundary()
     {
         return [
             [9, 0],
@@ -1569,9 +1493,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLatestOutstandingApplicationFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLatestOutstandingApplicationFee')]
     public function testGetLatestOutstandingApplicationFee($feesData, $expectedIndex)
     {
         $fees = $this->createFeesArrayCollectionFromArrayData($feesData);
@@ -1586,11 +1508,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public function dpGetLatestOutstandingApplicationFee()
+    public static function dpGetLatestOutstandingApplicationFee()
     {
         return [
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1605,7 +1527,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => null
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1620,7 +1542,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 1
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-08',
                         'isOutstanding' => true,
@@ -1635,7 +1557,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 0
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1650,7 +1572,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 0
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1667,9 +1589,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLatestOutstandingIssueFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLatestOutstandingIssueFee')]
     public function testGetLatestOutstandingIssueFee($feesData, $expectedIndex)
     {
         $fees = $this->createFeesArrayCollectionFromArrayData($feesData);
@@ -1684,11 +1604,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public function dpGetLatestOutstandingIssueFee()
+    public static function dpGetLatestOutstandingIssueFee()
     {
         return [
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1703,7 +1623,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => null
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1718,7 +1638,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 1
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-08',
                         'isOutstanding' => true,
@@ -1733,7 +1653,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 0
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1748,7 +1668,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 0
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => true,
@@ -1765,9 +1685,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetLatestIssueFee
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLatestIssueFee')]
     public function testGetLatestIssueFee($feesData, $expectedIndex)
     {
         $fees = $this->createFeesArrayCollectionFromArrayData($feesData);
@@ -1782,11 +1700,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public function dpGetLatestIssueFee()
+    public static function dpGetLatestIssueFee()
     {
         return [
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1801,7 +1719,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => null
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1816,7 +1734,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 1
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-08',
                         'isOutstanding' => false,
@@ -1831,7 +1749,7 @@ class IrhpApplicationEntityTest extends EntityTester
                 'expectedIndex' => 0
             ],
             [
-                'fees' => [
+                'feesData' => [
                     [
                         'invoicedDate' => '2019-01-04',
                         'isOutstanding' => false,
@@ -1948,9 +1866,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals(75.56, $this->sut->getOutstandingFeeAmount());
     }
 
-    /**
-     * @dataProvider dpTestGetSectionCompletionMultilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSectionCompletionMultilateral')]
     public function testGetSectionCompletionMultilateral($data, $expected)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -1964,7 +1880,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->getSectionCompletion());
     }
 
-    public function dpTestGetSectionCompletionMultilateral()
+    public static function dpTestGetSectionCompletionMultilateral()
     {
         $irhpPermitAppWithoutPermits = m::mock(IrhpPermitApplication::class)->makePartial();
 
@@ -2090,9 +2006,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetSectionCompletionBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSectionCompletionBilateral')]
     public function testGetSectionCompletionBilateral($data, $expected)
     {
         $this->sut->shouldReceive('canBeSubmitted')
@@ -2112,7 +2026,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->getSectionCompletion());
     }
 
-    public function dpTestGetSectionCompletionBilateral()
+    public static function dpTestGetSectionCompletionBilateral()
     {
         $incompleteCountries = [
             [
@@ -2199,9 +2113,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->getSectionCompletion();
     }
 
-    /**
-     * @dataProvider dpCanCheckAnswersForApplicationPathEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanCheckAnswersForApplicationPathEnabled')]
     public function testCanCheckAnswersForApplicationPathEnabled(
         $irhpPermitTypeId,
         $status,
@@ -2220,7 +2132,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canCheckAnswers());
     }
 
-    public function dpCanCheckAnswersForApplicationPathEnabled()
+    public static function dpCanCheckAnswersForApplicationPathEnabled()
     {
         return [
             'ECMT Removal - not yet submitted - check answers cannot start' => [
@@ -2406,9 +2318,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanCheckAnswersForMultilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanCheckAnswersForMultilateral')]
     public function testCanCheckAnswersForMultilateral(
         $status,
         $permitsRequired,
@@ -2433,7 +2343,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canCheckAnswers());
     }
 
-    public function dpCanCheckAnswersForMultilateral()
+    public static function dpCanCheckAnswersForMultilateral()
     {
         return [
             'Not yet submitted - permits required set' => [
@@ -2548,9 +2458,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertTrue($irhpApplication->getCheckedAnswers());
     }
 
-    /**
-     * @dataProvider dpCanMakeDeclarationForApplicationPathEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanMakeDeclarationForApplicationPathEnabled')]
     public function testCanMakeDeclarationForApplicationPathEnabled(
         $irhpPermitTypeId,
         $status,
@@ -2569,7 +2477,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canMakeDeclaration());
     }
 
-    public function dpCanMakeDeclarationForApplicationPathEnabled()
+    public static function dpCanMakeDeclarationForApplicationPathEnabled()
     {
         return [
             'ECMT Removal - not yet submitted - declaration cannot start' => [
@@ -2665,9 +2573,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanMakeDeclarationForMultilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanMakeDeclarationForMultilateral')]
     public function testCanMakeDeclarationForMultilateral(
         $status,
         $permitsRequired,
@@ -2694,7 +2600,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canMakeDeclaration());
     }
 
-    public function dpCanMakeDeclarationForMultilateral()
+    public static function dpCanMakeDeclarationForMultilateral()
     {
         return [
             'Not yet submitted - permits required set - answers checked' => [
@@ -2736,9 +2642,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanMakeDeclarationForBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanMakeDeclarationForBilateral')]
     public function testCanMakeDeclarationForBilateral($countriesAndStatuses, $canBeUpdated, $expected)
     {
         $irhpPermitType = new IrhpPermitType();
@@ -2759,7 +2663,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanMakeDeclarationForBilateral()
+    public static function dpCanMakeDeclarationForBilateral()
     {
         $incompleteCountries = [
             [
@@ -2810,9 +2714,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $irhpApplication->makeDeclaration();
     }
 
-    /**
-     * @dataProvider dptestGetPermitsRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestGetPermitsRequired')]
     public function testGetPermitsRequired($irhpPermitApplications, $expected)
     {
         $irhpApplication = m::mock(Entity::class)->makePartial();
@@ -2824,7 +2726,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $irhpApplication->getPermitsRequired());
     }
 
-    public function dpTestGetPermitsRequired()
+    public static function dpTestGetPermitsRequired()
     {
         $irhpPermitAppWithoutPermits = m::mock(IrhpPermitApplication::class);
         $irhpPermitAppWithoutPermits->shouldReceive('countPermitsRequired')
@@ -2901,9 +2803,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $irhpApplication->haveFeesRequiredChanged();
     }
 
-    /**
-     * @dataProvider dpHaveFeesRequiredChanged
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHaveFeesRequiredChanged')]
     public function testHaveFeesRequiredChanged(
         $irhpPermitType,
         $stock1QuantityBefore,
@@ -2953,7 +2853,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $irhpApplication->haveFeesRequiredChanged());
     }
 
-    public function dpHaveFeesRequiredChanged()
+    public static function dpHaveFeesRequiredChanged()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 7, 11, false],
@@ -2984,9 +2884,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetApplicationFeeProductReference
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicationFeeProductReference')]
     public function testGetApplicationFeeProductReference($irhpPermitTypeId, $productReference)
     {
         $irhpApplication = m::mock(Entity::class)->makePartial();
@@ -2999,7 +2897,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetApplicationFeeProductReference()
+    public static function dpGetApplicationFeeProductReference()
     {
         return [
             [
@@ -3074,9 +2972,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetIssueFeeProductReferenceUnsupportedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIssueFeeProductReferenceUnsupportedType')]
     public function testGetIssueFeeProductReferenceUnsupportedType($irhpPermitTypeId)
     {
         $this->expectException(ForbiddenException::class);
@@ -3100,7 +2996,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $irhpApplication->getIssueFeeProductReference();
     }
 
-    public function dpGetIssueFeeProductReferenceUnsupportedType()
+    public static function dpGetIssueFeeProductReferenceUnsupportedType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
@@ -3183,9 +3079,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals(new DateTime($dateString), $irhpApplication->getDateReceived());
     }
 
-    /**
-     * @dataProvider dptestIsReadyForIssuing
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestIsReadyForIssuing')]
     public function testIsReadyForIssuing($hasOutstandingFees, $expectedResult)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -3195,7 +3089,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $entity->isReadyForIssuing());
     }
 
-    public function dpTestIsReadyForIssuing()
+    public static function dpTestIsReadyForIssuing()
     {
         return [
             [false, true],
@@ -3222,9 +3116,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->submit($status);
     }
 
-    /**
-     * @dataProvider dpSubmitShortTermAndAnnual
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmitShortTermAndAnnual')]
     public function testSubmitShortTermAndAnnual($irhpPermitTypeId)
     {
         $status = m::mock(RefData::class);
@@ -3244,7 +3136,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->submit($status);
     }
 
-    public function dpSubmitShortTermAndAnnual()
+    public static function dpSubmitShortTermAndAnnual()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
@@ -3252,9 +3144,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpSubmitCertOfRoadworthiness
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmitCertOfRoadworthiness')]
     public function testSubmitCertOfRoadworthiness($irhpPermitTypeId)
     {
         $status = m::mock(RefData::class);
@@ -3274,7 +3164,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->submit($status);
     }
 
-    public function dpSubmitCertOfRoadworthiness()
+    public static function dpSubmitCertOfRoadworthiness()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
@@ -3587,9 +3477,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->getQuestionAnswerData());
     }
 
-    /**
-     * @dataProvider dpGetQuestionAnswerDataWithActiveApplicationPath
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetQuestionAnswerDataWithActiveApplicationPath')]
     public function testGetQuestionAnswerDataWithActiveApplicationPath($data, $applicationSteps, $expected)
     {
         $applicationPath = m::mock(ApplicationPath::class);
@@ -3615,7 +3503,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->getQuestionAnswerData());
     }
 
-    public function dpGetQuestionAnswerDataWithActiveApplicationPath()
+    public static function dpGetQuestionAnswerDataWithActiveApplicationPath()
     {
         $createdOn = new DateTime();
 
@@ -3916,9 +3804,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($permitsRequired, $entity->getAnswer($step));
     }
 
-    /**
-     * @dataProvider dpGetAnswerForCustomEcmtNoOfPermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAnswerForCustomEcmtNoOfPermits')]
     public function testGetAnswerForCustomEcmtNoOfPermits(
         $formControlType,
         $requiredEuro5,
@@ -3948,7 +3834,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetAnswerForCustomEcmtNoOfPermits()
+    public static function dpGetAnswerForCustomEcmtNoOfPermits()
     {
         return [
             [
@@ -4036,9 +3922,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestGetAnswerForCustomEcmtSectors
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAnswerForCustomEcmtSectors')]
     public function testGetAnswerForCustomEcmtSectors($sectorsEntity, $expectedAnswer)
     {
         $question = m::mock(Question::class);
@@ -4059,7 +3943,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetAnswerForCustomEcmtSectors()
+    public static function dpTestGetAnswerForCustomEcmtSectors()
     {
         $sectorId = 7;
 
@@ -4073,9 +3957,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits')]
     public function testGetAnswerForCustomEcmtAnnual2018NoOfPermits(
         $isSnapshot,
         $requiredEuro5,
@@ -4108,7 +3990,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits()
+    public static function dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits()
     {
         return [
             [true, null, null, null],
@@ -4137,9 +4019,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertNull($entity->getAnswer($step));
     }
 
-    /**
-     * @dataProvider dpGetAnswerForQuestion
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAnswerForQuestion')]
     public function testGetAnswerForQuestionWithoutAnswer($isCustom, $formControlType)
     {
         $createdOn = new DateTime();
@@ -4162,9 +4042,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertNull($entity->getAnswer($step));
     }
 
-    /**
-     * @dataProvider dpGetAnswerForQuestion
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAnswerForQuestion')]
     public function testGetAnswerForQuestionWithAnswer($isCustom, $formControlType)
     {
         $createdOn = new DateTime();
@@ -4193,7 +4071,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($answer, $entity->getAnswer($step));
     }
 
-    public function dpGetAnswerForQuestion()
+    public static function dpGetAnswerForQuestion()
     {
         return [
             [false, null],
@@ -4336,9 +4214,7 @@ class IrhpApplicationEntityTest extends EntityTester
         return Entity::createNew($source, $status, $irhpPermitType, $licence, $dateReceived);
     }
 
-    /**
-     * @dataProvider dpTestGetFeePerPermitBilateralMultilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetFeePerPermitBilateralMultilateral')]
     public function testGetFeePerPermitBilateralMultilateral($irhpPermitTypeId)
     {
         $applicationFeeType = m::mock(FeeType::class);
@@ -4359,7 +4235,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetFeePerPermitBilateralMultilateral()
+    public static function dpTestGetFeePerPermitBilateralMultilateral()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
@@ -4467,9 +4343,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->expire(m::mock(RefData::class));
     }
 
-    /**
-     * @dataProvider dpCanBeExpired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeExpired')]
     public function testCanBeExpired($status, $hasValidPermits, $expected)
     {
         $entity = $this->createNewEntity();
@@ -4486,7 +4360,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canBeExpired());
     }
 
-    public function dpCanBeExpired()
+    public static function dpCanBeExpired()
     {
         return [
             [IrhpInterface::STATUS_VALID, true, false],
@@ -4512,9 +4386,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCanViewCandidatePermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanViewCandidatePermits')]
     public function testCanViewCandidatePermits($isAwaitingFee, $isCandidatePermitsAllocationMode, $isApgg, $expected)
     {
         $this->sut->shouldReceive('isAwaitingFee')
@@ -4532,7 +4404,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canViewCandidatePermits());
     }
 
-    public function dpTestCanViewCandidatePermits()
+    public static function dpTestCanViewCandidatePermits()
     {
         return [
             [false, false, false, false],
@@ -4546,9 +4418,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCanSelectCandidatePermits
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanSelectCandidatePermits')]
     public function testCanSelectCandidatePermits($isAwaitingFee, $isCandidatePermitsAllocationMode, $isApsg, $expected)
     {
         $this->sut->shouldReceive('isAwaitingFee')
@@ -4566,7 +4436,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canSelectCandidatePermits());
     }
 
-    public function dpTestCanSelectCandidatePermits()
+    public static function dpTestCanSelectCandidatePermits()
     {
         return [
             [false, false, false, false],
@@ -4580,9 +4450,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsCandidatePermitsAllocationMode
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsCandidatePermitsAllocationMode')]
     public function testIsCandidatePermitsAllocationMode($allocationMode, $expected)
     {
         $this->sut->shouldReceive('getAllocationMode')
@@ -4595,7 +4463,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestIsCandidatePermitsAllocationMode()
+    public static function dpTestIsCandidatePermitsAllocationMode()
     {
         return [
             [IrhpPermitStock::ALLOCATION_MODE_STANDARD, false],
@@ -4607,9 +4475,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanBeGranted
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeGranted')]
     public function testCanBeGranted($isUnderConsideration, $licenceValid, $businessProcess, $expected)
     {
         $this->sut->shouldReceive('isUnderConsideration')
@@ -4629,7 +4495,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canBeGranted());
     }
 
-    public function dpCanBeGranted()
+    public static function dpCanBeGranted()
     {
         return [
             [true, true, RefData::BUSINESS_PROCESS_APGG, true],
@@ -4732,9 +4598,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestHasCountryId
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasCountryId')]
     public function testHasCountryId($countryId, $expected)
     {
         $country1Id = 'FR';
@@ -4762,7 +4626,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->hasCountryId($countryId));
     }
 
-    public function dpTestHasCountryId()
+    public static function dpTestHasCountryId()
     {
         return [
             ['FR', true],
@@ -4814,9 +4678,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpCalculateTotalPermitsRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCalculateTotalPermitsRequired')]
     public function testCalculateTotalPermitsRequired(
         $isEcmtShortTerm,
         $isEcmtAnnual,
@@ -4852,7 +4714,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCalculateTotalPermitsRequired()
+    public static function dpCalculateTotalPermitsRequired()
     {
         return [
             'ecmt short term' => [true, false, 5, 3, 8],
@@ -4881,9 +4743,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->calculateTotalPermitsRequired();
     }
 
-    /**
-     * @dataProvider dpCalculateTotalPermitsRequiredNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCalculateTotalPermitsRequiredNotSet')]
     public function testCalculateTotalPermitsRequiredNotSet(
         $isEcmtShortTerm,
         $isEcmtAnnual,
@@ -4918,7 +4778,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->calculateTotalPermitsRequired();
     }
 
-    public function dpCalculateTotalPermitsRequiredNotSet()
+    public static function dpCalculateTotalPermitsRequiredNotSet()
     {
         return [
             'ecmt short term, nothing set' => [true, false, null, null],
@@ -4930,9 +4790,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetPermitIntensityOfUse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitIntensityOfUse')]
     public function testGetPermitIntensityOfUse($emissionsCategoryId, $expectedIntensityOfUse)
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -4957,9 +4815,9 @@ class IrhpApplicationEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider dpTestGetPermitIntensityOfUse
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitIntensityOfUse')]
     public function testGetPermitIntensityOfUseZeroPermitsRequested($emissionsCategoryId, $expectedIntensityOfUse)
     {
         $this->expectException(\RuntimeException::class);
@@ -4996,7 +4854,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->getPermitIntensityOfUse('xyz');
     }
 
-    public function dpTestGetPermitIntensityOfUse()
+    public static function dpTestGetPermitIntensityOfUse()
     {
         return [
             [null, 5],
@@ -5005,9 +4863,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetPermitApplicationScore
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitApplicationScore')]
     public function testGetPermitApplicationScore(
         $emissionsCategoryId,
         $internationalJourneys,
@@ -5031,7 +4887,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetPermitApplicationScore()
+    public static function dpTestGetPermitApplicationScore()
     {
         return [
             [null, RefData::INTER_JOURNEY_LESS_60, 1.5],
@@ -5056,9 +4912,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetEmailCommandLookup
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetEmailCommandLookup')]
     public function testGetEmailCommandLookup($isEcmtShortTerm, $isEcmtAnnual, $expectedEmailCommandLookup)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5076,7 +4930,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetEmailCommandLookup()
+    public static function dpGetEmailCommandLookup()
     {
         return [
             [
@@ -5117,9 +4971,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $application->getEmailCommandLookup();
     }
 
-    /**
-     * @dataProvider dpProvideOutcomeNotificationType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProvideOutcomeNotificationType')]
     public function testGetOutcomeNotificationType($source, $expectedNotificationType)
     {
         $sourceRefData = m::mock(RefData::class);
@@ -5144,7 +4996,7 @@ class IrhpApplicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpProvideOutcomeNotificationType()
+    public static function dpProvideOutcomeNotificationType()
     {
         return [
             [IrhpInterface::SOURCE_SELFSERVE, ApplicationAcceptConsts::NOTIFICATION_TYPE_EMAIL],
@@ -5152,9 +5004,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpProvideSuccessLevel
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProvideSuccessLevel')]
     public function testGetSuccessLevel($permitsRequired, $permitsAwarded, $expectedSuccessLevel)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -5170,9 +5020,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpHasStateRequiredForPostScoringEmail
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasStateRequiredForPostScoringEmail')]
     public function testHasStateRequiredForPostScoringEmail($isUnderConsideration, $isInScope, $successLevel, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -5195,7 +5043,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpHasStateRequiredForPostScoringEmail()
+    public static function dpHasStateRequiredForPostScoringEmail()
     {
         return [
             [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false],
@@ -5218,7 +5066,7 @@ class IrhpApplicationEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpProvideSuccessLevel()
+    public static function dpProvideSuccessLevel()
     {
         return [
             [10,  1, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL],
@@ -5333,9 +5181,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->getPermitsAwarded(m::mock(RefData::class));
     }
 
-    /**
-     * @dataProvider dpGetIntensityOfUseWarningThreshold
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIntensityOfUseWarningThreshold')]
     public function testGetIntensityOfUseWarningThreshold(
         $isEcmtShortTerm,
         $isEcmtAnnual,
@@ -5365,7 +5211,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetIntensityOfUseWarningThreshold()
+    public static function dpGetIntensityOfUseWarningThreshold()
     {
         return [
             [true, false, 5, 8, 800],
@@ -5394,9 +5240,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $application->getIntensityOfUseWarningThreshold();
     }
 
-    /**
-     * @dataProvider dpGetAppSubmittedEmailCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAppSubmittedEmailCommand')]
     public function testGetAppSubmittedEmailCommand(
         $isEcmtShortTerm,
         $isEcmtAnnual,
@@ -5422,7 +5266,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetAppSubmittedEmailCommand()
+    public static function dpGetAppSubmittedEmailCommand()
     {
         return [
             [true, false, RefData::BUSINESS_PROCESS_APG, null],
@@ -5437,9 +5281,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetAppWithdrawnEmailCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAppWithdrawnEmailCommand')]
     public function testGetAppWithdrawnEmailCommand($irhpPermitTypeId, $withdrawReason, $expectedCommand)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5455,7 +5297,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetAppWithdrawnEmailCommand()
+    public static function dpGetAppWithdrawnEmailCommand()
     {
         return [
             [
@@ -5501,9 +5343,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetIssuedEmailCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIssuedEmailCommand')]
     public function testGetIssuedEmailCommand($isEcmtAnnual, $isEcmtShortTerm, $isApsg, $isApgg, $expectedCommand)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5530,7 +5370,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetIssuedEmailCommand()
+    public static function dpGetIssuedEmailCommand()
     {
         return [
             [true, false, true, false, SendEcmtApsgIssued::class],
@@ -5559,9 +5399,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpShouldAllocatePermitsOnSubmission
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShouldAllocatePermitsOnSubmission')]
     public function testShouldAllocatePermitsOnSubmission($businessProcessId, $expected)
     {
         $businessProcess = m::mock(RefData::class);
@@ -5578,16 +5416,14 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpUpdateChecked
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateChecked')]
     public function testUpdateChecked($checked)
     {
         $this->sut->updateChecked($checked);
         $this->assertEquals($checked, $this->sut->getChecked());
     }
 
-    public function dpUpdateChecked()
+    public static function dpUpdateChecked()
     {
         return [
             [true],
@@ -5595,7 +5431,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    public function dpShouldAllocatePermitsOnSubmission()
+    public static function dpShouldAllocatePermitsOnSubmission()
     {
         return [
             [RefData::BUSINESS_PROCESS_APG, true],
@@ -5604,9 +5440,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetSubmissionTaskDescription
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSubmissionTaskDescription')]
     public function testGetSubmissionTaskDescription($irhpPermitTypeId, $expectedTaskDescription)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5621,7 +5455,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetSubmissionTaskDescription()
+    public static function dpGetSubmissionTaskDescription()
     {
         return [
             [
@@ -5668,9 +5502,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->getSubmissionTaskDescription();
     }
 
-    /**
-     * @dataProvider dpGetSubmissionStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSubmissionStatus')]
     public function testGetSubmissionStatus($businessProcessId, $expectedStatus)
     {
         $businessProcess = m::mock(RefData::class);
@@ -5687,7 +5519,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetSubmissionStatus()
+    public static function dpGetSubmissionStatus()
     {
         return [
             [RefData::BUSINESS_PROCESS_AG, IrhpInterface::STATUS_VALID],
@@ -5743,9 +5575,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpRequiresPreAllocationCheck
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRequiresPreAllocationCheck')]
     public function testRequiresPreAllocationCheck($isEcmtShortTerm, $isEcmtAnnual, $expected)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5764,7 +5594,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpRequiresPreAllocationCheck()
+    public static function dpRequiresPreAllocationCheck()
     {
         return [
             [true, false, true],
@@ -5846,9 +5676,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->expireCertificate(m::mock(RefData::class));
     }
 
-    /**
-     * @dataProvider dpExpireCertificateMotNotExpired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExpireCertificateMotNotExpired')]
     public function testExpireCertificateMotNotExpired($expiryDate)
     {
         $this->expectException(\Exception::class);
@@ -5868,7 +5696,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->expireCertificate(m::mock(RefData::class));
     }
 
-    public function dpExpireCertificateMotNotExpired()
+    public static function dpExpireCertificateMotNotExpired()
     {
         return [
             'no mot expiry date present' => [null],
@@ -5906,9 +5734,7 @@ class IrhpApplicationEntityTest extends EntityTester
         self::assertEquals($expiryDate, $entity->getExpiryDate()->format('Y-m-d'));
     }
 
-    /**
-     * @dataProvider dpTestGetMotExpiryDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetMotExpiryDate')]
     public function testGetMotExpiryDate($isTrailer, $questionId)
     {
         $expiryDate = '2020-08-01';
@@ -5930,7 +5756,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpTestGetMotExpiryDate()
+    public static function dpTestGetMotExpiryDate()
     {
         return [
             'trailer' => [
@@ -5956,9 +5782,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpCanBeResetToNotYetSubmittedFromValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeResetToNotYetSubmittedFromValid')]
     public function testCanBeResetToNotYetSubmittedFromValid($isValid, $isCertificateOfRoadworthiness, $expected)
     {
         $this->sut->shouldReceive('isValid')
@@ -5975,7 +5799,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeResetToNotYetSubmittedFromValid()
+    public static function dpCanBeResetToNotYetSubmittedFromValid()
     {
         return [
             [true, true, true],
@@ -6012,9 +5836,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->resetToNotYetSubmittedFromValid($status);
     }
 
-    /**
-     * @dataProvider dpCanBeResetToNotYetSubmittedFromCancelled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeResetToNotYetSubmittedFromCancelled')]
     public function testCanBeResetToNotYetSubmittedFromCancelled(
         $isCancelled,
         $isEcmtShortTerm,
@@ -6052,7 +5874,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeResetToNotYetSubmittedFromCancelled()
+    public static function dpCanBeResetToNotYetSubmittedFromCancelled()
     {
         return [
             [false, false, true, false, false],
@@ -6097,9 +5919,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->resetToNotYetSubmittedFromCancelled($status);
     }
 
-    /**
-     * @dataProvider dpCanBeRevivedFromWithdrawn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeRevivedFromWithdrawn')]
     public function testCanBeRevivedFromWithdrawn($withdrawReason, $inScope, $businessProcessId, $expected)
     {
         $withdrawReasonRefData = m::mock(RefData::class);
@@ -6132,7 +5952,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeRevivedFromWithdrawn()
+    public static function dpCanBeRevivedFromWithdrawn()
     {
         return [
             [
@@ -6168,9 +5988,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCanBeRevivedFromWithdrawnNotWithdrawn
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeRevivedFromWithdrawnNotWithdrawn')]
     public function testCanBeRevivedFromWithdrawnNotWithdrawn($inScope, $businessProcessId)
     {
         $this->sut->setWithdrawReason(null);
@@ -6197,7 +6015,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeRevivedFromWithdrawnNotWithdrawn()
+    public static function dpCanBeRevivedFromWithdrawnNotWithdrawn()
     {
         return [
             [true, RefData::BUSINESS_PROCESS_APGG],
@@ -6252,9 +6070,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpCanBeRevivedFromUnsuccessful
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeRevivedFromUnsuccessful')]
     public function testCanBeRevivedFromUnsuccessful($businessProcessId, $statusId, $expected)
     {
         $statusRefData = m::mock(RefData::class);
@@ -6279,7 +6095,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpCanBeRevivedFromUnsuccessful()
+    public static function dpCanBeRevivedFromUnsuccessful()
     {
         return [
             [
@@ -6425,9 +6241,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider productRefMonthProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('productRefMonthProvider')]
     public function testGetProductReferenceForTier($expected, $validFrom, $validTo, $now)
     {
         $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -6442,7 +6256,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getProductReferenceForTier($now));
     }
 
-    public function productRefMonthProvider()
+    public static function productRefMonthProvider()
     {
         $validFrom = new DateTime('first day of January next year');
         $validTo = new DateTime('last day of December next year');
@@ -6568,9 +6382,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpIsApplicationPathEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationPathEnabled')]
     public function testIsApplicationPathEnabled($isEnabled)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -6586,7 +6398,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsApplicationPathEnabled()
+    public static function dpIsApplicationPathEnabled()
     {
         return [
             [true],
@@ -6602,9 +6414,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetIrhpPermitApplicationIdForCountry
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIrhpPermitApplicationIdForCountry')]
     public function testGetIrhpPermitApplicationIdForCountry($result, $countryCode)
     {
         $countries = [
@@ -6639,7 +6449,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($result, $this->sut->getIrhpPermitApplicationIdForCountry($countryEntity));
     }
 
-    public function dpGetIrhpPermitApplicationIdForCountry()
+    public static function dpGetIrhpPermitApplicationIdForCountry()
     {
         return [
             [null, 'NO'],
@@ -6666,9 +6476,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetIrhpPermitApplicationsByCountryName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIrhpPermitApplicationsByCountryName')]
     public function testGetIrhpPermitApplicationsByCountryName($irhpPermitApplications, $expected)
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -6680,7 +6488,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected->getValues(), $entity->getIrhpPermitApplicationsByCountryName()->getValues());
     }
 
-    public function dpGetIrhpPermitApplicationsByCountryName()
+    public static function dpGetIrhpPermitApplicationsByCountryName()
     {
         $irhpPermitApplicationA = m::mock(IrhpPermitApplication::class);
         $irhpPermitApplicationA->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getCountryDesc')
@@ -6771,9 +6579,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetIrhpPermitApplicationByStockCountryId
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetIrhpPermitApplicationByStockCountryId')]
     public function testGetIrhpPermitApplicationByStockCountryId($irhpPermitApplications, $countryId, $expected)
     {
         $entity = $this->createNewEntity();
@@ -6785,7 +6591,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpGetIrhpPermitApplicationByStockCountryId()
+    public static function dpGetIrhpPermitApplicationByStockCountryId()
     {
         $irhpPermitApplication1 = m::mock(IrhpPermitApplication::class);
         $irhpPermitApplication1->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getCountry->getId')
@@ -6818,9 +6624,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsApsg
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApsg')]
     public function testIsApsg($businessProcessId, $expected)
     {
         $this->sut->shouldReceive('getBusinessProcess')
@@ -6833,7 +6637,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsApsg()
+    public static function dpIsApsg()
     {
         return [
             [null, false],
@@ -6844,9 +6648,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsApgg
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApgg')]
     public function testIsApgg($businessProcessId, $expected)
     {
         $this->sut->shouldReceive('getBusinessProcess')
@@ -6859,7 +6661,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsApgg()
+    public static function dpIsApgg()
     {
         return [
             [null, false],
@@ -6870,9 +6672,7 @@ class IrhpApplicationEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsOngoing
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOngoing')]
     public function testIsOngoing($isNotYetSubmitted, $isUnderConsideration, $isAwaitingFee, $expected)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -6892,7 +6692,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsOngoing()
+    public static function dpIsOngoing()
     {
         return [
             [false, false, false, false],
@@ -6947,9 +6747,7 @@ class IrhpApplicationEntityTest extends EntityTester
         return $document;
     }
 
-    /**
-     * @dataProvider dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock')]
     public function testIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock(
         $isUnderConsideration,
         $isAwaitingFee,
@@ -6975,7 +6773,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public function dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock()
+    public static function dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock()
     {
         $irhpPermitStock1 = m::mock(IrhpPermitStock::class);
         $irhpPermitStock2 = m::mock(IrhpPermitStock::class);

@@ -102,9 +102,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    /**
-     * @dataProvider dpGetConfigFromDataWithMixedAndNumericLgvAuth
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromDataWithMixedAndNumericLgvAuth')]
     public function testGetConfigFromDataWithMixedAndNumericLgvAuth($totAuthLgvVehicles)
     {
         $data = [
@@ -144,7 +142,7 @@ class ApplicationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromDataWithMixedAndNumericLgvAuth()
+    public static function dpGetConfigFromDataWithMixedAndNumericLgvAuth()
     {
         return [
             [0],

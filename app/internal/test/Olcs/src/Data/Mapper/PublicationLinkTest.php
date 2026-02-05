@@ -37,11 +37,11 @@ class PublicationLinkTest extends MockeryTestCase
     /**
      * test map from result
      *
-     * @dataProvider mapFromResultProvider
      *
      * @param $inputData
      * @param $expectedOutput
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultProvider')]
     public function testMapFromResultStatusIsNew($inputData, $expectedOutput)
     {
         $this->assertEquals($expectedOutput, Sut::mapFromResult($inputData));
@@ -52,7 +52,7 @@ class PublicationLinkTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromResultProvider()
+    public static function mapFromResultProvider()
     {
         $pubType = 'pub type';
         $trafficArea = 'trafficArea';

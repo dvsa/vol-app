@@ -13,15 +13,8 @@ class StubDocumentSearchTrait
 {
     use \Olcs\Controller\Traits\DocumentSearchTrait;
 
-    protected FormHelperService $formHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
-    public function __construct(
-        FormHelperService $formHelper,
-        DocumentSubCategory $docSubCategoryDataService
-    ) {
-        $this->formHelper = $formHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    public function __construct(protected FormHelperService $formHelper, protected DocumentSubCategory $docSubCategoryDataService)
+    {
     }
 
     protected function getDocumentTableName()

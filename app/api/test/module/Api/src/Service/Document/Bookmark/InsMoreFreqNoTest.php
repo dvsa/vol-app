@@ -19,10 +19,8 @@ class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider safetyInsProvider
-     * @group InsMoreFreqNoTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('InsMoreFreqNoTest')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('safetyInsProvider')]
     public function testRenderWithInsMoreFreqNo($flag, $expected)
     {
         $bookmark = new InsMoreFreqNo();
@@ -38,7 +36,7 @@ class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function safetyInsProvider()
+    public static function safetyInsProvider()
     {
         return [
             [0, 'X'],

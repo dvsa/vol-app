@@ -4,14 +4,10 @@ namespace Dvsa\OlcsTest\Api\Service\Nr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Nr\Filter\Format\MemberStateCode;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Nr\Filter\Format\MemberStateCode
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Nr\Filter\Format\MemberStateCode::class)]
 class MemberStateCodeTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dpTestFilter
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFilter')]
     public function testFilter($value, $expect)
     {
         $value = [
@@ -26,7 +22,7 @@ class MemberStateCodeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function dpTestFilter()
+    public static function dpTestFilter()
     {
         return [
             [

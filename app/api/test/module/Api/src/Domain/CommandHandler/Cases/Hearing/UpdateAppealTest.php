@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Hearing\UpdateAppeal
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Hearing\UpdateAppeal::class)]
 class UpdateAppealTest extends AbstractCommandHandlerTestCase
 {
     /** @var  UpdateAppeal */
@@ -27,6 +25,7 @@ class UpdateAppealTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

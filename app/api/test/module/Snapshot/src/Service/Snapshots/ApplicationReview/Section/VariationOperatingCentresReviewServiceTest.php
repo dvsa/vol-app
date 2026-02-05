@@ -70,9 +70,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider psvProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('psvProvider')]
     public function testGetConfigFromDataWithEmptyOcList(
         $isGoods,
         $expectedOcServiceProperty,
@@ -103,9 +101,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    /**
-     * @dataProvider psvProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('psvProvider')]
     public function testGetConfigFromDataWithOcList(
         $isGoods,
         $expectedOcServiceProperty,
@@ -185,7 +181,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function psvProvider()
+    public static function psvProvider()
     {
         return [
             [
@@ -201,9 +197,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetHeaderTranslationKey
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetHeaderTranslationKey')]
     public function testGetHeaderTranslationKey($vehicleTypeId, $expectedTranslationKey)
     {
         $reviewData = [
@@ -218,7 +212,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpGetHeaderTranslationKey()
+    public static function dpGetHeaderTranslationKey()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_PSV, 'review-section-key'],

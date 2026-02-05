@@ -31,15 +31,13 @@ class DiscPrintingTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResultForPrefixes($prefixes));
     }
 
-    /**
-     * @dataProvider fromFormProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromFormProvider')]
     public function testMapFromForm($params, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($params));
     }
 
-    public function fromFormProvider()
+    public static function fromFormProvider()
     {
         return [
             [

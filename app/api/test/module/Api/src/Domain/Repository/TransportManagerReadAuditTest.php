@@ -23,11 +23,13 @@ class TransportManagerReadAuditTest extends AbstractReadAuditTest
         $this->setUpSut(TransportManagerReadAudit::class, true);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchOneOrMore()
     {
         parent::commonTestFetchOneOrMore('transportManager');
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchList()
     {
         parent::commonTestFetchList(
@@ -36,6 +38,7 @@ class TransportManagerReadAuditTest extends AbstractReadAuditTest
         );
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testDeleteOlderThan()
     {
         parent::commonTestDeleteOlderThan(TransportManagerReadAuditEntity::class);

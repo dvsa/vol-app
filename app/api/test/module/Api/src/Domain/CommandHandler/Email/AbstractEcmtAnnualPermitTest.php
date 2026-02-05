@@ -28,9 +28,8 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
     public $orgEmail2;
     /**
      * test handle command
-     *
-     * @dataProvider dpLocaleMappings
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
     public function testHandleCommand($licenceTranslateToWelsh, $expectedLocale)
     {
         $paymentDeadlineNumDays = '10';
@@ -100,9 +99,8 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
 
     /**
      * test handle command when the application created by internal user
-     *
-     * @dataProvider dpLocaleMappings
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
     public function testHandleCommandForCreatedByInternalUser($licenceTranslateToWelsh, $expectedLocale)
     {
         $paymentDeadlineNumDays = '10';
@@ -171,9 +169,8 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
 
     /**
      * test handle command awaiting fee
-     *
-     * @dataProvider dpLocaleMappings
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLocaleMappings')]
     public function testHandleCommandAwaitingFee($licenceTranslateToWelsh, $expectedLocale)
     {
         $permitsRequired = 8;
@@ -306,7 +303,7 @@ abstract class AbstractEcmtAnnualPermitTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function dpLocaleMappings()
+    public static function dpLocaleMappings()
     {
         return [
             ['N', 'en_GB'],

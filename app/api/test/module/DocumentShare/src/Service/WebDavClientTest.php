@@ -13,9 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\DocumentShare\Service\WebDavClient
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Service\WebDavClient::class)]
 class WebDavClientTest extends MockeryTestCase
 {
     public const BASE_URI = 'http://testing';
@@ -37,7 +35,7 @@ class WebDavClientTest extends MockeryTestCase
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
-        $this->sut = new Client($this->mockFileSystem, $this->createMock(\Laminas\Log\Logger::class));
+        $this->sut = new Client($this->mockFileSystem, $this->createStub(\Laminas\Log\Logger::class));
 
         $this->mockFile = m::mock(DsFile::class);
 

@@ -21,10 +21,10 @@ class InjectIsTxcAppTest extends TestCase
     }
 
     /**
-     * @dataProvider provideEbsrRefresh
      * @param $appType
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideEbsrRefresh')]
     public function testFilterInjectsEbsrRefresh($appType, $expected)
     {
         $sut = new InjectIsTxcApp();
@@ -33,7 +33,7 @@ class InjectIsTxcAppTest extends TestCase
         $this->assertEquals($expected, $return['ebsrRefresh']);
     }
 
-    public function provideEbsrRefresh()
+    public static function provideEbsrRefresh()
     {
         return [
             [BusRegEntity::TXC_APP_NON_CHARGEABLE, 'Y'],

@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
+use Dvsa\Olcs\Api\Service\Submission\Sections\ApplicantsComments;
 use Laminas\View\Renderer\PhpRenderer;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ApplicantsCommentsTest
@@ -11,14 +15,9 @@ use Mockery as m;
  */
 class ApplicantsCommentsTest extends AbstractSubmissionSectionTest
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ApplicantsComments::class;
+    protected $submissionSection = ApplicantsComments::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public function sectionTestProvider(): array
     {
         $case = $this->getCase();
 
@@ -30,11 +29,12 @@ class ApplicantsCommentsTest extends AbstractSubmissionSectionTest
     }
 
     /**
-     * @dataProvider sectionTestProvider
      *
      * @param $section
      * @param $expectedString
      */
+    #[DataProvider('sectionTestProvider')]
+    #[\Override]
     public function testGenerateSection($input = null, $expectedResult = null)
     {
         $mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);

@@ -160,9 +160,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedType')]
     public function testHandleQueryUnsupportedType($unsupportedTypeId)
     {
         $query = AvailableYearsQuery::create(
@@ -180,7 +178,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryUnsupportedType()
+    public static function dpTestHandleQueryUnsupportedType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
@@ -189,9 +187,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryNoYears
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryNoYears')]
     public function testHandleQueryNoYears($irhpPermitTypeId)
     {
         $query = AvailableYearsQuery::create(
@@ -217,7 +213,7 @@ class AvailableYearsTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpTestHandleQueryNoYears()
+    public static function dpTestHandleQueryNoYears()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

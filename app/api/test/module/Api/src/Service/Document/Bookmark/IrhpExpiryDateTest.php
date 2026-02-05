@@ -21,9 +21,7 @@ class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(IrhpPermitBundle::class, $query);
     }
 
-    /**
-     * @dataProvider dpRenderProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = new IrhpExpiryDate();
@@ -32,7 +30,7 @@ class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function dpRenderProvider()
+    public static function dpRenderProvider()
     {
         return [
             'no expiry date, use stock end date' => [

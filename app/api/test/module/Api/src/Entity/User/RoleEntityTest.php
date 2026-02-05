@@ -88,9 +88,7 @@ class RoleEntityTest extends EntityTester
         $this->assertEquals($anon->getRole(), Entity::ROLE_ANON);
     }
 
-    /**
-     * @dataProvider dpGetAllowedRoles
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAllowedRoles')]
     public function testGetAllowedRoles($role, $emptyExpected)
     {
         $roleEntity = new Entity();
@@ -102,7 +100,7 @@ class RoleEntityTest extends EntityTester
         $emptyExpected ? $this->assertEmpty($result) : $this->assertNotEmpty($result);
     }
 
-    public function dpGetAllowedRoles()
+    public static function dpGetAllowedRoles()
     {
         return [
             [Entity::ROLE_SYSTEM_ADMIN, false],

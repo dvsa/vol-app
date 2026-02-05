@@ -102,9 +102,8 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
     /**
      * @param $organisationType
      * @param $expectedSubCategory
-     *
-     * @dataProvider provideCreatedTaskSubCategoryCases
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskSubCategoryCases')]
     public function testCreatedTaskSubCategory($organisationType, $expectedSubCategory)
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
@@ -128,7 +127,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskSubCategoryCases()
+    public static function provideCreatedTaskSubCategoryCases()
     {
         return [
             [Organisation::ORG_TYPE_REGISTERED_COMPANY, Category::TASK_SUB_CATEGORY_DIRECTOR_CHANGE_DIGITAL],
@@ -167,9 +166,8 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
      * @param $organisationType
      *
      * @param $expectedDescription
-     *
-     * @dataProvider provideCreatedTaskDescriptionCases
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskDescriptionCases')]
     public function testCreatedTaskDescription($organisationType, $expectedDescription)
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
@@ -193,7 +191,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskDescriptionCases()
+    public static function provideCreatedTaskDescriptionCases()
     {
         return [
             [Organisation::ORG_TYPE_REGISTERED_COMPANY, 'Add director(s)'],
@@ -211,9 +209,8 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
      * @param $financialAnswers
      *
      * @param $expectedUrgency
-     *
-     * @dataProvider provideCreatedTaskUrgencyCases
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreatedTaskUrgencyCases')]
     public function testCreatedTaskUrgency($previousConvictionAnswer, $financialAnswers, $expectedUrgency)
     {
         $application = $this->createMockApplication(Application::VARIATION_TYPE_DIRECTOR_CHANGE);
@@ -242,7 +239,7 @@ class CreatePostAddPeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreatedTaskUrgencyCases()
+    public static function provideCreatedTaskUrgencyCases()
     {
         $negativeFinancialAnswers = [
             'bankrupt' => 'N',

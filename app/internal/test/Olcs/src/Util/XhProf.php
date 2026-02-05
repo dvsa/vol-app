@@ -7,7 +7,7 @@ namespace OlcsTest\Util;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class XhProf implements \PHPUnit_Framework_TestListener
+class XhProf implements \PHPUnit\Framework\TestListener
 {
     protected $runs = [];
 
@@ -52,7 +52,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      * @param Exception              $e
      * @param float                  $time
      */
-    public function addError(\PHPUnit_Framework_Test $test, Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, Exception $e, $time)
     {
     }
 
@@ -61,7 +61,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      *
      * @param float                                  $time
      */
-    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
     {
     }
 
@@ -70,7 +70,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      *
      * @param float                  $time
      */
-    public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -80,7 +80,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      * @param float                  $time
      * @since  Method available since Release 4.0.0
      */
-    public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
@@ -89,14 +89,14 @@ class XhProf implements \PHPUnit_Framework_TestListener
      *
      * @param float                  $time
      */
-    public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
     {
     }
 
     /**
      * A test started.
      */
-    public function startTest(\PHPUnit_Framework_Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test)
     {
         $this->st = microtime(true);
 
@@ -117,7 +117,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      *
      * @param float                  $time
      */
-    public function endTest(\PHPUnit_Framework_Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, $time)
     {
         $this->et = microtime(true);
         $data = xhprof_disable();
@@ -139,7 +139,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * A test suite started.
      */
-    public function startTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         $this->suites++;
     }
@@ -147,7 +147,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
     /**
      * A test suite ended.
      */
-    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
     {
         $this->suites--;
         if ($this->suites == 0) {

@@ -2,7 +2,7 @@
   "name": "olcs/backend",
   "description": "Back End Application for OLCS Project",
   "require": {
-    "php": "~8.2.0",
+    "php": "~8.3.0",
     "ext-intl": "*",
     "ext-json": "*",
     "ext-curl": "*",
@@ -118,12 +118,11 @@
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8",
-    "phpunit/phpunit": "^9.6",
+    "phpunit/phpunit": "^12.5",
     "mockery/mockery": "^1.6",
-    "johnkary/phpunit-speedtrap": "^4.0",
     "mikey179/vfsstream": "^1.6",
-    "dms/phpunit-arraysubset-asserts": "^0.5.0",
-    "dvsa/authentication-ldap": "^3.1"
+    "dvsa/authentication-ldap": "^3.1",
+    "rector/rector": "^2.3"
   },
   "extra": {
     "bamarni-bin": {

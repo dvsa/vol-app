@@ -44,10 +44,10 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getViewDataProvider
      * @param array $overviewData overview data
      * @param array $expectedViewData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getViewDataProvider')]
     public function testGetViewData($overviewData, $expectedViewData, $gracePeriodStr)
     {
         $lva = 'application';
@@ -95,7 +95,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function getViewDataProvider()
+    public static function getViewDataProvider()
     {
         return [
             'new goods application' => [
@@ -387,10 +387,10 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getInterimStatusProvider
      * @param array $applicationData
      * @param array $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getInterimStatusProvider')]
     public function testGetInterimStatus($applicationData, $expected)
     {
         $this->urlHelperService
@@ -401,7 +401,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getInterimStatus($applicationData, 'application'));
     }
 
-    public function getInterimStatusProvider()
+    public static function getInterimStatusProvider()
     {
         return [
             'with interim' => [
@@ -421,9 +421,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider getEntityChangeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntityChangeProvider')]
     public function testGetChangeOfEntity($application, $expected)
     {
         $this->urlHelperService
@@ -440,7 +438,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getChangeOfEntity($application));
     }
 
-    public function getEntityChangeProvider()
+    public static function getEntityChangeProvider()
     {
         return [
             'with changes' => [

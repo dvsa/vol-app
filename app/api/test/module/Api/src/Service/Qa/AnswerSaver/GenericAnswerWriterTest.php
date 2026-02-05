@@ -95,9 +95,7 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpForceQuestionType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpForceQuestionType')]
     public function testSaveAnswerAlreadyExists($questionType, $forcedType, $expectedType)
     {
         $this->answer->shouldReceive('setValue')
@@ -125,9 +123,7 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpForceQuestionType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpForceQuestionType')]
     public function testSaveAnswerRequiresCreation($questionType, $forcedType, $expectedType)
     {
         $questionText = m::mock(QuestionText::class);
@@ -164,7 +160,7 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    public function dpForceQuestionType()
+    public static function dpForceQuestionType()
     {
         return [
             [Question::QUESTION_TYPE_INTEGER, null, Question::QUESTION_TYPE_INTEGER],

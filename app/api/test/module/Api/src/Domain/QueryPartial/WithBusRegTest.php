@@ -23,9 +23,7 @@ class WithBusRegTest extends QueryPartialTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery($expectedDql, $arguments)
     {
         $this->sut->modifyQuery($this->qb, $arguments);
@@ -35,7 +33,7 @@ class WithBusRegTest extends QueryPartialTestCase
         );
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['SELECT a, br FROM foo a LEFT JOIN a.busReg br', []],

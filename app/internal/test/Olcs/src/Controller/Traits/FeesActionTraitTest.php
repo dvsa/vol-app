@@ -6,9 +6,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use OlcsTest\Controller\Traits\Stub\FeesActionTraitStub;
 
-/**
- * @covers \Olcs\Controller\Traits\FeesActionTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\FeesActionTrait::class)]
 class FeesActionTraitTest extends MockeryTestCase
 {
     /** @var FeesActionTraitStub | m\MockInterface */

@@ -33,6 +33,7 @@ class ProcessApplicationOperatingCentresTest extends AbstractCommandHandlerTestC
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

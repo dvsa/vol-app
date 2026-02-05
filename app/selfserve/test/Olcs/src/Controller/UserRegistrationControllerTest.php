@@ -80,7 +80,6 @@ class UserRegistrationControllerTest extends TestCase
     public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 

@@ -99,6 +99,7 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToDetails();
@@ -109,6 +110,7 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->redirectToDetails();

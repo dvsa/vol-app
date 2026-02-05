@@ -57,9 +57,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate($previousApplicationStep, $qaEntityAnswer)
     {
         $applicationPathId = 44;
@@ -105,7 +103,7 @@ class QaContextGeneratorTest extends MockeryTestCase
         $this->assertSame($qaContext, $returnedQaContext);
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate()
     {
         return [
             [null, null],

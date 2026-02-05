@@ -53,10 +53,9 @@ abstract class SendEbsrRegCancelEmailTestAbstract extends AbstractCommandHandler
     }
 
     /**
-     * @dataProvider handleCommandProvider
-     *
      * @param string $cmdClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($cmdClass)
     {
         $ebsrSubmissionId = 1234;

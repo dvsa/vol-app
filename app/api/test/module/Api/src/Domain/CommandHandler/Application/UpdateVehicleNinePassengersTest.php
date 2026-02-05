@@ -20,6 +20,7 @@ class UpdateVehicleNinePassengersTest extends AbstractUpdateApplicationTest
         'psvOperateLarge',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

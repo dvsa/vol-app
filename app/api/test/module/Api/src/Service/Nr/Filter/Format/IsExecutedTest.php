@@ -14,10 +14,10 @@ class IsExecutedTest extends TestCase
     /**
      * Tests the filter
      *
-     * @dataProvider filterProvider
      * @param $input
      * @param $expectedOutput
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filterProvider')]
     public function testFilter($input, $expectedOutput)
     {
         $sut = new IsExecuted();
@@ -27,7 +27,7 @@ class IsExecutedTest extends TestCase
     /**
      * data provider for testFilterProvider
      */
-    public function filterProvider()
+    public static function filterProvider()
     {
         $sut = new IsExecuted();
 

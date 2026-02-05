@@ -83,7 +83,6 @@ class GetRedirectTest extends AbstractCommandHandlerTestCase
         $user->setOrganisationUsers(new ArrayCollection([$orgUser]));
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_OPERATOR);
 
         $this->mockedSmServices[AuthorizationService::class]

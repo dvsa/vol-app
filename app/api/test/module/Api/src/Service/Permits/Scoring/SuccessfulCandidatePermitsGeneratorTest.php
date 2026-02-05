@@ -15,9 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate($euro5PermitsRemaining, $euro6PermitsRemaining, array $expectedSuccessful)
     {
         $stockId = 72;
@@ -71,7 +69,7 @@ class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate()
     {
         return [
             'more euro 6 than euro 5 remaining' => [

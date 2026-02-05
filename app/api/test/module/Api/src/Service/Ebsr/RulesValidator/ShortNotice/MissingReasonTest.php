@@ -14,12 +14,12 @@ class MissingReasonTest extends \PHPUnit\Framework\TestCase
     /**
      * tests whether the short notice section exists correctly
      *
-     * @dataProvider isValidProvider
      *
      * @param string $isShortNotice
      * @param array $busShortNotice
      * @param bool $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($isShortNotice, $busShortNotice, $valid)
     {
         $sut = new MissingReason();
@@ -38,7 +38,7 @@ class MissingReasonTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         $invalidSn = [
             'bankHolidayChange' => 'N',

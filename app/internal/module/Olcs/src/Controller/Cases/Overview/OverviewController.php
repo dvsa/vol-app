@@ -195,11 +195,12 @@ class OverviewController extends AbstractInternalController implements
      *
      * @return string
      */
+    #[\Override]
     public function redirectConfig(array $restResponse)
     {
         $action = $this->params()->fromRoute('action');
 
-        if (strtolower($action) == 'delete') {
+        if (strtolower((string) $action) == 'delete') {
             $licence = $this->params()->fromRoute('licence');
             $application = $this->params()->fromRoute('application');
             $transportManager = $this->params()->fromRoute('transportManager');

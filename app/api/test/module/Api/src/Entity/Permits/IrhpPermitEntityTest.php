@@ -167,9 +167,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertSame('UK00431', $this->sut->getPermitNumberWithPrefix());
     }
 
-    /**
-    * @dataProvider dpGetStartDate
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetStartDate')]
     public function testGetStartDate($validFrom, $issueDate, $expected)
     {
         $this->sut->setIssueDate($issueDate);
@@ -185,7 +183,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getStartDate());
     }
 
-    public function dpGetStartDate()
+    public static function dpGetStartDate()
     {
         $inPast = new DateTime('last year');
         $now = new DateTime();
@@ -240,9 +238,7 @@ class IrhpPermitEntityTest extends EntityTester
         );
     }
 
-    /**
-    * @dataProvider dpProceedToAwaitingPrinting
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToAwaitingPrinting')]
     public function testProceedToAwaitingPrinting($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -256,7 +252,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_AWAITING_PRINTING, $this->sut->getStatus()->getId());
     }
 
-    public function dpProceedToAwaitingPrinting()
+    public static function dpProceedToAwaitingPrinting()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -270,9 +266,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpProceedToPrinting
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToPrinting')]
     public function testProceedToPrinting($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -286,7 +280,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_PRINTING, $this->sut->getStatus()->getId());
     }
 
-    public function dpProceedToPrinting()
+    public static function dpProceedToPrinting()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -300,9 +294,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpProceedToPrinted
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToPrinted')]
     public function testProceedToPrinted($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -316,7 +308,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_PRINTED, $this->sut->getStatus()->getId());
     }
 
-    public function dpProceedToPrinted()
+    public static function dpProceedToPrinted()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -330,9 +322,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpProceedToError
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToError')]
     public function testProceedToError($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -346,7 +336,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_ERROR, $this->sut->getStatus()->getId());
     }
 
-    public function dpProceedToError()
+    public static function dpProceedToError()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -360,9 +350,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpProceedToTerminated
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProceedToTerminated')]
     public function testProceedToTerminated($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -376,7 +364,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_TERMINATED, $this->sut->getStatus()->getId());
     }
 
-    public function dpProceedToTerminated()
+    public static function dpProceedToTerminated()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -397,9 +385,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->sut->proceedToStatus(new RefData());
     }
 
-    /**
-    * @dataProvider dpIsPending
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsPending')]
     public function testIsPending($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -407,7 +393,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPending());
     }
 
-    public function dpIsPending()
+    public static function dpIsPending()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -421,9 +407,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsAwaitingPrinting
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAwaitingPrinting')]
     public function testIsAwaitingPrinting($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -431,7 +415,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isAwaitingPrinting());
     }
 
-    public function dpIsAwaitingPrinting()
+    public static function dpIsAwaitingPrinting()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -445,9 +429,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpIsPrinting
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsPrinting')]
     public function testIsPrinting($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -455,7 +437,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPrinting());
     }
 
-    public function dpIsPrinting()
+    public static function dpIsPrinting()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -469,9 +451,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpHasError
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasError')]
     public function testHasError($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -479,7 +459,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->hasError());
     }
 
-    public function dpHasError()
+    public static function dpHasError()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -493,7 +473,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    public function dpCease()
+    public static function dpCease()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -507,9 +487,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCease
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCease')]
     public function testCease($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -523,9 +501,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(Entity::STATUS_CEASED, $this->sut->getStatus()->getId());
     }
 
-    /**
-     * @dataProvider dpIsCeased
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCeased')]
     public function testIsCeased($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -533,7 +509,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isCeased());
     }
 
-    public function dpIsCeased()
+    public static function dpIsCeased()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -547,9 +523,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsTerminated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsTerminated')]
     public function testIsTerminated($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -557,7 +531,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isTerminated());
     }
 
-    public function dpIsTerminated()
+    public static function dpIsTerminated()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -571,9 +545,7 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
@@ -581,7 +553,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isValid());
     }
 
-    public function dpIsValid()
+    public static function dpIsValid()
     {
         return [
             [Entity::STATUS_PENDING, true],
@@ -595,16 +567,14 @@ class IrhpPermitEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsExpired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExpired')]
     public function testIsExpired($statusId, $expected)
     {
         $this->sut->getStatus()->setId($statusId);
         $this->assertEquals($expected, $this->sut->isExpired());
     }
 
-    public function dpIsExpired()
+    public static function dpIsExpired()
     {
         return [
             [Entity::STATUS_PENDING, false],
@@ -694,9 +664,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals(555, $replacedEntity->getPermitNumber());
     }
 
-    /**
-     * @dataProvider dpGetCeasedDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetCeasedDate')]
     public function testGetCeasedDate($expiryDate, $validTo, $expected)
     {
         $this->sut->setExpiryDate($expiryDate);
@@ -712,7 +680,7 @@ class IrhpPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCeasedDate());
     }
 
-    public function dpGetCeasedDate()
+    public static function dpGetCeasedDate()
     {
         $expAsDate = new DateTime('1st Jan 2200');
         $validToDate = new DateTime('1st Jan 2300');

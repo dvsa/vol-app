@@ -17,12 +17,12 @@ class LocalAuthorityMissingTest extends MockeryTestCase
     /**
      * tests whether missing local authorities not required are correctly identified
      *
-     * @dataProvider isValidProvider
      *
      * @param ArrayCollection $la
      * @param ArrayCollection $naptan
      * @param $valid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($la, $naptan, $valid)
     {
         $sut = new LocalAuthorityMissing();
@@ -40,7 +40,7 @@ class LocalAuthorityMissingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         $la1 = m::mock(LaEntity::class)->makePartial();
         $la1->setId(1);

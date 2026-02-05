@@ -37,7 +37,7 @@ class SendTmApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand()
     {
         return [
             [0, 'application'],
@@ -45,9 +45,7 @@ class SendTmApplicationTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommand($isVariation, $uriPart)
     {
         $command = Cmd::create(['id' => 863]);
@@ -112,9 +110,7 @@ class SendTmApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Transport Manager Application email sent'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
     public function testHandleCommandWithoutTmUsers($isVariation, $uriPart)
     {
         $command = Cmd::create(['id' => 863]);

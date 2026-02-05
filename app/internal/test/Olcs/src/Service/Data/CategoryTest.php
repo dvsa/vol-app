@@ -8,9 +8,7 @@ use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-/**
- * @covers \Olcs\Service\Data\Category
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\Category::class)]
 class CategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var Category */

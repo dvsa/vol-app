@@ -132,7 +132,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
-            [$this, 'onApplication'],
+            $this->onApplication(...),
             $priority
         );
     }

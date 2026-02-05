@@ -32,7 +32,7 @@ class OpDetailsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider()
     {
         return [
             [
@@ -84,9 +84,7 @@ class OpDetailsTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
     public function testRender($expected, $results)
     {
         $bookmark = new OpDetails();

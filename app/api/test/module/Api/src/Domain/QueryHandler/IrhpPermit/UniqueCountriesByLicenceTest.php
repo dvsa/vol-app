@@ -125,9 +125,7 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleQueryNonBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNonBilateral')]
     public function testHandleQueryNonBilateral($irhpPermitTypeId)
     {
         $this->query->shouldReceive('getIrhpPermitType')
@@ -142,7 +140,7 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQueryNonBilateral()
+    public static function dpHandleQueryNonBilateral()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

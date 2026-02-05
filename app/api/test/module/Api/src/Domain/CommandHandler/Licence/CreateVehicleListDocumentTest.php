@@ -43,9 +43,8 @@ class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
      * @param $isNi
      * @param $expectedTempateId
      * @param $expectedTemplateDescription
-     *
-     * @dataProvider dataProviderTestHandleCommandAll
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommandAll')]
     public function testHandleCommandAll($isDp, $isNi, $expectedTempateId, $expectedTemplateDescription)
     {
         $data = [
@@ -106,7 +105,7 @@ class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dataProviderTestHandleCommandAll()
+    public static function dataProviderTestHandleCommandAll()
     {
         return [
             // is DP type, is NI, Expected description, Expected template ID,

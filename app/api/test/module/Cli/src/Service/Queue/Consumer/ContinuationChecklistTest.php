@@ -15,10 +15,8 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist;
 use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Update;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\ContinuationChecklist::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class ContinuationChecklistTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = ContinuationChecklist::class;
@@ -113,9 +111,7 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandledExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandledExceptionProvider')]
     public function testProcessMessageFailureHandledExceptions($exception, $exceptionMessageString)
     {
         $user = new UserEntity('pid', 'type');
@@ -165,7 +161,7 @@ class ContinuationChecklistTest extends AbstractConsumerTestCase
         );
     }
 
-    public function dpHandledExceptionProvider(): array
+    public static function dpHandledExceptionProvider(): array
     {
         return [
             [ORMException::class, 'ORM Exception'],

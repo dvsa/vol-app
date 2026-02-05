@@ -17,6 +17,7 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
     /** @var  \Olcs\FormService\Form\Lva\Addresses */
     protected $sut;
 
+    #[\Override]
     public function testGetForm()
     {
         // Mocks

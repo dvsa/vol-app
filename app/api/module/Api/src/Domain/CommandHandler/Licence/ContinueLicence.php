@@ -319,6 +319,7 @@ final class ContinueLicence extends AbstractCommandHandler implements Transactio
             $continuationDetail->getLicence()->getOrganisation()->getId()
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

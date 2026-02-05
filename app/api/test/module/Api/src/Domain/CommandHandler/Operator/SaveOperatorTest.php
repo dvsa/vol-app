@@ -45,6 +45,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -66,9 +67,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider organisationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('organisationProvider')]
     public function testHandleCommandOrganisationNotValid($commandDetails, $expectedErrors)
     {
         $data = [
@@ -89,7 +88,7 @@ class SaveOperatorTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function organisationProvider()
+    public static function organisationProvider()
     {
         return [
             [

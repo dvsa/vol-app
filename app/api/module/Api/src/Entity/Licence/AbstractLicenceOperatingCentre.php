@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLicenceOperatingCentre implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLicenceOperatingCentre implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

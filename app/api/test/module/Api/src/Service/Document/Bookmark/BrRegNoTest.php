@@ -15,5 +15,5 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
  */
 class BrRegNoTest extends SingleValueTestAbstract
 {
-    public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegNo';
+    public const SUT_CLASS_NAME = \Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegNo::class;
 }

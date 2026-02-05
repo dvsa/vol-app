@@ -85,6 +85,7 @@ class MarkSuccessfulDaPermitApplications extends ScoringCommandHandler implement
         $this->result->addMessage('  ' . $totalSuccessfulCandidatePermits . ' permits have been marked as successful');
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->successfulCandidatePermitsFacade = $container->get(

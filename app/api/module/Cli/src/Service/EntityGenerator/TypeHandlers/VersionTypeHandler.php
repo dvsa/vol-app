@@ -61,11 +61,13 @@ class VersionTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 90; // High priority
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];

@@ -210,9 +210,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestExceptionOnUnexpectedIsolationLevel
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExceptionOnUnexpectedIsolationLevel')]
     public function testExceptionOnUnexpectedIsolationLevel($isolationLevel)
     {
         $this->expectException(RuntimeException::class);
@@ -225,7 +223,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         $this->emissionsCategoryAvailabilityCounter->getCount(47, RefData::EMISSIONS_CATEGORY_EURO6_REF);
     }
 
-    public function dpTestExceptionOnUnexpectedIsolationLevel()
+    public static function dpTestExceptionOnUnexpectedIsolationLevel()
     {
         return [
             [TransactionIsolationLevel::READ_UNCOMMITTED],

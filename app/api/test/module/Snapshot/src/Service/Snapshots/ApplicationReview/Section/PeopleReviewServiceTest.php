@@ -36,17 +36,13 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->sut = new PeopleReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testGetConfigFromData($data, $showPosition, $expected)
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data, $showPosition));
     }
 
-    /**
-     * @dataProvider providerShouldShowPosition
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerShouldShowPosition')]
     public function testShouldShowPosition($orgType, $expected)
     {
         $data = [
@@ -62,7 +58,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->shouldShowPosition($data));
     }
 
-    public function providerShouldShowPosition()
+    public static function providerShouldShowPosition()
     {
         return [
             [
@@ -88,7 +84,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [

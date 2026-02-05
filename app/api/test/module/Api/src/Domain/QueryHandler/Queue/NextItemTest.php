@@ -54,9 +54,9 @@ class NextItemTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider exceptionProvider
      * @param $exception
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('exceptionProvider')]
     public function testHandleQueryNoItem($exception)
     {
         $query = Qry::create(['includeTypes' => ['foo'], 'excludeTypes' => ['bar']]);
@@ -73,7 +73,7 @@ class NextItemTest extends QueryHandlerTestCase
     /**
      * @return array
      */
-    public function exceptionProvider()
+    public static function exceptionProvider()
     {
         return [
             [m::mock(NotFoundException::class)],

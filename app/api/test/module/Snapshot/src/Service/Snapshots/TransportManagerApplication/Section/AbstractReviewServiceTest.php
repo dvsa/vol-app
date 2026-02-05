@@ -55,15 +55,13 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFormatDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormatDate')]
     public function testFormatDate($expected, $date)
     {
         $this->assertEquals($expected, $this->sut->formatDate($date));
     }
 
-    public function dpFormatDate()
+    public static function dpFormatDate()
     {
         return [
             ['15 Aug 2005', '2005-08-15T15:52:01+00:00'],
@@ -182,9 +180,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFormatYesNo
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormatYesNo')]
     public function testFormatYesNo($value, $expected)
     {
         $this->assertEquals(
@@ -193,7 +189,7 @@ class AbstractReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpFormatYesNo()
+    public static function dpFormatYesNo()
     {
         return [
             ['B','No'],

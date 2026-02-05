@@ -24,9 +24,7 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         $this->auth = m::mock(AuthorizationService::class);
     }
 
-    /**
-     * @dataProvider providerAssert
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerAssert')]
     public function testAssert($isInternal, $licCat, $licTyp, $expected)
     {
         $licence = m::mock(Licence::class);
@@ -45,7 +43,7 @@ class UpdateLicenceTypeTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $licence));
     }
 
-    public function providerAssert()
+    public static function providerAssert()
     {
         return [
             [

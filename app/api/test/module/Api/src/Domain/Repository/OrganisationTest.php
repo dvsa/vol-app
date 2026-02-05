@@ -16,9 +16,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Organisation
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Organisation::class)]
 class OrganisationTest extends RepositoryTestCase
 {
     /**

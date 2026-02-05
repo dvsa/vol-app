@@ -25,11 +25,11 @@ class CanAccessTxcInboxRecordWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -45,7 +45,7 @@ class CanAccessTxcInboxRecordWithIdTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

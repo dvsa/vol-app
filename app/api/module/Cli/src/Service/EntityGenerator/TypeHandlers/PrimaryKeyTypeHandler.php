@@ -93,11 +93,13 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 100; // High priority to handle before other handlers
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];

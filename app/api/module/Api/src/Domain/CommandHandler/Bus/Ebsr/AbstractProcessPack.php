@@ -454,16 +454,11 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
         if (!$busReg->isEbsrRefresh()) {
             $status = $busReg->getStatus()->getId();
 
-            switch ($status) {
-                case BusRegEntity::STATUS_CANCEL:
-                    $appType = self::TASK_DESC_CANCEL;
-                    break;
-                case BusRegEntity::STATUS_VAR:
-                    $appType = self::TASK_DESC_VAR;
-                    break;
-                default:
-                    $appType = self::TASK_DESC_NEW;
-            }
+            $appType = match ($status) {
+                BusRegEntity::STATUS_CANCEL => self::TASK_DESC_CANCEL,
+                BusRegEntity::STATUS_VAR => self::TASK_DESC_VAR,
+                default => self::TASK_DESC_NEW,
+            };
         }
 
         $data = [
@@ -683,6 +678,7 @@ abstract class AbstractProcessPack extends AbstractCommandHandler implements
 
         return $collection;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->xmlStructureInput = $container->get(XmlStructureInputFactory::class);

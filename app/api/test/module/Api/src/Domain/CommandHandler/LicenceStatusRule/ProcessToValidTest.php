@@ -32,6 +32,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -55,7 +56,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function dataProviderHandleCommandOtherStatus()
+    public static function dataProviderHandleCommandOtherStatus()
     {
         return [
             [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -72,9 +73,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandOtherStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
     public function testHandleCommandOtherStatus($status)
     {
         $command = Command::create([]);
@@ -93,7 +92,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dataProviderHandleCommand()
+    public static function dataProviderHandleCommand()
     {
         return [
             [Licence::LICENCE_STATUS_CURTAILED],
@@ -101,9 +100,7 @@ class ProcessToValidTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommand')]
     public function testHandleCommand($status)
     {
         $command = Command::create([]);

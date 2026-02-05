@@ -24,6 +24,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ProcessInsolvencyDlq();

@@ -87,10 +87,10 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * tests beginValidating throws an exception for incorrect statuses
      *
-     * @dataProvider beginValidatingProvider
      *
      * @param string $previousStatus
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('beginValidatingProvider')]
     public function testBeginValidatingThrowsException($previousStatus)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
@@ -111,7 +111,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function beginValidatingProvider()
+    public static function beginValidatingProvider()
     {
         return [
             [Entity::UPLOADED_STATUS],
@@ -178,11 +178,11 @@ class EbsrSubmissionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isFailureProvider
      *
      * @param $submissionStatusString
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isFailureProvider')]
     public function testIsFailure($submissionStatusString, $expectedResult)
     {
         $ebsrSubmissionStatus = m::mock(RefData::class);
@@ -199,7 +199,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isFailureProvider()
+    public static function isFailureProvider()
     {
         return [
             [Entity::UPLOADED_STATUS, false],
@@ -212,11 +212,11 @@ class EbsrSubmissionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isSubmittedProvider
      *
      * @param $submissionStatusString
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isSubmittedProvider')]
     public function testIsSubmitted($submissionStatusString, $expectedResult)
     {
         $ebsrSubmissionStatus = m::mock(RefData::class);
@@ -233,7 +233,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isSubmittedProvider()
+    public static function isSubmittedProvider()
     {
         return [
             [Entity::UPLOADED_STATUS, false],
@@ -246,11 +246,11 @@ class EbsrSubmissionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isSuccessProvider
      *
      * @param $submissionStatusString
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isSuccessProvider')]
     public function testIsSuccess($submissionStatusString, $expectedResult)
     {
         $ebsrSubmissionStatus = m::mock(RefData::class);
@@ -267,7 +267,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isSuccessProvider()
+    public static function isSuccessProvider()
     {
         return [
             [Entity::UPLOADED_STATUS, false],
@@ -280,11 +280,11 @@ class EbsrSubmissionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isBeingProcessedProvider
      *
      * @param $submissionStatusString
      * @param $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBeingProcessedProvider')]
     public function testIsBeingProcessed($submissionStatusString, $expectedResult)
     {
         $ebsrSubmissionStatus = m::mock(RefData::class);
@@ -301,7 +301,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isBeingProcessedProvider()
+    public static function isBeingProcessedProvider()
     {
         return [
             [Entity::UPLOADED_STATUS, false],
@@ -316,10 +316,10 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * tests get errors returns empty array when the submission isn't a failure
      *
-     * @dataProvider getErrorsWithNoFailureProvider
      *
      * @param $submissionStatusString
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getErrorsWithNoFailureProvider')]
     public function testGetErrorsWithNoFailure($submissionStatusString)
     {
         $ebsrSubmissionStatus = m::mock(RefData::class);
@@ -336,7 +336,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function getErrorsWithNoFailureProvider()
+    public static function getErrorsWithNoFailureProvider()
     {
         return [
             [Entity::UPLOADED_STATUS],
@@ -406,11 +406,11 @@ class EbsrSubmissionEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider isDataRefreshProvider
      *
      * @param string $status
      * @param bool $result
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isDataRefreshProvider')]
     public function testIsDataRefresh($status, $result)
     {
         $entity = m::mock(Entity::class)->makePartial();
@@ -424,7 +424,7 @@ class EbsrSubmissionEntityTest extends EntityTester
      *
      * @return array
      */
-    public function isDataRefreshProvider()
+    public static function isDataRefreshProvider()
     {
         return [
             [Entity::DATA_REFRESH_SUBMISSION_TYPE, true],

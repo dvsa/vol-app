@@ -58,9 +58,7 @@ class QaContextTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpIsApplicationStepEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationStepEnabled')]
     public function testIsApplicationStepEnabled(
         $isNotYetSubmitted,
         $isUnderConsideration,
@@ -85,7 +83,7 @@ class QaContextTest extends MockeryTestCase
         );
     }
 
-    public function dpIsApplicationStepEnabled(): array
+    public static function dpIsApplicationStepEnabled(): array
     {
         return [
             [true, true, true, true],

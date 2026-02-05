@@ -20,9 +20,7 @@ class CommunityLicSuspensionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testUpdateCommunityLicSuspension($endDate, $expected)
     {
         $communityLic = 1;
@@ -34,7 +32,7 @@ class CommunityLicSuspensionEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getEndDate());
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             ['2016-01-01', new \DateTime('2016-01-01')],

@@ -66,9 +66,7 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    /**
-     * @dataProvider dpSaveWithQuestionType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveWithQuestionType')]
     public function testSaveWithQuestionType($questionType)
     {
         $this->genericAnswerWriter->shouldReceive('write')
@@ -78,7 +76,7 @@ class BaseAnswerSaverTest extends MockeryTestCase
         $this->baseAnswerSaver->save($this->qaContext, $this->postData, $questionType);
     }
 
-    public function dpSaveWithQuestionType()
+    public static function dpSaveWithQuestionType()
     {
         return [
             [Question::QUESTION_TYPE_STRING],

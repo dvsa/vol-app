@@ -11,9 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Parser\ParserFactory;
  */
 class ParserFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider typeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('typeProvider')]
     public function testGetParser($type, $class)
     {
         $factory = new ParserFactory();
@@ -36,7 +34,7 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
         $this->fail('Expected exception not found');
     }
 
-    public function typeProvider()
+    public static function typeProvider()
     {
         return [
             ['application/rtf', \Dvsa\Olcs\Api\Service\Document\Parser\RtfParser::class],

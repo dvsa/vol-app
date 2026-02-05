@@ -22,9 +22,8 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Dispatch Document Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\DispatchDocument
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\DispatchDocument::class)]
 class DispatchDocumentTest extends AbstractCommandHandlerTestCase
 {
     public const DOC_ID = 9001;

@@ -19,9 +19,7 @@ class FeeDueDateTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dpTestRender
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestRender')]
     public function testRender($invoicedDate, $atCalculate)
     {
         $dateTime = new \DateTime('2001-02-03');
@@ -42,7 +40,7 @@ class FeeDueDateTest extends MockeryTestCase
         $this->assertEquals('03/02/2001', $bookmark->render());
     }
 
-    public function dpTestRender()
+    public static function dpTestRender()
     {
         return [
             [

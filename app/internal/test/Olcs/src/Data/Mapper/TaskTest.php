@@ -8,9 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper;
 use Laminas\Form\FormInterface;
 
-/**
- * @covers \Olcs\Data\Mapper\Task
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\Task::class)]
 class TaskTest extends MockeryTestCase
 {
     /** @var  m\MockInterface | FlashMessengerHelperService */

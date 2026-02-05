@@ -14,10 +14,8 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Ebsr\RequestMap::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class RequestMapTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RequestMap::class;
@@ -41,6 +39,7 @@ class RequestMapTest extends AbstractConsumerTestCase
     /**
      * Tests task is created when map request fails
      */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFailed()
     {
         $busRegId = 123;

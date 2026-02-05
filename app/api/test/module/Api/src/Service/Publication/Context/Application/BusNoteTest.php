@@ -18,15 +18,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class BusNoteTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideTestProvider
      *
      * @param $section
      * @param $expectedString
      *
-     * @group publicationFilter
-     *
-     * Test the application bus note filter
      */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application bus note filter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestProvider')]
     public function testProvide($section, $expectedString)
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
@@ -58,7 +57,7 @@ class BusNoteTest extends MockeryTestCase
      *
      * @return array
      */
-    public function provideTestProvider()
+    public static function provideTestProvider()
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 

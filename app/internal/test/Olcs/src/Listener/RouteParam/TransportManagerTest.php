@@ -32,15 +32,13 @@ class TransportManagerTest extends MockeryTestCase
         /** @var EventManagerInterface $eventManager */
         $eventManager = m::mock(EventManagerInterface::class);
         $eventManager->shouldReceive('attach')
-            ->with(RouteParams::EVENT_PARAM . 'transportManager', [$sut, 'onTransportManager'], 1)
+            ->with(RouteParams::EVENT_PARAM . 'transportManager', $sut->onTransportManager(...), 1)
             ->once();
 
         $sut->attach($eventManager);
     }
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInternalEditProvider')]
     public function testOnTransportManager(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -147,9 +145,7 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInternalEditProvider')]
     public function testOnTransportManagerNotMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -244,9 +240,7 @@ class TransportManagerTest extends MockeryTestCase
     }
 
 
-    /**
-     * @dataProvider dpInternalEditProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInternalEditProvider')]
     public function testOnTransportManagerMerged(bool $isInternalEdit): void
     {
         $tmId = 1;
@@ -363,7 +357,7 @@ class TransportManagerTest extends MockeryTestCase
         $sut->setAuthService($mockAuthService);
     }
 
-    public function dpInternalEditProvider(): array
+    public static function dpInternalEditProvider(): array
     {
         return [
             [true],

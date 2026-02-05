@@ -27,9 +27,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($data)
     {
         $command = Cmd::create($data);
@@ -120,7 +118,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         $data = [
             'case_01' => [

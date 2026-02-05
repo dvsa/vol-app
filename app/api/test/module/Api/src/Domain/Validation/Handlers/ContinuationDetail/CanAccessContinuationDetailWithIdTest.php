@@ -22,11 +22,11 @@ class CanAccessContinuationDetailWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param bool $canAccess can access
      * @param bool $expected  expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         /** @var CommandInterface $dto */
@@ -38,7 +38,7 @@ class CanAccessContinuationDetailWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

@@ -5,9 +5,7 @@ namespace Dvsa\OlcsTest\Api\Service\File;
 use Dvsa\Olcs\Api\Service\File\File;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\File\File
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\File::class)]
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  File */

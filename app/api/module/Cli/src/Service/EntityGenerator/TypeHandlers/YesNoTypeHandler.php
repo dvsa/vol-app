@@ -124,6 +124,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
     /**
      * Override to not remove _id suffix for regular columns
      */
+    #[\Override]
     protected function generatePropertyName(string $columnName): string
     {
         // For regular columns, just convert to camelCase without removing _id
@@ -157,6 +158,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 100; // High priority for custom types
@@ -171,7 +173,7 @@ class YesNoTypeHandler extends AbstractTypeHandler
         
         // Clean up the comment (remove doctrine type hints)
         $comment = preg_replace('/\s*\(DC2Type:[^)]+\)\s*/', '', $comment);
-        $comment = trim($comment);
+        $comment = trim((string) $comment);
         
         if (empty($comment)) {
             $comment = ucfirst(str_replace('_', ' ', $column->getName()));

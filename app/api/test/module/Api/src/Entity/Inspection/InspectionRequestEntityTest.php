@@ -22,9 +22,7 @@ class InspectionRequestEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider datesProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('datesProvider')]
     public function testUpdateInspectionRequest($dueDate, $duePeriod, $dueExpected, $requestDate, $requestDateExpected)
     {
         /** @var Entity $sut */
@@ -68,7 +66,7 @@ class InspectionRequestEntityTest extends EntityTester
         $this->assertEquals('inspector_notes', $sut->getInspectorNotes());
     }
 
-    public function datesProvider()
+    public static function datesProvider()
     {
         return [
             [null, 3, (new DateTime('now'))->add(new \DateInterval('P3M')), null, new DateTime('now')],

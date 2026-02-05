@@ -33,9 +33,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         $this->irhpPermitAllocator = new IrhpPermitAllocator($this->irhpPermitRepo);
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
     public function testAllocatePermitInFirstRange($criteria, $expiryDate)
     {
         $pendingStatus = m::mock(RefData::class);
@@ -96,9 +94,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
     public function testFirstRangeFullAllocatePermitInSecondRange($criteria, $expiryDate)
     {
         $criteria = m::mock(RangeMatchingCriteriaInterface::class);
@@ -169,9 +165,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
     public function testExceptionOnAllRangesFull($criteria, $expiryDate)
     {
         $this->expectException(RuntimeException::class);
@@ -218,7 +212,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    public function dpCriteriaAndExpiryDate()
+    public static function dpCriteriaAndExpiryDate()
     {
         return [
             [m::mock(RangeMatchingCriteriaInterface::class), null],

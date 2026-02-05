@@ -13,17 +13,17 @@ use Laminas\Form\FormInterface;
 class SubmissionActionTest extends MockeryTestCase
 {
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $inData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider()
     {
         return [
             // add
@@ -75,17 +75,17 @@ class SubmissionActionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromFormDataProvider
      *
      * @param $inData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
     public function testMapFromForm($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider()
     {
         return [
             // recommendation

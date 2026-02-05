@@ -14,11 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TmHearingText1Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the TmHearingText1 filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the TmHearingText1 filter')]
     public function testProcess()
     {
         $sut = new TmHearingText1();

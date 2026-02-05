@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class OcVehicleTrailerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
     public function testFormat($noOfVehiclesRequired, $noOfTrailersRequired, $useHgvCaption, $expectedOutput)
     {
         $applicationOperatingCentre = m::mock(ApplicationOperatingCentre::class);
@@ -33,7 +31,7 @@ class OcVehicleTrailerTest extends MockeryTestCase
         );
     }
 
-    public function dpFormat()
+    public static function dpFormat()
     {
         return [
             'vehicles only' => [

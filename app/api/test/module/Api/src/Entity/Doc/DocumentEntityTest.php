@@ -16,10 +16,8 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManager;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Doc\Document
- * @covers \Dvsa\Olcs\Api\Entity\Doc\AbstractDocument
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\Document::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocument::class)]
 class DocumentEntityTest extends EntityTester
 {
     /** @var  string */
@@ -47,11 +45,11 @@ class DocumentEntityTest extends EntityTester
     /**
      * tests the related organisation is retrieved properly
      *
-     * @dataProvider relatedOrganisationProvider
      *
      * @param $setterMethod
      * @param $relationClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('relatedOrganisationProvider')]
     public function testGetRelatedOrganisation($setterMethod, $relationClass)
     {
         $organisation = m::mock(Organisation::class);
@@ -68,7 +66,7 @@ class DocumentEntityTest extends EntityTester
      *
      * @return array
      */
-    public function relatedOrganisationProvider()
+    public static function relatedOrganisationProvider()
     {
         return [
             ['setLicence', Licence::class],
@@ -89,9 +87,7 @@ class DocumentEntityTest extends EntityTester
         static::assertNull($this->sut->getRelatedLicence());
     }
 
-    /**
-     * @dataProvider dpTestGetRelatedLicence
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedLicence')]
     public function testGetRelatedLicence($relSetterMethod, $mockRelClass)
     {
         $mockLic = m::mock(Licence::class);
@@ -108,7 +104,7 @@ class DocumentEntityTest extends EntityTester
         static::assertSame($mockLic, $this->sut->getRelatedLicence());
     }
 
-    public function dpTestGetRelatedLicence()
+    public static function dpTestGetRelatedLicence()
     {
         return [
             ['setLicence', Licence::class],

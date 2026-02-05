@@ -34,7 +34,7 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            [$this, 'onConversation'],
+            $this->onConversation(...),
             $priority,
         );
     }

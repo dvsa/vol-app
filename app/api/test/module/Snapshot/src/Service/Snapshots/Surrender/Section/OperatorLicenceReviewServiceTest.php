@@ -29,10 +29,9 @@ class OperatorLicenceReviewServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dpTestGetConfigFromData
-     *
      * @param $args
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetConfigFromData')]
     public function testGetConfigFromData(
         $args,
         $expected
@@ -47,7 +46,7 @@ class OperatorLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public function dpTestGetConfigFromData()
+    public static function dpTestGetConfigFromData()
     {
         return [
 

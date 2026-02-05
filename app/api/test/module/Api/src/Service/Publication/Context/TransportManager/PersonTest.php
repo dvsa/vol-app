@@ -15,11 +15,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PersonTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the transport manager name filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the transport manager name filter')]
     public function testProvideWithTitle()
     {
         $id = 66;

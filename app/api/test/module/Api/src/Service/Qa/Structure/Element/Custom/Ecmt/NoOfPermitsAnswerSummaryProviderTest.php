@@ -43,9 +43,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $periodNameKey = 'period.name.key';
@@ -108,7 +106,7 @@ class NoOfPermitsAnswerSummaryProviderTest extends MockeryTestCase
         $this->assertEquals($expectedTemplateVariables, $templateVariables);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

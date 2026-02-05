@@ -25,11 +25,11 @@ class CanAccessTransactionWithRefTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider dataProvider
      *
      * @param $expected
      * @param $isValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValid($expected, $isValid)
     {
         /** @var CommandInterface $dto */
@@ -41,7 +41,7 @@ class CanAccessTransactionWithRefTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             [true, true],

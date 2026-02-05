@@ -7,9 +7,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessBusRegWithId
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessBusRegWithId::class)]
 class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
 {
     /** @var CanAccessBusRegWithId */
@@ -22,9 +20,7 @@ class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canAccess, $expected)
     {
         $id = 1111;
@@ -38,7 +34,7 @@ class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

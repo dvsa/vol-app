@@ -46,7 +46,7 @@ class LetterIssueType extends AbstractListDataService
         if (!$response->isOk()) {
             $body = $response->getBody();
             $errorMessage = 'Failed to fetch letter issue types: ' .
-                ($body ? $body : 'HTTP ' . $response->getStatusCode());
+                ($body ?: 'HTTP ' . $response->getStatusCode());
             throw new DataServiceException($errorMessage);
         }
 
@@ -64,6 +64,7 @@ class LetterIssueType extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];

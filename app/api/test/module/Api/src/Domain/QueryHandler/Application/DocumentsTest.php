@@ -17,6 +17,7 @@ use Mockery as m;
 
 class DocumentsTest extends QueryHandlerTestCase
 {
+    #[\Override]
     protected function initReferences()
     {
         $this->categoryReferences = [

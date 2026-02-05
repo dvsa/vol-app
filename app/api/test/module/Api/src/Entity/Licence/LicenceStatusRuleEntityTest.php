@@ -20,9 +20,7 @@ class LicenceStatusRuleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dataProviderTestIsQueued
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsQueued')]
     public function testIsQueued($startDate, $startProcessingDate, $expected)
     {
         $sut = new Entity(
@@ -36,7 +34,7 @@ class LicenceStatusRuleEntityTest extends EntityTester
         $this->assertSame($expected, $sut->isQueued());
     }
 
-    public function dataProviderTestIsQueued()
+    public static function dataProviderTestIsQueued()
     {
         return [
             // startDate, startProcessingDate, expected

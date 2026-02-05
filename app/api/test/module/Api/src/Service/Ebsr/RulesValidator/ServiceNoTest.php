@@ -14,9 +14,8 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $serviceNo service number
      * @param bool  $isValid   whether it's valid
-     *
-     * @dataProvider isValidProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid(mixed $serviceNo, $isValid)
     {
         $value = ['lineNames' => [$serviceNo]];
@@ -30,7 +29,7 @@ class ServiceNoTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider()
     {
         return [
             ['', false],

@@ -18,6 +18,7 @@ class CanAccessOrganisationAuthAware extends CanAccessOrganisationWithId impleme
 {
     use AuthAwareTrait;
 
+    #[\Override]
     protected function getId($dto)
     {
         return (int)($dto->getOrganisation() ?: $this->getCurrentOrganisation()->getId());

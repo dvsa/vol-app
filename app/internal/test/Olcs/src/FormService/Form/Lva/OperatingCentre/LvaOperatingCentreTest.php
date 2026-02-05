@@ -31,9 +31,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut = new LvaOperatingCentre($this->formHelper);
     }
 
-    /**
-     * @dataProvider alterFormProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
     public function testAlterForm($appliedVia)
     {
         $form = m::mock(Form::class)
@@ -165,7 +163,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function alterFormProvider()
+    public static function alterFormProvider()
     {
         return [
             [RefData::APPLIED_VIA_POST],

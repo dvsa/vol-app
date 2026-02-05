@@ -43,6 +43,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -66,9 +67,9 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleCommandProvider
      * @param String $appStatus
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($appStatus)
     {
         $id = 99;
@@ -305,11 +306,11 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider publicationSectionIdProvider
      *
      * @param string $appStatus
      * @param int $expectedSection
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionIdProvider')]
     public function testGetPublicationSectionId($appStatus, $isVariation, $expectedSection)
     {
         $application = $this->getTestingApplication();
@@ -334,7 +335,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
@@ -350,7 +351,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function publicationSectionIdProvider()
+    public static function publicationSectionIdProvider()
     {
         return [
             [

@@ -29,6 +29,7 @@ class CreateNextPublicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [PublicationEntity::PUB_NEW_STATUS];

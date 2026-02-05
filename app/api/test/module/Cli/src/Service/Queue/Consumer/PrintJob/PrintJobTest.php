@@ -22,9 +22,7 @@ class PrintJobTest extends AbstractConsumerTestCase
     /** @var  \Dvsa\Olcs\Cli\Service\Queue\Consumer\PrintJob\PrintJob */
     protected $sut;
 
-    /**
-    * @dataProvider dpGetCommandData
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetCommandData')]
     public function testGetCommandData($itemId, $entityId, $options, $expected)
     {
         $item = new QueueEntity();
@@ -35,7 +33,7 @@ class PrintJobTest extends AbstractConsumerTestCase
         $this->assertEquals($expected, $this->sut->getCommandData($item));
     }
 
-    public function dpGetCommandData()
+    public static function dpGetCommandData()
     {
         return [
             'with list of documents' => [

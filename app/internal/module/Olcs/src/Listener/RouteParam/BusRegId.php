@@ -73,7 +73,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'busRegId',
-            [$this, 'onBusRegId'],
+            $this->onBusRegId(...),
             $priority
         );
     }

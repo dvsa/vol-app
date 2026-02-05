@@ -36,15 +36,13 @@ class ApplicationLicenceHistoryReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationLicenceHistoryReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData($data, $expected)
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData()
     {
         return [
             [

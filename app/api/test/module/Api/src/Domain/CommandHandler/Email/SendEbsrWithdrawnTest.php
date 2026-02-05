@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrWithdrawn;
 
 /**
  * Send Ebsr Withdrawn Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrWithdrawnTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-withdrawn';

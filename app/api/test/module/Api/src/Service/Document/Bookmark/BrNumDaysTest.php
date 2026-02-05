@@ -20,9 +20,7 @@ class BrNumDaysTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Qry::class, $bookmark->getQuery([DynamicBookmark::PARAM_BUSREG_ID => 123]));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($status, $expected)
     {
         $data =                 [
@@ -43,7 +41,7 @@ class BrNumDaysTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             [BusRegEntity::STATUS_REGISTERED, 42],

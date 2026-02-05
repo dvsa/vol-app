@@ -9,12 +9,12 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 class BilateralFeeBreakdownGenerator implements FeeBreakdownGeneratorInterface
 {
-    private const STANDARD_OR_CABOTAGE_KEY_MAPPINGS = [
+    private const array STANDARD_OR_CABOTAGE_KEY_MAPPINGS = [
         IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED => 'standard',
         IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED => 'cabotage'
     ];
 
-    private const PERMIT_USAGE_KEY_MAPPINGS = [
+    private const array PERMIT_USAGE_KEY_MAPPINGS = [
         RefData::JOURNEY_SINGLE => 'single',
         RefData::JOURNEY_MULTIPLE => 'multiple'
     ];

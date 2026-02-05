@@ -34,7 +34,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

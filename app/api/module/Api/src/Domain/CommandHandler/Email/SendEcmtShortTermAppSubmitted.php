@@ -25,6 +25,7 @@ class SendEcmtShortTermAppSubmitted extends AbstractEcmtShortTermEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         return [

@@ -20,9 +20,7 @@ use Olcs\View\Model\Licence\LicenceOverviewSection;
  */
 class LicenceOverviewSectionTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestViewForPeople
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForPeople')]
     public function testViewForPeople($data): void
     {
         $ref = 'people';
@@ -39,7 +37,7 @@ class LicenceOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'org type from licence': array{data: array{id: 1, idIndex: 'licence', sectionNumber: 1, licence: array{organisation: array{type: array{id: 'org_t_llp'}}}}}, 'org type from organisation': array{data: array{id: 1, idIndex: 'licence', sectionNumber: 1, organisation: array{type: array{id: 'org_t_llp'}}}}}
      */
-    public function dpTestViewForPeople(): array
+    public static function dpTestViewForPeople(): array
     {
         return [
             'org type from licence' => [
@@ -71,9 +69,7 @@ class LicenceOverviewSectionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestViewForOperatingCentres
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestViewForOperatingCentres')]
     public function testViewForOperatingCentres($data, $expected): void
     {
         $ref = 'operating_centres';
@@ -89,7 +85,7 @@ class LicenceOverviewSectionTest extends MockeryTestCase
      *
      * @psalm-return array{'vehicleType not set': array{data: array{id: 1, idIndex: 'licence', sectionNumber: 1}, expected: 'section.name.operating_centres'}, 'vehicleType set to LGV': array{data: array{id: 1, idIndex: 'licence', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_lgv'}}, expected: 'section.name.operating_centres.lgv'}, 'vehicleType set to mixed': array{data: array{id: 1, idIndex: 'licence', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_mixed'}}, expected: 'section.name.operating_centres'}}
      */
-    public function dpTestViewForOperatingCentres(): array
+    public static function dpTestViewForOperatingCentres(): array
     {
         return [
             'vehicleType not set' => [

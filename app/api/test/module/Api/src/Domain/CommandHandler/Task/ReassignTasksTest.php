@@ -11,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Task\ReassignTasks as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks::class)]
 class ReassignTasksTest extends AbstractCommandHandlerTestCase
 {
     public const TASK_ID_1 = 9990;
@@ -48,6 +46,7 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

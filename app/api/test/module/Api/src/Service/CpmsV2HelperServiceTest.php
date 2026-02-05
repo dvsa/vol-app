@@ -25,9 +25,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Olcs\Logging\Log\Logger;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\CpmsV2HelperService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)]
 class CpmsV2HelperServiceTest extends MockeryTestCase
 {
     public const CHEQUE_NR = 100001;
@@ -151,9 +149,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data, $mockFee));
     }
 
-    /**
-     * @dataProvider dpTestGetPaymentStatus
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPaymentStatus')]
     public function testGetPaymentStatus($response, $expect)
     {
         $ref = 'unit_Ref';
@@ -170,7 +166,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals($expect, $sut->getPaymentStatus($ref, 'fee'));
     }
 
-    public function dpTestGetPaymentStatus()
+    public static function dpTestGetPaymentStatus()
     {
         return [
             [
@@ -213,9 +209,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals($expected, $sut->getPaymentStatus($ref, 'fee'));
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testInitiateCardRequest($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $orgId = 99;
@@ -300,7 +294,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function miscParamsProvider()
+    public static function miscParamsProvider()
     {
         return [
             'mics payment' => [
@@ -373,9 +367,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testInitiateCnpRequest($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $orgId = 99;
@@ -478,9 +470,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->initiateCardRequest('http://olcs-selfserve/foo', []);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testRecordCashPaymentWithOverpayment($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $orgId = 99;
@@ -591,9 +581,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testRecordChequePayment($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $orgId = 99;
@@ -709,9 +697,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testRecordPostalOrderPayment($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $orgId = 99;
@@ -821,9 +807,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider authCodeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('authCodeProvider')]
     public function testGetPaymentAuthCode($authCode)
     {
         $response = ['auth_code' => $authCode];
@@ -841,7 +825,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($authCode, $result);
     }
 
-    public function authCodeProvider()
+    public static function authCodeProvider()
     {
         return [
             ['AUTH123'],
@@ -883,9 +867,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
      * @param string $expectedScope
      * @param string $expectedEndpointSuffix
      * @param array  $miscParams
-     *
-     * @dataProvider reversalProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('reversalProvider')]
     public function testReversePayment($paymentMethod, $expectedScope, $expectedEndpointSuffix, $customer, $miscParams)
     {
         $orgId = 99;
@@ -919,7 +902,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function reversalProvider()
+    public static function reversalProvider()
     {
         return [
             'cheque' => [
@@ -1212,9 +1195,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testRefundFeeSinglePayment($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $isMiscellaneous = count($miscParams) > 0 ? true : false;
@@ -1502,9 +1483,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->refundFee($fee);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testRefundFeeMultiplePayments($miscParams, $expectedCustomer, $expectedReceiver)
     {
         $isMiscellaneous = count($miscParams) > 0 ? true : false;
@@ -1773,9 +1752,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->batchRefund($fee);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
     public function testBatchRefundWithServiceException($miscParams, $expectedCustomer, $expectedReceiver)
     {
 

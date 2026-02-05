@@ -43,9 +43,7 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($hasChanged, $isGranted, $expectTask)
     {
         $data = [
@@ -103,7 +101,7 @@ class UpdateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             [

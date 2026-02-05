@@ -26,26 +26,17 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
     use FeesActionTrait;
     use GenericReceipt;
 
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-    protected TranslationHelperService $translationHelper;
-    protected DateHelperService $dateHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider,
-        TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider,
+        protected TranslationHelperService $translationHelper,
+        protected DateHelperService $dateHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
-        $this->translationHelper = $translationHelper;
-        $this->dateHelper = $dateHelper;
     }
 
     /**

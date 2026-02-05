@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AnnualTripsAbroadTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGetRepresentation($showNiWarning)
     {
         $intensityWarningThreshold = 47;
@@ -44,7 +42,7 @@ class AnnualTripsAbroadTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse()
     {
         return [
             [true],

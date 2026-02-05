@@ -56,9 +56,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertSame($irhpPermitApplication, $entity->getIrhpPermitApplication());
     }
 
-    /**
-    * @dataProvider dpValueGetterAndSetter
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValueGetterAndSetter')]
     public function testValueGetterAndSetter($questionType, $answerValue)
     {
         $this->assertNull($this->entity->getValue());
@@ -67,7 +65,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($answerValue, $this->entity->getValue());
     }
 
-    public function dpValueGetterAndSetter()
+    public static function dpValueGetterAndSetter()
     {
         return [
             // string
@@ -107,9 +105,7 @@ class AnswerEntityTest extends EntityTester
         $this->entity->setValue(Question::QUESTION_TYPE_CUSTOM, 'custom');
     }
 
-    /**
-    * @dataProvider dpIsEqualTo
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEqualTo')]
     public function testIsEqualTo($questionType, $answerValue, $checkValue, $expected)
     {
         $this->assertNull($this->entity->getValue());
@@ -119,7 +115,7 @@ class AnswerEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isEqualTo($checkValue));
     }
 
-    public function dpIsEqualTo()
+    public static function dpIsEqualTo()
     {
         return [
             // matching values

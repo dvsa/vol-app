@@ -11,9 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Submission\CreateSubmissionSectionComment::class)]
 class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
 {
     public const COMMENT_ID = 9999;
@@ -32,6 +30,7 @@ class CreateSubmissionSectionCommentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

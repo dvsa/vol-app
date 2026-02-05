@@ -149,10 +149,10 @@ class GotenbergClient implements ConvertToPdfInterface
             // Sanitize the original filename for S3 key
             $baseName = pathinfo($originalFileName, PATHINFO_FILENAME);
             $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $baseName);
-            $sanitizedName = substr($sanitizedName, 0, 100); // Limit length
+            $sanitizedName = substr((string) $sanitizedName, 0, 100); // Limit length
             
             // Build S3 key: domain/pdf-conversions/YYYY-MM-DD/timestamp_filename.pdf
-            $s3Key = trim($this->s3KeyPrefix, '/') . '/pdf-conversions/' . $dateFolder . '/' 
+            $s3Key = trim((string) $this->s3KeyPrefix, '/') . '/pdf-conversions/' . $dateFolder . '/' 
                    . $timestamp . '_' . $sanitizedName . '.pdf';
             
             $this->s3Client->putObject([

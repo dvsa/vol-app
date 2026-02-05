@@ -34,8 +34,8 @@ final class UpdateBusinessType extends AbstractCommandHandler implements AuthAwa
     use AuthAwareTrait;
     use CacheAwareTrait;
 
-    public const ERROR_NO_TYPE = 'ORG-BT-1';
-    public const ERROR_CANT_CHANGE_TYPE = 'ORG-BT-2';
+    public const string ERROR_NO_TYPE = 'ORG-BT-1';
+    public const string ERROR_CANT_CHANGE_TYPE = 'ORG-BT-2';
 
     protected $repoServiceName = 'Organisation';
 

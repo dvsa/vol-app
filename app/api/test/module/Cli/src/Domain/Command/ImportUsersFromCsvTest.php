@@ -5,9 +5,7 @@ namespace Dvsa\OlcsTest\Cli\Domain\Command;
 use Dvsa\Olcs\Cli\Domain\Command\ImportUsersFromCsv;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Domain\Command\ImportUsersFromCsv
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\Command\ImportUsersFromCsv::class)]
 class ImportUsersFromCsvTest extends MockeryTestCase
 {
     public function testStructure()

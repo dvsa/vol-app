@@ -25,6 +25,7 @@ abstract class AbstractCancelApplicationHandlerTest extends AbstractCommandHandl
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

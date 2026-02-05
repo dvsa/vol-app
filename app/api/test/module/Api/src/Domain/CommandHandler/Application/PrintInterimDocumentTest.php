@@ -34,9 +34,7 @@ class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($vehicleType, $isVariation, $expectedData)
     {
         $command = Cmd::create(['id' => 111]);
@@ -72,7 +70,7 @@ class PrintInterimDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'mixed fleet application' => [

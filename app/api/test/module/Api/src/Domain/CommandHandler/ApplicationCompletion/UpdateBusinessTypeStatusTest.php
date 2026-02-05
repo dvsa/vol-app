@@ -40,6 +40,7 @@ class UpdateBusinessTypeStatusTest extends AbstractUpdateStatusTestCase
         $this->licence->setOrganisation($this->organisation);
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

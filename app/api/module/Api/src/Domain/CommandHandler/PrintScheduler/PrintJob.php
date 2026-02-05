@@ -41,7 +41,7 @@ class PrintJob extends AbstractCommandHandler
     /** @var int */
     private $stubPrintToLicenceId;
 
-    public function __construct(private array $config, private ContentStoreFileUploader $fileUploader, private ConvertToPdfInterface $convertToPdfService)
+    public function __construct(private array $config, private readonly ContentStoreFileUploader $fileUploader, private readonly ConvertToPdfInterface $convertToPdfService)
     {
     }
 
@@ -189,7 +189,7 @@ class PrintJob extends AbstractCommandHandler
             $files = Glob::glob($pattern, Glob::GLOB_BRACE);
 
             if (is_array($files)) {
-                array_map('unlink', $files);
+                array_map(unlink(...), $files);
             }
         }
     }
@@ -216,7 +216,7 @@ class PrintJob extends AbstractCommandHandler
         // 2>&1 redirect STDERR to STDOUT so that any errors are included in $output
         $command = sprintf(
             'pdfunite %s %s 2>&1',
-            implode(' ', array_map('escapeshellarg', $files)),
+            implode(' ', array_map(escapeshellarg(...), $files)),
             escapeshellarg($pdfOutput)
         );
 

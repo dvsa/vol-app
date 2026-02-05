@@ -51,6 +51,7 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $publicationLink = $this->getPublicationLink();
@@ -89,6 +90,7 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
      *
      * @return TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         /* @var $table \Common\Service\Table\TableBuilder */

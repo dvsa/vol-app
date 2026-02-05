@@ -14,9 +14,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\FeesHelperService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\FeesHelperService::class)]
 class FeesHelperServiceTest extends MockeryTestCase
 {
     /**
@@ -212,9 +210,8 @@ class FeesHelperServiceTest extends MockeryTestCase
      * @param string $amount
      * @param array $fees array of FeeEntity
      * @param array $expected allocated amounts e.g. ['97' => '12.45', '98' => '0.05']
-     *
-     * @dataProvider dpTestAllocatePayments()
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAllocatePayments')]
     public function testAllocatePayments($amount, $fees, $expected)
     {
         $this->assertSame($expected, $this->sut->allocatePayments($amount, $fees));
@@ -299,8 +296,8 @@ class FeesHelperServiceTest extends MockeryTestCase
      * @param string $amount
      * @param array $fees array of FeeEntity
      * @param string $expected formatted amount
-     * @dataProvider overpaymentProvider()
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('overpaymentProvider')]
     public function testGetOverpaymentAmount($amount, $fees, $expected)
     {
         $this->assertSame($expected, $this->sut->getOverpaymentAmount($amount, $fees));

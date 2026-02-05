@@ -23,12 +23,12 @@ final class SendForgotPassword extends AbstractCommandHandler implements EmailAw
 
     protected $repoServiceName = 'UserPasswordReset';
 
-    public const EMAIL_TEMPLATE = 'auth-forgot-password';
-    public const EMAIL_SUBJECT = 'auth.forgot-password.email.subject';
-    public const CALL_CHARGE_REPLACEMENT = '{{CALL_CHARGES_INFO}}';
-    public const OPERATOR_LICENSING_PHONE_REPLACEMENT = '{{OPERATOR_LICENSING_PHONE}}';
-    public const OPERATOR_LICENSING_EMAIL_REPLACEMENT = '{{OPERATOR_LICENSING_EMAIL}}';
-    public const RESET_URL = 'http://%s/auth/reset-password?confirmationId=%s&username=%s&tokenId=a';
+    public const string EMAIL_TEMPLATE = 'auth-forgot-password';
+    public const string EMAIL_SUBJECT = 'auth.forgot-password.email.subject';
+    public const string CALL_CHARGE_REPLACEMENT = '{{CALL_CHARGES_INFO}}';
+    public const string OPERATOR_LICENSING_PHONE_REPLACEMENT = '{{OPERATOR_LICENSING_PHONE}}';
+    public const string OPERATOR_LICENSING_EMAIL_REPLACEMENT = '{{OPERATOR_LICENSING_EMAIL}}';
+    public const string RESET_URL = 'http://%s/auth/reset-password?confirmationId=%s&username=%s&tokenId=a';
 
     public function handleCommand(CommandInterface $command): Result
     {

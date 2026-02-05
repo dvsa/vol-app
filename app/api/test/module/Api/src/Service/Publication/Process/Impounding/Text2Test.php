@@ -17,12 +17,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text2Test extends MockeryTestCase
 {
-    /**
-     *
-     * @group publicationFilter
-     *
-     * Test the hearing text1 filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing text1 filter')]
     public function testProcess()
     {
 

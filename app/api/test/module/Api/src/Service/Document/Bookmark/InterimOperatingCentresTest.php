@@ -36,7 +36,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('', $result);
     }
 
-    public function dpRenderWithGoodsLicence()
+    public static function dpRenderWithGoodsLicence()
     {
         return [
             [
@@ -67,9 +67,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderWithGoodsLicence
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderWithGoodsLicence')]
     public function testRenderWithGoodsLicence($vehicleTypeId, $totAuthLgvVehicles, $expectedTabVeh)
     {
         $data = [

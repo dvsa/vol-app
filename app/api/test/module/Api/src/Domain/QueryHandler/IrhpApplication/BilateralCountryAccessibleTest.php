@@ -21,9 +21,7 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($requestedCountry, $expected)
     {
         $irhpApplicationId = 462;
@@ -57,7 +55,7 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery()
     {
         return [
             'country accessible' => [

@@ -13,11 +13,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PreviousHearingDataTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the previous hearing date filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the previous hearing date filter')]
     public function testProvide()
     {
         $pi = 99;

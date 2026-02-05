@@ -39,7 +39,7 @@ final class RefundFee extends AbstractCommandHandler implements
     use AuthAwareTrait;
     use CpmsAwareTrait;
 
-    public const REFUND_COMMENT = 'Non over payment refund';
+    public const string REFUND_COMMENT = 'Non over payment refund';
 
     protected $repoServiceName = 'Fee';
 

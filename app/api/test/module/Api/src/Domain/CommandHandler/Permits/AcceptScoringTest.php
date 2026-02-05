@@ -56,6 +56,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -69,9 +70,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($disableEcmtAllocEmailNone, $expected)
     {
         $stockId = 47;
@@ -431,7 +430,7 @@ class AcceptScoringTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'unsuccessful email enabled' => [

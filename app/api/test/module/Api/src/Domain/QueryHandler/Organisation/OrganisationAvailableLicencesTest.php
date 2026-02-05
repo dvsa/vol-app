@@ -61,9 +61,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    /**
-     * @dataProvider dpHandleQueryProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryProvider')]
     public function testHandleQuery($isShortTerm, $permitsAvailable, $eligibleLicences, $hasEligibleLicences)
     {
         $permitTypeId = 22;
@@ -128,7 +126,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         static::assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function dpHandleQueryProvider()
+    public static function dpHandleQueryProvider()
     {
         return [
             [true, false, ['eligiblelicences'], true],

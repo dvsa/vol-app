@@ -19,9 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Publication\Bus as PublicationBusCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Bus\GrantBusReg
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Bus\GrantBusReg::class)]
 class GrantBusRegTest extends AbstractCommandHandlerTestCase
 {
     public const BUS_REG_ID = 9999;
@@ -41,6 +39,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -100,9 +99,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider handleCommandProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($oldStatus)
     {
         $command = BusGrantBusRegCmd::create(
@@ -169,7 +166,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [BusRegEntity::STATUS_VAR],
@@ -177,9 +174,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider handleCommandEbsrProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandEbsrProvider')]
     public function testHandleCommandEbsrRecord($oldStatus, $emailSideEffectClass)
     {
         $ebsrId = 55;
@@ -240,7 +235,7 @@ class GrantBusRegTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandEbsrProvider()
+    public static function handleCommandEbsrProvider()
     {
         return [
             [BusRegEntity::STATUS_VAR, SendEbsrRegistered::class],

@@ -176,9 +176,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
         static::assertEquals($expected, $result);
     }
 
-    /**
-     * @dataProvider dataProviderTestFilter
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestFilter')]
     public function testFilter(array $fees, $mockTrafficArea, $expect)
     {
         $query = Qry::create([]);
@@ -226,7 +224,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
         static::assertEquals($expected, $result);
     }
 
-    public function dataProviderTestFilter()
+    public static function dataProviderTestFilter()
     {
         $mockTrafficAreaA = m::mock(TrafficArea::class);
 
@@ -256,7 +254,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => null,
+                'mockTrafficArea' => null,
                 'expect' => [
                     'result' => [
                         ['id' => 24],
@@ -293,7 +291,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => $mockTrafficAreaA,
+                'mockTrafficArea' => $mockTrafficAreaA,
                 'expect' => [
                     'result' => [
                         ['id' => 25],
@@ -330,7 +328,7 @@ class FeeTypeListTest extends QueryHandlerTestCase
                         'effectiveFrom' => '2015-01-01',
                     ],
                 ],
-                'trafficArea' => $mockTrafficAreaA,
+                'mockTrafficArea' => $mockTrafficAreaA,
                 'expect' => [
                     'result' => [
                         ['id' => 25],

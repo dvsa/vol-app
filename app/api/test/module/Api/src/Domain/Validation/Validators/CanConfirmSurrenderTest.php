@@ -19,9 +19,7 @@ class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider surrenderStates
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('surrenderStates')]
     public function testIsValid($status, $expected)
     {
         $entityId = 999;
@@ -49,7 +47,7 @@ class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid($entityId));
     }
 
-    public function surrenderStates()
+    public static function surrenderStates()
     {
         return [
             'signed surrender' => [

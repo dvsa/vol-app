@@ -65,9 +65,7 @@ class ChangePasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ChangePasswordResult::SUCCESS, $result->getFlag('code'));
     }
 
-    /**
-     * @dataProvider dpChangeResult
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpChangeResult')]
     public function testHandleCommandFail(ChangePasswordResult $changeResult): void
     {
         $this->adapterResult($changeResult);
@@ -78,7 +76,7 @@ class ChangePasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($changeResult->getMessage(), $result->getFlag('message'));
     }
 
-    public function dpChangeResult(): array
+    public static function dpChangeResult(): array
     {
         return [
             'Generic failure' => [

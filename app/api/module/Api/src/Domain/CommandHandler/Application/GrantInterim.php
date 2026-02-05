@@ -32,9 +32,9 @@ final class GrantInterim extends AbstractCommandHandler implements Transactioned
 
     protected $extraRepos = ['Fee'];
 
-    public const ACTION_GRANTED = 'granted';
-    public const ACTION_IN_FORCE = 'in_force';
-    public const ACTION_FEE_REQUEST = 'fee_request';
+    public const string ACTION_GRANTED = 'granted';
+    public const string ACTION_IN_FORCE = 'in_force';
+    public const string ACTION_FEE_REQUEST = 'fee_request';
 
     /**
      * @param Cmd $command

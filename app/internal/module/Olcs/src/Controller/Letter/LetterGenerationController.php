@@ -406,9 +406,7 @@ class LetterGenerationController extends AbstractInternalController implements T
         $result = $response->getResult();
 
         // Filter active issue types only
-        $issueTypes = array_filter($result['results'] ?? [], function ($issueType) {
-            return !empty($issueType['isActive']);
-        });
+        $issueTypes = array_filter($result['results'] ?? [], fn($issueType) => !empty($issueType['isActive']));
 
         return array_values($issueTypes);
     }

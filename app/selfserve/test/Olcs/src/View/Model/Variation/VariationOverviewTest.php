@@ -19,9 +19,8 @@ class VariationOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables
-     *
-     * @group variationOverview
      */
+    #[\PHPUnit\Framework\Attributes\Group('variationOverview')]
     public function testSetVariables(): void
     {
         $data = [

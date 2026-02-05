@@ -19,15 +19,11 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
  */
 class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 {
-    private Connection $connection;
-    private AbstractSchemaManager $schemaManager;
-    private array $config;
+    private readonly AbstractSchemaManager $schemaManager;
 
-    public function __construct(Connection $connection, array $config = [])
+    public function __construct(private readonly Connection $connection, private array $config = [])
     {
-        $this->connection = $connection;
-        $this->schemaManager = $connection->createSchemaManager();
-        $this->config = $config;
+        $this->schemaManager = $this->connection->createSchemaManager();
     }
 
     public function getTableNames(): array
@@ -377,25 +373,25 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         
         // First, try exact match with entity table names
         foreach ($entities as $entity) {
-            $entityTableName = strtolower($entity['table']);
+            $entityTableName = strtolower((string) $entity['table']);
             
             // Check if the join table name starts with this entity's table name
-            if (strpos($tableName, $entityTableName . '_') === 0) {
+            if (str_starts_with($tableName, $entityTableName . '_')) {
                 return $entity;
             }
             
             // Check for singular form (e.g., 'user' in 'user_role' for table 'users')
             $singularEntityName = rtrim($entityTableName, 's');
-            if (strpos($tableName, $singularEntityName . '_') === 0) {
+            if (str_starts_with($tableName, $singularEntityName . '_')) {
                 return $entity;
             }
         }
         
         // Check for abbreviation mappings
         foreach ($abbreviationMappings as $abbrev => $fullName) {
-            if (strpos($tableName, $abbrev . '_') === 0) {
+            if (str_starts_with($tableName, $abbrev . '_')) {
                 foreach ($entities as $entity) {
-                    if (strtolower($entity['table']) === $fullName) {
+                    if (strtolower((string) $entity['table']) === $fullName) {
                         return $entity;
                     }
                 }
@@ -414,7 +410,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             $accumulator .= $part;
             
             foreach ($entities as $entity) {
-                $entityTableName = strtolower($entity['table']);
+                $entityTableName = strtolower((string) $entity['table']);
                 if ($entityTableName === $accumulator || $entityTableName === $accumulator . 's') {
                     return $entity;
                 }
@@ -434,6 +430,6 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         $propertyName = preg_replace('/_id$/', '', $columnName);
         
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($propertyName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $propertyName, '_')));
     }
 }

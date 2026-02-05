@@ -25,7 +25,7 @@ final class DeleteUserSelfserve extends AbstractCommandHandler implements
     use AuthAwareTrait;
     use CacheAwareTrait;
 
-    public const ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
+    public const string ADMIN_ROLE_ERROR = 'error-always-one-operator-admin';
 
     protected $repoServiceName = 'User';
 

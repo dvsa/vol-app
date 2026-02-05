@@ -30,9 +30,7 @@ class DateAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $qaAnswer = '2020-05-02';
@@ -52,7 +50,7 @@ class DateAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

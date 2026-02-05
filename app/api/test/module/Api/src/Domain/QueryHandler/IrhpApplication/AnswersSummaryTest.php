@@ -34,9 +34,7 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($translateToWelsh, $expectedLocale)
     {
         $previousLocale = 'sq_AL';
@@ -103,7 +101,7 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery()
     {
         return [
             ['Y', 'cy_GB'],
@@ -111,9 +109,7 @@ class AnswersSummaryTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQueryForBilateral($translateToWelsh, $expectedLocale)
     {
         $previousLocale = 'sq_AL';

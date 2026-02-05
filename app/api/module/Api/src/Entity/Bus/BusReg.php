@@ -317,7 +317,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
     public function fromData($data)
     {
         foreach ($data as $key => $value) {
-            $method = 'set' . ucwords($key);
+            $method = 'set' . ucwords((string) $key);
 
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
@@ -1287,7 +1287,7 @@ class BusReg extends AbstractBusReg implements ContextProviderInterface, Organis
             $additional[] = $otherService->getServiceNo();
         }
         //strip out any empty string values except 0
-        $additional = array_filter($additional, 'strlen');
+        $additional = array_filter($additional, strlen(...));
 
         if (!empty($additional)) {
             return $this->serviceNo . '(' . implode(',', $additional) . ')';

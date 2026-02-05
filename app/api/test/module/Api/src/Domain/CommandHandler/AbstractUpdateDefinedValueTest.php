@@ -23,6 +23,7 @@ abstract class AbstractUpdateDefinedValueTest extends AbstractCommandHandlerTest
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         if ($this->sut->isRefData()) {

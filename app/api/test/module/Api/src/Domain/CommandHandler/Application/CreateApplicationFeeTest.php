@@ -43,6 +43,7 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -61,9 +62,7 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider feeTypeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeTypeProvider')]
     public function testHandleCommand($feeTypeFeeType, $description, $expectedDate)
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
@@ -167,7 +166,7 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function feeTypeProvider()
+    public static function feeTypeProvider()
     {
         return [
             [

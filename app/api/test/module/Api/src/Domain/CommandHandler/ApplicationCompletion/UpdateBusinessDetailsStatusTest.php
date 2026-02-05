@@ -41,6 +41,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->licence->setOrganisation($this->organisation);
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -85,6 +86,7 @@ class UpdateBusinessDetailsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testHandleCommandWithoutContactDetails()
     {
         $this->applicationCompletion->setBusinessDetailsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);

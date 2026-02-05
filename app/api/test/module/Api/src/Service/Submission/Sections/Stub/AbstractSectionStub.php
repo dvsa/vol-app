@@ -12,16 +12,19 @@ class AbstractSectionStub extends AbstractSection
     {
     }
 
+    #[\Override]
     public function handleQuery($query)
     {
         return parent::handleQuery($query);
     }
 
+    #[\Override]
     public function extractPerson($contactDetails = null)
     {
         return parent::extractPerson($contactDetails);
     }
 
+    #[\Override]
     public function formatDate($datetime = null)
     {
         return parent::formatDate($datetime);

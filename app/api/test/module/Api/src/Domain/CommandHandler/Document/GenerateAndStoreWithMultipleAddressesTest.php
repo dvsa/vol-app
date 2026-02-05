@@ -93,9 +93,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
         $this->sut->handleCommand($mockCommand);
     }
 
-    /**
-     * @dataProvider insolvencyPractitioners
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('insolvencyPractitioners')]
     public function testInsolvencyPractitioner($practitioners, $expected)
     {
         $mockCommand = m::mock(Cmd::class);
@@ -239,7 +237,7 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
             ->shouldReceive('getSendToAddresses')->andReturn($this->getAddresses());
     }
 
-    public function insolvencyPractitioners(): array
+    public static function insolvencyPractitioners(): array
     {
         return [
             'One practitioner' => [

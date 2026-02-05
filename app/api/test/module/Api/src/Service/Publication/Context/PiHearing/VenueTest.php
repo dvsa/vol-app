@@ -14,11 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class VenueTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the pi venue filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the pi venue filter')]
     public function testProvide()
     {
         $venueAddress = 'al1, al2, Town, pc';

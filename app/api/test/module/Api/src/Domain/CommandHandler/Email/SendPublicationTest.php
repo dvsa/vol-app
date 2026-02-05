@@ -48,12 +48,12 @@ class SendPublicationTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param string $isPolice
      * @param int $policeTimes
      * @param int $nonPoliceTimes
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($isPolice, $policeTimes, $nonPoliceTimes, $subject)
     {
         $publicationId = 1234;
@@ -123,7 +123,7 @@ class SendPublicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             ['Y', 1, 0, SendPublication::EMAIL_POLICE_SUBJECT],

@@ -20,7 +20,7 @@ class DocumentRelink
         $result = [
             'type' => $data['document-relink-details']['type'],
             'targetId' => $data['document-relink-details']['targetId'],
-            'ids' => explode(',', $data['document-relink-details']['ids'])
+            'ids' => explode(',', (string) $data['document-relink-details']['ids'])
         ];
         return $result;
     }

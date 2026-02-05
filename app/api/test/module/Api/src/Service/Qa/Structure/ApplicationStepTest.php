@@ -45,9 +45,7 @@ class ApplicationStepTest extends MockeryTestCase
             ->andReturn($this->validatorListRepresentation);
     }
 
-    /**
-     * @dataProvider dpGetRepresentation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
     public function testGetRepresentation($enabled)
     {
         $expectedRepresentation = [
@@ -76,7 +74,7 @@ class ApplicationStepTest extends MockeryTestCase
         );
     }
 
-    public function dpGetRepresentation()
+    public static function dpGetRepresentation()
     {
         return [
             [true],

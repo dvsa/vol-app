@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 
 final class Grant extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERROR_IR_DUE_DATE = 'APP-GRA-IR-DD-1';
+    public const string ERROR_IR_DUE_DATE = 'APP-GRA-IR-DD-1';
 
     protected $repoServiceName = 'Application';
 
@@ -182,6 +182,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
             )
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

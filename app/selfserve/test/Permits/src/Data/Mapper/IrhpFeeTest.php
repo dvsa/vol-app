@@ -51,9 +51,7 @@ class IrhpFeeTest extends TestCase
         $this->irhpFee->mapForFormOptions($data, $this->form);
     }
 
-    /**
-     * @dataProvider dpMapForFormOptionsOther
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapForFormOptionsOther')]
     public function testMapForFormOptionsOther($isBilateral, $hasOutstandingFees): void
     {
         $data = [
@@ -74,7 +72,7 @@ class IrhpFeeTest extends TestCase
      *
      * @psalm-return list{list{false, false}, list{false, true}, list{true, true}}
      */
-    public function dpMapForFormOptionsOther(): array
+    public static function dpMapForFormOptionsOther(): array
     {
         return [
             [false, false],

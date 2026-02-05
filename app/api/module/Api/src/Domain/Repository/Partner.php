@@ -22,6 +22,7 @@ class Partner extends AbstractRepository
      * @param int $id
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         // limit by contact type

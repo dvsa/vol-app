@@ -18,9 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\Upload
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\Upload::class)]
 class UploadTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -47,6 +45,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $refData = new Entity\System\RefData();
@@ -94,9 +93,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpLinkedEntity
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLinkedEntity')]
     public function testHandleCommand($key, $id, $entityClass)
     {
         $data = [
@@ -167,7 +164,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpLinkedEntity()
+    public static function dpLinkedEntity()
     {
         return [
             [

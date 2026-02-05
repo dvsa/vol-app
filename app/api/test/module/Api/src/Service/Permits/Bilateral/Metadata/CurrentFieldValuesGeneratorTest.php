@@ -36,9 +36,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         $this->currentFieldValuesGenerator = new CurrentFieldValuesGenerator();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($bilateralRequired, $permitUsageSelection, $expected)
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock')
@@ -57,7 +55,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             [

@@ -52,6 +52,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -104,9 +105,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithChangeWhenNotAllowed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithChangeWhenNotAllowed')]
     public function testHandleCommandWithChangeWhenNotAllowed(
         $applicationLicenceType,
         $applicationVehicleType,
@@ -142,7 +141,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandWithChangeWhenNotAllowed()
+    public static function dpHandleCommandWithChangeWhenNotAllowed()
     {
         return [
             'standard national to standard international' => [
@@ -191,9 +190,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithReset
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithReset')]
     public function testHandleCommandWithReset(
         $existingLicenceType,
         $existingVehicleType,
@@ -233,7 +230,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame($resetResult, $result);
     }
 
-    public function dpHandleCommandWithReset()
+    public static function dpHandleCommandWithReset()
     {
         return [
             'change from mixed fleet to lgv, then to goods sn, not confirmed' => [
@@ -320,9 +317,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(
         $existingLicenceType,
         $existingVehicleType,
@@ -416,7 +411,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             'change from standard national goods to mixed fleet' => [

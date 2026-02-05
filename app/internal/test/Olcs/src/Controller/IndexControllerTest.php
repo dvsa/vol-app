@@ -92,9 +92,7 @@ class IndexControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider dpTestEntityListAction
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestEntityListAction')]
     public function testEntityListAction($type, $value, $dataService, $mockDataService, $expected)
     {
         $list = [11 => 'ABC', 12 => 'DEF'];
@@ -117,7 +115,7 @@ class IndexControllerTest extends MockeryTestCase
         $this->assertEquals($expected, $view->serialize());
     }
 
-    public function dpTestEntityListAction()
+    public static function dpTestEntityListAction()
     {
         $value = 100;
 

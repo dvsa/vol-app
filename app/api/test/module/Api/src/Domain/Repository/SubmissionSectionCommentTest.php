@@ -6,9 +6,7 @@ use Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as Cmd;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SubmissionSectionComment::class)]
 class SubmissionSectionCommentTest extends RepositoryTestCase
 {
     public const SUBMISSION_ID = 8888;
@@ -22,9 +20,7 @@ class SubmissionSectionCommentTest extends RepositoryTestCase
         $this->setUpSut(SubmissionSectionComment::class);
     }
 
-    /**
-     * @dataProvider dpTestIsExistsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsExistsProvider')]
     public function testIsExist($queryResult, $exists)
     {
         $qb = $this->createMockQb('QUERY');
@@ -49,7 +45,7 @@ class SubmissionSectionCommentTest extends RepositoryTestCase
         static::assertEquals($expect, $this->query);
     }
 
-    public function dpTestIsExistsProvider()
+    public static function dpTestIsExistsProvider()
     {
         return [
             [['data'], true],

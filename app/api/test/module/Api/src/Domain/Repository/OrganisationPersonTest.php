@@ -8,9 +8,7 @@ use Dvsa\Olcs\Api\Entity\Person\Person;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson as OrganisationPersonRepo;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson::class)]
 class OrganisationPersonTest extends RepositoryTestCase
 {
     /** @var OrganisationPersonRepo  */

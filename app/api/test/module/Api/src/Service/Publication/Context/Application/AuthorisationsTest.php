@@ -46,9 +46,7 @@ class AuthorisationsTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpSetContextWhenTotAuthLgvVehiclesNumeric
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSetContextWhenTotAuthLgvVehiclesNumeric')]
     public function testSetContextWhenTotAuthLgvVehiclesNumeric($totAuthLgvVehicles, $expectedAuthorisationText)
     {
         $this->application->shouldReceive('getTotAuthLgvVehicles')
@@ -63,7 +61,7 @@ class AuthorisationsTest extends MockeryTestCase
         );
     }
 
-    public function dpSetContextWhenTotAuthLgvVehiclesNumeric()
+    public static function dpSetContextWhenTotAuthLgvVehiclesNumeric()
     {
         return [
             [0, 'Authorisation: 0 Light goods vehicle(s).'],

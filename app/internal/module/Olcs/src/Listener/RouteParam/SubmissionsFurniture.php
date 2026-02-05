@@ -38,7 +38,7 @@ class SubmissionsFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onSubmission'],
+            $this->onSubmission(...),
             $priority
         );
     }

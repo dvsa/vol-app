@@ -58,7 +58,7 @@ class ImplementationTest extends MockeryTestCase
             }
         }
 
-        $this->validationManager = new ValidationHandlerManager($this->createMock(ContainerInterface::class), $validationHandlers);
+        $this->validationManager = new ValidationHandlerManager($this->createStub(ContainerInterface::class), $validationHandlers);
     }
 
     public function testAllImplemented()

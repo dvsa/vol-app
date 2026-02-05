@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrCancelled;
 
 /**
  * Send Ebsr Cancelled Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrCancelledTest extends SendEbsrRegCancelEmailTestAbstract
 {
     protected $template = 'ebsr-cancelled';

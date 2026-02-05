@@ -307,7 +307,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpUnsupportedPermitType()
+    public static function dpUnsupportedPermitType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
@@ -319,9 +319,7 @@ class UpdateMultipleNoOfPermitsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpUnsupportedPermitType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUnsupportedPermitType')]
     public function testUnsupportedPermitType($irhpPermitTypeId)
     {
         $this->expectException(RuntimeException::class);

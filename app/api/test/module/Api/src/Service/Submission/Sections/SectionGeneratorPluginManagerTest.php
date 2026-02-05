@@ -19,7 +19,7 @@ class SectionGeneratorPluginManagerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = new SectionGeneratorPluginManager($this->createMock(ContainerInterface::class));
+        $this->sut = new SectionGeneratorPluginManager($this->createStub(ContainerInterface::class));
     }
 
     public function testValidate()

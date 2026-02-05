@@ -48,6 +48,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = ['tmap_st_incomplete', 'tm_s_cur'];

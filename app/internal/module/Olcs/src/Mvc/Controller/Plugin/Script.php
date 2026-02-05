@@ -11,7 +11,7 @@ use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
  */
 class Script extends AbstractPlugin
 {
-    public function __construct(private CommonScriptFactory $scriptFactory)
+    public function __construct(private readonly CommonScriptFactory $scriptFactory)
     {
     }
 

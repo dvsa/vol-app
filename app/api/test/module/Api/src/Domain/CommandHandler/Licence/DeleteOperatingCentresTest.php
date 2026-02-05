@@ -13,9 +13,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteOperatingCentres
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteOperatingCentres::class)]
 class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\Application\DeleteOperatingCentres  */
@@ -34,6 +32,7 @@ class DeleteOperatingCentresTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

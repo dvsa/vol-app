@@ -82,9 +82,7 @@ class DocumentTest extends RepositoryTestCase
         $this->assertEquals('result', $sut->fetchListForTm(1));
     }
 
-    /**
-     * @dataProvider tmProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tmProvider')]
     public function testFetchListForTmApplication($type)
     {
         $sut = m::mock(DocumentRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -145,7 +143,7 @@ class DocumentTest extends RepositoryTestCase
         }
     }
 
-    public function tmProvider()
+    public static function tmProvider()
     {
         return [
             ['licence'],

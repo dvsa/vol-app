@@ -54,9 +54,8 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $busShortNotice
      * @param $shortNoticeSetTimes
-     *
-     * @dataProvider handleDataRefreshProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleDataRefreshProvider')]
     public function testHandleCommandDataRefresh($busShortNotice, $shortNoticeSetTimes): void
     {
         $filePath = 'vfs://root';
@@ -302,7 +301,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
     /**
      * @return array
      */
-    public function handleDataRefreshProvider(): array
+    public static function handleDataRefreshProvider(): array
     {
         return [
             [['short notice section'], 1],
@@ -313,9 +312,8 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
     /**
      * Tests successful creation of a variation application through EBSR
-     *
-     * @dataProvider handleVariationProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleVariationProvider')]
     public function testHandleCommandVariation(
         string $txcAppType,
         string $busRegStatus,
@@ -555,7 +553,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function handleVariationProvider(): array
+    public static function handleVariationProvider(): array
     {
         return [
             [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, AbstractProcessPack::TASK_DESC_CANCEL, false],

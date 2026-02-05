@@ -32,9 +32,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($ids, $yesNo, $optOutTmLetterValue)
     {
         $licenceId1 = 111;
@@ -96,7 +94,7 @@ class DeleteTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [

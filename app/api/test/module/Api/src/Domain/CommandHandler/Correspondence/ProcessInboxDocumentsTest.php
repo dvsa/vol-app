@@ -20,9 +20,7 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments::class)]
 class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 999;

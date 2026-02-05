@@ -7,9 +7,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox::class)]
 class CorrespondenceInboxTest extends RepositoryTestCase
 {
     /** @var  Repository\CorrespondenceInbox */

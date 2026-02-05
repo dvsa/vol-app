@@ -23,9 +23,8 @@ class OtherLicenceEntityTest extends EntityTester
 
     /**
      * Test update other licence with valid data
-     *
-     * @dataProvider validDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validDataProvider')]
     public function testUpdateOtherLicenceValid(
         $previousLicenceType,
         $licNo,
@@ -76,9 +75,8 @@ class OtherLicenceEntityTest extends EntityTester
 
     /**
      * Test update other licence with invalid data
-     *
-     * @dataProvider invalidDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidDataProvider')]
     public function testUpdateOtherLicenceInvalid(
         $previousLicenceType,
         $licNo,
@@ -113,7 +111,7 @@ class OtherLicenceEntityTest extends EntityTester
         );
     }
 
-    public function validDataProvider()
+    public static function validDataProvider()
     {
         return [
             [Entity::TYPE_CURRENT, 'licNo', 'holderName', 'Y'],
@@ -126,7 +124,7 @@ class OtherLicenceEntityTest extends EntityTester
         ];
     }
 
-    public function invalidDataProvider()
+    public static function invalidDataProvider()
     {
         return [
             // field is required

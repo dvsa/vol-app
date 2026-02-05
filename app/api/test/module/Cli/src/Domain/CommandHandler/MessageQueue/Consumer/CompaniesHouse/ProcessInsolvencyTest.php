@@ -33,6 +33,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ProcessInsolvency();
@@ -68,9 +69,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    /**
-     * @dataProvider addressData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('addressData')]
     public function testHandleCommandCreatesTasks($licence, $team)
     {
         $this->setupStandardService();
@@ -110,9 +109,7 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    /**
-     * @dataProvider emailTestsDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('emailTestsDataProvider')]
     public function testHandleCommandSendsEmails($licence)
     {
         $this->setupStandardService();

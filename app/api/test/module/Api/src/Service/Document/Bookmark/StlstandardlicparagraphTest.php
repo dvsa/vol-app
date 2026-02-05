@@ -63,9 +63,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(null, $query);
     }
 
-    /**
-     * @dataProvider dpRenderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderDataProvider')]
     public function testRender($expectSnippet, $licenceTypeId)
     {
         $bookmark = new Sut();
@@ -81,7 +79,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dpRenderDataProvider()
+    public static function dpRenderDataProvider()
     {
         return [
             [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
@@ -91,9 +89,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderCaseDataDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderCaseDataDataProvider')]
     public function testRenderCaseData($expectSnippet, $data)
     {
         $bookmark = new Sut();
@@ -109,7 +105,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function dpRenderCaseDataDataProvider()
+    public static function dpRenderCaseDataDataProvider()
     {
         return [
             [

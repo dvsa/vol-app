@@ -15,10 +15,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionMultipleTablesTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
     public function testInvoke($input, $expected)
     {
         $sut = new SubmissionSectionMultipleTables();
@@ -52,7 +52,7 @@ class SubmissionSectionMultipleTablesTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke()
     {
         return [
             [

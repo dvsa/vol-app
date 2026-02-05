@@ -18,8 +18,8 @@ use Mockery as m;
 
 /**
  * @author Dan Eggleston <dan@stolenegg.com>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CompaniesHouse\Compare
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CompaniesHouse\Compare::class)]
 class CompareTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CompaniesHouseApi | m\MockInterface */
@@ -40,9 +40,8 @@ class CompareTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handleCommand method with no changes
-     *
-     * @dataProvider noChangesProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noChangesProvider')]
     public function testHandleCommandNoChanges($companyNumber, $stubResponse, $stubSavedData)
     {
         // expectations
@@ -107,9 +106,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['companiesHouseAlert' => 101], $result->getIds());
     }
 
-    /**
-     * @dataProvider testHandleCommandValidiateCompanyNumberDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandValidiateCompanyNumberDataProvider')]
     public function testHandleCommandValidiateCompanyNumber($expectValid, $companyNumber)
     {
         $expectedAlertData = [
@@ -149,7 +146,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandValidiateCompanyNumberDataProvider()
+    public static function handleCommandValidiateCompanyNumberDataProvider()
     {
         return [
             [true, '6'],
@@ -167,9 +164,8 @@ class CompareTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handleCommand method when company was not previously stored
-     *
-     * @dataProvider firstTimeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('firstTimeProvider')]
     public function testHandleCommandCompanyFirstTimeFound($companyNumber, $stubResponse, $expectedSaveData)
     {
         // expectations
@@ -212,7 +208,6 @@ class CompareTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      *
-     * @dataProvider changesProvider
      *
      * @param string $companyNumber
      * @param array  $stubResponse     api response
@@ -220,6 +215,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
      * @param array  $expectedAlertData
      * @param array  $expectedSaveData new company data to save
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('changesProvider')]
     public function testHandleCommandChanges(
         $companyNumber,
         $stubResponse,
@@ -268,7 +264,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedSaveData, $newCompany->toArray());
     }
 
-    public function noChangesProvider()
+    public static function noChangesProvider()
     {
         return [
             'no changes' => [
@@ -380,7 +376,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function firstTimeProvider()
+    public static function firstTimeProvider()
     {
         return [
             [
@@ -463,7 +459,7 @@ class CompareTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function changesProvider()
+    public static function changesProvider()
     {
         return [
             'non_insolvent_status_change' => [

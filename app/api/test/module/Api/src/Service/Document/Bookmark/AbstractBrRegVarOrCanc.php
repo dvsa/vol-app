@@ -30,9 +30,7 @@ class AbstractBrRegVarOrCanc extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($data, $expected)
     {
         $bookmark = $this->getBookmark();

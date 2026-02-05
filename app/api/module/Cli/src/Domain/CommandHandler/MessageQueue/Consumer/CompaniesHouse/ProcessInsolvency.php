@@ -139,7 +139,7 @@ class ProcessInsolvency extends AbstractConsumer
 
         $filteredPractitioners = $this->filterPractitioners($practitioners);
 
-        return new ArrayCollection(array_map(fn($practitioner) => $this->mapToEntity($practitioner), $filteredPractitioners));
+        return new ArrayCollection(array_map($this->mapToEntity(...), $filteredPractitioners));
     }
 
 
@@ -348,6 +348,7 @@ class ProcessInsolvency extends AbstractConsumer
 
         return array_values(array_unique($practitionerData, SORT_REGULAR));
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->companiesHouseApi = $container->get(CompaniesHouseClient::class);

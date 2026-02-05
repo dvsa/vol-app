@@ -32,6 +32,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -52,9 +53,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test the Happy Path
-     *
-     * @dataProvider dpShortTermAnnualTypeCombinations
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShortTermAnnualTypeCombinations')]
     public function testHandleCommand($isEcmtShortTerm, $isEcmtAnnual, $isBilateral)
     {
         $cmdData = [
@@ -202,9 +202,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpShortTermAnnualTypeCombinations
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShortTermAnnualTypeCombinations')]
     public function testHandleCommandBadEcmtEmissionsCategory($isEcmtShortTerm, $isEcmtAnnual, $isBilateral)
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
@@ -249,7 +247,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpShortTermAnnualTypeCombinations()
+    public static function dpShortTermAnnualTypeCombinations()
     {
         return [
             [true, false, false],

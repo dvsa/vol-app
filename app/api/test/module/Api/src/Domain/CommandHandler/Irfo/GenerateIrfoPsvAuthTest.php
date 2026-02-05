@@ -35,6 +35,7 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -51,11 +52,11 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $irfoFeeTypeId
      * @param array $expectedDocs
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($irfoFeeTypeId, $expectedDocs)
     {
         $id = 99;
@@ -124,7 +125,7 @@ class GenerateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [

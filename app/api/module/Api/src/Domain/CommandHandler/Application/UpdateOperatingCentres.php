@@ -25,8 +25,8 @@ use Psr\Container\ContainerInterface;
  */
 final class UpdateOperatingCentres extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const ERR_OC_TA_1 = 'ERR_OC_TA_1'; // select-traffic-area-error
-    public const ERR_OC_CL_1 = 'ERR_OC_CL_1'; //community-licences-too-many
+    public const string ERR_OC_TA_1 = 'ERR_OC_TA_1'; // select-traffic-area-error
+    public const string ERR_OC_CL_1 = 'ERR_OC_CL_1'; //community-licences-too-many
 
     protected $repoServiceName = 'Application';
 
@@ -228,6 +228,7 @@ final class UpdateOperatingCentres extends AbstractCommandHandler implements Tra
 
         return $this->totals;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

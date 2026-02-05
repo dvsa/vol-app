@@ -25,9 +25,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->sut = new DvsaAddressServiceClient($this->httpClient);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByQueryReturnsArrayOfAddressModel(): void
     {
         $this->httpClient->shouldReceive('get')->andReturn($this->generateResponse(200, [
@@ -51,9 +49,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->assertContainsOnlyInstancesOf(Address::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByQueryReturnsArrayOfMultipleAddressModel(): void
     {
         $this->httpClient->shouldReceive('get')->andReturn($this->generateResponse(200, [
@@ -88,10 +84,8 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->assertContainsOnlyInstancesOf(Address::class, $result);
     }
 
-    /**
-     * @test
-     * @dataProvider fetchByInvalidQueryThrowsValidationExceptionDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchByInvalidQueryThrowsValidationExceptionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByInvalidQueryThrowsValidationException(int $httpStatusCode): void
     {
         $this->expectException(ValidationException::class);
@@ -106,7 +100,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->sut->lookupAddress('ABC123');
     }
 
-    public function fetchByInvalidQueryThrowsValidationExceptionDataProvider(): array
+    public static function fetchByInvalidQueryThrowsValidationExceptionDataProvider(): array
     {
         return [
             'API returns bad request' => [400],
@@ -114,9 +108,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByQueryConnectExceptionReturnsServiceException()
     {
         $this->expectException(ServiceException::class);
@@ -131,9 +123,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->sut->lookupAddress('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByQueryRequestExceptionReturnsServiceException()
     {
         $this->expectException(ServiceException::class);
@@ -147,9 +137,7 @@ class DvsaAddressServiceClientTest extends MockeryTestCase
         $this->sut->lookupAddress('ABC1234');
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fetchByQueryInvalidJsonReturnsServiceException()
     {
         $this->expectException(ServiceException::class);

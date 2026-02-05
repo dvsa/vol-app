@@ -5,9 +5,7 @@ namespace OlcsTest\Service\Data;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\ScannerSubCategory;
 
-/**
- * @covers \Olcs\Service\Data\ScannerSubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\ScannerSubCategory::class)]
 class ScannerSubCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var ScannerSubCategory */

@@ -32,7 +32,7 @@ class UpdateNysiisNameTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): never
     {
         $this->markTestSkipped('Nysiis service is currently switched off');
         $id = 1;

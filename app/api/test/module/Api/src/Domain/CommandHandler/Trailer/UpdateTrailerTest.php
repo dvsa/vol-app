@@ -33,9 +33,7 @@ class UpdateTrailerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpIsLongerSemiTrailer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLongerSemiTrailer')]
     public function testHandleCommand($isLongerSemiTrailer, $expectedIsLongerSemiTrailer)
     {
         $trailerId = 1;
@@ -53,7 +51,6 @@ class UpdateTrailerTest extends AbstractCommandHandlerTestCase
 
         // Use reflection to set the value of trailerNo property
         $reflectionProperty = new \ReflectionProperty(Cmd::class, 'trailerNo');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($command, $trailerNo);
 
         $trailer = m::mock(Trailer::class);
@@ -97,7 +94,7 @@ class UpdateTrailerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpIsLongerSemiTrailer()
+    public static function dpIsLongerSemiTrailer()
     {
         return [
             ['Y', true],

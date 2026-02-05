@@ -43,7 +43,6 @@ class TrafficAreaEntityTest extends EntityTester
     /**
      * Test getPublicationRecipients
      *
-     * @dataProvider publicationRecipientsProvider
      *
      * @param $pubType
      * @param $isPolice
@@ -51,6 +50,7 @@ class TrafficAreaEntityTest extends EntityTester
      * @param $nonPoliceTimes
      * @param $expectedRecipients
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationRecipientsProvider')]
     public function testGetPublicationRecipients(
         $pubType,
         $isPolice,
@@ -140,7 +140,7 @@ class TrafficAreaEntityTest extends EntityTester
      *
      * @return array
      */
-    public function publicationRecipientsProvider()
+    public static function publicationRecipientsProvider()
     {
         $adPoliceRecipients = [
             self::PUB_RECIPIENT_EMAIL2 => self::PUB_RECIPIENT_NAME2,

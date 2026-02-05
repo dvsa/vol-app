@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore as GenerateDocCommand
  */
 final class CreatePoliceDocument extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const DOCUMENT_DESCRIPTION = '%s %d police version';
+    public const string DOCUMENT_DESCRIPTION = '%s %d police version';
 
     protected $repoServiceName = 'Publication';
 

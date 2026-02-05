@@ -34,6 +34,7 @@ class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTest
     /**
      * Override this method in case of needing specific entity assertions i.e. for a permit application reference
      */
+    #[\Override]
     protected function extraEntityAssertions(m\MockInterface $entity)
     {
         $entity->shouldReceive('getApplicationRef')->once()->withNoArgs()->andReturn('OG9654321/3');

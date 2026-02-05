@@ -46,9 +46,7 @@ class AuthorisationsTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpSetContext
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSetContext')]
     public function testSetContext(
         $hgvAuthorisationIncreased,
         $vehicleTypeMixedWithLgv,
@@ -92,7 +90,7 @@ class AuthorisationsTest extends MockeryTestCase
         );
     }
 
-    public function dpSetContext()
+    public static function dpSetContext()
     {
         return [
             'lgv auth increase only' => [
@@ -102,7 +100,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 7 Light goods vehicle(s)'
                 ]
             ],
@@ -113,7 +111,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 0 Light goods vehicle(s)'
                 ]
             ],
@@ -124,7 +122,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 7 Light goods vehicle(s)'
                 ]
             ],
@@ -135,7 +133,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 7 Light goods vehicle(s)'
                 ]
@@ -147,7 +145,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 0 Light goods vehicle(s)'
                 ]
@@ -159,7 +157,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 7 Light goods vehicle(s)'
                 ]
@@ -171,7 +169,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 7 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
@@ -184,7 +182,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => null,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
                 ]
@@ -196,7 +194,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => null,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
                 ]
@@ -208,7 +206,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 0 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
@@ -221,7 +219,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                     'New licence authorisation will be 7 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
@@ -234,7 +232,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 7 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
                 ]
@@ -246,7 +244,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 0 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
                 ]
@@ -258,7 +256,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => true,
                 'totAuthLgvVehicles' => 7,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 7 Light goods vehicle(s)',
                     'New licence authorisation will be 3 trailer(s)'
                 ]
@@ -270,7 +268,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 vehicle(s)',
                 ]
             ],
@@ -281,7 +279,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => false,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 5 Heavy goods vehicle(s)',
                 ]
             ],
@@ -292,7 +290,7 @@ class AuthorisationsTest extends MockeryTestCase
                 'lgvChangedFromNullToNumeric' => false,
                 'totAuthLgvVehicles' => 0,
                 'trailerAuthorisationIncreased' => true,
-                [
+                "expectedAuthorisationArray" => [
                     'New licence authorisation will be 3 trailer(s)'
                 ]
             ],

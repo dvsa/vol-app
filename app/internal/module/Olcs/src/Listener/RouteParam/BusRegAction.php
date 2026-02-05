@@ -111,7 +111,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'busRegId',
-            [$this, 'onBusRegAction'],
+            $this->onBusRegAction(...),
             $priority
         );
     }

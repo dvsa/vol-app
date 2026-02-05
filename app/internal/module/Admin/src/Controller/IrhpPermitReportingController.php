@@ -40,6 +40,7 @@ class IrhpPermitReportingController extends AbstractIrhpPermitAdminController im
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['category'] = Category::CATEGORY_PERMITS;

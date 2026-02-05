@@ -42,6 +42,7 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -113,9 +114,7 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider providerWithConfirm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerWithConfirm')]
     public function testHandleCommandRequireConfirmationWithConfirm($receivedDate, $expectedCreateApp, $associatedOperatingCentres)
     {
         $data = [

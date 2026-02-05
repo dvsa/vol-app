@@ -18,11 +18,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text2Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the bus reg text 2 filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the bus reg text 2 filter')]
     public function testProcess()
     {
         $sut = new BusRegText2();

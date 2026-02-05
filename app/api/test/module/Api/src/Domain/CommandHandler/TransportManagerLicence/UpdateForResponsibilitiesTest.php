@@ -15,8 +15,8 @@ use Mockery as m;
  * TransportManagerLicence / UpdateForResponsibilities
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerLicence\UpdateForResponsibilities
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerLicence\UpdateForResponsibilities::class)]
 class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\TransportManagerLicence\UpdateForResponsibilities   */
@@ -31,6 +31,7 @@ class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

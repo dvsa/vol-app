@@ -19,9 +19,7 @@ class InterimVehiclesTest extends MockeryTestCase
         $this->assertEquals(123, $query->getId());
     }
 
-    /**
-     * @dataProvider dpRender
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRender')]
     public function testRender($data, $expected)
     {
         $bookmark = m::mock(InterimVehicles::class)->makePartial();
@@ -38,7 +36,7 @@ class InterimVehiclesTest extends MockeryTestCase
         );
     }
 
-    public function dpRender()
+    public static function dpRender()
     {
         return [
             'mixed' => [

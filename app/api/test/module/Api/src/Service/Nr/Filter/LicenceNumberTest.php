@@ -15,11 +15,11 @@ class LicenceNumberTest extends \PHPUnit\Framework\TestCase
      * Tests that if a community licence number pattern is found then we split out the part we need.
      * Otherwise, just use the value as is
      *
-     * @dataProvider filterProvider
      *
      * @param string $initialValue initial value
      * @param string $expectedResult expected result
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filterProvider')]
     public function testFilter($initialValue, $expectedResult)
     {
         $value = ['communityLicenceNumber' => $initialValue];
@@ -38,7 +38,7 @@ class LicenceNumberTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function filterProvider()
+    public static function filterProvider()
     {
         return [
             ['UKGB/OB1234567/00000', 'OB1234567'],

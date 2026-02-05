@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -38,9 +38,8 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
 
     /**
      * test handle command
-     *
-     * @dataProvider dpTestHandleCommand
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($templateName, $subject)
     {
         $templateVars = [
@@ -109,7 +108,7 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
         $this->assertSame($subject, $message->getSubject());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             ['unknown-template', 'Important information about your vehicle operator licence'],

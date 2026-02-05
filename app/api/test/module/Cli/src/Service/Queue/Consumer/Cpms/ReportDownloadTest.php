@@ -11,10 +11,8 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Cpms\ReportDownload::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class ReportDownloadTest extends AbstractConsumerTestCase
 {
     /** @var ReportDownload */
@@ -23,6 +21,7 @@ class ReportDownloadTest extends AbstractConsumerTestCase
     /** @var m\MockInterface */
     protected $qhm;
 
+    #[\Override]
     protected function instantiate()
     {
         $this->qhm = m::mock(QueryHandlerManager::class);

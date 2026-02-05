@@ -33,9 +33,8 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
      * @param $discsStolen
      * @param $discsStolenInfo
      * @param $expected
-     *
-     * @dataProvider dpTestGetConfigFromData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetConfigFromData')]
     public function testGetConfigFromData(
         $destroyedDiscs,
         $discsLost,
@@ -55,7 +54,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public function dpTestGetConfigFromData()
+    public static function dpTestGetConfigFromData()
     {
         return [
             [
@@ -64,7 +63,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => null,
                 'discsStolen' => 12,
                 'discsStolenInfo' => 'discs were stolen',
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [
@@ -93,7 +92,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => '15 discs were lost',
                 'discsStolen' => null,
                 'discsStolenInfo' => null,
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [
@@ -122,7 +121,7 @@ class CurrentDiscsReviewServiceTest extends MockeryTestCase
                 'discsLostInfo' => 'lost them',
                 'discsStolen' => 2,
                 'discsStolenInfo' => 'stolen',
-                'expectedResult' => [
+                'expected' => [
                     'multiItems' => [
                         [
                             [

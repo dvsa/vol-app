@@ -36,6 +36,7 @@ class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
 

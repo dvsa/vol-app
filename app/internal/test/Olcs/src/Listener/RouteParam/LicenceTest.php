@@ -45,7 +45,7 @@ class LicenceTest extends TestCase
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicence'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'licence', $this->sut->onLicence(...), 1);
 
         $this->sut->attach($mockEventManager);
     }

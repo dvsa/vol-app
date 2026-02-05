@@ -33,10 +33,6 @@ class OverviewController extends AbstractController implements VariationControll
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected ApplicationOverviewHelperService $applicationOverviewHelper;
-    protected StringHelperService $stringHelper;
-    protected FormHelperService $formHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -50,17 +46,13 @@ class OverviewController extends AbstractController implements VariationControll
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        ApplicationOverviewHelperService $applicationOverviewHelper,
-        StringHelperService $stringHelper,
-        FormHelperService $formHelper,
+        protected ApplicationOverviewHelperService $applicationOverviewHelper,
+        protected StringHelperService $stringHelper,
+        protected FormHelperService $formHelper,
         protected FormServiceManager $formServiceManager,
         protected $navigation,
         protected FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->applicationOverviewHelper = $applicationOverviewHelper;
-        $this->stringHelper = $stringHelper;
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 }

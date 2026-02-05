@@ -26,6 +26,7 @@ class Bus extends AbstractRepository
      * @throws Exception\NotFoundException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function fetchUsingId(QryCmd $query, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         /* @var \Doctrine\Orm\QueryBuilder $qb*/

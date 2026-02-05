@@ -9,9 +9,7 @@ namespace Dvsa\OlcsTest\Api\Entity\Traits;
  */
 trait TotAuthVehiclesTraitTest
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthHgvVehiclesIsCallable()
     {
         // Assert
@@ -22,9 +20,9 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthHgvVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthHgvVehiclesReturnsSelf()
     {
         // Assert
@@ -51,10 +49,10 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthHgvVehiclesIsCallable
      * @dataProvider validTotAuthHgvVehiclesCountsDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthHgvVehiclesSetsTotAuthHgvVehicles(mixed $count)
     {
         // Assert
@@ -81,9 +79,9 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthHgvVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthHgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs()
     {
         // Assert
@@ -99,9 +97,7 @@ trait TotAuthVehiclesTraitTest
         $this->assertSame($expectedNumber, $this->sut->getTotAuthVehicles());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthLgvVehiclesIsCallable()
     {
         // Assert
@@ -112,9 +108,9 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthLgvVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthLgvVehiclesReturnsSelf()
     {
         // Assert
@@ -141,10 +137,10 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthLgvVehiclesIsCallable
      * @dataProvider validTotAuthLgvVehiclesCountsDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthLgvVehiclesSetsTotAuthHgvVehicles(mixed $count)
     {
         // Assert
@@ -171,9 +167,9 @@ trait TotAuthVehiclesTraitTest
     }
 
     /**
-     * @test
      * @depends updateTotAuthLgvVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function updateTotAuthLgvVehiclesSetsTotAuthVehiclesToTheTotalOfLgvsAndHgvs()
     {
         // Assert

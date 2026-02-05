@@ -33,7 +33,7 @@ class ConvertToPdfFactory implements FactoryInterface
 
         // Use protocol to determine which client to use
         // HTTPS = Gotenberg (modern), HTTP = WebService (legacy)
-        if (str_starts_with($uri, 'https://')) {
+        if (str_starts_with((string) $uri, 'https://')) {
             $httpClient = new HttpClient($uri, $httpOptions);
             $wrapper = new ClientAdapterLoggingWrapper();
             $wrapper->wrapAdapter($httpClient);

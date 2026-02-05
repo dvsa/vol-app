@@ -11,10 +11,10 @@ use Olcs\Validator\TypeOfPI;
 class TypeOfPITest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $expected
      * @param $value
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($expected, $value)
     {
         $sut = new TypeOfPI();
@@ -22,7 +22,7 @@ class TypeOfPITest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public function provideIsValid()
+    public static function provideIsValid()
     {
         return [
             [true, ['test1']],

@@ -62,9 +62,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param ArrayCollection $feeTransactions
      * @param boolean         $expected
-     *
-     * @dataProvider outstandingPaymentProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('outstandingPaymentProvider')]
     public function testHadOutstandingPayment($feeTransactions, $expected)
     {
         $this->sut->setFeeTransactions($feeTransactions);
@@ -72,7 +71,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->hasOutstandingPayment());
     }
 
-    public function outstandingPaymentProvider()
+    public static function outstandingPaymentProvider()
     {
         return [
             'no fee payments' => [
@@ -197,9 +196,8 @@ class FeeEntityTest extends EntityTester
      * @param Licence $licence
      * @param IrhpApplication $irhpApplication
      * @param DateTime $expected
-     *
-     * @dataProvider ruleStartDateProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ruleStartDateProvider')]
     public function testGetRuleStartDate($accrualRuleId, $licence, $irhpApplication, $expected)
     {
         $feeType = m::mock()
@@ -219,7 +217,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getRuleStartDate());
     }
 
-    public function ruleStartDateProvider()
+    public static function ruleStartDateProvider()
     {
         $now = new DateTime();
         $futureContinuationDate = new Datetime('4 years 10 days midnight');
@@ -349,9 +347,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $accrualRuleId,
      * @param int $expected
-     *
-     * @dataProvider defermentPeriodProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('defermentPeriodProvider')]
     public function testGetDefermentPeriod($accrualRuleId, $expected)
     {
         $feeType = m::mock()
@@ -364,7 +361,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getDefermentPeriod());
     }
 
-    public function defermentPeriodProvider()
+    public static function defermentPeriodProvider()
     {
         return [
             'immediate' => [
@@ -405,9 +402,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $status
      * @param boolean $expected
-     *
-     * @dataProvider allowEditProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowEditProvider')]
     public function testAllowEdit($status, $expected)
     {
         $feeStatus = m::mock(RefData::class)->makePartial();
@@ -417,7 +413,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->allowEdit());
     }
 
-    public function allowEditProvider()
+    public static function allowEditProvider()
     {
         return [
             [Entity::STATUS_PAID, false],
@@ -525,9 +521,7 @@ class FeeEntityTest extends EntityTester
         return $feeTransaction;
     }
 
-    /**
-     * @dataProvider outstandingWaiveTransactionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('outstandingWaiveTransactionProvider')]
     public function testGetOutstandingWaiveTransaction(array $feeTransactions, $expected)
     {
         $this->sut->setFeeTransactions(new ArrayCollection($feeTransactions));
@@ -535,7 +529,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getOutstandingWaiveTransaction());
     }
 
-    public function outstandingWaiveTransactionProvider()
+    public static function outstandingWaiveTransactionProvider()
     {
         $transaction1 = m::mock(Transaction::class);
         $transaction1->shouldReceive('isOutstanding')
@@ -570,9 +564,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider outstandingAmountProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('outstandingAmountProvider')]
     public function testGetOutstandingAmount($feeAmount, $feeTransactions, $expected)
     {
         $this->sut->setGrossAmount($feeAmount);
@@ -645,9 +637,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider partPaidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('partPaidProvider')]
     public function testIsPartPaid($feeAmount, $feeTransactions, $expected)
     {
         $this->sut->setGrossAmount($feeAmount);
@@ -763,9 +753,7 @@ class FeeEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider providerExpiredForLicence
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerExpiredForLicence')]
     public function testIsExpiredForLicence($expiryDate, $expected)
     {
         $mockLicence = m::mock()
@@ -788,7 +776,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($sut->isExpiredForLicence(), $expected);
     }
 
-    public function providerExpiredForLicence()
+    public static function providerExpiredForLicence()
     {
         return [
             [
@@ -802,9 +790,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider getOrganisationProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getOrganisationProvider')]
     public function testGetOrganisation($licence, $irfoGvPermit, $irfoPsvAuth, $expected)
     {
         $this->sut->setLicence($licence);
@@ -813,7 +799,7 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->getOrganisation());
     }
 
-    public function getOrganisationProvider()
+    public static function getOrganisationProvider()
     {
         $organisation = m::mock(Organisation::class);
 
@@ -845,9 +831,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider getCustomerNameProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCustomerNameProvider')]
     public function testGetCustomerNameForInvoice($licence, $irfoGvPermit, $expected)
     {
         $this->sut->setLicence($licence);
@@ -855,7 +839,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCustomerNameForInvoice());
     }
 
-    public function getCustomerNameProvider()
+    public static function getCustomerNameProvider()
     {
         $organisation = m::mock(Organisation::class)
             ->shouldReceive('getName')
@@ -881,9 +865,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider getCustomerAddressProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCustomerAddressProvider')]
     public function testGetCustomerAddressForInvoice($licence, $irfoGvPermit, $irfoPsvAuth, $expected)
     {
         $this->sut->setLicence($licence);
@@ -899,7 +881,7 @@ class FeeEntityTest extends EntityTester
         $this->assertNull($this->sut->getCustomerAddressForInvoice());
     }
 
-    public function getCustomerAddressProvider()
+    public static function getCustomerAddressProvider()
     {
         $address = m::mock(Address::class)
             ->shouldReceive('toArray')
@@ -986,9 +968,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $status
      * @param boolean $expected
-     *
-     * @dataProvider isPaidProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isPaidProvider')]
     public function testIsPaid($status, $expected)
     {
         $this->sut->setFeeStatus(new RefData($status));
@@ -996,7 +977,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPaid());
     }
 
-    public function isPaidProvider()
+    public static function isPaidProvider()
     {
         return [
             [Entity::STATUS_PAID, true],
@@ -1009,9 +990,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $status
      * @param boolean $expected
-     *
-     * @dataProvider isOutstandingProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isOutstandingProvider')]
     public function testIsOutstanding($status, $expected)
     {
         $this->sut->setFeeStatus(new RefData($status));
@@ -1019,7 +999,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isOutstanding());
     }
 
-    public function isOutstandingProvider()
+    public static function isOutstandingProvider()
     {
         return [
             [Entity::STATUS_PAID, false],
@@ -1032,9 +1012,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $status
      * @param boolean $expected
-     *
-     * @dataProvider isCancelledProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isCancelledProvider')]
     public function testIsCancelled($status, $expected)
     {
         $this->sut->setFeeStatus(new RefData($status));
@@ -1042,7 +1021,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isCancelled());
     }
 
-    public function isCancelledProvider()
+    public static function isCancelledProvider()
     {
         return [
             [Entity::STATUS_PAID, false],
@@ -1057,9 +1036,8 @@ class FeeEntityTest extends EntityTester
      * @param string $status
      * @param array $feeTransactions
      * @param boolean $expected
-     *
-     * @dataProvider isFullyOutstandingProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isFullyOutstandingProvider')]
     public function testIsFullyOutstanding($feeAmount, $status, $feeTransactions, $expected)
     {
         $this->sut->setFeeStatus(new RefData($status));
@@ -1069,7 +1047,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isFullyOutstanding());
     }
 
-    public function isFullyOutstandingProvider()
+    public static function isFullyOutstandingProvider()
     {
         $paid10 = m::mock(FeeTransaction::class);
         $paid10->shouldReceive('getTransaction->isComplete')
@@ -1096,9 +1074,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $type
      * @param boolean $expected
-     *
-     * @dataProvider isBalancingFeeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isBalancingFeeProvider')]
     public function testIsBalancingFee($type, $expected)
     {
         $feeTypeType = new RefData($type);
@@ -1110,7 +1087,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isBalancingFee());
     }
 
-    public function isBalancingFeeProvider()
+    public static function isBalancingFeeProvider()
     {
         return [
             [FeeType::FEE_TYPE_APP, false],
@@ -1139,9 +1116,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $type
      * @param boolean $expected
-     *
-     * @dataProvider isNewApplicationFeeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isNewApplicationFeeProvider')]
     public function testIsNewApplicationFee($type, $expected)
     {
         $feeTypeType = new RefData($type);
@@ -1153,7 +1129,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isNewApplicationFee());
     }
 
-    public function isNewApplicationFeeProvider()
+    public static function isNewApplicationFeeProvider()
     {
         return [
             [FeeType::FEE_TYPE_APP, true],
@@ -1182,9 +1158,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $type
      * @param boolean $expected
-     *
-     * @dataProvider isVariationFeeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isVariationFeeProvider')]
     public function testIsVariationFee($type, $expected)
     {
         $feeTypeType = new RefData($type);
@@ -1196,7 +1171,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isVariationFee());
     }
 
-    public function isVariationFeeProvider()
+    public static function isVariationFeeProvider()
     {
         return [
             [FeeType::FEE_TYPE_APP, false],
@@ -1225,9 +1200,8 @@ class FeeEntityTest extends EntityTester
     /**
      * @param string $type
      * @param boolean $expected
-     *
-     * @dataProvider isGrantFeeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isGrantFeeProvider')]
     public function testIsGrantFee($type, $expected)
     {
         $feeTypeType = new RefData($type);
@@ -1239,7 +1213,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isGrantFee());
     }
 
-    public function isGrantFeeProvider()
+    public static function isGrantFeeProvider()
     {
         return [
             [FeeType::FEE_TYPE_APP, false],
@@ -1266,11 +1240,11 @@ class FeeEntityTest extends EntityTester
     }
 
     /**
-     * @dataProvider salesPersonRefProvider
      * @param string $trafficAreaRef
      * @param string $costCentreReference
      * @param string $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('salesPersonRefProvider')]
     public function testGetSalesPersonReference($trafficAreaRef, $costCentreReference, $expected)
     {
         $licence = m::mock(Licence::class);
@@ -1289,7 +1263,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getSalesPersonReference());
     }
 
-    public function salesPersonRefProvider()
+    public static function salesPersonRefProvider()
     {
         return [
             ['B', 'TA', 'B'],
@@ -1306,8 +1280,8 @@ class FeeEntityTest extends EntityTester
      * @param RefData $feeStatus
      * @param array $feeTransactions
      * @param bool $expected
-     * @dataProvider canRefundProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canRefundProvider')]
     public function testCanRefund($feeType, $feeStatus, $feeTransactions, $expected)
     {
         $this->sut
@@ -1321,7 +1295,7 @@ class FeeEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function canRefundProvider()
+    public static function canRefundProvider()
     {
         $nonMiscFeeType = m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
@@ -1448,8 +1422,8 @@ class FeeEntityTest extends EntityTester
      * @param float $rate
      * @param float $expectedVatAmount
      * @param float $expectedGrossAmount
-     * @dataProvider vatProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('vatProvider')]
     public function testSetVatAndGrossAmountsFromNetAmountUsingRate(
         $netAmount,
         $rate,
@@ -1464,7 +1438,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEqualsWithDelta($expectedGrossAmount, $this->sut->getGrossAmount(), 0.01);
     }
 
-    public function vatProvider()
+    public static function vatProvider()
     {
         return [
             'no_vat' => [
@@ -1499,14 +1473,14 @@ class FeeEntityTest extends EntityTester
      *
      * @param  string $input
      * @param  int $expected
-     * @dataProvider amountToPenceProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('amountToPenceProvider')]
     public function testAmountToPence($input, $expected)
     {
         $this->assertSame($expected, Entity::amountToPence($input));
     }
 
-    public function amountToPenceProvider()
+    public static function amountToPenceProvider()
     {
         return [
             ['1.00', (int) 100],
@@ -1525,14 +1499,14 @@ class FeeEntityTest extends EntityTester
      *
      * @param  string $input
      * @param  int $expected
-     * @dataProvider amountToPoundsProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('amountToPoundsProvider')]
     public function testAmountToPounds($input, $expected)
     {
         $this->assertSame($expected, Entity::amountToPounds($input));
     }
 
-    public function amountToPoundsProvider()
+    public static function amountToPoundsProvider()
     {
         return [
             [100, '1.00'],
@@ -1544,9 +1518,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider amountByTransactionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('amountByTransactionProvider')]
     public function testGetAmountAllocatedByTransactionId($feeTransactions, $transactionId, $expected)
     {
         $this->sut->setFeeTransactions($feeTransactions);
@@ -1598,9 +1570,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dataProviderIsRuleBeforeInvoiceDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderIsRuleBeforeInvoiceDate')]
     public function testIsRuleBeforeInvoiceDate($expected, $invoicedDate)
     {
         // force the rule date to be now
@@ -1615,7 +1585,7 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isRuleBeforeInvoiceDate());
     }
 
-    public function dataProviderIsRuleBeforeInvoiceDate()
+    public static function dataProviderIsRuleBeforeInvoiceDate()
     {
         return [
             [true, (new DateTime())->modify('1 second')],
@@ -1627,16 +1597,14 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dataProviderGetInvoicedDateTime
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderGetInvoicedDateTime')]
     public function testGetInvoicedDateTime($expected, $invoicedDate)
     {
         $this->sut->setInvoicedDate($invoicedDate);
         $this->assertEquals($expected, $this->sut->getInvoicedDateTime());
     }
 
-    public function dataProviderGetInvoicedDateTime()
+    public static function dataProviderGetInvoicedDateTime()
     {
         return [
             [new DateTime('2016-01-25'), new DateTime('2016-01-25')],
@@ -1645,9 +1613,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestGetRelatedOrganisation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedOrganisation')]
     public function testGetRelatedOrganisation(Entity $sut, $expect)
     {
         static::assertSame($expect, $sut->getRelatedOrganisation());
@@ -1698,9 +1664,7 @@ class FeeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetDueDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetDueDate')]
     public function testGetDueDate($status, $type, $invoicedDate, $expected)
     {
         $this->sut->setFeeStatus(new RefData($status));
@@ -1716,7 +1680,7 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getDueDate(true));
     }
 
-    public function dpGetDueDate()
+    public static function dpGetDueDate()
     {
         $now = new DateTime();
 

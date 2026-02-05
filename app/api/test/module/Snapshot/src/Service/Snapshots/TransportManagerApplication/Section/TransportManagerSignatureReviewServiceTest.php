@@ -40,9 +40,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerSignatureReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider getConfigProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigProvider')]
     public function testGetConfig($data, $expected)
     {
         $this->mockTranslator
@@ -95,7 +93,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['markup' => $expectedMarkup], $this->sut->getConfig($tma));
     }
 
-    public function getConfigProvider()
+    public static function getConfigProvider()
     {
 
         $digitalSignature = m::mock(DigitalSignature::class);
@@ -177,11 +175,11 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
     /**
      * testAppropriateTemplateUsedForDigitalSignatures
      *
-     * @dataProvider digitalSignatureDataProvider
      *
      * @param $conditions
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('digitalSignatureDataProvider')]
     public function notestAppropriateTemplateUsedForDigitalSignatures($conditions, $expected)
     {
         $this->mockTranslator
@@ -213,7 +211,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         ], $actual);
     }
 
-    public function digitalSignatureDataProvider()
+    public static function digitalSignatureDataProvider()
     {
         $opDigitalSignature = m::mock(DigitalSignature::class);
         $opDigitalSignature->shouldReceive('getSignatureName')->andReturn('OpName');

@@ -59,6 +59,7 @@ class SlaException extends AbstractListDataService
      * @param SlaExceptionEntity[]|array $data Raw data
      * @return array<string, array{label: string, options: array<int, string>}>
      */
+    #[\Override]
     public function formatDataForGroups(array $data): array
     {
         $optGroups = [];
@@ -95,6 +96,7 @@ class SlaException extends AbstractListDataService
      * @param bool $useGroups Use groups (always true for this service)
      * @return array<string, array{label: string, options: array<int, string>}>
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = true): array
     {
         $data = $this->fetchListData($context);
@@ -117,6 +119,7 @@ class SlaException extends AbstractListDataService
      * @param array $data Data
      * @return array<int, string>
      */
+    #[\Override]
     public function formatData(array $data): array
     {
         $optionData = [];

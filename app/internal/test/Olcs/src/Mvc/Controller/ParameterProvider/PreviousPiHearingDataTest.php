@@ -14,12 +14,12 @@ use Laminas\Mvc\Controller\Plugin\Params;
 class PreviousPiHearingDataTest extends TestCase
 {
     /**
-     * @dataProvider provideParametersProvider
      *
      * @param $venueOther
      * @param $venue
      * @param $outputVenue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideParametersProvider')]
     public function testProvideParameters($venueOther, $venue, $outputVenue)
     {
         $piId = 44;
@@ -68,7 +68,7 @@ class PreviousPiHearingDataTest extends TestCase
     /**
      * @return array
      */
-    public function provideParametersProvider()
+    public static function provideParametersProvider()
     {
         return [
             ['other venue', 11, 'other'],

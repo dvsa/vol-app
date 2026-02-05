@@ -31,9 +31,7 @@ class QuestionEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    /**
-    * @dataProvider dpIsCustom
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCustom')]
     public function testIsCustom($id, $expected)
     {
         $questionType = new RefData($id);
@@ -43,7 +41,7 @@ class QuestionEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isCustom());
     }
 
-    public function dpIsCustom()
+    public static function dpIsCustom()
     {
         return [
             [Entity::QUESTION_TYPE_STRING, false],
@@ -53,9 +51,7 @@ class QuestionEntityTest extends EntityTester
         ];
     }
 
-    /**
-    * @dataProvider dpGetActiveQuestionText
-    */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetActiveQuestionText')]
     public function testGetActiveQuestionText($questionTexts, $dateToCheck, $expected)
     {
         $this->entity->setQuestionTexts($questionTexts);
@@ -63,7 +59,7 @@ class QuestionEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getActiveQuestionText($dateToCheck));
     }
 
-    public function dpGetActiveQuestionText()
+    public static function dpGetActiveQuestionText()
     {
         $inPast = new DateTime('last year');
         $lastWeek = new DateTime('-1 week');

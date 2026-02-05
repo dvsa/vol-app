@@ -5,9 +5,9 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository;
 
 /**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Role
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Role::class)]
 class RoleTest extends RepositoryTestCase
 {
     public const ROLE = 'unit_role';

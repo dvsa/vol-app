@@ -12,9 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\DocumentGenerator
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\DocumentGenerator::class)]
 class DocumentGeneratorTest extends MockeryTestCase
 {
     /** @var  DocumentGenerator */

@@ -233,9 +233,7 @@ class BusShortNoticeEntityTest extends EntityTester
         $this->assertEquals($this->entity->getHolidayDetail(), 'bar');
     }
 
-    /**
-     * @dataProvider hasGrantableDetailsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasGrantableDetailsProvider')]
     public function testHasGrantableDetails($change, $details, $expected)
     {
         $this->entity->setBankHolidayChange($change['bankHolidayChange']);
@@ -262,7 +260,7 @@ class BusShortNoticeEntityTest extends EntityTester
         $this->assertEquals($this->entity->hasGrantableDetails(), $expected);
     }
 
-    public function hasGrantableDetailsProvider()
+    public static function hasGrantableDetailsProvider()
     {
         return [
             [

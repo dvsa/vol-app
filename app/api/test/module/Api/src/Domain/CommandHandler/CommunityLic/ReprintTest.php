@@ -17,9 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Licence\UpdateTotalCommunityLicences as UpdateTotalCommunityLicencesCommand;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Reprint
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Reprint::class)]
 class ReprintTest extends AbstractCommandHandlerTestCase
 {
     /** @var Reprint */
@@ -36,6 +34,7 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -47,9 +46,8 @@ class ReprintTest extends AbstractCommandHandlerTestCase
 
     /**
      * Tests handle command in situations where db updates are made
-     *
-     * @dataProvider dpHandleCommand
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($isBatchReprint, $dbUpdateDisabled, $dbParamCheckedTimes)
     {
         $licenceId = 1;
@@ -184,7 +182,7 @@ class ReprintTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(CommunityLicEntity::STATUS_ACTIVE, $communityLic2->getStatus()->getId());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [false, 0, 0],

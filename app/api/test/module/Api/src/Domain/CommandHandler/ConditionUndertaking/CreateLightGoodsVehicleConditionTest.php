@@ -66,9 +66,7 @@ class CreateLightGoodsVehicleConditionTest extends AbstractCommandHandlerTestCas
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandNoUndertakingRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandNoUndertakingRequired')]
     public function testHandleCommandNoUndertakingRequired($vehicleTypeId, $hasLightGoodsVehicleUndertakings)
     {
         $applicationId = 44;
@@ -97,7 +95,7 @@ class CreateLightGoodsVehicleConditionTest extends AbstractCommandHandlerTestCas
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandNoUndertakingRequired()
+    public static function dpHandleCommandNoUndertakingRequired()
     {
         return [
             [RefData::APP_VEHICLE_TYPE_PSV, true],

@@ -67,8 +67,8 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
      * @param $aocData
      * @param $locData
      * @param $expected
-     * @dataProvider ocProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('ocProvider')]
     public function testGetListDataForApplication($aocData, $locData, $expected, $params)
     {
         /** @var Licence $licence */
@@ -92,7 +92,7 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getListDataForApplication($application, $query));
     }
 
-    public function ocProvider()
+    public static function ocProvider()
     {
         return [
             'noOfVehiclesRequired' => [

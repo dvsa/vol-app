@@ -56,7 +56,7 @@ class BusRegActionTest extends MockeryTestCase
         /** @var EventManagerInterface|m\Mock $mockEventManager */
         $mockEventManager = m::mock(EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegAction'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'busRegId', $this->sut->onBusRegAction(...), 1);
 
         $this->sut->attach($mockEventManager);
     }
@@ -178,20 +178,19 @@ class BusRegActionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider shouldOpenGrantButtonInModalProvider
      *
      * @param $data
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('shouldOpenGrantButtonInModalProvider')]
     public function testShouldOpenGrantButtonInModal($data, $expected)
     {
         $method = new \ReflectionMethod($this->sut, 'shouldOpenGrantButtonInModal');
-        $method->setAccessible(true);
 
         $this->assertEquals($expected, $method->invoke($this->sut, $data));
     }
 
-    public function shouldOpenGrantButtonInModalProvider()
+    public static function shouldOpenGrantButtonInModalProvider()
     {
         return [
             // variation

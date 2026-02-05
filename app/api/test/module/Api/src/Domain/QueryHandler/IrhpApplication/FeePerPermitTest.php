@@ -26,9 +26,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQuerySupportedPermitType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuerySupportedPermitType')]
     public function testHandleQuerySupportedPermitType($permitTypeId)
     {
         $applicationFeeProdRef = 'APPLICATION_FEE_PROD_REF';
@@ -101,7 +99,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpTestHandleQuerySupportedPermitType()
+    public static function dpTestHandleQuerySupportedPermitType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
@@ -109,9 +107,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedPermitType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedPermitType')]
     public function testHandleQueryUnsupportedPermitType($permitTypeId)
     {
         $this->expectException(ForbiddenException::class);
@@ -130,7 +126,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function dpTestHandleQueryUnsupportedPermitType()
+    public static function dpTestHandleQueryUnsupportedPermitType()
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

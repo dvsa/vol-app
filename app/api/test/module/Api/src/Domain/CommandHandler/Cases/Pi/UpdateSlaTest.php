@@ -30,6 +30,7 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -42,10 +43,9 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider writtenOutcomeProvider
-     *
      * @param string|null $writtenOutcome
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('writtenOutcomeProvider')]
     public function testHandleCommand($writtenOutcome)
     {
         $id = 11;
@@ -87,7 +87,7 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function writtenOutcomeProvider()
+    public static function writtenOutcomeProvider()
     {
         return [
             [SlaEntity::VERBAL_DECISION_ONLY],

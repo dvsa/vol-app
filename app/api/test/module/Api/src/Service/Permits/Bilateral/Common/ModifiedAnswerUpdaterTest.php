@@ -53,9 +53,7 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         $this->modifiedAnswerUpdater->update($this->qaContext, 'old_answer', $newAnswer);
     }
 
-    /**
-     * @dataProvider dpUpdateOldAnswerNullOrAnswerNotChanged
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateOldAnswerNullOrAnswerNotChanged')]
     public function testUpdateOldAnswerNullOrAnswerNotChanged($oldAnswer)
     {
         $newAnswer = 'answer';
@@ -67,7 +65,7 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         $this->modifiedAnswerUpdater->update($this->qaContext, $oldAnswer, $newAnswer);
     }
 
-    public function dpUpdateOldAnswerNullOrAnswerNotChanged()
+    public static function dpUpdateOldAnswerNullOrAnswerNotChanged()
     {
         return [
             ['answer'],

@@ -15,15 +15,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class LicenceCancelledTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideTestProvider
      *
      * @param $section
      * @param $expectedString
      *
-     * @group publicationFilter
-     *
-     * Test the application licence cancelled filter
      */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application licence cancelled filter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestProvider')]
     public function testProvide($section, $expectedString)
     {
 
@@ -49,7 +48,7 @@ class LicenceCancelledTest extends MockeryTestCase
      *
      * @return array
      */
-    public function provideTestProvider()
+    public static function provideTestProvider()
     {
         $sut = new LicenceCancelled(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 

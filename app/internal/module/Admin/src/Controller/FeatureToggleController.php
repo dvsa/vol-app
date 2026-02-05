@@ -63,6 +63,7 @@ class FeatureToggleController extends AbstractInternalController implements Left
         return $view;
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Feature toggles');

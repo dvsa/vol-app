@@ -33,9 +33,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->sut = new SignatureReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider physicalSignatureDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('physicalSignatureDataProvider')]
     public function testPhysicalSignature($data, $expected)
     {
         $this->translator->shouldReceive('translate')
@@ -95,7 +93,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    public function physicalSignatureDataProvider()
+    public static function physicalSignatureDataProvider()
     {
         return [
             'is_not_ni' => [

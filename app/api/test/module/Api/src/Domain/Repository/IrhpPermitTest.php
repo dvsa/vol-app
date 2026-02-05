@@ -77,9 +77,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetPermitCountWithEmissionsCategoryId
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitCountWithEmissionsCategoryId')]
     public function testGetPermitCountWithEmissionsCategoryId($emissionsCategoryId)
     {
         $permitCount = 744;
@@ -134,7 +132,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetPermitCountWithEmissionsCategoryId()
+    public static function dpTestGetPermitCountWithEmissionsCategoryId()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -344,9 +342,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider dpFetchListForReadyToPrintWithStockAndRangeType
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListForReadyToPrintWithStockAndRangeType')]
     public function testFetchListForReadyToPrintWithStockAndRangeType($irhpPermitRangeType, $expectedJourney, $expectedCabotage)
     {
         $this->setUpSut(IrhpPermit::class, true);
@@ -385,7 +381,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchListForReadyToPrintWithStockAndRangeType()
+    public static function dpFetchListForReadyToPrintWithStockAndRangeType()
     {
         return [
             [
@@ -476,9 +472,7 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpFetchListByLicence
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFetchListByLicence')]
     public function testFetchListByLicence($status, $validOnly, $expectedStatuses)
     {
         $this->setUpSut(IrhpPermit::class, true);
@@ -520,7 +514,7 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function dpFetchListByLicence()
+    public static function dpFetchListByLicence()
     {
         return [
             'valid only' => [null, true, IrhpPermitEntity::$validStatuses],

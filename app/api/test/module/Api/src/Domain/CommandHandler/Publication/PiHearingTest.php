@@ -58,6 +58,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->ta1 = m::mock(TrafficAreaEntity::class);
@@ -89,9 +90,9 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleTmHearingProvider
      * @param string $cmdClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleTmHearingProvider')]
     public function testHandleNonTmHearing($cmdClass, $caseType)
     {
         $id = 99;
@@ -160,10 +161,9 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider commandProvider
-     *
      * @param $cmdClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandProvider')]
     public function testHandleTmHearingCreate($cmdClass)
     {
         $id = 99;
@@ -257,10 +257,9 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider commandProvider
-     *
      * @param $cmdClass
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandProvider')]
     public function testHandleTmHearingDelete($cmdClass)
     {
         $id = 99;
@@ -354,7 +353,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function commandProvider()
+    public static function commandProvider()
     {
         return [
             [PiHearingCmd::class],
@@ -365,7 +364,7 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleTmHearingProvider()
+    public static function handleTmHearingProvider()
     {
         return [
             [PiHearingCmd::class, CasesEntity::APP_CASE_TYPE],

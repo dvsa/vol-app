@@ -63,6 +63,7 @@ class ViewVehicleController extends AbstractVehicleController
      * @return ViewModel
      * @throws VehiclesNotFoundWithIdsException
      */
+    #[\Override]
     public function indexAction()
     {
         $licenceId = (int) $this->params()->fromRoute('licence');

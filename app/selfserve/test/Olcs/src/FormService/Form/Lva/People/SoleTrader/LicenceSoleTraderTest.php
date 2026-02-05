@@ -46,9 +46,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $this->fsm);
     }
 
-    /**
-     * @dataProvider noDisqualifyProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noDisqualifyProvider')]
     public function testGetFormNoDisqualify($params): void
     {
         $params['canModify'] = true;
@@ -166,7 +164,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
      */
-    public function noDisqualifyProvider(): array
+    public static function noDisqualifyProvider(): array
     {
         return [
             [

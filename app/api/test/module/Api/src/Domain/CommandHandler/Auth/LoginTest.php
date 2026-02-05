@@ -36,19 +36,15 @@ class LoginTest extends AbstractCommandHandlerTestCase
      */
     private $mockAdapter;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable()
     {
         // Assert
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandAdapterSetsUsernameAndPasswordFromCommand()
     {
         // Expectations
@@ -64,10 +60,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
     }
 
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful()
     {
         // Expectations
@@ -104,10 +98,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandUpdatesUserLastLoginAtWhenAuthenticationIsSuccessful')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful()
     {
         // Expectations
@@ -150,10 +142,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandDoesNotUpdateLastLoginAtWhenAuthenticationIsNotSuccessful')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandReturnsResultWithExpectedFlags()
     {
         // Execute
@@ -171,11 +161,9 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     * @dataProvider returnsExpectedResultWhenUserCannotAccessRealmProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('returnsExpectedResultWhenUserCannotAccessRealmProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandReturnsExpectedResultWhenUserCannotAccessRealm(bool $isInternal, string $realm)
     {
         // Expectations
@@ -211,7 +199,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    public function returnsExpectedResultWhenUserCannotAccessRealmProvider()
+    public static function returnsExpectedResultWhenUserCannotAccessRealmProvider()
     {
         return [
             'Internal user accessing selfserve' => [true, 'selfserve'],
@@ -219,10 +207,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithMonitoredRolesAndHasNoOrg()
     {
         // Expectations
@@ -262,10 +248,8 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     * @depends handleCommandAdapterSetsUsernameAndPasswordFromCommand
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandReturnsExpectedResultWhenUserIsSelfServeWithoutMonitoredRolesAndHasNoOrg()
     {
         // Expectations
@@ -301,9 +285,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertNotEmpty($result->getFlag('identity'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandUserNotFoundInDatabaseReturnsNotFoundResult()
     {
         // Expectations
@@ -329,9 +311,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandUserSoftDeletedInDatabaseReturnsNotFoundResult()
     {
         // Expectations
@@ -362,9 +342,7 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandUserDisabledInDatabaseReturnsDisabledResult()
     {
         // Expectations

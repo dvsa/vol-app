@@ -9,9 +9,7 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Dvsa\Olcs\Api\Entity\View\DocumentSearchView as DocumentSearchViewEntity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DocumentSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DocumentSearchView::class)]
 class DocumentSearchViewTest extends RepositoryTestCase
 {
     public function setUp(): void

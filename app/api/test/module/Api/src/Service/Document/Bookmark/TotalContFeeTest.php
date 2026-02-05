@@ -55,16 +55,14 @@ class TotalContFeeTest extends MockeryTestCase
         $this->assertEquals('', $this->sut->render());
     }
 
-    /**
-     * @dataProvider resultsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('resultsProvider')]
     public function testRenderWithTotalContFee($results)
     {
         $this->sut->setData($results);
         $this->assertEquals('123,456', $this->sut->render());
     }
 
-    public function resultsProvider()
+    public static function resultsProvider()
     {
         return [
             [

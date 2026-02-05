@@ -22,12 +22,12 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getNavigationProvider
      *
      * @param int $applicationId
      * @param string $activeSection
      * @param array $sections
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNavigationProvider')]
     public function testGetNavigation($applicationId, $activeSection, $sections)
     {
         $expected = [];
@@ -51,7 +51,7 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->getNavigation($applicationId, $activeSection));
     }
 
-    public function getNavigationProvider()
+    public static function getNavigationProvider()
     {
         return [
             [7, 'notes', ['notes' => [], 'tasks' => []]],

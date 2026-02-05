@@ -62,6 +62,7 @@ class ApplicationController extends AbstractInternalController implements LeftVi
     /**
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->handleIndexPost();

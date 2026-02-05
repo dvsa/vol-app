@@ -38,6 +38,7 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         parent::initReferences();

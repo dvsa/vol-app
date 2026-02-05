@@ -64,6 +64,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['emailTemplateCategory'] = $this->params()->fromQuery('emailTemplateCategory');

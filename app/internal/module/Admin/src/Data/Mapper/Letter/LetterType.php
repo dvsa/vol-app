@@ -23,10 +23,10 @@ class LetterType implements MapperInterface
                 'name' => $data['name'] ?? null,
                 'description' => $data['description'] ?? null,
                 'isActive' => $data['isActive'] ?? true,
-                'masterTemplate' => isset($data['masterTemplate']['id']) ? $data['masterTemplate']['id'] : null,
-                'category' => isset($data['category']['id']) ? $data['category']['id'] : null,
-                'subCategory' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
-                'letterTestData' => isset($data['letterTestData']['id']) ? $data['letterTestData']['id'] : null,
+                'masterTemplate' => $data['masterTemplate']['id'] ?? null,
+                'category' => $data['category']['id'] ?? null,
+                'subCategory' => $data['subCategory']['id'] ?? null,
+                'letterTestData' => $data['letterTestData']['id'] ?? null,
             ]
         ];
 

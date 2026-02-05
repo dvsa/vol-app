@@ -114,13 +114,13 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider dpTestHandleCommandResetSignature
      *
      * @param $expectResetSignature
      * @param $section
      * @param $isSelfserve
      * @param $applicationStatus
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandResetSignature')]
     public function testHandleCommandResetSignature($expectResetSignature, $section, $isSelfserve, $applicationStatus)
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
@@ -171,7 +171,7 @@ class UpdateApplicationCompletionTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpTestHandleCommandResetSignature()
+    public static function dpTestHandleCommandResetSignature()
     {
         return [
             [true, 'typeOfLicence', true, ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED],

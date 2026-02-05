@@ -32,7 +32,7 @@ final class CreateApplicationFee extends AbstractCommandHandler implements AuthA
 
     protected $extraRepos = ['FeeType'];
 
-    public const DUE_DATE_FORMAT = 'Y-m-d';
+    public const string DUE_DATE_FORMAT = 'Y-m-d';
 
     public function handleCommand(CommandInterface $command)
     {

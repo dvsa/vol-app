@@ -9,9 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-/**
- * @coversDefaultClass
- */
+#[\PHPUnit\Framework\Attributes\CoversClass('::class')]
 class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
 {
     /** @var  TransportManagerApplication\Section\TransportManagerResponsibilityReviewService */
@@ -36,9 +34,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testGetConfig($tma, $expected)
     {
         $this->mockTranslator->shouldReceive('translate')
@@ -49,7 +45,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider()
     {
         /** @var Entity\Tm\TransportManager $tm1 */
         $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
@@ -144,7 +140,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
         return [
             [
                 'tma' => $tma1,
-                'expect' => [
+                'expected' => [
                     'subSections' => [
                         [
                             'mainItems' => [
@@ -232,7 +228,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
             ],
             [
                 'tma' => $tma2,
-                'expect' => [
+                'expected' => [
                     'subSections' => [
                         [
                             'mainItems' => [
@@ -320,7 +316,7 @@ class TransportManagerResponsibilityReviewServiceTest extends MockeryTestCase
             ],
             [
                 'tma' => $tma3,
-                'expect' => [
+                'expected' => [
                     'subSections' => [
                         [
                             'mainItems' => [

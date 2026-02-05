@@ -59,11 +59,11 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider indexProvider
      * @param array $overviewData
      * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveReviewDate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexProvider')]
     public function testIndexActionGet($overviewData, $shouldRemoveReviewDate)
     {
         $licenceId = 123;
@@ -123,7 +123,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         }
     }
 
-    public function indexProvider()
+    public static function indexProvider()
     {
         $valueOptions = [
             'trafficAreas' => [

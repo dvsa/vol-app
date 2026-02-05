@@ -25,9 +25,8 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test render
-     *
-     * @dataProvider dataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testRender($query, $expected)
     {
         $bookmark = new TaAddress();
@@ -44,7 +43,7 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'licence' => [

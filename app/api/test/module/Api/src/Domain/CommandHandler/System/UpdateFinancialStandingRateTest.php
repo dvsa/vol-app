@@ -26,9 +26,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($goodsOrPsv, $licenceType, $vehicleType)
     {
         $id = 69;
@@ -103,7 +101,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['Financial Standing Rate updated'], $response->getMessages());
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [
@@ -194,9 +192,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandInputRulesViolation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandInputRulesViolation')]
     public function testHandleCommandInputRulesViolation(
         $goodsOrPsv,
         $licenceType,
@@ -235,7 +231,7 @@ class UpdateFinancialStandingRateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandInputRulesViolation()
+    public static function dpHandleCommandInputRulesViolation()
     {
         return [
             [

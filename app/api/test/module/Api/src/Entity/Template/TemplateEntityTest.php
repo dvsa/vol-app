@@ -44,9 +44,7 @@ class TemplateEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestGetComputedCategoryName
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetComputedCategoryName')]
     public function testGetComputedCategoryName($categoryName, $linkedCategoryEntity, $expectedCategoryName)
     {
         $template = m::mock(Entity::class)->makePartial();
@@ -56,7 +54,7 @@ class TemplateEntityTest extends EntityTester
         $this->assertEquals($expectedCategoryName, $template->getComputedCategoryName());
     }
 
-    public function dpTestGetComputedCategoryName()
+    public static function dpTestGetComputedCategoryName()
     {
         $categoryName = 'Category name';
         $linkedCategoryName = 'Linked category name';

@@ -16,6 +16,7 @@ class CanDeleteDocument extends AbstractCanAccessEntity
     /**
      * @throws NotFoundException
      */
+    #[\Override]
     public function isValid($entityId): bool
     {
         $document = $this->getDocument($entityId);

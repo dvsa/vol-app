@@ -43,6 +43,7 @@ final class UpdateNysiisName extends AbstractCommandHandler implements AuthAware
         return $this->result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

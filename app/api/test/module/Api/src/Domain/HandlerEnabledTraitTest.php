@@ -73,9 +73,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    /**
-     * @dataProvider toggleConfigProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('toggleConfigProvider')]
     public function testEnabledWithToggleConfigException($toggleConfig1, $toggleConfig2, $checkSecondToggle)
     {
         $this->expectException(DisabledHandlerException::class);
@@ -98,7 +96,7 @@ class HandlerEnabledTraitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(true, $this->sut->checkEnabled());
     }
 
-    public function toggleConfigProvider()
+    public static function toggleConfigProvider()
     {
         return [
             [true, false, 1],

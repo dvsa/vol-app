@@ -20,9 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpAddRows
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAddRows')]
     public function testAddRows($isSnapshot, $availableStocks, $isMultiStock, $expectedSlug)
     {
         $countryId = 'NO';
@@ -89,7 +87,7 @@ class BilateralIpaAnswersSummaryRowsAdderTest extends MockeryTestCase
         $sut->addRows($answersSummary, $irhpPermitApplication, $isSnapshot);
     }
 
-    public function dpAddRows()
+    public static function dpAddRows()
     {
         $noStocks = [];
         $oneStock = [['id' => 1]];

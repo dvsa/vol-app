@@ -58,9 +58,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandlerExceptionNotAllow
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandlerExceptionNotAllow')]
     public function testHandlerExceptionNotAllow($orgData)
     {
         $data = [
@@ -93,7 +91,7 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandlerExceptionNotAllow()
+    public static function dpTestHandlerExceptionNotAllow()
     {
         return [
             [

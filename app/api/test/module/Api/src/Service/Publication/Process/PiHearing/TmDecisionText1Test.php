@@ -14,11 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TmDecisionText1Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the TmDecisionText1 filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the TmDecisionText1 filter')]
     public function testProcess()
     {
         $sut = new TmDecisionText1();

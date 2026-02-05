@@ -43,13 +43,13 @@ class PolicePeopleTest extends MockeryTestCase
     /**
      * Tests data renders correctly
      *
-     * @dataProvider renderWithDataProvider
      *
      * @param array $licence
      * @param string $expectedLicNo
      * @param string $pubType
      * @param string $expectedSection
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderWithDataProvider')]
     public function testRenderWithData($licence, $expectedLicNo, $pubType, $expectedSection)
     {
         $forename1 = 'forename 1';
@@ -143,7 +143,7 @@ class PolicePeopleTest extends MockeryTestCase
         );
     }
 
-    public function renderWithDataProvider()
+    public static function renderWithDataProvider()
     {
         $licNo = 'OB1234567';
 

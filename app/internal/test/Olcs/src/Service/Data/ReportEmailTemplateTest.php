@@ -25,9 +25,7 @@ class ReportEmailTemplateTest extends AbstractDataServiceTestCase
         $this->sut = new ReportEmailTemplate($this->abstractDataServiceServices);
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($results, $expected)
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
@@ -55,7 +53,7 @@ class ReportEmailTemplateTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions());
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions()
     {
         return [
             'with data' => [

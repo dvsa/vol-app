@@ -59,6 +59,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->isButtonPressed('change')) {

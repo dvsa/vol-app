@@ -28,9 +28,7 @@ class AvailableLicencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQueryProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryProvider')]
     public function testHandleQuery($isMultiStock, $stockId)
     {
         $permitTypeId = 777;
@@ -96,7 +94,7 @@ class AvailableLicencesTest extends QueryHandlerTestCase
         $this->assertEquals($expectedReturnValues, $this->sut->handleQuery($originalQuery));
     }
 
-    public function dpHandleQueryProvider()
+    public static function dpHandleQueryProvider()
     {
         return [
             [true, null],

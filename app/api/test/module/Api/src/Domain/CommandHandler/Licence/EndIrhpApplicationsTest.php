@@ -38,9 +38,7 @@ class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($withdrawReason)
     {
         $licenceId = 52;
@@ -123,7 +121,7 @@ class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [WithdrawableInterface::WITHDRAWN_REASON_BY_USER],

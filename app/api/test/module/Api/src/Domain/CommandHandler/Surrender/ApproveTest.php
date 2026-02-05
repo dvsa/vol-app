@@ -37,6 +37,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -46,9 +47,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($data, $expected)
     {
         $now = new \DateTime();
@@ -116,7 +115,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             'psv_sn_notNi' => [
@@ -272,9 +271,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpTesthasEcmsAndSignatureBeenChecked
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTesthasEcmsAndSignatureBeenChecked')]
     public function testhasEcmsAndSignatureBeenChecked($data, $expected)
     {
         $now = new \DateTime();
@@ -349,7 +346,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTesthasEcmsAndSignatureBeenChecked()
+    public static function dpTesthasEcmsAndSignatureBeenChecked()
     {
         return [
             'ecms_checked' => [

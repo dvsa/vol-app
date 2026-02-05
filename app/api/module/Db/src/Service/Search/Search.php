@@ -130,7 +130,7 @@ class Search implements AuthAwareInterface
 
         $searchTypes = array_filter(
             array_map(
-                fn($index) => $this->getSearchType($index),
+                $this->getSearchType(...),
                 $indexes,
             ),
             fn($item) => $item !== null,

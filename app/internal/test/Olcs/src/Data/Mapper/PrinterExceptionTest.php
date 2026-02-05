@@ -20,15 +20,13 @@ use Laminas\Form\FormInterface;
  */
 class PrinterExceptionTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider fromResultProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromResultProvider')]
     public function testMapFromResult($data, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function fromResultProvider()
+    public static function fromResultProvider()
     {
         return [
             'data' => [
@@ -78,15 +76,13 @@ class PrinterExceptionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fromFormProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromFormProvider')]
     public function testMapFromForm($data, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function fromFormProvider()
+    public static function fromFormProvider()
     {
         return [
             'user' => [

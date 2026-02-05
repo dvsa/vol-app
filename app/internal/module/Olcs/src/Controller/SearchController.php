@@ -29,20 +29,17 @@ class SearchController extends AbstractController implements LeftViewProvider
 
     public const CONTAINER = 'searchForm';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected $navigation,
         protected RoleService $roleService,
         protected Placeholder $placeholder
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -113,6 +110,7 @@ class SearchController extends AbstractController implements LeftViewProvider
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->backAction();
@@ -248,7 +246,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     protected function vehicleremove26Action()
     {
         if ($this->getRequest()->isPost()) {
-            $ids = explode(',', $this->params('child_id'));
+            $ids = explode(',', (string) $this->params('child_id'));
             $response = $this->handleCommand(
                 \Dvsa\Olcs\Transfer\Command\Vehicle\UpdateSection26::create(
                     ['ids' => $ids, 'section26' => 'N']
@@ -281,7 +279,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     protected function vehicleset26Action()
     {
         if ($this->getRequest()->isPost()) {
-            $ids = explode(',', $this->params('child_id'));
+            $ids = explode(',', (string) $this->params('child_id'));
             $response = $this->handleCommand(
                 \Dvsa\Olcs\Transfer\Command\Vehicle\UpdateSection26::create(
                     ['ids' => $ids, 'section26' => 'Y']

@@ -77,6 +77,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
      *
      * @return array|mixed
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         if ($this->request->isPost()) {
@@ -97,6 +98,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
     /**
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         if (!isset($this->queryParams['fromOverview'])) {
@@ -115,6 +117,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveForms()
     {
         if (
@@ -146,6 +149,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
      * Extend method to redirect to countries confirmation page when one or more of the currently selected countries
      * are unselected
      */
+    #[\Override]
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['CancelButton'])) {

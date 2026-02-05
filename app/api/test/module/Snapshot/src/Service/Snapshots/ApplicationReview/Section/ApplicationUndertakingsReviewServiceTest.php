@@ -35,9 +35,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationUndertakingsReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
     public function testGetConfigFromData($data, $expected)
     {
         $this->mockTranslator->shouldReceive('translate')
@@ -107,7 +105,7 @@ class ApplicationUndertakingsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData()
     {
         return [
             'psv, special restricted' => [

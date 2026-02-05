@@ -32,9 +32,8 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * test convertToPHPValue
-     *
-     * @dataProvider providerConvertToPHPValue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerConvertToPHPValue')]
     public function testConvertToPhpValue($input, $output)
     {
         $mockPlatform = $this->createMock(MySQLPlatform::class);
@@ -45,7 +44,7 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for convertToPHPValue
      */
-    public function providerConvertToPhpValue()
+    public static function providerConvertToPhpValue()
     {
         return [
             [true, 'Y'],
@@ -57,9 +56,8 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * test convertToDatabaseValue
-     *
-     * @dataProvider providerConvertToDatabaseValue
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerConvertToDatabaseValue')]
     public function testConvertToDatabaseValue($input, $output)
     {
         $mockPlatform = $this->createMock(MySQLPlatform::class);
@@ -70,7 +68,7 @@ class YesNoTypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for convertToDatabaseValue
      */
-    public function providerConvertToDatabaseValue()
+    public static function providerConvertToDatabaseValue()
     {
         return [
             ['y', 1],

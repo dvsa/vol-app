@@ -19,9 +19,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\View\Model\JsonModel;
 
-/**
- * @covers \Dvsa\Olcs\Api\Controller\GenericController
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Controller\GenericController::class)]
 class GenericControllerTest extends TestCase
 {
     protected $commandHandlerManager;

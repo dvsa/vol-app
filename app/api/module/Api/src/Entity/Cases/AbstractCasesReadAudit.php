@@ -34,7 +34,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractCasesReadAudit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCasesReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

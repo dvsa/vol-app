@@ -43,6 +43,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -107,9 +108,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
             ->once();
     }
 
-    /**
-     * @dataProvider statusProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testHandleCommand($specifiedDate, $status)
     {
         $licenceId = 1;
@@ -206,7 +205,7 @@ class RestoreTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($specifiedDate, $communityLic->getSpecifiedDate());
     }
 
-    public function statusProvider()
+    public static function statusProvider()
     {
         return [
             [new DateTime('now'),  CommunityLicEntity::STATUS_ACTIVE],

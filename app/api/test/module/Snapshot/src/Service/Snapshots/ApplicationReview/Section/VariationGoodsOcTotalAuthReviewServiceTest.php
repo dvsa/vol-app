@@ -42,15 +42,13 @@ class VariationGoodsOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationGoodsOcTotalAuthReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
     public function testGetConfigFromData($data, $expected)
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData()
     {
         return [
             'without changes' => [

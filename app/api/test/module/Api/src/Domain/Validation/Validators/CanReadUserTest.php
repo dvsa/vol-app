@@ -24,9 +24,7 @@ class CanReadUserTest extends AbstractValidatorsTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testIsValid($canReadUser, $expected)
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -59,7 +57,7 @@ class CanReadUserTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [true, true],

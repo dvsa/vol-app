@@ -19,16 +19,14 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\AddMonthsRoundingDown;
  */
 class AddMonthsRoundingDownTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dateProvider')]
     public function testCalculateDate($date, $months, $expected)
     {
         $addMonths = new AddMonthsRoundingDown();
         $this->assertEquals($addMonths->calculateDate($date, $months), $expected);
     }
 
-    public function dateProvider()
+    public static function dateProvider()
     {
         return [
             [new \DateTime('2015-12-31'), 2, new \DateTime('2016-02-29')],

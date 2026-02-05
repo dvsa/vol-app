@@ -26,8 +26,8 @@ class ComplaintEntityTest extends EntityTester
     /**
      * @param string $statusId
      * @param boolean $expected
-     * @dataProvider isOpenProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isOpenProvider')]
     public function testIsOpen($statusId, $expected)
     {
         $sut = $this->instantiate($this->entityClass);
@@ -47,7 +47,7 @@ class ComplaintEntityTest extends EntityTester
         $this->assertFalse($sut->isOpen());
     }
 
-    public function isOpenProvider()
+    public static function isOpenProvider()
     {
         return [
             [Entity::COMPLAIN_STATUS_OPEN, true],
@@ -58,8 +58,8 @@ class ComplaintEntityTest extends EntityTester
     /**
      * @param bool $isCompliance
      * @param bool $expected
-     * @dataProvider isEnvironmentalComplaintProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isEnvironmentalComplaintProvider')]
     public function testIsEnvironmentalComplaint($isCompliance, $expected)
     {
         $sut = $this->instantiate($this->entityClass);
@@ -69,7 +69,7 @@ class ComplaintEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isEnvironmentalComplaint());
     }
 
-    public function isEnvironmentalComplaintProvider()
+    public static function isEnvironmentalComplaintProvider()
     {
         return [
             [false, true],
@@ -82,8 +82,8 @@ class ComplaintEntityTest extends EntityTester
      * @param string $statusId
      * @param \DateTime|null $closedDate
      * @param \DateTime|null $expected
-     * @dataProvider populateClosedDateProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('populateClosedDateProvider')]
     public function testPopulateClosedDate($isCompliance, $statusId, $closedDate, $expected)
     {
         $sut = $this->instantiate($this->entityClass);
@@ -104,7 +104,7 @@ class ComplaintEntityTest extends EntityTester
         );
     }
 
-    public function populateClosedDateProvider()
+    public static function populateClosedDateProvider()
     {
         return [
             // non-Environmental Complaint

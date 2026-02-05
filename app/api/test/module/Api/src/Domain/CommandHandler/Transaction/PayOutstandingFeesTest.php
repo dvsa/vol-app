@@ -101,6 +101,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -465,9 +466,8 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handle command for various application types (licence app, irhp)
-     *
-     * @dataProvider dpHandleForApplication
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleForApplication')]
     public function testHandleCommandWithApplicationId($applicationType, $feeServiceMethod)
     {
         // set up data
@@ -565,7 +565,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
     }
 
-    public function dpHandleForApplication()
+    public static function dpHandleForApplication()
     {
         return [
             'licence application' => [
@@ -1195,9 +1195,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider feeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeDataProvider')]
     public function testHandleCommandChequePaymentInsufficientFee($type, $orgId)
     {
         // set up data
@@ -1407,7 +1405,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-06-10', $savedTransaction->getChequePoDate()->format('Y-m-d'));
     }
 
-    public function feeDataProvider()
+    public static function feeDataProvider()
     {
         return [
             [

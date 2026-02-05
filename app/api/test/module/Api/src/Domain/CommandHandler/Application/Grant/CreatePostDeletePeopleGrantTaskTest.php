@@ -68,12 +68,12 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideCreateTaskWhenNoPeopleRemainCases
      *
      * @param $organisationType
      * @param $expectedTaskDescription
      * @param $expectedSubCategory
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreateTaskWhenNoPeopleRemainCases')]
     public function testCreateTaskWhenNoPeopleRemain($organisationType, $expectedTaskDescription, $expectedSubCategory)
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
@@ -103,7 +103,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreateTaskWhenNoPeopleRemainCases()
+    public static function provideCreateTaskWhenNoPeopleRemainCases()
     {
         return [
             [

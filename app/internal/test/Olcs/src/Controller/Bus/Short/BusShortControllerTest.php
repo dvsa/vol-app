@@ -36,11 +36,11 @@ class BusShortControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormForEditDataProvider
      *
      * @param $data
      * @param $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormForEditDataProvider')]
     public function testAlterFormForEdit(
         $data,
         $readonly
@@ -82,7 +82,7 @@ class BusShortControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function alterFormForEditDataProvider()
+    public static function alterFormForEditDataProvider()
     {
         return [
             [

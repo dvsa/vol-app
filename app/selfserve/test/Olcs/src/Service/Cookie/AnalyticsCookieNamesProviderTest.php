@@ -73,9 +73,7 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetNamesForProd
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetNamesForProd')]
     public function testGetNamesForProd($domain): void
     {
         $expected = [
@@ -134,7 +132,7 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
      *
      * @psalm-return list{list{'.www.preview.vehicle-operator-licensing.service.gov.uk'}, list{'.www.vehicle-operator-licensing.service.gov.uk'}}
      */
-    public function dpGetNamesForProd(): array
+    public static function dpGetNamesForProd(): array
     {
         return [
             ['.www.preview.vehicle-operator-licensing.service.gov.uk'],

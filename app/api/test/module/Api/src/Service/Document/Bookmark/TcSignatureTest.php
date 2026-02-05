@@ -22,9 +22,7 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
     public function testRender($id, $image)
     {
         $bookmark = new TcSignature();
@@ -62,7 +60,7 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return [
             ['B', 'TC_SIG_NORTHEASTERN'],

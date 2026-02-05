@@ -18,7 +18,7 @@ class ActionTest extends TestCase
 
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'action', [$sut, 'onAction'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'action', $sut->onAction(...), 1);
 
         $sut->attach($mockEventManager);
     }

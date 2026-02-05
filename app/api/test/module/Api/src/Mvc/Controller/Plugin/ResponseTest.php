@@ -14,9 +14,7 @@ use Laminas\Http\Headers;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\View\Model\JsonModel;
 
-/**
- * @covers \Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response::class)]
 class ResponseTest extends MockeryTestCase
 {
     /** @var  Plugin\Response */
@@ -87,9 +85,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_400, $this->response->getStatusCode());
     }
 
-    /**
-     * @dataProvider getSingleResultDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSingleResultDataProvider')]
     public function testSingleResult($data)
     {
         $result = $this->sut->singleResult($data);
@@ -99,7 +95,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    public function getSingleResultDataProvider()
+    public static function getSingleResultDataProvider()
     {
         return [
             // array
@@ -129,9 +125,7 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
     public function testStreamResult()
     {
         $streanContent = 'UNIT_expect_content';

@@ -15,11 +15,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class GrantNewText3Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the Bus Reg GrantNewText3 filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the Bus Reg GrantNewText3 filter')]
     public function testProcess()
     {
         $sut = new GrantNewText3();

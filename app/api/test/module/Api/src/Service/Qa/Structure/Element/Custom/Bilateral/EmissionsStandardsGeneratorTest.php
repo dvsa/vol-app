@@ -16,9 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsStandardsGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($answerValue, $expectedYesNo)
     {
         $elementGeneratorContext = m::mock(ElementGeneratorContext::class);
@@ -41,7 +39,7 @@ class EmissionsStandardsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             ['string_value', 'Y'],

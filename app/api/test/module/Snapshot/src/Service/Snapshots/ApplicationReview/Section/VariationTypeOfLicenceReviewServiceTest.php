@@ -40,9 +40,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationTypeOfLicenceReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
     public function testGetConfigFromData($licenceLicenceTypeId, $applicationLicenceTypeId)
     {
         $data = [
@@ -65,7 +63,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['freetext' => 'translated-text-bar-foo'], $this->sut->getConfigFromData($data));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData()
     {
         return [
             [
@@ -95,9 +93,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetConfigFromDataStandardInternational
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromDataStandardInternational')]
     public function testConfigFromDataStandardInternational(
         $licenceVehicleTypeId,
         $applicationVehicleTypeId,
@@ -149,7 +145,7 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function dpGetConfigFromDataStandardInternational()
+    public static function dpGetConfigFromDataStandardInternational()
     {
         return [
             [

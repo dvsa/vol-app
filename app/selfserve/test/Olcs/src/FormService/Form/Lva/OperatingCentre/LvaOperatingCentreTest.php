@@ -57,9 +57,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut = new LvaOperatingCentre($this->formHelper, $mockTranslator, $mockUrl);
     }
 
-    /**
-     * @dataProvider paramsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramsProvider')]
     public function testAlterFormNi($params): void
     {
         $form = m::mock(Form::class)
@@ -164,9 +162,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    /**
-     * @dataProvider gbParamsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('gbParamsProvider')]
     public function testAlterFormGb($params): void
     {
         $form = m::mock(Form::class)
@@ -278,7 +274,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'Y', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 1}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
      */
-    public function paramsProvider(): array
+    public static function paramsProvider(): array
     {
         return [
             [
@@ -359,7 +355,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'N', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 0}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 0}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
      */
-    public function gbParamsProvider(): array
+    public static function gbParamsProvider(): array
     {
         return [
             [

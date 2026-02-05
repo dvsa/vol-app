@@ -65,6 +65,7 @@ class SlaExceptionController extends AbstractInternalController implements CaseC
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function addAction()
     {
         return $this->add(

@@ -22,9 +22,7 @@ class CanCloseConversationWithIdTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsValid')]
     public function testIsValid($canAccess, $hasPermission, $expected)
     {
         /** @var CommandInterface $dto */
@@ -43,7 +41,7 @@ class CanCloseConversationWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function dpTestIsValid()
+    public static function dpTestIsValid()
     {
         return [
             [true, true, true],

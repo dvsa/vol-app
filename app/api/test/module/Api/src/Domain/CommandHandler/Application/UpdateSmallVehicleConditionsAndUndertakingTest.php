@@ -20,6 +20,7 @@ class UpdateSmallVehicleConditionsAndUndertakingTest extends AbstractUpdateAppli
         'psvSmallConditions',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

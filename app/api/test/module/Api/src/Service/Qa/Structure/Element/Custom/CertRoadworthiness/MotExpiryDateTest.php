@@ -14,9 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MotExpiryDateTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGetRepresentation($enableFileUploads)
     {
         $dateWithThresholdRepresentation = [
@@ -41,7 +39,7 @@ class MotExpiryDateTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse()
     {
         return [
             [true],

@@ -10,9 +10,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Queue\Failed
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Queue\Failed::class)]
 class FailedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -29,9 +27,8 @@ class FailedTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handleCommand method
-     *
-     * @dataProvider dpTestHandleCommand
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
     public function testHandleCommand($lastErr, $existingLastErr, $expectedLastErr)
     {
         $id = 1234;
@@ -67,7 +64,7 @@ class FailedTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(QueueEntity::STATUS_FAILED, $mockQueueEntity->getStatus()->getId());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand()
     {
         return [
             'maximum attempts error' => [

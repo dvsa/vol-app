@@ -18,8 +18,6 @@ class TransportManagerDocumentController extends TransportManagerController impl
     use Traits\DocumentSearchTrait;
     use Traits\ListDataTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -28,7 +26,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         $navigation,
-        DocumentSubCategory $docSubCategoryDataService
+        protected DocumentSubCategory $docSubCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -39,7 +37,6 @@ class TransportManagerDocumentController extends TransportManagerController impl
             $translationHelper,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**
@@ -63,6 +60,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         // the action needs to be index. Otherwise the action name will get appended to urls in the TM menu

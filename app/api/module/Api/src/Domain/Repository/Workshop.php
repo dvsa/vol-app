@@ -31,6 +31,7 @@ class Workshop extends AbstractRepository
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return parent::buildDefaultQuery($qb, $id)->withContactDetails();

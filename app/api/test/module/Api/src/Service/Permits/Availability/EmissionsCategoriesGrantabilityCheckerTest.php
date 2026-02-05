@@ -17,9 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestIsGrantable
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsGrantable')]
     public function testIsGrantable($requiredEuro5, $availableEuro5, $requiredEuro6, $availableEuro6, $isGrantable)
     {
         $irhpPermitStockId = 57;
@@ -54,7 +52,7 @@ class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestIsGrantable()
+    public static function dpTestIsGrantable()
     {
         return [
             [5, 5, 5, 5, true],

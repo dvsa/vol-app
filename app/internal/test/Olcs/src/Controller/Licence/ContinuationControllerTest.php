@@ -81,7 +81,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormActions($mockForm, false, $continuationDetail);
     }
 
-    public function dataProviderAlterFormReceived()
+    public static function dataProviderAlterFormReceived()
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'N'],
@@ -100,12 +100,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormReceived
      *
      * @param bool   $enabled
      * @param string $status
      * @param string $received 'Y' or 'N'
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormReceived')]
     public function testAlterFormReceived($enabled, $status, $received)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -120,7 +120,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormReceived($mockForm, $continuationDetail);
     }
 
-    public function dataProviderAlterFormChecklistStatus()
+    public static function dataProviderAlterFormChecklistStatus()
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, true],
@@ -138,11 +138,11 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormChecklistStatus
      *
      * @param bool   $enabled
      * @param status $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormChecklistStatus')]
     public function testAlterFormChecklistStatus($enabled, $status, $received)
     {
         $mockElement = \Mockery::mock();
@@ -185,12 +185,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderFormNumberOfDiscs
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormNumberOfDiscs')]
     public function testAlterFormTotalVehicleAuthorisation($displayed, $goodsOrPsv, $licenceType)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -209,11 +209,11 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
     public function testAlterFormTotalVehicleAuthorisationDisables($enabled, $status)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -230,7 +230,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
     }
 
-    public function dataProviderFormNumberOfDiscs()
+    public static function dataProviderFormNumberOfDiscs()
     {
         return [
             [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
@@ -245,12 +245,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderFormNumberOfDiscs
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderFormNumberOfDiscs')]
     public function testFormNumberOfDiscs($displayed, $goodsOrPsv, $licenceType)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -285,11 +285,11 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
     public function testFormNumberOfDiscsDisables($enabled, $status)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -322,7 +322,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function dataProviderAlterFormNumberOfCommunityLicences(): array
+    public static function dataProviderAlterFormNumberOfCommunityLicences(): array
     {
         return [
             [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED, 4],
@@ -337,12 +337,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderAlterFormNumberOfCommunityLicences
      *
      * @param bool   $displayed
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAlterFormNumberOfCommunityLicences')]
     public function testAlterFormNumberOfCommunityLicences($displayed, $goodsOrPsv, $licenceType, $maxAuth)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -376,11 +376,11 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider dataProviderContinuationDetailStatusElementsEnabled
      *
      * @param bool   $enabled
      * @param string $status
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderContinuationDetailStatusElementsEnabled')]
     public function testAlterFormNumberOfCommunityLicencesDisables($enabled, $status)
     {
         $mockForm = \Mockery::mock(Form::class);
@@ -420,7 +420,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      *
      * @return array
      */
-    public function dataProviderContinuationDetailStatusElementsEnabled()
+    public static function dataProviderContinuationDetailStatusElementsEnabled()
     {
         return [
             [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE],

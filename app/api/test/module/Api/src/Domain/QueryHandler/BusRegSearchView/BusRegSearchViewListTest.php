@@ -17,9 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\BusRegSearchView\BusRegSearchViewList
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\BusRegSearchView\BusRegSearchViewList::class)]
 class BusRegSearchViewListTest extends QueryHandlerTestCase
 {
     public function setUp(): void

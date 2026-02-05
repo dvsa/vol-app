@@ -14,10 +14,7 @@ class AbstractArrayList extends \PHPUnit\Framework\TestCase
     public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\FORMATTER_CLASS_NAME';
     public const ARRAY_FIELD = '';
     public const EXPECTED_OUTPUT = '(3, abc, 2)'; //allows differing format to be configured for each
-
-    /**
-     * @dataProvider dpTestFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormat')]
     public function testFormat($input, $expected)
     {
         $class = static::SUT_CLASS_NAME;
@@ -31,7 +28,7 @@ class AbstractArrayList extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dpTestFormat()
+    public static function dpTestFormat()
     {
         return [
             [

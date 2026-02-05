@@ -22,11 +22,9 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Licence
- * @covers \Dvsa\Olcs\Api\Domain\Repository\AbstractRepository
- * @covers \Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Licence::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractRepository::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository::class)]
 class LicenceTest extends RepositoryTestCase
 {
     /** @var LicenceRepo | m\MockInterface */
@@ -133,9 +131,8 @@ class LicenceTest extends RepositoryTestCase
      *
      * @param array $result
      * @param bool $licenceFound
-     *
-     * @dataProvider existsByLicNoProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('existsByLicNoProvider')]
     public function testExistsByLicNo($result, $licenceFound)
     {
         $licNo = 'OB1234567';
@@ -161,7 +158,7 @@ class LicenceTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function existsByLicNoProvider()
+    public static function existsByLicNoProvider()
     {
         return [
             [[0 => 'Result'], true],

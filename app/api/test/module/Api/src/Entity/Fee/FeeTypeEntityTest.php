@@ -45,8 +45,8 @@ class FeeTypeEntityTest extends EntityTester
      * @param string $fixedValue
      * @param string $fiveYearValue
      * @param array $expected
-     * @dataProvider bundleDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('bundleDataProvider')]
     public function testGetCalculatedBundleValues($fixedValue, $fiveYearValue, $expected)
     {
         $this->sut->setFixedValue($fixedValue);
@@ -55,7 +55,7 @@ class FeeTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCalculatedBundleValues());
     }
 
-    public function bundleDataProvider()
+    public static function bundleDataProvider()
     {
         return [
             [
@@ -77,8 +77,8 @@ class FeeTypeEntityTest extends EntityTester
 
     /**
      * @param boolean $expected
-     * @dataProvider countryCodeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('countryCodeProvider')]
     public function testGetCountryCode(mixed $isNi, $expected)
     {
         $this->sut->setIsNi($isNi);
@@ -89,7 +89,7 @@ class FeeTypeEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function countryCodeProvider()
+    public static function countryCodeProvider()
     {
         return [
             ['Y', 'NI'],
@@ -110,9 +110,7 @@ class FeeTypeEntityTest extends EntityTester
         $this->assertFalse($this->sut->isShowQuantity());
     }
 
-    /**
-     * @dataProvider dpIsEcmtApplication
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtApplication')]
     public function testIsEcmtApplication(string $feeType, bool $expectedResult)
     {
         $feeTypeRefData = new RefData($feeType);
@@ -125,9 +123,7 @@ class FeeTypeEntityTest extends EntityTester
         return $this->listTypes([Entity::FEE_TYPE_ECMT_APP]);
     }
 
-    /**
-     * @dataProvider dpIsEcmtIssue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtIssue')]
     public function testIsEcmtIssue(string $feeType, bool $expectedResult)
     {
         $feeTypeRefData = new RefData($feeType);
@@ -140,9 +136,7 @@ class FeeTypeEntityTest extends EntityTester
         return $this->listTypes([Entity::FEE_TYPE_ECMT_ISSUE]);
     }
 
-    /**
-     * @dataProvider dpIsIrhpApplicationIssue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsIrhpApplicationIssue')]
     public function testIsIrhpApplicationIssue(string $feeType, bool $expectedResult)
     {
         $feeTypeRefData = new RefData($feeType);
@@ -155,9 +149,7 @@ class FeeTypeEntityTest extends EntityTester
         return $this->listTypes([Entity::FEE_TYPE_IRHP_ISSUE]);
     }
 
-    /**
-     * @dataProvider dpIsIrhpApplication
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsIrhpApplication')]
     public function testIsIrhpApplication(string $feeType, bool $expectedResult)
     {
         $feeTypeRefData = new RefData($feeType);

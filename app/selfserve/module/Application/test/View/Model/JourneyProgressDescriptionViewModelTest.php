@@ -28,9 +28,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructThrowsExceptionIfCurrentSectionIsNotInSections()
     {
         // Expect
@@ -40,9 +38,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->setUpSut(static::AN_UNKNOWN_SECTION_ID, static::AN_EMPTY_SECTIONS_ARRAY);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructHasCorrectTemplate()
     {
         // Setup
@@ -52,9 +48,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(static::VIEW_MODEL_TEMPLATE, $this->sut->getTemplate());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsTextVariable()
     {
         // Setup
@@ -64,9 +58,7 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         $this->assertEquals(static::APPLICATION_STEPS_TRANSLATION_KEY, $this->sut->getVariable(static::TEXT_VARIABLE_NAME));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariable(): array
     {
         // Setup
@@ -79,20 +71,16 @@ class JourneyProgressDescriptionViewModelTest extends MockeryTestCase
         return $dataVariable;
     }
 
-    /**
-     * @test
-     * @depends __construct_SetsDataVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariableWithCurrentSectionNumber(array $data)
     {
         // Assert
         $this->assertEquals(static::A_SECTIONS_NUMBER_IN_A_JOURNEY, $data[0]);
     }
 
-    /**
-     * @test
-     * @depends __construct_SetsDataVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('__construct_SetsDataVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsDataVariableWithNumberOfSections(array $data)
     {
         // Assert

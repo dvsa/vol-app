@@ -29,7 +29,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractOperatingCentreOpposition implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOperatingCentreOpposition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

@@ -46,9 +46,7 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
     private string $token = 'token';
     private string $refreshedToken = 'new_token';
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable()
     {
         // Setup
@@ -58,10 +56,8 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandReturnsExpectedResult()
     {
         // Setup
@@ -93,6 +89,7 @@ class RefreshTokenTest extends AbstractCommandHandlerTestCase
         $this->assertSame($result->toArray(), $expectedResult);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

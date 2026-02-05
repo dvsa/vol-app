@@ -40,7 +40,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
     {
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'organisation', $this->sut->onOrganisation(...), 1);
 
         $this->sut->attach($mockEventManager);
     }

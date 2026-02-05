@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
  */
 class DefaultTypeHandler extends AbstractTypeHandler
 {
-    private const TYPE_MAPPING = [
+    private const array TYPE_MAPPING = [
         'bigint' => ['int', 'integer'],
         'binary' => ['string', 'string'],
         'blob' => ['string', 'string'],
@@ -107,6 +107,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
     /**
      * Override to not remove _id suffix for regular columns
      */
+    #[\Override]
     protected function generatePropertyName(string $columnName): string
     {
         // For regular columns, just convert to camelCase without removing _id
@@ -131,11 +132,13 @@ class DefaultTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return -100; // Lowest priority (fallback)
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];

@@ -43,6 +43,7 @@ use Dvsa\Olcs\Api\Entity\Vehicle\Vehicle;
 use Laminas\View\Renderer\PhpRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AbstractSubmissionSectionTest
@@ -57,9 +58,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
     protected $goodsOrPsv = 'goods';
     protected $natureOfBusiness = 'nob1';
 
-    /**
-     * @dataProvider sectionTestProvider
-     */
+    #[DataProvider('sectionTestProvider')]
     public function testGenerateSection($input = null, $expectedResult = null)
     {
         if (!empty($input)) {
@@ -76,12 +75,7 @@ abstract class AbstractSubmissionSectionTest extends MockeryTestCase
         }
     }
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    abstract public function sectionTestProvider();
+    abstract public static function sectionTestProvider(): array;
 
     /**
      * Return a case attached to an application

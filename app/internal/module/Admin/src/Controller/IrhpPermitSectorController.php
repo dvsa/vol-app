@@ -66,6 +66,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFile('irhp-permit-total-table');

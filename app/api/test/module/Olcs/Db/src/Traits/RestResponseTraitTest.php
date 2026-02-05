@@ -19,10 +19,9 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test that getNewResponse returns a new instance
-     *
-     * @group Traits
-     * @group RestResponseTrait
      */
+    #[\PHPUnit\Framework\Attributes\Group('Traits')]
+    #[\PHPUnit\Framework\Attributes\Group('RestResponseTrait')]
     public function testGetNewResponse()
     {
         $trait = $this->getMockForTrait(\Dvsa\Olcs\Db\Traits\RestResponseTrait::class);
@@ -41,11 +40,11 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
     /**
      * Test respond
      *
-     * @dataProvider providerRespond
      *
-     * @group Traits
-     * @group RestResponseTrait
      */
+    #[\PHPUnit\Framework\Attributes\Group('Traits')]
+    #[\PHPUnit\Framework\Attributes\Group('RestResponseTrait')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerRespond')]
     public function testRespond($input, $expected)
     {
         $expectedContent = json_encode(
@@ -115,7 +114,7 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function providerRespond()
+    public static function providerRespond()
     {
         return [
             [

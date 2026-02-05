@@ -5,9 +5,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\SubCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SubCategory::class)]
 class SubCategoryTest extends RepositoryTestCase
 {
     public const CATEGORY = 90001;
@@ -36,9 +34,7 @@ class SubCategoryTest extends RepositoryTestCase
         static::assertEquals('QUERY', $this->query);
     }
 
-    /**
-     * @dataProvider dpTestApplyListX
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestApplyListX')]
     public function testApplyListX($query, $expect)
     {
         $qb = $this->createMockQb('QUERY');
@@ -61,7 +57,7 @@ class SubCategoryTest extends RepositoryTestCase
         $this->assertEquals($expect, $this->query);
     }
 
-    public function dpTestApplyListX()
+    public static function dpTestApplyListX()
     {
         return [
             [

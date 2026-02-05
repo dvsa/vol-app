@@ -153,6 +153,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      *
      * @return ViewModel|Laminas/Http/Response
      */
+    #[\Override]
     public function editAction()
     {
         $command = $this->determineCommand();
@@ -190,6 +191,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      *
      * @return array
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -200,6 +202,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      *
      * @return array
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

@@ -45,15 +45,13 @@ class AbstractSectionTest extends MockeryTestCase
         static::assertEquals('EXPECT', $this->sut->handleQuery($query));
     }
 
-    /**
-     * @dataProvider dpTestExtractPerson
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExtractPerson')]
     public function testExtractPerson($contactDetails, $expect)
     {
         static::assertEquals($expect, $this->sut->extractPerson($contactDetails));
     }
 
-    public function dpTestExtractPerson()
+    public static function dpTestExtractPerson()
     {
         $personData = [
             'title' => '',
@@ -99,15 +97,13 @@ class AbstractSectionTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestFormatDate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormatDate')]
     public function testFormatDate($dateTime, $expect)
     {
         static::assertEquals($expect, $this->sut->formatDate($dateTime));
     }
 
-    public function dpTestFormatDate()
+    public static function dpTestFormatDate()
     {
         return [
             [

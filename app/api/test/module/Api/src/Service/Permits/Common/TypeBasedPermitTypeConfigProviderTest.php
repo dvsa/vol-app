@@ -46,9 +46,7 @@ class TypeBasedPermitTypeConfigProviderTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestGetPermitTypeConfig
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitTypeConfig')]
     public function testGetPermitTypeConfig(
         $irhpPermitTypeId,
         $excludedRestrictedCountryIds,

@@ -68,9 +68,10 @@ class EditableTranslationsController extends AbstractInternalController implemen
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('translationSearch', urldecode($this->params()->fromQuery('translationSearch')));
+        $this->placeholder()->setPlaceholder('translationSearch', urldecode((string) $this->params()->fromQuery('translationSearch')));
         $this->placeholder()->setPlaceholder('resultsTableTitle', 'Editable Translations');
         $this->placeholder()->setPlaceholder('jsonBaseUrl', $this->url()->fromRoute('admin-dashboard/admin-editable-translations'));
         return parent::indexAction();
@@ -118,9 +119,10 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @param  array $parameters
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
-        $parameters['translationSearch'] = urldecode($this->params()->fromQuery('translationSearch'));
+        $parameters['translationSearch'] = urldecode((string) $this->params()->fromQuery('translationSearch'));
         return $parameters;
     }
 
@@ -184,11 +186,12 @@ class EditableTranslationsController extends AbstractInternalController implemen
         $form->get('translationVar')->setValue('translatedText');
         $form->get('addedit')->setValue($addEdit);
 
-        $this->placeholder()->setPlaceholder('pageTitle', ucfirst($addEdit) . ' Translation Key');
+        $this->placeholder()->setPlaceholder('pageTitle', ucfirst((string) $addEdit) . ' Translation Key');
 
         return $form;
     }
 
+    #[\Override]
     public function addAction()
     {
         return $this->editkeyAction('add');
@@ -230,6 +233,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         $request = $this->getRequest();

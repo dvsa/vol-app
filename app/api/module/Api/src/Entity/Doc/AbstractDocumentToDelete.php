@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="document_to_delete")
  */
-abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

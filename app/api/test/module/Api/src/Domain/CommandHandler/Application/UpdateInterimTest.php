@@ -39,6 +39,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -53,9 +54,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpValidate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
     public function testValidate($vehicleType, $totAuthHgvVehicles, $totAuthLgvVehicles, $totAuthTrailers, $data, $expected)
     {
         $this->expectException(ValidationException::class);
@@ -89,7 +88,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpValidate()
+    public static function dpValidate()
     {
         return [
             'LGV without required data' => [
@@ -977,9 +976,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertNull($application->getInterimAuthTrailers());
     }
 
-    /**
-     * @dataProvider statusProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testHandleCommandRequestedYesInforceNoInterimVehicles($status)
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -1086,7 +1083,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function statusProvider()
+    public static function statusProvider()
     {
         return [
             [ApplicationEntity::INTERIM_STATUS_REQUESTED],

@@ -24,9 +24,7 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
         $this->sut = new IrhpPermitPrintType($this->abstractDataServiceServices);
     }
 
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFetchListOptions')]
     public function testFetchListOptions($results, $expected)
     {
         $this->transferAnnotationBuilder->shouldReceive('createQuery')
@@ -48,7 +46,7 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(null));
     }
 
-    public function dpTestFetchListOptions()
+    public static function dpTestFetchListOptions()
     {
         return [
             'with data' => [

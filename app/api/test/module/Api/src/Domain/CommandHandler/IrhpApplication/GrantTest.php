@@ -37,6 +37,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -46,9 +47,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($isEcmtShortTerm, $issueFeeProductReference, $expectedEmailCmd)
     {
         $irhpApplicationId = 55;
@@ -159,7 +158,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($irhpApplicationId, $result->getId('irhpApplication'));
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         return [
             [

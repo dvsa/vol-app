@@ -50,9 +50,7 @@ class LicenceExternalUserTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQueryExternalUser($isLicenceSurrenderAllowed, $openApplicationsForLicence)
     {
         $query = Qry::create(['id' => 111]);
@@ -152,7 +150,7 @@ class LicenceExternalUserTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function dptestHandleQuery()
+    public static function dptestHandleQuery()
     {
         return [
             [

@@ -12,9 +12,7 @@ use Olcs\Service\Helper\WebDavJsonWebTokenGenerationServiceFactory;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Olcs\Service\Helper\WebDavJsonWebTokenGenerationService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Helper\WebDavJsonWebTokenGenerationService::class)]
 class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 {
     protected const JWT_PRIVATE_KEY_BASE64 = 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlCT3dJQkFBSkJBSnRybTk2M3BYNlJIdG1oWTdGSndlTUcrWDU4bWMwbzRjUTlOMmp3SmVLWFlnM2h3bEpWCkVkTTByM1d6Y0FVcVhHeStvNlpWVGF5N3NnRmdTM1kvbVZVQ0F3RUFBUUpCQUkwdkxjTWVOTHBLL2lsWTBJVW0KcVhpZ3gxZzl2RUdBbDhaNmpiRklKa0kxTU45bEZmRVNMSHJWQTNKck1KZEh2R3RIN2ZoSHNoaUM1LzR1SDVpbAorU2tDSVFEa2dBYjJveThNMkUwQ05FbEJpbWhwTzN4MWV5bTNxNStPR0NZeEZHckxWd0loQUs0Z0IvMytodlpICk5SNm1rUldONktCRC95ZDMzaDFJa0djNmFXTTBhRUV6QWlFQWxQdE1qdjZ5cktOVEFuN296SXpicXRFWVF0ajgKeUQ1a0Y1ZHpQMGphb0owQ0lENWFJZ0tHSG5ZYVVaOUVMamYxdFJPT3hkT3dUTTFYcXI0TVlLaXhuNU9aQWlCOApaQkNaTG41dTRuWEFpZW1ENHA3bkF5dWp4azlQcWdBQmxUbXBJRHE1clE9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==';
@@ -65,22 +63,18 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $this->serviceManager = $this->createMock(ContainerInterface::class);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, '__invoke']);
+        $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfWebDavJsonWebTokenGenerationService()
     {
         // Setup
@@ -96,10 +90,8 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(WebDavJsonWebTokenGenerationService::class, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenPrivateKeyEmpty()
     {
         // Setup
@@ -117,10 +109,8 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $result = $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenPrivateNotSet()
     {
         // Setup
@@ -138,10 +128,8 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $result = $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenDefaultLifetimeSecondsEmpty()
     {
         // Setup
@@ -159,10 +147,8 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $result = $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenDefaultLifetimeSecondsNotSet()
     {
         // Setup
@@ -180,10 +166,8 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
         $result = $this->sut->__invoke($sm, null);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenUrlPatternNotSet()
     {
         // Setup

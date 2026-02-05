@@ -60,9 +60,7 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
         $this->answersSummaryGenerator->registerCustomRowsAdder(3, m::mock(AnswersSummaryRowsAdderInterface::class));
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerateWithDefaultRowsAdder($isSnapshot)
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->getId')
@@ -87,9 +85,7 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerateWithCustomRowsAdder($isSnapshot)
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->getId')
@@ -114,7 +110,7 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot()
     {
         return [
             [true],

@@ -52,6 +52,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -140,9 +141,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertNull($app->getLicence()->getTrafficArea());
     }
 
-    /**
-     * @dataProvider environmentProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('environmentProvider')]
     public function testHandleCommand($isInternal, $isExternal, $licenceStatus, $appliedVia)
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
@@ -260,9 +259,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(0, $app->getLgvDeclarationConfirmation());
     }
 
-    /**
-     * @dataProvider environmentProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('environmentProvider')]
     public function testHandleCommandGb($isInternal, $isExternal, $licenceStatus, $appliedVia)
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
@@ -383,7 +380,7 @@ class CreateApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(1, $app->getLgvDeclarationConfirmation());
     }
 
-    public function environmentProvider()
+    public static function environmentProvider()
     {
         return [
             [true, false, Licence::LICENCE_STATUS_UNDER_CONSIDERATION, ApplicationEntity::APPLIED_VIA_PHONE],

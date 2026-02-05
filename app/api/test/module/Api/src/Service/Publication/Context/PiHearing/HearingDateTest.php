@@ -13,11 +13,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class HearingDateTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the hearing date filter
-     */
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing date filter')]
     public function testProvideGmt()
     {
         $input = [

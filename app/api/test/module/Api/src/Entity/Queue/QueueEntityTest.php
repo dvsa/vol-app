@@ -52,9 +52,7 @@ class QueueEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider queueDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('queueDataProvider')]
     public function testValidateQueueWithException($type, $status, $date)
     {
         $this->expectException(ValidationException::class);
@@ -62,7 +60,7 @@ class QueueEntityTest extends EntityTester
         $sut->validateQueue($type, $status, $date);
     }
 
-    public function queueDataProvider()
+    public static function queueDataProvider()
     {
         return [
             [Entity::TYPE_ACCEPT_ECMT_SCORING, 'foo', null],

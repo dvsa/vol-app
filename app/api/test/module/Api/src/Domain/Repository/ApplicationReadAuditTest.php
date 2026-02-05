@@ -20,11 +20,13 @@ class ApplicationReadAuditTest extends AbstractReadAuditTest
         $this->setUpSut(ApplicationReadAudit::class, true);
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchOneOrMore()
     {
         parent::commonTestFetchOneOrMore('application');
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testFetchList()
     {
         parent::commonTestFetchList(
@@ -33,6 +35,7 @@ class ApplicationReadAuditTest extends AbstractReadAuditTest
         );
     }
 
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testDeleteOlderThan()
     {
         parent::commonTestDeleteOlderThan(ApplicationReadAuditEntity::class);

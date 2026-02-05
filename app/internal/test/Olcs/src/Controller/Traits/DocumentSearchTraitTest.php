@@ -8,9 +8,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\DocumentSubCategory;
 
-/**
- * @covers \Olcs\Controller\Traits\DocumentSearchTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\DocumentSearchTrait::class)]
 class DocumentSearchTraitTest extends MockeryTestCase
 {
     protected $mockFormHelper;
@@ -73,9 +71,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $this->sut->traitUpdateSelectValueOptions($mockEl, $changeOptions);
     }
 
-    /**
-     * @dataProvider dpTestMapDocumentFilters
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapDocumentFilters')]
     public function testMapDocumentFilters($extra, $expect)
     {
         $mockRequest = m::mock(\Laminas\Http\Request::class);
@@ -89,7 +85,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestMapDocumentFilters()
+    public static function dpTestMapDocumentFilters()
     {
         $def = [
             'sort' => 'issuedDate',

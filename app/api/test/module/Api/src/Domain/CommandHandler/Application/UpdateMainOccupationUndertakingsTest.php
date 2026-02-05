@@ -21,6 +21,7 @@ class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTest
         'psvMainOccupationUndertakings',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

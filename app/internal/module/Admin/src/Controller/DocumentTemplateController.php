@@ -105,6 +105,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
     /**
      * @return mixed|Form|Response|ViewModel
      */
+    #[\Override]
     public function addAction()
     {
         $request = $this->getRequest();
@@ -128,6 +129,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
     /**
      * @return array|Form|Response|ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $request = $this->getRequest();

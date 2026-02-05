@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

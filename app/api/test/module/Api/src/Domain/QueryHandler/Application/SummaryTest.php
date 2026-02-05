@@ -10,9 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Application\Summary
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\Summary::class)]
 class SummaryTest extends QueryHandlerTestCase
 {
     public $mockCaseRepo;
@@ -572,7 +570,7 @@ class SummaryTest extends QueryHandlerTestCase
 
         $mockFee = m::mock()->shouldReceive('getLatestPaymentRef')->andReturn('ref')->once()->getMock();
         $this->mockFeeRepo->shouldReceive('fetchLatestPaidFeeByApplicationId')->with(111)->andReturn($mockFee)->once();
-        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createMock(Entity\Cases\Cases::class), $this->createMock(Entity\Cases\Cases::class)]);
+        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createStub(Entity\Cases\Cases::class), $this->createStub(Entity\Cases\Cases::class)]);
 
         $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->once()
@@ -900,7 +898,7 @@ class SummaryTest extends QueryHandlerTestCase
         $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
             ->once()
             ->andReturn('apsts_consideration');
-        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createMock(Entity\Cases\Cases::class), $this->createMock(Entity\Cases\Cases::class)]);
+        $this->mockCaseRepo->shouldReceive('fetchOpenCasesForApplication')->with(111)->andReturn([$this->createStub(Entity\Cases\Cases::class), $this->createStub(Entity\Cases\Cases::class)]);
         $mockFee = m::mock()->shouldReceive('getLatestPaymentRef')->andReturn('ref')->once()->getMock();
         $this->mockFeeRepo->shouldReceive('fetchLatestPaidFeeByApplicationId')->with(111)->andReturn($mockFee)->once();
 

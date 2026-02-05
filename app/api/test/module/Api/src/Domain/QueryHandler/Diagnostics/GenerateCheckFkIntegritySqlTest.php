@@ -132,10 +132,9 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider provideOddCharactersForConstraintsQuery
-     *
      * @param $constraints
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideOddCharactersForConstraintsQuery')]
     public function testThatOddCharactersCauseExceptions($constraints)
     {
         $this->expectConstraintsQuery($constraints);
@@ -144,7 +143,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
         $this->sut->handleQuery(GenerateCheckFkIntegritySqlCmd::create([]));
     }
 
-    public function provideOddCharactersForConstraintsQuery()
+    public static function provideOddCharactersForConstraintsQuery()
     {
         $identifierKeys = [
             'TABLE_SCHEMA',
@@ -187,7 +186,7 @@ class GenerateCheckFkIntegritySqlTest extends QueryHandlerTestCase
 
     private function normalize($query)
     {
-        return trim(preg_replace('/(^ *| *$| *\n *)/', ' ', $query));
+        return trim((string) preg_replace('/(^ *| *$| *\n *)/', ' ', (string) $query));
     }
 
     /**

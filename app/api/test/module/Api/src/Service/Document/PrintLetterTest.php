@@ -9,9 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\PrintLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\PrintLetter::class)]
 class PrintLetterTest extends MockeryTestCase
 {
     public const TEMPLATE_ID = 7777;
@@ -83,9 +81,7 @@ class PrintLetterTest extends MockeryTestCase
         static::assertFalse($this->sut->canEmail($this->mockDocE));
     }
 
-    /**
-     * @dataProvider dpTestCanEmailTrue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanEmailTrue')]
     public function testCanEmailTrue($emailPref, $forceEmailCorrespondence)
     {
         // If Org has email correspondence allowed, or
@@ -113,7 +109,7 @@ class PrintLetterTest extends MockeryTestCase
         static::assertTrue($this->sut->canEmail($this->mockDocE, $forceEmailCorrespondence));
     }
 
-    public function dpTestCanEmailTrue()
+    public static function dpTestCanEmailTrue()
     {
         return [
             'email correspondence preference true, force false' => [true, false],

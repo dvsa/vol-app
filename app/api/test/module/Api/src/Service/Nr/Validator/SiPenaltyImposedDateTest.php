@@ -12,11 +12,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SiPenaltyImposedDateTest extends TestCase
 {
     /**
-     * @dataProvider provideIsValid
      * @param $imposedErrus
      * @param $valid
      * @param string $error
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($imposedErrus, $valid, $error = '')
     {
         $value = ['imposedErrus' => [0 => $imposedErrus]];
@@ -31,7 +31,7 @@ class SiPenaltyImposedDateTest extends TestCase
         }
     }
 
-    public function provideIsValid()
+    public static function provideIsValid()
     {
         return [
             [

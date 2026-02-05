@@ -32,6 +32,7 @@ class UpdateStatusTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = ['status1',TmaEntity::STATUS_INCOMPLETE];

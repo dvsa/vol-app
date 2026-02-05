@@ -57,6 +57,7 @@ class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -133,7 +134,6 @@ class UpdateMyAccountCognitoTest extends AbstractCommandHandlerTestCase
         $user->setPid('some-pid');
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_INTERNAL);
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')

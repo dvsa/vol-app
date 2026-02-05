@@ -18,9 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\CreateGoodsVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\CreateGoodsVehicle::class)]
 class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 9001;
@@ -59,6 +57,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [];

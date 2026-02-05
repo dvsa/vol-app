@@ -8,9 +8,8 @@ use Mockery as m;
 
 /**
  * SlaException Entity Unit Tests
- *
- * @covers \Dvsa\Olcs\Api\Entity\Pi\SlaException
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Pi\SlaException::class)]
 class SlaExceptionEntityTest extends EntityTester
 {
     /**

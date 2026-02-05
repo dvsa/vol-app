@@ -11,11 +11,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 class SubmissionSectionTableTest extends TestCase
 {
     /**
-     * @dataProvider provideInvoke
      * @param $input
      * @param $expected
      * @param $disabled
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideInvoke')]
     public function testInvoke($input, $expected, $disabled)
     {
         $sut = new SubmissionSectionTable();
@@ -55,7 +55,7 @@ class SubmissionSectionTableTest extends TestCase
         );
     }
 
-    public function provideInvoke()
+    public static function provideInvoke()
     {
         return [
             [

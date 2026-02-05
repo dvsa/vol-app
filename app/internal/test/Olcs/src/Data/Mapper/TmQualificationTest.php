@@ -43,15 +43,13 @@ class TmQualificationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    /**
-     * @dataProvider mapFromResultProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultProvider')]
     public function testMapFromResult($data, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function mapFromResultProvider()
+    public static function mapFromResultProvider()
     {
         return [
             [

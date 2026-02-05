@@ -28,7 +28,7 @@ use Psr\Container\ContainerInterface;
  */
 final class Create extends AbstractCommandHandler
 {
-    public const LICENCE_INVALID_MSG = 'Licence ID %d with number %s is unable to make an application for %s stock ID %d';
+    public const string LICENCE_INVALID_MSG = 'Licence ID %d with number %s is unable to make an application for %s stock ID %d';
 
     protected $repoServiceName = 'IrhpApplication';
     protected $extraRepos = ['Licence', 'IrhpPermitStock', 'IrhpPermitType', 'IrhpPermitWindow'];
@@ -128,6 +128,7 @@ final class Create extends AbstractCommandHandler
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

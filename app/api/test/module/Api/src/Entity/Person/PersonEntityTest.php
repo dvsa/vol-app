@@ -27,9 +27,7 @@ class PersonEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider birthDateProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('birthDateProvider')]
     public function testUpdatePerson($birthDate, $expected)
     {
         $entity = new Entity();
@@ -44,7 +42,7 @@ class PersonEntityTest extends EntityTester
         $this->assertEquals('bplace', $entity->getBirthPlace());
     }
 
-    public function birthDateProvider()
+    public static function birthDateProvider()
     {
         return [
             ['2015-01-01', new \DateTime('2015-01-01')],

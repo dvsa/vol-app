@@ -12,9 +12,7 @@ use Laminas\Form\Form;
  */
 class OperatorTransferTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider fromErrorsProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fromErrorsProvider')]
     public function testFromErrors($messages, $expected)
     {
 
@@ -27,7 +25,7 @@ class OperatorTransferTest extends MockeryTestCase
         $this->assertNull(Sut::mapFromErrors($mockForm, $messages));
     }
 
-    public function fromErrorsProvider()
+    public static function fromErrorsProvider()
     {
         return [
             [

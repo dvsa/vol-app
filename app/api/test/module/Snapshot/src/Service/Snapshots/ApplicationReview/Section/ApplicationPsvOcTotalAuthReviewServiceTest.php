@@ -36,9 +36,7 @@ class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationPsvOcTotalAuthReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider licenceTypeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceTypeProvider')]
     public function testGetConfigFromData($licenceType, $expected)
     {
         $data = [
@@ -50,7 +48,7 @@ class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function licenceTypeProvider()
+    public static function licenceTypeProvider()
     {
         return [
             'standard national' => [

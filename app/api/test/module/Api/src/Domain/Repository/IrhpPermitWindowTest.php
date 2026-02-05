@@ -319,9 +319,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchOpenWindowsByTypeProvider')]
     public function testFetchOpenWindowsByType($isInternal, $expected)
     {
         $now = new DateTime('2019-04-08 09:51:10');
@@ -344,10 +342,8 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeProvider
-     */
-    public function fetchOpenWindowsByTypeProvider()
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchOpenWindowsByTypeProvider')]
+    public static function fetchOpenWindowsByTypeProvider()
     {
         return [
             [false, 'BLAH '
@@ -368,9 +364,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         ];
     }
 
-    /**
-     * @dataProvider fetchOpenWindowsByTypeYearProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchOpenWindowsByTypeYearProvider')]
     public function testFetchOpenWindowsByTypeYear()
     {
         $now = new DateTime('2019-04-08 09:51:10');
@@ -408,7 +402,7 @@ class IrhpPermitWindowTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function fetchOpenWindowsByTypeYearProvider()
+    public static function fetchOpenWindowsByTypeYearProvider()
     {
         return [
             [false, 'BLAH '

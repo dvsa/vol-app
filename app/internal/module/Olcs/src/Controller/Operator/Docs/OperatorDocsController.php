@@ -24,9 +24,6 @@ class OperatorDocsController extends OperatorController
     use Traits\DocumentSearchTrait;
     use Traits\DocumentActionTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -39,8 +36,8 @@ class OperatorDocsController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         Navigation $navigation,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -55,8 +52,6 @@ class OperatorDocsController extends OperatorController
             $queryService,
             $navigation
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**

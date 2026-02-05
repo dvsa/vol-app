@@ -17,9 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsGrantable
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGrantable')]
     public function testIsGrantable($range1Count, $range2Count, $range3Count, $expectedResult)
     {
         $irhpPermitRange1RequestedPermits = 6;
@@ -77,7 +75,7 @@ class CandidatePermitsGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpIsGrantable()
+    public static function dpIsGrantable()
     {
         return [
             [3, 5, 0, true],

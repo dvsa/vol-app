@@ -37,6 +37,7 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->references = [
@@ -48,9 +49,7 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpIsLongerSemiTrailer
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLongerSemiTrailer')]
     public function testHandleCommand($isLongerSemiTrailer, $expectedIsLongerSemiTrailer)
     {
         $data = [
@@ -89,7 +88,7 @@ class CreateTrailerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpIsLongerSemiTrailer()
+    public static function dpIsLongerSemiTrailer()
     {
         return [
             ['Y', true],

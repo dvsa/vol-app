@@ -23,6 +23,7 @@ class CompanyProfileTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CompanyProfile();

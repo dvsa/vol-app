@@ -25,15 +25,15 @@ final class LastTmLetter extends AbstractCommandHandler implements EmailAwareInt
 {
     use EmailAwareTrait;
 
-    protected const GB_GV_TEMPLATE = [
+    protected const array GB_GV_TEMPLATE = [
         'identifier' => 'GV_letter_to_op_regarding_no_TM_specified',
         'id' => 919
     ];
-    protected const GB_PSV_TEMPLATE = [
+    protected const array GB_PSV_TEMPLATE = [
         'identifier' => 'PSV_letter_to_op_regarding_no_TM_specified',
         'id' => 920
     ];
-    protected const NI_GV_TEMPLATE = [
+    protected const array NI_GV_TEMPLATE = [
         'identifier' => 'GV_letter_to_op_regarding_no_TM_specified_NI',
         'id' => 918
     ];

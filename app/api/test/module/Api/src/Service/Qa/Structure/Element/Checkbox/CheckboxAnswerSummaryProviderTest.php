@@ -31,9 +31,7 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $labelKey = 'label.key';
@@ -59,7 +57,7 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         return [
             [true],

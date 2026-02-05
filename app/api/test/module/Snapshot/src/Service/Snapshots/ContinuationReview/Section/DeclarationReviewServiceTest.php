@@ -83,9 +83,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider getConfigFromDataDeclarationMarkupDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigFromDataDeclarationMarkupDataProvider')]
     public function testGetConfigFromDataDeclarationMarkup($expectedMarkup, $goodsOrPsv, $licenceType, $isNi, $isLgv)
     {
         $this->continuationDetail->setSignatureType(null);
@@ -117,7 +115,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function getConfigFromDataDeclarationMarkupDataProvider()
+    public static function getConfigFromDataDeclarationMarkupDataProvider()
     {
         return [
             [

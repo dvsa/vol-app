@@ -45,6 +45,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = ['lsts_terminated', 'lsts_surrendered', 'lcat_psv', 'lcat_gv'];
@@ -54,9 +55,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider testHandleCommandProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($status, $terminated)
     {
         $command = Command::create(['id' => 532, 'terminated' => $terminated]);
@@ -325,7 +324,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 surrendered"], $result->getMessages());
     }
 
-    public function testHandleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [

@@ -11,9 +11,8 @@ class RevocationsSlaTest extends MockeryTestCase
 {
     /**
      * testMapFromResult
-     *
-     * @dataProvider mapFromFormDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
     public function testMapFromForm(array $input, array $expected)
     {
 
@@ -21,7 +20,7 @@ class RevocationsSlaTest extends MockeryTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider()
     {
         return [
             "valid form submission" => [
@@ -80,17 +79,17 @@ class RevocationsSlaTest extends MockeryTestCase
     /**
      * testMapFromResult
      *
-     * @dataProvider mapFromResultDataProvider
      *
      * @param array $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult(array $input, $expected)
     {
         $actual = Sut::mapFromResult($input);
         $this->assertEquals($expected, $actual);
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider()
     {
         return [
             "valid return from backend" => [

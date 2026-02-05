@@ -51,9 +51,7 @@ class TransactionEntityTest extends EntityTester
         $this->assertInstanceOf(\Doctrine\Common\Collections\ArrayCollection::class, $feeTransactions);
     }
 
-    /**
-     * @dataProvider isOutstandingProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isOutstandingProvider')]
     public function testIsOutstanding($status, $expected)
     {
         /** @var RefData $status */
@@ -71,7 +69,7 @@ class TransactionEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isOutstandingProvider()
+    public static function isOutstandingProvider()
     {
         return [
             [Entity::STATUS_OUTSTANDING, true],
@@ -82,9 +80,7 @@ class TransactionEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider isPaidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isPaidProvider')]
     public function testIsPaid($status, $expected)
     {
         /** @var RefData $status */
@@ -99,9 +95,7 @@ class TransactionEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPaid());
     }
 
-    /**
-     * @dataProvider isPaidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isPaidProvider')]
     public function testIsComplete($status, $expected)
     {
         /** @var RefData $status */
@@ -119,7 +113,7 @@ class TransactionEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function isPaidProvider()
+    public static function isPaidProvider()
     {
         return [
             [Entity::STATUS_OUTSTANDING, false],
@@ -169,9 +163,7 @@ class TransactionEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestDisplayReversalOption
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestDisplayReversalOption')]
     public function testDisplayReversalOption($isMigrated, $isCompletePaymentOrAdjustment, $expect)
     {
         /** @var Entity $sut */
@@ -185,7 +177,7 @@ class TransactionEntityTest extends EntityTester
         static::assertSame($expect, $sut->displayReversalOption());
     }
 
-    public function dpTestDisplayReversalOption()
+    public static function dpTestDisplayReversalOption()
     {
         return [
             [
@@ -201,9 +193,7 @@ class TransactionEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsMirgated
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsMirgated')]
     public function testIsMirgated($paymentMethod, $legacyStatus, $expect)
     {
         $this->sut->setPaymentMethod($paymentMethod);
@@ -212,7 +202,7 @@ class TransactionEntityTest extends EntityTester
         static::assertSame($expect, $this->sut->isMigrated());
     }
 
-    public function dpTestIsMirgated()
+    public static function dpTestIsMirgated()
     {
         return [
             [
@@ -233,9 +223,7 @@ class TransactionEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsCompletePaymentOrAdjustment
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsCompletePaymentOrAdjustment')]
     public function testIsCompletePaymentOrAdjustment($isPayment, $isAdjustment, $isComplete, $expect)
     {
         /** @var Entity $sut */
@@ -248,7 +236,7 @@ class TransactionEntityTest extends EntityTester
         static::assertSame($expect, $sut->isCompletePaymentOrAdjustment());
     }
 
-    public function dpTestIsCompletePaymentOrAdjustment()
+    public static function dpTestIsCompletePaymentOrAdjustment()
     {
         return [
             [
@@ -272,9 +260,7 @@ class TransactionEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestCanReverse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanReverse')]
     public function testCanReverse($displayReversalOption, $isReversed, $expect)
     {
         /** @var Entity $sut */
@@ -286,7 +272,7 @@ class TransactionEntityTest extends EntityTester
         static::assertSame($expect, $sut->canReverse());
     }
 
-    public function dpTestCanReverse()
+    public static function dpTestCanReverse()
     {
         return [
             [
@@ -307,9 +293,7 @@ class TransactionEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpTestIsReserved
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsReserved')]
     public function testIsReserved($transactions, $expect)
     {
         $this->sut->setFeeTransactions(new ArrayCollection($transactions));
@@ -317,7 +301,7 @@ class TransactionEntityTest extends EntityTester
         static::assertSame($expect, $this->sut->isReversed());
     }
 
-    public function dpTestIsReserved()
+    public static function dpTestIsReserved()
     {
         return [
             'no fee transactions' => [
@@ -535,9 +519,7 @@ class TransactionEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpTestGetPreviousTransaction
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPreviousTransaction')]
     public function testGetPreviousTransaction($transType, $expect)
     {
         $transaction = new Transaction();
@@ -568,19 +550,19 @@ class TransactionEntityTest extends EntityTester
         }
     }
 
-    public function dpTestGetPreviousTransaction()
+    public static function dpTestGetPreviousTransaction()
     {
         return [
             [
-                'type' => new RefData(Transaction::TYPE_REVERSAL),
+                'transType' => new RefData(Transaction::TYPE_REVERSAL),
                 'expect' => true,
             ],
             [
-                'type' => new RefData(Transaction::TYPE_ADJUSTMENT),
+                'transType' => new RefData(Transaction::TYPE_ADJUSTMENT),
                 'expect' => true,
             ],
             [
-                'type' => new RefData('TYPE_INVALID'),
+                'transType' => new RefData('TYPE_INVALID'),
                 'expect' => null,
             ],
         ];

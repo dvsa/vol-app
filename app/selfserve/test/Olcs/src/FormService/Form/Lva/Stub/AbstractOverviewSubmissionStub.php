@@ -9,11 +9,13 @@ use Olcs\FormService\Form\Lva\AbstractOverviewSubmission;
  */
 class AbstractOverviewSubmissionStub extends AbstractOverviewSubmission
 {
+    #[\Override]
     public function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
         parent::alterForm($form, $data, $params);
     }
 
+    #[\Override]
     public function hasSectionsWithStatus($status)
     {
         return parent::hasSectionsWithStatus($status);

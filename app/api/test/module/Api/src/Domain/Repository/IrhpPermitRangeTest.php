@@ -67,9 +67,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestGetCombinedRangeSizeWithEmissionsCategoryId
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCombinedRangeSizeWithEmissionsCategoryId')]
     public function testGetCombinedRangeSizeWithEmissionsCategoryId($emissionsCategoryId)
     {
         $combinedRangeSize = 1002;
@@ -120,7 +118,7 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public function dpTestGetCombinedRangeSizeWithEmissionsCategoryId()
+    public static function dpTestGetCombinedRangeSizeWithEmissionsCategoryId()
     {
         return [
             [RefData::EMISSIONS_CATEGORY_EURO5_REF],

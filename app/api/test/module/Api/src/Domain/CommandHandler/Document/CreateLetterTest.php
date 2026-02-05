@@ -68,9 +68,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFirstLetter($templateIdentifier)
     {
         $this->setupDocTemplateRepo($templateIdentifier);
@@ -132,9 +130,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterExceptionProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFirstLetterException(
         array $commandData,
         string $templateIdentifier,
@@ -163,9 +159,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFinalLetterProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFinalLetterProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFinalLetter($templateIdentifier)
     {
         $this->setupDocTemplateRepo($templateIdentifier);
@@ -229,9 +223,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterExceptionProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFinalLetterException(
         array $commandData,
         string $templateIdentifier,
@@ -354,17 +346,17 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
             ->once();
     }
 
-    public function followUpTaskForApplicationOrVariationFinalLetterProvider()
+    public static function followUpTaskForApplicationOrVariationFinalLetterProvider()
     {
         return [CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FINAL];
     }
 
-    public function followUpTaskForApplicationOrVariationFirstLetterProvider()
+    public static function followUpTaskForApplicationOrVariationFirstLetterProvider()
     {
         return [CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST];
     }
 
-    public function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider()
+    public static function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider()
     {
         return [
             'missing_application' => [

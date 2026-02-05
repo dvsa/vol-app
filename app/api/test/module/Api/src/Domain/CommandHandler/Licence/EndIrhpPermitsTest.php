@@ -54,9 +54,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
     public function testHandleCommandWithTaskCreationFromActivePermitsAndValidApplications(
         $context,
         $expectedDescription
@@ -150,9 +148,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
     public function testHandleCommandWithTaskCreationFromActivePermitsOnly($context, $expectedDescription)
     {
         $activeIrhpPermit1Id = 84;
@@ -220,9 +216,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithTaskCreation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithTaskCreation')]
     public function testHandleCommandWithTaskCreationFromValidApplicationsOnly($context, $expectedDescription)
     {
         $this->repoMap['IrhpPermit']->shouldReceive('fetchList')
@@ -290,7 +284,7 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommandWithTaskCreation()
+    public static function dpHandleCommandWithTaskCreation()
     {
         return [
             [

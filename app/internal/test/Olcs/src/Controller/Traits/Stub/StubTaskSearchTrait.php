@@ -14,13 +14,8 @@ class StubTaskSearchTrait
 
     public $currentUser;
 
-    protected FormHelperService $formHelper;
-    protected SubCategory $subCategoryDataService;
-
-    public function __construct(FormHelperService $formHelper, SubCategory $subCategoryDataService)
+    public function __construct(protected FormHelperService $formHelper, protected SubCategory $subCategoryDataService)
     {
-        $this->formHelper = $formHelper;
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     public function traitUpdateSelectValueOptions($el, $options)

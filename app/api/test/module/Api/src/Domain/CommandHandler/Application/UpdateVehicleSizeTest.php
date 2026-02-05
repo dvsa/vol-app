@@ -24,6 +24,7 @@ class UpdateVehicleSizeTest extends AbstractUpdateApplicationTest
         'psvvs_small',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

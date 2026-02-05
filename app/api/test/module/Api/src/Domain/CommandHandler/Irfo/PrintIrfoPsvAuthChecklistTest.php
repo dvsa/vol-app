@@ -34,11 +34,11 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param int $irfoFeeTypeId
      * @param string $expectedTemplate
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($irfoFeeTypeId, $expectedTemplate)
     {
         $data = [
@@ -140,7 +140,7 @@ class PrintIrfoPsvAuthChecklistTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider()
     {
         return [
             [

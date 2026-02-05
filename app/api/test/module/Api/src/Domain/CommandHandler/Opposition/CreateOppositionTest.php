@@ -132,6 +132,7 @@ class CreateOppositionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

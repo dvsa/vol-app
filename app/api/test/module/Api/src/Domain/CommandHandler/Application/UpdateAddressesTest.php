@@ -116,9 +116,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandForLgv
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandForLgv')]
     public function testHandleCommandForLgv($establishmentAddress, $expectedPostcode)
     {
         $data = [
@@ -216,7 +214,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommandForLgv()
+    public static function dpTestHandleCommandForLgv()
     {
         return [
             [

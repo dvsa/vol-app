@@ -21,7 +21,7 @@ class CacheClearCommand extends AbstractBatchCommand
     /**
      * Available cache namespaces from CacheEncryption service
      */
-    private const NAMESPACES = [
+    private const array NAMESPACES = [
         'user_account',
         'sys_param',
         'sys_param_list',
@@ -86,7 +86,7 @@ class CacheClearCommand extends AbstractBatchCommand
 
         // Validate namespaces if provided
         if ($namespace) {
-            $namespaces = array_map('trim', explode(',', $namespace));
+            $namespaces = array_map(trim(...), explode(',', (string) $namespace));
             $invalid = array_diff($namespaces, self::NAMESPACES);
             if (!empty($invalid)) {
                 $output->writeln(sprintf(

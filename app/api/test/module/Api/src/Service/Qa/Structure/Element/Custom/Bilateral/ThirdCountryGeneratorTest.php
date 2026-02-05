@@ -16,9 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ThirdCountryGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate($answerValue, $expectedYesNo)
     {
         $elementGeneratorContext = m::mock(ElementGeneratorContext::class);
@@ -41,7 +39,7 @@ class ThirdCountryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate()
     {
         return [
             ['string_value', 'Y'],

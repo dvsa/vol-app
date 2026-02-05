@@ -55,6 +55,7 @@ class PermitsController extends AbstractSelfserveController
     /**
      * @return ViewModel|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();

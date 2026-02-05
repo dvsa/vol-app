@@ -22,9 +22,7 @@ class SlaTargetDateEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /**
-     * @dataProvider dpTestConstruct
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestConstruct')]
     public function testConstruct($entity, $expect)
     {
         $agreedDate = new \DateTime('2011-10-09');
@@ -46,7 +44,7 @@ class SlaTargetDateEntityTest extends EntityTester
         static::assertEquals($underDelegation, $sut->getUnderDelegation());
     }
 
-    public function dpTestConstruct()
+    public static function dpTestConstruct()
     {
         return [
             [

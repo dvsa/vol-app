@@ -44,9 +44,7 @@ class SafetyTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider trailersProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('trailersProvider')]
     public function testHandleQuery($canHaveTrailer)
     {
         $licence = m::mock(BundleSerializableInterface::class);
@@ -98,7 +96,7 @@ class SafetyTest extends QueryHandlerTestCase
         );
     }
 
-    public function trailersProvider()
+    public static function trailersProvider()
     {
         return [
             [true],

@@ -25,9 +25,7 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         parent::setUp();
     }
 
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
         $euro5CombinedRangeSize,
         $euro5PermitCount,
@@ -81,7 +79,7 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider()
     {
         return [
             [null, 0, 5, 20, 10, 5, false, '5 Euro 5 permits required but no Euro 5 ranges available'],

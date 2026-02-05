@@ -13,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command\CommunityLic\Annul as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Annul
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Annul::class)]
 class AnnulTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CommandHandler\CommunityLic\Annul */
@@ -31,6 +29,7 @@ class AnnulTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [

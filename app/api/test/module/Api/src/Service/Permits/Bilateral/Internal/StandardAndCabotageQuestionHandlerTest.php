@@ -19,9 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpHandle
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandle')]
     public function testHandle($bilateralRequired, $expectedAnswer)
     {
         $permitUsageSelection = 'permit_usage_selection';
@@ -58,7 +56,7 @@ class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
         $standardAndCabotageQuestionHandler->handle($qaContext, $requiredPermits);
     }
 
-    public function dpHandle()
+    public static function dpHandle()
     {
         return [
             'standard only' => [

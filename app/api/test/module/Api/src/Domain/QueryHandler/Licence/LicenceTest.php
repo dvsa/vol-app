@@ -56,9 +56,7 @@ class LicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQuery($isLicenceSurrenderAllowed, $openApplicationsForLicence)
     {
         $query = Qry::create(['id' => 111]);
@@ -129,9 +127,7 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQueryNoContinuationDetail($isLicenceSurrenderAllowed, $openApplicationsForLicence)
     {
         $query = Qry::create(['id' => 111]);
@@ -199,9 +195,7 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    /**
-     * @dataProvider dptestHandleQueryShowExpiryWarningDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQueryShowExpiryWarningDataProvider')]
     public function testHandleQueryShowExpiryWarning(
         $expected,
         $isExpiring,
@@ -263,7 +257,7 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertSame($isLicenceSurrenderAllowed, $resultArray['isLicenceSurrenderAllowed']);
     }
 
-    public function dptestHandleQueryShowExpiryWarningDataProvider()
+    public static function dptestHandleQueryShowExpiryWarningDataProvider()
     {
         return [
             'should show' => [
@@ -309,9 +303,7 @@ class LicenceTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
     public function testHandleQueryShowExpiryWarningNoContinuationDetail(
         $isLicenceSurrenderAllowed,
         $openApplicationsForLicence
@@ -367,7 +359,7 @@ class LicenceTest extends QueryHandlerTestCase
         }
     }
 
-    public function dptestHandleQuery()
+    public static function dptestHandleQuery()
     {
         return [
             [

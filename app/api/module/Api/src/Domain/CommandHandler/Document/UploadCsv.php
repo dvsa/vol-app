@@ -13,8 +13,8 @@ use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
 
 final class UploadCsv extends AbstractCommandHandler
 {
-    public const CONFIRM_MSG = 'CSV containing %d rows was uploaded';
-    public const EMPTY_MSG = 'No data found. Creating empty file';
+    public const string CONFIRM_MSG = 'CSV containing %d rows was uploaded';
+    public const string EMPTY_MSG = 'No data found. Creating empty file';
 
     /**
      * Handle command

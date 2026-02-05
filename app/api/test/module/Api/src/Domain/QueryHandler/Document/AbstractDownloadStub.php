@@ -11,11 +11,13 @@ use Laminas\Http\Response\Stream;
  */
 class AbstractDownloadStub extends AbstractDownload
 {
+    #[\Override]
     public function download(string $identifier, ?string $path = null, ?string $fileName = null): Stream
     {
         return parent::download($identifier, $path, $fileName);
     }
 
+    #[\Override]
     public function setIsInline($inline)
     {
         return parent::setIsInline($inline);

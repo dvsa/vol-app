@@ -44,6 +44,7 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -71,9 +72,7 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testHandleCommand($isExempt, $expectedLicenceNo)
     {
         $licenceNoGenId = 1234567;
@@ -205,17 +204,17 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('phone_t_secondary', $phoneContacts->get(1)->getPhoneContactType()->getId());
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         return [
             'notExempt' => [
                 'isExempt' => 'N',
-                'expectedLicenceNumber' => 'UPN1234567'
+                'expectedLicenceNo' => 'UPN1234567'
 
             ],
             'isExempt' => [
                 'isExempt' => 'Y',
-                'expectedLicenceNumber' => 'EPN1234567'
+                'expectedLicenceNo' => 'EPN1234567'
             ]
         ];
     }

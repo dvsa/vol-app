@@ -341,9 +341,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider irfoDataProfider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('irfoDataProfider')]
     public function testHandleCommandSuccessTotalAmountGreaterThenGrossAmount($type)
     {
         // set up data
@@ -585,7 +583,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function irfoDataProfider()
+    public static function irfoDataProfider()
     {
         return [
             ['PSV'],
@@ -597,9 +595,8 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
      * @param string $cpmsStatus
      * @param string $expectedPaymentStatus
      * @param string $expectedMessage
-     *
-     * @dataProvider failureStatusProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('failureStatusProvider')]
     public function testHandleCommandFailures($cpmsStatus, $expectedPaymentStatus, $expectedMessage)
     {
         // set up data
@@ -669,7 +666,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function failureStatusProvider()
+    public static function failureStatusProvider()
     {
         return [
             [
@@ -698,9 +695,8 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
     /**
      * @param int    $cpmsStatus
      * @param string $expectedMessage
-     *
-     * @dataProvider otherStatusProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('otherStatusProvider')]
     public function testHandleCommandOtherStatus($cpmsStatus, $expectedMessage)
     {
         // set up data
@@ -756,7 +752,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function otherStatusProvider()
+    public static function otherStatusProvider()
     {
         return [
             [

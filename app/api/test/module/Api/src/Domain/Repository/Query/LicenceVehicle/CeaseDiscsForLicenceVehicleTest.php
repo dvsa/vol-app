@@ -39,7 +39,7 @@ class CeaseDiscsForLicenceVehicleTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider()
     {
         $today = new DateTime();
 

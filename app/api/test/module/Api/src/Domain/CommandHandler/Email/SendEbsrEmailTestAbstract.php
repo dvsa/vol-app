@@ -61,10 +61,9 @@ abstract class SendEbsrEmailTestAbstract extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
-     *
      * @param string $orgEmail
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand($orgEmail, $adminEmail, $expectedToAddress, $extraCc, $cmdClass)
     {
         $regNo = 5678;

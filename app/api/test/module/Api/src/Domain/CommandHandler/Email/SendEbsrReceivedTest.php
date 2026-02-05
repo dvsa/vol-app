@@ -14,10 +14,10 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrReceived;
 
 /**
  * Send Ebsr Received Email Test
- * @group ebsrEmails
  *
  * @author Craig R <uk@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrReceivedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-received';

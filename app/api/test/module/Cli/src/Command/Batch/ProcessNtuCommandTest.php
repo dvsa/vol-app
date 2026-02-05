@@ -59,14 +59,18 @@ class ProcessNtuCommandTest extends TestCase
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
             ->willReturn($fakeResult);
+        $matcher = $this->exactly(count($fakeResult['result']));
 
-        $this->mockCommandHandlerManager->expects($this->exactly(count($fakeResult['result'])))
-            ->method('handleCommand')
-            ->withConsecutive(
-                [$this->equalTo(NotTakenUpApplication::create(['id' => 1]))],
-                [$this->equalTo(NotTakenUpApplication::create(['id' => 2]))]
-            )
-            ->willReturn(new Result());
+        $this->mockCommandHandlerManager->expects($matcher)
+            ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
+            if ($matcher->numberOfInvocations() === 1) {
+                $this->assertEquals(NotTakenUpApplication::create(['id' => 1]), $parameters[0]);
+            }
+            if ($matcher->numberOfInvocations() === 2) {
+                $this->assertEquals(NotTakenUpApplication::create(['id' => 2]), $parameters[0]);
+            }
+            return new Result();
+        });
 
         $input = new ArrayInput([], $this->command->getDefinition());
         $output = new BufferedOutput();

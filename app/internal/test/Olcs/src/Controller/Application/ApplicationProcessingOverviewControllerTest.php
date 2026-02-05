@@ -75,7 +75,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $event->setRouter($router);
         $event->setRouteMatch($routeMatch);
 
-        $pluginManager = new PluginManager($this->createMock(ContainerInterface::class));
+        $pluginManager = new PluginManager($this->createStub(ContainerInterface::class));
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);

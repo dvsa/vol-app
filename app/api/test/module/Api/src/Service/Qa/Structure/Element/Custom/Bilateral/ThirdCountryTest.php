@@ -12,9 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ThirdCountryTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGetRepresentation
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetRepresentation')]
     public function testGetRepresentation($yesNo)
     {
         $thirdCountry = new ThirdCountry($yesNo);
@@ -27,7 +25,7 @@ class ThirdCountryTest extends MockeryTestCase
         );
     }
 
-    public function dpGetRepresentation()
+    public static function dpGetRepresentation()
     {
         return [
             ['Y'],

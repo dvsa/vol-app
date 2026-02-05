@@ -36,9 +36,7 @@ class UpdateTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider contextProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('contextProvider')]
     public function testIsValidNoContextOrWrongContext($application, $licence, $id)
     {
         $data = [
@@ -56,7 +54,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public function contextProvider()
+    public static function contextProvider()
     {
         return [
             [null, null, null],
@@ -65,9 +63,7 @@ class UpdateTest extends AbstractHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
     public function testIsValidWithOwnership($licenceId, $expected)
     {
         $data = [
@@ -95,7 +91,7 @@ class UpdateTest extends AbstractHandlerTestCase
         $this->assertEquals($expected, $this->sut->isValid($dto));
     }
 
-    public function licenceProvider()
+    public static function licenceProvider()
     {
         return [
             [123, true],

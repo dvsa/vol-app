@@ -1091,6 +1091,7 @@ class UpdateVariationCompletion extends AbstractCommandHandler implements
 
         return $totAuthVehicles < $totDiscs;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

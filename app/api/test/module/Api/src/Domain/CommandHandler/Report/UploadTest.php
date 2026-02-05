@@ -22,9 +22,7 @@ use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Report\Upload
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Report\Upload::class)]
 class UploadTest extends AbstractCommandHandlerTestCase
 {
     public const FILENAME = 'fileName.csv';
@@ -50,6 +48,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->categoryReferences = [

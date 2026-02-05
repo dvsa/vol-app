@@ -25,6 +25,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
+    #[\Override]
     protected function initReferences()
     {
         $this->refData = [
@@ -34,9 +35,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand($isShortTerm, $expectedExpiryDate, $expectedIssueDate)
     {
         $irhpPermitApplicationId = 472;
@@ -140,7 +139,7 @@ class AllocateCandidatePermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand()
     {
         $expectedIssueDate = new \DateTime();
         $expectedIssueDate->add(new \DateInterval('P10D'));

@@ -14,8 +14,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerApplication\GetDetails
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerApplication\GetDetails::class)]
 class GetDetailsTest extends QueryHandlerTestCase
 {
     /** @var  QueryHandler\TransportManagerApplication\GetDetails  */
@@ -40,7 +40,7 @@ class GetDetailsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery()
     {
         $lgvArQualification = m::mock(TmQualification::class);
         $lgvArQualification->shouldReceive('getSerialNo')
@@ -59,9 +59,7 @@ class GetDetailsTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery($lgvArQualification, $expectedLgvAcquiredRightsReferenceNumber)
     {
         $query = Query::create(['id' => 32]);

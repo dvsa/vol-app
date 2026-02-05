@@ -10,15 +10,13 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\ContactNumber;
  */
 class ContactNumberTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testFormat($input, $expected)
     {
         $this->assertEquals($expected, ContactNumber::format($input));
     }
 
-    public function dataProvider()
+    public static function dataProvider()
     {
         $primary = [
             'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY],

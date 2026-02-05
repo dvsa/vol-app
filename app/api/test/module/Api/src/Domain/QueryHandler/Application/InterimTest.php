@@ -32,9 +32,7 @@ class InterimTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handlerQueryProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handlerQueryProvider')]
     public function testHandleQuery($status, $isInterimRequested, $isInterimInforce, $canSetStatus, $canUpdatedInterim)
     {
         $query = Qry::create(['id' => 111]);
@@ -62,7 +60,7 @@ class InterimTest extends QueryHandlerTestCase
         $this->assertEquals($canUpdatedInterim, $data['canUpdateInterim']);
     }
 
-    public function handlerQueryProvider()
+    public static function handlerQueryProvider()
     {
         return [
             [

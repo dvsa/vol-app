@@ -19,10 +19,10 @@ class CanDeleteDocumentTest extends AbstractValidatorsTestCase
      */
     protected $sut;
 
-    private const IS_SYSTEM_USER = 0;
-    private const IS_INTERNAL_USER = 1;
-    private const IS_EXTERNAL_USER = 2;
-    private const DOCUMENT_ID = "123";
+    private const int IS_SYSTEM_USER = 0;
+    private const int IS_INTERNAL_USER = 1;
+    private const int IS_EXTERNAL_USER = 2;
+    private const string DOCUMENT_ID = "123";
 
     public function setUp(): void
     {

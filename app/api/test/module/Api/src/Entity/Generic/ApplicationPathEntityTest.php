@@ -62,9 +62,7 @@ class ApplicationPathEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpGetApplicationStepByQuestionId
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicationStepByQuestionId')]
     public function testGetApplicationStepByQuestionId($applicationSteps, $questionId, $expectedApplicationStep)
     {
         $applicationPath = new Entity();
@@ -76,7 +74,7 @@ class ApplicationPathEntityTest extends EntityTester
         );
     }
 
-    public function dpGetApplicationStepByQuestionId()
+    public static function dpGetApplicationStepByQuestionId()
     {
         $applicationStep1 = m::mock(ApplicationStep::class);
         $applicationStep1->shouldReceive('getQuestion->getId')

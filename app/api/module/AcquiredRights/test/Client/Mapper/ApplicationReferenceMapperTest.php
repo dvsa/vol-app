@@ -16,10 +16,8 @@ class ApplicationReferenceMapperTest extends MockeryTestCase
         $this->sut = new ApplicationReferenceMapper();
     }
 
-    /**
-     * @test
-     * @dataProvider dataProviderResponseDataAndExceptionMap
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderResponseDataAndExceptionMap')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function createFromResponseArrayValidOrThrowsAppropriateExceptions(array $data, string $exceptionMessage = null)
     {
         if (!is_null($exceptionMessage)) {

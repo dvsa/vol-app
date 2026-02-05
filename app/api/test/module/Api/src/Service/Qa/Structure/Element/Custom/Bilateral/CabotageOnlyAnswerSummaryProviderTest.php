@@ -28,9 +28,7 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
     public function testGetTemplateVariables($isSnapshot)
     {
         $qaContext = m::mock(QaContext::class);
@@ -44,7 +42,7 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables()
     {
         return [
             [true],

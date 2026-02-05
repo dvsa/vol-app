@@ -53,7 +53,7 @@ class ReviveApplicationTest extends AbstractCommandHandlerTestCase
 
         $application->shouldReceive('getStatus')
             ->andReturn(
-                $status->getMock()
+                $status->createStub()
             );
 
         $this->repoMap['Application']->shouldReceive('fetchById')
@@ -91,7 +91,7 @@ class ReviveApplicationTest extends AbstractCommandHandlerTestCase
 
         $application->shouldReceive('getStatus')
             ->andReturn(
-                $status->getMock()
+                $status->createStub()
             );
 
         $this->repoMap['Application']->shouldReceive('fetchById')

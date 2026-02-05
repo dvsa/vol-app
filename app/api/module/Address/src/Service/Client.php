@@ -25,6 +25,7 @@ class Client extends HttpClient
         $this->setMethod('GET');
     }
 
+    #[\Override]
     public function setUri($uri)
     {
         $uri = $this->baseUri . '/' . ltrim($uri, '/');
