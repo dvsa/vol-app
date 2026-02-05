@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertakingEntity;
@@ -16,7 +18,7 @@ use Mockery as m;
  */
 class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new InterimOperatingCentres();
         $query = $bookmark->getQuery(['application' => 7]);
@@ -24,7 +26,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoData()
+    public function testRenderWithNoData(): void
     {
         $parser = new RtfParser();
         $bookmark = new InterimOperatingCentres();
@@ -36,7 +38,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('', $result);
     }
 
-    public function dpRenderWithGoodsLicence()
+    public static function dpRenderWithGoodsLicence(): array
     {
         return [
             [
@@ -67,10 +69,8 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpRenderWithGoodsLicence
-     */
-    public function testRenderWithGoodsLicence($vehicleTypeId, $totAuthLgvVehicles, $expectedTabVeh)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderWithGoodsLicence')]
+    public function testRenderWithGoodsLicence(mixed $vehicleTypeId, mixed $totAuthLgvVehicles, mixed $expectedTabVeh): void
     {
         $data = [
             'id' => 50,
@@ -232,7 +232,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $bookmark = $this->createPartialMock(InterimOperatingCentres::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark->expects($this->atLeastOnce())
             ->method('getSnippet')
             ->willReturn('snippet');
 
@@ -243,7 +243,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('foo', $result);
     }
 
-    public function testRenderWithPsvLicence()
+    public function testRenderWithPsvLicence(): void
     {
         $data = [
             'id' => 123,
@@ -287,7 +287,7 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $bookmark = $this->createPartialMock(InterimOperatingCentres::class, ['getSnippet']);
 
-        $bookmark->expects($this->any())
+        $bookmark->expects($this->atLeastOnce())
             ->method('getSnippet')
             ->willReturn('snippet');
 

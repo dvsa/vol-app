@@ -22,8 +22,8 @@ final class BulkReprint extends AbstractCommandHandler implements UploaderAwareI
 {
     use UploaderAwareTrait;
 
-    public const EXPECTED_ITEMS_IN_ROW = 3;
-    public const MAX_LINE_COUNT = 5000;
+    public const int EXPECTED_ITEMS_IN_ROW = 3;
+    public const int MAX_LINE_COUNT = 5000;
 
     protected $repoServiceName = 'Document';
 

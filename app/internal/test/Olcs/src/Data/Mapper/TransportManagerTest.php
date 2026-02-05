@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class TransportManagerTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = new Form();
 
@@ -28,7 +30,7 @@ class TransportManagerTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'transport-manager-details' => ['foo' => 'bar'],
@@ -81,7 +83,7 @@ class TransportManagerTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'homeCd'      => [

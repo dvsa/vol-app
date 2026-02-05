@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -22,7 +24,7 @@ class ConvictionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testUpdateConvictionCategory()
+    public function testUpdateConvictionCategory(): void
     {
         $refData = m::mock(RefData::class);
 
@@ -32,7 +34,7 @@ class ConvictionEntityTest extends EntityTester
         $this->assertSame($refData, $sut->getConvictionCategory());
     }
 
-    public function testUpdateConvictionCategoryError()
+    public function testUpdateConvictionCategoryError(): void
     {
         $sut = new Entity();
         $thrown = false;
@@ -49,7 +51,7 @@ class ConvictionEntityTest extends EntityTester
         $this->assertTrue($thrown, 'Exception not thrown');
     }
 
-    public function testUpdateConvictionCategoryCustom()
+    public function testUpdateConvictionCategoryCustom(): void
     {
         $sut = new Entity();
         $description = 'Conviction category';

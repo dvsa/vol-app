@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Parser;
 
 use Dvsa\Olcs\Api\Service\Document\Parser\EditorJsParser;
@@ -18,18 +20,18 @@ class EditorJsParserTest extends TestCase
         $this->parser = new EditorJsParser();
     }
 
-    public function testGetFileExtension()
+    public function testGetFileExtension(): void
     {
         $this->assertEquals('json', $this->parser->getFileExtension());
     }
 
-    public function testRenderImageThrowsException()
+    public function testRenderImageThrowsException(): never
     {
         $this->expectException(\RuntimeException::class);
         $this->parser->renderImage('data', 100, 100, 'png');
     }
 
-    public function testExtractTokensFromParagraph()
+    public function testExtractTokensFromParagraph(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -49,7 +51,7 @@ class EditorJsParserTest extends TestCase
         $this->assertContains('LICENCE_NUMBER', $tokens);
     }
 
-    public function testExtractTokensFromHeader()
+    public function testExtractTokensFromHeader(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -69,7 +71,7 @@ class EditorJsParserTest extends TestCase
         $this->assertContains('LICENCE_NUMBER', $tokens);
     }
 
-    public function testExtractTokensFromList()
+    public function testExtractTokensFromList(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -95,7 +97,7 @@ class EditorJsParserTest extends TestCase
         $this->assertContains('CASEWORKER_NAME', $tokens);
     }
 
-    public function testExtractTokensFromMultipleBlocks()
+    public function testExtractTokensFromMultipleBlocks(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -125,7 +127,7 @@ class EditorJsParserTest extends TestCase
         $this->assertContains('TODAYS_DATE', $tokens);
     }
 
-    public function testExtractTokensDeduplicates()
+    public function testExtractTokensDeduplicates(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -142,7 +144,7 @@ class EditorJsParserTest extends TestCase
         $this->assertContains('OP_NAME', $tokens);
     }
 
-    public function testExtractTokensHandlesInvalidJson()
+    public function testExtractTokensHandlesInvalidJson(): void
     {
         $tokens = $this->parser->extractTokens('not valid json{');
 
@@ -150,7 +152,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEmpty($tokens);
     }
 
-    public function testExtractTokensHandlesEmptyBlocks()
+    public function testExtractTokensHandlesEmptyBlocks(): void
     {
         $json = json_encode(['blocks' => []]);
 
@@ -160,7 +162,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEmpty($tokens);
     }
 
-    public function testReplaceTokensInParagraph()
+    public function testReplaceTokensInParagraph(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -185,7 +187,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals($expected, $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceTokensInHeader()
+    public function testReplaceTokensInHeader(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -210,7 +212,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals(2, $decoded['blocks'][0]['data']['level']);
     }
 
-    public function testReplaceTokensInList()
+    public function testReplaceTokensInList(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -239,7 +241,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('Date: 01/01/2025', $decoded['blocks'][0]['data']['items'][1]);
     }
 
-    public function testReplaceTokensWithSimpleStringValues()
+    public function testReplaceTokensWithSimpleStringValues(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -256,7 +258,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('Simple Value', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceTokensConvertsNewlinesToBr()
+    public function testReplaceTokensConvertsNewlinesToBr(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -274,7 +276,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('Line 1<br>Line 2<br>Line 3', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceTokensPreservesPreformattedNewlines()
+    public function testReplaceTokensPreservesPreformattedNewlines(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -292,7 +294,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals("Line 1\nLine 2", $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceTokensLeavesUnknownTokensIntact()
+    public function testReplaceTokensLeavesUnknownTokensIntact(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -313,7 +315,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('Replaced and [[UNKNOWN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceHandlesInvalidJson()
+    public function testReplaceHandlesInvalidJson(): void
     {
         $invalidJson = 'not valid json{';
 
@@ -323,7 +325,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals($invalidJson, $result);
     }
 
-    public function testReplaceHandlesEmptyData()
+    public function testReplaceHandlesEmptyData(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -338,7 +340,7 @@ class EditorJsParserTest extends TestCase
         $this->assertEquals('[[TEST_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplacePreservesJsonStructure()
+    public function testReplacePreservesJsonStructure(): void
     {
         $json = json_encode([
             'time' => 1234567890,

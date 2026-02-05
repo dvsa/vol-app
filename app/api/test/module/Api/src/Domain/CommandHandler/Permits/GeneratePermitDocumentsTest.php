@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Doctrine\ORM\Query;
@@ -30,7 +32,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $irhpPermitId1 = 1;
         $irhpPermitId2 = 2;
@@ -164,7 +166,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForBilateral()
+    public function testHandleCommandForBilateral(): void
     {
         $countryId = CountryEntity::ID_NORWAY;
 
@@ -311,7 +313,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandForBilateralWithSuppressedCoverLetter()
+    public static function dpHandleCommandForBilateralWithSuppressedCoverLetter(): array
     {
         return [
             [CountryEntity::ID_BELARUS],
@@ -325,10 +327,8 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-    * @dataProvider dpHandleCommandForBilateralWithSuppressedCoverLetter
-    */
-    public function testHandleCommandForBilateralWithSuppressedCoverLetter($countryId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandForBilateralWithSuppressedCoverLetter')]
+    public function testHandleCommandForBilateralWithSuppressedCoverLetter(mixed $countryId): void
     {
         $irhpPermitId1 = 1;
         $irhpPermitId2 = 2;
@@ -433,7 +433,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForMultilateral()
+    public function testHandleCommandForMultilateral(): void
     {
         $irhpPermitId1 = 1;
         $irhpPermitId2 = 2;
@@ -570,7 +570,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForEcmtShortTerm()
+    public function testHandleCommandForEcmtShortTerm(): void
     {
         $irhpPermitId1 = 1;
         $irhpPermitId2 = 2;
@@ -707,7 +707,7 @@ class GeneratePermitDocumentsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForEcmtRemoval()
+    public function testHandleCommandForEcmtRemoval(): void
     {
         $irhpPermitId1 = 1;
         $irhpPermitId2 = 2;

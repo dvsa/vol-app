@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Bus\Ebsr\EbsrSubmission;
@@ -22,7 +24,7 @@ class EbsrSubmissionTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 111]);
 

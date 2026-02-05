@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Fee Test
  *
@@ -35,7 +37,8 @@ class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Fee::STATUS_OUTSTANDING,
@@ -45,7 +48,7 @@ class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutFees()
+    public function testHandleCommandWithoutFees(): void
     {
         $data = [
 
@@ -81,7 +84,7 @@ class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
 

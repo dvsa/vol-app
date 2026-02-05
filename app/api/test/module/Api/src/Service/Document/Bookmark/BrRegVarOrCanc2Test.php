@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegVarOrCanc2 as BookmarkClass;
@@ -9,8 +11,8 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegVarOrCanc2 as BookmarkClass;
  */
 class BrRegVarOrCanc2Test extends AbstractBrRegVarOrCanc
 {
-    protected $new = 'REGISTER';
-    protected $vary = 'VARY';
-    protected $cancel = 'CANCEL';
+    protected const NEW_TEXT = 'REGISTER';
+    protected const VARY_TEXT = 'VARY';
+    protected const CANCEL_TEXT = 'CANCEL';
     protected $bookmarkClass = BookmarkClass::class;
 }

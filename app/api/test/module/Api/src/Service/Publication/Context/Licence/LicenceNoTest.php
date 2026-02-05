@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Licence;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -28,7 +30,7 @@ class LicenceNoTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testProvideWithLicence()
+    public function testProvideWithLicence(): void
     {
         $publicationLink = $this->getPublicationLinkWithLicence();
         $context = new \ArrayObject();
@@ -43,7 +45,7 @@ class LicenceNoTest extends MockeryTestCase
         );
     }
 
-    public function testProvideWithApplication()
+    public function testProvideWithApplication(): void
     {
         $publicationLink = $this->getPublicationLinkWithApplication();
         $context = new \ArrayObject();
@@ -61,7 +63,7 @@ class LicenceNoTest extends MockeryTestCase
     /**
      * @return PublicationLink
      */
-    private function getPublicationLinkWithLicence()
+    private function getPublicationLinkWithLicence(): mixed
     {
         $publicationLink = new PublicationLink();
         $organisation = new \Dvsa\Olcs\Api\Entity\Organisation\Organisation();
@@ -76,7 +78,7 @@ class LicenceNoTest extends MockeryTestCase
     /**
      * @return PublicationLink
      */
-    private function getPublicationLinkWithApplication()
+    private function getPublicationLinkWithApplication(): mixed
     {
         $publicationLink = new PublicationLink();
 

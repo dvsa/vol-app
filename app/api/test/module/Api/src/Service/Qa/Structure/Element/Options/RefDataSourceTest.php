@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Domain\Repository\RefData as RefDataRepository;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RefDataSourceTest extends MockeryTestCase
 {
-    public function testPopulateOptionList()
+    public function testPopulateOptionList(): void
     {
         $categoryId = 'permit_application_status';
 

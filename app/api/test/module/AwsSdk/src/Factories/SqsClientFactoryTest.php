@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\AwsSdk\Factories;
 
 use Aws\Sqs\SqsClient;
@@ -33,10 +35,8 @@ class SqsClientFactoryTest extends TestCase
         $this->sm = $sm;
     }
 
-    /**
-     * @dataProvider dpTestInvoke
-     */
-    public function testInvoke($sqsOptions)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
+    public function testInvoke(mixed $sqsOptions): void
     {
         // Params
         $config = [
@@ -59,11 +59,11 @@ class SqsClientFactoryTest extends TestCase
         $this->assertInstanceOf(SqsClient::class, $sqsClient);
     }
 
-    public function dpTestInvoke()
+    public static function dpTestInvoke(): array
     {
         return [
-            [
-                'with_sqs_options' => [
+            'with-sqs-options' => [
+                'sqsOptions' => [
                     'sqsOptions' => [
                         'credentials' => [
                             'key' => 'some_key',
@@ -71,8 +71,10 @@ class SqsClientFactoryTest extends TestCase
                         ],
                     ]
                 ],
-                'without-sqs-options' => []
-            ]
+            ],
+            'without-sqs-options' => [
+                'sqsOptions' => [],
+            ],
         ];
     }
 }

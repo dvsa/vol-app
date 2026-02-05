@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Dvsa\Olcs\Api\Entity\DigitalSignature;
@@ -33,10 +35,8 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->sut = new SignatureReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider physicalSignatureDataProvider
-     */
-    public function testPhysicalSignature($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('physicalSignatureDataProvider')]
+    public function testPhysicalSignature(mixed $data, mixed $expected): void
     {
         $this->translator->shouldReceive('translate')
             ->with($expected['markup'])
@@ -71,7 +71,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    public function testDigitalSignature()
+    public function testDigitalSignature(): void
     {
         $signature = m::mock(DigitalSignature::class);
         $signature->shouldReceive('getSignatureName')->andReturn('test-name');
@@ -95,7 +95,7 @@ class SignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $markup);
     }
 
-    public function physicalSignatureDataProvider()
+    public static function physicalSignatureDataProvider(): array
     {
         return [
             'is_not_ni' => [

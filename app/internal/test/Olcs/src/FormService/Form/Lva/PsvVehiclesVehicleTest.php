@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Psv Vehicles Vehicle Test
  *
@@ -26,7 +28,7 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
         $this->sut = new PsvVehiclesVehicle();
     }
 
-    public function testAlterFormNoop()
+    public function testAlterFormNoop(): void
     {
         $mockForm = m::mock();
         $this->assertNull($this->sut->alterForm($mockForm));

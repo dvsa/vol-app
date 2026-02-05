@@ -60,7 +60,7 @@ return [
         [
             'title' => 'Active',
             'name' => 'isActive',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 $isActive = $row['isActive'] ?? false;
                 return $isActive
                     ? '<span class="govuk-tag govuk-tag--green">Active</span>'

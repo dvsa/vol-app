@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Dvsa\Olcs\Cli\Domain\Query\CompaniesHouse\Organisations;
 use Dvsa\Olcs\Cli\Command\Batch\EnqueueCompaniesHouseCompareCommand;
 use Dvsa\Olcs\Cli\Domain\Command\MessageQueue\Enqueue;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class EnqueueCompaniesHouseCompareCommandTest extends AbstractBatchCommandCases
 {
     use QueryHandlerExceptionTestsTrait;
 
-    protected function getCommandClass()
+    protected function getCommandClass(): string
     {
         return EnqueueCompaniesHouseCompareCommand::class;
     }
 
-    protected function getCommandName()
+    protected function getCommandName(): string
     {
         return 'batch:enqueue-companies-house-compare';
     }
 
-    protected function getCommandDTOs()
+    protected function getCommandDTOs(): array
     {
         return [
             Enqueue::create([

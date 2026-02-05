@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Service\Permits\ApplyRanges\ForCpProvider;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockBasedForCpProviderFactoryTest extends MockeryTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $irhpPermitStockId = 53;
 

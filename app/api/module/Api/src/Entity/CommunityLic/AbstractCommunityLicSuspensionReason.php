@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCommunityLicSuspensionReason implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCommunityLicSuspensionReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

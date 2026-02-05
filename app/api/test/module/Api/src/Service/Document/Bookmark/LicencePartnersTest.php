@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\LicencePartners;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class LicencePartnersTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new LicencePartners();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -21,7 +23,7 @@ class LicencePartnersTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoLicencePartners()
+    public function testRenderWithNoLicencePartners(): void
     {
         $bookmark = new LicencePartners();
         $bookmark->setData([]);
@@ -32,7 +34,7 @@ class LicencePartnersTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithLicencePartners()
+    public function testRenderWithLicencePartners(): void
     {
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\LicencePartners::class)
             ->makePartial()

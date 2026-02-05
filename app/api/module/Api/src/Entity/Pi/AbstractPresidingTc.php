@@ -29,7 +29,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

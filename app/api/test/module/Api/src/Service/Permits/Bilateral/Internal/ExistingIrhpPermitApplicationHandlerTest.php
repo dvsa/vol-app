@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitApplication as IrhpPermitApplicationRepository;
@@ -76,7 +78,7 @@ class ExistingIrhpPermitApplicationHandlerTest extends MockeryTestCase
         );
     }
 
-    public function testHandleStockChanged()
+    public function testHandleStockChanged(): void
     {
         $newStockId = 11;
 
@@ -134,7 +136,7 @@ class ExistingIrhpPermitApplicationHandlerTest extends MockeryTestCase
         );
     }
 
-    public function testHandleStockNotChanged()
+    public function testHandleStockNotChanged(): void
     {
         $this->questionHandlerDelegator->shouldReceive('delegate')
             ->with($this->irhpPermitApplication, $this->applicationStep1, self::REQUIRED_PERMITS)

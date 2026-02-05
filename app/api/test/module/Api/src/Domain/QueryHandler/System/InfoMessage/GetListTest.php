@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\System\InfoMessage;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
@@ -21,7 +23,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query\System\InfoMessage\GetList::create([]);
 

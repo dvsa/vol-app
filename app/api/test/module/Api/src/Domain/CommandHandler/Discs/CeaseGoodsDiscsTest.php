@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CeaseGoodsDiscsTest.php
  *
@@ -31,7 +33,7 @@ class CeaseGoodsDiscsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 123

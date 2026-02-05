@@ -289,6 +289,7 @@ abstract class AbstractGrantController extends AbstractController
      *
      * @return null|\Laminas\Http\Response
      */
+    #[\Override]
     protected function checkForRedirect($lvaId)
     {
         // no-op to avoid LVA predispatch magic kicking in

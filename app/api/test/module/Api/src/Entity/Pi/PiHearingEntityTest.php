@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Pi;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -37,10 +39,8 @@ class PiHearingEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    /**
-     * @dataProvider dataProviderHearingBeforeAgreedDateValidate
-     */
-    public function testCreateValidationHearingBeforeAgreedDate($expectException, $hearingDate, $piAgreedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHearingBeforeAgreedDateValidate')]
+    public function testCreateValidationHearingBeforeAgreedDate(mixed $expectException, mixed $hearingDate, mixed $piAgreedDate): void
     {
         $piEntity = m::mock(PiEntity::class);
         $piEntity->shouldReceive('isClosed')->andReturn(false);
@@ -84,10 +84,8 @@ class PiHearingEntityTest extends EntityTester
         }
     }
 
-    /**
-     * @dataProvider dataProviderHearingBeforeAgreedDateValidate
-     */
-    public function testUpdateValidationDecisionBeforeHearing($expectException, $hearingDate, $piAgreedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHearingBeforeAgreedDateValidate')]
+    public function testUpdateValidationDecisionBeforeHearing(mixed $expectException, mixed $hearingDate, mixed $piAgreedDate): void
     {
         $sut = $this->instantiate($this->entityClass);
         $piEntity = m::mock(PiEntity::class);
@@ -136,7 +134,7 @@ class PiHearingEntityTest extends EntityTester
     /**
      * test create
      */
-    public function testCreateNotAdjournedOrCancelled()
+    public function testCreateNotAdjournedOrCancelled(): void
     {
         $piEntity = m::mock(PiEntity::class);
         $piEntity->shouldReceive('isClosed')->andReturn(false);
@@ -193,10 +191,10 @@ class PiHearingEntityTest extends EntityTester
     /**
      * test update with different adjourned dates to also test date processing
      *
-     * @dataProvider adjournedDateProvider
      * @param string|null $adjournedDate
      */
-    public function testUpdateWithAdjournedOrCancelled($adjournedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('adjournedDateProvider')]
+    public function testUpdateWithAdjournedOrCancelled(mixed $adjournedDate): void
     {
         $piEntity = m::mock(PiEntity::class);
         $piEntity->shouldReceive('isClosed')->andReturn(false);
@@ -257,7 +255,7 @@ class PiHearingEntityTest extends EntityTester
         $this->assertEquals($details, $this->entity->getDetails());
     }
 
-    public function testCreateExceptionWhenPiClosed()
+    public function testCreateExceptionWhenPiClosed(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -286,7 +284,7 @@ class PiHearingEntityTest extends EntityTester
         );
     }
 
-    public function testUpdateExceptionWhenPiClosed()
+    public function testUpdateExceptionWhenPiClosed(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -318,7 +316,7 @@ class PiHearingEntityTest extends EntityTester
     /**
      * @return array
      */
-    public function adjournedDateProvider()
+    public static function adjournedDateProvider(): array
     {
         return [
             [null],
@@ -326,7 +324,7 @@ class PiHearingEntityTest extends EntityTester
         ];
     }
 
-    public function dataProviderHearingBeforeAgreedDateValidate()
+    public static function dataProviderHearingBeforeAgreedDateValidate(): array
     {
         return [
             // $expectException, $hearingDate, $piAgreedDate

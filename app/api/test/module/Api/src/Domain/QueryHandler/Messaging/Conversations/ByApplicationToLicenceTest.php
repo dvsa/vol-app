@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Messaging\Conversations;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Messaging\Conversations\ByApplicationToLicence as Handler;
@@ -21,7 +23,7 @@ class ByApplicationToLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(
             [

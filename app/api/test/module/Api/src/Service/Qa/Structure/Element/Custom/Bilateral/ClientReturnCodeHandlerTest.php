@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -40,7 +42,7 @@ class ClientReturnCodeHandlerTest extends MockeryTestCase
         $this->clientReturnCodeHandler = new ClientReturnCodeHandler($this->applicationCountryRemover);
     }
 
-    public function testHandleDestinationCancel()
+    public function testHandleDestinationCancel(): void
     {
         $country1 = m::mock(Country::class);
 
@@ -56,7 +58,7 @@ class ClientReturnCodeHandlerTest extends MockeryTestCase
         );
     }
 
-    public function testHandleDestinationOverview()
+    public function testHandleDestinationOverview(): void
     {
         $country1 = m::mock(Country::class);
         $country2 = m::mock(Country::class);

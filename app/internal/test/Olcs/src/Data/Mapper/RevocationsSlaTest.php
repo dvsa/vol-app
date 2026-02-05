@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -11,17 +13,16 @@ class RevocationsSlaTest extends MockeryTestCase
 {
     /**
      * testMapFromResult
-     *
-     * @dataProvider mapFromFormDataProvider
      */
-    public function testMapFromForm(array $input, array $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
+    public function testMapFromForm(array $input, array $expected): void
     {
 
         $actual = Sut::mapFromForm($input);
         $this->assertEquals($expected, $actual);
     }
 
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider(): array
     {
         return [
             "valid form submission" => [
@@ -80,17 +81,17 @@ class RevocationsSlaTest extends MockeryTestCase
     /**
      * testMapFromResult
      *
-     * @dataProvider mapFromResultDataProvider
      *
      * @param array $expected
      */
-    public function testMapFromResult(array $input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapFromResult(array $input, mixed $expected): void
     {
         $actual = Sut::mapFromResult($input);
         $this->assertEquals($expected, $actual);
     }
 
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         return [
             "valid return from backend" => [
@@ -143,7 +144,7 @@ class RevocationsSlaTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];

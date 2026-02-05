@@ -85,6 +85,7 @@ class TaskAllocationRule extends AbstractRepository
         return $result;
     }
 
+    #[\Override]
     public function buildDefaultListQuery(
         QueryBuilder $qb,
         QueryInterface $query,

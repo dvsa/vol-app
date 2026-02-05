@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Standard Test
  *
@@ -29,14 +31,12 @@ class StandardTest extends MockeryTestCase
     {
         $this->sut = new Standard();
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    public function testIsValid()
+    public function testIsValid(): void
     {
         $dto = m::mock();
 

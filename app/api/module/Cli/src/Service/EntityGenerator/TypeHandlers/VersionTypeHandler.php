@@ -19,33 +19,33 @@ class VersionTypeHandler extends AbstractTypeHandler
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
         $annotations = [];
-        
+
         // Add column definition
         $type = $column->getType() === 'smallint' ? 'smallint' : 'integer';
         $options = [];
-        
+
         if ($column->getDefault() !== null) {
             $options[] = '"default": ' . $column->getDefault();
         }
-        
+
         $columnDef = sprintf(
             '@ORM\Column(type="%s", name="%s", nullable=%s',
             $type,
             $column->getName(),
             $column->isNullable() ? 'true' : 'false'
         );
-        
+
         if (!empty($options)) {
             $columnDef .= ', options={' . implode(', ', $options) . '}';
         }
-        
+
         $columnDef .= ')';
-        
+
         $annotations[] = $columnDef;
-        
+
         // Add version annotation
         $annotations[] = '@ORM\Version';
-        
+
         return implode("\n     * ", $annotations);
     }
 
@@ -61,11 +61,13 @@ class VersionTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 90; // High priority
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return ['Doctrine\ORM\Mapping as ORM'];

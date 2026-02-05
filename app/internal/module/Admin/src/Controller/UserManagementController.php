@@ -125,11 +125,13 @@ class UserManagementController extends AbstractInternalController implements Lef
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirect()->toRoute('search', ['index' => 'user', 'action' => 'search'], ['code' => 303]);
     }
 
+    #[\Override]
     public function deleteAction()
     {
         //we need to check the user isn't the last operator admin
@@ -156,6 +158,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      *
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     public function getForm($type)
     {
         $form = parent::getForm($type);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\Command\CommunityLic;
 
 use Dvsa\Olcs\Cli\Domain\Command\CommunityLic\Activate;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Cli\Domain\Command\CommunityLic\Activate;
  */
 class ActivateTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $params = [
             'communityLicenceIds' => [1, 2]

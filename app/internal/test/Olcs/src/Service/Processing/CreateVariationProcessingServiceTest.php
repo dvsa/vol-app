@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Processing;
 
 use Common\Service\Cqrs\Command\CommandService;
@@ -49,7 +51,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetDataFromForm()
+    public function testGetDataFromForm(): void
     {
         $form = m::mock(\Laminas\Form\Form::class);
 
@@ -59,7 +61,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->assertEquals(['foo' => 'bar'], $this->sut->getDataFromForm($form));
     }
 
-    public function testCreateVariation()
+    public function testCreateVariation(): void
     {
         $licenceId = 123;
         $data = ['licenceType' => 'bar'];
@@ -96,7 +98,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->assertEquals(111, $this->sut->createVariation($licenceId, $data));
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         // Params
         $mockRequest = m::mock(\Laminas\Http\Request::class);
@@ -122,7 +124,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $this->assertSame($mockForm, $this->sut->getForm($mockRequest));
     }
 
-    public function testGetFormWithPost()
+    public function testGetFormWithPost(): void
     {
         // Params
         $mockRequest = m::mock(\Laminas\Http\Request::class);

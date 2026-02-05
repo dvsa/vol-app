@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Licence;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
@@ -17,12 +19,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class LicenceAddressTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
+    public function testProvide(): void
     {
         $licenceAddress = 'licence address';
 
@@ -51,12 +50,9 @@ class LicenceAddressTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
-    public function testProvideWithNoAddress()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
+    public function testProvideWithNoAddress(): void
     {
         $licenceEntityMock = m::mock(LicenceEntity::class);
         $licenceEntityMock->shouldReceive('getCorrespondenceCd')->once()->andReturn(null);
@@ -75,12 +71,9 @@ class LicenceAddressTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publicationLink, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the licence address filter
-     */
-    public function testProvideWithNoLicence()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the licence address filter')]
+    public function testProvideWithNoLicence(): void
     {
         $publicationLink = m::mock(PublicationLink::class);
         $publicationLink->shouldReceive('getLicence')->andReturn(null);

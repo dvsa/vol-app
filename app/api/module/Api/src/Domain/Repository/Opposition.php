@@ -24,6 +24,7 @@ class Opposition extends AbstractRepository
      * @param QueryBuilder $qb
      * @param int          $id
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         parent::buildDefaultQuery($qb, $id);
@@ -54,6 +55,7 @@ class Opposition extends AbstractRepository
      * @param QueryInterface $query
      * @param array $compositeFields
      */
+    #[\Override]
     protected function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         parent::buildDefaultListQuery($qb, $query, $compositeFields);

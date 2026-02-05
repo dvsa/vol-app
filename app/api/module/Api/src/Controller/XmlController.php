@@ -19,6 +19,7 @@ class XmlController extends AbstractRestfulController
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function create($data)
     {
         $dto = $this->params('dto');

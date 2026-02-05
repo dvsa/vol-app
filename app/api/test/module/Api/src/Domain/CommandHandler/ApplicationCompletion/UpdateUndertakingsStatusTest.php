@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Undertakings Status Test
  *
@@ -35,7 +37,7 @@ class UpdateUndertakingsStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->setupIsInternalUser(false);
         $this->applicationCompletion->setUndertakingsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -45,7 +47,7 @@ class UpdateUndertakingsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->setupIsInternalUser(false);
         $this->applicationCompletion->setUndertakingsStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
@@ -55,7 +57,7 @@ class UpdateUndertakingsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->setupIsInternalUser(false);
         $this->applicationCompletion->setUndertakingsStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -65,7 +67,7 @@ class UpdateUndertakingsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandForInternalUser()
+    public function testHandleCommandForInternalUser(): void
     {
         $this->setupIsInternalUser();
         $this->applicationCompletion->setDeclarationsInternalStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -75,7 +77,7 @@ class UpdateUndertakingsStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandVerified()
+    public function testHandleCommandVerified(): void
     {
         $this->setupIsInternalUser(false);
         $this->applicationCompletion->setDeclarationsInternalStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);

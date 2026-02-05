@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TransportManagers;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class TransportManagersTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TransportManagers();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -21,7 +23,7 @@ class TransportManagersTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoTransportManagers()
+    public function testRenderWithNoTransportManagers(): void
     {
         $bookmark = new TransportManagers();
         $bookmark->setData([]);
@@ -32,7 +34,7 @@ class TransportManagersTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithTransportManagers()
+    public function testRenderWithTransportManagers(): void
     {
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\TransportManagers::class)
             ->makePartial()

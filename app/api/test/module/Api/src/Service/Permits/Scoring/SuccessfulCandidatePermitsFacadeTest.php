@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -58,7 +60,7 @@ class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $stockId = 47;
         $quotaRemaining = 22;
@@ -84,7 +86,7 @@ class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
         );
     }
 
-    public function testWrite()
+    public function testWrite(): void
     {
         $this->successfulCandidatePermitsWriter->shouldReceive('write')
             ->with($this->candidatePermits)
@@ -93,7 +95,7 @@ class SuccessfulCandidatePermitsFacadeTest extends MockeryTestCase
         $this->successfulCandidatePermitsFacade->write($this->candidatePermits);
     }
 
-    public function testLog()
+    public function testLog(): void
     {
         $result = new Result();
 

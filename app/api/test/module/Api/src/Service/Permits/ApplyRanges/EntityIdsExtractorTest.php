@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EntityIdsExtractorTest extends MockeryTestCase
 {
-    public function testGetExtracted()
+    public function testGetExtracted(): void
     {
         $country1Id = 4;
         $country1 = m::mock(Country::class);

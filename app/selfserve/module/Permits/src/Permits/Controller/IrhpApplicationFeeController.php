@@ -36,7 +36,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
 
     protected $lva;
 
-    private const FEE_BREAKDOWN_TABLES = [
+    private const array FEE_BREAKDOWN_TABLES = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-multilateral',
     ];
@@ -254,6 +254,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveTables()
     {
         $feeBreakdownRows = $this->data[IrhpFeeBreakdownDataSource::DATA_KEY];
@@ -273,6 +274,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();

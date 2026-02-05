@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update IrfoPermitStock Test
  */
@@ -28,7 +30,8 @@ class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPermitStockEntity::STATUS_IN_STOCK
@@ -37,7 +40,7 @@ class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'ids' => array_fill(0, Sut::MAX_IDS_COUNT, 'id'),
@@ -103,7 +106,7 @@ class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandWithMaxIdsCountExceeded()
+    public function testHandleCommandWithMaxIdsCountExceeded(): void
     {
         $this->expectException(Exception\ValidationException::class);
 

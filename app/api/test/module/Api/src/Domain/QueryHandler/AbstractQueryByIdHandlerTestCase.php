@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler;
@@ -10,7 +12,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-abstract class AbstractQueryByIdHandlerTest extends QueryHandlerTestCase
+abstract class AbstractQueryByIdHandlerTestCase extends QueryHandlerTestCase
 {
     /**
      * Related data also being fetched
@@ -75,7 +77,7 @@ abstract class AbstractQueryByIdHandlerTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = $this->qryClass::create(['id' => 1]);
         $resultArray = ['result' => ['serialized']];

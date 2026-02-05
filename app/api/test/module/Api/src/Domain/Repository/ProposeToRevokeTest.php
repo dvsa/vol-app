@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\ProposeToRevoke
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\ProposeToRevoke::class)]
 class ProposeToRevokeTest extends RepositoryTestCase
 {
     /** @var  Repository\ProposeToRevoke */
@@ -19,7 +19,7 @@ class ProposeToRevokeTest extends RepositoryTestCase
         $this->setUpSut(Repository\ProposeToRevoke::class);
     }
 
-    public function testFetchProposeToRevokeUsingCase()
+    public function testFetchProposeToRevokeUsingCase(): void
     {
         $caseId = 24;
 

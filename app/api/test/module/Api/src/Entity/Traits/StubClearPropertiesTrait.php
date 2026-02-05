@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Traits;
 
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
@@ -10,14 +12,14 @@ class StubClearPropertiesTrait
 
     private $property;
 
-    public function setProperty($property)
+    public function setProperty(mixed $property): mixed
     {
         $this->property = $property;
 
         return $this;
     }
 
-    public function getProperty()
+    public function getProperty(): mixed
     {
         return $this->property;
     }

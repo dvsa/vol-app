@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\User;
 
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\User\CanAccessUserList as Sut;
@@ -20,10 +22,8 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccessOrganisation, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccessOrganisation, mixed $expected): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -34,7 +34,7 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function testIsValidInternal()
+    public function testIsValidInternal(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, true);
 
@@ -43,7 +43,7 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         $this->assertEquals(true, $this->sut->isValid($dto));
     }
 
-    public function testIsValidWithoutOrg()
+    public function testIsValidWithoutOrg(): void
     {
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -52,7 +52,7 @@ class CanAccessUserListTest extends AbstractHandlerTestCase
         $this->assertSame(false, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

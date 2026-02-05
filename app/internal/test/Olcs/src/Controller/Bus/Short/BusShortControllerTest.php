@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bus Short Controller Test
  */
@@ -36,15 +38,15 @@ class BusShortControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormForEditDataProvider
      *
      * @param $data
      * @param $readonly
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormForEditDataProvider')]
     public function testAlterFormForEdit(
-        $data,
-        $readonly
-    ) {
+        mixed $data,
+        mixed $readonly
+    ): void {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
@@ -82,7 +84,7 @@ class BusShortControllerTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function alterFormForEditDataProvider()
+    public static function alterFormForEditDataProvider(): array
     {
         return [
             [

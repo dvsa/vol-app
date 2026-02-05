@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendUserRegistered as SampleEmail;
@@ -13,10 +15,8 @@ use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\OlcsTest\Cli\Service\Queue\Consumer\AbstractConsumerTestCase;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
-/**
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send
- * @covers \Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\Email\Send::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
 class SendTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Send::class;
@@ -24,7 +24,7 @@ class SendTest extends AbstractConsumerTestCase
     /** @var  Send */
     protected $sut;
 
-    public function testProcessMessageSuccess()
+    public function testProcessMessageSuccess(): void
     {
         $options = json_encode(
             [
@@ -65,7 +65,7 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesEmailNotSentException()
+    public function testProcessMessageHandlesEmailNotSentException(): void
     {
         $options = json_encode(
             [
@@ -106,7 +106,7 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesLaminasServiceException()
+    public function testProcessMessageHandlesLaminasServiceException(): void
     {
         $options = json_encode(
             [
@@ -146,7 +146,7 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesException()
+    public function testProcessMessageHandlesException(): void
     {
         $options = json_encode(
             [
@@ -186,7 +186,7 @@ class SendTest extends AbstractConsumerTestCase
         );
     }
 
-    public function testProcessMessageHandlesMaxAttempts()
+    public function testProcessMessageHandlesMaxAttempts(): void
     {
         $options = json_encode(
             [

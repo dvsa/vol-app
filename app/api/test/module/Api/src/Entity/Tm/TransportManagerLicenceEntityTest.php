@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -39,7 +41,7 @@ class TransportManagerLicenceEntityTest extends EntityTester
         parent::setUp();
     }
 
-    public function testUpdateTransportManagerLicence()
+    public function testUpdateTransportManagerLicence(): void
     {
         $this->sut->updateTransportManagerLicence(
             'tmt',
@@ -65,7 +67,7 @@ class TransportManagerLicenceEntityTest extends EntityTester
         $this->assertEquals($this->sut->getIsOwner(), 1);
     }
 
-    public function testUpdateTransportManagerLicenceInvalid()
+    public function testUpdateTransportManagerLicenceInvalid(): void
     {
         try {
             $this->sut->updateTransportManagerLicence(
@@ -110,7 +112,7 @@ class TransportManagerLicenceEntityTest extends EntityTester
         }
     }
 
-    public function testGetTotalWeeklyHours()
+    public function testGetTotalWeeklyHours(): void
     {
         $this->sut->updateTransportManagerLicence(
             'tmt',
@@ -127,7 +129,7 @@ class TransportManagerLicenceEntityTest extends EntityTester
         $this->assertEquals($this->sut->getTotalWeeklyHours(), 28);
     }
 
-    public function testGetRelatedOrganisation()
+    public function testGetRelatedOrganisation(): void
     {
         $mockOrg = m::mock(Entities\Organisation\Organisation::class);
 

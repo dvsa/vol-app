@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\GenerateChecklistDocument;
@@ -43,7 +45,8 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'STATUS',
@@ -79,7 +82,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoOp()
+    public function testHandleCommandNoOp(): void
     {
         $id = 69;
 
@@ -107,7 +110,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => $id], $result->getIds());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 69;
         $licenceId = 7;
@@ -224,7 +227,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandNiGoods()
+    public function testHandleCommandNiGoods(): void
     {
         $id = 69;
         $licenceId = 7;
@@ -344,7 +347,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function assertFeeCreated($feeId = 102, $feeTypeId = 999, $licenceId = 7)
+    private function assertFeeCreated(int $feeId = 102, int $feeTypeId = 999, int $licenceId = 7): void
     {
         $now = new DateTime();
         $this->repoMap['FeeType']
@@ -384,7 +387,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    private function assertDocumentCreated($continuationDetailId = 1, $userId = 1, $enforcePrint = false)
+    private function assertDocumentCreated(int $continuationDetailId = 1, int $userId = 1, bool $enforcePrint = false): void
     {
         $dtoData = [
             'id' => $continuationDetailId,
@@ -400,7 +403,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(GenerateChecklistDocument::class, $dtoData, $docResult);
     }
 
-    private function setupContinuationDetail($id)
+    private function setupContinuationDetail(mixed $id): mixed
     {
         $licenceId = 7;
         $licNo = 'OB1234567';
@@ -423,7 +426,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         return $continuationDetail;
     }
 
-    private function assertNonDigital()
+    private function assertNonDigital(): void
     {
         $id = 69;
         $documentId = 101;
@@ -475,14 +478,14 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandDigitalEmailDisbaled()
+    public function testHandleCommandDigitalEmailDisbaled(): void
     {
         $this->references[Organisation::class][1]
             ->shouldReceive('getAllowEmail')->with()->once()->andReturn('N');
         $this->assertNonDigital();
     }
 
-    public function testHandleCommandDigitalNoAdminEmailAddresses()
+    public function testHandleCommandDigitalNoAdminEmailAddresses(): void
     {
         $this->references[Organisation::class][1]
             ->shouldReceive('getAllowEmail')->with()->once()->andReturn('Y')
@@ -490,7 +493,7 @@ class ProcessTest extends AbstractCommandHandlerTestCase
         $this->assertNonDigital();
     }
 
-    public function testHandleCommandDigital()
+    public function testHandleCommandDigital(): void
     {
         $id = 69;
         $userId = 1;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Queue\Service\Message\CompaniesHouse;
 
 use Dvsa\Olcs\Queue\Service\Message\CompaniesHouse\CompanyProfile;
@@ -10,7 +12,7 @@ class CompanyProfileTest extends TestCase
     protected $sut;
 
 
-    public function testProcessMessageData()
+    public function testProcessMessageData(): void
     {
         $this->sut = new CompanyProfile(
             ['companyOrLlpNo' => 632],
@@ -26,7 +28,7 @@ class CompanyProfileTest extends TestCase
         $this->assertEquals($expected, $this->sut->toArray());
     }
 
-    public function testProcessMessageException()
+    public function testProcessMessageException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("companyOrLlpNo is required in messageData");

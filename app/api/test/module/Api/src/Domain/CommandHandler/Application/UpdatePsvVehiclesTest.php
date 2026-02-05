@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Psv Vehicles Test
  *
@@ -36,14 +38,15 @@ class UpdatePsvVehiclesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutVehicles()
+    public function testHandleCommandWithoutVehicles(): void
     {
         $command = Cmd::create(
             [
@@ -73,7 +76,7 @@ class UpdatePsvVehiclesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithVehicles()
+    public function testHandleCommandWithVehicles(): void
     {
         $command = Cmd::create(
             [

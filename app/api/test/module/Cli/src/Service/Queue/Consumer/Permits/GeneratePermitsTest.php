@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Permits Test
  */
@@ -17,7 +19,7 @@ class GeneratePermitsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $item = new QueueEntity();
         $item->setOptions(json_encode(['ids' => [1, 2, 3], 'user' => 456]));

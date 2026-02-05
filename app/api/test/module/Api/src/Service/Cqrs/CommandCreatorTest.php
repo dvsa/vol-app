@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Cqrs;
 
 use Dvsa\Olcs\Api\Entity\Fee\Fee;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CommandCreatorTest extends MockeryTestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $parameters = [
             'licence' => 7,

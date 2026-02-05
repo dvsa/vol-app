@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermUnsuccessful as SendEcmtShortTermUnsuccessfulCmd;
@@ -13,7 +15,7 @@ use Mockery as m;
 /**
  * Test the short term permit app unsuccessful email
  */
-class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTest
+class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -30,7 +32,7 @@ class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTest
     /**
      * test handle command
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $templateVars = [
             'applicationRef' => $this->applicationRef,
@@ -74,7 +76,7 @@ class SendEcmtShortTermUnsuccessfulTest extends AbstractPermitTest
     /**
      * test handle command when the application created by internal user
      */
-    public function testHandleCommandForCreatedByInternalUser()
+    public function testHandleCommandForCreatedByInternalUser(): void
     {
         $templateVars = [
             'applicationRef' => $this->applicationRef,

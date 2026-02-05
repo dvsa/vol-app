@@ -107,8 +107,7 @@ class MsiResponseTest extends MockeryTestCase
         string $city,
         string $address,
         string $postCode,
-    ): void
-    {
+    ): void {
         $siPenaltyTypeId1 = 101;
         $siPenaltyTypeId2 = 102;
         $penaltyImposedIdentifier1 = 888;

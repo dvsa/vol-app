@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\CommandHandlerInterface;
@@ -32,14 +34,12 @@ class CommandHandlerManagerTest extends MockeryTestCase
 
         $this->sut = new CommandHandlerManager($container, []);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = m::mock(CommandInterface::class)->makePartial();
         $command->shouldReceive('getArrayCopy')->once()->andReturn(['foo' => 'bar']);
@@ -57,7 +57,7 @@ class CommandHandlerManagerTest extends MockeryTestCase
         $this->assertEquals(['response'], $this->sut->handleCommand($command));
     }
 
-    public function testHandleCommandWithWrapped()
+    public function testHandleCommandWithWrapped(): void
     {
         $command = m::mock(CommandInterface::class)->makePartial();
         $command->shouldReceive('getArrayCopy')->once()->andReturn(['foo' => 'bar']);
@@ -78,7 +78,7 @@ class CommandHandlerManagerTest extends MockeryTestCase
         $this->assertEquals(['response'], $this->sut->handleCommand($command));
     }
 
-    public function testHandleCommandFailedValidator()
+    public function testHandleCommandFailedValidator(): void
     {
         $this->expectException(ForbiddenException::class);
 
@@ -98,7 +98,7 @@ class CommandHandlerManagerTest extends MockeryTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInvalid()
+    public function testHandleCommandInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
 
@@ -112,14 +112,14 @@ class CommandHandlerManagerTest extends MockeryTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $plugin = m::mock(CommandHandlerInterface::class);
 
         $this->assertNull($this->sut->validate($plugin));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
 

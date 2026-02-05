@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Domain\Repository\FeeType as FeeTypeRepository;
@@ -28,19 +30,17 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
 {
     public const ISSUE_FEE_PER_PERMIT = '5.00';
 
-    /**
-     * @dataProvider dpGenerate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(
-        $maxPermitted,
-        $permitsRemaining,
-        $expectedMaxCanApplyFor,
-        $isApsg,
-        $isUnderConsideration,
-        $expectedSkipAvailabilityValidation,
-        $isOngoing,
-        $expectedIssueFeePerPermit
-    ) {
+        mixed $maxPermitted,
+        mixed $permitsRemaining,
+        mixed $expectedMaxCanApplyFor,
+        mixed $isApsg,
+        mixed $isUnderConsideration,
+        mixed $expectedSkipAvailabilityValidation,
+        mixed $isOngoing,
+        mixed $expectedIssueFeePerPermit
+    ): void {
         $stockId = 22;
         $validityYear = 2015;
         $requiredEuro5 = 13;
@@ -172,7 +172,7 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [43, 19, 19, true, true, true, false, 'N/A'],

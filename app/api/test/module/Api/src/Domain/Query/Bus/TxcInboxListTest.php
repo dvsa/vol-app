@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query\Bus;
 
 use Dvsa\Olcs\Api\Domain\Query\Bus\TxcInboxList;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\TxcInboxList;
  */
 class TxcInboxListTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $localAuthority = 1;
         $subtype = 'subtype';

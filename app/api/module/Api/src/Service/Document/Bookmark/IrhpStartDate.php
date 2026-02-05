@@ -18,6 +18,7 @@ class IrhpStartDate extends SingleValueAbstract
     public const SRCH_VAL_KEY = 'irhpPermitStock';
     public const QUERY_CLASS = Qry::class;
 
+    #[\Override]
     public function render()
     {
         $now = strtotime('today midnight');

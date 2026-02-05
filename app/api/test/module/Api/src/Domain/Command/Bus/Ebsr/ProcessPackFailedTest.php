@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPackFailed;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPackFailed;
  */
 class ProcessPackFailedTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 1;
         $organisation = 2;

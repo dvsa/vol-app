@@ -39,6 +39,7 @@ class PaymentType extends RefData
      *
      * @return array
      */
+    #[\Override]
     public function fetchListData($category = null)
     {
         $category = 'fee_pay_method';

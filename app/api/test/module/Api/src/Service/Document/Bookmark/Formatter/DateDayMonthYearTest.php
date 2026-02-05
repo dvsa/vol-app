@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Formatter;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\DateDayMonthYear;
@@ -9,10 +11,8 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\DateDayMonthYear;
  */
 class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider scenariosProvider
-     */
-    public function testFormat($date, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
+    public function testFormat(mixed $date, mixed $expected): void
     {
         $data = ['validFrom' => $date];
 
@@ -22,7 +22,7 @@ class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider(): array
     {
         return [
             ['2018-02-01 15:10:11', '01 February 2018'],

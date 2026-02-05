@@ -32,8 +32,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         array $config,
-        private FlashMessengerHelperService $flashMessengerHelper,
-        private WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+        private readonly FlashMessengerHelperService $flashMessengerHelper,
+        private readonly WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -85,16 +85,16 @@ class DocumentFinaliseController extends AbstractDocumentController
             '<a class="govuk-link" href="%s" data-file-url="%s" target="_blank">%s</a>',
             htmlentities($url, ENT_QUOTES, 'utf-8'),
             htmlentities($url, ENT_QUOTES, 'utf-8'),
-            htmlentities($data['data']['template']['description'], ENT_QUOTES, 'utf-8')
+            htmlentities((string) $data['data']['template']['description'], ENT_QUOTES, 'utf-8')
         );
 
         $data = [
-            'category' => htmlspecialchars($category, ENT_QUOTES, 'utf-8'),
-            'subCategory' => htmlspecialchars($documentSubCategory, ENT_QUOTES, 'utf-8'),
+            'category' => htmlspecialchars((string) $category, ENT_QUOTES, 'utf-8'),
+            'subCategory' => htmlspecialchars((string) $documentSubCategory, ENT_QUOTES, 'utf-8'),
             'template' => $link,
         ];
 
-        $form = $this->generateFormWithData('FinaliseDocument', [$this, 'processSaveLetter'], $data, false);
+        $form = $this->generateFormWithData('FinaliseDocument', $this->processSaveLetter(...), $data, false);
 
         foreach ($data as $key => $value) {
             $form->get($key)->setAttribute('value', $value);

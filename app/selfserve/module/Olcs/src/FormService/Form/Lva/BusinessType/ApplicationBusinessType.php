@@ -41,6 +41,7 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
      *
      * @return void
      */
+    #[\Override]
     protected function alterForm(Form $form, $params)
     {
         parent::alterForm($form, $params);

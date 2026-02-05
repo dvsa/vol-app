@@ -24,7 +24,7 @@ final class CreateLetter extends AbstractCommandHandler implements Transactioned
 {
     use AuthAwareTrait;
 
-    public const DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST = [
+    public const array DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST = [
         'templates/PUB_APPS_SUPP_DOCS_1ST.rtf',
         'templates/GB/ENV_PUB_APPS_SUPP_DOCS_1ST.rtf',
         'templates/GB/PSV_NEW_APP_SUPP_DOCS_1ST.rtf',
@@ -34,7 +34,7 @@ final class CreateLetter extends AbstractCommandHandler implements Transactioned
         'templates/GB/Incompletenon-digitalVarapp1strequestforsupportingdocs.rtf',
     ];
 
-    public const DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FINAL = [
+    public const array DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FINAL = [
         'templates/GB/PUB_APPS_SUPP_DOCS_FINAL.rtf',
         'templates/GB/ENV_PUB_APPS_SUPP_DOCS_FINAL.rtf',
         'templates/GB/PSV_NEW_APP_SUPP_DOCS_FINAL.rtf',

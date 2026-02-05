@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update DeclareUnfit Test
  */
@@ -35,7 +37,8 @@ class UpdateDeclareUnfitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'unfitnessReason',
@@ -45,7 +48,7 @@ class UpdateDeclareUnfitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -126,7 +129,7 @@ class UpdateDeclareUnfitTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandThrowsIncorrectActionException()
+    public function testHandleCommandThrowsIncorrectActionException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 

@@ -26,8 +26,7 @@ class TransExchangeClient implements TransExchangeClientInterface
         private readonly ParseXmlString $xmlParser,
         private readonly Xsd $xsdValidator,
         private readonly string $correlationId
-    )
-    {
+    ) {
     }
 
     /**

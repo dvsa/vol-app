@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\BusRegBundle as Qry;
@@ -10,20 +12,18 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Base\DynamicBookmark;
  */
 class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
 {
-    protected $renderReg;
-    protected $renderVary;
+    protected const RENDER_REG = '';
+    protected const RENDER_VARY = '';
     protected $bookmarkClass;
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = $this->getBookmark([]);
         $this->assertInstanceOf(Qry::class, $bookmark->getQuery(['busRegId' => 123]));
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = $this->getBookmark($data);
         $this->assertEquals($expected, $bookmark->render());
@@ -32,7 +32,7 @@ class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
     /**
      * test exception thrown when data is empty
      */
-    public function testRenderWithEmptyData()
+    public function testRenderWithEmptyData(): void
     {
         $this->expectException(
             \Exception::class
@@ -45,26 +45,26 @@ class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             [
                 [
                     'variationNo' => 0,
                 ],
-                $this->renderReg
+                static::RENDER_REG
             ],
             [
                 [
                     'variationNo' => 1,
                 ],
-                $this->renderVary
+                static::RENDER_VARY
             ],
             [
                 [
                     'variationNo' => 222,
                 ],
-                $this->renderVary
+                static::RENDER_VARY
             ],
         ];
     }
@@ -76,7 +76,7 @@ class AbstractBrRegOrVary extends \PHPUnit\Framework\TestCase
      *
      * @return DynamicBookmark
      */
-    public function getBookmark($data)
+    public function getBookmark(mixed $data): mixed
     {
         /** @var DynamicBookmark $bookmark */
         $bookmark = new $this->bookmarkClass();

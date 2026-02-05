@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * People Review Service Test
  *
@@ -36,18 +38,14 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->sut = new PeopleReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testGetConfigFromData($data, $showPosition, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testGetConfigFromData(mixed $data, mixed $showPosition, mixed $expected): void
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data, $showPosition));
     }
 
-    /**
-     * @dataProvider providerShouldShowPosition
-     */
-    public function testShouldShowPosition($orgType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerShouldShowPosition')]
+    public function testShouldShowPosition(mixed $orgType, mixed $expected): void
     {
         $data = [
             'licence' => [
@@ -62,7 +60,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->shouldShowPosition($data));
     }
 
-    public function providerShouldShowPosition()
+    public static function providerShouldShowPosition(): array
     {
         return [
             [
@@ -88,7 +86,7 @@ class PeopleReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [

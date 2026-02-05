@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Transport Managers Review Service Test
  *
@@ -44,7 +46,7 @@ class ApplicationTransportManagersReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = ['transportManagers' => ['bar' => 'foo']];
 

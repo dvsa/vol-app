@@ -77,6 +77,7 @@ final class TransportManagerDeleteDelta extends AbstractCommandHandler implement
 
         return $result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -1,23 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
-/**
- * Class ProhibitionHistoryTest
- * @author Shaun Lizzio <shaun@valtech.co.uk>
- */
-class ProhibitionHistoryTest extends AbstractSubmissionSectionTest
+use Dvsa\Olcs\Api\Service\Submission\Sections\ProhibitionHistory;
+
+class ProhibitionHistoryTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ProhibitionHistory::class;
+    protected $submissionSection = ProhibitionHistory::class;
 
     /**
      * Filter provider
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = [
             'data' => [

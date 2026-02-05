@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\CommunityLic;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion;
@@ -13,9 +15,7 @@ use Dvsa\Olcs\Transfer\Command\CommunityLic\Annul as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Annul
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\CommunityLic\Annul::class)]
 class AnnulTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CommandHandler\CommunityLic\Annul */
@@ -31,7 +31,8 @@ class AnnulTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLicEntity::STATUS_ANNUL,
@@ -40,7 +41,7 @@ class AnnulTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -110,7 +111,7 @@ class AnnulTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithApplication()
+    public function testHandleCommandWithApplication(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
@@ -190,7 +191,7 @@ class AnnulTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testCommandHandlerWithException()
+    public function testCommandHandlerWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

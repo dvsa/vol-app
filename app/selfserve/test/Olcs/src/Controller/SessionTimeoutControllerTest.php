@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace OlcsTest\Controller;
 
 use Common\Controller\Plugin\Redirect;
-use Common\Rbac\JWTIdentityProvider;
 use Common\Rbac\User;
-use Interop\Container\Containerinterface;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Router\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Parameters;
@@ -20,6 +17,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\SessionTimeoutController;
 use LmcRbacMvc\Identity\IdentityProviderInterface;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @see SessionTimeoutController
@@ -27,14 +25,11 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
 class SessionTimeoutControllerTest extends MockeryTestCase
 {
     protected const COOKIE_NAME = 'cookie';
-    private $identityProviderClass = JWTIdentityProvider::class;
     private IdentityProviderInterface $identityProviderMock;
     protected Redirect $redirectHelperMock;
     protected SessionTimeoutController $sut;
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionIsCallable(): void
     {
         $this->setUpSut();
@@ -42,9 +37,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertTrue(method_exists($this->sut, 'indexAction') && is_callable($this->sut->indexAction(...)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsViewModelIfIdentityIsAnonymous(): void
     {
         $this->setUpSut();
@@ -60,9 +53,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionReturnsViewModelIfIdentityIsNull(): void
     {
         $this->setUpSut();
@@ -76,9 +67,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(ViewModel::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function indexActionLogsOutUserIfLoggedIn(): void
     {
         $this->setUpSut();
@@ -100,12 +89,8 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Response::class, $response);
     }
 
-    /**
-     * @test
-     *
-     * @dataProvider dpIdentityProviderClass
-     */
-    public function indexActionRedirectsUserIfLoggedIn(string $identityProviderClass): void
+    #[Test]
+    public function indexActionRedirectsUserIfLoggedIn(): void
     {
         $this->setUpSut();
         // Setup
@@ -126,25 +111,12 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
-    public function dpIdentityProviderClass(): array
-    {
-        return [
-            [$this->identityProviderClass],
-            [JWTIdentityProvider::class],
-        ];
-    }
-
     protected function setup(): void
     {
         $this->identityProviderMock = m::mock(IdentityProviderInterface::class);
         $this->redirectHelperMock = m::mock(Redirect::class);
     }
 
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param Request $request
-     * @param RouteMatch|null $routeMatch
-     */
     protected function setUpSut(): void
     {
         $this->sut = new SessionTimeoutController(
@@ -153,12 +125,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @param string $url
-     * @param array|null $input
-     * @return Request
-     */
-    protected function setUpRequest(?string $url = null, array $input = null)
+    protected function setUpRequest(?string $url = null, array $input = null): Request
     {
         $uri = m::mock(Http::class);
         $uri->shouldIgnoreMissing($uri);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RestrictedCountriesAnswerClearerTest extends MockeryTestCase
 {
-    public function testClear()
+    public function testClear(): void
     {
         $emptyArrayCollection = m::mock(ArrayCollection::class);
 

@@ -9,9 +9,7 @@ use phpseclib3\Crypt\AES;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 
-/**
- * @covers \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class)]
 class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -27,37 +25,37 @@ class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
         $this->sut = EncryptedStringType::getType(EncryptedStringType::TYPE);
     }
 
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertSame(EncryptedStringType::TYPE, $this->sut->getName());
     }
 
-    public function testGetEncrypterNotSet()
+    public function testGetEncrypterNotSet(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->sut->setEncrypter(null);
         $this->sut->getEncrypter();
     }
 
-    public function testSetGetEncrypter()
+    public function testSetGetEncrypter(): void
     {
         $blockCipher = m::mock(AES::class);
         $this->sut->setEncrypter($blockCipher);
         $this->assertSame($blockCipher, $this->sut->getEncrypter());
     }
 
-    public function testConvertToPhpValue()
+    public function testConvertToPhpValue(): void
     {
-        $platform = $this->createMock(MySQLPlatform::class);
+        $platform = $this->createStub(MySQLPlatform::class);
         $blockCipher = m::mock(AES::class);
         $blockCipher->shouldReceive('decrypt')->with('ENCRYPTED')->once()->andReturn('DECRYPTED');
         $this->sut->setEncrypter($blockCipher);
         $this->assertSame('DECRYPTED', $this->sut->convertToPHPValue(base64_encode('ENCRYPTED'), $platform));
     }
 
-    public function testConvertToDatabaseValue()
+    public function testConvertToDatabaseValue(): void
     {
-        $platform = $this->createMock(MySQLPlatform::class);
+        $platform = $this->createStub(MySQLPlatform::class);
         $blockCipher = m::mock(AES::class);
         $blockCipher->shouldReceive('encrypt')->with('DECRYPTED')->once()->andReturn('ENCRYPTED');
         $this->sut->setEncrypter($blockCipher);

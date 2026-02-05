@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Licence Inspection Request Test
  *
@@ -31,7 +33,7 @@ class LicenceInspectionRequestListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['licence' => 1]);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\ContinuationDetail;
 
 use Doctrine\ORM\Query;
@@ -21,7 +23,7 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 3,
@@ -56,7 +58,7 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandNo()
+    public function testHandleCommandNo(): void
     {
         $data = [
             'id' => 3,
@@ -91,7 +93,7 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandFactoringYes()
+    public function testHandleCommandFactoringYes(): void
     {
         $data = [
             'id' => 3,
@@ -124,7 +126,7 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
     }
 
-    public function testHandleCommandFactoringNo()
+    public function testHandleCommandFactoringNo(): void
     {
         $data = [
             'id' => 3,

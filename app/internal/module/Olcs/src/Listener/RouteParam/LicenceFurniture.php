@@ -42,7 +42,7 @@ class LicenceFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            [$this, 'onLicenceFurniture'],
+            $this->onLicenceFurniture(...),
             $priority
         );
     }

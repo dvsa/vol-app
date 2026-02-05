@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Schedule41;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -34,7 +36,7 @@ class Text3Test extends MockeryTestCase
      *
      * @return PublicationLink
      */
-    private function getPublicationLink($organisationType)
+    private function getPublicationLink(mixed $organisationType): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -56,7 +58,7 @@ class Text3Test extends MockeryTestCase
         return $publicationLink;
     }
 
-    public function testText3()
+    public function testText3(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $publicationLink->getApplication()->getLicence()->getTrafficArea()->setIsNi(false);
@@ -122,7 +124,7 @@ The operating centre(s) being removed from D12345 as part of this application.";
         $this->assertSame($expectedText, $publicationLink->getText3());
     }
 
-    public function testText3S4SurrenderAndNi()
+    public function testText3S4SurrenderAndNi(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $publicationLink->getApplication()->getLicence()->getTrafficArea()->setIsNi(true);
@@ -190,7 +192,7 @@ D12345 has been surrendered as part of this application.";
         $this->assertSame($expectedText, $publicationLink->getText3());
     }
 
-    public function testText3Tm()
+    public function testText3Tm(): void
     {
         $publicationLink = $this->getPublicationLink(Organisation::ORG_TYPE_LLP);
         $publicationLink->getApplication()->getLicence()->getTrafficArea()->setIsNi(true);
@@ -232,7 +234,7 @@ D12345 has been surrendered as part of this application.";
         $this->assertSame($expectedText, $publicationLink->getText3());
     }
 
-    public function testText3LicenceUpdgrade()
+    public function testText3LicenceUpdgrade(): void
     {
         $refDataSn = new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL);
         $refDataSn->setDescription('SN');

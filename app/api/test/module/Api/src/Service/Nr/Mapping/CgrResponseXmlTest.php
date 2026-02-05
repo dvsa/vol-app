@@ -11,9 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class CgrResponseXmlTest extends TestCase
 {
-    /**
-     * @dataProvider dpTemplate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTemplate')]
     public function testXmlMapping(string $template): void
     {
         $domDocument = new DOMDocument();
@@ -137,7 +135,7 @@ class CgrResponseXmlTest extends TestCase
         $this->assertEquals($expected, $sut->mapData($domDocument));
     }
 
-    public function dpTemplate(): array
+    public static function dpTemplate(): array
     {
         return [
             ['checkGoodReputeResponseTemplate.xml'],

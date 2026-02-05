@@ -25,7 +25,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $date = date(Common\Module::$dateFormat, strtotime($data['hearingDate']));
+                $date = date(Common\Module::$dateFormat, strtotime((string) $data['hearingDate']));
                 $url = $this->generateUrl(
                     ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
                     'case_pi_hearing',

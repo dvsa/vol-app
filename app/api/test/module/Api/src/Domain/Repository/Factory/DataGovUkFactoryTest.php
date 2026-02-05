@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Factory;
 
 use Psr\Container\ContainerInterface;
@@ -13,7 +15,7 @@ use Mockery as m;
  */
 class DataGovUkFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockConn = m::mock(\Doctrine\DBAL\Connection::class)
             ->shouldReceive('close')

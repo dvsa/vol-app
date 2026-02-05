@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use Doctrine\ORM\QueryBuilder;
@@ -10,9 +12,7 @@ use Dvsa\Olcs\Transfer\Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Application\GoodsVehiclesExport
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\GoodsVehiclesExport::class)]
 class GoodsVehiclesExportTest extends QueryHandlerTestCase
 {
     public const ID = 1111;
@@ -33,7 +33,7 @@ class GoodsVehiclesExportTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query\Application\GoodsVehiclesExport::create(['id' => self::ID]);
 

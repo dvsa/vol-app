@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Fee List Test
  *
@@ -38,7 +40,7 @@ class FeeListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 
@@ -85,7 +87,7 @@ class FeeListTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleQueryWithLicence()
+    public function testHandleQueryWithLicence(): void
     {
         $licenceId = 7;
         $query = Qry::create(['licence' => $licenceId]);
@@ -144,7 +146,7 @@ class FeeListTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testHandleQueryWithApplication()
+    public function testHandleQueryWithApplication(): void
     {
         $applicationId = 7;
         $query = Qry::create(['application' => $applicationId]);

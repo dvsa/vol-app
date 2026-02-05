@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\ContactDetail;
 
 use Mockery as m;
@@ -11,9 +13,8 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 
 /**
  * Get country list test
- *
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\ContactDetail\ContactDetailsList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\ContactDetail\ContactDetailsList::class)]
 class ContactDetailsListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -24,7 +25,7 @@ class ContactDetailsListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(
             [

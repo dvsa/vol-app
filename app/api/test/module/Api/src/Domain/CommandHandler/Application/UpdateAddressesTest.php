@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Addresses test
  *
@@ -40,7 +42,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 123,
@@ -116,10 +118,8 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpTestHandleCommandForLgv
-     */
-    public function testHandleCommandForLgv($establishmentAddress, $expectedPostcode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommandForLgv')]
+    public function testHandleCommandForLgv(mixed $establishmentAddress, mixed $expectedPostcode): void
     {
         $data = [
             'id' => 123,
@@ -216,7 +216,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommandForLgv()
+    public static function dpTestHandleCommandForLgv(): array
     {
         return [
             [
@@ -318,7 +318,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandForLgvAndInvalidTrafficArea()
+    public function testHandleCommandForLgvAndInvalidTrafficArea(): void
     {
         $expectedException = new ValidationException(['TA invalid']);
 

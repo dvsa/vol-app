@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant Community Licence Test
  *
@@ -36,7 +38,8 @@ class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLic::STATUS_ACTIVE,
@@ -51,7 +54,7 @@ class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111
@@ -120,7 +123,7 @@ class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(date('Y-m-d'), $pendingRecord->getSpecifiedDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandCantHave()
+    public function testHandleCommandCantHave(): void
     {
         $data = [
             'id' => 111

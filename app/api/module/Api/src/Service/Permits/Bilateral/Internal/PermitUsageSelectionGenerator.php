@@ -16,7 +16,7 @@ class PermitUsageSelectionGenerator
     {
         $journeyTypes = [];
         foreach ($requiredPermits as $permitUsage => $quantity) {
-            $permitUsageComponents = explode('-', $permitUsage);
+            $permitUsageComponents = explode('-', (string) $permitUsage);
             $journeyType = $permitUsageComponents[1];
             $journeyTypes[$journeyType] = true;
         }

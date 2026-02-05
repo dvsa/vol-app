@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;

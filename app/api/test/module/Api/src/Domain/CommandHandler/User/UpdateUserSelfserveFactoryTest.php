@@ -19,9 +19,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\OlcsTest\Api\Domain\CommandHandler\User\UpdateUserSelfserveFactory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\OlcsTest\Api\Domain\CommandHandler\User\UpdateUserSelfserveFactory::class)]
 class UpdateUserSelfserveFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
@@ -33,9 +31,7 @@ class UpdateUserSelfserveFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -45,11 +41,9 @@ class UpdateUserSelfserveFactoryTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfTransactioningCommandHandler()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfTransactioningCommandHandler(): void
     {
         // Setup
         $this->setUpSut();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Psv Licence Vehicle Test
  *
@@ -39,7 +41,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithRemovalDateExternal()
+    public function testHandleCommandWithRemovalDateExternal(): void
     {
         $command = Cmd::create(
             [
@@ -66,7 +68,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithRemovalDateInternalApplication()
+    public function testHandleCommandWithRemovalDateInternalApplication(): void
     {
         $command = Cmd::create(
             [
@@ -94,7 +96,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithRemovalDateInternalLicenceWithoutRemovalDate()
+    public function testHandleCommandWithRemovalDateInternalLicenceWithoutRemovalDate(): void
     {
         $command = Cmd::create(
             [
@@ -123,7 +125,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithRemovalDateInternalLicenceWithRemovalDate()
+    public function testHandleCommandWithRemovalDateInternalLicenceWithRemovalDate(): void
     {
         $command = Cmd::create(
             [
@@ -164,7 +166,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-01-01', $licenceVehicle->getRemovalDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [

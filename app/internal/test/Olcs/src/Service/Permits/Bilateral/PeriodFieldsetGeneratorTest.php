@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PeriodFieldsetGenerator Test
  *
@@ -67,7 +69,7 @@ class PeriodFieldsetGeneratorTest extends TestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $periodFieldset = m::mock(Fieldset::class);
 
@@ -94,7 +96,7 @@ class PeriodFieldsetGeneratorTest extends TestCase
         );
     }
 
-    public function testGenerateExceptionPopulatorNotFound()
+    public function testGenerateExceptionPopulatorNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Fieldset populator not found for type unknownType');

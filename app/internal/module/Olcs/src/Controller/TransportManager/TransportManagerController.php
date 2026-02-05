@@ -484,12 +484,13 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * @codeCoverageIgnore this is part of the event system.
      */
+    #[\Override]
     protected function attachDefaultListeners()
     {
         parent::attachDefaultListeners();
 
         if (! empty($this->navigationId)) {
-            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setNavigationCurrentLocation'], 6);
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, $this->setNavigationCurrentLocation(...), 6);
         }
     }
 }

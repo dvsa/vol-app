@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpApplication\Expire;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpApplication\Expire;
  */
 class ExpireTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = ['id' => 1];
         $command = Expire::create($data);

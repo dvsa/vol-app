@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,15 +35,13 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->sut = new OperatingCentresReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider dpGetConfigFromData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetConfigFromData')]
     public function testGetConfigFromData(
-        $canHaveTrailer,
-        $isVehicleTypeMixedWithLgv,
-        $licenceOperatingCentres,
-        $expected
-    ) {
+        mixed $canHaveTrailer,
+        mixed $isVehicleTypeMixedWithLgv,
+        mixed $licenceOperatingCentres,
+        mixed $expected
+    ): void {
         $continuationDetail = new ContinuationDetail();
 
         $licenceOperatingCentres = new ArrayCollection($licenceOperatingCentres);
@@ -63,7 +63,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($continuationDetail));
     }
 
-    public function dpGetConfigFromData()
+    public static function dpGetConfigFromData(): array
     {
         $loc1 = m::mock()
             ->shouldReceive('getOperatingCentre')
@@ -211,10 +211,8 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGetSummaryFromData
-     */
-    public function testGetSummaryFromData($applicableAuthProperties, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSummaryFromData')]
+    public function testGetSummaryFromData(mixed $applicableAuthProperties, mixed $expected): void
     {
         $continuationDetail = new ContinuationDetail();
 
@@ -241,7 +239,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getSummaryFromData($continuationDetail));
     }
 
-    public function dpGetSummaryFromData()
+    public static function dpGetSummaryFromData(): array
     {
         return [
             'vehicles and trailers' => [
@@ -284,7 +282,7 @@ class OperatingCentresReviewServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetSummaryHeader()
+    public function testGetSummaryHeader(): void
     {
         $this->assertEquals(
             'continuations.oc-section.table.authorisation',

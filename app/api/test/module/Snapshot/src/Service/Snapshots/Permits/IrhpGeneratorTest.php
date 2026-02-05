@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Permits;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -52,7 +54,7 @@ class IrhpGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithNoPermitApplication()
+    public function testGenerateWithNoPermitApplication(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Snapshot generator expects IRHP application record');
@@ -61,10 +63,8 @@ class IrhpGeneratorTest extends MockeryTestCase
         $this->sut->generate();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($isCertificateOfRoadworthiness, $expectedGuidanceDeclarationTitle)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $isCertificateOfRoadworthiness, mixed $expectedGuidanceDeclarationTitle): void
     {
         $operatorName = 'operator name';
         $permitTypeDescription = 'permit type';
@@ -147,7 +147,7 @@ class IrhpGeneratorTest extends MockeryTestCase
         $this->sut->generate();
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [false, 'permits.snapshot.declaration.title'],

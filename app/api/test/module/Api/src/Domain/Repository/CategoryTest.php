@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Category
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Category::class)]
 class CategoryTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -16,7 +16,7 @@ class CategoryTest extends RepositoryTestCase
         $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\Category::class, true);
     }
 
-    public function testApplyListFiltersInvalidClass()
+    public function testApplyListFiltersInvalidClass(): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -35,10 +35,8 @@ class CategoryTest extends RepositoryTestCase
         static::assertEquals('QUERY', $this->query);
     }
 
-    /**
-     * @dataProvider dpTestApplyListX
-     */
-    public function testApplyListX($query, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestApplyListX')]
+    public function testApplyListX(mixed $query, mixed $expect): void
     {
         $qb = $this->createMockQb('QUERY');
 
@@ -59,7 +57,7 @@ class CategoryTest extends RepositoryTestCase
         $this->assertEquals($expect, $this->query);
     }
 
-    public function dpTestApplyListX()
+    public static function dpTestApplyListX(): array
     {
         return [
             [

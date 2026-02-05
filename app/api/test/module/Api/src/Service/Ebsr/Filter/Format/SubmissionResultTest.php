@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format;
 
 use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
@@ -16,13 +18,13 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests filter
      *
-     * @dataProvider provideFilter
      *
      * @param $submissionDate
      * @param $rawData
      * @param $expectedData
      */
-    public function testFilter($submissionDate, $rawData, $expectedData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
+    public function testFilter(mixed $submissionDate, mixed $rawData, mixed $expectedData): void
     {
         $sut = new SubmissionResult();
 
@@ -52,7 +54,7 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideFilter()
+    public static function provideFilter(): array
     {
         $submissionDate = '2015-12-25 00:00:00';
         $submissionDateTime = new \DateTime($submissionDate);

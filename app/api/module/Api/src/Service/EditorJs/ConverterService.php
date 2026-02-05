@@ -15,8 +15,8 @@ use Setono\EditorJS\BlockRenderer\ParagraphBlockRenderer;
  */
 class ConverterService
 {
-    private Parser $parser;
-    private Renderer $renderer;
+    private readonly Parser $parser;
+    private readonly Renderer $renderer;
 
     public function __construct()
     {
@@ -65,9 +65,9 @@ class ConverterService
 
         // Remove empty paragraphs and other empty block elements
         $cleanHtml = preg_replace('/<p[^>]*>\s*<\/p>/', '', $cleanHtml);
-        $cleanHtml = preg_replace('/<div[^>]*>\s*<\/div>/', '', $cleanHtml);
+        $cleanHtml = preg_replace('/<div[^>]*>\s*<\/div>/', '', (string) $cleanHtml);
 
-        return trim($cleanHtml);
+        return trim((string) $cleanHtml);
     }
 
 

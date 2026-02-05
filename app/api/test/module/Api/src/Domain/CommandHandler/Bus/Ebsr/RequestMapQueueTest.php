@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -31,7 +33,7 @@ class RequestMapQueueTest extends AbstractCommandHandlerTestCase
     /**
      * Tests EBSR map requests are queued correctly
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $busRegId = 123;
         $userId = 456;
@@ -87,7 +89,7 @@ class RequestMapQueueTest extends AbstractCommandHandlerTestCase
     /**
      * Tests exception thrown when no ebsr submission present
      */
-    public function testHandleCommandNoSubmission()
+    public function testHandleCommandNoSubmission(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 

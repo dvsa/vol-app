@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base;
 
 use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base\Stub\ImageBookmarkStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark::class)]
 class ImageBookmarkTest extends MockeryTestCase
 {
-    public function testGetImageFail()
+    public function testGetImageFail(): void
     {
         $name = 'unit_Name';
 
@@ -31,7 +31,7 @@ class ImageBookmarkTest extends MockeryTestCase
         $sut->getImage($name);
     }
 
-    public function testGetImageOk()
+    public function testGetImageOk(): void
     {
         $name = 'unit_Name';
 

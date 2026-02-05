@@ -9,36 +9,20 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
  */
 class EntityData
 {
-    private string $tableName;
-    private string $className;
-    private string $namespace;
     private string $namespaceFolder;
-    private string $abstractContent;
-    private string $concreteContent;
-    private string $testContent;
-    private string $mappingContent;
-    private array $metadata;
 
     public function __construct(
-        string $tableName,
-        string $className,
-        string $namespace,
+        private readonly string $tableName,
+        private readonly string $className,
+        private readonly string $namespace,
         string $namespaceFolder = '',
-        string $abstractContent = '',
-        string $concreteContent = '',
-        string $testContent = '',
-        string $mappingContent = '',
-        array $metadata = []
+        private string $abstractContent = '',
+        private string $concreteContent = '',
+        private string $testContent = '',
+        private string $mappingContent = '',
+        private array $metadata = []
     ) {
-        $this->tableName = $tableName;
-        $this->className = $className;
-        $this->namespace = $namespace;
-        $this->namespaceFolder = $namespaceFolder ?: $this->extractNamespaceFolder($namespace);
-        $this->abstractContent = $abstractContent;
-        $this->concreteContent = $concreteContent;
-        $this->testContent = $testContent;
-        $this->mappingContent = $mappingContent;
-        $this->metadata = $metadata;
+        $this->namespaceFolder = $namespaceFolder ?: $this->extractNamespaceFolder($this->namespace);
     }
 
     private function extractNamespaceFolder(string $namespace): string

@@ -61,6 +61,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Assign Submission Test
  */
@@ -56,6 +58,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AssignSubmission();
@@ -100,7 +103,8 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->initReferences();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'sub_st_rec_grant_as'
@@ -115,7 +119,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandTeamExistsCreateTask()
+    public function testHandleCommandTeamExistsCreateTask(): void
     {
         $data = [
             'id' => 1,
@@ -226,7 +230,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandTeamDoesntExistCreateTask()
+    public function testHandleCommandTeamDoesntExistCreateTask(): void
     {
         $data = [
             'id' => 1,
@@ -335,7 +339,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandInformationIncomplete()
+    public function testHandleCommandInformationIncomplete(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -361,7 +365,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandTeamExistsUpdateTask()
+    public function testHandleCommandTeamExistsUpdateTask(): void
     {
         $submissionId = 99;
         $licenceId = 77;
@@ -483,7 +487,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    private function getMockTask()
+    private function getMockTask(): mixed
     {
         /** @var TaskEntity $task */
         $task = m::mock(TaskEntity::class)->makePartial();
@@ -503,7 +507,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         return $task;
     }
 
-    public function testHandleCommandTransportManagerCase()
+    public function testHandleCommandTransportManagerCase(): void
     {
         $data = [
             'id' => 1,
@@ -611,18 +615,16 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function informationCompleteDateDataProvider()
+    public static function informationCompleteDateDataProvider(): array
     {
         return [
-            ['2017-01-31', true],
-            ['2018-01-01', true],
+            ['2017-01-31'],
+            ['2018-01-01'],
         ];
     }
 
-    /**
-     * @dataProvider  informationCompleteDateDataProvider
-     */
-    public function testSavesWhenAssignedDateEqualToOrAfter($informationCompleteDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('informationCompleteDateDataProvider')]
+    public function testSavesWhenAssignedDateEqualToOrAfter(mixed $informationCompleteDate): void
     {
         $data = [
             'id' => 1,
@@ -728,10 +730,8 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider  assignToTcDataProvider
-     */
-    public function testHandleCommandAssignToTc($tcSlaStarted, $assignDateTimes)
+    #[\PHPUnit\Framework\Attributes\DataProvider('assignToTcDataProvider')]
+    public function testHandleCommandAssignToTc(mixed $tcSlaStarted, mixed $assignDateTimes): void
     {
         $data = [
             'id' => 1,
@@ -844,7 +844,7 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function assignToTcDataProvider()
+    public static function assignToTcDataProvider(): array
     {
         return [
             [0, 1],

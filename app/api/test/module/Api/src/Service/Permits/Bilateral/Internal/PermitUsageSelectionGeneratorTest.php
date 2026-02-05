@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -21,10 +23,8 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         $this->permitUsageSelectionGenerator = new PermitUsageSelectionGenerator();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($requiredPermits, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $requiredPermits, mixed $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -32,7 +32,7 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [
@@ -76,7 +76,7 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testGenerateException()
+    public function testGenerateException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Found zero or multiple journey types in input data');

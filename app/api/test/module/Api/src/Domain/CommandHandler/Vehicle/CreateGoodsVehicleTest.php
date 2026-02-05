@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Vehicle;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -18,9 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\CreateGoodsVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle\CreateGoodsVehicle::class)]
 class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 9001;
@@ -59,7 +59,8 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -72,7 +73,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandAlreadyExists()
+    public function testHandleCommandAlreadyExists(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -98,7 +99,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandVrmSection26()
+    public function testHandleCommandVrmSection26(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -120,7 +121,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function testHandleCommandRequiredConfirmationSelfserve()
+    public function testHandleCommandRequiredConfirmationSelfserve(): void
     {
         $this->expectException(RequiresConfirmationException::class);
 
@@ -158,7 +159,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRequiredConfirmationSelfserveIdentifyDuplicates()
+    public function testHandleCommandRequiredConfirmationSelfserveIdentifyDuplicates(): void
     {
         $this->expectException(RequiresConfirmationException::class);
 
@@ -198,7 +199,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRequiredConfirmationInternal()
+    public function testHandleCommandRequiredConfirmationInternal(): void
     {
         $this->expectException(RequiresConfirmationException::class);
 
@@ -258,7 +259,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRequiredConfirmationInternalIdentifyDuplicates()
+    public function testHandleCommandRequiredConfirmationInternalIdentifyDuplicates(): void
     {
         $this->expectException(RequiresConfirmationException::class);
 
@@ -329,7 +330,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -405,7 +406,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 
-    public function testHandleCommandIdentifyDuplicates()
+    public function testHandleCommandIdentifyDuplicates(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -489,7 +490,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandAlternative()
+    public function testHandleCommandAlternative(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -574,7 +575,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandIdentifyDuplicatesAlternative()
+    public function testHandleCommandIdentifyDuplicatesAlternative(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -667,7 +668,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-02-02', $savedLicenceVehicle->getReceivedDate()->format('Y-m-d'));
     }
 
-    public function testHandleCommandForApplication()
+    public function testHandleCommandForApplication(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -756,7 +757,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 
-    public function testHandleCommandForApplicationNoActivevehicles()
+    public function testHandleCommandForApplicationNoActivevehicles(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -834,7 +835,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(100, $vehicle->getPlatedWeight());
     }
 
-    public function testHandleCommandForApplicationWithException()
+    public function testHandleCommandForApplicationWithException(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -864,7 +865,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandForApplicationWithExceptionAlternative()
+    public function testHandleCommandForApplicationWithExceptionAlternative(): void
     {
         $this->expectException(ValidationException::class);
 

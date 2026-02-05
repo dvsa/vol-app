@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
@@ -22,7 +24,7 @@ class CountryTest extends RepositoryTestCase
         $this->setUpSut(Country::class);
     }
 
-    public function testFetchIdsAndDescriptions()
+    public function testFetchIdsAndDescriptions(): void
     {
         $idsAndDescriptions = [
             [
@@ -56,7 +58,7 @@ class CountryTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchAvailableCountriesForIrhpApplication()
+    public function testFetchAvailableCountriesForIrhpApplication(): void
     {
         $now = new DateTime('2018-10-25 13:21:10');
 
@@ -88,7 +90,7 @@ class CountryTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchReadyToPrint()
+    public function testFetchReadyToPrint(): void
     {
         $qb = $this->createMockQb('BLAH');
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,7 +28,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $prefix = "UK";
@@ -98,10 +100,9 @@ class IrhpPermitRangeEntityTest extends EntityTester
 
     /**
      * Test the canDelete method
-     *
-     * @dataProvider provider
      */
-    public function testCanDelete($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testCanDelete(mixed $data, mixed $expected): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $prefix = "UK";
@@ -135,7 +136,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
      *
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         return [
             'valid delete' => [
@@ -205,7 +206,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         ];
     }
 
-    public function testGetSize()
+    public function testGetSize(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $prefix = "UK";
@@ -234,10 +235,8 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals(76, $entity->getSize());
     }
 
-    /**
-     * @dataProvider dpHasCountries
-     */
-    public function testHasCountries(array $countries, $expectedHasCountries)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCountries')]
+    public function testHasCountries(array $countries, mixed $expectedHasCountries): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setCountrys(new ArrayCollection($countries));
@@ -248,7 +247,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         );
     }
 
-    public function dpHasCountries()
+    public static function dpHasCountries(): array
     {
         return [
             [
@@ -266,10 +265,8 @@ class IrhpPermitRangeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsCabotage
-     */
-    public function testIsCabotage($cabotage, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCabotage')]
+    public function testIsCabotage(mixed $cabotage, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setCabotage($cabotage);
@@ -277,7 +274,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isCabotage());
     }
 
-    public function dpIsCabotage()
+    public static function dpIsCabotage(): array
     {
         return [
             [false, false],
@@ -285,10 +282,8 @@ class IrhpPermitRangeEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsStandard
-     */
-    public function testIsStandard($cabotage, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsStandard')]
+    public function testIsStandard(mixed $cabotage, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->setCabotage($cabotage);
@@ -296,7 +291,7 @@ class IrhpPermitRangeEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isStandard());
     }
 
-    public function dpIsStandard()
+    public static function dpIsStandard(): array
     {
         return [
             [false, true],

@@ -35,6 +35,7 @@ class SendEcmtShortTermSuccessful extends AbstractEcmtShortTermEmailHandler
      *
      * @return array
      */
+    #[\Override]
     protected function getTemplateVariables($recordObject): array
     {
         $this->getRepo()->refresh($recordObject);
@@ -74,6 +75,7 @@ class SendEcmtShortTermSuccessful extends AbstractEcmtShortTermEmailHandler
             'periodName' => $periodName
         ];
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->translator = $container->get('translator');

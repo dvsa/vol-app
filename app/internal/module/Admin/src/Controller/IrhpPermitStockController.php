@@ -71,7 +71,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
         Navigation $navigation,
-        private ScriptFactory $scriptFactory
+        private readonly ScriptFactory $scriptFactory
     ) {
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
@@ -99,6 +99,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      *
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFile('irhp-permit-stock');

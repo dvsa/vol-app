@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section\AbstractReviewServiceServices;
@@ -30,7 +32,7 @@ class TypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->sut = new TypeOfLicenceReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromDataGb()
+    public function testGetConfigFromDataGb(): void
     {
         $gbContinuationDetail = new ContinuationDetail();
 
@@ -75,7 +77,7 @@ class TypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($gbContinuationDetail));
     }
 
-    public function testGetConfigFromDataNi()
+    public function testGetConfigFromDataNi(): void
     {
         $niContinuationDetail = new ContinuationDetail();
 

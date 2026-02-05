@@ -12,7 +12,7 @@ use Olcs\XmlTools\Xml\Specification\RecursionValue;
 
 class CgrResponseXml
 {
-    private ?string $nsPrefix;
+    private ?string $nsPrefix = null;
 
     public function __construct(private readonly MapXmlFile $mapXmlFile, private readonly string $xmlNs)
     {
@@ -66,7 +66,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerNameDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerNameDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerNameDetails',
                 [
                     new NodeAttribute('familyName', 'familyName'),
                     new NodeAttribute('firstName', 'firstName'),
@@ -82,7 +83,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerCertificateDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerCertificateDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerCertificateDetails',
                 [
                     new NodeAttribute('certificateNumber', 'certificateNumber'),
                     new NodeAttribute('certificateIssueDate', 'certificateIssueDate'),
@@ -110,7 +112,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerDetails',
                 [
                     new NodeAttribute('respondingAuthority', 'respondingAuthority'),
                     new NodeAttribute('searchMethod', 'searchMethod'),
@@ -127,7 +130,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerNameDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerNameDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerNameDetails',
                 [
                     new NodeAttribute('familyName', 'familyName'),
                     new NodeAttribute('firstName', 'firstName'),
@@ -142,7 +146,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerAddressDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerAddressDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerAddressDetails',
                 [
                     new NodeAttribute('address', 'address'),
                     new NodeAttribute('postCode', 'postCode'),
@@ -157,7 +162,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportManagerCertificateDetails',
-            new Recursion($this->nsPrefix . 'TransportManagerCertificateDetails',
+            new Recursion(
+                $this->nsPrefix . 'TransportManagerCertificateDetails',
                 [
                     new NodeAttribute('certificateNumber', 'certificateNumber'),
                     new NodeAttribute('certificateIssueDate', 'certificateIssueDate'),
@@ -173,7 +179,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'fitness',
-            new Recursion($this->nsPrefix . 'Fitness',
+            new Recursion(
+                $this->nsPrefix . 'Fitness',
                 [
                     new NodeAttribute('fitnessStatus', 'fitnessStatus'),
                     new NodeAttribute('unfitStartDate', 'unfitStartDate'),
@@ -187,7 +194,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportUndertakings',
-            new Recursion($this->nsPrefix . 'TransportUndertakings',
+            new Recursion(
+                $this->nsPrefix . 'TransportUndertakings',
                 [
                     new NodeAttribute('totalManagedUndertakings', 'totalManagedUndertakings'),
                     new NodeAttribute('totalManagedVehicles', 'totalManagedVehicles'),
@@ -226,7 +234,8 @@ class CgrResponseXml
     {
         return new RecursionValue(
             'transportUndertakingAddress',
-            new Recursion($this->nsPrefix . 'TransportUndertakingAddress',
+            new Recursion(
+                $this->nsPrefix . 'TransportUndertakingAddress',
                 [
                     new NodeAttribute('address', 'address'),
                     new NodeAttribute('postCode', 'postCode'),

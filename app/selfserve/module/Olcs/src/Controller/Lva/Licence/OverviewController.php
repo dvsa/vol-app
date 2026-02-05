@@ -38,8 +38,6 @@ class OverviewController extends AbstractController implements MethodToggleAware
 
     ];
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -48,10 +46,9 @@ class OverviewController extends AbstractController implements MethodToggleAware
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
-        $this->lvaAdapter = $lvaAdapter;
     }
 
     /**
@@ -59,6 +56,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
      *
      * @return LicenceOverview
      */
+    #[\Override]
     public function indexAction()
     {
         $data = $this->getOverviewData($this->getLicenceId());
@@ -143,6 +141,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
      *
      * @return array
      */
+    #[\Override]
     protected function getAccessibleSections($keysOnly = true)
     {
         $accessibleSections = parent::getAccessibleSections($keysOnly);

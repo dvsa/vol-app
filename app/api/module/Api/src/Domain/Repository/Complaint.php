@@ -30,6 +30,7 @@ class Complaint extends AbstractRepository
      * @throws Exception\NotFoundException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function fetchUsingId(QryCmd $query, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         $qb = $this->createQueryBuilder();
@@ -60,6 +61,7 @@ class Complaint extends AbstractRepository
      * @param int $id
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)

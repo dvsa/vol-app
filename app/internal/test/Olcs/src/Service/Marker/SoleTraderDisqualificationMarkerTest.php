@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\SoleTraderDisqualificationMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderNotSoleTrader()
+    public function testCanRenderNotSoleTrader(): void
     {
         $data = [
             'organisation' => ['type' => ['id' => 'XXX']]
@@ -39,7 +41,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderNoOrgPerson()
+    public function testCanRenderNoOrgPerson(): void
     {
         $data = [
             'organisation' => [
@@ -55,7 +57,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderNoDisqualification()
+    public function testCanRenderNoDisqualification(): void
     {
         $data = [
             'organisation' => [
@@ -73,7 +75,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderCountDisqualification()
+    public function testCanRenderCountDisqualification(): void
     {
         $data = [
             'organisation' => [
@@ -93,7 +95,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRender()
+    public function testCanRender(): void
     {
         $data = [
             'organisation' => [
@@ -113,7 +115,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'organisation' => [
@@ -156,7 +158,7 @@ class SoleTraderDisqualificationMarkerTest extends TestCase
         $this->assertSame('HTML1', $this->sut->render());
     }
 
-    public function testRenderNoEndDate()
+    public function testRenderNoEndDate(): void
     {
         $data = [
             'organisation' => [

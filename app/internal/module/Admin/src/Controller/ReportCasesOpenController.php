@@ -39,6 +39,7 @@ class ReportCasesOpenController extends AbstractInternalController implements Le
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Open cases report');

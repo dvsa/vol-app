@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee as CancelFeeCmd;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FeeUpdaterTest extends MockeryTestCase
 {
-    public function testUpdateFees()
+    public function testUpdateFees(): void
     {
         $permitsRequired = 47;
         $outstandingIssueFee1Id = 76;

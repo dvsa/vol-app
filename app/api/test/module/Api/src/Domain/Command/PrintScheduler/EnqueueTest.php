@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\PrintScheduler;
 
 use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
  */
 class EnqueueTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = Enqueue::create(
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Expire All For Licence Test
  *
@@ -46,7 +48,7 @@ class ExpireAllForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -63,12 +65,12 @@ class ExpireAllForLicenceTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): ExpireAllForLicence
     {
         return new ExpireAllForLicence();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE com_lic cl '
         . 'SET cl.status_id = :status, '

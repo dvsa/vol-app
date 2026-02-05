@@ -29,6 +29,7 @@ class ResultList extends Result
     /**
      * Recursively serialize objects based on the bundle
      */
+    #[\Override]
     public function serialize()
     {
         $list = [];

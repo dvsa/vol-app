@@ -31,7 +31,6 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
     use ProcessingControllerTrait;
 
     protected $helperClass = \Olcs\Helper\LicenceProcessingHelper::class;
-    protected TreeRouteStack $router;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -43,7 +42,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
         $navigation,
         protected SubCategory $subCategoryDataService,
         FlashMessengerHelperService $flashMessengerHelper,
-        TreeRouteStack $router
+        protected TreeRouteStack $router
     ) {
         parent::__construct(
             $scriptFactory,
@@ -55,7 +54,6 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
             $navigation,
             $flashMessengerHelper
         );
-        $this->router = $router;
     }
 
     /**

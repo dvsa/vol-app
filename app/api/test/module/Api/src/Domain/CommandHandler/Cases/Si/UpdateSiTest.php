@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cases\Si;
 
 use Doctrine\ORM\Query;
@@ -27,7 +29,8 @@ class UpdateSiTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             CountryEntity::class => [
@@ -44,7 +47,7 @@ class UpdateSiTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 123;
         $version = 1;
@@ -122,7 +125,7 @@ class UpdateSiTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($reason, $savedSi->getReason());
     }
 
-    public function testHandleCommandThrowsErruException()
+    public function testHandleCommandThrowsErruException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

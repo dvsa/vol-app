@@ -35,14 +35,13 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
     protected $lva = 'licence';
     protected string $location = 'external';
 
+    #[\Override]
     protected function getScripts(): array
     {
         $scripts  = parent::getScripts();
         $scripts[] = 'vehicles';
         return $scripts;
     }
-
-    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -70,7 +69,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -85,6 +84,5 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
             $translatorHelper,
             $guidanceHelper
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

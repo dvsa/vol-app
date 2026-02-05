@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Type Of Licence Test
  *
@@ -31,7 +33,7 @@ class TypeOfLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         /** @var Licence $licence */
         $licence = m::mock(Licence::class)->makePartial();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\CertRoadworthiness;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Custom\CertRoadworthiness\MotExpiryDate;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MotExpiryDateTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
-    public function testGetRepresentation($enableFileUploads)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
+    public function testGetRepresentation(mixed $enableFileUploads): void
     {
         $dateWithThresholdRepresentation = [
             'dateWithThresholdKey1' => 'dateWithThresholdValue1',
@@ -41,7 +41,7 @@ class MotExpiryDateTest extends MockeryTestCase
         );
     }
 
-    public function dpTrueFalse()
+    public static function dpTrueFalse(): array
     {
         return [
             [true],

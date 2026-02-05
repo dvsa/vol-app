@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use DateTime;
@@ -27,17 +29,15 @@ class ProcessNtuCommandTest extends TestCase
         $this->mockCommandHandlerManager = $this->createMock(CommandHandlerManager::class);
         $this->mockQueryHandlerManager = $this->createMock(QueryHandlerManager::class);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->command = new ProcessNtuCommand($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
         $this->command->setName('batch:process-ntu');
     }
 
-    public function testExecuteWithDryRun()
+    public function testExecuteWithDryRun(): void
     {
         $fakeResult = ['result' => [['id' => 1], ['id' => 2]]];
         $this->mockQueryHandlerManager->expects($this->once())
@@ -53,27 +53,31 @@ class ProcessNtuCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
-    public function testExecuteWithoutDryRun()
+    public function testExecuteWithoutDryRun(): void
     {
         $fakeResult = ['result' => [['id' => 1], ['id' => 2]]];
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
             ->willReturn($fakeResult);
+        $matcher = $this->exactly(count($fakeResult['result']));
 
-        $this->mockCommandHandlerManager->expects($this->exactly(count($fakeResult['result'])))
-            ->method('handleCommand')
-            ->withConsecutive(
-                [$this->equalTo(NotTakenUpApplication::create(['id' => 1]))],
-                [$this->equalTo(NotTakenUpApplication::create(['id' => 2]))]
-            )
-            ->willReturn(new Result());
+        $this->mockCommandHandlerManager->expects($matcher)
+            ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
+                if ($matcher->numberOfInvocations() === 1) {
+                    $this->assertEquals(NotTakenUpApplication::create(['id' => 1]), $parameters[0]);
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    $this->assertEquals(NotTakenUpApplication::create(['id' => 2]), $parameters[0]);
+                }
+                return new Result();
+            });
 
         $input = new ArrayInput([], $this->command->getDefinition());
         $output = new BufferedOutput();
         $this->command->run($input, $output);
     }
 
-    public function testExecuteNoApplicationsFound()
+    public function testExecuteNoApplicationsFound(): void
     {
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\ApplicationTrailerLimit;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ApplicationTrailerLimit;
  */
 class ApplicationTrailerLimitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new ApplicationTrailerLimit();
         $query = $bookmark->getQuery(['case' => 123]);
@@ -19,7 +21,7 @@ class ApplicationTrailerLimitTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new ApplicationTrailerLimit();
         $bookmark->setData(

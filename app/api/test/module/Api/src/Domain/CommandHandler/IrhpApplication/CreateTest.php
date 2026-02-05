@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpApplication\CreateDefaultIrhpPermitApplications;
@@ -44,7 +46,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             IrhpApplication::class => [
@@ -61,10 +64,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($fromInternal, $source, $withStockId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $fromInternal, mixed $source, mixed $withStockId): void
     {
         $irhpAppId = 11;
         $permitTypeId = 22;
@@ -185,7 +186,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         self::assertEquals($expectedResult, $this->sut->handleCommand($command)->toArray());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return
             [
@@ -196,10 +197,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
             ];
     }
 
-    /**
-     * @dataProvider dpLicenceNotEligible
-     */
-    public function testHandleCommandLicenceNotEligible($withStockId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLicenceNotEligible')]
+    public function testHandleCommandLicenceNotEligible(mixed $withStockId): void
     {
         $permitDescription = 'permit description';
         $permitTypeId = 22;
@@ -263,7 +262,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpLicenceNotEligible()
+    public static function dpLicenceNotEligible(): array
     {
         return [
             [true],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Options\Option;
@@ -22,7 +24,7 @@ class OptionTest extends MockeryTestCase
         $this->label = 'Food';
     }
 
-    public function testGetRepresentationWithHint()
+    public function testGetRepresentationWithHint(): void
     {
         $hint = 'Hint for Food';
 
@@ -40,7 +42,7 @@ class OptionTest extends MockeryTestCase
         );
     }
 
-    public function testGetRepresentationWithoutHint()
+    public function testGetRepresentationWithoutHint(): void
     {
         $expectedRepresentation = [
             'value' => $this->value,
@@ -55,7 +57,7 @@ class OptionTest extends MockeryTestCase
         );
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $option = new Option($this->value, $this->label);
 
@@ -65,7 +67,7 @@ class OptionTest extends MockeryTestCase
         );
     }
 
-    public function testGetLabel()
+    public function testGetLabel(): void
     {
         $option = new Option($this->value, $this->label);
 
@@ -75,7 +77,7 @@ class OptionTest extends MockeryTestCase
         );
     }
 
-    public function testSetLabel()
+    public function testSetLabel(): void
     {
         $newLabel = 'new label';
 
@@ -88,7 +90,7 @@ class OptionTest extends MockeryTestCase
         );
     }
 
-    public function testSetHint()
+    public function testSetHint(): void
     {
         $newHint = 'new hint';
 

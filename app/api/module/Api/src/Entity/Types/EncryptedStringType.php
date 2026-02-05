@@ -10,13 +10,14 @@ class EncryptedStringType extends StringType
 {
     public const TYPE = 'encrypted_string';
 
-    private ?AES $encrypter;
+    private ?AES $encrypter = null;
 
     /**
      * Get the name of this type
      *
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return self::TYPE;
@@ -30,6 +31,7 @@ class EncryptedStringType extends StringType
      *
      * @return bool|string
      */
+    #[\Override]
     public function convertToPhpValue($value, AbstractPlatform $platform)
     {
         return $this->getEncrypter()->decrypt(base64_decode($value));
@@ -43,6 +45,7 @@ class EncryptedStringType extends StringType
      *
      * @return string
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return base64_encode($this->getEncrypter()->encrypt($value));

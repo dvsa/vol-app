@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\PrivateHireLicence;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessLicence;
@@ -23,7 +25,7 @@ class PrivateHireLicenceTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternalUser()
+    public function testIsValidInternalUser(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -35,10 +37,8 @@ class PrivateHireLicenceTest extends AbstractHandlerTestCase
         $this->assertSame(true, $this->sut->isValid($dto));
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -59,7 +59,7 @@ class PrivateHireLicenceTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

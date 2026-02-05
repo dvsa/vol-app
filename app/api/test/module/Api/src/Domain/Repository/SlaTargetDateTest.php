@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SlaTargetDate Repo Test
  *
@@ -18,6 +20,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class SlaTargetDateTest extends RepositoryTestCase
 {
     /**
@@ -30,7 +33,7 @@ class SlaTargetDateTest extends RepositoryTestCase
         $this->setUpSut(Repository\SlaTargetDate::class);
     }
 
-    public function testFetchUsingEntityIdAndType()
+    public function testFetchUsingEntityIdAndType(): void
     {
         $entityType = 'document';
         $entityId = 100;
@@ -48,7 +51,7 @@ class SlaTargetDateTest extends RepositoryTestCase
         $this->assertEquals('foobar', $result);
     }
 
-    public function testFetchByDocumentId()
+    public function testFetchByDocumentId(): void
     {
         $documentId = 1;
 
@@ -65,7 +68,8 @@ class SlaTargetDateTest extends RepositoryTestCase
         $this->assertEquals('foobar', $result);
     }
 
-    public function testApplyListFilters()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repository\SlaTargetDate::class, true);
 

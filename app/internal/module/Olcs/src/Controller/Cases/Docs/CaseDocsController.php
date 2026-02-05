@@ -25,16 +25,13 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
 
-    protected TranslationHelperService $translationHelper;
-    protected DocumentSubCategory $docSubCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        TranslationHelperService $translationHelper,
-        DocumentSubCategory $docSubCategoryDataService
+        protected TranslationHelperService $translationHelper,
+        protected DocumentSubCategory $docSubCategoryDataService
     ) {
         parent::__construct(
             $scriptFactory,
@@ -42,8 +39,6 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
             $tableFactory,
             $viewHelperManager
         );
-        $this->translationHelper = $translationHelper;
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
     }
 
     /**

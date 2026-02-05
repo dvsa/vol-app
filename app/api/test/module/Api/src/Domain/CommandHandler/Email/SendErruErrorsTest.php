@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendErruErrors as SendErruErrorsCmd;
@@ -42,7 +44,7 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handle command
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $requestFailureId = 1234;
         $notificationNumber = '0ffefb6b-6344-4a60-9a53-4381c32f98d9';
@@ -120,7 +122,7 @@ class SendErruErrorsTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handle command when there's no input data (likely xml failed to parse)
      */
-    public function testHandleCommandWithNoInputData()
+    public function testHandleCommandWithNoInputData(): void
     {
         $requestFailureId = 1234;
 

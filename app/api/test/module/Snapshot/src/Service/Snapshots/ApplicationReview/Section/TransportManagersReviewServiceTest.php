@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transport Managers Review Service Test
  *
@@ -38,7 +40,7 @@ class TransportManagersReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagersReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             [

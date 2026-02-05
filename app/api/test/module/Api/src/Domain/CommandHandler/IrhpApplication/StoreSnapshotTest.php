@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\IrhpApplication\StoreSnapshot as Cmd;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Dvsa\Olcs\Api\Entity\System\SubCategory;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\Permits\IrhpGenerator;
-use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCreateSnapshotHandlerTest;
+use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCreateSnapshotHandlerTestCase;
 use Mockery as m;
 
 /**
@@ -17,7 +19,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTest
+class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
 {
     protected $cmdClass = Cmd::class;
     protected $sutClass = Sut::class;
@@ -34,7 +36,8 @@ class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTest
     /**
      * Override this method in case of needing specific entity assertions i.e. for a permit application reference
      */
-    protected function extraEntityAssertions(m\MockInterface $entity)
+    #[\Override]
+    protected function extraEntityAssertions(m\MockInterface $entity): mixed
     {
         $entity->shouldReceive('getApplicationRef')->once()->withNoArgs()->andReturn('OG9654321/3');
         $entity->shouldReceive('getIrhpPermitType->getName->getDescription')

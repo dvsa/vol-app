@@ -21,7 +21,7 @@ final class SendResponse extends AbstractCommandHandler implements UploaderAware
 {
     use UploaderAwareTrait;
 
-    public const MSG_NO_RESPONSE_REQUIRED = 'The infringements on this case have no requested penalties - no response required';
+    public const string MSG_NO_RESPONSE_REQUIRED = 'The infringements on this case have no requested penalties - no response required';
 
     protected $repoServiceName = 'ErruRequest';
 

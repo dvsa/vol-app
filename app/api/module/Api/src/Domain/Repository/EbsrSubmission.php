@@ -99,6 +99,7 @@ class EbsrSubmission extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function buildDefaultListQuery(QueryBuilder $qb, QueryInterface $query, $compositeFields = [])
     {
         parent::buildDefaultListQuery($qb, $query, $compositeFields);

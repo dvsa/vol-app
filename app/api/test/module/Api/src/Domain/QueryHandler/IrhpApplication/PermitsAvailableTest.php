@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\PermitsAvailable;
@@ -38,7 +40,7 @@ class PermitsAvailableTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testReturnTrueWhenWindowOpenAndHasAvailability()
+    public function testReturnTrueWhenWindowOpenAndHasAvailability(): void
     {
         $irhpPermitStockId = 47;
 
@@ -65,7 +67,7 @@ class PermitsAvailableTest extends QueryHandlerTestCase
         );
     }
 
-    public function testReturnFalseWhenWindowOpenButNoAvailability()
+    public function testReturnFalseWhenWindowOpenButNoAvailability(): void
     {
         $irhpPermitStockId = 47;
 
@@ -92,7 +94,7 @@ class PermitsAvailableTest extends QueryHandlerTestCase
         );
     }
 
-    public function testReturnFalseWhenWindowClosed()
+    public function testReturnFalseWhenWindowClosed(): void
     {
         $irhpPermitWindow = m::mock(IrhpPermitWindow::class);
         $irhpPermitWindow->shouldReceive('isActive')
@@ -111,7 +113,7 @@ class PermitsAvailableTest extends QueryHandlerTestCase
         );
     }
 
-    public function testReturnTrueWhenNotShortTerm()
+    public function testReturnTrueWhenNotShortTerm(): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->isEcmtShortTerm')
             ->withNoArgs()

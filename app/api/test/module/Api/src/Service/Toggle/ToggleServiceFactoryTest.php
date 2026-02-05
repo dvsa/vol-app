@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Toggle;
 
 use Dvsa\Olcs\Api\Domain\Query\FeatureToggle\FetchList;
@@ -13,7 +15,7 @@ use Psr\Container\ContainerInterface;
 
 class ToggleServiceFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $configName1 = 'config name 1';
         $configName2 = 'config name 2';

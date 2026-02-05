@@ -98,6 +98,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('contentTitle', 'Competences');
@@ -115,9 +116,9 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         $this->processFiles(
             $form,
             'file',
-            [$this, 'processCertificateFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getDocuments']
+            $this->processCertificateFileUpload(...),
+            $this->deleteFile(...),
+            $this->getDocuments(...)
         );
         return $response;
     }
@@ -130,6 +131,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         return $view;
     }
 
+    #[\Override]
     public function editAction()
     {
         return $this->edit(
@@ -209,6 +211,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         return $form;
     }
 
+    #[\Override]
     protected function alterTable($table, $data)
     {
         if (isset($data['extra']['transportManager']['removedDate'])) {

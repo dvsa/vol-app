@@ -9,36 +9,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
  */
 class ColumnMetadata
 {
-    private string $name;
-    private string $type;
-    private ?int $length;
-    private bool $nullable;
-    private bool $primary;
-    private bool $autoIncrement;
-    private mixed $default;
-    private ?string $comment;
-    private array $options;
-
-    public function __construct(
-        string $name,
-        string $type,
-        ?int $length = null,
-        bool $nullable = true,
-        bool $primary = false,
-        bool $autoIncrement = false,
-        mixed $default = null,
-        ?string $comment = null,
-        array $options = []
-    ) {
-        $this->name = $name;
-        $this->type = $type;
-        $this->length = $length;
-        $this->nullable = $nullable;
-        $this->primary = $primary;
-        $this->autoIncrement = $autoIncrement;
-        $this->default = $default;
-        $this->comment = $comment;
-        $this->options = $options;
+    public function __construct(private readonly string $name, private readonly string $type, private readonly ?int $length = null, private readonly bool $nullable = true, private readonly bool $primary = false, private readonly bool $autoIncrement = false, private readonly mixed $default = null, private readonly ?string $comment = null, private array $options = [])
+    {
     }
 
     public function getName(): string
@@ -108,7 +80,7 @@ class ColumnMetadata
             return null;
         }
 
-        if (preg_match('/\(DC2Type:([^)]+)\)/', $this->comment, $matches)) {
+        if (preg_match('/\(DC2Type:([^)]+)\)/', (string) $this->comment, $matches)) {
             return $matches[1];
         }
 

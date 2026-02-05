@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Db\Service\Search;
 
 use Dvsa\Olcs\Db\Service\Search\ClientFactory;

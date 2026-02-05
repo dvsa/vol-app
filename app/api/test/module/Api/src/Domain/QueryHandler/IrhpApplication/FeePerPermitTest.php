@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
@@ -26,10 +28,8 @@ class FeePerPermitTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleQuerySupportedPermitType
-     */
-    public function testHandleQuerySupportedPermitType($permitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuerySupportedPermitType')]
+    public function testHandleQuerySupportedPermitType(mixed $permitTypeId): void
     {
         $applicationFeeProdRef = 'APPLICATION_FEE_PROD_REF';
 
@@ -101,7 +101,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpTestHandleQuerySupportedPermitType()
+    public static function dpTestHandleQuerySupportedPermitType(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
@@ -109,10 +109,8 @@ class FeePerPermitTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestHandleQueryUnsupportedPermitType
-     */
-    public function testHandleQueryUnsupportedPermitType($permitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedPermitType')]
+    public function testHandleQueryUnsupportedPermitType(mixed $permitTypeId): void
     {
         $this->expectException(ForbiddenException::class);
         $this->expectExceptionMessage('FeePerPermit query only supports bilateral and multilateral types');
@@ -130,7 +128,7 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function dpTestHandleQueryUnsupportedPermitType()
+    public static function dpTestHandleQueryUnsupportedPermitType(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

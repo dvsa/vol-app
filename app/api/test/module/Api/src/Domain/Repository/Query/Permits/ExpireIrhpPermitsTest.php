@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Permits;
 
 use Doctrine\DBAL\Connection;
@@ -64,7 +66,7 @@ class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -86,12 +88,12 @@ class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): ExpireIrhpPermitsQry
     {
         return new ExpireIrhpPermitsQry();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE ip_table ip '
             . 'INNER JOIN ipr_table ipr ON ipr.id = ip.irhp_permit_range_id '

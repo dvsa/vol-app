@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Other Licence Test
  *
@@ -33,7 +35,7 @@ class UpdateOtherLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = $this->getCommand();
 
@@ -78,7 +80,7 @@ class UpdateOtherLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getCommand()
+    protected function getCommand(): mixed
     {
         $data = [
             'id' => 1,
@@ -94,7 +96,7 @@ class UpdateOtherLicenceTest extends AbstractCommandHandlerTestCase
         return Cmd::create($data);
     }
 
-    protected function getOtherLicence()
+    protected function getOtherLicence(): m\MockInterface
     {
         return m::mock(OtherLicenceEntity::class)->makePartial();
     }

@@ -19,28 +19,24 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
  */
 class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 {
-    private Connection $connection;
-    private AbstractSchemaManager $schemaManager;
-    private array $config;
+    private readonly AbstractSchemaManager $schemaManager;
 
-    public function __construct(Connection $connection, array $config = [])
+    public function __construct(private readonly Connection $connection, private array $config = [])
     {
-        $this->connection = $connection;
-        $this->schemaManager = $connection->createSchemaManager();
-        $this->config = $config;
+        $this->schemaManager = $this->connection->createSchemaManager();
     }
 
     public function getTableNames(): array
     {
         $tables = $this->schemaManager->listTableNames();
-        
+
         return array_filter($tables, fn($table) => !$this->shouldIgnoreTable($table));
     }
 
     public function getTableMetadata(string $tableName): TableMetadata
     {
         $table = $this->schemaManager->introspectTable($tableName);
-        
+
         return new TableMetadata(
             $tableName,
             $this->extractColumns($table),
@@ -98,14 +94,14 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             // Determine ownership based on join table name
             // The entity whose name appears first in the join table name owns the relationship
             $owningEntity = $this->determineOwningEntity($joinTableName, $joinTableInfo['entities']);
-            $inverseEntity = ($owningEntity === $joinTableInfo['entities'][0]) 
-                ? $joinTableInfo['entities'][1] 
+            $inverseEntity = ($owningEntity === $joinTableInfo['entities'][0])
+                ? $joinTableInfo['entities'][1]
                 : $joinTableInfo['entities'][0];
-            
+
             if (!isset($relationships[$owningEntity['table']])) {
                 $relationships[$owningEntity['table']] = [];
             }
-            
+
             // Add owning side relationship
             $relationships[$owningEntity['table']][] = [
                 'type' => 'many_to_many',
@@ -118,14 +114,14 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
                 'name' => $joinTableName . '_' . $owningEntity['table'] . '_' . $inverseEntity['table'],
                 'is_owning' => true,
             ];
-            
+
             // Add inverse side relationship (unless the target should skip ManyToMany)
             // Skip inverse for ref_data table as it's configured with skipManyToMany
             if ($inverseEntity['table'] !== 'ref_data') {
                 if (!isset($relationships[$inverseEntity['table']])) {
                     $relationships[$inverseEntity['table']] = [];
                 }
-                
+
                 $relationships[$inverseEntity['table']][] = [
                     'type' => 'many_to_many',
                     'join_table' => $joinTableName,
@@ -168,7 +164,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     private function extractColumns(Table $table): array
     {
         $columns = [];
-        
+
         // Get primary key columns
         $primaryKeyColumns = [];
         if ($table->hasPrimaryKey()) {
@@ -309,7 +305,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
             $primaryKeyColumns = $primaryKey->getColumns();
             $allForeignKeyColumns = [];
-            
+
             foreach ($foreignKeys as $fk) {
                 $allForeignKeyColumns = array_merge($allForeignKeyColumns, $fk->getLocalColumns());
             }
@@ -317,7 +313,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             // Check if primary key columns match foreign key columns
             sort($primaryKeyColumns);
             sort($allForeignKeyColumns);
-            
+
             if ($primaryKeyColumns !== $allForeignKeyColumns) {
                 continue;
             }
@@ -325,7 +321,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             // Check that the table has no other columns besides FK columns and legacy OLBS columns
             $allColumns = $table->getColumns();
             $nonLegacyColumns = [];
-            
+
             foreach ($allColumns as $column) {
                 $columnName = $column->getName();
                 // Skip legacy OLBS migration columns (olbs_key, olbs_oc_id, olbs_opp_id, olbs_type, etc.)
@@ -333,7 +329,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
                     $nonLegacyColumns[] = $columnName;
                 }
             }
-            
+
             // The non-legacy columns should only be the FK columns
             if (count($nonLegacyColumns) !== count($allForeignKeyColumns)) {
                 continue;
@@ -367,60 +363,60 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     {
         // Convert join table name to lowercase for comparison
         $tableName = strtolower($joinTableName);
-        
+
         // Special case mappings for abbreviated table names
         $abbreviationMappings = [
             'ptr' => 'propose_to_revoke',
             'irfo' => 'irfo_psv_auth',
             'irhp' => 'irhp_application',
         ];
-        
+
         // First, try exact match with entity table names
         foreach ($entities as $entity) {
-            $entityTableName = strtolower($entity['table']);
-            
+            $entityTableName = strtolower((string) $entity['table']);
+
             // Check if the join table name starts with this entity's table name
-            if (strpos($tableName, $entityTableName . '_') === 0) {
+            if (str_starts_with($tableName, $entityTableName . '_')) {
                 return $entity;
             }
-            
+
             // Check for singular form (e.g., 'user' in 'user_role' for table 'users')
             $singularEntityName = rtrim($entityTableName, 's');
-            if (strpos($tableName, $singularEntityName . '_') === 0) {
+            if (str_starts_with($tableName, $singularEntityName . '_')) {
                 return $entity;
             }
         }
-        
+
         // Check for abbreviation mappings
         foreach ($abbreviationMappings as $abbrev => $fullName) {
-            if (strpos($tableName, $abbrev . '_') === 0) {
+            if (str_starts_with($tableName, $abbrev . '_')) {
                 foreach ($entities as $entity) {
-                    if (strtolower($entity['table']) === $fullName) {
+                    if (strtolower((string) $entity['table']) === $fullName) {
                         return $entity;
                     }
                 }
             }
         }
-        
+
         // For complex table names like 'licence_status_decision', check for partial matches
         // Split by underscore and check progressively
         $parts = explode('_', $tableName);
         $accumulator = '';
-        
+
         foreach ($parts as $part) {
             if ($accumulator !== '') {
                 $accumulator .= '_';
             }
             $accumulator .= $part;
-            
+
             foreach ($entities as $entity) {
-                $entityTableName = strtolower($entity['table']);
+                $entityTableName = strtolower((string) $entity['table']);
                 if ($entityTableName === $accumulator || $entityTableName === $accumulator . 's') {
                     return $entity;
                 }
             }
         }
-        
+
         // Fallback: return the first entity (maintains current behavior for edge cases)
         return $entities[0];
     }
@@ -432,8 +428,8 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     {
         // Remove _id suffix if present
         $propertyName = preg_replace('/_id$/', '', $columnName);
-        
+
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($propertyName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $propertyName, '_')));
     }
 }

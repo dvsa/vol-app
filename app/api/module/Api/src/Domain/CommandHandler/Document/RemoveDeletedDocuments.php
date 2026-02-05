@@ -18,7 +18,7 @@ use Psr\Container\ContainerInterface;
  */
 final class RemoveDeletedDocuments extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const NUMBER_DOCS_TO_REMOVE = 100;
+    public const int NUMBER_DOCS_TO_REMOVE = 100;
 
     protected $repoServiceName = 'DocumentToDelete';
 
@@ -150,6 +150,7 @@ final class RemoveDeletedDocuments extends AbstractCommandHandler implements Tra
         $command = Create::create($commandParameters);
         $this->handleSideEffect($command);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

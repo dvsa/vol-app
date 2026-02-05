@@ -132,7 +132,7 @@ class QueryHandlerTestCase extends MockeryTestCase
         $this->sut = $this->sut->__invoke($sm, null);
     }
 
-    protected function initReferences()
+    protected function initReferences(): void
     {
         if (!$this->initRefdata) {
             foreach ($this->refData as $id => $mock) {
@@ -168,22 +168,22 @@ class QueryHandlerTestCase extends MockeryTestCase
         }
     }
 
-    public function mapRefData($key)
+    public function mapRefData(mixed $key): mixed
     {
         return $this->refData[$key] ?? null;
     }
 
-    public function mapCategoryReference($key)
+    public function mapCategoryReference(mixed $key): mixed
     {
         return $this->categoryReferences[$key] ?? null;
     }
 
-    public function mapSubCategoryReference($key)
+    public function mapSubCategoryReference(mixed $key): mixed
     {
         return $this->subCategoryReferences[$key] ?? null;
     }
 
-    public function mapReference($class, $id)
+    public function mapReference(mixed $class, mixed $id): mixed
     {
         return $this->references[$class][$id] ?? null;
     }
@@ -192,9 +192,10 @@ class QueryHandlerTestCase extends MockeryTestCase
     {
         $this->assertCommandData();
         $this->assertQueryData();
+        parent::assertPostConditions();
     }
 
-    protected function mockRepo($name, $class)
+    protected function mockRepo(mixed $name, mixed $class): mixed
     {
         if (!$class instanceof m\MockInterface) {
             $class = m::mock($class);
@@ -224,7 +225,7 @@ class QueryHandlerTestCase extends MockeryTestCase
         return $class;
     }
 
-    public function expectedSideEffect($class, $data, $result, $times = 1)
+    public function expectedSideEffect(mixed $class, mixed $data, mixed $result, int $times = 1): void
     {
         $this->commandHandler->shouldReceive('handleCommand')
             ->times($times)
@@ -240,7 +241,7 @@ class QueryHandlerTestCase extends MockeryTestCase
     /**
      * @NOTE must be called after the tested method has been executed
      */
-    private function assertCommandData()
+    private function assertCommandData(): void
     {
         foreach ($this->commands as $command) {
             /** @var CommandInterface $cmd */
@@ -261,7 +262,7 @@ class QueryHandlerTestCase extends MockeryTestCase
     /**
      * @NOTE must be called after the tested method has been executed
      */
-    private function assertQueryData()
+    private function assertQueryData(): void
     {
         foreach ($this->sideEffectQueries as $query) {
             /** @var QueryInterface $qry */
@@ -278,7 +279,7 @@ class QueryHandlerTestCase extends MockeryTestCase
         }
     }
 
-    public function expectedQuery($class, $data = [], $result = null, $times = 1)
+    public function expectedQuery(mixed $class, array $data = [], mixed $result = null, int $times = 1): void
     {
         if ($result === null) {
             $result = new Result();
@@ -295,7 +296,7 @@ class QueryHandlerTestCase extends MockeryTestCase
             );
     }
 
-    public function expectedCacheCall($cacheId, $uniqueId = null, $result = null, $times = 1)
+    public function expectedCacheCall(mixed $cacheId, mixed $uniqueId = null, mixed $result = null, int $times = 1): void
     {
         $data = [
             'id' => $cacheId,
@@ -305,12 +306,12 @@ class QueryHandlerTestCase extends MockeryTestCase
         $this->expectedQuery(CacheByIdQry::class, $data, $result, $times);
     }
 
-    public function expectedUserDataCacheCall($result = null, $times = 1)
+    public function expectedUserDataCacheCall(mixed $result = null, int $times = 1): void
     {
         $this->expectedQuery(MyAccount::class, [], $result, $times);
     }
 
-    protected function setupIsInternalUser($isInternalUser = true)
+    protected function setupIsInternalUser(bool $isInternalUser = true): void
     {
         $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('isGranted')

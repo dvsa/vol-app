@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits;
 
 use Common\Service\Helper\FormHelperService;
@@ -8,9 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\Service\Data\SubCategory as SubCategoryDS;
 
-/**
- * @covers \Olcs\Controller\Traits\TaskSearchTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\TaskSearchTrait::class)]
 class TaskSearchTraitTest extends MockeryTestCase
 {
     public const ID = 99999;
@@ -31,7 +31,7 @@ class TaskSearchTraitTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods(true);
     }
 
-    public function testUpdateSelectValueOptions()
+    public function testUpdateSelectValueOptions(): void
     {
         $options = [
             'exists1' => 'exists1_Val',
@@ -71,10 +71,8 @@ class TaskSearchTraitTest extends MockeryTestCase
         $this->sut->traitUpdateSelectValueOptions($mockEl, $changeOptions);
     }
 
-    /**
-     * @dataProvider dpTestMapTaskFilters
-     */
-    public function testMapTaskFilters($extra, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapTaskFilters')]
+    public function testMapTaskFilters(mixed $extra, mixed $expect): void
     {
         $userData = [
             'id' => self::ID,
@@ -100,7 +98,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestMapTaskFilters()
+    public static function dpTestMapTaskFilters(): array
     {
         return [
             [
@@ -127,7 +125,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         ];
     }
 
-    public function testGetTaskForm()
+    public function testGetTaskForm(): void
     {
         $expectCategory = 8001;
         $expectTeam = 9001;
@@ -177,10 +175,8 @@ class TaskSearchTraitTest extends MockeryTestCase
         $this->sut->traitGetTaskForm($filters);
     }
 
-    /**
-     * @dataProvider dpTestProcessTasksActions
-     */
-    public function testProcessTasksActions($type, $action, $id, $paramName, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProcessTasksActions')]
+    public function testProcessTasksActions(mixed $type, mixed $action, mixed $id, mixed $paramName, mixed $expected): void
     {
         $query = ['query' => 'unit_Query'];
 
@@ -206,7 +202,7 @@ class TaskSearchTraitTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProcessTasksActions()
+    public static function dpTestProcessTasksActions(): array
     {
         return [
             [

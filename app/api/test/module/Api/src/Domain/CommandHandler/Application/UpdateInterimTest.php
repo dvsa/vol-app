@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\ORM\Query;
@@ -39,7 +41,8 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::INTERIM_STATUS_REQUESTED,
@@ -53,10 +56,8 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpValidate
-     */
-    public function testValidate($vehicleType, $totAuthHgvVehicles, $totAuthLgvVehicles, $totAuthTrailers, $data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
+    public function testValidate(mixed $vehicleType, mixed $totAuthHgvVehicles, mixed $totAuthLgvVehicles, mixed $totAuthTrailers, mixed $data, mixed $expected): void
     {
         $this->expectException(ValidationException::class);
 
@@ -89,7 +90,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpValidate()
+    public static function dpValidate(): array
     {
         return [
             'LGV without required data' => [
@@ -382,7 +383,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -487,7 +488,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(12, $application->getInterimAuthTrailers());
     }
 
-    public function testHandleCommandRequestedNo()
+    public function testHandleCommandRequestedNo(): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -605,7 +606,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertNull($application->getInterimStatus());
     }
 
-    public function testHandleCommandRefusedRevoked()
+    public function testHandleCommandRefusedRevoked(): void
     {
         $data = [
             'id' => 111,
@@ -642,7 +643,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandRequestedYesInforce()
+    public function testHandleCommandRequestedYesInforce(): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -765,7 +766,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertNotNull($lv2->getSpecifiedDate());
     }
 
-    public function testHandleCommandGranted()
+    public function testHandleCommandGranted(): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -871,7 +872,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertNull($application->getInterimAuthTrailers());
     }
 
-    public function testHandleCommandGrantedNullDate()
+    public function testHandleCommandGrantedNullDate(): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -977,10 +978,8 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         $this->assertNull($application->getInterimAuthTrailers());
     }
 
-    /**
-     * @dataProvider statusProvider
-     */
-    public function testHandleCommandRequestedYesInforceNoInterimVehicles($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
+    public function testHandleCommandRequestedYesInforceNoInterimVehicles(mixed $status): void
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
 
@@ -1086,7 +1085,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function statusProvider()
+    public static function statusProvider(): array
     {
         return [
             [ApplicationEntity::INTERIM_STATUS_REQUESTED],
@@ -1094,7 +1093,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandRefusedToInforce()
+    public function testHandleCommandRefusedToInforce(): void
     {
         $data = [
             'id' => 111,
@@ -1165,7 +1164,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandRefusedToInforceNoLicenceVehicles()
+    public function testHandleCommandRefusedToInforceNoLicenceVehicles(): void
     {
         $data = [
             'id' => 111,
@@ -1204,7 +1203,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandEndedToInForce()
+    public function testHandleCommandEndedToInForce(): void
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -1359,7 +1358,7 @@ class UpdateInterimTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandEndedToEnded()
+    public function testHandleCommandEndedToEnded(): void
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();

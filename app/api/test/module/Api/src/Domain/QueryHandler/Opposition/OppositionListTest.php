@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Opposition;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList;
@@ -10,8 +12,8 @@ use Mockery as m;
 
 /**
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Opposition\OppositionList::class)]
 class OppositionListTest extends QueryHandlerTestCase
 {
     /** @var  OppositionList */
@@ -25,7 +27,7 @@ class OppositionListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 

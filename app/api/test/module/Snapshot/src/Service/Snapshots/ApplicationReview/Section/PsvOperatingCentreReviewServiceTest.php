@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Psv Operating Centre Review Service Test
  *
@@ -35,7 +37,7 @@ class PsvOperatingCentreReviewServiceTest extends MockeryTestCase
         $this->sut = new PsvOperatingCentreReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'noOfVehiclesRequired' => 10,

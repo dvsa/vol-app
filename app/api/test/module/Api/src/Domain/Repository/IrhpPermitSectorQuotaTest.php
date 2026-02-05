@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\QueryBuilder;
@@ -19,7 +21,7 @@ class IrhpPermitSectorQuotaTest extends RepositoryTestCase
         $this->setUpSut(IrhpPermitSectorQuota::class);
     }
 
-    public function testFetchByNonZeroQuota()
+    public function testFetchByNonZeroQuota(): void
     {
         $expectedResult = [
             'sectorId' => 4,

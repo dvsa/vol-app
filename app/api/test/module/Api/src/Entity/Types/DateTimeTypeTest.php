@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -27,15 +29,13 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $this->mockPlatform->shouldReceive('getDateTimeFormatString')->andReturn('d-m-Y H:i:s');
     }
 
-    /**
-     * @dataProvider dpConvertToPhpValue
-     */
-    public function testConvertToPhpValue($value, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToPhpValue')]
+    public function testConvertToPhpValue(mixed $value, mixed $expected): void
     {
         static::assertSame($expected, $this->sut->convertToPHPValue($value, $this->mockPlatform));
     }
 
-    public function dpConvertToPhpValue()
+    public static function dpConvertToPhpValue(): array
     {
         return [
             [null, null],
@@ -47,7 +47,7 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testConvertToPhpValueConvertExc()
+    public function testConvertToPhpValueConvertExc(): void
     {
         $value = '00000';
 
@@ -58,15 +58,13 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $this->sut->convertToPHPValue($value, $this->mockPlatform);
     }
 
-    /**
-     * @dataProvider dpConvertToDatabaseValue
-     */
-    public function testConvertToDatabaseValue($value, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToDatabaseValue')]
+    public function testConvertToDatabaseValue(mixed $value, mixed $expected): void
     {
         static::assertSame($expected, $this->sut->convertToDatabaseValue($value, $this->mockPlatform));
     }
 
-    public function dpConvertToDatabaseValue()
+    public static function dpConvertToDatabaseValue(): array
     {
         return [
             [null, null],

@@ -20,29 +20,29 @@ class MasterTemplateController extends AbstractInternalController implements Lef
     protected $tableName = 'admin-master-template';
     protected $defaultTableSortField = 'name';
     protected $defaultTableOrderField = 'ASC';
-    
+
     protected $listDto = ListDTO::class;
     protected $itemDto = ItemDTO::class;
     protected $itemParams = ['id'];
-    
+
     protected $formClass = MasterTemplateForm::class;
     protected $addFormClass = MasterTemplateForm::class;
     protected $mapperClass = MasterTemplateMapper::class;
-    
+
     protected $createCommand = CreateDTO::class;
     protected $updateCommand = UpdateDTO::class;
     protected $deleteCommand = DeleteDTO::class;
-    
+
     protected $addContentTitle = 'Add Master Template';
     protected $editContentTitle = 'Edit Master Template';
-    
+
     protected $deleteModalTitle = 'Remove Master Template';
     protected $deleteConfirmMessage = 'Are you sure you want to remove this master template?';
     protected $deleteSuccessMessage = 'The master template has been removed';
-    
+
     protected $addSuccessMessage = 'Master template created successfully';
     protected $editSuccessMessage = 'Master template updated successfully';
-    
+
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
     ];

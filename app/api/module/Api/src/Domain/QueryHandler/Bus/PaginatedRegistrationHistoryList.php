@@ -22,6 +22,7 @@ class PaginatedRegistrationHistoryList extends RegistrationHistoryListQueryHandl
      * @return mixed
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $busReg = $this->getRepo()->fetchUsingId($query);

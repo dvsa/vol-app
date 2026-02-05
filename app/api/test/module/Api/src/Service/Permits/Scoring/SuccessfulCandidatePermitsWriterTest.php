@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Scoring;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit as IrhpCandidatePermitRepository;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SuccessfulCandidatePermitsWriterTest extends MockeryTestCase
 {
-    public function testWrite()
+    public function testWrite(): void
     {
         $candidatePermit1Id = 1;
         $candidatePermit1EmissionsCategory = RefData::EMISSIONS_CATEGORY_EURO6_REF;

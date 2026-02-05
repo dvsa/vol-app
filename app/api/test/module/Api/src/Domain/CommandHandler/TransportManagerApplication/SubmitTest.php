@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TransportManagerApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -51,7 +53,8 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransportManagerApplication::STATUS_TM_SIGNED,
@@ -63,7 +66,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithVersion()
+    public function testHandleCommandWithVersion(): void
     {
         $command = Command::create(['id' => 863, 'version' => 234]);
 
@@ -98,7 +101,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithNextStatus()
+    public function testHandleCommandWithNextStatus(): void
     {
         $command = Command::create(['id' => 863, 'nextStatus' => TransportManagerApplication::STATUS_RECEIVED]);
 
@@ -154,7 +157,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandIsOwnerY()
+    public function testHandleCommandIsOwnerY(): void
     {
         $command = Command::create(['id' => 863]);
 
@@ -206,17 +209,15 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand(): array
     {
         return [
             [false, 'application'],
             [true, 'variation']
         ];
     }
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
-    public function testHandleCommandSendEmailToAdminsRemoveDuplicate($isVariation, $uriSegment)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
+    public function testHandleCommandSendEmailToAdminsRemoveDuplicate(mixed $isVariation, mixed $uriSegment): void
     {
         $command = Command::create(['id' => 863]);
 
@@ -325,10 +326,8 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
-    public function testHandleCommandSendEmailToCreator($isVariation, $uriSegment)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
+    public function testHandleCommandSendEmailToCreator(mixed $isVariation, mixed $uriSegment): void
     {
         $command = Command::create(['id' => 863]);
 
@@ -432,7 +431,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandSkipTask()
+    public function testHandleCommandSkipTask(): void
     {
         $command = Command::create(['id' => 863, 'version' => 234]);
 

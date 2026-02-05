@@ -21,6 +21,7 @@ class HistoryController extends AbstractHistoryController implements BusRegContr
      *
      * @return \Common\Service\Table\TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         $table->removeColumn('appId');

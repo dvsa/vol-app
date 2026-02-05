@@ -53,9 +53,7 @@ class TypeHandlerRegistry implements TypeHandlerRegistryInterface
             return;
         }
 
-        usort($this->handlers, function (TypeHandlerInterface $a, TypeHandlerInterface $b) {
-            return $b->getPriority() <=> $a->getPriority();
-        });
+        usort($this->handlers, fn(TypeHandlerInterface $a, TypeHandlerInterface $b) => $b->getPriority() <=> $a->getPriority());
 
         $this->sorted = true;
     }

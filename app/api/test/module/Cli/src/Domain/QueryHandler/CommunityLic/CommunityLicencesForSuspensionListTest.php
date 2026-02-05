@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\QueryHandler\CommunityLic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -24,7 +26,7 @@ class CommunityLicencesForSuspensionListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $now = (new \DateTime())->setTime(0, 0, 0);
         $query = Qry::create(['date' => $now]);

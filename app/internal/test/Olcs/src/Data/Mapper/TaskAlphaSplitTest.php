@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -12,7 +14,7 @@ use Olcs\Data\Mapper\TaskAlphaSplit as Sut;
  */
 class TaskAlphaSplitTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'taskAllocationRule' => 1404,
@@ -33,7 +35,7 @@ class TaskAlphaSplitTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromResultNew()
+    public function testMapFromResultNew(): void
     {
         $data = [
             'taskAllocationRule' => 1404,
@@ -44,7 +46,7 @@ class TaskAlphaSplitTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'taskAllocationRule' => 1404,

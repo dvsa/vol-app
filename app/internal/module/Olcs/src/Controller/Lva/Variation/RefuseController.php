@@ -31,8 +31,6 @@ class RefuseController extends AbstractRefuseController implements VariationCont
     protected $lva = 'variation';
     protected string $location = 'internal';
 
-    protected StringHelperService $stringHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -49,12 +47,10 @@ class RefuseController extends AbstractRefuseController implements VariationCont
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected FormServiceManager $formServiceManager,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

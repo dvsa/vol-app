@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Organisation;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Organisation\FixIsIrfo;
@@ -53,7 +55,7 @@ class FixIsIrfoTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -65,12 +67,12 @@ class FixIsIrfoTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): FixIsIrfo
     {
         return new FixIsIrfo();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE organisation o '
             . 'LEFT JOIN irfo_psv_auth ipa ON ipa.organisation_id = o.id '

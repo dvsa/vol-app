@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create VI extract files test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Cli\Domain\Command\CreateViExtractFiles;
  */
 class CreateViExtractFilesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $params = [
             'op' => true,

@@ -19,6 +19,7 @@ class WebDavResponse extends Response
     /**
      * @return bool
      */
+    #[\Override]
     public function isSuccess(): bool
     {
         return $this->response;
@@ -35,6 +36,7 @@ class WebDavResponse extends Response
      *
      * @return void|Response
      */
+    #[\Override]
     public function setStatusCode($code)
     {
         if ($code) {

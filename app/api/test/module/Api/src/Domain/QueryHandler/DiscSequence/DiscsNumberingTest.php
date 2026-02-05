@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Disc Numbering Test
  *
@@ -33,16 +35,14 @@ class DiscsNumberingTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider emptyParamsProvider
-     */
-    public function testHandleQueryEmpty($params)
+    #[\PHPUnit\Framework\Attributes\DataProvider('emptyParamsProvider')]
+    public function testHandleQueryEmpty(mixed $params): void
     {
         $query = Qry::create($params);
         $this->assertEquals(['result' => [], 'count' => 0], $this->sut->handleQuery($query));
     }
 
-    public function emptyParamsProvider()
+    public static function emptyParamsProvider(): array
     {
         return [
             [['operatorType' => 'lcat_gv', 'licenceType' => 'ltyp_r', 'discSequence' => 1]],
@@ -52,7 +52,7 @@ class DiscsNumberingTest extends QueryHandlerTestCase
         ];
     }
 
-    public function testHandleQueryIncreaseStartNumber()
+    public function testHandleQueryIncreaseStartNumber(): void
     {
         $operatorType = 'lcat_psv';
         $licenceType = 'ltyp_r';
@@ -104,7 +104,7 @@ class DiscsNumberingTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryDecreaseStartNumber()
+    public function testHandleQueryDecreaseStartNumber(): void
     {
         $operatorType = 'lcat_gv';
         $licenceType = 'ltyp_r';

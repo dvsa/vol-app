@@ -39,7 +39,7 @@ class PsvSmallConditionsReviewService extends AbstractReviewService
             $returnData[] = [
                 [
                     'full-content' => $this->translate(
-                    'markup-application_vehicle-safety_undertakings-smallVehiclesUndertakingsScotland'
+                        'markup-application_vehicle-safety_undertakings-smallVehiclesUndertakingsScotland'
                     )
                 ],
             ];
@@ -50,7 +50,7 @@ class PsvSmallConditionsReviewService extends AbstractReviewService
         $returnData[] = [
             [
                 'full-content' => '<h4>' . $undertakingsHeading . '</h4>' . $this->translate(
-                'markup-application_vehicle-safety_undertakings-smallVehiclesUndertakings'
+                    'markup-application_vehicle-safety_undertakings-smallVehiclesUndertakings'
                 )
             ],
         ];

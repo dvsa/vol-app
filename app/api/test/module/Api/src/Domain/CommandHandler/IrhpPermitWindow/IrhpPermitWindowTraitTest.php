@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
@@ -8,6 +10,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
 {
     /** @var IrhpPermitWindowTraitStub $sut */
@@ -20,7 +23,7 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testValidateStockRangesNonBilateral()
+    public function testValidateStockRangesNonBilateral(): void
     {
         $irhpPermitStock = m::mock(IrhpPermitStock::class);
         $irhpPermitStock->shouldReceive('getIrhpPermitType->isBilateral')
@@ -30,17 +33,15 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->validateStockRanges($irhpPermitStock);
     }
 
-    /**
-     * @dataProvider dpValidateStockRangesBilateral
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidateStockRangesBilateral')]
     public function testValidateStockRangesBilateral(
-        $isBilateralCabotageOnly,
-        $isBilateralStandardOnly,
-        $isBilateralStandardAndCabotage,
-        $hasCabotageRange,
-        $hasStandardRange,
-        $expectedErr
-    ) {
+        mixed $isBilateralCabotageOnly,
+        mixed $isBilateralStandardOnly,
+        mixed $isBilateralStandardAndCabotage,
+        mixed $hasCabotageRange,
+        mixed $hasStandardRange,
+        mixed $expectedErr
+    ): void {
         $applicationPathGroup = m::mock(ApplicationPathGroup::class);
         $applicationPathGroup->shouldReceive('isBilateralCabotageOnly')
             ->withNoArgs()
@@ -74,7 +75,7 @@ class IrhpPermitWindowTraitTest extends AbstractCommandHandlerTestCase
         $this->sut->validateStockRanges($irhpPermitStock);
     }
 
-    public function dpValidateStockRangesBilateral()
+    public static function dpValidateStockRangesBilateral(): array
     {
         return
             [

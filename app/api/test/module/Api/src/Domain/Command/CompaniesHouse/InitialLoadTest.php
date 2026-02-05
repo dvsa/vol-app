@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Companies House InitialLoad command test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\InitialLoad;
  */
 class InitialLoadTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = InitialLoad::create(['companyNumber' => '01234567']);
 

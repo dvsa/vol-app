@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Printer Data Service Test
  *
@@ -31,7 +33,7 @@ class PrinterTest extends AbstractDataServiceTestCase
         $this->sut = new Printer($this->abstractDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -54,7 +56,7 @@ class PrinterTest extends AbstractDataServiceTestCase
         $this->assertEquals($results['results'], $this->sut->fetchListData());
     }
 
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 
@@ -74,13 +76,13 @@ class PrinterTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $this->sut->setData('Printer', []);
         $this->assertEquals([], $this->sut->fetchListOptions(null));
     }
 
-    public function testFetchListOptions()
+    public function testFetchListOptions(): void
     {
         $data = [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Mockery as m;
@@ -38,7 +40,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'irhpPermitStock' => '1',
@@ -88,7 +90,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
      * Test for overlapping IRHP Permit Windows - no values are asserted as this tests to ensure that a validation
      * exception is thrown.
      */
-    public function testHandleOverlap()
+    public function testHandleOverlap(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('The dates overlap with another window for this Permit stock');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,11 +24,9 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Licence
- * @covers \Dvsa\Olcs\Api\Domain\Repository\AbstractRepository
- * @covers \Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Licence::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractRepository::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\AbstractReadonlyRepository::class)]
 class LicenceTest extends RepositoryTestCase
 {
     /** @var LicenceRepo | m\MockInterface */
@@ -37,7 +37,7 @@ class LicenceTest extends RepositoryTestCase
         $this->setUpSut(LicenceRepo::class, true);
     }
 
-    public function testFetchSafetyDetailsUsingId()
+    public function testFetchSafetyDetailsUsingId(): void
     {
         /** @var QueryInterface | m\MockInterface $command */
         $command = m::mock(QueryInterface::class);
@@ -80,7 +80,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchSafetyDetailsUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testFetchSafetyDetailsUsingIdWithResults()
+    public function testFetchSafetyDetailsUsingIdWithResults(): void
     {
         /** @var QueryInterface | m\MockInterface $command */
         $command = m::mock(QueryInterface::class);
@@ -133,10 +133,9 @@ class LicenceTest extends RepositoryTestCase
      *
      * @param array $result
      * @param bool $licenceFound
-     *
-     * @dataProvider existsByLicNoProvider
      */
-    public function testExistsByLicNo($result, $licenceFound)
+    #[\PHPUnit\Framework\Attributes\DataProvider('existsByLicNoProvider')]
+    public function testExistsByLicNo(mixed $result, mixed $licenceFound): void
     {
         $licNo = 'OB1234567';
         $qb = m::mock(QueryBuilder::class);
@@ -161,7 +160,7 @@ class LicenceTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function existsByLicNoProvider()
+    public static function existsByLicNoProvider(): array
     {
         return [
             [[0 => 'Result'], true],
@@ -172,7 +171,7 @@ class LicenceTest extends RepositoryTestCase
     /**
      * Tests finding a licence by licNo without retreiving the additional data
      */
-    public function testFetchByLicNoWithoutAdditionalData()
+    public function testFetchByLicNoWithoutAdditionalData(): void
     {
         $licNo = 'OB1234567';
         $qb = m::mock(QueryBuilder::class);
@@ -195,7 +194,7 @@ class LicenceTest extends RepositoryTestCase
     /**
      * Tests exception thrown when returned licence record is null
      */
-    public function testFetchByLicNoWithoutAdditionalDataNotFound()
+    public function testFetchByLicNoWithoutAdditionalDataNotFound(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 
@@ -217,7 +216,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchByLicNoWithoutAdditionalData($licNo);
     }
 
-    public function testFetchByLicNo()
+    public function testFetchByLicNo(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
@@ -242,7 +241,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertSame('RESULTS', $this->sut->fetchByLicNo('LIC0001'));
     }
 
-    public function testFetchByLicNoNotFound()
+    public function testFetchByLicNoNotFound(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
@@ -269,7 +268,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchByLicNo('LIC0001');
     }
 
-    public function testFetchForUserRegistration()
+    public function testFetchForUserRegistration(): void
     {
         $licNo = 'LIC0001';
 
@@ -291,7 +290,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertSame($licence, $this->sut->fetchForUserRegistration($licNo));
     }
 
-    public function testFetchForUserRegistrationThrowsIncorrectAddressException()
+    public function testFetchForUserRegistrationThrowsIncorrectAddressException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -314,7 +313,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchForUserRegistration($licNo);
     }
 
-    public function testFetchForUserRegistrationThrowsUnlicencedException()
+    public function testFetchForUserRegistrationThrowsUnlicencedException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -339,7 +338,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchForUserRegistration($licNo);
     }
 
-    public function testFetchForUserRegistrationThrowsAdminUsersException()
+    public function testFetchForUserRegistrationThrowsAdminUsersException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -365,7 +364,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->fetchForUserRegistration($licNo);
     }
 
-    public function testFetchByVrm()
+    public function testFetchByVrm(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -384,7 +383,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByVrmAndStatus()
+    public function testFetchByVrmAndStatus(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -405,7 +404,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchWithEnforcementArea()
+    public function testFetchWithEnforcementArea(): void
     {
         $licenceId = 1;
 
@@ -441,7 +440,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchWithOperatingCentres()
+    public function testFetchWithOperatingCentres(): void
     {
         $licenceId = 1;
 
@@ -485,7 +484,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchWithPrivateHireLicence()
+    public function testFetchWithPrivateHireLicence(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -512,7 +511,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(LicenceRepo::class, true);
 
@@ -532,7 +531,7 @@ class LicenceTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testFetchForContinuation()
+    public function testFetchForContinuation(): void
     {
         $qb = m::mock(QueryBuilder::class);
 
@@ -566,7 +565,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchForContinuationNotSought()
+    public function testFetchForContinuationNotSought(): void
     {
         $qb = $this->createMockQb('[QUERY]');
 
@@ -625,7 +624,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchWithVariationsAndInterimInforce()
+    public function testFetchWithVariationsAndInterimInforce(): void
     {
         $licenceId = 1;
         $qb = m::mock(QueryBuilder::class);
@@ -665,7 +664,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchWithVariationsAndInterimInforce($licenceId));
     }
 
-    public function testFetchWithAddressesUsingIdWithQuery()
+    public function testFetchWithAddressesUsingIdWithQuery(): void
     {
         $id = 9999;
 
@@ -702,7 +701,7 @@ class LicenceTest extends RepositoryTestCase
         static::assertEquals(['EXPECT'], $this->sut->fetchWithAddressesUsingId($mockQuery));
     }
 
-    public function testFetchWithAddressesUsingIdWithInt()
+    public function testFetchWithAddressesUsingIdWithInt(): void
     {
         $id = 9999;
 
@@ -734,7 +733,7 @@ class LicenceTest extends RepositoryTestCase
         static::assertEquals(['EXPECT'], $this->sut->fetchWithAddressesUsingId($id));
     }
 
-    public function testFetchByOrganisationIdAndStatuses()
+    public function testFetchByOrganisationIdAndStatuses(): void
     {
 
         $qb = m::mock(QueryBuilder::class);
@@ -759,7 +758,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertSame(['result'], $this->sut->fetchByOrganisationIdAndStatuses(1, $statuses));
     }
 
-    public function testFetchByOrganisationId()
+    public function testFetchByOrganisationId(): void
     {
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);
@@ -772,7 +771,7 @@ class LicenceTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchPsvLicenceIdsToSurrender()
+    public function testFetchPsvLicenceIdsToSurrender(): void
     {
         $qb = m::mock(QueryBuilder::class);
 
@@ -837,13 +836,13 @@ class LicenceTest extends RepositoryTestCase
         $this->assertSame([1, 2], $this->sut->fetchPsvLicenceIdsToSurrender());
     }
 
-    public function testInternationalGoodsReport()
+    public function testInternationalGoodsReport(): void
     {
         $this->expectQueryWithData(InternationalGoodsReport::class, [], [], m::mock(Result::class));
         $this->sut->internationalGoodsReport();
     }
 
-    public function testFetchForLastTmAutoLetter()
+    public function testFetchForLastTmAutoLetter(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);

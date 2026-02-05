@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
@@ -33,10 +35,8 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
         $this->sut = new VariationOverviewSubmissionStub($mockTranslationHelper, $this->mockFormHlp);
     }
 
-    /**
-     * @dataProvider dpTestAlterForm
-     */
-    public function testAlterFormDescription($section, $expect): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAlterForm')]
+    public function testAlterFormDescription(array $section, string $expect): void
     {
         //  mock expected parent call
         $this->mockParentCall();
@@ -79,7 +79,7 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
      *
      * @psalm-return list{array{section: array{status: 'unit_ExpectedStatus'}, expect: 'variation.overview.submission.desc.notchanged'}, array{section: array{status: 1}, expect: 'variation.overview.submission.desc.req-attention'}, array{section: array{status: 2}, expect: 'variation.overview.submission.desc.must-submit'}}
      */
-    public function dpTestAlterForm(): array
+    public static function dpTestAlterForm(): array
     {
         return [
             [

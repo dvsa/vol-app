@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant Condition Undertaking Test
  *
@@ -36,7 +38,8 @@ class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ConditionUndertaking::TYPE_CONDITION
@@ -47,7 +50,7 @@ class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutRecords()
+    public function testHandleCommandWithoutRecords(): void
     {
         $data = [
             'id' => 111
@@ -73,7 +76,7 @@ class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandAdded()
+    public function testHandleCommandAdded(): void
     {
         $data = [
             'id' => 111
@@ -137,7 +140,7 @@ class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandUpdated()
+    public function testHandleCommandUpdated(): void
     {
         $data = [
             'id' => 111
@@ -200,7 +203,7 @@ class GrantConditionUndertakingTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandDeleted()
+    public function testHandleCommandDeleted(): void
     {
         $data = [
             'id' => 111

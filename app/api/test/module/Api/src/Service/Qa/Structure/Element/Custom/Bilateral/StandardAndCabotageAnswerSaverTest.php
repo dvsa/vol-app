@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\Answer;
@@ -62,7 +64,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         );
     }
 
-    public function testSaveNoCabotageRequired()
+    public function testSaveNoCabotageRequired(): void
     {
         $this->namedAnswerFetcher->shouldReceive('fetch')
             ->with($this->applicationStep, $this->postData, 'qaElement')
@@ -77,10 +79,8 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         $this->standardAndCabotageAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    /**
-     * @dataProvider dpSaveCabotageRequired
-     */
-    public function testSaveCabotageRequired($answerValue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSaveCabotageRequired')]
+    public function testSaveCabotageRequired(mixed $answerValue): void
     {
         $this->namedAnswerFetcher->shouldReceive('fetch')
             ->with($this->applicationStep, $this->postData, 'qaElement')
@@ -99,7 +99,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         $this->standardAndCabotageAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    public function dpSaveCabotageRequired()
+    public static function dpSaveCabotageRequired(): array
     {
         return [
             [Answer::BILATERAL_STANDARD_AND_CABOTAGE],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Tm;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -23,7 +25,7 @@ class TmQualificationEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $tm = m::mock(TransportManager::class);
         $country = m::mock(Country::class);
@@ -39,7 +41,7 @@ class TmQualificationEntityTest extends EntityTester
         $this->assertSame($serialNo, $entity->getSerialNo());
     }
 
-    public function testUpdateTmQualification()
+    public function testUpdateTmQualification(): void
     {
         $entity = new Entity();
 
@@ -58,7 +60,7 @@ class TmQualificationEntityTest extends EntityTester
         $this->assertEquals(1, $entity->getTransportManager());
     }
 
-    public function testUpdateTmQualificationWithException()
+    public function testUpdateTmQualificationWithException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

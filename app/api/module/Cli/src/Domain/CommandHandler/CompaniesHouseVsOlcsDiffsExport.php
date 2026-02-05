@@ -130,6 +130,7 @@ final class CompaniesHouseVsOlcsDiffsExport extends AbstractCommandHandler
         fclose($fh);
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

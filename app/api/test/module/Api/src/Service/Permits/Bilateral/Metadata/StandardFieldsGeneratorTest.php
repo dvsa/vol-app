@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup;
@@ -34,10 +36,8 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
         $this->standardFieldsGenerator = new StandardFieldsGenerator($this->currentFieldValuesGenerator);
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($applicationPathGroupId, $permitUsageList, $currentFieldValues, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $applicationPathGroupId, mixed $permitUsageList, mixed $currentFieldValues, mixed $expected): void
     {
         $this->irhpPermitStock->shouldReceive('getApplicationPathGroup->getId')
             ->withNoArgs()
@@ -58,7 +58,7 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         $singlePermitUsage = m::mock(RefData::class);
         $singlePermitUsage->shouldReceive('getId')
@@ -302,7 +302,7 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testGenerateException()
+    public function testGenerateException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unexpected application path group');

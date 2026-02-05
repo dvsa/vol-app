@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Application;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,15 +21,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class ConditionUndertakingTest extends MockeryTestCase
 {
     /**
-     * @group publicationFilter
-     * @dataProvider provideTestProvider
-     *
-     * Test the application condition undertakings filter
-     *
      * @param $action
      * @param $expectedActionString
      */
-    public function testProvideWithOperatingCentre($action, $expectedActionString)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestProvider')]
+    public function testProvideWithOperatingCentre(mixed $action, mixed $expectedActionString): void
     {
         $conditionTypeDescription = 'condition type description';
         $notes = 'notes';
@@ -66,12 +65,9 @@ class ConditionUndertakingTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publication, new \ArrayObject()));
     }
 
-    /**
-     * @group publicationFilter
-     *
-     * Test the application condition undertakings filter
-     */
-    public function testProvideUpdateNoOperatingCentre()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the application condition undertakings filter')]
+    public function testProvideUpdateNoOperatingCentre(): void
     {
         $sut = new ConditionUndertakingContext(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 
@@ -109,7 +105,7 @@ class ConditionUndertakingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function provideTestProvider()
+    public static function provideTestProvider(): array
     {
         $sut = new ConditionUndertakingContext(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 

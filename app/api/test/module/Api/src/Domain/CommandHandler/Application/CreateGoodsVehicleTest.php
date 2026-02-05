@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -15,9 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateGoodsVehicle
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateGoodsVehicle::class)]
 class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public const APP_ID = 9001;
@@ -40,7 +40,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithoutSpaces()
+    public function testHandleCommandWithoutSpaces(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -60,7 +60,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->expects('isGranted')
             ->with(Permission::INTERNAL_USER, null)

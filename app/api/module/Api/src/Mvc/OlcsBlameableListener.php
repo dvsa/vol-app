@@ -30,6 +30,7 @@ class OlcsBlameableListener extends GedmoBlameableListener implements AuthAwareI
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getFieldValue($meta, $field, $eventAdapter)
     {
         $this->setUserValue(

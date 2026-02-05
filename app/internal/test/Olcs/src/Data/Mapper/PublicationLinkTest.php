@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -15,7 +17,7 @@ class PublicationLinkTest extends MockeryTestCase
     /**
      * Tests mapFromForm
      */
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $inData = ['fields' => ['field' => 'data']];
         $expected = ['field' => 'data'];
@@ -26,7 +28,7 @@ class PublicationLinkTest extends MockeryTestCase
     /**
      * Tests mapFromErrors
      */
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];
@@ -37,12 +39,12 @@ class PublicationLinkTest extends MockeryTestCase
     /**
      * test map from result
      *
-     * @dataProvider mapFromResultProvider
      *
      * @param $inputData
      * @param $expectedOutput
      */
-    public function testMapFromResultStatusIsNew($inputData, $expectedOutput)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultProvider')]
+    public function testMapFromResultStatusIsNew(mixed $inputData, mixed $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, Sut::mapFromResult($inputData));
     }
@@ -52,7 +54,7 @@ class PublicationLinkTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromResultProvider()
+    public static function mapFromResultProvider(): array
     {
         $pubType = 'pub type';
         $trafficArea = 'trafficArea';

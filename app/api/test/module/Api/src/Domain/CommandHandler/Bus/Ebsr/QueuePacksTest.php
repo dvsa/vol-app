@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Bus\Ebsr;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -31,7 +33,8 @@ class QueuePacksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             EbsrSubmission::UPLOADED_STATUS,
@@ -45,7 +48,7 @@ class QueuePacksTest extends AbstractCommandHandlerTestCase
     /**
      * Tests EBSR packs are queued correctly
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $submissionType = EbsrSubmission::NEW_SUBMISSION_TYPE;
         $cmd = QueuePacksCmd::create(['submissionType' => $submissionType]);
@@ -115,7 +118,7 @@ class QueuePacksTest extends AbstractCommandHandlerTestCase
     /**
      * Tests what happens if there are no packs for the organisation
      */
-    public function testHandleCommandNoPacks()
+    public function testHandleCommandNoPacks(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -147,7 +150,7 @@ class QueuePacksTest extends AbstractCommandHandlerTestCase
     /**
      * Tests what happens if the organisation is missing
      */
-    public function testHandleCommandNoOrganisation()
+    public function testHandleCommandNoOrganisation(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

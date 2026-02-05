@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
@@ -22,7 +24,7 @@ class GenericListTest extends TestCase
         $this->mockParams = m::mock(Params::class)->makePartial();
     }
 
-    public function testProvideParameters()
+    public function testProvideParameters(): void
     {
         $expected = [
             'page' => 7,
@@ -57,7 +59,7 @@ class GenericListTest extends TestCase
         $this->assertEquals($expected, $sut->provideParameters());
     }
 
-    public function testDefaults()
+    public function testDefaults(): void
     {
         $sut = new GenericList(['case', 'id' => 'application'], 'unit_defSort', 'unit_DefOrder');
         $sut->setDefaultLimit(9999);

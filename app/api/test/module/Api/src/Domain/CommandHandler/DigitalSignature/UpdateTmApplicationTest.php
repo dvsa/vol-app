@@ -35,7 +35,7 @@ class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testMissingRole()
+    public function testMissingRole(): void
     {
         $applicationId = 666;
         $digitalSignatureId = 999;
@@ -56,9 +56,7 @@ class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    /**
-     * @dataProvider dpRoleProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRoleProvider')]
     public function testHandleCommand(string $role, string $nextStatus, array $updateMethods): void
     {
         $applicationId = 666;
@@ -94,7 +92,7 @@ class UpdateTmApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($this->expectedResultMessages(), $result->getMessages());
     }
 
-    public function dpRoleProvider(): array
+    public static function dpRoleProvider(): array
     {
         return [
             [RefData::TMA_SIGN_AS_TM, TmApplicationEntity::STATUS_TM_SIGNED, ['updateTmDigitalSignature']],

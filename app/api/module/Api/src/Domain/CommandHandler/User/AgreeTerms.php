@@ -18,7 +18,7 @@ final class AgreeTerms extends AbstractCommandHandler implements AuthAwareInterf
     use AuthAwareTrait;
     use CacheAwareTrait;
 
-    public const SUCCESS_MSG = 'Terms and conditions accepted';
+    public const string SUCCESS_MSG = 'Terms and conditions accepted';
 
     protected $repoServiceName = 'User';
 

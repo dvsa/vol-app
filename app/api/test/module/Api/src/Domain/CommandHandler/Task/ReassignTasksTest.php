@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Task;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks;
@@ -11,9 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Task\ReassignTasks as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks::class)]
 class ReassignTasksTest extends AbstractCommandHandlerTestCase
 {
     public const TASK_ID_1 = 9990;
@@ -48,7 +48,8 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -65,7 +66,7 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(
             [
@@ -101,7 +102,7 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandUnassignedUser()
+    public function testHandleCommandUnassignedUser(): void
     {
         $command = Cmd::create(
             [
@@ -138,7 +139,7 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandTeamFromUser()
+    public function testHandleCommandTeamFromUser(): void
     {
         $command = Cmd::create(
             [
@@ -167,7 +168,7 @@ class ReassignTasksTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandFailTeamInvalid()
+    public function testHandleCommandFailTeamInvalid(): void
     {
         $this->expectException(ValidationException::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Organisation;
 
 use Mockery as m;
@@ -32,7 +34,7 @@ class DisqualificationEntityTest extends EntityTester
         parent::setUp();
     }
 
-    public function testConstructorNoParams()
+    public function testConstructorNoParams(): void
     {
         try {
             $sut = new Entity();
@@ -43,7 +45,7 @@ class DisqualificationEntityTest extends EntityTester
         }
     }
 
-    public function testConstructorBothParams()
+    public function testConstructorBothParams(): void
     {
         try {
             $sut = new Entity(
@@ -57,21 +59,21 @@ class DisqualificationEntityTest extends EntityTester
         }
     }
 
-    public function testConstructorOrganisation()
+    public function testConstructorOrganisation(): void
     {
         $organisation = m::mock(\Dvsa\Olcs\Api\Entity\Organisation\Organisation::class);
         $sut = new Entity($organisation);
         $this->assertSame($organisation, $sut->getOrganisation());
     }
 
-    public function testConstructorPerson()
+    public function testConstructorPerson(): void
     {
         $person = m::mock(\Dvsa\Olcs\Api\Entity\Person\Person::class);
         $sut = new Entity(null, $person);
         $this->assertSame($person, $sut->getPerson());
     }
 
-    public function testUpdateMinimumParams()
+    public function testUpdateMinimumParams(): void
     {
         $this->sut->update(
             'N'
@@ -82,7 +84,7 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame(null, $this->sut->getPeriod());
     }
 
-    public function testUpdateAllParams()
+    public function testUpdateAllParams(): void
     {
         $startDate = new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime('2014-12-02');
         $this->sut->update(
@@ -97,7 +99,7 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame(41, $this->sut->getPeriod());
     }
 
-    public function testUpdateValidationStartDate()
+    public function testUpdateValidationStartDate(): void
     {
         try {
             $this->sut->update(
@@ -112,7 +114,7 @@ class DisqualificationEntityTest extends EntityTester
         }
     }
 
-    public function testGetStatusN()
+    public function testGetStatusN(): void
     {
         $this->sut->setStartDate((new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime('-1 month'))->format('Y-m-d'));
         $this->sut->setPeriod(12);
@@ -121,10 +123,8 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame(Entity::STATUS_INACTIVE, $this->sut->getStatus());
     }
 
-    /**
-     * @dataProvider dpGetStatus
-     */
-    public function testGetStatus($expectedStatus, $startDate, $period)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetStatus')]
+    public function testGetStatus(mixed $expectedStatus, mixed $startDate, mixed $period): void
     {
         $this->sut->setStartDate((new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime($startDate))->format('Y-m-d'));
         $this->sut->setPeriod($period);
@@ -133,7 +133,7 @@ class DisqualificationEntityTest extends EntityTester
         $this->assertSame($expectedStatus, $this->sut->getStatus());
     }
 
-    public function dpGetStatus()
+    public static function dpGetStatus(): array
     {
         return [
             [Entity::STATUS_INACTIVE, '-2 month', 1],
@@ -151,7 +151,7 @@ class DisqualificationEntityTest extends EntityTester
         ];
     }
 
-    public function testGetCalculatedBundleValues()
+    public function testGetCalculatedBundleValues(): void
     {
         $this->assertSame(
             [

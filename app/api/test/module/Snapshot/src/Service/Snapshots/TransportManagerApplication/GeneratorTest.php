@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generator Test
  *
@@ -116,7 +118,7 @@ class GeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $organisation = $this->mockOrganisation();
 
@@ -180,7 +182,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals($expected, $params);
     }
 
-    public function testGenerateWithSignatureOpSigned()
+    public function testGenerateWithSignatureOpSigned(): void
     {
         $organisation = $this->mockOrganisation();
 
@@ -229,7 +231,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertEquals($expected, $params);
     }
 
-    public function testGenerateWithSignatureOpSignedDigitally()
+    public function testGenerateWithSignatureOpSignedDigitally(): void
     {
         $organisation = $this->mockOrganisation();
 
@@ -282,7 +284,7 @@ class GeneratorTest extends MockeryTestCase
      * @param $licence
      * @return m\MockInterface
      */
-    private function mockApplication($licence): m\MockInterface
+    private function mockApplication(mixed $licence): m\MockInterface
     {
         $application = m::mock(Application::class);
         $application->shouldReceive('getLicence')->andReturn($licence);
@@ -295,7 +297,7 @@ class GeneratorTest extends MockeryTestCase
      * @param $organisation
      * @return m\MockInterface
      */
-    private function mockLicence($organisation): m\MockInterface
+    private function mockLicence(mixed $organisation): m\MockInterface
     {
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getOrganisation')->andReturn($organisation);
@@ -316,7 +318,7 @@ class GeneratorTest extends MockeryTestCase
     /**
      * @param $tma
      */
-    private function setMainServicesExpectations($tma): void
+    private function setMainServicesExpectations(mixed $tma): void
     {
         $this->niTextTranslation
             ->shouldReceive('setLocaleForNiFlag')->once()->with('N');

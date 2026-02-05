@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send User Created Email Test
  */
@@ -37,7 +39,7 @@ class SendUserCreatedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandForSelfserveUser()
+    public function testHandleCommandForSelfserveUser(): void
     {
         $userId = 111;
         $emailAddress = 'me@test.me';
@@ -109,7 +111,7 @@ class SendUserCreatedTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandForInternalUser()
+    public function testHandleCommandForInternalUser(): void
     {
         $userId = 111;
         $emailAddress = 'me@test.me';

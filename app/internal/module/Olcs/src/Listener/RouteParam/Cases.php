@@ -106,7 +106,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onCase'],
+            $this->onCase(...),
             $priority
         );
     }

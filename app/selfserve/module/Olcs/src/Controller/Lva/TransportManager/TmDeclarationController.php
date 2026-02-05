@@ -111,6 +111,7 @@ class TmDeclarationController extends AbstractDeclarationController
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getTranslatedDeclarationMarkupParams(TranslationHelperService $translationHelper)
     {
         $translated = $translationHelper->translate(

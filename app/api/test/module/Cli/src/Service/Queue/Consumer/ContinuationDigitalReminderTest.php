@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Dvsa\Olcs\Api\Entity\Queue\Queue;
@@ -14,7 +16,7 @@ class ContinuationDigitalReminderTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = ContinuationDigitalReminder::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $queue = new Queue();
         $queue->setEntityId(87);

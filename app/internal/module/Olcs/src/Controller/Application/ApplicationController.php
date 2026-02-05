@@ -35,10 +35,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
     use Traits\ApplicationControllerTrait;
     use CheckForCrudAction;
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-
-    protected $navigation;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -47,8 +43,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
         protected PluginManager $dataServiceManager,
         protected OppositionHelperService $oppositionHelper,
         protected ComplaintsHelperService $complaintsHelper,
-        FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected FlashMessengerHelperService $flashMessengerHelper,
+        protected $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -56,8 +52,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $tableFactory,
             $viewHelperManager
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->navigation = $navigation;
     }
 
     /**

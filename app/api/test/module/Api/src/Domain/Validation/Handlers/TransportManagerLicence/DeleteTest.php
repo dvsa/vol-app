@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\TransportManagerLicence;
 
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
@@ -37,10 +39,9 @@ class DeleteTest extends AbstractHandlerTestCase
      * @param $canAccess
      * @param $expected
      * @param $userId
-     *
-     * @dataProvider dpIsValid
      */
-    public function testIsValid($canAccess, $expected, $userId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
+    public function testIsValid(mixed $canAccess, mixed $expected, mixed $userId): void
     {
         $mockUser = $this->mockUser();
         $mockUser->shouldReceive('getId')->once()->andReturn($userId)->getMock();
@@ -64,7 +65,7 @@ class DeleteTest extends AbstractHandlerTestCase
      *
      * @return array
      */
-    public function dpIsValid()
+    public static function dpIsValid(): array
     {
         return [
             [true, true, 10],

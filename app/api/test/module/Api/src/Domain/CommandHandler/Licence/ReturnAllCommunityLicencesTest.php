@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Transfer\Service\CacheEncryption;
@@ -31,7 +33,8 @@ class ReturnAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CommunityLic::STATUS_RETURNDED => m::mock(RefData::class)->makePartial()->setDescription('returned'),
@@ -40,7 +43,7 @@ class ReturnAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 608,

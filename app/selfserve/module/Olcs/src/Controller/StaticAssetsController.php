@@ -6,11 +6,8 @@ use Laminas\Mvc\Controller\AbstractActionController;
 
 class StaticAssetsController extends AbstractActionController
 {
-    private array $config;
-
-    public function __construct(array $config)
+    public function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public function redirectAction()
@@ -30,10 +27,10 @@ class StaticAssetsController extends AbstractActionController
         }
 
         // Build the full path with optional prefix
-        $fullPath = $prefix ? trim($prefix, '/') . '/' . ltrim($path, '/') : $path;
+        $fullPath = $prefix ? trim((string) $prefix, '/') . '/' . ltrim((string) $path, '/') : $path;
 
         // Build the redirect URL
-        $redirectUrl = rtrim($assetsUrl, '/') . '/' . ltrim($fullPath, '/');
+        $redirectUrl = rtrim((string) $assetsUrl, '/') . '/' . ltrim((string) $fullPath, '/');
 
         // Return a 302 redirect
         return $this->redirect()->toUrl($redirectUrl);

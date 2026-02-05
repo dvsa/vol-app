@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Class
  *
@@ -22,7 +24,7 @@ abstract class SingleValueTestAbstract extends \PHPUnit\Framework\TestCase
      */
     public const SUT_CLASS_NAME = '\Dvsa\Olcs\Api\Service\Document\Bookmark\BOOKMARK_CLASS_NAME';
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 
@@ -35,7 +37,7 @@ abstract class SingleValueTestAbstract extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
 
@@ -59,7 +61,7 @@ abstract class SingleValueTestAbstract extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function getData($key, $value)
+    protected function getData(mixed $key, mixed $value): array
     {
         return [$key => $value];
     }
@@ -68,14 +70,14 @@ abstract class SingleValueTestAbstract extends \PHPUnit\Framework\TestCase
      * tests the default value is rendered correctly in those bookmarks that populate it
      * (base class has a default value of null)
      */
-    public function testRenderDefaultValue()
+    public function testRenderDefaultValue(): void
     {
         $sutClassName = static::SUT_CLASS_NAME;
         $bookmark = new $sutClassName();
         $this->assertEquals($sutClassName::DEFAULT_VALUE, $bookmark->render());
     }
 
-    public function getFormatter()
+    public function getFormatter(): false|FormatterInterface
     {
         $sutClassName = static::SUT_CLASS_NAME;
 

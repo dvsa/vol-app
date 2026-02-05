@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,10 +35,8 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
-    public function testHandleQuery($ranges, $candidatePermits, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQuery(mixed $ranges, mixed $candidatePermits, mixed $expected): void
     {
         $stockId = 99;
 
@@ -78,7 +78,7 @@ class StockAlignmentReportTest extends QueryHandlerTestCase
         $this->assertEquals(['rows' => $expected], $result);
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery(): array
     {
         $euro5Desc = 'Euro 5';
         $euro5 = new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF);

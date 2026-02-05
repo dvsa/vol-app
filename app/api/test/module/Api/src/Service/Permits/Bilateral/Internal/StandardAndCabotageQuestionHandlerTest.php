@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Entity\Generic\Answer;
@@ -19,10 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpHandle
-     */
-    public function testHandle($bilateralRequired, $expectedAnswer)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandle')]
+    public function testHandle(mixed $bilateralRequired, mixed $expectedAnswer): void
     {
         $permitUsageSelection = 'permit_usage_selection';
 
@@ -58,7 +58,7 @@ class StandardAndCabotageQuestionHandlerTest extends MockeryTestCase
         $standardAndCabotageQuestionHandler->handle($qaContext, $requiredPermits);
     }
 
-    public function dpHandle()
+    public static function dpHandle(): array
     {
         return [
             'standard only' => [

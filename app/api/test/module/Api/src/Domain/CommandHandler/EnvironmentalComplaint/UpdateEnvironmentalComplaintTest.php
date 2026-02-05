@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Environmental Complaint Test
  *
@@ -37,7 +39,8 @@ class UpdateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ComplaintEntity::COMPLAIN_STATUS_OPEN,
@@ -57,7 +60,7 @@ class UpdateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 99,
@@ -124,7 +127,7 @@ class UpdateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
         $this->assertContains('Environmental Complaint updated', $result->getMessages());
     }
 
-    public function testHandleCommandNoExistingContactDetailsEntity()
+    public function testHandleCommandNoExistingContactDetailsEntity(): void
     {
         $data = [
             'id' => 99,

@@ -51,7 +51,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
         $this->getRepo()->save($conditionUndertaking);
 
-        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ? 
+        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ?
             EventHistoryTypeEntity::EVENT_CODE_CONDITION_CHANGED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_CHANGED;
 
         // create Event History record

@@ -21,6 +21,7 @@ class ApplicationPsvVehicles extends CommonPsvVehicles
         parent::__construct($formHelper, $authService);
     }
 
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

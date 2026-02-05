@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query as DomainQry;
@@ -22,7 +24,7 @@ class TotalContFeeTest extends MockeryTestCase
         $this->sut = new TotalContFee();
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         /** @var \Dvsa\Olcs\Api\Service\Date $mockDateHelper */
         $mockDateHelper = m::mock(\Dvsa\Olcs\Api\Service\Date::class)
@@ -49,22 +51,20 @@ class TotalContFeeTest extends MockeryTestCase
         static::assertEquals('2015-05-01', $query->getEffectiveFrom());
     }
 
-    public function testRenderWithNoTotalContFee()
+    public function testRenderWithNoTotalContFee(): void
     {
         $this->sut->setData(null);
         $this->assertEquals('', $this->sut->render());
     }
 
-    /**
-     * @dataProvider resultsProvider
-     */
-    public function testRenderWithTotalContFee($results)
+    #[\PHPUnit\Framework\Attributes\DataProvider('resultsProvider')]
+    public function testRenderWithTotalContFee(mixed $results): void
     {
         $this->sut->setData($results);
         $this->assertEquals('123,456', $this->sut->render());
     }
 
-    public function resultsProvider()
+    public static function resultsProvider(): array
     {
         return [
             [

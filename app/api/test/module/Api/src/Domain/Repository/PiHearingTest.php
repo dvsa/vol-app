@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PiHearing Repo test
  */
@@ -21,7 +23,7 @@ class PiHearingTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchPreviousHearing()
+    public function testFetchPreviousHearing(): void
     {
         $piId = 123;
         $hearingDate = new \DateTime('2016-02-10');
@@ -48,7 +50,7 @@ class PiHearingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         $piId = 123;
 
@@ -70,7 +72,7 @@ class PiHearingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForReport()
+    public function testFetchListForReport(): void
     {
         $this->setUpSut(Repo::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -108,7 +110,7 @@ class PiHearingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForReportWithTrafficAreas()
+    public function testFetchListForReportWithTrafficAreas(): void
     {
         $this->setUpSut(Repo::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
@@ -148,7 +150,7 @@ class PiHearingTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForReportWithtrafficAreasOther()
+    public function testFetchListForReportWithtrafficAreasOther(): void
     {
         $this->setUpSut(Repo::class, true);
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);

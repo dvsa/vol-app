@@ -215,7 +215,6 @@ class EventHistory extends AbstractRepository
                 : null;
 
             if ($newValueDeletedDate !== null) {
-
                 $returnValues = [];
 
                 foreach ($cleanValues[1] as $key => $oldValue) {

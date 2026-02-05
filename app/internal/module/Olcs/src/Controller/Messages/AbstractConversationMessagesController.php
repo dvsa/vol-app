@@ -51,6 +51,7 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
     abstract protected function getConversationViewRoute(): string;
 
     /** @param array $parameters */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['includeReadRoles'] = 1;
@@ -67,6 +68,7 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
     /**
      * @return array|Response|ViewModel|void
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFiles(['table-actions']);
@@ -100,7 +102,7 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
             return parent::indexAction();
         }
 
-        $action = strtolower($this->params()->fromPost('action'));
+        $action = strtolower((string) $this->params()->fromPost('action'));
         switch ($action) {
             case 'end and archive conversation':
                 $route = str_replace('/view', '/close', $this->getConversationViewRoute());

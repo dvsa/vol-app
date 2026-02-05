@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeleteTransportManagerLicenceTest.php
  *
@@ -38,7 +40,7 @@ class DeleteTransportManagerLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'licence' => 7

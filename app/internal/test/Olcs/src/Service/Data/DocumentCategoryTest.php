@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\DocumentCategory;
@@ -7,9 +9,7 @@ use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
-/**
- * @covers \Olcs\Service\Data\DocumentCategory
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentCategory::class)]
 class DocumentCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var DocumentCategory */
@@ -22,7 +22,7 @@ class DocumentCategoryTest extends AbstractListDataServiceTestCase
         $this->sut = new DocumentCategory($this->abstractListDataServiceServices);
     }
 
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
         $params = [

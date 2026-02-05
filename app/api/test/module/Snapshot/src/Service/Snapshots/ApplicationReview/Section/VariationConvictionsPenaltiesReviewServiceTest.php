@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Convictions Penalties Review Service Test
  *
@@ -47,7 +49,7 @@ class VariationConvictionsPenaltiesReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'foo' => 'bar'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\CompanyStatus;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class CompanyStatusTest extends TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new CompanyStatus();
         $query = $bookmark->getQuery(['licence' => 123, 'bundle' => []]);
@@ -15,10 +17,8 @@ class CompanyStatusTest extends TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dptestRender
-     */
-    public function testRender($companyStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestRender')]
+    public function testRender(mixed $companyStatus): void
     {
         $bookmark = new CompanyStatus();
         $bookmark->setData(
@@ -31,39 +31,16 @@ class CompanyStatusTest extends TestCase
         );
     }
 
-    public function dptestRender()
+    public static function dptestRender(): array
     {
         return [
-            [
-                [
-                    'status' => 'liquidation',
-                    'expected' => 'Liquidation'
-                ],
-                [
-                    'status' => 'insolvency-proceedings',
-                    'expected' => 'Insolvency Proceedings'
-                ],
-                [
-                    'status' => 'administration',
-                    'expected' => 'Administration'
-                ],
-                [
-                    'status' => 'liquidation',
-                    'expected' => 'Liquidation'
-                ],
-                [
-                    'status' => 'receivership',
-                    'expected' => 'Receivership'
-                ],
-                [
-                    'status' => 'voluntary-arrangement',
-                    'expected' => 'Voluntary Arrangement'
-                ],
-                [
-                    'status' => null,
-                    'expected' => null
-                ]
-            ]
+            [['status' => 'liquidation', 'expected' => 'Liquidation']],
+            [['status' => 'insolvency-proceedings', 'expected' => 'Insolvency Proceedings']],
+            [['status' => 'administration', 'expected' => 'Administration']],
+            [['status' => 'liquidation', 'expected' => 'Liquidation']],
+            [['status' => 'receivership', 'expected' => 'Receivership']],
+            [['status' => 'voluntary-arrangement', 'expected' => 'Voluntary Arrangement']],
+            [['status' => null, 'expected' => null]],
         ];
     }
 }

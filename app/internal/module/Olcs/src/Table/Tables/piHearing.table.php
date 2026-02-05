@@ -47,7 +47,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $date = date(Module::$dateFormat, strtotime($data['hearingDate']));
+                $date = date(Module::$dateFormat, strtotime((string) $data['hearingDate']));
                 if (!empty($data['pi']['closedDate'])) {
                     return $date;
                 } else {

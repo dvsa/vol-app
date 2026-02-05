@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\PrintScan;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,7 +22,7 @@ class PrinterEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCanDelete()
+    public function testCanDelete(): void
     {
         $printer = new Entity();
         $this->assertTrue($printer->canDelete());

@@ -9,27 +9,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
  */
 class TableMetadata
 {
-    private string $tableName;
-    private array $columns;
-    private array $indexes;
-    private array $uniqueConstraints;
-    private array $foreignKeys;
-    private ?string $comment;
-
-    public function __construct(
-        string $tableName,
-        array $columns,
-        array $indexes = [],
-        array $uniqueConstraints = [],
-        array $foreignKeys = [],
-        ?string $comment = null
-    ) {
-        $this->tableName = $tableName;
-        $this->columns = $columns;
-        $this->indexes = $indexes;
-        $this->uniqueConstraints = $uniqueConstraints;
-        $this->foreignKeys = $foreignKeys;
-        $this->comment = $comment;
+    public function __construct(private readonly string $tableName, private array $columns, private readonly array $indexes = [], private readonly array $uniqueConstraints = [], private readonly array $foreignKeys = [], private readonly ?string $comment = null)
+    {
     }
 
     public function getTableName(): string

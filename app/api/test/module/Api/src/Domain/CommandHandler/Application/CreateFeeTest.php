@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Fee Test
  *
@@ -26,6 +28,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class CreateFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
@@ -37,7 +40,8 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'FEE_TYPE',
@@ -54,7 +58,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 834, 'feeTypeFeeType' => 'FEE_TYPE']);
 
@@ -106,7 +110,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithTask()
+    public function testHandleCommandWithTask(): void
     {
         $command = Cmd::create(['id' => 834, 'feeTypeFeeType' => 'FEE_TYPE', 'task' => 111]);
 
@@ -158,7 +162,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandReceivedDateNull()
+    public function testHandleCommandReceivedDateNull(): void
     {
         $command = Cmd::create(['id' => 834, 'feeTypeFeeType' => 'FEE_TYPE']);
 
@@ -211,7 +215,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNi()
+    public function testHandleCommandNi(): void
     {
         $command = Cmd::create(['id' => 834, 'feeTypeFeeType' => 'FEE_TYPE']);
 
@@ -263,7 +267,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithOptinal()
+    public function testHandleCommandWithOptinal(): void
     {
         $command = Cmd::create(['id' => 834, 'feeTypeFeeType' => 'FEE_TYPE', 'optional' => true]);
 

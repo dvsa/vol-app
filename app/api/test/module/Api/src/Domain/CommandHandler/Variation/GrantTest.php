@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -45,7 +47,8 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::APPLICATION_STATUS_VALID,
@@ -59,7 +62,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -196,7 +199,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
-    public function testHandleCommandUpgradeGoods()
+    public function testHandleCommandUpgradeGoods(): void
     {
         $data = [
             'id' => 111,
@@ -303,7 +306,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
-    public function testHandleCommandUpgradePsv()
+    public function testHandleCommandUpgradePsv(): void
     {
         $data = [
             'id' => 111,
@@ -405,7 +408,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
-    public function testHandleCommandUpgradePsvNoPsvDiscs()
+    public function testHandleCommandUpgradePsvNoPsvDiscs(): void
     {
         $data = [
             'id' => 111,
@@ -502,7 +505,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(ApplicationEntity::APPLICATION_STATUS_VALID, $application->getStatus()->getId());
     }
 
-    public function testThatIncorrectVariationTypeThrowsException()
+    public function testThatIncorrectVariationTypeThrowsException(): void
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -520,7 +523,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandRefundInterim()
+    public function testHandleCommandRefundInterim(): void
     {
         $data = [
             'id' => 111,

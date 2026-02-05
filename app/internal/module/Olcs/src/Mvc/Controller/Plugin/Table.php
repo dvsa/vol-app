@@ -50,6 +50,7 @@ class Table extends AbstractPlugin
     /**
      * @return \Laminas\Mvc\Controller\AbstractActionController
      */
+    #[\Override]
     public function getController()
     {
         return parent::getController();

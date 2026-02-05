@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Get latest fee type test
  *
@@ -31,7 +33,7 @@ class GetLatestFeeTypeTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testGetLatestFeeType()
+    public function testGetLatestFeeType(): void
     {
         $query = Qry::create(
             [

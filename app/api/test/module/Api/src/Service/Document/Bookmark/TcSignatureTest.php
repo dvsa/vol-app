@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TcSignature;
@@ -14,7 +16,7 @@ use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
  */
 class TcSignatureTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new TcSignature();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -22,10 +24,8 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider renderDataProvider
-     */
-    public function testRender($id, $image)
+    #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
+    public function testRender(mixed $id, mixed $image): void
     {
         $bookmark = new TcSignature();
         $bookmark->setData(
@@ -62,7 +62,7 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function renderDataProvider()
+    public static function renderDataProvider(): array
     {
         return [
             ['B', 'TC_SIG_NORTHEASTERN'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Publication;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -37,17 +39,15 @@ class PublicationLinkEntityTest extends EntityTester
 
     public function setUp(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
     /**
      * Tests updateText throws an exception if the corresponding publication isn't of status New
      */
-    public function testUpdateTextThrowsException()
+    public function testUpdateTextThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -61,7 +61,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * @throws \Dvsa\Olcs\Api\Domain\Exception\ForbiddenException
      */
-    public function testUpdateText()
+    public function testUpdateText(): void
     {
         $publicationMock = $this->getPublicationMock(true);
 
@@ -82,7 +82,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createBusReg
      */
-    public function testCreateBusReg()
+    public function testCreateBusReg(): void
     {
         $publicationSection = m::mock(PublicationSectionEntity::class);
         $trafficArea = m::mock(TrafficAreaEntity::class);
@@ -105,7 +105,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating bus reg throws ForbiddenException when necessary
      */
-    public function testCreateBusRegThrowsException()
+    public function testCreateBusRegThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -123,7 +123,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createTmPiHearing
      */
-    public function testCreateTmPiHearing()
+    public function testCreateTmPiHearing(): void
     {
         $publicationSection = m::mock(PublicationSectionEntity::class);
         $trafficArea = m::mock(TrafficAreaEntity::class);
@@ -144,7 +144,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating tm pi hearing throws ForbiddenException when necessary
      */
-    public function testCreateTmPiHearingThrowsException()
+    public function testCreateTmPiHearingThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -161,7 +161,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createPiHearing
      */
-    public function testCreatePiHearing()
+    public function testCreatePiHearing(): void
     {
         $publicationSection = m::mock(PublicationSectionEntity::class);
         $trafficArea = m::mock(TrafficAreaEntity::class);
@@ -182,7 +182,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating pi hearing throws ForbiddenException when necessary
      */
-    public function testCreatePiHearingThrowsException()
+    public function testCreatePiHearingThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -199,7 +199,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createLicence
      */
-    public function testCreateLicence()
+    public function testCreateLicence(): void
     {
         $publicationSection = m::mock(PublicationSectionEntity::class);
         $trafficArea = m::mock(TrafficAreaEntity::class);
@@ -218,7 +218,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating licence throws ForbiddenException when necessary
      */
-    public function testCreateLicenceThrowsException()
+    public function testCreateLicenceThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -234,7 +234,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createApplication
      */
-    public function testCreateApplication()
+    public function testCreateApplication(): void
     {
         $publicationSection = m::mock(PublicationSectionEntity::class);
         $trafficArea = m::mock(TrafficAreaEntity::class);
@@ -255,7 +255,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating application throws ForbiddenException when necessary
      */
-    public function testCreateApplicationThrowsException()
+    public function testCreateApplicationThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -272,7 +272,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests createImpounding
      */
-    public function testCreateImpounding()
+    public function testCreateImpounding(): void
     {
         $impounding = m::mock(ImpoundingEntity::class);
         $publicationSection = m::mock(PublicationSectionEntity::class);
@@ -295,7 +295,7 @@ class PublicationLinkEntityTest extends EntityTester
     /**
      * Tests creating impounding throws ForbiddenException when necessary
      */
-    public function testCreateImpoundingThrowsException()
+    public function testCreateImpoundingThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ForbiddenException::class);
 
@@ -310,7 +310,7 @@ class PublicationLinkEntityTest extends EntityTester
         $entity->createImpounding($impounding, $publication, $publicationSection, $trafficArea, $licence, $application);
     }
 
-    public function testMaybeSetPublishAfterDateDo()
+    public function testMaybeSetPublishAfterDateDo(): void
     {
         $sut = new Entity();
 
@@ -330,7 +330,7 @@ class PublicationLinkEntityTest extends EntityTester
         $this->assertEquals($publishAfterDate, $sut->getPublishAfterDate());
     }
 
-    public function testMaybeSetPublishAfterDateDoNot()
+    public function testMaybeSetPublishAfterDateDoNot(): void
     {
         $sut = new Entity();
 
@@ -346,7 +346,7 @@ class PublicationLinkEntityTest extends EntityTester
      * @param bool $canGenerate
      * @return m\MockInterface
      */
-    private function getPublicationMock($canGenerate)
+    private function getPublicationMock(mixed $canGenerate): mixed
     {
         $publicationMock = m::mock(PublicationEntity::class);
         $publicationMock->shouldReceive('canGenerate')->once()->andReturn($canGenerate);

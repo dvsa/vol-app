@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\Repository\DocTemplateSearchView as DocTemplateSearchViewRepo;
 use Dvsa\Olcs\Transfer\Query\DocTemplate\FullList as FullDocTemplateList;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DocTemplateSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DocTemplateSearchView::class)]
 class DocTemplateSearchViewTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -17,11 +17,11 @@ class DocTemplateSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider fetchListDataProvider
      * @param $data
      * @param $expected
      */
-    public function testFetchList($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchListDataProvider')]
+    public function testFetchList(mixed $data, mixed $expected): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -38,7 +38,7 @@ class DocTemplateSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function fetchListDataProvider()
+    public static function fetchListDataProvider(): array
     {
         return [
             [[], '{QUERY}'],

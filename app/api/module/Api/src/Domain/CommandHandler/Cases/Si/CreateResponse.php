@@ -21,9 +21,9 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
 {
     use AuthAwareTrait;
 
-    public const RESPONSE_DOCUMENT_DESCRIPTION = 'ERRU MSI response for business case ID: %s';
-    public const MSG_RESPONSE_CREATED = 'Msi Response created';
-    public const MSG_RESPONSE_NOT_REQUIRED = 'No requested penalties - Msi Response not required';
+    public const string RESPONSE_DOCUMENT_DESCRIPTION = 'ERRU MSI response for business case ID: %s';
+    public const string MSG_RESPONSE_CREATED = 'Msi Response created';
+    public const string MSG_RESPONSE_NOT_REQUIRED = 'No requested penalties - Msi Response not required';
 
     protected $repoServiceName = 'Cases';
 
@@ -117,6 +117,7 @@ final class CreateResponse extends AbstractCommandHandler implements AuthAwareIn
 
         return UploadCmd::create($data);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

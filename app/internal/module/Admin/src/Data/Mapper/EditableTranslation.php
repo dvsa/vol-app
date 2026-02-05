@@ -37,7 +37,7 @@ class EditableTranslation implements MapperInterface
             if (empty($translation)) {
                 unset($data['fields']['translationsArray'][$isoCode]);
             } else {
-                $data['fields']['translationsArray'][$isoCode] = base64_encode($data['fields']['translationsArray'][$isoCode]);
+                $data['fields']['translationsArray'][$isoCode] = base64_encode((string) $data['fields']['translationsArray'][$isoCode]);
             }
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context;
 
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
@@ -22,7 +24,7 @@ class AbstractFactoryTest extends MockeryTestCase
         $this->mockSl = m::mock(ContainerInterface::class);
     }
 
-    public function testCanCreate()
+    public function testCanCreate(): void
     {
         $reqName = AbstractContextStub::class;
 
@@ -31,7 +33,7 @@ class AbstractFactoryTest extends MockeryTestCase
         );
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $this->mockSl
             ->shouldReceive('get')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\MessageQueue\Consumer\CompaniesHouse;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendFailedOrganisationsList;
@@ -24,6 +26,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         ]
     ];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ProcessInsolvencyDlq();
@@ -31,7 +34,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->mockRepo('Organisation', OrganisationRepo::class);
     }
 
-    public function testHandleCommandSendsEmail()
+    public function testHandleCommandSendsEmail(): void
     {
         $this->setUpServices();
 
@@ -71,7 +74,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    public function testHandleCommandRemovesDuplicateOrganisationNumbersFromEmail()
+    public function testHandleCommandRemovesDuplicateOrganisationNumbersFromEmail(): void
     {
         $this->setUpServicesWithDuplicateQueueEntries();
 
@@ -111,7 +114,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($messages, $response->getMessages());
     }
 
-    public function testHandleCommandWhenQueueIsEmpty()
+    public function testHandleCommandWhenQueueIsEmpty(): void
     {
         $this->setupServicesWithEmptyQueue();
 
@@ -125,7 +128,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->assertEquals($flags, $response->getFlags());
     }
 
-    protected function getMockQueueService()
+    protected function getMockQueueService(): mixed
     {
         $queueService = m::mock(Queue::class);
 
@@ -169,7 +172,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         return $queueService;
     }
 
-    protected function setUpServices()
+    protected function setUpServices(): void
     {
         $this->mockedSmServices = [
             Queue::class => $this->getMockQueueService(),
@@ -179,7 +182,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->setupService();
     }
 
-    protected function getEmptyQueueService()
+    protected function getEmptyQueueService(): mixed
     {
         $queueService = m::mock(Queue::class);
 
@@ -191,7 +194,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         return $queueService;
     }
 
-    protected function setupServicesWithEmptyQueue()
+    protected function setupServicesWithEmptyQueue(): void
     {
         $this->mockedSmServices = [
             Queue::class => $this->getEmptyQueueService(),
@@ -201,7 +204,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->setupService();
     }
 
-    protected function setUpServicesWithDuplicateQueueEntries()
+    protected function setUpServicesWithDuplicateQueueEntries(): void
     {
         $this->mockedSmServices = [
             Queue::class => $this->getMockQueueServiceWithDuplicateEntries(),
@@ -211,7 +214,7 @@ class ProcessInsolvencyDlqTest extends AbstractCompaniesHouseConsumerTestCase
         $this->setupService();
     }
 
-    protected function getMockQueueServiceWithDuplicateEntries()
+    protected function getMockQueueServiceWithDuplicateEntries(): mixed
     {
         $queueService = m::mock(Queue::class);
 

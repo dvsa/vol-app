@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -43,7 +45,7 @@ class DisqualifyControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testIndexActionNoParam()
+    public function testIndexActionNoParam(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(false);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);
@@ -53,7 +55,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    public function testIndexActionPerson()
+    public function testIndexActionPerson(): void
     {
         $data = [
             'personCdId' => 91,
@@ -83,7 +85,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
-    public function testIndexActionPersonPost()
+    public function testIndexActionPersonPost(): void
     {
         $data = [
             'id' => 120,
@@ -126,7 +128,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->indexAction());
     }
 
-    public function testIndexActionPersonPostValidationError()
+    public function testIndexActionPersonPostValidationError(): void
     {
         $data = [
             'personCdId' => 91,
@@ -162,7 +164,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->indexAction());
     }
 
-    public function testIndexActionOrganisation()
+    public function testIndexActionOrganisation(): void
     {
         $data = [
             'id' => null,
@@ -191,7 +193,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
-    public function testGetOrganisationWithDisqualification()
+    public function testGetOrganisationWithDisqualification(): void
     {
         $organisation = [
             'name' => 'ACME Ltd',
@@ -234,7 +236,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         );
     }
 
-    public function testGetOrganisationWithOutDisqualification()
+    public function testGetOrganisationWithOutDisqualification(): void
     {
         $organisation = [
             'name' => 'ACME Ltd',
@@ -264,7 +266,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         );
     }
 
-    public function testGetOrganisationError()
+    public function testGetOrganisationError(): void
     {
         $mockResponse = m::mock(\Common\Service\Cqrs\Response::class);
 
@@ -282,7 +284,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->getOrganisation(512);
     }
 
-    public function testGetPersonError()
+    public function testGetPersonError(): void
     {
         $mockResponse = m::mock(\Common\Service\Cqrs\Response::class);
 
@@ -299,7 +301,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->getPerson(512);
     }
 
-    public function testGetPersonWithDisqualification()
+    public function testGetPersonWithDisqualification(): void
     {
         $person = [
             'forename' => 'Bob',
@@ -343,7 +345,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         );
     }
 
-    public function testGetPersonWithOutDisqualification()
+    public function testGetPersonWithOutDisqualification(): void
     {
         $person = [
             'forename' => 'Bob',
@@ -379,7 +381,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         );
     }
 
-    public function testSaveDisqualificationCreateForPerson()
+    public function testSaveDisqualificationCreateForPerson(): void
     {
         $formData = [
             'isDisqualified' => 'X',
@@ -415,7 +417,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->saveDisqualification($formData, null, 642, null);
     }
 
-    public function testSaveDisqualificationCreateForOrganisation()
+    public function testSaveDisqualificationCreateForOrganisation(): void
     {
         $formData = [
             'isDisqualified' => 'X',
@@ -451,7 +453,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->saveDisqualification($formData, null, null, 634);
     }
 
-    public function testSaveDisqualificationUpdate()
+    public function testSaveDisqualificationUpdate(): void
     {
         $formData = [
             'isDisqualified' => 'X',
@@ -488,7 +490,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->saveDisqualification($formData, 12, 642, null);
     }
 
-    public function testSaveDisqualificationError()
+    public function testSaveDisqualificationError(): void
     {
         $formData = [
             'isDisqualified' => 'X',
@@ -509,7 +511,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->saveDisqualification($formData, 12, 642, null);
     }
 
-    public function testCloseAjaxOperator()
+    public function testCloseAjaxOperator(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(null);
 
@@ -519,7 +521,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->closeAjax());
     }
 
-    public function testCloseAjaxPersonOperator()
+    public function testCloseAjaxPersonOperator(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(12);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(912);
@@ -530,7 +532,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->closeAjax());
     }
 
-    public function testCloseAjaxPersonLicence()
+    public function testCloseAjaxPersonLicence(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(12);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);
@@ -542,7 +544,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->closeAjax());
     }
 
-    public function testCloseAjaxPersonApplication()
+    public function testCloseAjaxPersonApplication(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(12);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);
@@ -555,7 +557,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->closeAjax());
     }
 
-    public function testCloseAjaxPersonVariation()
+    public function testCloseAjaxPersonVariation(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(12);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);
@@ -569,7 +571,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->assertSame('RESPONSE', $this->sut->closeAjax());
     }
 
-    public function testCloseAjaxError()
+    public function testCloseAjaxError(): void
     {
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(12);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);

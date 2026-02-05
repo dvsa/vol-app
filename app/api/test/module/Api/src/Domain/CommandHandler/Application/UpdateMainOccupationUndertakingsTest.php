@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateMainOccupationUndertak
 use Dvsa\Olcs\Transfer\Command\Application\UpdateMainOccupationUndertakings as Command;
 use Mockery as m;
 
-class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTest
+class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTestCase
 {
     protected string $handlerClass = Handler::class;
     protected string $commandClass = Command::class;
@@ -21,6 +21,7 @@ class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTest
         'psvMainOccupationUndertakings',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

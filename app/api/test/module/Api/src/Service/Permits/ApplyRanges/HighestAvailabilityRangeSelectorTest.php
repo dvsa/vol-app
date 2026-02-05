@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\ApplyRanges;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -26,7 +28,7 @@ class HighestAvailabilityRangeSelectorTest extends MockeryTestCase
         $this->result = new Result();
     }
 
-    public function testGetRangeWhereSingleHighestAvailabilityRange()
+    public function testGetRangeWhereSingleHighestAvailabilityRange(): void
     {
         $expectedRange = $this->createMockRange(4, 45);
 
@@ -52,7 +54,7 @@ class HighestAvailabilityRangeSelectorTest extends MockeryTestCase
         );
     }
 
-    public function testGetRangeWhereMultipleHighestAvailabilityRanges()
+    public function testGetRangeWhereMultipleHighestAvailabilityRanges(): void
     {
         $expectedRange = $this->createMockRange(5, 45);
 
@@ -82,7 +84,7 @@ class HighestAvailabilityRangeSelectorTest extends MockeryTestCase
         );
     }
 
-    private function createMockRange($id, $permitsRemaining)
+    private function createMockRange(mixed $id, mixed $permitsRemaining): array
     {
         $entity = m::mock(IrhpPermitRange::class);
         $entity->shouldReceive('getId')

@@ -54,10 +54,9 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $busShortNotice
      * @param $shortNoticeSetTimes
-     *
-     * @dataProvider handleDataRefreshProvider
      */
-    public function testHandleCommandDataRefresh($busShortNotice, $shortNoticeSetTimes): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleDataRefreshProvider')]
+    public function testHandleCommandDataRefresh(mixed $busShortNotice, mixed $shortNoticeSetTimes): void
     {
         $filePath = 'vfs://root';
         $xmlName = $filePath . '/xml-file-name.xml';
@@ -302,7 +301,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
     /**
      * @return array
      */
-    public function handleDataRefreshProvider(): array
+    public static function handleDataRefreshProvider(): array
     {
         return [
             [['short notice section'], 1],
@@ -313,16 +312,14 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
 
     /**
      * Tests successful creation of a variation application through EBSR
-     *
-     * @dataProvider handleVariationProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleVariationProvider')]
     public function testHandleCommandVariation(
         string $txcAppType,
         string $busRegStatus,
         string $taskString,
         bool $fee
-    ): void
-    {
+    ): void {
         $filePath = 'vfs://root';
         $xmlName = $filePath . '/xml-file-name.xml';
         $xmlDocument = "<xml></xml>";
@@ -555,7 +552,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function handleVariationProvider(): array
+    public static function handleVariationProvider(): array
     {
         return [
             [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, AbstractProcessPack::TASK_DESC_CANCEL, false],
@@ -1161,7 +1158,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return m\MockInterface
      */
-    private function failedEbsrSubmission($ebsrSubId, $organisation, $document): m\MockInterface
+    private function failedEbsrSubmission(mixed $ebsrSubId, mixed $organisation, mixed $document): m\MockInterface
     {
         $ebsrSubmission = m::mock(EbsrSubmissionEntity::class);
 
@@ -1189,7 +1186,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $ebsrSubmission
      * @param $timesSaved
      */
-    private function ebsrSubmissionRepo($command, $ebsrSubmission, $timesSaved): void
+    private function ebsrSubmissionRepo(mixed $command, mixed $ebsrSubmission, mixed $timesSaved): void
     {
         $this->repoMap['EbsrSubmission']->shouldReceive('fetchUsingId')
             ->once()
@@ -1209,7 +1206,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return m\MockInterface
      */
-    private function basicDocument($docIdentifier, $documentDescription): m\MockInterface
+    private function basicDocument(mixed $docIdentifier, mixed $documentDescription): m\MockInterface
     {
         $document = m::mock(DocumentEntity::class);
         $document->shouldReceive('getIdentifier')->once()->andReturn($docIdentifier);
@@ -1224,7 +1221,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $docIdentifier
      * @param $xmlName
      */
-    private function fileProcessor($docIdentifier, $xmlName): void
+    private function fileProcessor(mixed $docIdentifier, mixed $xmlName): void
     {
         $this->mockedSmServices[FileProcessorInterface::class]
             ->shouldReceive('setSubDirPath')
@@ -1247,7 +1244,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function trafficAreas($parsedTrafficAreas, $trafficArea1, $trafficArea2, $trafficArea3): ArrayCollection
+    private function trafficAreas(mixed $parsedTrafficAreas, mixed $trafficArea1, mixed $trafficArea2, mixed $trafficArea3): ArrayCollection
     {
         $trafficAreas = [
             0 => $trafficArea1
@@ -1271,7 +1268,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function localAuthorities($parsedLocalAuthorities, $firstTa, $secondTa): ArrayCollection
+    private function localAuthorities(mixed $parsedLocalAuthorities, mixed $firstTa, mixed $secondTa): ArrayCollection
     {
         $localAuthority1 = m::mock(LocalAuthorityEntity::class);
         $localAuthority1->shouldReceive('getTrafficArea')->andReturn($firstTa);
@@ -1298,7 +1295,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function busServiceTypes($busServiceTypes): ArrayCollection
+    private function busServiceTypes(mixed $busServiceTypes): ArrayCollection
     {
         $busServiceTypeKeys = array_keys($busServiceTypes);
 
@@ -1325,7 +1322,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @return ArrayCollection
      */
-    private function naptan($naptanCodes): ArrayCollection
+    private function naptan(mixed $naptanCodes): ArrayCollection
     {
         $naptanAuthority1 = m::mock(LocalAuthorityEntity::class);
         $naptanAuthority2 = m::mock(LocalAuthorityEntity::class);
@@ -1351,7 +1348,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $context
      * @param $outputValue
      */
-    private function mockInput($inputName, $inputValue, $context, $outputValue): void
+    private function mockInput(mixed $inputName, mixed $inputValue, mixed $context, mixed $outputValue): void
     {
         $this->mockedSmServices[$inputName]
             ->shouldReceive('setValue')
@@ -1377,7 +1374,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $context
      * @param $messages
      */
-    private function mockInputFailure($inputName, $inputValue, $context, $messages): void
+    private function mockInputFailure(mixed $inputName, mixed $inputValue, mixed $context, mixed $messages): void
     {
         $this->mockedSmServices[$inputName]
             ->shouldReceive('setValue')
@@ -1408,8 +1405,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
         int $documentId,
         bool $fee,
         string $expectedTaskDesc
-    ): void
-    {
+    ): void {
         $this->documentLinkSideEffect($documentId, $savedBusRegId, $licenceId);
         $this->requestMapSideEffect($savedBusRegId);
         $this->txcInboxSideEffect($savedBusRegId);
@@ -1446,7 +1442,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $filename
      * @param $description
      */
-    private function supportingDocSideEffect($docPath, $busRegId, $licenceId, $filename, $description): void
+    private function supportingDocSideEffect(mixed $docPath, mixed $busRegId, mixed $licenceId, mixed $filename, mixed $description): void
     {
         $documentData = [
             'content' => base64_encode(file_get_contents($docPath)),
@@ -1468,7 +1464,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      * @param $savedBusRegId
      * @param $licenceId
      */
-    private function documentLinkSideEffect($documentId, $savedBusRegId, $licenceId): void
+    private function documentLinkSideEffect(mixed $documentId, mixed $savedBusRegId, mixed $licenceId): void
     {
         $documentLinkData = [
             'id' => $documentId,
@@ -1484,7 +1480,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function requestMapSideEffect($savedBusRegId): void
+    private function requestMapSideEffect(mixed $savedBusRegId): void
     {
         $requestMapData = [
             'id' => $savedBusRegId,
@@ -1499,7 +1495,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function busFeeSideEffect($savedBusRegId): void
+    private function busFeeSideEffect(mixed $savedBusRegId): void
     {
         $this->expectedSideEffect(CreateBusFeeCmd::class, ['id' => $savedBusRegId], new Result());
     }
@@ -1509,7 +1505,7 @@ class ProcessPackTransactionTest extends ProcessPackTestCase
      *
      * @param $savedBusRegId
      */
-    private function txcInboxSideEffect($savedBusRegId): void
+    private function txcInboxSideEffect(mixed $savedBusRegId): void
     {
         $this->expectedSideEffect(CreateTxcInboxCmd::class, ['id' => $savedBusRegId], new Result());
     }

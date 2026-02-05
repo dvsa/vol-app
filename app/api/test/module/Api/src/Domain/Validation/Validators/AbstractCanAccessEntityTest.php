@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity;
@@ -21,14 +23,14 @@ class AbstractCanAccessEntityTest extends MockeryTestCase
         $this->sut = m::mock(AbstractCanAccessEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    public function testIsValidInternal()
+    public function testIsValidInternal(): void
     {
         $this->sut->shouldReceive('isInternalUser')->with()->once()->andReturn(true);
 
         $this->assertTrue($this->sut->isValid(111));
     }
 
-    public function testIsValidSystem()
+    public function testIsValidSystem(): void
     {
         $this->sut->shouldReceive('isInternalUser')->with()->once()->andReturn(false);
         $this->sut->shouldReceive('isSystemUser')->with()->once()->andReturn(true);
@@ -36,7 +38,7 @@ class AbstractCanAccessEntityTest extends MockeryTestCase
         $this->assertTrue($this->sut->isValid(111));
     }
 
-    public function testIsValidEntity()
+    public function testIsValidEntity(): void
     {
         $this->sut->shouldReceive('isInternalUser')->with()->once()->andReturn(false);
         $this->sut->shouldReceive('isSystemUser')->with()->once()->andReturn(false);

@@ -16,23 +16,10 @@ use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
  */
 class LetterPreviewService
 {
-    private const LOGO_TEMPLATE_SLUG = 'otclogo-letters';
+    private const string LOGO_TEMPLATE_SLUG = 'otclogo-letters';
 
-    private SectionRendererPluginManager $rendererManager;
-    private $contentStore;
-    private $docTemplateRepo;
-    private VolGrabReplacementService $volGrabReplacementService;
-
-    public function __construct(
-        SectionRendererPluginManager $rendererManager,
-        $contentStore,
-        $docTemplateRepo,
-        VolGrabReplacementService $volGrabReplacementService
-    ) {
-        $this->rendererManager = $rendererManager;
-        $this->contentStore = $contentStore;
-        $this->docTemplateRepo = $docTemplateRepo;
-        $this->volGrabReplacementService = $volGrabReplacementService;
+    public function __construct(private readonly SectionRendererPluginManager $rendererManager, private $contentStore, private $docTemplateRepo, private readonly VolGrabReplacementService $volGrabReplacementService)
+    {
     }
 
     /**
@@ -58,7 +45,6 @@ class LetterPreviewService
         } else {
             // Build placeholder values
             $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml, $appendicesHtml);
-
 
             $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
         }
@@ -118,7 +104,7 @@ class LetterPreviewService
         foreach ($issuesByType as $typeData) {
             // Issue Type heading
             $html .= '<div class="issue-type-group">';
-            $html .= '<h3 class="issue-type-heading">' . htmlspecialchars($typeData['name']) . '</h3>';
+            $html .= '<h3 class="issue-type-heading">' . htmlspecialchars((string) $typeData['name']) . '</h3>';
 
             // Render each issue under this type
             foreach ($typeData['issues'] as $issue) {
@@ -333,10 +319,10 @@ class LetterPreviewService
             }
 
             $content = $file->getContent();
-            $base64 = base64_encode($content);
+            $base64 = base64_encode((string) $content);
 
             return 'data:image/png;base64,' . $base64;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Log error but don't fail rendering
             return '';
         }

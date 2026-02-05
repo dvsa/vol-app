@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Process Duplicate Vehicle Warnings Test
  *
@@ -37,14 +39,15 @@ class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommandEmpty()
+    public function testHandleCommandEmpty(): void
     {
         $results = null;
 
@@ -63,7 +66,7 @@ class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNoDuplicates()
+    public function testHandleCommandNoDuplicates(): void
     {
         /** @var Licence $licence1 */
         $licence1 = m::mock(Licence::class)->makePartial();
@@ -106,7 +109,7 @@ class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithDuplicates()
+    public function testHandleCommandWithDuplicates(): void
     {
         /** @var Licence $licence1 */
         $licence1 = m::mock(Licence::class)->makePartial();
@@ -152,7 +155,7 @@ class ProcessDuplicateVehicleWarningsTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithFailure()
+    public function testHandleCommandWithFailure(): void
     {
         /** @var Licence $licence1 */
         $licence1 = m::mock(Licence::class)->makePartial();

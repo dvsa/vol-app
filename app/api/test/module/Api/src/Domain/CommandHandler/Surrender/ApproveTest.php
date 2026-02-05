@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Surrender;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -37,7 +39,8 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             RefData::SURRENDER_STATUS_APPROVED,
@@ -46,10 +49,8 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $data, mixed $expected): void
     {
         $now = new \DateTime();
         $cmdData = [
@@ -116,7 +117,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             'psv_sn_notNi' => [
@@ -221,7 +222,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testGenerateDocumentAndSendNotificationEmailWithInvalidLicenceType()
+    public function testGenerateDocumentAndSendNotificationEmailWithInvalidLicenceType(): void
     {
         $now = new \DateTime();
         $cmdData = [
@@ -272,10 +273,8 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpTesthasEcmsAndSignatureBeenChecked
-     */
-    public function testhasEcmsAndSignatureBeenChecked($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTesthasEcmsAndSignatureBeenChecked')]
+    public function testhasEcmsAndSignatureBeenChecked(mixed $data, mixed $expected): void
     {
         $now = new \DateTime();
         $cmdData = [
@@ -349,7 +348,7 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpTesthasEcmsAndSignatureBeenChecked()
+    public static function dpTesthasEcmsAndSignatureBeenChecked(): array
     {
         return [
             'ecms_checked' => [

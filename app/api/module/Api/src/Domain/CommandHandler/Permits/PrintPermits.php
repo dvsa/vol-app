@@ -28,9 +28,9 @@ final class PrintPermits extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'Queue';
 
-    public const MAX_BATCH_SIZE = 100;
-    public const ERR_MAX_BATCH_SIZE_REACHED = 'ERR_PERMIT_PRINTING_MAX_BATCH_SIZE_REACHED';
-    public const ERR_ALREADY_IN_PROGRESS = 'ERR_PERMIT_PRINTING_ALREADY_IN_PROGRESS';
+    public const int MAX_BATCH_SIZE = 100;
+    public const string ERR_MAX_BATCH_SIZE_REACHED = 'ERR_PERMIT_PRINTING_MAX_BATCH_SIZE_REACHED';
+    public const string ERR_ALREADY_IN_PROGRESS = 'ERR_PERMIT_PRINTING_ALREADY_IN_PROGRESS';
 
     /**
      * @param CommandInterface $command

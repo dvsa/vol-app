@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Helper;
 
 use Firebase\JWT\JWT;
@@ -8,9 +10,7 @@ use InvalidArgumentException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
-/**
- * @covers \Olcs\Service\Helper\WebDavJsonWebTokenGenerationService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Helper\WebDavJsonWebTokenGenerationService::class)]
 class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 {
     public const JWT_PRIVATE_KEY_TEMP_PATH = 'webdav_jwt_generation_service_private_key.pem';
@@ -26,10 +26,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     protected WebDavJsonWebTokenGenerationService $sut;
 
-    /**
-     * @test
-     * @dataProvider dataProviderDefaultLifetimeSecondsNotGreaterThanZero
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderDefaultLifetimeSecondsNotGreaterThanZero')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructWithDefaultLifetimeSecondsNotGreaterThanZeroThrowsException(int $defaultLifetimeSeconds): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -43,7 +41,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProviderDefaultLifetimeSecondsNotGreaterThanZero(): array
+    public static function dataProviderDefaultLifetimeSecondsNotGreaterThanZero(): array
     {
         return [
             'Zero (int)' => [0],
@@ -51,10 +49,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider dataProviderWithInvalidPrivateKeyInvalidVariants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderWithInvalidPrivateKeyInvalidVariants')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructWithInvalidPrivateKeyThrowsException(string $privateKey): void
     {
         if (!extension_loaded('openssl')) {
@@ -73,20 +69,18 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProviderWithInvalidPrivateKeyInvalidVariants(): array
+    public static function dataProviderWithInvalidPrivateKeyInvalidVariants(): array
     {
         return [
-            'Base64 Encoded Positive Integer (int > string)' => [base64_encode(1)],
-            'Base64 Encoded Negative Integer (int > string)' => [base64_encode(-1)],
+            'Base64 Encoded Positive Integer (int > string)' => [base64_encode('1')],
+            'Base64 Encoded Negative Integer (int > string)' => [base64_encode('-1')],
             'FooBar (string)' => ['FooBar'],
             'Base64 Encoded Public Key (string)' => [static::JWT_PUBLIC_KEY_BASE64],
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructWithInvalidPrivateKeyInvalidPathOrBase64ThrowsException(string $privateKey): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -100,18 +94,16 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants(): array
+    public static function dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants(): array
     {
         return [
-            'Base64 Encoded Zero (int > string)' => [base64_encode(0)],
+            'Base64 Encoded Zero (int > string)' => [base64_encode('0')],
             'Invalid Base64 characters (string)' => ['4rdHFh%2BHYoS8oLdVvbUzEVqB8Lvm7kSPnuwF0AAABYQ%3D'],
             'Non-Existent Path (string)' => ['/tmp/some-non-existent-path/to-some-file.pem'],
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateTokenIsCallable(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
@@ -119,13 +111,11 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
             static::JWT_DEFAULT_LIFETIME_1_MINUTE,
             self::WEBDAV_URI_PATTERN
         );
-        $this->assertIsCallable([$this->sut, 'generateToken']);
+        $this->assertIsCallable($this->sut->generateToken(...));
     }
 
-    /**
-     * @test
-     * @depends generateTokenIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('generateTokenIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateTokenWithPrivateKeyAsBase64ReturnsJsonWebToken(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
@@ -135,7 +125,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
-        $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
+        $decodedJwt = JWT::decode($result, new Key(base64_decode((string) static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
         $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
         $this->assertEquals(static::JWT_SUBJECT, $decodedJwt->sub);
@@ -144,13 +134,11 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->assertEquals(static::JWT_DOCUMENT, $decodedJwt->doc);
     }
 
-    /**
-     * @test
-     * @depends generateTokenIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('generateTokenIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateTokenWithPrivateKeyAsFileReturnsJsonWebToken(): void
     {
-        file_put_contents(static::JWT_PRIVATE_KEY_TEMP_PATH, base64_decode(static::JWT_PRIVATE_KEY_BASE64, true), LOCK_EX);
+        file_put_contents(static::JWT_PRIVATE_KEY_TEMP_PATH, base64_decode((string) static::JWT_PRIVATE_KEY_BASE64, true), LOCK_EX);
 
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_TEMP_PATH,
@@ -159,7 +147,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
-        $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
+        $decodedJwt = JWT::decode($result, new Key(base64_decode((string) static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
         $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
         $this->assertEquals(static::JWT_SUBJECT, $decodedJwt->sub);
@@ -168,10 +156,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $this->assertEquals(static::JWT_DOCUMENT, $decodedJwt->doc);
     }
 
-    /**
-     * @test
-     * @depends generateTokenIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('generateTokenIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function generateTokenWithPrivateKeyAsBase64ReturnsJsonWebTokenWithIssuedAtAndExpiry(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
@@ -181,7 +167,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
 
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
-        $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
+        $decodedJwt = JWT::decode($result, new Key(base64_decode((string) static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
         $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_ISSUED_AT, $decodedJwt);
         $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_EXPIRES_AT, $decodedJwt);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -39,7 +41,8 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Licence::class => [
@@ -54,10 +57,8 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
     }
 
 
-    /**
-     * @dataProvider usersProvider
-     */
-    public function testHandleCommand($email1, $email2, $times)
+    #[\PHPUnit\Framework\Attributes\DataProvider('usersProvider')]
+    public function testHandleCommand(mixed $email1, mixed $email2, mixed $times): void
     {
         $data = [
             'licence' => 111,
@@ -152,7 +153,7 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function usersProvider()
+    public static function usersProvider(): array
     {
         return [
             ['foo1@bar.com', 'foo2@bar.com', 2],
@@ -160,7 +161,7 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandValidationError()
+    public function testHandleCommandValidationError(): void
     {
         $this->expectException(ValidationException::class);
 

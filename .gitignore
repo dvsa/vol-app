@@ -3,6 +3,10 @@
 !.idea/php.xml
 !.idea/.name
 
+# Claude
+/.claude/
+CLAUDE.md
+
 # Logs
 logs
 *.log
@@ -83,4 +87,3 @@ packages/local-refresh/.cache/
 .idea
 
 # VOL project config
-

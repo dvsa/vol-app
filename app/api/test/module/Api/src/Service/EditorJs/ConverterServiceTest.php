@@ -7,9 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\EditorJs;
 use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\EditorJs\ConverterService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class)]
 class ConverterServiceTest extends TestCase
 {
     private ConverterService $sut;

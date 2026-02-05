@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Discs;
 
 use Dvsa\Olcs\Api\Domain\Command\Discs\CreatePsvVehicleListForDiscs as CreatePsvVehicleListForDiscsCommand;
@@ -35,7 +37,7 @@ class BatchVehicleListGeneratorForPsvDiscsTest extends AbstractCommandHandlerTes
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $queries = $this->getQueries();
         $bookmarks = $this->getBookmarks();
@@ -76,7 +78,7 @@ class BatchVehicleListGeneratorForPsvDiscsTest extends AbstractCommandHandlerTes
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getBookmarks()
+    protected function getBookmarks(): mixed
     {
         $params = [];
         for ($i = 0; $i < $this->batchSize + $this->additionalSize; $i++) {
@@ -85,7 +87,7 @@ class BatchVehicleListGeneratorForPsvDiscsTest extends AbstractCommandHandlerTes
         return $params;
     }
 
-    protected function getQueries()
+    protected function getQueries(): mixed
     {
         $queries = [];
         for ($i = 0; $i < $this->batchSize + $this->additionalSize; $i++) {

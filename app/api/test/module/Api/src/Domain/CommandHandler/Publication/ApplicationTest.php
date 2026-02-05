@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /** PiHearingTest
  */
 
@@ -43,7 +45,8 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             TrafficAreaEntity::class => [
@@ -66,10 +69,10 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      *
-     * @dataProvider handleCommandProvider
      * @param String $appStatus
      */
-    public function testHandleCommand($appStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $appStatus): void
     {
         $id = 99;
         $licenceId = 88;
@@ -121,7 +124,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(ResultCmd::class, $result);
     }
 
-    public function testHandleCommandVariation()
+    public function testHandleCommandVariation(): void
     {
         $id = 99;
         $licenceId = 88;
@@ -174,7 +177,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(ResultCmd::class, $result);
     }
 
-    public function testHandleCommandTrueSchedue41()
+    public function testHandleCommandTrueSchedue41(): void
     {
         $id = 99;
         $licenceId = 88;
@@ -231,7 +234,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(ResultCmd::class, $result);
     }
 
-    public function testHandleCommandUnTrueSchedue41()
+    public function testHandleCommandUnTrueSchedue41(): void
     {
         $id = 99;
         $licenceId = 88;
@@ -295,7 +298,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
      * @param $publicationId
      * @return m\MockInterface
      */
-    private function getPublicationMock($publicationId)
+    private function getPublicationMock(mixed $publicationId): mixed
     {
         $publicationMock = m::mock(PublicationEntity::class);
         $publicationMock->shouldReceive('getId')->andReturn($publicationId);
@@ -305,12 +308,12 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider publicationSectionIdProvider
      *
      * @param string $appStatus
      * @param int $expectedSection
      */
-    public function testGetPublicationSectionId($appStatus, $isVariation, $expectedSection)
+    #[\PHPUnit\Framework\Attributes\DataProvider('publicationSectionIdProvider')]
+    public function testGetPublicationSectionId(mixed $appStatus, mixed $isVariation, mixed $expectedSection): void
     {
         $application = $this->getTestingApplication();
         $application->setIsVariation($isVariation);
@@ -319,7 +322,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedSection, $this->sut->getPublicationSectionId($application));
     }
 
-    public function testInvalidSectionIdException()
+    public function testInvalidSectionIdException(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -334,7 +337,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
@@ -350,7 +353,7 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function publicationSectionIdProvider()
+    public static function publicationSectionIdProvider(): array
     {
         return [
             [

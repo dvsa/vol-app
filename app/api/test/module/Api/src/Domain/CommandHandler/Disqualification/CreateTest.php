@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Disqualification;
 
 use Mockery as m;
@@ -29,7 +31,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [ContactDetails::CONTACT_TYPE_CORRESPONDENCE_ADDRESS];
 
@@ -45,7 +48,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandOrganisation()
+    public function testHandleCommandOrganisation(): void
     {
         $data = [
             'organisation' => 154,
@@ -76,7 +79,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['disqualification' => 154], $result->getIds());
     }
 
-    public function testHandleCommandOfficerWithContactDetails()
+    public function testHandleCommandOfficerWithContactDetails(): void
     {
         $data = [
             'person' => 43,

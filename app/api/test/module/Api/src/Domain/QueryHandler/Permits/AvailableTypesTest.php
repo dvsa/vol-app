@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\AvailableTypes;
@@ -51,7 +53,7 @@ class AvailableTypesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = AvailableTypesQuery::create([]);
 
@@ -80,7 +82,7 @@ class AvailableTypesTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryShortTermUnavailable()
+    public function testHandleQueryShortTermUnavailable(): void
     {
         $query = AvailableTypesQuery::create([]);
 
@@ -108,7 +110,7 @@ class AvailableTypesTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNoTypesAvailable()
+    public function testHandleQueryNoTypesAvailable(): void
     {
         $query = AvailableTypesQuery::create([]);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\CompaniesHouseCompanyBundle as Qry;
@@ -22,7 +24,7 @@ class CompaniesHouseCompanyBundleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licenceEntity = m::mock(LicenceEntity::class);
         $companiesHouseCompanyEntity = m::mock(CompaniesHouseCompanyEntity::class);

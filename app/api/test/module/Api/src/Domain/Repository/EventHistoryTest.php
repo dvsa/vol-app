@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\NoResultException;
@@ -22,7 +24,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -40,7 +42,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -58,7 +60,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByAccount()
+    public function testFetchByAccount(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -76,7 +78,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByAccountWithoutEventType()
+    public function testFetchByAccountWithoutEventType(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -94,7 +96,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -168,7 +170,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testFetchEventHistoryDetails()
+    public function testFetchEventHistoryDetails(): void
     {
         $table = 'application_hist';
         $id = 1;
@@ -227,7 +229,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->sut->fetchEventHistoryDetails($id, $version, $table));
     }
 
-    public function testFetchEventHistoryDetailsWithDeletedDate()
+    public function testFetchEventHistoryDetailsWithDeletedDate(): void
     {
         $table = 'application_hist';
         $id = 1;
@@ -272,9 +274,8 @@ class EventHistoryTest extends RepositoryTestCase
             ['name' => 'foo', 'oldValue' => 'bar1', 'newValue' => ''],
             ['name' => 'cake', 'oldValue' => 'baz1', 'newValue' => ''],
             ['name' => 'same', 'oldValue' => 'value', 'newValue' => ''],
-            ['name' => 'deleted_date', 'oldValue' => '', 'newValue' => ''], 
+            ['name' => 'deleted_date', 'oldValue' => '', 'newValue' => ''],
         ];
-
 
         $this->assertEquals(
             $expected,
@@ -284,7 +285,7 @@ class EventHistoryTest extends RepositoryTestCase
 
 
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -305,7 +306,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertNull($this->sut->applyListJoins($qb));
     }
 
-    public function testFetchByTask()
+    public function testFetchByTask(): void
     {
         $taskId = 1;
 
@@ -370,7 +371,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals(['foo'], $this->sut->fetchByTask($taskId));
     }
 
-    public function testFetchPreviousLicenceStatus()
+    public function testFetchPreviousLicenceStatus(): void
     {
         $licenceId = 1;
         $qb = $this->createMockQb('QUERY');
@@ -386,10 +387,8 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertSame($expectedQuery, $this->query);
     }
 
-    /**
-     * @dataProvider fetchPreviousLicenceStatusDataProvider
-     */
-    public function testFetchPreviousLicenceStatusReturn($eventTypeId, $expectedStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('fetchPreviousLicenceStatusDataProvider')]
+    public function testFetchPreviousLicenceStatusReturn(mixed $eventTypeId, mixed $expectedStatus): void
     {
         $qb = $this->createMockQb('QUERY');
         $qb->shouldReceive('getQuery->getSingleScalarResult')
@@ -403,7 +402,7 @@ class EventHistoryTest extends RepositoryTestCase
         self::assertEquals($expectedResult, $result);
     }
 
-    public function fetchPreviousLicenceStatusDataProvider()
+    public static function fetchPreviousLicenceStatusDataProvider(): array
     {
         return [
             'case_curtailed' => [
@@ -421,7 +420,7 @@ class EventHistoryTest extends RepositoryTestCase
         ];
     }
 
-    public function testFetchPreviousLicenceStatusNoResult()
+    public function testFetchPreviousLicenceStatusNoResult(): void
     {
         $licenceId = 1;
 
@@ -441,7 +440,7 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertSame(['status' => Licence::LICENCE_STATUS_VALID], $this->sut->fetchPreviousLicenceStatus($licenceId));
     }
 
-    public function testFetchPreviousLicenceStatusException()
+    public function testFetchPreviousLicenceStatusException(): void
     {
         $licenceId = 1;
 

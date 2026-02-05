@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\FormInterface;
  */
 class PiTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data', 'messages' => []];
@@ -20,7 +22,7 @@ class PiTest extends MockeryTestCase
         $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromErrorsDecisionDateBeforeHearing()
+    public function testMapFromErrorsDecisionDateBeforeHearing(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $mockForm->shouldReceive('get->get->setMessages')

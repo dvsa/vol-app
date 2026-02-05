@@ -30,7 +30,7 @@ abstract class AbstractCloseConversationController extends AbstractController im
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
-        private FlashMessengerHelperService $flashMessengerHelperService
+        private readonly FlashMessengerHelperService $flashMessengerHelperService
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
     }

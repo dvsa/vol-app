@@ -1,24 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Cli\Command\Batch\DataDvaNiExportCommand;
 use Dvsa\Olcs\Cli\Domain\Command\DataDvaNiExport;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
 {
-    protected function getCommandClass()
+    protected function getCommandClass(): string
     {
         return DataDvaNiExportCommand::class;
     }
 
-    protected function getCommandName()
+    protected function getCommandName(): string
     {
         return 'batch:data-dva-ni-export';
     }
 
-    protected function getCommandDTOs()
+    protected function getCommandDTOs(): array
     {
         return [
             DataDvaNiExport::create([
@@ -27,7 +30,8 @@ class DataDvaNiExportCommandTest extends AbstractBatchCommandCases
         ];
     }
 
-    public function testExecuteSuccess()
+    #[\Override]
+    public function testExecuteSuccess(): void
     {
         $params = [
             'reportName' => 'exampleReport'

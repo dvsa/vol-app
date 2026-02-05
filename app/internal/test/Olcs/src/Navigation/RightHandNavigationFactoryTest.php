@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Navigation;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -12,7 +14,7 @@ use Olcs\Navigation\RightHandNavigationFactory;
  */
 class RightHandNavigationFactoryTest extends TestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $sut = new RightHandNavigationFactory();
 

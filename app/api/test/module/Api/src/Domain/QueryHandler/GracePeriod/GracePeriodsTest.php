@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\GracePeriod;
 
 use Doctrine\ORM\Query;
@@ -23,7 +25,7 @@ class GracePeriodsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = GracePeriodsQuery::create(['licence' => 1]);
 

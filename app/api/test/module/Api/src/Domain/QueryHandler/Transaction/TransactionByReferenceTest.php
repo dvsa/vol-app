@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Transaction by reference Test
  *
@@ -30,7 +32,7 @@ class TransactionByReferenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $paymentRef = 'OLCS-1234-ABCD';
 

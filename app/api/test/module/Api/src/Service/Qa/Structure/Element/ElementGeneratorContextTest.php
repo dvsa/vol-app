@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -16,6 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ElementGeneratorContextTest extends MockeryTestCase
 {
     private $validatorList;
@@ -43,7 +46,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
             ->andReturn($this->qaEntity);
     }
 
-    public function testGetValidatorList()
+    public function testGetValidatorList(): void
     {
         $elementGeneratorContext = new ElementGeneratorContext(
             $this->validatorList,
@@ -57,7 +60,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function testGetApplicationStepEntity()
+    public function testGetApplicationStepEntity(): void
     {
         $elementGeneratorContext = new ElementGeneratorContext(
             $this->validatorList,
@@ -71,7 +74,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function testGetQaEntity()
+    public function testGetQaEntity(): void
     {
         $elementGeneratorContext = new ElementGeneratorContext(
             $this->validatorList,
@@ -85,7 +88,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function testGetQaContext()
+    public function testGetQaContext(): void
     {
         $elementGeneratorContext = new ElementGeneratorContext(
             $this->validatorList,
@@ -99,7 +102,8 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function testGetAnswerValue()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testGetAnswerValue(): void
     {
         $answerValue = 'foo';
 
@@ -116,10 +120,8 @@ class ElementGeneratorContextTest extends MockeryTestCase
         $elementGeneratorContext->getAnswerValue();
     }
 
-    /**
-     * @dataProvider dpIsSelfservePageContainer
-     */
-    public function testIsSelfservePageContainer($elementContainer, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsSelfservePageContainer')]
+    public function testIsSelfservePageContainer(mixed $elementContainer, mixed $expected): void
     {
         $elementGeneratorContext = new ElementGeneratorContext(
             $this->validatorList,
@@ -133,7 +135,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public function dpIsSelfservePageContainer()
+    public static function dpIsSelfservePageContainer(): array
     {
         return [
             [ElementContainer::FORM_FRAGMENT, false],

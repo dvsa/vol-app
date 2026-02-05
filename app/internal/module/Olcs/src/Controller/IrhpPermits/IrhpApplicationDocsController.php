@@ -23,17 +23,14 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     use ControllerTraits\DocumentActionTrait;
     use ControllerTraits\DocumentSearchTrait;
 
-    protected DocumentSubCategory $docSubCategoryDataService;
-    protected TranslationHelperService $translationHelper;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        DocumentSubCategory $docSubCategoryDataService,
-        TranslationHelperService $translationHelper
+        protected DocumentSubCategory $docSubCategoryDataService,
+        protected TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -41,8 +38,6 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
             $tableFactory,
             $viewHelperManager,
         );
-        $this->docSubCategoryDataService = $docSubCategoryDataService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**

@@ -36,7 +36,7 @@ class Create extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'conversation'   => $conversationId = 1,
@@ -96,7 +96,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->assertArrayHasKey('messages', $result->toArray());
     }
 
-    public function testCannotAddMessageToClosedConversation()
+    public function testCannotAddMessageToClosedConversation(): void
     {
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Unable to create message on conversations that are closed or archived');
@@ -117,7 +117,7 @@ class Create extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testCannotAddMessageToArchivedConversation()
+    public function testCannotAddMessageToArchivedConversation(): void
     {
         $this->expectException(BadRequestException::class);
         $this->expectExceptionMessage('Unable to create message on conversations that are closed or archived');

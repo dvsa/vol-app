@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -45,18 +47,23 @@ class VariationFurnitureTest extends TestCase
         $this->sut->__invoke($sl, VariationFurniture::class);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $events = m::mock(EventManagerInterface::class);
-
-        $events->shouldReceive('attach')->once()
-            ->with('route.param.application', [$this->sut, 'onVariationFurniture'], 1)
-            ->andReturn('listener');
+        $events->expects('attach')
+            ->with(
+                'route.param.application',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onVariationFurniture';
+                }),
+                1
+            );
 
         $this->sut->attach($events);
     }
 
-    public function testOnVariationFurnitureWithError()
+    public function testOnVariationFurnitureWithError(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 
@@ -75,7 +82,7 @@ class VariationFurnitureTest extends TestCase
         $this->sut->onVariationFurniture($event);
     }
 
-    public function testOnVariationFurniture()
+    public function testOnVariationFurniture(): void
     {
         $routeParam = new RouteParam();
         $routeParam->setValue(111);

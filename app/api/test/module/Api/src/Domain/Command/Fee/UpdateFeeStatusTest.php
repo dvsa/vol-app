@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Fee;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\UpdateFeeStatus;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateFeeStatusTest extends TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $data = [
             'id' => 1,

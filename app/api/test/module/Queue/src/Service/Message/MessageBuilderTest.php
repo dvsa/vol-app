@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Queue\Service\Message;
 
 use Dvsa\Olcs\Queue\Service\Message\CompaniesHouse\CompanyProfile;
@@ -16,7 +18,7 @@ class MessageBuilderTest extends TestCase
         $this->sut = new MessageBuilder();
     }
 
-    public function testBuildMessages()
+    public function testBuildMessages(): void
     {
         $messages = $this->sut->buildMessages(
             [
@@ -35,7 +37,7 @@ class MessageBuilderTest extends TestCase
         $this->assertEquals($expected, $messages);
     }
 
-    public function testBuildMessage()
+    public function testBuildMessage(): void
     {
         $messages = $this->sut->buildMessage(
             ['companyOrLlpNo' => 123],
@@ -48,7 +50,7 @@ class MessageBuilderTest extends TestCase
         $this->assertEquals($expected, $messages);
     }
 
-    public function testExceptionThrownIfInvalidMessageType()
+    public function testExceptionThrownIfInvalidMessageType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The NonExistentClass class does not exist');
@@ -62,7 +64,7 @@ class MessageBuilderTest extends TestCase
         );
     }
 
-    public function testExceptionThrownIfQueueConfigDoesNotExist()
+    public function testExceptionThrownIfQueueConfigDoesNotExist(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The url config CompanyProfile_URL does not exist');

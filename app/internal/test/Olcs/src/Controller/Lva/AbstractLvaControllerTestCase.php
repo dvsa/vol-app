@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -14,7 +16,7 @@ abstract class AbstractLvaControllerTestCase extends MockeryTestCase
 {
     use ControllerTestTrait;
 
-    protected function getServiceManager()
+    protected function getServiceManager(): mixed
     {
         return Bootstrap::getServiceManager();
     }

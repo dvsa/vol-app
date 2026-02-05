@@ -17,10 +17,10 @@ final class Update extends AbstractCommandHandler
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterTestData $letterTestData */
         $letterTestData = $this->getRepo()->fetchUsingId($command);
-        
+
         $letterTestData->setName($command->getName());
         $letterTestData->setJson($command->getJson());
 
@@ -28,7 +28,7 @@ final class Update extends AbstractCommandHandler
 
         $this->result->addId('letterTestData', $letterTestData->getId());
         $this->result->addMessage("Letter test data '{$letterTestData->getName()}' updated");
-        
+
         return $this->result;
     }
 }

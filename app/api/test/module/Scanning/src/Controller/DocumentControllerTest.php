@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Scanning\Controller;
 
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
@@ -47,7 +49,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->sut->setCommandHandlerManager($this->mockCommandHandlerManager);
     }
 
-    public function testMissingDescription()
+    public function testMissingDescription(): void
     {
         /** @var \Laminas\View\Model\JsonModel $jsonModel */
         $jsonModel = $this->sut->create([]);
@@ -55,7 +57,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('POST "description" is not a valid number', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidDescription()
+    public function testInvalidDescription(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('X');
         /** @var \Laminas\View\Model\JsonModel $jsonModel */
@@ -64,7 +66,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('POST "description" is not a valid number', $jsonModel->getVariable('title'));
     }
 
-    public function testMissingImage()
+    public function testMissingImage(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         /** @var \Laminas\View\Model\JsonModel $jsonModel */
@@ -74,7 +76,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('POST "image" is missing', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImage()
+    public function testInvalidImage(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $this->request->shouldReceive('getFiles->get')->with('image')->once()->andReturn('FOO');
@@ -85,7 +87,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('File was not found', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImageValidator()
+    public function testInvalidImageValidator(): void
     {
         // No need to test all validation outcomes as were not testing the validator itself
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
@@ -99,7 +101,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('Missing a temporary folder', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImageUnsupportedMediaType()
+    public function testInvalidImageUnsupportedMediaType(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $imageUpload = ['name' => 'foo', 'tmp_name' => __FILE__];
@@ -116,7 +118,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('Unsupported Media Type', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImageScanDocumentNotFound()
+    public function testInvalidImageScanDocumentNotFound(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $imageUpload = ['name' => 'foo', 'tmp_name' => __FILE__];
@@ -133,7 +135,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('Cannot find scan record', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImageDomainError()
+    public function testInvalidImageDomainError(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $imageUpload = ['name' => 'foo', 'tmp_name' => __FILE__];
@@ -151,7 +153,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('Internal Server Error', $jsonModel->getVariable('title'));
     }
 
-    public function testInvalidImageOtherError()
+    public function testInvalidImageOtherError(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $imageUpload = ['name' => 'foo', 'tmp_name' => __FILE__];
@@ -169,7 +171,7 @@ class DocumentControllerTest extends MockeryTestCase
         $this->assertSame('Internal Server Error', $jsonModel->getVariable('title'));
     }
 
-    public function testSuccess()
+    public function testSuccess(): void
     {
         $this->request->shouldReceive('getPost')->with('description')->once()->andReturn('12');
         $imageUpload = ['name' => 'foo', 'tmp_name' => __DIR__  . DIRECTORY_SEPARATOR . 'test.file'];

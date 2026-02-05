@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Application;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class PoliceTest extends MockeryTestCase
 {
-    public function testProcessApplicationPeople()
+    public function testProcessApplicationPeople(): void
     {
         $sut = new \Dvsa\Olcs\Api\Service\Publication\Process\Application\Police();
 
@@ -48,10 +50,8 @@ class PoliceTest extends MockeryTestCase
         $this->assertSame($publicationLink->getPoliceDatas()[1]->getPerson(), $person3);
     }
 
-    /**
-     * @dataProvider dataProviderTestProcessNewApplication
-     */
-    public function testProcessNewApplication($expectTmAdded, $sectionId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessNewApplication')]
+    public function testProcessNewApplication(mixed $expectTmAdded, mixed $sectionId): void
     {
         $sut = new \Dvsa\Olcs\Api\Service\Publication\Process\Application\Police();
 
@@ -86,7 +86,7 @@ class PoliceTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProcessNewApplication()
+    public static function dataProviderTestProcessNewApplication(): array
     {
         return [
             [true, PublicationSection::APP_NEW_SECTION],
@@ -97,7 +97,7 @@ class PoliceTest extends MockeryTestCase
         ];
     }
 
-    public function testProcessTransportManagers()
+    public function testProcessTransportManagers(): void
     {
         $sut = new \Dvsa\Olcs\Api\Service\Publication\Process\Application\Police();
 
@@ -139,7 +139,7 @@ class PoliceTest extends MockeryTestCase
      *
      * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    private function setupTransportManager()
+    private function setupTransportManager(): mixed
     {
         $person = new \Dvsa\Olcs\Api\Entity\Person\Person();
 

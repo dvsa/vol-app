@@ -141,6 +141,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      *
      * @return TableBuilder
      */
+    #[\Override]
     protected function alterTable($table, $data)
     {
         $title = ($table->getTotal() === 1)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Variation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,10 +34,8 @@ class OperatingCentresTest extends MockeryTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestProvideAdded
-     */
-    public function testProvideAdded($isVehicleTypeMixedWithLgv, $expectedContext)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideAdded')]
+    public function testProvideAdded(mixed $isVehicleTypeMixedWithLgv, mixed $expectedContext): void
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
         $context = new \ArrayObject();
@@ -66,7 +66,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideAdded()
+    public static function dpTestProvideAdded(): array
     {
         return [
             [
@@ -98,10 +98,8 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestProvideS4Ignored
-     */
-    public function testProvideS4Ignored($isVehicleTypeMixedWithLgv, $expectedContext)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideS4Ignored')]
+    public function testProvideS4Ignored(mixed $isVehicleTypeMixedWithLgv, mixed $expectedContext): void
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
         $context = new \ArrayObject();
@@ -133,7 +131,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideS4Ignored()
+    public static function dpTestProvideS4Ignored(): array
     {
         return [
             [
@@ -161,10 +159,8 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestProvideUpdated
-     */
-    public function testProvideUpdated($isVehicleTypeMixedWithLgv, $expectedContext)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestProvideUpdated')]
+    public function testProvideUpdated(mixed $isVehicleTypeMixedWithLgv, mixed $expectedContext): void
     {
         $publicationLink = $this->getPublicationLink($isVehicleTypeMixedWithLgv);
         $context = new \ArrayObject();
@@ -200,7 +196,7 @@ class OperatingCentresTest extends MockeryTestCase
         );
     }
 
-    public function dpTestProvideUpdated()
+    public static function dpTestProvideUpdated(): array
     {
         return [
             [
@@ -232,7 +228,7 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    public function testProvideUpdatedMissingLoc()
+    public function testProvideUpdatedMissingLoc(): void
     {
         $publicationLink = $this->getPublicationLink(false);
         $context = new \ArrayObject();
@@ -254,7 +250,6 @@ class OperatingCentresTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestProvideUpdatedIncreaseDecrease
      *
      * @param type $aocVehicles
      * @param type $aocTrailers
@@ -262,7 +257,8 @@ class OperatingCentresTest extends MockeryTestCase
      * @param type $locTrailers
      * @param type $inc
      */
-    public function testProvideUpdatedIncreaseDecrease($aocVehicles, $aocTrailers, $locVehicles, $locTrailers, $inc)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProvideUpdatedIncreaseDecrease')]
+    public function testProvideUpdatedIncreaseDecrease(mixed $aocVehicles, mixed $aocTrailers, mixed $locVehicles, mixed $locTrailers, mixed $inc): void
     {
         $publicationLink = $this->getPublicationLink(false);
         $context = new \ArrayObject();
@@ -291,7 +287,7 @@ class OperatingCentresTest extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProvideUpdatedIncreaseDecrease()
+    public static function dataProviderTestProvideUpdatedIncreaseDecrease(): array
     {
         return [
             [11, 20, 10, 20, true],
@@ -302,7 +298,7 @@ class OperatingCentresTest extends MockeryTestCase
         ];
     }
 
-    public function testProvideDeleted()
+    public function testProvideDeleted(): void
     {
         $publicationLink = $this->getPublicationLink(false);
         $context = new \ArrayObject();
@@ -344,7 +340,7 @@ class OperatingCentresTest extends MockeryTestCase
      *
      * @return PublicationLink
      */
-    private function getPublicationLink($isVehicleTypeMixedWithLgv)
+    private function getPublicationLink(mixed $isVehicleTypeMixedWithLgv): mixed
     {
         $publicationLink = new PublicationLink();
 
@@ -381,11 +377,11 @@ class OperatingCentresTest extends MockeryTestCase
      */
     private function addApplicationOperatingCentre(
         PublicationLink $publicationLink,
-        $action,
-        $vehiclesRequired,
-        $trailersRequired,
+        mixed $action,
+        mixed $vehiclesRequired,
+        mixed $trailersRequired,
         \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre
-    ) {
+    ): void {
         $licence = $publicationLink->getLicence();
         $application = $publicationLink->getApplication();
         $application->setLicence($licence);
@@ -406,10 +402,10 @@ class OperatingCentresTest extends MockeryTestCase
      */
     private function addLicenceOperatingCentre(
         PublicationLink $publicationLink,
-        $vehiclesRequired,
-        $trailersRequired,
+        mixed $vehiclesRequired,
+        mixed $trailersRequired,
         \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre
-    ) {
+    ): void {
         $aoc = new LicenceOperatingCentre($publicationLink->getLicence(), $operatingCentre);
         $aoc->setNoOfVehiclesRequired($vehiclesRequired);
         $aoc->setNoOfTrailersRequired($trailersRequired);
@@ -423,7 +419,7 @@ class OperatingCentresTest extends MockeryTestCase
      *
      * @return \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
-    private function getOperatingCentre($operatingCentreId)
+    private function getOperatingCentre(mixed $operatingCentreId): mixed
     {
         $operatingCentre = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
         $operatingCentre->setId($operatingCentreId);

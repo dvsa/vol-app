@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Internal Licencing Overview Controller Test
  *
@@ -59,12 +61,12 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
     }
 
     /**
-     * @dataProvider indexProvider
      * @param array $overviewData
      * @param boolean $shouldRemoveTcArea
      * @param boolean $shouldRemoveReviewDate
      */
-    public function testIndexActionGet($overviewData, $shouldRemoveReviewDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexProvider')]
+    public function testIndexActionGet(mixed $overviewData, mixed $shouldRemoveReviewDate): void
     {
         $licenceId = 123;
 
@@ -123,7 +125,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         }
     }
 
-    public function indexProvider()
+    public static function indexProvider(): array
     {
         $valueOptions = [
             'trafficAreas' => [
@@ -200,7 +202,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
     }
 
-    public function testIndexActionPostValidSaveSuccess()
+    public function testIndexActionPostValidSaveSuccess(): void
     {
         $licenceId = 123;
         $organisationId = 234;
@@ -317,7 +319,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexActionPostValidSaveFails()
+    public function testIndexActionPostValidSaveFails(): void
     {
         $licenceId = 123;
         $organisationId = 234;
@@ -439,7 +441,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
     }
 
-    public function testIndexActionPostInvalid()
+    public function testIndexActionPostInvalid(): void
     {
         $licenceId = 123;
 
@@ -510,7 +512,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
     }
 
-    protected function mockTcAreaSelect($form)
+    protected function mockTcAreaSelect(mixed $form): void
     {
         $tcAreaOptions = [
             'A' => 'Traffic area A',
@@ -531,7 +533,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public function testIndexActionUnlicensedRedirect()
+    public function testIndexActionUnlicensedRedirect(): void
     {
         $licenceId = 123;
         $organisationId = 1;

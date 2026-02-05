@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Publication Link Test
  */
@@ -28,7 +30,7 @@ class UpdatePublicationLinkTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $text1 = 'text1';
         $text2 = 'text2';

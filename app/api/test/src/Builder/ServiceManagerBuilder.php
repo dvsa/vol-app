@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Builder;
 
 use Laminas\ServiceManager\ServiceManager;
@@ -22,7 +24,7 @@ class ServiceManagerBuilder implements BuilderInterface
     /**
      * @inheritDoc
      */
-    public function build()
+    public function build(): mixed
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setAllowOverride(true);

@@ -8,3 +8,9 @@ parameters:
     - # PHPStan does not let you bind a different variable to $this: https://github.com/phpstan/phpstan/issues/8327.
       message: '#Undefined variable: \$this#'
       path: '**/*.table.php'
+    - # Laminas classes are annotated @final in PHPDoc but not with the PHP final keyword; extending them is intentional.
+      message: '#extends @final class#'
+    - # Laminas classes are annotated @final in PHPDoc but not with the PHP final keyword; overriding their properties is intentional.
+      message: '#overrides @final property#'
+    - # SlaException entity is defined in the API app which is not a Composer dependency of internal.
+      message: '#Class Dvsa\\Olcs\\Api\\Entity\\Pi\\SlaException not found#'

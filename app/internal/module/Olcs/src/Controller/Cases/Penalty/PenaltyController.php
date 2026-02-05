@@ -89,6 +89,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $data = $this->getPenaltyData();

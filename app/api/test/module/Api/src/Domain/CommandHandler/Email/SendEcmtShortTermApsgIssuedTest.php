@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermApsgIssued as SendEcmtShortTermApsgIssuedCmd;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the ECMT Short Term APSG issued email
  */
-class SendEcmtShortTermApsgIssuedTest extends AbstractEcmtAnnualPermitTest
+class SendEcmtShortTermApsgIssuedTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtShortTermApsgIssuedCmd::class;
     protected $commandHandlerClass = SendEcmtShortTermApsgIssuedHandler::class;

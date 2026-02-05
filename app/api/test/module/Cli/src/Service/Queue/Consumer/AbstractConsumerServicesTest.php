@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class AbstractConsumerServicesTest extends MockeryTestCase
 {
-    public function testGetCommandHandlerManager()
+    public function testGetCommandHandlerManager(): void
     {
         $commandHandlerManager = m::mock(CommandHandlerManager::class);
 

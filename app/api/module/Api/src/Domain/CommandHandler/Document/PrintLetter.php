@@ -129,6 +129,7 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         );
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

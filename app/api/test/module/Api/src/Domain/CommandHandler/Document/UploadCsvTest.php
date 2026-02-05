@@ -22,9 +22,6 @@ class UploadCsvTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
     public function testHandleCommandNoResults(): void
     {
         $csvContent = [];
@@ -69,10 +66,8 @@ class UploadCsvTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
-    public function testHandleCommand($cmdUserId, $attachedUserId): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
+    public function testHandleCommand(mixed $cmdUserId, mixed $attachedUserId): void
     {
         $csvContent = [
             [
@@ -126,7 +121,7 @@ class UploadCsvTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function dpHandleCommand(): array
+    public static function dpHandleCommand(): array
     {
         return [
             [null, IdentityProviderInterface::SYSTEM_USER],

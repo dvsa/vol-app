@@ -88,19 +88,17 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      * @var string
      */
     protected $section = 'inspection-request';
-    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessenger,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
         protected TransferAnnotationBuilder $transferAnnotationBuilder,
         protected CachingQueryService $queryService,
         protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest
     ) {
-        $this->flashMessengerHelper = $flashMessenger;
-        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+        parent::__construct($translationHelper, $formHelper, $this->flashMessengerHelper, $navigation);
     }
 
     /**

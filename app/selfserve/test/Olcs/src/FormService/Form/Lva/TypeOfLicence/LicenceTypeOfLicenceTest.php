@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Service\Helper\FormHelperService;
@@ -33,10 +35,8 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
         $this->sut = new LicenceTypeOfLicence($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
-    /**
-     * @dataProvider paramsProvider
-     */
-    public function testAlterForm($params, $removeElement, $accessToLicenceType): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('paramsProvider')]
+    public function testAlterForm(array $params, string $removeElement, int $accessToLicenceType): void
     {
 
         $mockForm = m::mock(Form::class);
@@ -73,7 +73,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: true}, 'form-actions', 2}, list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: false}, 'form-actions', 3}}
      */
-    public function paramsProvider(): array
+    public static function paramsProvider(): array
     {
         return [
             [
@@ -89,7 +89,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
         ];
     }
 
-    public function mockLockElements(m\LegacyMockInterface $mockForm, $params, $accessToLicenceType): void
+    public function mockLockElements(m\LegacyMockInterface $mockForm, array $params, int $accessToLicenceType): void
     {
         $mockOperatorLocation = m::mock(Element::class)
             ->shouldReceive('setLabel')

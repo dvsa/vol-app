@@ -41,10 +41,6 @@ class OperatorFeesController extends OperatorController
      */
     protected $subNavRoute = 'operator_fees';
 
-    protected TranslationHelperService $translationHelper;
-    protected UrlHelperService $urlHelper;
-    protected IdentityProviderInterface $identityProvider;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -57,13 +53,10 @@ class OperatorFeesController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         \Laminas\Navigation\Navigation $navigation,
-        TranslationHelperService $translatorHelper,
-        UrlHelperService $urlHelper,
-        IdentityProviderInterface $identityProvider
+        protected TranslationHelperService $translationHelper,
+        protected UrlHelperService $urlHelper,
+        protected IdentityProviderInterface $identityProvider
     ) {
-        $this->translationHelper = $translatorHelper;
-        $this->urlHelper = $urlHelper;
-        $this->identityProvider = $identityProvider;
         parent::__construct(
             $scriptFactory,
             $formHelper,

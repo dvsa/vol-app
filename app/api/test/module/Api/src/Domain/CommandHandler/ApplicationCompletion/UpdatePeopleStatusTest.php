@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update People Status Test
  *
@@ -41,7 +43,7 @@ class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
         $this->application->setApplicationOrganisationPersons(new \Doctrine\Common\Collections\ArrayCollection());
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->organisation->setOrganisationPersons(new ArrayCollection());
         $this->applicationCompletion->setPeopleStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
@@ -49,7 +51,7 @@ class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->organisation->setOrganisationPersons(new ArrayCollection());
         $this->applicationCompletion->setPeopleStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
@@ -57,7 +59,7 @@ class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandDeletedAop()
+    public function testHandleCommandDeletedAop(): void
     {
         $this->applicationCompletion->setPeopleStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -72,7 +74,7 @@ class UpdatePeopleStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setPeopleStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

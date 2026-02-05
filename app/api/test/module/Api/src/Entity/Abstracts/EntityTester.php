@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Abstracts;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -34,12 +36,12 @@ abstract class EntityTester extends MockeryTestCase
      */
     protected $extraDateProperties = [];
 
-    public function getClassToTestName()
+    public function getClassToTestName(): mixed
     {
         return $this->entityClass;
     }
 
-    protected function instantiate($entityName)
+    protected static function instantiate(mixed $entityName): mixed
     {
         if (!method_exists($entityName, '__construct')) {
             $object = new $entityName();
@@ -56,7 +58,7 @@ abstract class EntityTester extends MockeryTestCase
         return $object;
     }
 
-    public function testLifecycleCallbacks()
+    public function testLifecycleCallbacks(): void
     {
         $classToTestName = $this->getClassToTestName();
         $entity = $this->instantiate($classToTestName);
@@ -80,7 +82,7 @@ abstract class EntityTester extends MockeryTestCase
         }
     }
 
-    public function testGetDates()
+    public function testGetDates(): void
     {
         if (empty($this->extraDateProperties)) {
             $this->assertTrue(true); //nothing to test
@@ -109,7 +111,7 @@ abstract class EntityTester extends MockeryTestCase
         }
     }
 
-    public function testGettersAndSetters()
+    public function testGettersAndSetters(): void
     {
         foreach ($this->getGettersAndSetters() as $testCase) {
             [$methodName, $testValue] = $testCase;
@@ -122,7 +124,7 @@ abstract class EntityTester extends MockeryTestCase
         }
     }
 
-    public function testAddMethods()
+    public function testAddMethods(): void
     {
         foreach ($this->getAddMethods() as $methodName) {
             if ($methodName == null) {
@@ -156,7 +158,7 @@ abstract class EntityTester extends MockeryTestCase
     /**
      * @return array
      */
-    public function getGettersAndSetters()
+    public function getGettersAndSetters(): mixed
     {
         $classToTestName = $this->getClassToTestName();
 
@@ -209,7 +211,7 @@ abstract class EntityTester extends MockeryTestCase
     /**
      * @return array
      */
-    public function getAddMethods()
+    public function getAddMethods(): mixed
     {
         $classToTestName = $this->getClassToTestName();
 

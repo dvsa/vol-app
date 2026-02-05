@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\IrhpPermitBundle;
@@ -14,17 +16,15 @@ class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
 {
     public const SUT_CLASS_NAME = IrhpExpiryDate::class;
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new IrhpExpiryDate();
         $query = $bookmark->getQuery([IrhpExpiryDate::SRCH_VAL_KEY => 123]);
         $this->assertInstanceOf(IrhpPermitBundle::class, $query);
     }
 
-    /**
-     * @dataProvider dpRenderProvider
-     */
-    public function testRender($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderProvider')]
+    public function testRender(mixed $data, mixed $expected): void
     {
         $bookmark = new IrhpExpiryDate();
         $bookmark->setData($data);
@@ -32,7 +32,7 @@ class IrhpExpiryDateTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function dpRenderProvider()
+    public static function dpRenderProvider(): array
     {
         return [
             'no expiry date, use stock end date' => [

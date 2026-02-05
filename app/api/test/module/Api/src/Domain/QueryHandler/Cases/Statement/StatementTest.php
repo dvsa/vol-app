@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Statement Test
  *
@@ -32,7 +34,7 @@ class StatementTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 1]);
         $this->createMockStatement($query, null);
@@ -47,7 +49,7 @@ class StatementTest extends QueryHandlerTestCase
         $this->assertSame('DUMMY_STATEMENT_VALUE', $serializedResult['DUMMY_STATEMENT_KEY']);
     }
 
-    public function testHandleQueryWhenNoAssignedCaseworker()
+    public function testHandleQueryWhenNoAssignedCaseworker(): void
     {
         $query = Qry::create(['id' => 1]);
         $this->createMockStatement($query, null);
@@ -61,7 +63,7 @@ class StatementTest extends QueryHandlerTestCase
         $this->assertNull($arr['assignedCaseworker']);
     }
 
-    public function testHandleQueryWhenAssignedCaseworker()
+    public function testHandleQueryWhenAssignedCaseworker(): void
     {
         $query = Qry::create(['id' => 1]);
 
@@ -84,7 +86,7 @@ class StatementTest extends QueryHandlerTestCase
         $this->assertSame('DUMMY_USER_ID', $serializedResult['assignedCaseworker']['id']);
     }
 
-    protected function createMockStatement($query, $caseworker)
+    protected function createMockStatement(mixed $query, mixed $caseworker): mixed
     {
         $statement = m::mock(StatementEntity::class);
         $statement->shouldReceive('getAssignedCaseworker')->andReturn($caseworker);

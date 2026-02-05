@@ -25,7 +25,7 @@ final class RequestMapQueue extends AbstractCommandHandler implements AuthAwareI
     use AuthAwareTrait;
     use QueueAwareTrait;
 
-    public const CONFIRM_MESSAGE = 'New PDF(s) requested';
+    public const string CONFIRM_MESSAGE = 'New PDF(s) requested';
 
     protected $repoServiceName = 'Bus';
 

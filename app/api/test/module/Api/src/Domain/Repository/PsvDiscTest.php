@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Psv Disc test
  *
@@ -37,7 +39,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->setUpSut(PsvDiscRepo::class);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $licenceType = 'ltyp_r';
         $maxPages = 1;
@@ -92,7 +94,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->sut->fetchDiscsToPrint($licenceType, $maxPages * DiscSequence::DISCS_ON_PAGE);
     }
 
-    public function testSetPrintingOn()
+    public function testSetPrintingOn(): void
     {
         $discs = [1, 2];
         $sut = m::mock(PsvDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -104,7 +106,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->assertNull($sut->setIsPrintingOn($discs));
     }
 
-    public function testSetPrintingOff()
+    public function testSetPrintingOff(): void
     {
         $discs = [1, 2];
         $sut = m::mock(PsvDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -116,7 +118,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->assertNull($sut->setIsPrintingOff($discs));
     }
 
-    public function testSetPrinting()
+    public function testSetPrinting(): void
     {
         $this->expectQueryWithData(
             'Discs\PsvDiscsSetIsPrinting',
@@ -127,7 +129,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->sut->setIsPrintingOn([1, 2]);
     }
 
-    public function testSetIsPrintingOffAndAssignNumbers()
+    public function testSetIsPrintingOffAndAssignNumbers(): void
     {
         $query = m::mock();
         $query->shouldReceive('execute')->once()->with(['id' => 121, 'discNo' => 99]);
@@ -141,7 +143,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->sut->setIsPrintingOffAndAssignNumbers([121, 12, 54], 99);
     }
 
-    public function testApplyListFiltersIncludeCeasedFalse()
+    public function testApplyListFiltersIncludeCeasedFalse(): void
     {
         $sut = m::mock(PsvDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $qb = m::mock(\Doctrine\ORM\QueryBuilder::class);
@@ -164,7 +166,7 @@ class PsvDiscTest extends RepositoryTestCase
         $sut->fetchList($query);
     }
 
-    public function testApplyListFiltersIncludeCeasedTrue()
+    public function testApplyListFiltersIncludeCeasedTrue(): void
     {
         $sut = m::mock(PsvDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
         $qb = m::mock(\Doctrine\ORM\QueryBuilder::class);
@@ -184,7 +186,7 @@ class PsvDiscTest extends RepositoryTestCase
         $sut->fetchList($query);
     }
 
-    public function testCeaseDiscsForLicence()
+    public function testCeaseDiscsForLicence(): void
     {
         $licenceId = 123;
         $stmt = m::mock();
@@ -195,7 +197,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->assertSame(652, $this->sut->ceaseDiscsForLicence($licenceId));
     }
 
-    public function testFetchDiscsToPrintMin()
+    public function testFetchDiscsToPrintMin(): void
     {
         $licenceType = 'ltyp_r';
 
@@ -246,7 +248,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->sut->fetchDiscsToPrintMin($licenceType);
     }
 
-    public function testCreatePsvDiscs()
+    public function testCreatePsvDiscs(): void
     {
         $query = m::mock();
         $query->shouldReceive('executeInsert')->once()->with(321, 99, true);
@@ -256,7 +258,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->sut->createPsvDiscs(321, 99, true);
     }
 
-    public function testCountForLicence()
+    public function testCountForLicence(): void
     {
         $licenceId = 1;
 
@@ -275,7 +277,7 @@ class PsvDiscTest extends RepositoryTestCase
         self::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCountForLicenceNoResult()
+    public function testCountForLicenceNoResult(): void
     {
         $licenceId = 1;
 
@@ -295,7 +297,7 @@ class PsvDiscTest extends RepositoryTestCase
         $this->assertSame(['discCount' => 0], $this->sut->countForLicence($licenceId));
     }
 
-    public function testCountForLicenceException()
+    public function testCountForLicenceException(): void
     {
         $licenceId = 1;
 

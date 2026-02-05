@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Organisation;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Organisation\FixIsUnlicenced;
@@ -41,7 +43,7 @@ class FixIsUnlicencedTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -53,12 +55,12 @@ class FixIsUnlicencedTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): FixIsUnlicenced
     {
         return new FixIsUnlicenced();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE organisation o ' .
             'SET o.is_unlicensed = 0, o.last_modified_on = NOW(), o.last_modified_by = :currentUserId ' .

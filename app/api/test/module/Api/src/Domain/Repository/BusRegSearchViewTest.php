@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList;
@@ -25,7 +27,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByRegNo()
+    public function testFetchByRegNo(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
@@ -45,7 +47,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
         $this->assertSame('RESULTS', $this->sut->fetchByRegNo('REG0001'));
     }
 
-    public function testFetchByRegNoNotFound()
+    public function testFetchByRegNoNotFound(): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
@@ -67,7 +69,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
         $this->sut->fetchByRegNo('REG0001');
     }
 
-    public function testFetchActiveByLicence()
+    public function testFetchActiveByLicence(): void
     {
         $activeStatuses = [
             BusReg::STATUS_NEW,
@@ -99,10 +101,10 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param $context
      */
-    public function testFetchDistinctList($context, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
+    public function testFetchDistinctList(mixed $context, mixed $expected): void
     {
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
@@ -122,10 +124,10 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param $context
      */
-    public function testFetchDistinctListWithOrganisationId($context, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
+    public function testFetchDistinctListWithOrganisationId(mixed $context, mixed $expected): void
     {
         $organisationId = 1;
 
@@ -151,10 +153,10 @@ class BusRegSearchViewTest extends RepositoryTestCase
     }
 
     /**
-     * @dataProvider provideContextGroupBys
      * @param string $context to determine what data to return
      */
-    public function testFetchDistinctListWithLocalAuthorityId($context, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideContextGroupBys')]
+    public function testFetchDistinctListWithLocalAuthorityId(mixed $context, mixed $expected): void
     {
         $localAuthorityId = 1;
 
@@ -184,7 +186,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
      *
      * @return array
      */
-    public function provideContextGroupBys()
+    public static function provideContextGroupBys(): array
     {
         return [
             [
@@ -202,7 +204,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
     /**
      * Test applyListFilters when logged in as an Operator
      */
-    public function testApplyListFiltersOperator()
+    public function testApplyListFiltersOperator(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -252,7 +254,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
     /**
      * Test applyListFilters when using status (to comply with bus reg main page)
      */
-    public function testApplyListFiltersAlternativeStatus()
+    public function testApplyListFiltersAlternativeStatus(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -280,7 +282,7 @@ class BusRegSearchViewTest extends RepositoryTestCase
     /**
      * Test applyListFilters when logged in as an LA
      */
-    public function testApplyListFiltersLocalAuthority()
+    public function testApplyListFiltersLocalAuthority(): void
     {
         $this->setUpSut(Repo::class, true);
 

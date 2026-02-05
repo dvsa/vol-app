@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Licence History Test
  *
@@ -34,7 +36,7 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNotInProgressNoErrors()
+    public function testHandleCommandNotInProgressNoErrors(): void
     {
         $command = $this->getCommand();
 
@@ -79,7 +81,7 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandNotInProgressWithErrors()
+    public function testHandleCommandNotInProgressWithErrors(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -101,7 +103,7 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandNotInProgressWithEmptyAnswer()
+    public function testHandleCommandNotInProgressWithEmptyAnswer(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -123,7 +125,7 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandInProgress()
+    public function testHandleCommandInProgress(): void
     {
         $command = $this->getCommand(true);
 
@@ -164,7 +166,7 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getCommand($inProgress = false, $removeField = false)
+    protected function getCommand(bool $inProgress = false, bool $removeField = false): mixed
     {
         $data = [
             'id' => 1,
@@ -185,12 +187,12 @@ class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
         return Cmd::create($data);
     }
 
-    protected function getApplication()
+    protected function getApplication(): m\MockInterface
     {
         return m::mock(ApplicationEntity::class)->makePartial();
     }
 
-    protected function getOtherLicences($hideOne = false)
+    protected function getOtherLicences(bool $hideOne = false): mixed
     {
         $otherLicenceCurrent = m::mock()
             ->shouldReceive('getPreviousLicenceType')

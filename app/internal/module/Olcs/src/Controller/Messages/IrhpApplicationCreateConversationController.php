@@ -22,6 +22,7 @@ class IrhpApplicationCreateConversationController extends AbstractCreateConversa
         ]
     ];
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(['navigationId' => 'irhp_conversations']);

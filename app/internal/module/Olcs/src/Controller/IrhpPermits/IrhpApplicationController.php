@@ -194,6 +194,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirect()
@@ -208,6 +209,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * @return \Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->redirect()
@@ -281,6 +283,7 @@ class IrhpApplicationController extends AbstractInternalController implements
      *
      * @return array
      */
+    #[\Override]
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['isPreGrant'] = true;
@@ -293,6 +296,7 @@ class IrhpApplicationController extends AbstractInternalController implements
      *
      * Small override to handle the cancel button on the Add form as this form is not shown in a JS modal popup
      */
+    #[\Override]
     public function addAction()
     {
         $typeResponse = $this->handleQuery(PermitTypeQry::create(['id' => $this->params()->fromRoute('permitTypeId')]));
@@ -346,6 +350,7 @@ class IrhpApplicationController extends AbstractInternalController implements
      *
      * Small override to handle the cancel button on the Edit form
      */
+    #[\Override]
     public function editAction()
     {
         $request = $this->getRequest();
@@ -640,10 +645,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             );
 
             if ($this->request->isPost()) {
-                $selectedCountryIds = explode(',', $formData['fields']['selectedCountriesCsv']);
+                $selectedCountryIds = explode(',', (string) $formData['fields']['selectedCountriesCsv']);
             } else {
                 // selected countries need to come from querystring
-                $selectedCountryIds = explode(',', $this->params()->fromQuery('countries'));
+                $selectedCountryIds = explode(',', (string) $this->params()->fromQuery('countries'));
             }
             $formData['selectedCountryIds'] = $selectedCountryIds;
 
@@ -775,7 +780,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 
             if ($this->request->isPost()) {
                 $postParams = $this->params()->fromPost();
-                $selectedCountryIds = explode(',', $postParams['fields']['selectedCountriesCsv']);
+                $selectedCountryIds = explode(',', (string) $postParams['fields']['selectedCountriesCsv']);
             } else {
                 foreach ($formData['bilateralMetadata']['countries'] as $country) {
                     if ($country['visible']) {
@@ -1134,6 +1139,7 @@ class IrhpApplicationController extends AbstractInternalController implements
      *
      * @return array
      */
+    #[\Override]
     protected function mapFromForm($mapperClass, array $data)
     {
         if ($mapperClass === IrhpApplicationMapper::class) {

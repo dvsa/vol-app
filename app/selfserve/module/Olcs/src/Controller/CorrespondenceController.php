@@ -39,6 +39,7 @@ class CorrespondenceController extends AbstractController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $params = [

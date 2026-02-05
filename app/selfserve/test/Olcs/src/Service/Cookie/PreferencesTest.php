@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Qa;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -23,10 +25,8 @@ class PreferencesTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpExceptionOnInvalidOrMissingKey
-     */
-    public function testExceptionOnInvalidOrMissingKey($exceptionMessage, $preferencesArray): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionOnInvalidOrMissingKey')]
+    public function testExceptionOnInvalidOrMissingKey(string $exceptionMessage, array $preferencesArray): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage($exceptionMessage);
@@ -39,7 +39,7 @@ class PreferencesTest extends MockeryTestCase
      *
      * @psalm-return list{list{'Preference analytics is not present', array{settings: true, key87: 'foo'}}, list{'Preference settings is not present', array{analytics: true, key99: 'bar'}}, list{'Preference analytics is non-bool value', array{analytics: 'tree', settings: true, key87: 'foo'}}, list{'Preference settings is non-bool value', array{analytics: true, settings: 'cat', key99: 'bar'}}}
      */
-    public function dpExceptionOnInvalidOrMissingKey(): array
+    public static function dpExceptionOnInvalidOrMissingKey(): array
     {
         return [
             [
@@ -75,10 +75,8 @@ class PreferencesTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpValidInput
-     */
-    public function testValidInput($preferencesArray): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidInput')]
+    public function testValidInput(array $preferencesArray): void
     {
         $sut = new Preferences($preferencesArray);
 
@@ -93,7 +91,7 @@ class PreferencesTest extends MockeryTestCase
      *
      * @psalm-return list{list{array{analytics: true, settings: true}}, list{array{analytics: true, settings: false}}, list{array{analytics: false, settings: true}}, list{array{analytics: false, settings: false}}}
      */
-    public function dpValidInput(): array
+    public static function dpValidInput(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep;
@@ -58,14 +60,12 @@ class QaContextTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpIsApplicationStepEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationStepEnabled')]
     public function testIsApplicationStepEnabled(
-        $isNotYetSubmitted,
-        $isUnderConsideration,
-        $enabledAfterSubmission,
-        $expected
+        mixed $isNotYetSubmitted,
+        mixed $isUnderConsideration,
+        mixed $enabledAfterSubmission,
+        mixed $expected
     ): void {
         $this->qaEntity->shouldReceive('isNotYetSubmitted')
             ->withNoArgs()
@@ -85,7 +85,7 @@ class QaContextTest extends MockeryTestCase
         );
     }
 
-    public function dpIsApplicationStepEnabled(): array
+    public static function dpIsApplicationStepEnabled(): array
     {
         return [
             [true, true, true, true],

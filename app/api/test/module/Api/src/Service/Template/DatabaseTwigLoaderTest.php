@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Template;
 
 use DateTime;
@@ -30,7 +32,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         $this->sut = new DatabaseTwigLoader($this->databaseTemplateFetcher);
     }
 
-    public function testGetSourceContext()
+    public function testGetSourceContext(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
         $code = '{{var1}} test {{var2}}';
@@ -49,7 +51,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         $this->assertEquals($name, $source->getName());
     }
 
-    public function testGetSourceContextLoaderError()
+    public function testGetSourceContextLoaderError(): void
     {
         $this->expectException(LoaderError::class);
         $this->expectExceptionMessage('Template "en_GB/plain/send-ecmt-successfulddd" does not exist.');
@@ -63,7 +65,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         $this->sut->getSourceContext($name);
     }
 
-    public function testExistsTrue()
+    public function testExistsTrue(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
 
@@ -76,7 +78,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         );
     }
 
-    public function testExistsFalse()
+    public function testExistsFalse(): void
     {
         $name = 'en_GB/plain/send-ecmt-successfulddd';
 
@@ -89,7 +91,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         );
     }
 
-    public function testGetCacheKey()
+    public function testGetCacheKey(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
 
@@ -99,7 +101,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         );
     }
 
-    public function testIsFreshTrue()
+    public function testIsFreshTrue(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
 
@@ -121,7 +123,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         );
     }
 
-    public function testIsFreshFalseLastModifiedAfterTime()
+    public function testIsFreshFalseLastModifiedAfterTime(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
 
@@ -143,7 +145,7 @@ class DatabaseTwigLoaderTest extends MockeryTestCase
         );
     }
 
-    public function testIsFreshFalseLastModifiedMissing()
+    public function testIsFreshFalseLastModifiedMissing(): void
     {
         $name = 'en_GB/plain/send-ecmt-successful';
 

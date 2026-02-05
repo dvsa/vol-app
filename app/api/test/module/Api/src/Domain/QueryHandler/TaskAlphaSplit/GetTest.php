@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\TaskAlphaSplit;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\TaskAlphaSplit\Get as QueryHandler;
@@ -22,7 +24,7 @@ class GetTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['id' => 1304]);
 

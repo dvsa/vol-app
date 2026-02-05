@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Template;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,7 +22,7 @@ class TemplateTestDataEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetDecodedJson()
+    public function testGetDecodedJson(): void
     {
         $json = '{ "Dataset 1": { "var1": "value1", "var2": "value2" }}';
 

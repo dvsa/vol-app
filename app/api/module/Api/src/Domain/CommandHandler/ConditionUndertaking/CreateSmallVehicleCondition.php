@@ -19,7 +19,7 @@ final class CreateSmallVehicleCondition extends AbstractCommandHandler
 
     protected $extraRepos = ['Application'];
 
-    public const SMALL_VEHICLE_UNERRTAKINGS_NOTES =
+    public const string SMALL_VEHICLE_UNERRTAKINGS_NOTES =
         'Small vehicles undertakings
 (a) The operator will advise the Traffic Commissioner of the make, model and ' .
         'registration number of vehicles used under that licence, and will advise of any changes.

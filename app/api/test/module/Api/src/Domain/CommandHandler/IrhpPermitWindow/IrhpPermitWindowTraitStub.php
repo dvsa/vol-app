@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitWindow;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -17,7 +19,7 @@ class IrhpPermitWindowTraitStub extends AbstractCommandHandler
      * @return Result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command): Result
     {
         return new Result();
     }

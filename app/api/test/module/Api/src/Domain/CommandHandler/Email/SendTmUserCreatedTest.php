@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send TM User Created Email Test
  */
@@ -38,7 +40,7 @@ class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand(): array
     {
         return [
             [0, 'application'],
@@ -46,10 +48,8 @@ class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
-    public function testHandleCommand($isVariation, $uriPart)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
+    public function testHandleCommand(mixed $isVariation, mixed $uriPart): void
     {
         $userId = 111;
         $tmaId = 222;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Traits;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
@@ -15,6 +17,7 @@ use Mockery as m;
  * to ensure changes in the trait are highlighted early
  * as potential impact could be high
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTestCase
 {
     /** @var DeleteContactDetailsAndAddressTraitStub $sut */
@@ -28,14 +31,14 @@ class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTest
         parent::setUp();
     }
 
-    public function testInjectReposWhenNotSet()
+    public function testInjectReposWhenNotSet(): void
     {
         $this->sut = new DeleteContactDetailsAndAddressTraitStub();
         $this->sut->injectReposStub();
         $this->assertEquals(['ContactDetails', 'Address'], $this->sut->getExtraRepos());
     }
 
-    public function testInjectRepos()
+    public function testInjectRepos(): void
     {
         $this->sut = new DeleteContactDetailsAndAddressTraitStub();
         $this->sut->setExtraRepos(['ContactDetails', 'Address']);
@@ -43,7 +46,7 @@ class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTest
         $this->assertEquals(['ContactDetails', 'Address'], $this->sut->getExtraRepos());
     }
 
-    public function testMaybeDeleteContactDetailsAndAddressWithAddressNull()
+    public function testMaybeDeleteContactDetailsAndAddressWithAddressNull(): void
     {
         $contactDetails = m::mock(ContactDetailsEntity::class);
         $contactDetails->shouldReceive('getAddress')->andReturn(null);
@@ -52,13 +55,13 @@ class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTest
         $this->sut->maybeDeleteContactDetailsAndAddressStub($contactDetails);
     }
 
-    public function testMaybeDeleteContactDetailsAndAddressWithCdNull()
+    public function testMaybeDeleteContactDetailsAndAddressWithCdNull(): void
     {
         $contactDetails = null;
         $this->sut->maybeDeleteContactDetailsAndAddressStub($contactDetails);
     }
 
-    public function testMaybeDeleteContactDetailsAndAddress()
+    public function testMaybeDeleteContactDetailsAndAddress(): void
     {
         $address = m::mock(AddressEntity::class);
         $this->repoMap['Address']->shouldReceive('delete')

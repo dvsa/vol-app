@@ -33,7 +33,6 @@ class GrantController extends AbstractGrantController implements ApplicationCont
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -53,12 +52,10 @@ class GrantController extends AbstractGrantController implements ApplicationCont
         FormHelperService $formHelper,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

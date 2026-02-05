@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
@@ -24,7 +26,7 @@ class TransactionTest extends RepositoryTestCase
         $this->setUpSut(TransactionRepo::class);
     }
 
-    public function testFetchByReference()
+    public function testFetchByReference(): void
     {
         $ref = 'OLCS-1234-ABCD';
 
@@ -78,7 +80,7 @@ class TransactionTest extends RepositoryTestCase
         $this->sut->fetchByReference($ref, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testfetchOutstandingCardPayments()
+    public function testfetchOutstandingCardPayments(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
 

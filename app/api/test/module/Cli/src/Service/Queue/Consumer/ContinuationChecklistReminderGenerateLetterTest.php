@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Continuation Checklist Reminder Generate Letter Queue Consumer Test
  *
@@ -22,7 +24,7 @@ class ContinuationChecklistReminderGenerateLetterTest extends AbstractConsumerTe
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $mockUser = m::mock(UserEntity::class)->shouldReceive('getId')->andReturn(2)->getMock();
         $item = new QueueEntity();

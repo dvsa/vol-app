@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Temporary Password Email Test
  */
@@ -35,10 +37,8 @@ class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider handleCommandDataProvider
-     */
-    public function testHandleCommand($isInternal, $expectedUrl)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandDataProvider')]
+    public function testHandleCommand(mixed $isInternal, mixed $expectedUrl): void
     {
         $userId = 111;
         $emailAddress = 'me@test.me';
@@ -98,7 +98,7 @@ class SendUserTemporaryPasswordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function handleCommandDataProvider()
+    public static function handleCommandDataProvider(): array
     {
         return [
             [false, 'http://selfserve/'],

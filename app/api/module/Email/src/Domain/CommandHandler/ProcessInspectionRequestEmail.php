@@ -23,8 +23,8 @@ use Dvsa\Olcs\Email\Service\Imap as Mailbox;
  */
 final class ProcessInspectionRequestEmail extends AbstractCommandHandler
 {
-    public const SUBJECT_REGEX = '/\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
-    public const MAILBOX_ID = 'inspection_request';
+    public const string SUBJECT_REGEX = '/\[ Maintenance Inspection \] REQUEST=([\d]+),STATUS=([SU]?)$/';
+    public const string MAILBOX_ID = 'inspection_request';
 
     /**
      * @var Mailbox
@@ -182,6 +182,7 @@ final class ProcessInspectionRequestEmail extends AbstractCommandHandler
     {
         $this->result->addMessage($message);
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->setMailbox($container->get('ImapService'));

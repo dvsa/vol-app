@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * End Interim Test
  *
@@ -32,7 +34,8 @@ class EndInterimTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::INTERIM_STATUS_ENDED
@@ -41,7 +44,7 @@ class EndInterimTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::create(['id' => 111]);
 

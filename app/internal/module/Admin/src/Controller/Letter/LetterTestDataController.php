@@ -20,29 +20,29 @@ class LetterTestDataController extends AbstractInternalController implements Lef
     protected $tableName = 'admin-letter-test-data';
     protected $defaultTableSortField = 'name';
     protected $defaultTableOrderField = 'ASC';
-    
+
     protected $listDto = ListDTO::class;
     protected $itemDto = ItemDTO::class;
     protected $itemParams = ['id'];
-    
+
     protected $formClass = LetterTestDataForm::class;
     protected $addFormClass = LetterTestDataForm::class;
     protected $mapperClass = LetterTestDataMapper::class;
-    
+
     protected $createCommand = CreateDTO::class;
     protected $updateCommand = UpdateDTO::class;
     protected $deleteCommand = DeleteDTO::class;
-    
+
     protected $addContentTitle = 'Add Test Data';
     protected $editContentTitle = 'Edit Test Data';
-    
+
     protected $deleteModalTitle = 'Remove Test Data';
     protected $deleteConfirmMessage = 'Are you sure you want to remove this test data?';
     protected $deleteSuccessMessage = 'The test data has been removed';
-    
+
     protected $addSuccessMessage = 'Test data created successfully';
     protected $editSuccessMessage = 'Test data updated successfully';
-    
+
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
     ];

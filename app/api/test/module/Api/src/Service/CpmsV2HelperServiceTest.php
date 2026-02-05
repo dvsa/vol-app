@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service;
 
 use Dvsa\Olcs\Api\Entity\Fee\FeeType;
@@ -25,9 +27,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Olcs\Logging\Log\Logger;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\CpmsV2HelperService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)]
 class CpmsV2HelperServiceTest extends MockeryTestCase
 {
     public const CHEQUE_NR = 100001;
@@ -77,16 +77,14 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         // Create service with mocked dependencies
         $this->sut = $this->createService($this->cpmsClient, $this->feesHelper, $config);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         parent::setUp();
     }
 
-    private function createService($api, $feesHelper, $config = [])
+    private function createService(mixed $api, mixed $feesHelper, array $config = []): mixed
     {
         /** @var ContainerInterface | m\MockInterface $sm */
         $sm = m::mock(ContainerInterface::class);
@@ -108,7 +106,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         return $sut->__invoke($sm, CpmsV2HelperService::class);
     }
 
-    public function testHandleResponse()
+    public function testHandleResponse(): void
     {
         $data = ['unit_data'];
         $ref = 'unit_ref';
@@ -122,7 +120,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data));
     }
 
-    public function testHanldeResponseWithNi()
+    public function testHanldeResponseWithNi(): void
     {
         $data = ['unit_data'];
         $ref = 'unit_ref';
@@ -151,10 +149,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data, $mockFee));
     }
 
-    /**
-     * @dataProvider dpTestGetPaymentStatus
-     */
-    public function testGetPaymentStatus($response, $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPaymentStatus')]
+    public function testGetPaymentStatus(mixed $response, mixed $expect): void
     {
         $ref = 'unit_Ref';
 
@@ -170,7 +166,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals($expect, $sut->getPaymentStatus($ref, 'fee'));
     }
 
-    public function dpTestGetPaymentStatus()
+    public static function dpTestGetPaymentStatus(): array
     {
         return [
             [
@@ -188,7 +184,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetPaymentStatusWithMessageFromCpms()
+    public function testGetPaymentStatusWithMessageFromCpms(): void
     {
         $ref = 'unit_Ref';
         $response = [
@@ -213,10 +209,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         static::assertEquals($expected, $sut->getPaymentStatus($ref, 'fee'));
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testInitiateCardRequest($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testInitiateCardRequest(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $orgId = 99;
         $redirectUrl = 'http://olcs-selfserve/foo';
@@ -300,7 +294,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function miscParamsProvider()
+    public static function miscParamsProvider(): array
     {
         return [
             'mics payment' => [
@@ -373,10 +367,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testInitiateCnpRequest($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testInitiateCnpRequest(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $orgId = 99;
         $redirectUrl = 'http://olcs-selfserve/foo';
@@ -460,7 +452,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function testInitiateCardRequestInvalidApiResponse()
+    public function testInitiateCardRequestInvalidApiResponse(): void
     {
         $this->expectException(CpmsResponseException::class);
 
@@ -478,10 +470,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->initiateCardRequest('http://olcs-selfserve/foo', []);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testRecordCashPaymentWithOverpayment($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testRecordCashPaymentWithOverpayment(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $orgId = 99;
 
@@ -591,10 +581,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testRecordChequePayment($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testRecordChequePayment(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $orgId = 99;
 
@@ -709,10 +697,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testRecordPostalOrderPayment($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testRecordPostalOrderPayment(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $orgId = 99;
 
@@ -821,10 +807,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider authCodeProvider
-     */
-    public function testGetPaymentAuthCode($authCode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('authCodeProvider')]
+    public function testGetPaymentAuthCode(mixed $authCode): void
     {
         $response = ['auth_code' => $authCode];
 
@@ -841,7 +825,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($authCode, $result);
     }
 
-    public function authCodeProvider()
+    public static function authCodeProvider(): array
     {
         return [
             ['AUTH123'],
@@ -849,7 +833,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         ];
     }
 
-    public function testGetPaymentAuthCodeWithNi()
+    public function testGetPaymentAuthCodeWithNi(): void
     {
         $response = ['auth_code' => 'AUTH123'];
 
@@ -883,10 +867,9 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
      * @param string $expectedScope
      * @param string $expectedEndpointSuffix
      * @param array  $miscParams
-     *
-     * @dataProvider reversalProvider
      */
-    public function testReversePayment($paymentMethod, $expectedScope, $expectedEndpointSuffix, $customer, $miscParams)
+    #[\PHPUnit\Framework\Attributes\DataProvider('reversalProvider')]
+    public function testReversePayment(mixed $paymentMethod, mixed $expectedScope, mixed $expectedEndpointSuffix, mixed $customer, mixed $miscParams): void
     {
         $orgId = 99;
 
@@ -919,7 +902,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function reversalProvider()
+    public static function reversalProvider(): array
     {
         return [
             'cheque' => [
@@ -1042,15 +1025,15 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
      * @return FeeEntity
      */
     private function getStubFee(
-        $id,
-        $amount,
-        $accrualRule = null,
-        $licenceStartDate = null,
-        $organisationId = null,
-        $invoicedDate = null,
-        $feeTypeId = null,
-        $licNo = 'OB1234567'
-    ) {
+        mixed $id,
+        mixed $amount,
+        mixed $accrualRule = null,
+        mixed $licenceStartDate = null,
+        mixed $organisationId = null,
+        mixed $invoicedDate = null,
+        mixed $feeTypeId = null,
+        string $licNo = 'OB1234567'
+    ): FeeEntity {
         $status = new RefData();
         $rule = new RefData();
         if ($accrualRule) {
@@ -1099,7 +1082,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         return $fee;
     }
 
-    public function testGetReportList()
+    public function testGetReportList(): void
     {
         $response = ['stuff'];
 
@@ -1124,7 +1107,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function testRequestReport()
+    public function testRequestReport(): void
     {
         $code = 'ABC123';
         $start = new \DateTime('2015-10-07 08:57:00');
@@ -1157,7 +1140,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function testGetReportStatus()
+    public function testGetReportStatus(): void
     {
         $reference = 'OLCS-1234-FOO';
 
@@ -1184,7 +1167,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public function testDownloadReport()
+    public function testDownloadReport(): void
     {
         $reference = 'OLCS-1234-FOO';
         $token = 'secretsquirrel';
@@ -1212,10 +1195,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testRefundFeeSinglePayment($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testRefundFeeSinglePayment(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $isMiscellaneous = count($miscParams) > 0 ? true : false;
         $fee = m::mock(FeeEntity::class);
@@ -1368,7 +1349,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame(['payment_ref' => 'RECEIPT_REF'], $result);
     }
 
-    public function testRefundFeeSinglePaymentErrorResponse()
+    public function testRefundFeeSinglePaymentErrorResponse(): void
     {
         $this->expectException(CpmsResponseException::class);
 
@@ -1502,10 +1483,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->refundFee($fee);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testRefundFeeMultiplePayments($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testRefundFeeMultiplePayments(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
         $isMiscellaneous = count($miscParams) > 0 ? true : false;
         $fee = m::mock(FeeEntity::class);
@@ -1720,7 +1699,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response['receipt_references'], $result);
     }
 
-    public function testBatchRefundWithInvalidResponse()
+    public function testBatchRefundWithInvalidResponse(): void
     {
         $this->expectException(CpmsResponseException::class);
         $this->mockSchemaIdChange();
@@ -1773,10 +1752,8 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->sut->batchRefund($fee);
     }
 
-    /**
-     * @dataProvider miscParamsProvider
-     */
-    public function testBatchRefundWithServiceException($miscParams, $expectedCustomer, $expectedReceiver)
+    #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
+    public function testBatchRefundWithServiceException(mixed $miscParams, mixed $expectedCustomer, mixed $expectedReceiver): void
     {
 
         $isMiscellaneous = count($miscParams) > 0 ? true : false;
@@ -1913,7 +1890,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response['receipt_references'], $result);
     }
 
-    public function testCreateServiceWithInvoicePrefix()
+    public function testCreateServiceWithInvoicePrefix(): void
     {
         $sut = $this->createService(
             null,
@@ -1927,27 +1904,27 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame('PREFIX', $sut->getInvoicePrefix());
     }
 
-    public function testGetSetInvoicePrefix()
+    public function testGetSetInvoicePrefix(): void
     {
         $this->assertSame(null, $this->sut->getInvoicePrefix());
         $this->sut->setInvoicePrefix('PREFIX');
         $this->assertSame('PREFIX', $this->sut->getInvoicePrefix());
     }
 
-    public function testSetInvoicePrefixTooLong()
+    public function testSetInvoicePrefixTooLong(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->sut->setInvoicePrefix('TOO_LONGX');
     }
 
-    public function testFormatAddressNull()
+    public function testFormatAddressNull(): void
     {
         $sut = m::mock(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)->makePartial();
 
         $this->assertNull($sut->formatAddress(null));
     }
 
-    public function testValidateReceiverParamsWithException()
+    public function testValidateReceiverParamsWithException(): void
     {
         $sut = m::mock(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)->makePartial();
 
@@ -1955,7 +1932,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $sut->validateReceiverParams();
     }
 
-    public function testValidateCustomerParamsWithException()
+    public function testValidateCustomerParamsWithException(): void
     {
         $sut = m::mock(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)->makePartial();
 
@@ -1963,7 +1940,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $sut->validateCustomerParams();
     }
 
-    public function testGetReceiverReferenceMiscFee()
+    public function testGetReceiverReferenceMiscFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -1986,7 +1963,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertNull($sut->getReceiverReference($mockFee));
     }
 
-    public function testGetReceiverReferenceIrfoFee()
+    public function testGetReceiverReferenceIrfoFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -2018,7 +1995,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals('IR0000001', $sut->getReceiverReference($mockFee));
     }
 
-    public function testGetReceiverReferenceBusFee()
+    public function testGetReceiverReferenceBusFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -2058,7 +2035,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals('OB1234567B', $sut->getReceiverReference($mockFee));
     }
 
-    public function testGetReceiverReferenceLicenceFee()
+    public function testGetReceiverReferenceLicenceFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -2098,7 +2075,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals('OB1234567', $sut->getReceiverReference($mockFee));
     }
 
-    public function testGetReceiverReferenceOrgFee()
+    public function testGetReceiverReferenceOrgFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -2138,7 +2115,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals(99, $sut->getReceiverReference($mockFee));
     }
 
-    public function testGetReceiverReferenceNoFee()
+    public function testGetReceiverReferenceNoFee(): void
     {
         $mockFee = m::mock()
             ->shouldReceive('getLicence')
@@ -2172,7 +2149,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertNull($sut->getReceiverReference($mockFee));
     }
 
-    public function testFormatAddressArray()
+    public function testFormatAddressArray(): void
     {
         $sut = m::mock(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)->makePartial();
 
@@ -2196,7 +2173,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals($sut->formatAddress($address), $expected);
     }
 
-    public function testFormatAddressObject()
+    public function testFormatAddressObject(): void
     {
         $sut = m::mock(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)->makePartial();
 
@@ -2219,7 +2196,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertEquals($sut->formatAddress($address), $expected);
     }
 
-    protected function mockSchemaIdChange($isNi = false, $times = 1)
+    protected function mockSchemaIdChange(bool $isNi = false, int $times = 1): void
     {
         $this->identity
             ->shouldReceive('setClientId')

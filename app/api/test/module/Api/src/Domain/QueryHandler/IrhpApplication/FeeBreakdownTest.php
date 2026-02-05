@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpApplication\FeeBreakdown;
@@ -40,10 +42,8 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpGenerateFeeBreakdownAvailable
-     */
-    public function testGenerateFeeBreakdownAvailable($irhpPermitTypeId, $expectedServiceName)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateFeeBreakdownAvailable')]
+    public function testGenerateFeeBreakdownAvailable(mixed $irhpPermitTypeId, mixed $expectedServiceName): void
     {
         $feeBreakdown = [
             'row1' => [
@@ -71,7 +71,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpGenerateFeeBreakdownAvailable()
+    public static function dpGenerateFeeBreakdownAvailable(): array
     {
         return [
             [
@@ -85,10 +85,8 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerateFeeBreakdownNotAvailable
-     */
-    public function testGenerateFeeBreakdownNotAvailable($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateFeeBreakdownNotAvailable')]
+    public function testGenerateFeeBreakdownNotAvailable(mixed $irhpPermitTypeId): void
     {
         $this->irhpApplication->shouldReceive('getIrhpPermitType->getId')
             ->withNoArgs()
@@ -100,7 +98,7 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpGenerateFeeBreakdownNotAvailable()
+    public static function dpGenerateFeeBreakdownNotAvailable(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermit;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\IrhpPermit\UniqueCountriesByLicence as Handler;
@@ -24,7 +26,7 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryBilateral()
+    public function testHandleQueryBilateral(): void
     {
         $licenceId = 797;
         $irhpPermitTypeId = IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL;
@@ -125,10 +127,8 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleQueryNonBilateral
-     */
-    public function testHandleQueryNonBilateral($irhpPermitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNonBilateral')]
+    public function testHandleQueryNonBilateral(mixed $irhpPermitTypeId): void
     {
         $this->query->shouldReceive('getIrhpPermitType')
             ->withNoArgs()
@@ -142,7 +142,7 @@ class UniqueCountriesByLicenceTest extends QueryHandlerTestCase
         );
     }
 
-    public function dpHandleQueryNonBilateral()
+    public static function dpHandleQueryNonBilateral(): array
     {
         return [
             [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],

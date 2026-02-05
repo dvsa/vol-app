@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update IrfoPsvAuth Test
  */
@@ -38,7 +40,8 @@ class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::STATUS_PENDING,
@@ -62,7 +65,7 @@ class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 1,
@@ -193,7 +196,7 @@ class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('deleted number', $deletedIrfoPsvAuthNumbers[0]->getName());
     }
 
-    public function testHandleCommandForRenew()
+    public function testHandleCommandForRenew(): void
     {
         $data = [
             'id' => 1,

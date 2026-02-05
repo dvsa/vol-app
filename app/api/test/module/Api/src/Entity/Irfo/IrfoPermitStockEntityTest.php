@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry;
@@ -20,7 +22,7 @@ class IrfoPermitStockEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $serialNo = 'unit_SerialNo';
         $validForYear = 'unit_ValidForYear';

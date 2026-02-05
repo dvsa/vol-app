@@ -37,17 +37,15 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
-    protected FormHelperService $formHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        FormHelperService $formHelper
+        protected FormHelperService $formHelper
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
-        $this->formHelper = $formHelper;
     }
 
     /**
@@ -67,6 +65,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $form = $this->getForm('DiscPrinting');
@@ -74,7 +73,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
         $inlineScripts = ['disc-printing'];
 
         if ($this->getRequest()->isPost()) {
-            $this->formPost($form, [$this, 'processForm']);
+            $this->formPost($form, $this->processForm(...));
             if ($this->hasDiscsToPrint) {
                 $inlineScripts[] = 'disc-printing-popup';
             }

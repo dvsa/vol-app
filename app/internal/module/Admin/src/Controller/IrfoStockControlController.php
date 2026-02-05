@@ -128,6 +128,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
         $request->getQuery()->fromArray($filters);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->setPageTitle();
@@ -137,16 +138,19 @@ class IrfoStockControlController extends AbstractInternalController implements L
         return parent::indexAction();
     }
 
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    #[\Override]
     public function editAction()
     {
         return $this->notFoundAction();
     }
 
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();
@@ -172,7 +176,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
             $response = $this->handleCommand(
                 IssuedDto::create(
                     [
-                        'ids' => explode(',', $this->params()->fromRoute('id')),
+                        'ids' => explode(',', (string) $this->params()->fromRoute('id')),
                         'irfoGvPermit' => $form->getData()['fields']['irfoGvPermitId']
                     ]
                 )
@@ -203,7 +207,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
     protected function update($status)
     {
         return $this->processCommand(
-            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id')), 'status' => $status]),
+            new AddFormDefaultData(['ids' => explode(',', (string) $this->params()->fromRoute('id')), 'status' => $status]),
             UpdateDto::class
         );
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Radio;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -84,7 +86,7 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         $this->radioAnswerSummaryProvider = new RadioAnswerSummaryProvider($this->optionListGenerator);
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -92,10 +94,8 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $qaAnswer = 'item2Value';
         $item2Label = 'item2Label';
@@ -120,10 +120,8 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariablesException($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariablesException(mixed $isSnapshot): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Answer not found in list of options');
@@ -137,7 +135,7 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         $this->radioAnswerSummaryProvider->getTemplateVariables($this->qaContext, $this->element, $isSnapshot);
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

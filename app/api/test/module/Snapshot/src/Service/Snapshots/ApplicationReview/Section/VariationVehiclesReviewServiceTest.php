@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Variation Vehicles Review Service Test
  *
@@ -35,15 +37,13 @@ class VariationVehiclesReviewServiceTest extends MockeryTestCase
         $this->sut = new VariationVehiclesReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             [

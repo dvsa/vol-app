@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -37,7 +39,8 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -46,7 +49,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutSpaces()
+    public function testHandleCommandWithoutSpaces(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -67,7 +70,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->expects('isGranted')
             ->with(Permission::INTERNAL_USER, null)

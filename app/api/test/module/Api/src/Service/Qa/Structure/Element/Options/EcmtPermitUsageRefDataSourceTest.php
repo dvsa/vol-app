@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Options;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -90,7 +92,7 @@ class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
         $this->ecmtPermitUsageRefDataSource = new EcmtPermitUsageRefDataSource($this->refDataSource, $transformations);
     }
 
-    public function testPopulateOptionList()
+    public function testPopulateOptionList(): void
     {
         $optionListOptions = [
             $this->optionListOption1,
@@ -105,7 +107,7 @@ class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
         $this->ecmtPermitUsageRefDataSource->populateOptionList($this->optionList, self::OPTIONS);
     }
 
-    public function testPopulateOptionListException()
+    public function testPopulateOptionListException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find transformations for option value other_ref_data');

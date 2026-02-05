@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class Rule450MarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\TransportManager\Rule450Marker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'transportManagerApplications' => [

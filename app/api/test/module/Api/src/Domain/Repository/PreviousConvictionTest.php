@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PreviousConvictionTest
  *
@@ -23,7 +25,7 @@ class PreviousConvictionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
@@ -41,7 +43,7 @@ class PreviousConvictionTest extends RepositoryTestCase
         $this->assertSame('RESULT', $this->sut->fetchByTransportManager(123));
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Checkbox;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Element\Checkbox\Checkbox;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CheckboxTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGetRepresentation
-     */
-    public function testGetRepresentation($checked)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRepresentation')]
+    public function testGetRepresentation(mixed $checked): void
     {
         $labelTranslateableTextRepresentation = ['labelTranslateableTextRepresentation'];
 
@@ -49,7 +49,7 @@ class CheckboxTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetRepresentation()
+    public static function dpTestGetRepresentation(): array
     {
         return [
             [true],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Submit Application Step test
  */
@@ -99,7 +101,7 @@ class SubmitApplicationStepTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandEntityDeleted()
+    public function testHandleCommandEntityDeleted(): void
     {
         $this->repoMap[self::REPOSITORY_NAME]->shouldReceive('contains')
             ->with($this->qaEntity)
@@ -113,7 +115,7 @@ class SubmitApplicationStepTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandEntityExists()
+    public function testHandleCommandEntityExists(): void
     {
         $this->repoMap[self::REPOSITORY_NAME]->shouldReceive('contains')
             ->with($this->qaEntity)

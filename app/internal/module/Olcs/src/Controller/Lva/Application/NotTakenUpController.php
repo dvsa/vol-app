@@ -27,7 +27,6 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     protected $cancelMessageKey  = 'application-not-ntu';
     protected $successMessageKey = 'application-ntu-successfully';
     protected $titleKey          = 'internal-application-ntu-title';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -44,12 +43,10 @@ class NotTakenUpController extends AbstractApplicationDecisionController
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         protected FormHelperService $formHelper,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

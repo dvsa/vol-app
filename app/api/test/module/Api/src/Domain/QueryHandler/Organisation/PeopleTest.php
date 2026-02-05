@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Organisation;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -37,7 +39,7 @@ class PeopleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 724]);
 
@@ -76,7 +78,7 @@ class PeopleTest extends QueryHandlerTestCase
         $this->assertSame($expected, $result->serialize());
     }
 
-    public function testHandleQueryUnlicensed()
+    public function testHandleQueryUnlicensed(): void
     {
         $query = Qry::create(['id' => 724]);
 

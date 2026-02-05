@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractListQueryHandler;
 class GetList extends AbstractListQueryHandler
 {
     protected $repoServiceName = 'LetterAppendix';
-    
+
     protected $bundle = [
         'currentVersion'
     ];

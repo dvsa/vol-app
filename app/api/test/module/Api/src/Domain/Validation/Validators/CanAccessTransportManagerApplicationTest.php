@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessApplication;
@@ -26,7 +28,7 @@ class CanAccessTransportManagerApplicationTest extends AbstractValidatorsTestCas
         parent::setUp();
     }
 
-    public function testIsValidSameTm()
+    public function testIsValidSameTm(): void
     {
         $entity = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class);
         $entity->shouldReceive('getTransportManager')->with()->once()->andReturn('TM');
@@ -40,7 +42,7 @@ class CanAccessTransportManagerApplicationTest extends AbstractValidatorsTestCas
         $this->assertEquals(true, $this->sut->isValid(212));
     }
 
-    public function testIsValidNotSameTm()
+    public function testIsValidNotSameTm(): void
     {
         $entity = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class);
         $entity->shouldReceive('getTransportManager')->with()->once()->andReturn('TM');

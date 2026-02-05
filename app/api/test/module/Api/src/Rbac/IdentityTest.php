@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Identity Test
  */
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IdentityTest extends MockeryTestCase
 {
-    public function testGetUser()
+    public function testGetUser(): void
     {
         $user = User::anon();
 
@@ -25,7 +27,7 @@ class IdentityTest extends MockeryTestCase
         $this->assertSame($user, $sut->getUser());
     }
 
-    public function testGetRoles()
+    public function testGetRoles(): void
     {
         $user = User::anon();
 

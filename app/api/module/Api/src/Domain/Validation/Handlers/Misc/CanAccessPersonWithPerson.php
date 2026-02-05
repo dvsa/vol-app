@@ -15,6 +15,7 @@ namespace Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc;
  */
 class CanAccessPersonWithPerson extends CanAccessPersonWithId
 {
+    #[\Override]
     protected function getId($dto)
     {
         return $dto->getPerson();

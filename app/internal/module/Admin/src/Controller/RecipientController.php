@@ -89,6 +89,7 @@ class RecipientController extends AbstractInternalController implements LeftView
         $this->placeholder()->setPlaceholder('pageTitle', 'Recipients');
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->setPageTitle();
@@ -96,6 +97,7 @@ class RecipientController extends AbstractInternalController implements LeftView
         return parent::indexAction();
     }
 
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();

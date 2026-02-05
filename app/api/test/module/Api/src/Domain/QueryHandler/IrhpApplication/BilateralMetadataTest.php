@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use DateTime;
@@ -68,7 +70,7 @@ class BilateralMetadataTest extends QueryHandlerTestCase
             ->andReturn($availableCountries);
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $irhpApplicationEntity = m::mock(IrhpApplicationEntity::class);
 
@@ -97,7 +99,7 @@ class BilateralMetadataTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryApplicationIdNotSpecified()
+    public function testHandleQueryApplicationIdNotSpecified(): void
     {
         $query = BilateralMetadataQry::create([]);
 

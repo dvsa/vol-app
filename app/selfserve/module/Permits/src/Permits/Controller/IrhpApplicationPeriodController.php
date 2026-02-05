@@ -77,6 +77,7 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function handlePost()
     {
         if (
@@ -104,6 +105,7 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function formIsValid()
     {
         return parent::formIsValid() && $this->allowFormValidationSuccess;

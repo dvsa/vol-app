@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
@@ -88,7 +90,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpInterface::STATUS_ISSUING,
@@ -98,10 +101,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpSubmissionStatuses
-     */
-    public function testHandleCommandWithAllocation($submissionStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmissionStatuses')]
+    public function testHandleCommandWithAllocation(mixed $submissionStatus): void
     {
         $this->irhpApplication->shouldReceive('shouldAllocatePermitsOnSubmission')
             ->withNoArgs()
@@ -152,10 +153,8 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(self::IRHP_APPLICATION_ID, $result->getId('irhpApplication'));
     }
 
-    /**
-     * @dataProvider dpSubmissionStatuses
-     */
-    public function testHandleCommandWithoutAllocation($submissionStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmissionStatuses')]
+    public function testHandleCommandWithoutAllocation(mixed $submissionStatus): void
     {
         $this->irhpApplication->shouldReceive('shouldAllocatePermitsOnSubmission')
             ->withNoArgs()
@@ -200,7 +199,7 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(self::IRHP_APPLICATION_ID, $result->getId('irhpApplication'));
     }
 
-    public function dpSubmissionStatuses()
+    public static function dpSubmissionStatuses(): array
     {
         return [
             [IrhpInterface::STATUS_ISSUING],

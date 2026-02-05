@@ -26,6 +26,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         parent::__construct($formHelper);
     }
 
+    #[\Override]
     protected function alterForm(Form $form, array $params)
     {
         $this->formServiceLocator->get('lva-application')->alterForm($form);
@@ -36,6 +37,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
     /**
      * @see AbstractOperatingCentres::allowChangingTrafficArea
      */
+    #[\Override]
     protected function allowChangingTrafficArea($trafficAreaId)
     {
         // Traffic area can be changed as long as its not Northern Irelend
@@ -45,6 +47,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
     /**
      * @see AbstractOperatingCentres::removeTrafficAreaElements
      */
+    #[\Override]
     protected function removeTrafficAreaElements($data)
     {
         return false;

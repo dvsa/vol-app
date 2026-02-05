@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Permits\OpenWindows;
@@ -26,7 +28,8 @@ class OpenWindowsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->references = [
             IrhpPermitWindow::class => [
@@ -47,7 +50,7 @@ class OpenWindowsTest extends QueryHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         /** @var IrhpPermitType $irhpPermitType */
         $irhpPermitType = $this->references[IrhpPermitType::class][10];
@@ -94,7 +97,7 @@ class OpenWindowsTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryWhenNoOpenWindow()
+    public function testHandleQueryWhenNoOpenWindow(): void
     {
         $irhpPermitTypeId = 10;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Vehicles Status Test
  *
@@ -31,7 +33,7 @@ class UpdateVehiclesStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setVehiclesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -40,7 +42,7 @@ class UpdateVehiclesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setVehiclesStatus(ApplicationCompletionEntity::STATUS_COMPLETE);
 
@@ -49,7 +51,7 @@ class UpdateVehiclesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithoutVehicles()
+    public function testHandleCommandWithoutVehicles(): void
     {
         $this->applicationCompletion->setVehiclesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -62,7 +64,7 @@ class UpdateVehiclesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithMoreThanTotAuth()
+    public function testHandleCommandWithMoreThanTotAuth(): void
     {
         $this->applicationCompletion->setVehiclesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -76,7 +78,7 @@ class UpdateVehiclesStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $this->applicationCompletion->setVehiclesStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

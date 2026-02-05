@@ -111,6 +111,7 @@ class NonPublicInquiryController extends AbstractInternalController implements C
      *
      * @return array
      */
+    #[\Override]
     public function notFoundAction()
     {
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);

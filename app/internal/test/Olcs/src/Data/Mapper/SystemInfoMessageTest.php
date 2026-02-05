@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -13,7 +15,7 @@ class SystemInfoMessageTest extends MockeryTestCase
 {
     public const ID = 9999;
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'id' => self::ID,
@@ -31,7 +33,7 @@ class SystemInfoMessageTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             SystemInfoMessage::DETAILS => [
@@ -49,7 +51,7 @@ class SystemInfoMessageTest extends MockeryTestCase
         );
     }
 
-    public function testMapFromError()
+    public function testMapFromError(): void
     {
         $errors = [
             'messages' => [

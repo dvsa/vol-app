@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -24,7 +26,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->setUpSut(DataRetention::class, true);
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(DataRetention::class, true);
 
@@ -39,7 +41,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListJoins($mockQb);
     }
 
-    public function testApplyListFiltersRecordsQry()
+    public function testApplyListFiltersRecordsQry(): void
     {
         $query = RecordsQry::create(
             [
@@ -62,7 +64,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryMarkedForDeletionY()
+    public function testApplyListFiltersRecordsQryMarkedForDeletionY(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -90,7 +92,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryMarkedForDeletionN()
+    public function testApplyListFiltersRecordsQryMarkedForDeletionN(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -118,7 +120,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryWithNextReviewDeferred()
+    public function testApplyListFiltersRecordsQryWithNextReviewDeferred(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -144,7 +146,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFiltersRecordsQryWithNextReviewPending()
+    public function testApplyListFiltersRecordsQryWithNextReviewPending(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -169,7 +171,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFiltersRecordsQryWithAssignedToUser()
+    public function testApplyListFiltersRecordsQryWithAssignedToUser(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -193,7 +195,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryWithAssignedToUserUnassigned()
+    public function testApplyListFiltersRecordsQryWithAssignedToUserUnassigned(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -216,7 +218,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryWithAssignedToUserAll()
+    public function testApplyListFiltersRecordsQryWithAssignedToUserAll(): void
     {
         $query = RecordsQry::create(
             ['dataRetentionRuleId' => 13,
@@ -237,7 +239,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testApplyListFiltersRecordsQryWithGoodsLicence()
+    public function testApplyListFiltersRecordsQryWithGoodsLicence(): void
     {
         $query = RecordsQry::create(
             [
@@ -264,7 +266,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->sut->applyListFilters($qb, $query);
     }
 
-    public function testRunCleanupProc()
+    public function testRunCleanupProc(): void
     {
         $mockStatement = m::mock();
         $mockStatement
@@ -285,7 +287,7 @@ class DataRetentionTest extends RepositoryTestCase
         $this->assertTrue($result);
     }
 
-    public function testFetchAllProcessedForRule()
+    public function testFetchAllProcessedForRule(): void
     {
         $qb = $this->createMockQb('BLAH');
 

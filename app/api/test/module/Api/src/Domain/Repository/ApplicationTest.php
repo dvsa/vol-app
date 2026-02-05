@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\LockMode;
@@ -22,9 +24,8 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Application
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Application::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ApplicationTest extends RepositoryTestCase
 {
     public const APP_ID = 8001;
@@ -38,14 +39,14 @@ class ApplicationTest extends RepositoryTestCase
         $this->setUpSut(Repository\Application::class);
     }
 
-    public function testLockWithoutApplication()
+    public function testLockWithoutApplication(): void
     {
         $this->expectException(RuntimeException::class);
 
         $this->sut->lock(m::mock(Licence::class), 1);
     }
 
-    public function testLockWithConflict()
+    public function testLockWithConflict(): void
     {
         $entity = m::mock(Application::class);
 
@@ -58,7 +59,8 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->lock($entity, 1);
     }
 
-    public function testLock()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testLock(): void
     {
         $entity = m::mock(Application::class);
 
@@ -68,14 +70,14 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->lock($entity, 1);
     }
 
-    public function testSaveWithoutApplication()
+    public function testSaveWithoutApplication(): void
     {
         $this->expectException(RuntimeException::class);
 
         $this->sut->save(m::mock(Licence::class));
     }
 
-    public function testSave()
+    public function testSave(): void
     {
         $entity = m::mock(Application::class);
 
@@ -88,14 +90,14 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->save($entity);
     }
 
-    public function testDeleteWithoutApplication()
+    public function testDeleteWithoutApplication(): void
     {
         $this->expectException(RuntimeException::class);
 
         $this->sut->delete(m::mock(Licence::class));
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $entity = m::mock(Application::class);
 
@@ -108,7 +110,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->delete($entity);
     }
 
-    public function testGetRefdataReference()
+    public function testGetRefdataReference(): void
     {
         $id = 'foo';
 
@@ -119,7 +121,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('blah', $this->sut->getRefdataReference($id));
     }
 
-    public function testGetCategoryReference()
+    public function testGetCategoryReference(): void
     {
         $id = 'foo';
 
@@ -130,7 +132,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('blah', $this->sut->getCategoryReference($id));
     }
 
-    public function testGetSubCategoryReference()
+    public function testGetSubCategoryReference(): void
     {
         $id = 'foo';
 
@@ -141,7 +143,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('blah', $this->sut->getSubCategoryReference($id));
     }
 
-    public function testGetReference()
+    public function testGetReference(): void
     {
         $id = 'foo';
 
@@ -152,7 +154,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('blah', $this->sut->getReference(RefData::class, $id));
     }
 
-    public function testFetchUsingId()
+    public function testFetchUsingId(): void
     {
         /** @var QueryInterface | m\MockInterface $command */
         $command = m::mock(QueryInterface::class);
@@ -195,7 +197,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testFetchUsingIdWithResults()
+    public function testFetchUsingIdWithResults(): void
     {
         /** @var QueryInterface | m\MockInterface $command */
         $command = m::mock(QueryInterface::class);
@@ -241,7 +243,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->fetchUsingId($command, Query::HYDRATE_OBJECT, 1);
     }
 
-    public function testFetchWithLicenceAndOc()
+    public function testFetchWithLicenceAndOc(): void
     {
         $applicationId = 1;
 
@@ -305,7 +307,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchActiveForOrganisation()
+    public function testFetchActiveForOrganisation(): void
     {
         $organisationId = 123;
 
@@ -351,7 +353,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchWithLicence()
+    public function testFetchWithLicence(): void
     {
         $applicationId = 1;
 
@@ -387,7 +389,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchWithLicenceAndOrg()
+    public function testFetchWithLicenceAndOrg(): void
     {
         $applicationId = 1;
 
@@ -426,7 +428,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testFetchByOrgAndStatusForActiveLicences()
+    public function testFetchByOrgAndStatusForActiveLicences(): void
     {
         $qb = $this->createMockQb('{{QUERY}}');
 
@@ -461,7 +463,7 @@ class ApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchWithLicenceNotFound()
+    public function testFetchWithLicenceNotFound(): void
     {
         $applicationId = 1;
 
@@ -499,7 +501,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals('RESULT', $result);
     }
 
-    public function testApplyListJoins()
+    public function testApplyListJoins(): void
     {
         $this->setUpSut(Repository\Application::class, true);
 
@@ -511,7 +513,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->applyListJoins($mockQb);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repository\Application::class, true);
 
@@ -545,7 +547,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $mockQuery);
     }
 
-    public function testFetchWithTmLicences()
+    public function testFetchWithTmLicences(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
@@ -559,7 +561,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchWithTmLicences(1));
     }
 
-    public function testFetchForNtu()
+    public function testFetchForNtu(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
@@ -590,7 +592,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchForNtu());
     }
 
-    public function testFetchAbandonedVariations()
+    public function testFetchAbandonedVariations(): void
     {
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
@@ -619,7 +621,7 @@ class ApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULT'], $this->sut->fetchAbandonedVariations($olderThanDate));
     }
 
-    public function testFetchOpenApplicationsForLicence()
+    public function testFetchOpenApplicationsForLicence(): void
     {
         $licenceId = 5;
         $status = Application::APPLICATION_STATUS_UNDER_CONSIDERATION;

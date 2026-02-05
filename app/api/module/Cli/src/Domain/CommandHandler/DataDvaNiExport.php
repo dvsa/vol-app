@@ -17,7 +17,7 @@ final class DataDvaNiExport extends AbstractDataExport
     use QueueAwareTrait;
 
     public const FILE_DATETIME_FORMAT = 'YmdHis';
-    public const NI_OPERATOR_LICENCE = 'ni-operator-licence';
+    public const string NI_OPERATOR_LICENCE = 'ni-operator-licence';
 
 
     /**
@@ -80,13 +80,14 @@ final class DataDvaNiExport extends AbstractDataExport
         $this->cleanUpFiles([$csvFilePath, $manifestPath, $archivePath]);
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');
         $exportCfg = $config['data-dva-ni-export'] ?? [];
 
         if (isset($exportCfg['s3_uri'])) {
-            $parsedUrl = parse_url(rtrim($exportCfg['s3_uri'], '/'));
+            $parsedUrl = parse_url(rtrim((string) $exportCfg['s3_uri'], '/'));
             $this->s3Bucket = $parsedUrl['host'];
             $this->path = ltrim($parsedUrl['path'], '/');
         }

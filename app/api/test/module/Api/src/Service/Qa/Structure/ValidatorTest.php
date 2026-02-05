@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\Validator;
@@ -31,7 +33,7 @@ class ValidatorTest extends MockeryTestCase
         $this->validator = new Validator($this->rule, $this->params);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $expectedRepresentation = [
             'rule' => $this->rule,
@@ -44,21 +46,21 @@ class ValidatorTest extends MockeryTestCase
         );
     }
 
-    public function testHasRuleTrue()
+    public function testHasRuleTrue(): void
     {
         $this->assertTrue(
             $this->validator->hasRule($this->rule)
         );
     }
 
-    public function testHasRuleFalse()
+    public function testHasRuleFalse(): void
     {
         $this->assertFalse(
             $this->validator->hasRule('OtherRule')
         );
     }
 
-    public function testSetParameter()
+    public function testSetParameter(): void
     {
         $this->validator->setParameter('min', 41);
 
@@ -76,7 +78,7 @@ class ValidatorTest extends MockeryTestCase
         );
     }
 
-    public function testSetParameterNotFound()
+    public function testSetParameterNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Parameter foo not found in validator');

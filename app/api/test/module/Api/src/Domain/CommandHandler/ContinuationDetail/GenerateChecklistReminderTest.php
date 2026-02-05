@@ -24,7 +24,8 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Document::class => [

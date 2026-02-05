@@ -34,7 +34,7 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
      * @param null $organisationId
      * @return m\Mock
      */
-    private function getCurrentUser($localAuthorityId = null, $organisationId = null)
+    private function getCurrentUser(mixed $localAuthorityId = null, mixed $organisationId = null): m\MockInterface
     {
         $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
         $mockUser->shouldReceive('getUser')
@@ -64,7 +64,7 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         return $mockUser;
     }
 
-    public function testHandleQueryOperator()
+    public function testHandleQueryOperator(): void
     {
         $organisationId = 1;
         $localAuthorityId = null;
@@ -103,7 +103,7 @@ class BusRegSearchViewContextListTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryLocalAuthority()
+    public function testHandleQueryLocalAuthority(): void
     {
         $organisationId = null;
         $localAuthorityId = 99;

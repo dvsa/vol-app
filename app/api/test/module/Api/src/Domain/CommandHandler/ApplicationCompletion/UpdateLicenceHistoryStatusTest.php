@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Licence History Status Test
  *
@@ -20,6 +22,7 @@ use Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'LicenceHistory';
@@ -32,7 +35,8 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             OtherLicence::TYPE_DISQUALIFIED,
@@ -42,21 +46,21 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutAnAnswer()
+    public function testHandleCommandWithoutAnAnswer(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -71,7 +75,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithAllNos()
+    public function testHandleCommandWithAllNos(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -86,7 +90,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithYesWithoutOtherLicences()
+    public function testHandleCommandWithYesWithoutOtherLicences(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -103,7 +107,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithYesWithoutSpecificOtherLicences()
+    public function testHandleCommandWithYesWithoutSpecificOtherLicences(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -130,7 +134,7 @@ class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithYesWithSpecificOtherLicences()
+    public function testHandleCommandWithYesWithSpecificOtherLicences(): void
     {
         $this->applicationCompletion->setLicenceHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

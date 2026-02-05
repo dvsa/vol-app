@@ -185,7 +185,7 @@ abstract class AbstractDataExport extends AbstractCommandHandler
 
         foreach ($filePaths as $filePath) {
             $hash = hash_file('sha256', $filePath);
-            $fileName = basename($filePath);
+            $fileName = basename((string) $filePath);
             $manifestLines[] = $hash . '  ' . $fileName;
         }
 
@@ -208,10 +208,10 @@ abstract class AbstractDataExport extends AbstractCommandHandler
         $tar = new \PharData($archivePath);
 
         foreach ($filePaths as $filePath) {
-            $tar->addFile($filePath, basename($filePath));
+            $tar->addFile($filePath, basename((string) $filePath));
         }
 
-        $tar->addFile($manifestPath, basename($manifestPath));
+        $tar->addFile($manifestPath, basename((string) $manifestPath));
         $tar->compress(\Phar::GZ);
         unlink($archivePath);
 
@@ -220,7 +220,7 @@ abstract class AbstractDataExport extends AbstractCommandHandler
 
     protected function uploadToS3($filePath)
     {
-        $fileName = basename($filePath);
+        $fileName = basename((string) $filePath);
         $fileResource = fopen($filePath, 'r');
 
         $this->s3Client->putObject([

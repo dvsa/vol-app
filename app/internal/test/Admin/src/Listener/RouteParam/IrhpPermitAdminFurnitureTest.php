@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Irhp Permit Admin Furniture Test
  *
@@ -11,6 +13,7 @@ namespace AdminTest\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Laminas\EventManager\EventManagerInterface;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -36,16 +39,23 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut = new IrhpPermitAdminFurniture();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
+        $mockEventManager = m::mock(EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'stockId', [$this->sut, 'onIrhpPermitAdminFurniture'], 1);
+            ->with(
+                RouteParams::EVENT_PARAM . 'stockId',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onIrhpPermitAdminFurniture';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    protected function onIrhpPermitAdminSetup($irhpPermitStockData)
+    protected function onIrhpPermitAdminSetup(mixed $irhpPermitStockData): void
     {
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
@@ -65,7 +75,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         }
     }
 
-    public function testOnIrhpPermitQueryError()
+    public function testOnIrhpPermitQueryError(): void
     {
         $this->onIrhpPermitAdminSetup(false);
 
@@ -79,10 +89,8 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    /**
-     * @dataProvider dpNoAdditionalNavProvider
-     */
-    public function testOnIrhpPermitAdminNoAdditionalNav($permitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNoAdditionalNavProvider')]
+    public function testOnIrhpPermitAdminNoAdditionalNav(mixed $permitTypeId): void
     {
         $stockId = 1;
         $subTitle = 'Type: permit type description Validity: 01/01/2018 to 31/12/2018 Quota: 100';
@@ -113,7 +121,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function dpNoAdditionalNavProvider()
+    public static function dpNoAdditionalNavProvider(): array
     {
         return [
             [Refdata::ECMT_PERMIT_TYPE_ID],
@@ -122,10 +130,8 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpWithAdditionalNavProvider
-     */
-    public function testOnIrhpPermitAdminWithAdditionalNav($permitTypeId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpWithAdditionalNavProvider')]
+    public function testOnIrhpPermitAdminWithAdditionalNav(mixed $permitTypeId): void
     {
         $stockId = 1;
         $subTitle = 'Type: permit type description Validity: 01/01/2018 to 31/12/2018 Quota: 100';
@@ -157,7 +163,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function dpWithAdditionalNavProvider()
+    public static function dpWithAdditionalNavProvider(): array
     {
         return [
             [Refdata::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
@@ -166,7 +172,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         ];
     }
 
-    public function testOnIrhpPermitAdminRemovals()
+    public function testOnIrhpPermitAdminRemovals(): void
     {
         $stockId = 10;
         $subTitle = 'Type: Removals permit Stock: 10 Quota: 100';
@@ -196,7 +202,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testOnIrhpPermitAdminBilateral()
+    public function testOnIrhpPermitAdminBilateral(): void
     {
         $stockId = 20;
         $subTitle = 'Type: Bilateral permits (Norway) Validity: 01/01/2019 to 31/12/2019 Quota: 200';
@@ -230,7 +236,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testOnIrhpPermitAdminBilateralWithPermitCategory()
+    public function testOnIrhpPermitAdminBilateralWithPermitCategory(): void
     {
         $stockId = 20;
         $subTitle = 'Type: Bilateral permits (Morocco - Permit category description) Validity: 01/01/2019 to 31/12/2019 Quota: 200';
@@ -267,7 +273,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
@@ -290,7 +296,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->assertSame($mockNavigation, $sut->getNavigationService());
     }
 
-    private function getViewHelperManager($subTitle)
+    private function getViewHelperManager(mixed $subTitle): void
     {
         $titleContainer = m::mock(Placeholder\Container::class);
         $titleContainer->expects('set')->with('Permits');
@@ -308,7 +314,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->setViewHelperManager($mockViewHelperManager);
     }
 
-    private function getMockNavigation()
+    private function getMockNavigation(): void
     {
         $sectorsPage = m::mock(NavigationPage::class);
         $sectorsPage->expects('setVisible')->with(false);

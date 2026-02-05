@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Formatter;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Name;
@@ -11,10 +13,8 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\Name;
  */
 class NameTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider nameProvider
-     */
-    public function testFormat($input, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('nameProvider')]
+    public function testFormat(mixed $input, mixed $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -22,7 +22,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function nameProvider()
+    public static function nameProvider(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Generic\Answer;
@@ -60,7 +62,7 @@ class NoOfPermitsAnswerSaverTest extends MockeryTestCase
         );
     }
 
-    public function testSaveStandardOnly()
+    public function testSaveStandardOnly(): void
     {
         $standardPermitsRequired = 14;
 
@@ -85,7 +87,7 @@ class NoOfPermitsAnswerSaverTest extends MockeryTestCase
         $this->noOfPermitsAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    public function testSaveCabotageOnly()
+    public function testSaveCabotageOnly(): void
     {
         $cabotagePermitsRequired = 14;
 
@@ -110,7 +112,7 @@ class NoOfPermitsAnswerSaverTest extends MockeryTestCase
         $this->noOfPermitsAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    public function testSaveStandardAndCabotage()
+    public function testSaveStandardAndCabotage(): void
     {
         $standardPermitsRequired = 17;
         $cabotagePermitsRequired = 12;

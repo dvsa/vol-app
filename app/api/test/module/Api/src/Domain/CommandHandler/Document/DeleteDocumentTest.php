@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Repository\Document;
@@ -46,7 +48,8 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -58,7 +61,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $documentId = 123;
         $command = Cmd::create(['id' => $documentId, 'unlinkLicence' => false]);
@@ -122,7 +125,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand calls the extra side effect if the document is ebsr pack
      */
-    public function testHandleCommandEbsrDoc()
+    public function testHandleCommandEbsrDoc(): void
     {
         $ebsrSubId = 123345;
         $documentId = 123;
@@ -176,7 +179,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand with unlinkLicence set to true
      */
-    public function testHandleCommandWithUnlinkLicence()
+    public function testHandleCommandWithUnlinkLicence(): void
     {
         $documentId = 123;
         $userId = 456;
@@ -238,7 +241,7 @@ class DeleteDocumentTest extends AbstractCommandHandlerTestCase
     /**
      * Tests handleCommand with unlinkLicence set to true but different user
      */
-    public function testHandleCommandWithUnlinkLicenceDifferentUser()
+    public function testHandleCommandWithUnlinkLicenceDifferentUser(): void
     {
         $documentId = 123;
         $currentUserId = 456;

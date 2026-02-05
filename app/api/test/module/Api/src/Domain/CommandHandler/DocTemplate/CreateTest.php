@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DocTemplate;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -23,9 +25,7 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Create
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Create::class)]
 class CreateTest extends AbstractCommandHandlerTestCase
 {
     public const BODY = 'expect_body';
@@ -59,7 +59,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Entity\System\Category::class => [
@@ -79,7 +80,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'content' => base64_encode(self::BODY),
@@ -168,7 +169,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIdentifierExists()
+    public function testHandleCommandIdentifierExists(): void
     {
         $data = [
             'content' => base64_encode(self::BODY),

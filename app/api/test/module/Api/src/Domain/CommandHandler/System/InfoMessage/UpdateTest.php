@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System\InfoMessage;
 
 use Doctrine\ORM\Query;
@@ -23,7 +25,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function test()
+    public function test(): void
     {
         $id = 99999;
         $startDate = (new \DateTime())->setTime(0, 0, 0);

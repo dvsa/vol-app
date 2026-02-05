@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cpms Request Report Command Handler Test
  *
@@ -41,7 +43,7 @@ class RequestReportTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $reportCode = 'FOO';
         $start = '2015-10-07 00:00:00';
@@ -96,7 +98,7 @@ class RequestReportTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['queue' => 99, 'cpmsReport' => 'OLCS-1234-FOO'], $result->getIds());
     }
 
-    public function testHandleCommandErrorFromCpms()
+    public function testHandleCommandErrorFromCpms(): void
     {
         $reportCode = 'FOO';
         $start = '2015-10-07 00:00:00';

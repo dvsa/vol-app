@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Goods Disc test
  *
@@ -42,7 +44,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->setUpSut(GoodsDiscRepo::class);
     }
 
-    public function testFetchDiscsToPrintNi()
+    public function testFetchDiscsToPrintNi(): void
     {
         $licenceType = 'ltyp_r';
 
@@ -107,7 +109,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->fetchDiscsToPrint('Y', $licenceType, $maxResults);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $licenceType = 'ltyp_r';
 
@@ -188,7 +190,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->fetchDiscsToPrint('N', $licenceType, $maxResults);
     }
 
-    public function testSetPrintingOn()
+    public function testSetPrintingOn(): void
     {
         $discs = [1, 2];
         $sut = m::mock(GoodsDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -200,7 +202,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertNull($sut->setIsPrintingOn($discs));
     }
 
-    public function testSetPrintingOff()
+    public function testSetPrintingOff(): void
     {
         $discs = [1, 2];
         $sut = m::mock(GoodsDiscRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -212,7 +214,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertNull($sut->setIsPrintingOff($discs));
     }
 
-    public function testSetPrinting()
+    public function testSetPrinting(): void
     {
         $this->expectQueryWithData(
             'Discs\GoodsDiscsSetIsPrinting',
@@ -223,7 +225,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->setIsPrintingOn([1, 2]);
     }
 
-    public function testSetIsPrintingOffAndAssignNumbers()
+    public function testSetIsPrintingOffAndAssignNumbers(): void
     {
         $query = m::mock();
         $query->shouldReceive('execute')->once()->with(['id' => 1, 'discNo' => 634]);
@@ -237,7 +239,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->setIsPrintingOffAndAssignNumbers([1, 32, 4], 634);
     }
 
-    public function testCeaseDiscsForLicence()
+    public function testCeaseDiscsForLicence(): void
     {
         $licenceId = 123;
 
@@ -249,7 +251,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertSame(564, $this->sut->ceaseDiscsForLicence($licenceId));
     }
 
-    public function testCeaseDiscsForLicenceVehicle()
+    public function testCeaseDiscsForLicenceVehicle(): void
     {
         $lvId = 123;
         $rowCount = 564;
@@ -267,7 +269,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertSame($rowCount, $this->sut->ceaseDiscsForLicenceVehicle($lvId));
     }
 
-    public function testCeaseDiscsForApplication()
+    public function testCeaseDiscsForApplication(): void
     {
         $stmt = m::mock();
         $stmt->shouldReceive('rowCount')->with()->once()->andReturn(123);
@@ -277,7 +279,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertSame(123, $this->sut->ceaseDiscsForApplication(45));
     }
 
-    public function testFetchDiscsToPrintMin()
+    public function testFetchDiscsToPrintMin(): void
     {
         $licenceType = 'ltyp_r';
 
@@ -353,7 +355,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->fetchDiscsToPrintMin('N', $licenceType);
     }
 
-    public function testUpdateExistingGoodsDiscs()
+    public function testUpdateExistingGoodsDiscs(): void
     {
         $application = m::mock(\Dvsa\Olcs\Api\Entity\Application\Application::class);
         $application->shouldReceive('getId')->andReturn(1102);
@@ -365,7 +367,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->sut->updateExistingGoodsDiscs($application);
     }
 
-    public function testCreateDiscsForLicence()
+    public function testCreateDiscsForLicence(): void
     {
         $stmt = m::mock();
         $stmt->shouldReceive('rowCount')->with()->once()->andReturn(83);
@@ -375,7 +377,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertSame(83, $this->sut->createDiscsForLicence(1502));
     }
 
-    public function testCountForLicence()
+    public function testCountForLicence(): void
     {
         $licenceId = 1;
 
@@ -394,7 +396,7 @@ class GoodsDiscTest extends RepositoryTestCase
         self::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testCountForLicenceNoResult()
+    public function testCountForLicenceNoResult(): void
     {
         $licenceId = 1;
 
@@ -414,7 +416,7 @@ class GoodsDiscTest extends RepositoryTestCase
         $this->assertSame(['discCount' => 0], $this->sut->countForLicence($licenceId));
     }
 
-    public function testCountForLicenceException()
+    public function testCountForLicenceException(): void
     {
         $licenceId = 1;
 

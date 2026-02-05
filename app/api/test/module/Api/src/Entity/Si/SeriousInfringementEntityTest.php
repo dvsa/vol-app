@@ -99,9 +99,7 @@ class SeriousInfringementEntityTest extends EntityTester
         $this->assertTrue($entity->responseSet());
     }
 
-    /**
-     * @dataProvider dpHasRequestedPenalties
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasRequestedPenalties')]
     public function testHasRequestedPenalties(ArrayCollection $requestedErrus, bool $expectedResult): void
     {
         /** @var Entity $entity */
@@ -110,7 +108,7 @@ class SeriousInfringementEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $entity->hasRequestedPenalties());
     }
 
-    public function dpHasRequestedPenalties(): array
+    public static function dpHasRequestedPenalties(): array
     {
         return [
             [new ArrayCollection(), false],

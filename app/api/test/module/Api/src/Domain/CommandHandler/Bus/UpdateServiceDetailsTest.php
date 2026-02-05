@@ -40,9 +40,8 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
      *
      * @note we don't test the two dates here relate to each other properly, that is tested elsewhere
      * First date is included for completeness
-     *
-     * @dataProvider createFeeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('createFeeProvider')]
     public function testHandleCommand(bool $createFee): void
     {
         $busRegId = 99;
@@ -204,7 +203,7 @@ class UpdateServiceDetailsTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function createFeeProvider(): array
+    public static function createFeeProvider(): array
     {
         return [
             [true],

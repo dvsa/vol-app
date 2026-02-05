@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * DeleteListTest
  *
@@ -37,7 +39,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Command::create(['ids' => [4323, 12373], 'licence' => 1, 'lva' => 'licence']);
 
@@ -72,7 +74,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandNotNullTrafficArea()
+    public function testHandleCommandNotNullTrafficArea(): void
     {
         $command = Command::create(['ids' => [4323, 12373], 'licence' => 1, 'lva' => 'licence']);
 
@@ -108,7 +110,7 @@ class DeleteListTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    protected function mockCreateTask()
+    protected function mockCreateTask(): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->twice()

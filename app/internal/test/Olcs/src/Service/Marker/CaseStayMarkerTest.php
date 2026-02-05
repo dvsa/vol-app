@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class CaseStayMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\CaseStayMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderEmptyStays()
+    public function testCanRenderEmptyStays(): void
     {
         $data = [
             'cases' => [
@@ -46,7 +48,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithoutAppeal()
+    public function testCanRenderWithoutAppeal(): void
     {
         $data = [
             'cases' => [
@@ -64,7 +66,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderAppealDecision()
+    public function testCanRenderAppealDecision(): void
     {
         $data = [
             'cases' => [
@@ -86,7 +88,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderAppealWithdrawn()
+    public function testCanRenderAppealWithdrawn(): void
     {
         $data = [
             'cases' => [
@@ -107,7 +109,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRender()
+    public function testCanRender(): void
     {
         $data = [
             'cases' => [
@@ -128,7 +130,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testCanRenderWidthdrawnStays()
+    public function testCanRenderWidthdrawnStays(): void
     {
         $data = [
             'cases' => [
@@ -149,7 +151,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'cases' => [
@@ -179,7 +181,7 @@ class CaseStayMarkerTest extends TestCase
         $this->assertSame('HTML1HTML2', $this->sut->render());
     }
 
-    public function testRenderOnWithdrawnStays()
+    public function testRenderOnWithdrawnStays(): void
     {
         $data = [
             'cases' => [

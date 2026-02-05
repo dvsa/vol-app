@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\AnswersSummary;
 
 use Dvsa\Olcs\Api\Entity\Generic\ApplicationStep as ApplicationStepEntity;
@@ -82,10 +84,8 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGenerateNotSupported($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGenerateNotSupported(mixed $isSnapshot): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Answer summary provider does not support entity type entityType');
@@ -105,7 +105,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],
@@ -113,10 +113,8 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($isSnapshot, $questionSlug, $shouldIncludeSlug, $expectedSlug)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $isSnapshot, mixed $questionSlug, mixed $shouldIncludeSlug, mixed $expectedSlug): void
     {
         $questionTranslationKey = 'question.translation.key';
         $formattedAnswer = 'line 1<br>line 2';
@@ -205,7 +203,7 @@ class AnswersSummaryRowGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [false, 'no-of-permits', true, 'no-of-permits'],

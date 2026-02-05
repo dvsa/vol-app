@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Community Lic Withdrawal Reason Test
  *
@@ -23,7 +25,7 @@ class CommunityLicWithdrawalReasonTest extends RepositoryTestCase
         $this->setUpSut(CommunityLicWithdrawalReasonRepo::class);
     }
 
-    public function testFetchByWithdrawalIds()
+    public function testFetchByWithdrawalIds(): void
     {
         $ids = [1];
         $mockQb = m::mock();

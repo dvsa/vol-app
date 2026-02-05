@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Safety Status Test
  *
@@ -21,6 +23,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'Safety';
@@ -33,7 +36,8 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             Licence::TACH_EXT,
@@ -46,21 +50,21 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutInsVaries()
+    public function testHandleCommandWithoutInsVaries(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -69,7 +73,7 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutTachoIns()
+    public function testHandleCommandWithoutTachoIns(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -79,7 +83,7 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutWorkshops()
+    public function testHandleCommandWithoutWorkshops(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -90,7 +94,7 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutConfirmation()
+    public function testHandleCommandWithoutConfirmation(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -103,7 +107,7 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutTachoName()
+    public function testHandleCommandWithoutTachoName(): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -116,7 +120,7 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function dpHandleCommandTrailers()
+    public static function dpHandleCommandTrailers(): array
     {
         return [
             [
@@ -152,10 +156,8 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommandTrailers
-     */
-    public function testHandleCommandTrailers($vehicleType, $safetyInsTrailers, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandTrailers')]
+    public function testHandleCommandTrailers(mixed $vehicleType, mixed $safetyInsTrailers, mixed $expected): void
     {
         $this->applicationCompletion->setSafetyStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

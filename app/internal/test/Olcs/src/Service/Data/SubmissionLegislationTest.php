@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\SubmissionLegislation;
@@ -30,7 +32,7 @@ class SubmissionLegislationTest extends AbstractPublicInquiryDataTestCase
         $this->sut = new SubmissionLegislation($this->abstractPublicInquiryDataServices);
     }
 
-    public function testFormatData()
+    public function testFormatData(): void
     {
         $this->assertEquals($this->reasons2, $this->sut->formatData($this->reasons));
     }

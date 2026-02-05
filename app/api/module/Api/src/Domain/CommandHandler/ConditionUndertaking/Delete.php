@@ -44,9 +44,9 @@ final class Delete extends AbstractDeleteCommandHandler
         $value = $result->getIds()['id' . $command->getId()] ?? null;
 
         if ($value == $command->getId() && $conditionUndertaking->getConditionType() instanceof RefData) {
-            $eventHistoryType = $conditionUndertaking->getConditionType()->getId() === ConditionUndertaking::TYPE_CONDITION ? 
+            $eventHistoryType = $conditionUndertaking->getConditionType()->getId() === ConditionUndertaking::TYPE_CONDITION ?
                 EventHistoryTypeEntity::EVENT_CODE_CONDITION_DELETED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_DELETED;
-            
+
             // create Event History record
             $this->eventHistoryCreator->create($conditionUndertaking, $eventHistoryType);
         }

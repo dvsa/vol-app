@@ -79,6 +79,7 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
      *
      * @return array
      */
+    #[\Override]
     public function redirectConfig(array $restResponse)
     {
         //if there's a variation previous to the one just deleted

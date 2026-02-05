@@ -61,6 +61,7 @@ class TransferVehicleController extends AbstractVehicleController
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         try {

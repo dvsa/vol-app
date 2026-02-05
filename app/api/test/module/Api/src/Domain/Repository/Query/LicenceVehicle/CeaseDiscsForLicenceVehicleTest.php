@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\LicenceVehicle\CeaseDiscsForLicenceVehicle;
@@ -39,7 +41,7 @@ class CeaseDiscsForLicenceVehicleTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -55,12 +57,12 @@ class CeaseDiscsForLicenceVehicleTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): CeaseDiscsForLicenceVehicle
     {
         return new CeaseDiscsForLicenceVehicle();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE goods_disc gd '
           . 'SET gd.ceased_date = :ceasedDate, '

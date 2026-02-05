@@ -18,6 +18,7 @@ class CanAccessTransportManagerApplication extends AbstractCanAccessEntity
      *
      * @return boolean
      */
+    #[\Override]
     public function isValid($entityId)
     {
         /* @var $tma \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication */

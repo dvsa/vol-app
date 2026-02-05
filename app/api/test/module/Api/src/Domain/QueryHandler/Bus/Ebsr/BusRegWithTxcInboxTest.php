@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BusRegWithTxcInboxTest
  */
@@ -24,6 +26,7 @@ use Mockery as m;
  * BusRegWithTxcInboxTest
  * Tests include for LA, operator and anonymous users querying bus regs that exist and dont exist
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class BusRegWithTxcInboxTest extends QueryHandlerTestCase
 {
     /**
@@ -49,7 +52,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
      * @param null $organisationId
      * @return m\Mock
      */
-    private function getCurrentUser($localAuthorityId = null, $organisationId = null)
+    private function getCurrentUser(mixed $localAuthorityId = null, mixed $organisationId = null): m\MockInterface
     {
         $mockUser = m::mock(\Dvsa\Olcs\Api\Entity\User\User::class)->makePartial();
         $mockUser->shouldReceive('getUser')
@@ -82,7 +85,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
     /**
      * Test operator user querying a bus reg
      */
-    public function testHandleQueryForOrganisation()
+    public function testHandleQueryForOrganisation(): void
     {
         $busRegId = 2;
         $organisationId = 6;
@@ -124,7 +127,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
     /**
      * Test LA user querying a bus reg
      */
-    public function testHandleQueryForLocalAuthority()
+    public function testHandleQueryForLocalAuthority(): void
     {
         $busRegId = 2;
         $localAuthorityId = 4;
@@ -172,7 +175,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
     /**
      * Test anon user querying a bus reg
      */
-    public function testHandleQueryForAnonUser()
+    public function testHandleQueryForAnonUser(): void
     {
         $busRegId = 2;
         $localAuthorityId = 4;
@@ -220,7 +223,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
     /**
      * Test LA user querying a non existent bus reg
      */
-    public function testHandleQueryBusRegNotFoundException()
+    public function testHandleQueryBusRegNotFoundException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 
@@ -249,7 +252,7 @@ class BusRegWithTxcInboxTest extends QueryHandlerTestCase
     /**
      * Test Anon user querying a non existent bus reg
      */
-    public function testHandleQueryForAnonBusRegNotFoundException()
+    public function testHandleQueryForAnonBusRegNotFoundException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\NotFoundException::class);
 

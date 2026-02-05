@@ -62,6 +62,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
      *
      * @return Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFile('irhp-permit-total-table');

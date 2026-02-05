@@ -46,6 +46,7 @@ final class Update extends CreateUpdateAbstract implements TransactionedInterfac
         return $result;
     }
 
+    #[\Override]
     protected function setData($entity, CommandInterface $command)
     {
         /* @var $entity Entity For traceability */

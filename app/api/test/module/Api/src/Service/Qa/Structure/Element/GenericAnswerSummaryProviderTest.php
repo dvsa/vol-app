@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element;
 
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
@@ -22,7 +24,7 @@ class GenericAnswerSummaryProviderTest extends MockeryTestCase
         $this->genericAnswerSummaryProvider = new GenericAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -30,10 +32,8 @@ class GenericAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpSnapshot
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $answerValue = 'foo';
 
@@ -56,7 +56,7 @@ class GenericAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpSnapshot()
+    public static function dpSnapshot(): array
     {
         return [
             [true],

@@ -22,6 +22,7 @@ use Olcs\Auth\Adapter\InternalCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LoginControllerFactoryTest extends MockeryTestCase
 {
     /**
@@ -29,37 +30,33 @@ class LoginControllerFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
         $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, '__invoke']);
+        $this->assertIsCallable($this->sut->__invoke(...));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
-    public function invokeReturnsAnInstanceOfDispatcherWithLoginController()
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function invokeReturnsAnInstanceOfDispatcherWithLoginController(): void
     {
         // Setup
         $this->setUpSut();
 
         $sm = $this->createMock(ContainerInterface::class);
         $sm->method('get')->willReturnMap([
-            [InternalCommandAdapter::class, $this->createMock(InternalCommandAdapter::class)],
-            [AuthenticationServiceInterface::class, $this->createMock(AuthenticationServiceInterface::class)],
-            [CurrentUser::class, $this->createMock(CurrentUser::class)],
-            [FlashMessenger::class, $this->createMock(FlashMessenger::class)],
-            [FormHelperService::class, $this->createMock(FormHelperService::class)],
-            [Layout::class, $this->createMock(Layout::class)],
-            [Redirect::class, $this->createMock(Redirect::class)],
-            [Url::class, $this->createMock(Url::class)],
+            [InternalCommandAdapter::class, $this->createStub(InternalCommandAdapter::class)],
+            [AuthenticationServiceInterface::class, $this->createStub(AuthenticationServiceInterface::class)],
+            [CurrentUser::class, $this->createStub(CurrentUser::class)],
+            [FlashMessenger::class, $this->createStub(FlashMessenger::class)],
+            [FormHelperService::class, $this->createStub(FormHelperService::class)],
+            [Layout::class, $this->createStub(Layout::class)],
+            [Redirect::class, $this->createStub(Redirect::class)],
+            [Url::class, $this->createStub(Url::class)],
             ['ControllerPluginManager', $sm],
         ]);
 
@@ -76,16 +73,16 @@ class LoginControllerFactoryTest extends MockeryTestCase
         $this->sut = new LoginControllerFactory();
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
-        $serviceManager->setService(InternalCommandAdapter::class, $this->createMock(InternalCommandAdapter::class));
-        $serviceManager->setService(AuthenticationServiceInterface::class, $this->createMock(AuthenticationServiceInterface::class));
-        $serviceManager->setService('Auth\CookieService', $this->createMock(CookieService::class));
-        $serviceManager->setService(CurrentUser::class, $this->createMock(CurrentUser::class));
-        $serviceManager->setService(FlashMessenger::class, $this->createMock(FlashMessenger::class));
-        $serviceManager->setService(FormHelperService::class, $this->createMock(FormHelperService::class));
-        $serviceManager->setService(Layout::class, $this->createMock(Layout::class));
-        $serviceManager->setService(Redirect::class, $this->createMock(Redirect::class));
-        $serviceManager->setService(Url::class, $this->createMock(Url::class));
+        $serviceManager->setService(InternalCommandAdapter::class, $this->createStub(InternalCommandAdapter::class));
+        $serviceManager->setService(AuthenticationServiceInterface::class, $this->createStub(AuthenticationServiceInterface::class));
+        $serviceManager->setService('Auth\CookieService', $this->createStub(CookieService::class));
+        $serviceManager->setService(CurrentUser::class, $this->createStub(CurrentUser::class));
+        $serviceManager->setService(FlashMessenger::class, $this->createStub(FlashMessenger::class));
+        $serviceManager->setService(FormHelperService::class, $this->createStub(FormHelperService::class));
+        $serviceManager->setService(Layout::class, $this->createStub(Layout::class));
+        $serviceManager->setService(Redirect::class, $this->createStub(Redirect::class));
+        $serviceManager->setService(Url::class, $this->createStub(Url::class));
     }
 }

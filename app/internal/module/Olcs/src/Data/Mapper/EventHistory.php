@@ -24,7 +24,7 @@ class EventHistory
         $result['details'] = $data['eventHistoryType']['description'];
         $result['info'] = $data['eventData'];
 
-        $result['date'] = date(Module::$dateTimeFormat, strtotime($data['eventDatetime']));
+        $result['date'] = date(Module::$dateTimeFormat, strtotime((string) $data['eventDatetime']));
 
         $result['by'] = isset($data['user']['contactDetails']['person']['forename']) &&
             isset($data['user']['contactDetails']['person']['familyName']) ?

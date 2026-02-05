@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Controller;
 
 use Dvsa\Olcs\Api\Controller\XmlController;
@@ -29,7 +31,7 @@ class XmlControllerTest extends TestCase
      * @param $mockSl
      * @return XmlController
      */
-    protected function setupSut($mockSl)
+    protected function setupSut(mixed $mockSl): mixed
     {
         $sut = new XmlController($this->commandHandlerManager);
         $sut->setPluginManager($mockSl);
@@ -39,7 +41,7 @@ class XmlControllerTest extends TestCase
     /**
      * Tests create when a valid response is returned
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $validResponse = new HttpResponse();
         $validResponse->setStatusCode(HttpResponse::STATUS_CODE_202);
@@ -66,7 +68,7 @@ class XmlControllerTest extends TestCase
     /**
      * Tests create when an exception is thrown
      */
-    public function testCreateWithException()
+    public function testCreateWithException(): void
     {
         $badRequestResponse = new HttpResponse();
         $badRequestResponse->setStatusCode(HttpResponse::STATUS_CODE_400);
@@ -98,7 +100,7 @@ class XmlControllerTest extends TestCase
      * @param $mockCommandHandler
      * @return m\MockInterface
      */
-    protected function getMockSl($mockResponse, $mockParams)
+    protected function getMockSl(mixed $mockResponse, mixed $mockParams): m\MockInterface
     {
         $mockSl = m::mock(PluginManager::class);
         $mockSl->shouldReceive('get')->with('response', null)->andReturn($mockResponse);

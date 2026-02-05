@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PiDefinition Repo Test
  *
@@ -20,6 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\PiDefinition as Repo;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class PiDefinitionTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -27,7 +30,8 @@ class PiDefinitionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testApplyListFilters()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
@@ -51,7 +55,8 @@ class PiDefinitionTest extends RepositoryTestCase
         $this->sut->applyListFilters($mockQb, $query);
     }
 
-    public function testApplyListFiltersForTm()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testApplyListFiltersForTm(): void
     {
         $this->setUpSut(Repo::class, true);
 

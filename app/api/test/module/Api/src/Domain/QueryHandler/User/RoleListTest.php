@@ -26,7 +26,7 @@ class RoleListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create([]);
 
@@ -58,7 +58,7 @@ class RoleListTest extends QueryHandlerTestCase
         $this->assertEquals([['role' => Role::ROLE_OPERATOR_TC], ['role' => Role::ROLE_OPERATOR_ADMIN]], $result['result']);
     }
 
-    public function testHandleQueryTcConsultantDisabled()
+    public function testHandleQueryTcConsultantDisabled(): void
     {
         $query = Qry::create([]);
 

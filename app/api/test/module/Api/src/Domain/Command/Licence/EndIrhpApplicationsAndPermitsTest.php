@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Licence;
 
 use Dvsa\Olcs\Api\Domain\Command\Licence\EndIrhpApplicationsAndPermits;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EndIrhpApplicationsAndPermitsTest extends TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 100;
         $reason = WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED;

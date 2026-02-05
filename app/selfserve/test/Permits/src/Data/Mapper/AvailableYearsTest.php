@@ -25,10 +25,8 @@ class AvailableYearsTest extends TestCase
         $this->availableYears = new AvailableYears($this->translationHelperService);
     }
 
-    /**
-     * @dataProvider dpTestExceptionNotSupported
-     */
-    public function testExceptionNotSupported($typeId): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExceptionNotSupported')]
+    public function testExceptionNotSupported(int $typeId): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This mapper does not support permit type ' . $typeId);
@@ -48,7 +46,7 @@ class AvailableYearsTest extends TestCase
      *
      * @psalm-return list{list{3}, list{4}, list{5}}
      */
-    public function dpTestExceptionNotSupported(): array
+    public static function dpTestExceptionNotSupported(): array
     {
         return [
             [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID],
@@ -245,10 +243,8 @@ class AvailableYearsTest extends TestCase
         $this->assertEquals($expectedData, $returnedData);
     }
 
-    /**
-     * @dataProvider dpTestEcmtAnnualMultipleOptions
-     */
-    public function testEcmtAnnualMultipleOptions($data, $expected, $expectedValueOptions): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestEcmtAnnualMultipleOptions')]
+    public function testEcmtAnnualMultipleOptions(array $data, array $expected, array $expectedValueOptions): void
     {
         $mockForm = m::mock(Form::class);
 
@@ -275,7 +271,7 @@ class AvailableYearsTest extends TestCase
      *
      * @psalm-return array{'empty list': array{data: array{type: 1, years: array{years: array<never, never>, selectedYear: ''}}, expected: array{type: 1, years: array{years: array<never, never>, selectedYear: ''}, browserTitle: 'permits.page.year.ecmt-annual.question.multiple-years-available', question: 'permits.page.year.ecmt-annual.question.multiple-years-available', hint: 'permits.page.year.ecmt-annual.hint.multiple-years-available'}, expectedValueOptions: array<never, never>}, 'list with data': array{data: array{type: 1, years: array{years: list{3030, 3031}, selectedYear: 3031}}, expected: array{type: 1, years: array{years: list{3030, 3031}, selectedYear: 3031}, browserTitle: 'permits.page.year.ecmt-annual.question.multiple-years-available', question: 'permits.page.year.ecmt-annual.question.multiple-years-available', hint: 'permits.page.year.ecmt-annual.hint.multiple-years-available'}, expectedValueOptions: list{array{value: 3030, label: 3030, attributes: array{id: 'year'}, selected: false}, array{value: 3031, label: 3031, selected: true}}}}
      */
-    public function dpTestEcmtAnnualMultipleOptions(): array
+    public static function dpTestEcmtAnnualMultipleOptions(): array
     {
         return [
             'empty list' => [

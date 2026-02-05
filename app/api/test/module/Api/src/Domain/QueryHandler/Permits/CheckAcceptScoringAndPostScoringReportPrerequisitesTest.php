@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
@@ -25,19 +27,17 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         parent::setUp();
     }
 
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
-        $euro5CombinedRangeSize,
-        $euro5PermitCount,
-        $euro5SuccessfulCount,
-        $euro6CombinedRangeSize,
-        $euro6PermitCount,
-        $euro6SuccessfulCount,
-        $expectedResult,
-        $expectedMessage
-    ) {
+        mixed $euro5CombinedRangeSize,
+        mixed $euro5PermitCount,
+        mixed $euro5SuccessfulCount,
+        mixed $euro6CombinedRangeSize,
+        mixed $euro6PermitCount,
+        mixed $euro6SuccessfulCount,
+        mixed $expectedResult,
+        mixed $expectedMessage
+    ): void {
         $stockId = 25;
 
         $this->repoMap['IrhpPermitRange']->shouldReceive('getCombinedRangeSize')
@@ -81,7 +81,7 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider(): array
     {
         return [
             [null, 0, 5, 20, 10, 5, false, '5 Euro 5 permits required but no Euro 5 ranges available'],
@@ -98,7 +98,7 @@ class CheckAcceptScoringAndPostScoringReportPrerequisitesTest extends QueryHandl
         ];
     }
 
-    public function testHandleQueryNoInScopeUnderConsiderationApplications()
+    public function testHandleQueryNoInScopeUnderConsiderationApplications(): void
     {
         $stockId = 37;
 

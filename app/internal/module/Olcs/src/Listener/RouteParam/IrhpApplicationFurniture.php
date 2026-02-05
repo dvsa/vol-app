@@ -133,7 +133,7 @@ class IrhpApplicationFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'irhpAppId',
-            [$this, 'onIrhpApplicationFurniture'],
+            $this->onIrhpApplicationFurniture(...),
             $priority
         );
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Doctrine\ORM\Query;
@@ -41,10 +43,8 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($isGranted, $expectTask)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $isGranted, mixed $expectTask): void
     {
         $data = [
             'licence' => self::LICENCE_ID,
@@ -97,7 +97,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             [
@@ -111,7 +111,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function mockIsGranted($permission, $result)
+    private function mockIsGranted(mixed $permission, mixed $result): void
     {
         $this->mockAuthSrv
             ->shouldReceive('isGranted')

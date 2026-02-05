@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -17,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text2Test extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $sut = new LicenceText2();
 
@@ -43,7 +45,7 @@ class Text2Test extends MockeryTestCase
         $this->assertEquals($expectedString, $publicationLink->getText2());
     }
 
-    public function testProcessNoCancelledText()
+    public function testProcessNoCancelledText(): void
     {
         $sut = new LicenceText2();
 

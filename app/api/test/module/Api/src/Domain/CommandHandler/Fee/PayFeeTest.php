@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Fee;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\EndInterim as EndInterimCmd;
@@ -43,7 +45,8 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Application::APPLICATION_STATUS_UNDER_CONSIDERATION,
@@ -55,7 +58,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandIrhpApplicationFeeNoSideEffect()
+    public function testHandleCommandIrhpApplicationFeeNoSideEffect(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -92,7 +95,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIrhpApplicationWithSideEffect()
+    public function testHandleCommandIrhpApplicationWithSideEffect(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -131,7 +134,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIrhpIssueNoSideEffect()
+    public function testHandleCommandIrhpIssueNoSideEffect(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -167,7 +170,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandIrhpIssueWithSideEffect()
+    public function testHandleCommandIrhpIssueWithSideEffect(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -209,7 +212,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutApplication()
+    public function testHandleCommandWithoutApplication(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -231,7 +234,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithVariation()
+    public function testHandleCommandWithVariation(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -258,7 +261,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithUnGrantedApplication()
+    public function testHandleCommandWithUnGrantedApplication(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -286,7 +289,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithOutstandingApplicationFees()
+    public function testHandleCommandWithOutstandingApplicationFees(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -319,7 +322,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutOutstandingApplicationFees()
+    public function testHandleCommandWithoutOutstandingApplicationFees(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -358,7 +361,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandContinuationNoContinuationDetail()
+    public function testHandleCommandContinuationNoContinuationDetail(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -380,7 +383,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceStatusNotAllowed()
+    public static function licenceStatusNotAllowed(): array
     {
         return [
             [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -396,10 +399,8 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceStatusNotAllowed
-     */
-    public function testHandleCommandContinuationNotAllowedLicenceStatus($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusNotAllowed')]
+    public function testHandleCommandContinuationNotAllowedLicenceStatus(mixed $status): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -422,7 +423,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutOutstandingApplicationFeesWithGrantIntWithoutInterimStatus()
+    public function testHandleCommandWithoutOutstandingApplicationFeesWithGrantIntWithoutInterimStatus(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -462,7 +463,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function licenceStatusAllowed()
+    public static function licenceStatusAllowed(): array
     {
         return [
             [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED],
@@ -471,10 +472,8 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider licenceStatusAllowed
-     */
-    public function testHandleCommandContinuationHasOutstandingFees($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusAllowed')]
+    public function testHandleCommandContinuationHasOutstandingFees(mixed $status): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -500,10 +499,8 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider licenceStatusAllowed
-     */
-    public function testHandleCommandContinuation($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusAllowed')]
+    public function testHandleCommandContinuation(mixed $status): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -537,7 +534,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutOutstandingApplicationFeesWithGrantInt()
+    public function testHandleCommandWithoutOutstandingApplicationFeesWithGrantInt(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -578,7 +575,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithVariationAndInterimInForce()
+    public function testHandleCommandWithVariationAndInterimInForce(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -622,7 +619,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCancelApplicationTasks()
+    public function testHandleCommandCancelApplicationTasks(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -676,7 +673,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithFeeTask()
+    public function testHandleCommandWithFeeTask(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 
@@ -709,7 +706,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithGrantInterimFee()
+    public function testHandleCommandWithGrantInterimFee(): void
     {
         $command = PayFeeCommand::create(['id' => 111]);
 

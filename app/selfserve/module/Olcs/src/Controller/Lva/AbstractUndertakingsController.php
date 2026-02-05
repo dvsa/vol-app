@@ -59,6 +59,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         if ($this->isButtonPressed('change')) {
@@ -168,7 +169,6 @@ abstract class AbstractUndertakingsController extends AbstractController
                 true
             );
         } elseif ($this->isButtonPressed('sign')) {
-
             $returnUrl = $this->url()->fromRoute(
                 'lva-application/undertakings',
                 [

@@ -25,7 +25,7 @@ final class BatchVehicleListGeneratorForPsvDiscs extends AbstractCommandHandler 
 
     protected $repoServiceName = 'PsvDisc';
 
-    public const BATCH_SIZE = 30;
+    public const int BATCH_SIZE = 30;
 
     public function handleCommand(CommandInterface $command)
     {

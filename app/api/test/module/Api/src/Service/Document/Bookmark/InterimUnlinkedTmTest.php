@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -12,7 +14,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimUnlinkedTm;
  */
 class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new InterimUnlinkedTm();
         $query = $bookmark->getQuery(['application' => 123]);
@@ -20,7 +22,7 @@ class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithRestrictedLicence()
+    public function testRenderWithRestrictedLicence(): void
     {
         $bookmark = new InterimUnlinkedTm();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('N/A', $bookmark->render());
     }
 
-    public function testRenderWithNoTms()
+    public function testRenderWithNoTms(): void
     {
         $bookmark = new InterimUnlinkedTm();
         $bookmark->setData(
@@ -49,7 +51,7 @@ class InterimUnlinkedTmTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('None added as part of this application', $bookmark->render());
     }
 
-    public function testRenderWithTms()
+    public function testRenderWithTms(): void
     {
         $bookmark = new InterimUnlinkedTm();
         $bookmark->setData(

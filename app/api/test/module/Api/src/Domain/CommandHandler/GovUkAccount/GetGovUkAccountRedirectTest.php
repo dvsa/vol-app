@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\GovUkAccount;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -24,7 +26,7 @@ class GetGovUkAccountRedirectTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'returnUrl' => 'https://olcs-seldserve/some/path',

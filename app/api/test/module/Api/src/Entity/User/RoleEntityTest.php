@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +24,7 @@ class RoleEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testEntityName()
+    public function testEntityName(): void
     {
         $roleEntity = new Entity();
         $roleEntity->setRole('admin');
@@ -30,7 +32,7 @@ class RoleEntityTest extends EntityTester
         $this->assertEquals('admin', $roleEntity->getName());
     }
 
-    public function testHasPermission()
+    public function testHasPermission(): void
     {
         $roleEntity = new Entity();
         $roleEntity->setRole('admin');
@@ -55,7 +57,7 @@ class RoleEntityTest extends EntityTester
         $this->assertTrue($roleEntity->hasPermission('permissionOne'));
     }
 
-    public function testDoesNotHavePermission()
+    public function testDoesNotHavePermission(): void
     {
         $roleEntity = new Entity();
         $roleEntity->setRole('admin');
@@ -80,7 +82,7 @@ class RoleEntityTest extends EntityTester
         $this->assertFalse($roleEntity->hasPermission('permissionThree'));
     }
 
-    public function testAnon()
+    public function testAnon(): void
     {
         $role = new Entity();
         $anon = $role->anon();
@@ -88,10 +90,8 @@ class RoleEntityTest extends EntityTester
         $this->assertEquals($anon->getRole(), Entity::ROLE_ANON);
     }
 
-    /**
-     * @dataProvider dpGetAllowedRoles
-     */
-    public function testGetAllowedRoles($role, $emptyExpected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAllowedRoles')]
+    public function testGetAllowedRoles(mixed $role, mixed $emptyExpected): void
     {
         $roleEntity = new Entity();
         $roleEntity->setRole($role);
@@ -102,7 +102,7 @@ class RoleEntityTest extends EntityTester
         $emptyExpected ? $this->assertEmpty($result) : $this->assertNotEmpty($result);
     }
 
-    public function dpGetAllowedRoles()
+    public static function dpGetAllowedRoles(): array
     {
         return [
             [Entity::ROLE_SYSTEM_ADMIN, false],

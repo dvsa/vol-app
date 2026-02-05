@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\User;
 
 use Dvsa\Olcs\Api\Domain\Repository\User;
@@ -30,7 +32,7 @@ class UpdateUserLastLoginAtTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testUserLastLoginAtIsUpdatedToCurrentTimestamp()
+    public function testUserLastLoginAtIsUpdatedToCurrentTimestamp(): void
     {
         $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('getIdentity')
@@ -67,7 +69,7 @@ class UpdateUserLastLoginAtTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    private function getMockIdentity()
+    private function getMockIdentity(): m\MockInterface
     {
         /** @var UserEntity $mockUser */
         $mockUser = m::mock(UserEntity::class)->makePartial();

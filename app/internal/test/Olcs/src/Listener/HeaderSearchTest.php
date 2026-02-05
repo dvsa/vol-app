@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Laminas\EventManager\EventManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Common\Rbac\User;
@@ -19,8 +23,7 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class HeaderSearchTest extends TestCase
 {
-    /** @var \Olcs\Listener\HeaderSearch */
-    protected $sut;
+    protected HeaderSearch $sut;
 
     /** @var  m\MockInterface */
     private $mockFormHlp;
@@ -58,20 +61,25 @@ class HeaderSearchTest extends TestCase
         $this->sut = new HeaderSearch();
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
+        /** @var EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                MvcEvent::EVENT_DISPATCH,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onDispatch';
+                }),
+                20
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    /**
-     * @dataProvider dpOnDispatch
-     */
-    public function testOnDispatch($userData, $setTimes)
+    #[DataProvider('dpOnDispatch')]
+    public function testOnDispatch(mixed $userData, mixed $setTimes): void
     {
         $index = 'licence';
 
@@ -137,7 +145,7 @@ class HeaderSearchTest extends TestCase
         $this->sut->onDispatch($mockEvent);
     }
 
-    public function dpOnDispatch(): array
+    public static function dpOnDispatch(): array
     {
         return [
             'loggedin' => [
@@ -158,7 +166,7 @@ class HeaderSearchTest extends TestCase
         ];
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $service = $this->sut->__invoke($this->mockSm, HeaderSearch::class);
 
@@ -168,13 +176,13 @@ class HeaderSearchTest extends TestCase
         $this->assertSame($this->mockFormElmMngr, $this->sut->getFormElementManager());
     }
 
-    public function testGetViewHelperManager()
+    public function testGetViewHelperManager(): void
     {
         $this->sut->setViewHelperManager('foo');
         $this->assertEquals('foo', $this->sut->getViewHelperManager());
     }
 
-    public function testSetViewHelperManager()
+    public function testSetViewHelperManager(): void
     {
         $this->assertSame($this->sut->setViewHelperManager('foo'), $this->sut);
         $this->assertEquals('foo', $this->sut->getViewHelperManager());

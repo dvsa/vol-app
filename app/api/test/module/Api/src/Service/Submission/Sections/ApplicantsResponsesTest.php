@@ -1,26 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
+use Dvsa\Olcs\Api\Service\Submission\Sections\ApplicantsResponses;
 use Laminas\View\Renderer\PhpRenderer;
 use Mockery as m;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-/**
- * Class ApplicantsResponsesTest
- * @author Shaun Lizzio <shaun@valtech.co.uk>
- */
-class ApplicantsResponsesTest extends AbstractSubmissionSectionTest
+class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ApplicantsResponses::class;
+    protected $submissionSection = ApplicantsResponses::class;
 
-    /**
-     * Filter provider
-     *
-     * @return array
-     */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = 'foo';
 
@@ -30,12 +25,13 @@ class ApplicantsResponsesTest extends AbstractSubmissionSectionTest
     }
 
     /**
-     * @dataProvider sectionTestProvider
      *
      * @param $section
      * @param $expectedString
      */
-    public function testGenerateSection($input = null, $expectedResult = null)
+    #[DataProvider('sectionTestProvider')]
+    #[\Override]
+    public function testGenerateSection(mixed $input = null, mixed $expectedResult = null): void
     {
         $mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);
         $mockViewRenderer = m::mock(PhpRenderer::class);

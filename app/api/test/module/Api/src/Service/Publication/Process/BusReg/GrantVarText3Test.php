@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\BusReg;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -16,15 +18,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class GrantVarText3Test extends MockeryTestCase
 {
     /**
-     * @group publicationFilter
-     * @dataProvider processTestProvider
-     *
      * @param string $variationReasons
      * @param string $text
      *
      * Test the Bus Reg GrantVarText3 filter
      */
-    public function testProcess($variationReasons, $text)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('processTestProvider')]
+    public function testProcess(mixed $variationReasons, mixed $text): void
     {
         $sut = new GrantVarText3();
 
@@ -66,7 +67,7 @@ class GrantVarText3Test extends MockeryTestCase
      *
      * @return array
      */
-    public function processTestProvider()
+    public static function processTestProvider(): array
     {
         return [
             ['var reasons', 'Operating between %s and %s given service number %s effective from %s. To amend %s.'],

@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\View\HelperPluginManager;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\EventManager\Event;
@@ -23,7 +27,7 @@ class CasesTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function setupMockCase($id, $data)
+    public function setupMockCase(mixed $id, mixed $data): void
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();
@@ -45,16 +49,23 @@ class CasesTest extends MockeryTestCase
         $this->sut->setQueryService($mockQueryService);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onCase'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'case',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onCase';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnCase()
+    public function testOnCase(): void
     {
         $id = 69;
         $case = [
@@ -99,7 +110,7 @@ class CasesTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class)
+        $mockViewHelperManager = m::mock(HelperPluginManager::class)
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
@@ -137,12 +148,10 @@ class CasesTest extends MockeryTestCase
         $this->sut->onCase($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockNavigation = m::mock();
-        $mockSidebar = m::mock();
-        $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
         $mockAnnotationBuilder = m::mock(AnnotationBuilder::class);
 
@@ -159,7 +168,7 @@ class CasesTest extends MockeryTestCase
         $this->assertSame($mockAnnotationBuilder, $this->sut->getAnnotationBuilder());
     }
 
-    public function testOnCaseNotFound()
+    public function testOnCaseNotFound(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 

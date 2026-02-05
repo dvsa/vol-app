@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\TranslateableText;
@@ -46,7 +48,7 @@ class TranslateableTextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithNoParameters()
+    public function testGenerateWithNoParameters(): void
     {
         $options = [
             'key' => $this->optionsKey
@@ -58,7 +60,7 @@ class TranslateableTextGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateWithParameters()
+    public function testGenerateWithParameters(): void
     {
         $translateableTextParameter1 = m::mock(TranslateableTextParameter::class);
 

@@ -26,7 +26,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandNeedReassign()
+    public function testHandleCommandNeedReassign(): void
     {
         $command = Cmd::create(['id' => 'foo', 'paramValue' => 'bar', 'description' => 'cake']);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermit as IrhpPermitRepository;
@@ -44,7 +46,7 @@ class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
         $this->stockLicenceMaxPermittedCounter = new StockLicenceMaxPermittedCounter($this->irhpPermitRepo);
     }
 
-    public function testGetCountEcmtAnnual()
+    public function testGetCountEcmtAnnual(): void
     {
         $licenceId = 707;
         $totAuthVehicles = 15;
@@ -80,7 +82,7 @@ class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
         );
     }
 
-    public function testGetCountEcmtShortTerm()
+    public function testGetCountEcmtShortTerm(): void
     {
         $totAuthVehicles = 12;
         $totAuthVehiclesTimesTwo = 24;
@@ -102,7 +104,7 @@ class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
         );
     }
 
-    public function testGetCountInvalidType()
+    public function testGetCountInvalidType(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(StockLicenceMaxPermittedCounter::ERR_INVALID_TYPE);

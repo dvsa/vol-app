@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -26,9 +28,9 @@ class ComplaintEntityTest extends EntityTester
     /**
      * @param string $statusId
      * @param boolean $expected
-     * @dataProvider isOpenProvider
      */
-    public function testIsOpen($statusId, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isOpenProvider')]
+    public function testIsOpen(mixed $statusId, mixed $expected): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -40,14 +42,14 @@ class ComplaintEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isOpen());
     }
 
-    public function testIsOpenWithoutStatus()
+    public function testIsOpenWithoutStatus(): void
     {
         $sut = $this->instantiate($this->entityClass);
 
         $this->assertFalse($sut->isOpen());
     }
 
-    public function isOpenProvider()
+    public static function isOpenProvider(): array
     {
         return [
             [Entity::COMPLAIN_STATUS_OPEN, true],
@@ -58,9 +60,9 @@ class ComplaintEntityTest extends EntityTester
     /**
      * @param bool $isCompliance
      * @param bool $expected
-     * @dataProvider isEnvironmentalComplaintProvider
      */
-    public function testIsEnvironmentalComplaint($isCompliance, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isEnvironmentalComplaintProvider')]
+    public function testIsEnvironmentalComplaint(mixed $isCompliance, mixed $expected): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -69,7 +71,7 @@ class ComplaintEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isEnvironmentalComplaint());
     }
 
-    public function isEnvironmentalComplaintProvider()
+    public static function isEnvironmentalComplaintProvider(): array
     {
         return [
             [false, true],
@@ -82,9 +84,9 @@ class ComplaintEntityTest extends EntityTester
      * @param string $statusId
      * @param \DateTime|null $closedDate
      * @param \DateTime|null $expected
-     * @dataProvider populateClosedDateProvider
      */
-    public function testPopulateClosedDate($isCompliance, $statusId, $closedDate, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('populateClosedDateProvider')]
+    public function testPopulateClosedDate(mixed $isCompliance, mixed $statusId, mixed $closedDate, mixed $expected): void
     {
         $sut = $this->instantiate($this->entityClass);
 
@@ -104,7 +106,7 @@ class ComplaintEntityTest extends EntityTester
         );
     }
 
-    public function populateClosedDateProvider()
+    public static function populateClosedDateProvider(): array
     {
         return [
             // non-Environmental Complaint
@@ -127,7 +129,7 @@ class ComplaintEntityTest extends EntityTester
     /**
      * Test constructor
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockCase = m::mock(CasesEntity::class);
         $mockStatus = m::mock(RefDataEntity::class);

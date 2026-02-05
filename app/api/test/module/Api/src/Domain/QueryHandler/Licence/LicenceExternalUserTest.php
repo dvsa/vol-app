@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
@@ -50,10 +52,8 @@ class LicenceExternalUserTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dptestHandleQuery
-     */
-    public function testHandleQueryExternalUser($isLicenceSurrenderAllowed, $openApplicationsForLicence)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dptestHandleQuery')]
+    public function testHandleQueryExternalUser(mixed $isLicenceSurrenderAllowed, mixed $openApplicationsForLicence): void
     {
         $query = Qry::create(['id' => 111]);
 
@@ -131,7 +131,7 @@ class LicenceExternalUserTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public function testHandleQueryExternalUserForbidden()
+    public function testHandleQueryExternalUserForbidden(): void
     {
         $this->expectException(ForbiddenException::class);
         $query = Qry::create(['id' => 111]);
@@ -152,7 +152,7 @@ class LicenceExternalUserTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function dptestHandleQuery()
+    public static function dptestHandleQuery(): array
     {
         return [
             [

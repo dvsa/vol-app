@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -85,7 +87,7 @@ class OrganisationTest extends MockeryTestCase
         parent::setUp();
     }
 
-    private function setupOrganisation($orgData)
+    private function setupOrganisation(mixed $orgData): void
     {
         $this->mockResponse
             ->shouldReceive('isOk')->with()->once()->andReturn(true)
@@ -96,19 +98,24 @@ class OrganisationTest extends MockeryTestCase
             ->with('organisation', $orgData);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         /** @var EventManagerInterface|m\MockInterface $mockEventManager */
         $mockEventManager = m::mock(EventManagerInterface::class);
-        $mockEventManager
-            ->shouldReceive('attach')
-            ->once()
-            ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'organisation',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onOrganisation';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnOrganisationNotFound()
+    public function testOnOrganisationNotFound(): void
     {
         $id = 1;
 
@@ -128,7 +135,7 @@ class OrganisationTest extends MockeryTestCase
         $this->sut->onOrganisation($event);
     }
 
-    public function testOnOrganisation()
+    public function testOnOrganisation(): void
     {
         $id = 1;
 
@@ -166,7 +173,7 @@ class OrganisationTest extends MockeryTestCase
         $this->sut->onOrganisation($event);
     }
 
-    public function testOnOrganisationIsNotAll()
+    public function testOnOrganisationIsNotAll(): void
     {
         $id = 1;
         $orgData = [

@@ -20,9 +20,9 @@ final class CreateCorrespondenceRecord extends AbstractCommand
 {
     use Licence;
 
-    public const TYPE_STANDARD = 'standard';
-    public const TYPE_CONTINUATION = 'continuation';
-    public const TYPE_CLOSED_CONVERSATION = 'conversation';
+    public const string TYPE_STANDARD = 'standard';
+    public const string TYPE_CONTINUATION = 'continuation';
+    public const string TYPE_CLOSED_CONVERSATION = 'conversation';
 
     protected $document;
 

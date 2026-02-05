@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpPermit;
 
 use Doctrine\ORM\Query;
@@ -34,7 +36,7 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryForConstrainedCountriesTrue()
+    public function testHandleQueryForConstrainedCountriesTrue(): void
     {
         $irhpApplicationId = 10;
 
@@ -179,10 +181,8 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @dataProvider dpHandleQueryWithEmptyList
-     */
-    public function testHandleQueryWithEmptyList($isConstrainedCountriesType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryWithEmptyList')]
+    public function testHandleQueryWithEmptyList(mixed $isConstrainedCountriesType): void
     {
         $irhpApplicationId = 10;
 
@@ -247,7 +247,7 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dpHandleQueryWithEmptyList()
+    public static function dpHandleQueryWithEmptyList(): array
     {
         return [
             [true],
@@ -255,7 +255,7 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         ];
     }
 
-    public function testHandleQueryForConstrainedCountriesFalse()
+    public function testHandleQueryForConstrainedCountriesFalse(): void
     {
         $irhpApplicationId = 10;
 

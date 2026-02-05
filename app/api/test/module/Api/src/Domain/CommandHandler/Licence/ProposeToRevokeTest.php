@@ -42,7 +42,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $mockTeam = m::mock(Team::class);
         $mockTeam->shouldReceive('getId')->andReturn(123);
@@ -148,7 +148,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandWithEmails()
+    public function testHandleCommandWithEmails(): void
     {
         $mockTeam = m::mock(Team::class);
         $mockTeam->shouldReceive('getId')->andReturn(123);
@@ -271,7 +271,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandNoEmails()
+    public function testHandleCommandNoEmails(): void
     {
         $mockTeam = m::mock(Team::class);
         $mockTeam->shouldReceive('getId')->andReturn(123);
@@ -372,7 +372,7 @@ class ProposeToRevokeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandUnregisteredUser()
+    public function testHandleCommandUnregisteredUser(): void
     {
         $mockTeam = m::mock(Team::class);
         $mockTeam->shouldReceive('getId')->andReturn(123);

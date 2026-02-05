@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Common;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +24,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class RangeBasedRestrictedCountriesProviderTest extends MockeryTestCase
 {
-    public function testGetList()
+    public function testGetList(): void
     {
         $irhpPermitRangeId = 42;
 

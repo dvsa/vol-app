@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Service\Qa\QaContext;
@@ -20,7 +22,7 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         $this->sut = new CabotageOnlyAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -28,10 +30,8 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $qaContext = m::mock(QaContext::class);
         $element = m::mock(ElementInterface::class);
@@ -44,7 +44,7 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         return [
             [true],

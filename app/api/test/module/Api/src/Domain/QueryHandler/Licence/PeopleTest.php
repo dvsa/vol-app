@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use DMS\PHPUnitExtensions\ArraySubset\Assert;
@@ -12,9 +14,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Licence\People
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Licence\People::class)]
 class PeopleTest extends QueryHandlerTestCase
 {
     /** @var People */
@@ -41,7 +41,7 @@ class PeopleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['id' => 111]);
 

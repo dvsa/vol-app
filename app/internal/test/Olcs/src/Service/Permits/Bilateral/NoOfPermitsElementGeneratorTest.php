@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * NoOfPermitsElementGenerator Test
  *
@@ -22,7 +24,7 @@ use Laminas\Form\Factory as FormFactory;
  */
 class NoOfPermitsElementGeneratorTest extends TestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $translatedLabel = 'Translated label';
         $permitsRequired = '21';

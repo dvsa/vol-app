@@ -34,7 +34,6 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -58,12 +57,10 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
         ScriptFactory $scriptFactory,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

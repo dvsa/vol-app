@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Schedule41ApproveTest.php
  *
@@ -36,10 +38,8 @@ class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dataProviderTestHandleCommand
-     */
-    public function testHandleCommand($expectedSection, $isNew, $isNi, $isTrueS4)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]
+    public function testHandleCommand(mixed $expectedSection, mixed $isNew, mixed $isNi, mixed $isTrueS4): void
     {
         $data = [
             'id' => 1,
@@ -103,7 +103,7 @@ class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dataProviderTestHandleCommand()
+    public static function dataProviderTestHandleCommand(): array
     {
         return [
             // expectedSection, isNew, isNi, isTrueS4

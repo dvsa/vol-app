@@ -52,7 +52,7 @@ return [
                     return Escape::html(trim(($person['forename'] ?? '') . ' ' . ($person['familyName'] ?? '')));
                 }
                 if (isset($row['createdBy']['loginId'])) {
-                    return Escape::html(trim($row['createdBy']['loginId']));
+                    return Escape::html(trim((string) $row['createdBy']['loginId']));
                 }
                 return 'Unknown';
             }

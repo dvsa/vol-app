@@ -112,6 +112,7 @@ class ProhibitionDefectController extends AbstractInternalController implements
      *
      * @return array
      */
+    #[\Override]
     public function indexAction()
     {
         $prohibition = $this->params()->fromRoute('prohibition');

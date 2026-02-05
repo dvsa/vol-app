@@ -36,10 +36,9 @@ use Olcs\XmlTools\Xml\Specification\SpecificationInterface;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 
-/**
- * @runTestsInSeparateProcesses
- * @preserveGlobalState disabled
- */
+#[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
+#[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 {
     protected array $config = [
@@ -81,15 +80,14 @@ class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
      */
     private m\MockInterface $s3Client;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TransXChangeConsumer();
         $this->mockRepo('EbsrSubmission', EbsrSubmission::class);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 

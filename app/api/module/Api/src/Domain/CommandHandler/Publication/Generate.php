@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Command\Publication\CreateNextPublication as CreateNext
  */
 final class Generate extends AbstractCommandHandler implements TransactionedInterface
 {
-    public const DOCUMENT_DESCRIPTION = '%s %d generated';
+    public const string DOCUMENT_DESCRIPTION = '%s %d generated';
 
     protected $repoServiceName = 'Publication';
     protected $extraRepos = ['PublicationLink'];

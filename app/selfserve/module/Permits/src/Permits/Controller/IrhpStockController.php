@@ -69,6 +69,7 @@ class IrhpStockController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function retrieveData()
     {
         parent::retrieveData();
@@ -86,6 +87,7 @@ class IrhpStockController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function mergeTemplateVars()
     {
         $this->templateVarsConfig['question']['backUriOptions'] = [
@@ -105,6 +107,7 @@ class IrhpStockController extends AbstractSelfserveController
      *
      * @return void
      */
+    #[\Override]
     public function handlePostCommand(array &$config, array $params)
     {
         $this->redirectParams = [

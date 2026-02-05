@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Fee Test
  *
@@ -43,7 +45,8 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             FeeEntity::STATUS_OUTSTANDING,
@@ -84,7 +87,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'feeType' => 99,
@@ -152,7 +155,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][99], $savedFee->getFeeType());
     }
 
-    public function testHandleCommandForApplicationFee()
+    public function testHandleCommandForApplicationFee(): void
     {
         $data = [
             'quantity' => 2,
@@ -212,7 +215,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][99], $savedFee->getFeeType());
     }
 
-    public function testHandleCommandForBusRegFee()
+    public function testHandleCommandForBusRegFee(): void
     {
         $data = [
             'feeType' => 99,
@@ -272,7 +275,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][99], $savedFee->getFeeType());
     }
 
-    public function testHandleCommandForIrfoGvPermitFee()
+    public function testHandleCommandForIrfoGvPermitFee(): void
     {
         $data = [
             'feeType' => 99,
@@ -330,7 +333,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('Y', $savedFee->getIrfoFeeExempt());
     }
 
-    public function testHandleCommandForIrfoPsvAuthFee()
+    public function testHandleCommandForIrfoPsvAuthFee(): void
     {
         $data = [
             'feeType' => 99,
@@ -386,7 +389,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][99], $savedFee->getFeeType());
     }
 
-    public function testHandleCommandForMiscFee()
+    public function testHandleCommandForMiscFee(): void
     {
         $data = [
             'feeType' => 101,
@@ -437,7 +440,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][101], $savedFee->getFeeType());
     }
 
-    public function testValidateMiscFeeType()
+    public function testValidateMiscFeeType(): void
     {
         $feeType = m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
@@ -450,7 +453,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($this->sut->validate($command, $feeType));
     }
 
-    public function testValidateAdjustmentFeeType()
+    public function testValidateAdjustmentFeeType(): void
     {
         $feeType = m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
@@ -466,7 +469,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertTrue($this->sut->validate($command, $feeType));
     }
 
-    public function testValidateNoLinkedEntity()
+    public function testValidateNoLinkedEntity(): void
     {
         $feeType = m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
@@ -484,7 +487,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->sut->validate($command, $feeType);
     }
 
-    public function testValidateIrfoBoth()
+    public function testValidateIrfoBoth(): void
     {
         $feeType = m::mock(FeeType::class)
             ->shouldReceive('isMiscellaneous')
@@ -508,10 +511,10 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider feeAmountsProvider
      * @param $amount
      */
-    public function testHandleCommandForZeroAmountFee($amount, $status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeAmountsProvider')]
+    public function testHandleCommandForZeroAmountFee(mixed $amount, mixed $status): void
     {
 
         $data = [
@@ -578,7 +581,7 @@ class CreateFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->references[FeeType::class][101], $savedFee->getFeeType());
     }
 
-    public function feeAmountsProvider()
+    public static function feeAmountsProvider(): array
     {
         return [
             [0, FeeEntity::STATUS_PAID],

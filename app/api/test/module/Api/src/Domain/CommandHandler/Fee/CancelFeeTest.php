@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * CancelFeeTestt
  *
@@ -34,7 +36,8 @@ class CancelFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             FeeEntity::STATUS_CANCELLED
@@ -43,7 +46,7 @@ class CancelFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = CancelFeeCommand::create(['id' => 863]);
 
@@ -67,7 +70,7 @@ class CancelFeeTest extends AbstractCommandHandlerTestCase
         $this->assertSame($this->mapRefData(FeeEntity::STATUS_CANCELLED), $fee->getFeeStatus());
     }
 
-    public function testHandleCommandWithTask()
+    public function testHandleCommandWithTask(): void
     {
         $command = CancelFeeCommand::create(['id' => 863]);
 

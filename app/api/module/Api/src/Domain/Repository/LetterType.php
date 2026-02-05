@@ -20,6 +20,7 @@ class LetterType extends AbstractRepository
      * @param int $hydrateMode Hydration mode
      * @return array
      */
+    #[\Override]
     public function fetchList(QueryInterface $query, $hydrateMode = Query::HYDRATE_OBJECT)
     {
         $qb = $this->createQueryBuilder();

@@ -42,7 +42,6 @@ class FeesController extends AbstractController
     private $disableCardPayments = false;
 
     protected TableFactory $tableFactory;
-    protected TranslationHelperService $translationHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -62,10 +61,9 @@ class FeesController extends AbstractController
         protected ScriptFactory $scriptFactory,
         protected FormHelperService $formHelper,
         protected UrlHelperService $urlHelper,
-        TranslationHelperService $translationHelper
+        protected TranslationHelperService $translationHelper
     ) {
         $this->tableFactory = $tableFactory;
-        $this->translationHelper = $translationHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -73,6 +71,7 @@ class FeesController extends AbstractController
     /**
      * Fees index action
      */
+    #[\Override]
     public function indexAction()
     {
         $response = $this->checkActionRedirect();

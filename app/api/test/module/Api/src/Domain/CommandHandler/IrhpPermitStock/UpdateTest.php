@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitStock;
 
 use Mockery as m;
@@ -31,7 +33,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             RefData::PERMIT_CAT_HORS_CONTINGENT,
@@ -49,7 +52,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 1;
         $permitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT;
@@ -107,7 +110,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandBilateral()
+    public function testHandleCommandBilateral(): void
     {
         $id = 1;
         $permitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Unlicensed Operator Command Handler Test
  *
@@ -44,7 +46,8 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ContactDetailsEntity::CONTACT_TYPE_CORRESPONDENCE_ADDRESS,
@@ -71,10 +74,8 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testHandleCommand($isExempt, $expectedLicenceNo)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testHandleCommand(mixed $isExempt, mixed $expectedLicenceNo): void
     {
         $licenceNoGenId = 1234567;
 
@@ -205,17 +206,17 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('phone_t_secondary', $phoneContacts->get(1)->getPhoneContactType()->getId());
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             'notExempt' => [
                 'isExempt' => 'N',
-                'expectedLicenceNumber' => 'UPN1234567'
+                'expectedLicenceNo' => 'UPN1234567'
 
             ],
             'isExempt' => [
                 'isExempt' => 'Y',
-                'expectedLicenceNumber' => 'EPN1234567'
+                'expectedLicenceNo' => 'EPN1234567'
             ]
         ];
     }

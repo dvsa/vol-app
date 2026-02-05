@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ProcessToRevokeCurtailSuspendTest
  *
@@ -31,7 +33,8 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
@@ -54,7 +57,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function dataProviderHandleCommandOtherStatus()
+    public static function dataProviderHandleCommandOtherStatus(): array
     {
         return [
             [Licence::LICENCE_STATUS_CURTAILED],
@@ -72,10 +75,8 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandOtherStatus
-     */
-    public function testHandleCommandOtherStatus($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
+    public function testHandleCommandOtherStatus(mixed $status): void
     {
         $command = Command::create([]);
 
@@ -94,7 +95,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandSuspended()
+    public function testHandleCommandSuspended(): void
     {
         $command = Command::create([]);
 
@@ -126,7 +127,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandRevoked()
+    public function testHandleCommandRevoked(): void
     {
         $command = Command::create([]);
 
@@ -158,7 +159,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandCurtailed()
+    public function testHandleCommandCurtailed(): void
     {
         $command = Command::create([]);
 
@@ -190,7 +191,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dataProviderHandleCommandInvalidToLicence()
+    public static function dataProviderHandleCommandInvalidToLicence(): array
     {
         return [
             [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
@@ -206,10 +207,8 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderHandleCommandInvalidToLicence
-     */
-    public function testHandleCommandInvalidToLicence($status)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandInvalidToLicence')]
+    public function testHandleCommandInvalidToLicence(mixed $status): void
     {
         $command = Command::create([]);
 
@@ -230,7 +229,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
      *
      * @return LicenceStatusRule
      */
-    protected function createLicenceStatusRule($licenceStatus, $ruleStatus = Licence::LICENCE_STATUS_VALID)
+    protected function createLicenceStatusRule(mixed $licenceStatus, mixed $ruleStatus = Licence::LICENCE_STATUS_VALID): mixed
     {
         $licence = new \Dvsa\Olcs\Api\Entity\Licence\Licence(
             m::mock(\Dvsa\Olcs\Api\Entity\Organisation\Organisation::class),

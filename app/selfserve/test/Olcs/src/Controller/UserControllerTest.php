@@ -28,9 +28,8 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class User Controller Test
- *
- * @covers \Olcs\Controller\UserController
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\UserController::class)]
 class UserControllerTest extends MockeryTestCase
 {
     /**

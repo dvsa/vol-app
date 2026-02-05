@@ -12,9 +12,7 @@ use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Letter\SectionRenderer\IssueSectionRenderer
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\IssueSectionRenderer::class)]
 class IssueSectionRendererTest extends MockeryTestCase
 {
     private IssueSectionRenderer $sut;

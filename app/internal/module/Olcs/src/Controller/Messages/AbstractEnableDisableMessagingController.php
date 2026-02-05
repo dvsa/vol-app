@@ -30,6 +30,7 @@ abstract class AbstractEnableDisableMessagingController extends ApplicationContr
     abstract protected function getRoutePrefix(): string;
     abstract protected function getOrganisationId(): int;
 
+    #[\Override]
     public function indexAction()
     {
         $this->scriptFactory->loadFiles(['table-actions']);

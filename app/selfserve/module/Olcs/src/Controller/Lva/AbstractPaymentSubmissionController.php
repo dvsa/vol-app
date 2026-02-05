@@ -36,8 +36,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected $lva;
     protected string $location = 'external';
     protected $disableCardPayments = false;
-
-    protected TranslationHelperService $translationHelper;
     protected TableFactory $tableFactory;
 
     /**
@@ -51,12 +49,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        TranslationHelperService $translationHelper,
+        protected TranslationHelperService $translationHelper,
         protected FlashMessengerHelperService $flashMessengerHelper,
         TableFactory $tableFactory,
         protected FormHelperService $formHelper
     ) {
-        $this->translationHelper = $translationHelper;
         $this->tableFactory = $tableFactory;
 
         parent::__construct($niTextTranslationUtil, $authService);
@@ -68,6 +65,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      * @psalm-suppress UndefinedDocblockClass
      */
+    #[\Override]
     public function indexAction()
     {
         $applicationId = $this->getApplicationId();

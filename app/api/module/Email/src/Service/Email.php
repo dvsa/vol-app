@@ -178,11 +178,7 @@ class Email implements FactoryInterface
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            $message = sprintf(self::NOT_SENT_ERROR, $e->getMessage());
-            Logger::err('email failed', ['data' => $message]);
-            throw new EmailNotSentException($message, 0, $e);
-        } catch (\Exception $e) {
+        } catch (TransportExceptionInterface | \Exception $e) {
             $message = sprintf(self::NOT_SENT_ERROR, $e->getMessage());
             Logger::err('email failed', ['data' => $message]);
             throw new EmailNotSentException($message, 0, $e);

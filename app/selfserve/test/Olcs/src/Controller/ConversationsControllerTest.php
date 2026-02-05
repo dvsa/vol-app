@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Common\Controller\Plugin\HandleCommand;
@@ -76,7 +78,6 @@ class ConversationsControllerTest extends TestCase
     public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 
@@ -295,9 +296,18 @@ class ConversationsControllerTest extends TestCase
                   ->with(
                       $this->mockForm,
                       'form-actions->file',
-                      [$this->sut, 'processFileUpload'],
-                      [$this->sut, 'deleteFile'],
-                      [$this->sut, 'getUploadedFiles'],
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'processFileUpload';
+                      }),
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'deleteFile';
+                      }),
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'getUploadedFiles';
+                      }),
                       'form-actions->file->fileCount',
                   );
 

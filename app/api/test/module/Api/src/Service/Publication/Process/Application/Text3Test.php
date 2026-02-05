@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Application;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -22,10 +24,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text3Test extends MockeryTestCase
 {
-    /**
-     * @dataProvider dataProviderTestProcessSection
-     */
-    public function testProcessSection($expectTextSet, $sectionId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestProcessSection')]
+    public function testProcessSection(mixed $expectTextSet, mixed $sectionId): void
     {
         $sut = new ApplicationText3();
 
@@ -54,7 +54,7 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public function dataProviderTestProcessSection()
+    public static function dataProviderTestProcessSection(): array
     {
         return [
             [true, PublicationSection::APP_NEW_SECTION],
@@ -65,7 +65,7 @@ class Text3Test extends MockeryTestCase
         ];
     }
 
-    public function testProcessOc()
+    public function testProcessOc(): void
     {
         $sut = new ApplicationText3();
 
@@ -109,7 +109,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function testProcessOcS4Ignored()
+    public function testProcessOcS4Ignored(): void
     {
         $sut = new ApplicationText3();
 
@@ -147,7 +147,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function testProcessTransportManagers()
+    public function testProcessTransportManagers(): void
     {
         $sut = new ApplicationText3();
 
@@ -181,7 +181,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function testProcessConditionsAndUndertakings()
+    public function testProcessConditionsAndUndertakings(): void
     {
         $sut = new ApplicationText3();
 
@@ -214,7 +214,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function testProcessMixedFleet()
+    public function testProcessMixedFleet(): void
     {
         $sut = new ApplicationText3();
 
@@ -262,7 +262,7 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public function testProcessLgvOnly()
+    public function testProcessLgvOnly(): void
     {
         $sut = new ApplicationText3();
 

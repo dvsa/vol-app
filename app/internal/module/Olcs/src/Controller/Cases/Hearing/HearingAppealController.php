@@ -52,6 +52,7 @@ class HearingAppealController extends AbstractInternalController implements Case
      *
      * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectTo([]);
@@ -62,6 +63,7 @@ class HearingAppealController extends AbstractInternalController implements Case
      *
      * @return ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         $caseId = $this->params()->fromRoute('case');

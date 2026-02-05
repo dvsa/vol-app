@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Email\View\Helper;
 
 use Dvsa\Olcs\Email\View\Helper\EmailStyle;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class EmailStyleTest extends MockeryTestCase
 {
-    public function testSendSuccess()
+    public function testSendSuccess(): void
     {
         $sut = new EmailStyle();
         $result = $sut->primaryButton();

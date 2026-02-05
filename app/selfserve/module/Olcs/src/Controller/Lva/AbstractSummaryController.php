@@ -38,6 +38,7 @@ abstract class AbstractSummaryController extends AbstractController
      *
      * @return \Common\View\Model\Section
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->renderSummary($this->getParams(true));

@@ -1,12 +1,12 @@
 # hadolint global ignore=DL3018,SC2086
-FROM ghcr.io/dvsa/dvsa-docker-images/php/8.2/fpm-nginx:0 AS selfserve
+FROM ghcr.io/dvsa/dvsa-docker-images/php/8.3/fpm-nginx:latest AS selfserve
 
 # hadolint ignore=DL3002
 USER root
 
 # Installing require dependencies
 RUN apk add --no-cache pcre-dev~=8.45 $PHPIZE_DEPS \
-  && pecl install igbinary \
+  && pecl install igbinary apcu \
   && pecl install -D "enable-redis-igbinary='yes' enable-redis-lzf='no' enable-redis-zstd='no'" redis \
   && docker-php-ext-enable redis igbinary \
   && apk del pcre-dev $PHPIZE_DEPS

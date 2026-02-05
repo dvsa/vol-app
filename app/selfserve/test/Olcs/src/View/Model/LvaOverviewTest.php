@@ -31,10 +31,8 @@ class LvaOverviewTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function constructInitialisesEmptySectionsVariable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesEmptySectionsVariable(): void
     {
         // Setup
         $this->setUpSut(static::EMPTY_DATA);
@@ -43,10 +41,8 @@ class LvaOverviewTest extends MockeryTestCase
         $this->assertIsArray($this->sut->getVariable(static::SECTIONS_VARIABLE_NAME));
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesEmptySectionsVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesEmptySectionsVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection(): LvaOverviewSection
     {
         // Setup
@@ -59,40 +55,32 @@ class LvaOverviewTest extends MockeryTestCase
         return $sectionsVariable[0];
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
-    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithRef(LvaOverviewSection $section)
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithRef(LvaOverviewSection $section): void
     {
         // Assert
         $this->assertEquals(static::FIRST_SECTION_ARRAY_KEY, $section->ref);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
-    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithMode(LvaOverviewSection $section)
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithMode(LvaOverviewSection $section): void
     {
         // Assert
         $this->assertEquals(static::COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY[static::FIRST_SECTION_ARRAY_KEY], $section->mode);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
-     */
-    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithData(LvaOverviewSection $section)
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithData(LvaOverviewSection $section): void
     {
         // Assert
         $this->assertEquals(array_merge(static::DATA, static::SECTION_NUMBER_DATA), $section->data);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesEmptySectionsVariable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesEmptySectionsVariable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection(): LvaOverviewSection
     {
         // Setup
@@ -105,34 +93,30 @@ class LvaOverviewTest extends MockeryTestCase
         return $overviewSection;
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     */
-    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithRef(LvaOverviewSection $overviewSection)
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithRef(LvaOverviewSection $overviewSection): void
     {
         // Assert
         $this->assertEquals(static::SECTION_REFERENCE, $overviewSection->ref);
     }
 
-    /**
-     * @test
-     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
-     */
-    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithData(LvaOverviewSection $overviewSection)
+    #[\PHPUnit\Framework\Attributes\Depends('constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithData(LvaOverviewSection $overviewSection): void
     {
         // Assert
         $this->assertEquals(static::DATA, $overviewSection->data);
     }
 
-    protected function setUpSut(...$args): void
+    protected function setUpSut(mixed ...$args): void
     {
         $this->sut = new class (...$args) extends LvaOverview {
-            protected function newSectionModel(...$args): LvaOverviewSection
+            protected function newSectionModel(mixed ...$args): LvaOverviewSection
             {
                 return new class (...$args) extends LvaOverviewSection
                 {
-                    public function __construct(public $ref, public $data, public $mode)
+                    public function __construct(public mixed $ref, public mixed $data, public mixed $mode)
                     {
                     }
                 };
@@ -146,11 +130,11 @@ class LvaOverviewTest extends MockeryTestCase
     protected function setUpSutWithSectionModelThatDoesNotTakeAModeWhenConstructed(mixed ...$args): void
     {
         $this->sut = new class (...$args) extends LvaOverview {
-            protected function newSectionModel(...$args): LvaOverviewSection
+            protected function newSectionModel(mixed ...$args): LvaOverviewSection
             {
                 return new class (...$args) extends LvaOverviewSection
                 {
-                    public function __construct(public $ref, public $data)
+                    public function __construct(public mixed $ref, public mixed $data)
                     {
                     }
                 };

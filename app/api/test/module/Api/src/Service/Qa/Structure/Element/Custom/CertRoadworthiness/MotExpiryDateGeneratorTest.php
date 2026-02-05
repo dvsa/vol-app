@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\CertRoadworthiness;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -19,10 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class MotExpiryDateGeneratorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestGenerate
-     */
-    public function testGenerate($isSelfservePageContainer, $isNi, $expectedEnableFileUploads)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
+    public function testGenerate(mixed $isSelfservePageContainer, mixed $isNi, mixed $expectedEnableFileUploads): void
     {
         $irhpApplication = m::mock(IrhpApplication::class);
         $irhpApplication->shouldReceive('getLicence->isNi')
@@ -61,7 +61,7 @@ class MotExpiryDateGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGenerate()
+    public static function dpTestGenerate(): array
     {
         return [
             [false, false, false],

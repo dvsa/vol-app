@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Overview Helper Service Test
  *
@@ -44,11 +46,11 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getViewDataProvider
      * @param array $overviewData overview data
      * @param array $expectedViewData
      */
-    public function testGetViewData($overviewData, $expectedViewData, $gracePeriodStr)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getViewDataProvider')]
+    public function testGetViewData(mixed $overviewData, mixed $expectedViewData, mixed $gracePeriodStr): void
     {
         $lva = 'application';
 
@@ -95,7 +97,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         );
     }
 
-    public function getViewDataProvider()
+    public static function getViewDataProvider(): array
     {
         return [
             'new goods application' => [
@@ -387,11 +389,11 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider getInterimStatusProvider
      * @param array $applicationData
      * @param array $expected
      */
-    public function testGetInterimStatus($applicationData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getInterimStatusProvider')]
+    public function testGetInterimStatus(mixed $applicationData, mixed $expected): void
     {
         $this->urlHelperService
             ->shouldReceive('fromRoute')
@@ -401,7 +403,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getInterimStatus($applicationData, 'application'));
     }
 
-    public function getInterimStatusProvider()
+    public static function getInterimStatusProvider(): array
     {
         return [
             'with interim' => [
@@ -421,10 +423,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider getEntityChangeProvider
-     */
-    public function testGetChangeOfEntity($application, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEntityChangeProvider')]
+    public function testGetChangeOfEntity(mixed $application, mixed $expected): void
     {
         $this->urlHelperService
             ->shouldReceive('fromRoute')
@@ -440,7 +440,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getChangeOfEntity($application));
     }
 
-    public function getEntityChangeProvider()
+    public static function getEntityChangeProvider(): array
     {
         return [
             'with changes' => [

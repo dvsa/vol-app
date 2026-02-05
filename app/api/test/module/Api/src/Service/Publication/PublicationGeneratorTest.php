@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication;
 
 use ArrayObject;
@@ -27,7 +29,7 @@ class PublicationGeneratorTest extends MockeryTestCase
         $this->mockProcessMngr = m::mock(Publication\Process\PluginManager::class);
     }
 
-    public function testCreatePublicationOk()
+    public function testCreatePublicationOk(): void
     {
         $cfg = [
             'pubKey' => [
@@ -64,7 +66,7 @@ class PublicationGeneratorTest extends MockeryTestCase
         static::assertEquals($expectPub, $actual);
     }
 
-    public function testCreatePublicationFailInvalidCfg()
+    public function testCreatePublicationFailInvalidCfg(): void
     {
         //  expect
         $this->expectException(\Exception::class);
@@ -74,7 +76,7 @@ class PublicationGeneratorTest extends MockeryTestCase
         $sut->createPublication('invalidKey', null, null);
     }
 
-    public function testCreatePublicationFailInvalidProcess()
+    public function testCreatePublicationFailInvalidProcess(): void
     {
         $cfg = [
             'pubKey' => [

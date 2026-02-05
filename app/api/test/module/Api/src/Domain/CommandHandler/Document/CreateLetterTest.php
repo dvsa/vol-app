@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
@@ -37,7 +39,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $queryData = ['details' => ['category' => '123', 'documentSubCategory' => '321']];
         $expectedQueryData = ['details' => ['category' => '123', 'documentSubCategory' => '321']];
@@ -68,10 +70,8 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterProvider
-     */
-    public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFirstLetter($templateIdentifier)
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterProvider')]
+    public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFirstLetter(mixed $templateIdentifier): void
     {
         $this->setupDocTemplateRepo($templateIdentifier);
         $this->setupAuthService();
@@ -132,14 +132,12 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterExceptionProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFirstLetterException(
         array $commandData,
         string $templateIdentifier,
         string $expectedExceptionMessage
-    ) {
+    ): void {
         $this->setupDocTemplateRepo($templateIdentifier);
 
         $command = Cmd::create($commandData);
@@ -163,10 +161,8 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFinalLetterProvider
-     */
-    public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFinalLetter($templateIdentifier)
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFinalLetterProvider')]
+    public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFinalLetter(mixed $templateIdentifier): void
     {
         $this->setupDocTemplateRepo($templateIdentifier);
         $this->setupAuthService();
@@ -229,14 +225,12 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider followUpTaskForApplicationOrVariationFirstLetterExceptionProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('followUpTaskForApplicationOrVariationFirstLetterExceptionProvider')]
     public function testHandleCommandWithFollowUpTaskForApplicationOrVariationFinalLetterException(
         array $commandData,
         string $templateIdentifier,
         string $expectedExceptionMessage
-    ) {
+    ): void {
         $this->setupDocTemplateRepo($templateIdentifier);
 
         $command = Cmd::create($commandData);
@@ -260,7 +254,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithException()
+    public function testHandleCommandWithException(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Error generating document');
@@ -354,17 +348,17 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
             ->once();
     }
 
-    public function followUpTaskForApplicationOrVariationFinalLetterProvider()
+    public static function followUpTaskForApplicationOrVariationFinalLetterProvider(): array
     {
-        return [CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FINAL];
+        return array_map(fn($v) => [$v], CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FINAL);
     }
 
-    public function followUpTaskForApplicationOrVariationFirstLetterProvider()
+    public static function followUpTaskForApplicationOrVariationFirstLetterProvider(): array
     {
-        return [CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST];
+        return array_map(fn($v) => [$v], CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST);
     }
 
-    public function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider()
+    public static function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider(): array
     {
         return [
             'missing_application' => [
@@ -402,7 +396,7 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function followUpTaskForApplicationOrVariationFinalLetterExceptionProvider()
+    public function followUpTaskForApplicationOrVariationFinalLetterExceptionProvider(): array
     {
         return [
             'missing_application' => [

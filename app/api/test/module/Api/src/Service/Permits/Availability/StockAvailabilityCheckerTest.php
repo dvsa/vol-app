@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Service\Permits\Availability\StockAvailabilityChecker;
@@ -14,10 +16,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class StockAvailabilityCheckerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestHasAvailability
-     */
-    public function testHasAvailability($stockAvailabilityCount, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
+    public function testHasAvailability(mixed $stockAvailabilityCount, mixed $expected): void
     {
         $irhpPermitStockId = 48;
 
@@ -34,7 +34,7 @@ class StockAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public function dpTestHasAvailability()
+    public static function dpTestHasAvailability(): array
     {
         return [
             [0, false],

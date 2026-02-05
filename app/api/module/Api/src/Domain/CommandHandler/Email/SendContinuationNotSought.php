@@ -32,7 +32,7 @@ final class SendContinuationNotSought extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'SystemParameter';
 
-    public const DATE_FORMAT = 'd/m/Y';
+    public const string DATE_FORMAT = 'd/m/Y';
 
     /**
      * @param CommandInterface $command

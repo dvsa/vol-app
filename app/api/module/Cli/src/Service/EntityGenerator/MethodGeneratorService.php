@@ -9,7 +9,7 @@ use Doctrine\Inflector\InflectorFactory;
 
 /**
  * Method Generator Service
- * 
+ *
  * Provides helper methods for generating entity getter/setter methods
  * Based on the original AlignEntitiesToSchema script functionality
  */
@@ -34,7 +34,7 @@ final readonly class MethodGeneratorService
         if (isset($field['isInverse']) && $field['isInverse'] === true) {
             return $field['property']['name'] ?? '';
         }
-        
+
         // For regular fields, just return the property name as-is
         return $field['property']['name'] ?? '';
     }
@@ -68,10 +68,10 @@ final readonly class MethodGeneratorService
     public function getPhpTypeFromType(string $type): string
     {
         // Handle array types for collections
-        if (str_starts_with($type, 'ArrayCollection') || str_starts_with($type, '\\Doctrine\\Common\\Collections\\ArrayCollection')) {
-            return '\\Doctrine\\Common\\Collections\\ArrayCollection';
+        if (str_starts_with($type, 'ArrayCollection') || str_starts_with($type, \Doctrine\Common\Collections\ArrayCollection::class)) {
+            return \Doctrine\Common\Collections\ArrayCollection::class;
         }
-        
+
         // Handle entity types (anything starting with uppercase or backslash)
         if (preg_match('/^[A-Z\\\\]/', $type)) {
             // Ensure full namespace for entity types
@@ -80,7 +80,7 @@ final readonly class MethodGeneratorService
             }
             return str_starts_with($type, '\\') ? $type : '\\' . $type;
         }
-        
+
         return match (strtolower($type)) {
             'string', 'varchar', 'char' => 'string',
             'boolean', 'bool' => 'bool',
@@ -99,7 +99,7 @@ final readonly class MethodGeneratorService
     public function isPropertyFromTrait(array $field): bool
     {
         $propertyName = $field['property']['name'] ?? '';
-        
+
         return in_array($propertyName, [
             'createdOn',      // Provided by CreatedOnTrait
             'lastModifiedOn', // Provided by ModifiedOnTrait
@@ -157,13 +157,13 @@ final readonly class MethodGeneratorService
         if (preg_match('/targetEntity="([^"]+)"/', $annotation, $matches)) {
             return $matches[1];
         }
-        
+
         // Fallback - extract from type hint in property
         $type = $field['property']['type'] ?? '';
         if (str_starts_with($type, '\\')) {
             return ltrim($type, '\\');
         }
-        
+
         return 'unknown';
     }
 
@@ -228,7 +228,7 @@ final readonly class MethodGeneratorService
     public function getMethodNameForField(array $field): string
     {
         $propertyName = $field['property']['name'] ?? '';
-        
+
         // Just capitalize the property name - it's already properly pluralized
         return ucfirst($propertyName);
     }

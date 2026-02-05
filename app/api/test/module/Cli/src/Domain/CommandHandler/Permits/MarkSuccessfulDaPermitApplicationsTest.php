@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -35,7 +37,7 @@ class MarkSuccessfulDaPermitApplicationsTest extends AbstractCommandHandlerTestC
     /**
      * tests handleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $stockId = 8;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update TxcInbox Test
  */
@@ -33,7 +35,7 @@ class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
         $localAuthorityId = 888;
@@ -80,7 +82,7 @@ class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommandNotLocalAuthority()
+    public function testHandleCommandNotLocalAuthority(): void
     {
         $id = 99;
 

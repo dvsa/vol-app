@@ -107,6 +107,7 @@ class RecommendationController extends AbstractInternalController implements Cas
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->notFoundAction();
@@ -117,6 +118,7 @@ class RecommendationController extends AbstractInternalController implements Cas
      *
      * @return ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -127,6 +129,7 @@ class RecommendationController extends AbstractInternalController implements Cas
      *
      * @return ViewModel
      */
+    #[\Override]
     public function deleteAction()
     {
         return $this->notFoundAction();

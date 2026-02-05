@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Community Lic Suspension Test
  *
@@ -23,7 +25,7 @@ class CommunityLicSuspensionTest extends RepositoryTestCase
         $this->setUpSut(CommunityLicSuspensionRepo::class);
     }
 
-    public function testFetchByCommunityLicIds()
+    public function testFetchByCommunityLicIds(): void
     {
         $ids = [1];
         $mockQb = m::mock();

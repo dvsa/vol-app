@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Opposition;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
@@ -40,13 +42,13 @@ class OpposerEntityTest extends EntityTester
         $this->sut = new Entity($this->mockCd, $this->opposerType, $this->oppositionType);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         static::assertSame($this->mockCd, $this->sut->getContactDetails());
         static::assertSame($this->opposerType, $this->sut->getOpposerType());
     }
 
-    public function testUpdateOk()
+    public function testUpdateOk(): void
     {
         $opposerType = new RefData('OPPOSER_TYPE_2');
 
@@ -60,7 +62,7 @@ class OpposerEntityTest extends EntityTester
         static::assertSame($opposerType, $this->sut->getOpposerType());
     }
 
-    public function testUpdateException()
+    public function testUpdateException(): void
     {
         $this->expectException(
             InvalidArgumentException::class

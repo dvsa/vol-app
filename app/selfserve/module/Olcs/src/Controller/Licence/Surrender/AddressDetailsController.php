@@ -39,6 +39,7 @@ class AddressDetailsController extends AbstractSurrenderController
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */

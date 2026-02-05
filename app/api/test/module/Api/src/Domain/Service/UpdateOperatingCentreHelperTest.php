@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Service;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
@@ -32,7 +34,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
      */
     protected $sut;
 
-    public function testAddMessages()
+    public function testAddMessages(): void
     {
         $this->setUpSut();
         $this->sut->addMessage('foo', 'bar');
@@ -48,7 +50,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getMessages());
     }
 
-    public function validateTotalAuthTrailersProvider()
+    public static function validateTotalAuthTrailersProvider(): array
     {
         return [
             'No OCs and none required' => [
@@ -159,10 +161,8 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider validateTotalAuthTrailersProvider
-     */
-    public function testValdiateTotalAuthTrailers($mustHaveOperatingCentre, $data, $totals, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validateTotalAuthTrailersProvider')]
+    public function testValdiateTotalAuthTrailers(mixed $mustHaveOperatingCentre, mixed $data, mixed $totals, mixed $expected): void
     {
         $this->setUpSut();
 
@@ -175,7 +175,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getMessages());
     }
 
-    public function validatePsvProvider()
+    public static function validatePsvProvider(): array
     {
         return [
             'Valid Sum' => [
@@ -199,10 +199,8 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider validatePsvProvider
-     */
-    public function testValidatePsv($isRestricted, $data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('validatePsvProvider')]
+    public function testValidatePsv(mixed $isRestricted, mixed $data, mixed $expected): void
     {
         $this->setUpSut();
         $licenceBuilder = LicenceBuilder::aPsvLicence();
@@ -216,7 +214,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getMessages());
     }
 
-    public function testValidateEnforcementAreaValid()
+    public function testValidateEnforcementAreaValid(): void
     {
         $this->setUpSut();
         $data = [
@@ -238,7 +236,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals([], $this->sut->getMessages());
     }
 
-    public function testValidateEnforcementArea()
+    public function testValidateEnforcementArea(): void
     {
         $this->setUpSut();
         $data = [
@@ -261,10 +259,8 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($messages, $this->sut->getMessages());
     }
 
-    /**
-     * @test
-     */
-    public function validateTotalAuthVehiclesIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validateTotalAuthVehiclesIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -276,7 +272,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function invalidTotalAuthVehicleConfigurations(): array
+    public static function invalidTotalAuthVehicleConfigurations(): array
     {
         return [
             'No OCs' => [
@@ -314,16 +310,16 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
 
     /**
      * @param int $operatingCentreCount,
-     * @test
-     * @dataProvider invalidTotalAuthVehicleConfigurations
-     * @depends validateTotalAuthVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Depends('validateTotalAuthVehiclesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidTotalAuthVehicleConfigurations')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTotalAuthVehiclesAddsValidationMessagesWhereTotalAuthHgvVehiclesValueIsInvalid(
         ?int $totAuthHgvs,
         int $operatingCentreCount,
         array $operatingCentreConstraints,
         string $validationErrorCode
-    ) {
+    ): void {
         // Setup
         $this->setUpSut();
         $command = UpdateOperatingCentres::create(['totAuthHgvVehicles' => $totAuthHgvs]);
@@ -341,7 +337,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function validTotalAuthVehicleConfigurations(): array
+    public static function validTotalAuthVehicleConfigurations(): array
     {
         return [
             '0 OC' => [
@@ -373,16 +369,16 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
 
     /**
      * @param ?int $totAuthVehicles
-     * @test
-     * @dataProvider validTotalAuthVehicleConfigurations
-     * @depends validateTotalAuthVehiclesIsCallable
      */
+    #[\PHPUnit\Framework\Attributes\Depends('validateTotalAuthVehiclesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validTotalAuthVehicleConfigurations')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function validateTotalAuthVehiclesDoesNotAddValidationMessagesWhereTotalAuthHgvVehiclesValueIsValid(
         bool $mustHaveOperatingCentre,
         int $totAuthVehicles,
         int $operatingCentreCount,
         array $operatingCentreConstraints
-    ) {
+    ): void {
         // Setup
         $this->setUpSut();
         $command = UpdateOperatingCentres::create([static::TOTAL_AUTH_HGV_VEHICLES_COMMAND_PROPERTY => $totAuthVehicles]);
@@ -401,11 +397,9 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertSame([], $this->sut->getMessages());
     }
 
-    /**
-     * @test
-     * @depends validateTotalAuthVehiclesDoesNotAddValidationMessagesWhereTotalAuthHgvVehiclesValueIsValid
-     */
-    public function validateTotalAuthHgvVehiclesAcceptsLicence()
+    #[\PHPUnit\Framework\Attributes\Depends('validateTotalAuthVehiclesDoesNotAddValidationMessagesWhereTotalAuthHgvVehiclesValueIsValid')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validateTotalAuthHgvVehiclesAcceptsLicence(): void
     {
         // Setup
         $this->setUpSut();
@@ -427,10 +421,8 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertTrue(true, 'Expected no exception to be thrown');
     }
 
-    /**
-     * @test
-     */
-    public function validatePsvIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validatePsvIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -439,11 +431,9 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'validatePsv']);
     }
 
-    /**
-     * @test
-     * @depends validatePsvIsCallable
-     */
-    public function validatePsvAddsValidationMessagesWhenLgvsAreProvided()
+    #[\PHPUnit\Framework\Attributes\Depends('validatePsvIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validatePsvAddsValidationMessagesWhenLgvsAreProvided(): void
     {
         // Setup
         $this->setUpSut();
@@ -457,10 +447,8 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         $this->assertNotNull($this->sut->getMessages()[static::TOTAL_AUTH_LGV_VEHICLES_COMMAND_PROPERTY][0][static::LGVS_NOT_SUPPORTED_FOR_PSVS_ERROR_CODE] ?? null);
     }
 
-    /**
-     * @test
-     */
-    public function validateTotalAuthLgvVehiclesIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validateTotalAuthLgvVehiclesIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -472,7 +460,7 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
     /**
      * @return array
      */
-    public function dpValidateTotalAuthLgvVehicles(): array
+    public static function dpValidateTotalAuthLgvVehicles(): array
     {
         return [
             'cannot have LGV and none requested' => [
@@ -522,12 +510,9 @@ class UpdateOperatingCentreHelperTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider dpValidateTotalAuthLgvVehicles
-     * @depends validateTotalAuthLgvVehiclesIsCallable
-     */
-    public function validateTotalAuthLgvVehicles($canHaveLgv, $mustHaveLgv, $totAuthLgvVehicles, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidateTotalAuthLgvVehicles')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function validateTotalAuthLgvVehicles(mixed $canHaveLgv, mixed $mustHaveLgv, mixed $totAuthLgvVehicles, mixed $expected): void
     {
         // Setup
         $this->setUpSut();

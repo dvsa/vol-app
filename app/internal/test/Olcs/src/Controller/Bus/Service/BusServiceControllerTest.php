@@ -40,7 +40,7 @@ class BusServiceControllerTest extends MockeryTestCase
         );
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $this->sut = m::mock(Sut::class, [$this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation, $this->tableFactory])
             ->makePartial()
@@ -112,20 +112,20 @@ class BusServiceControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider alterFormForEditDataProvider
      *
      * @param $data
      * @param $readonly
      * @param $timetableRemoved
      * @param $opNotifiedLaPteRemoved
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormForEditDataProvider')]
     public function testAlterFormForEdit(
-        $data,
-        $readonly,
-        $timetableRemoved,
-        $opNotifiedLaPteRemoved,
-        $laShortNoteRemoved
-    ) {
+        mixed $data,
+        mixed $readonly,
+        mixed $timetableRemoved,
+        mixed $opNotifiedLaPteRemoved,
+        mixed $laShortNoteRemoved
+    ): void {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
@@ -184,7 +184,7 @@ class BusServiceControllerTest extends MockeryTestCase
         $this->assertSame($mockForm, $result);
     }
 
-    public function alterFormForEditDataProvider()
+    public static function alterFormForEditDataProvider(): array
     {
         return [
             [

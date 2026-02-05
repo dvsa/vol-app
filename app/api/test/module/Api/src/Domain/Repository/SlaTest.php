@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Sla Test
  *
@@ -23,7 +25,7 @@ class SlaTest extends RepositoryTestCase
         $this->setUpSut(Repository\Sla::class);
     }
 
-    public function testFetchByCategories()
+    public function testFetchByCategories(): void
     {
         $categories = ['foo', 'bar'];
 

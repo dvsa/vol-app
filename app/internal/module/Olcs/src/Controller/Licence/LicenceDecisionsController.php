@@ -41,7 +41,6 @@ class LicenceDecisionsController extends AbstractController implements
     ];
 
     protected $undoCommand;
-    protected $navigation;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -49,7 +48,7 @@ class LicenceDecisionsController extends AbstractController implements
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         protected FlashMessengerHelperService $flashMessengerHelper,
-        $navigation
+        protected $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -57,7 +56,6 @@ class LicenceDecisionsController extends AbstractController implements
             $tableFactory,
             $viewHelperManager
         );
-        $this->navigation = $navigation;
     }
 
     /**
@@ -83,7 +81,7 @@ class LicenceDecisionsController extends AbstractController implements
         $response = $this->handleQuery($query);
         $result = $response->getResult();
 
-        $pageTitle = ucfirst($decision) . " licence";
+        $pageTitle = ucfirst((string) $decision) . " licence";
         if (
             !isset($result['suitableForDecisions']) || $this->getRequest()->isPost()
             || $result['suitableForDecisions'] === true

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\InjectReceivedDate;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  */
 class InjectReceivedDateTest extends TestCase
 {
-    public function testFilter()
+    public function testFilter(): void
     {
         $sut = new InjectReceivedDate();
 

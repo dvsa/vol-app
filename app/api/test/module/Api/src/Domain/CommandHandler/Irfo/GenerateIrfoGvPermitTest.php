@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Generate Irfo Gv Permit Test
  */
@@ -34,7 +36,7 @@ class GenerateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
         $orgId = 101;
@@ -82,7 +84,7 @@ class GenerateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandThrowsException()
+    public function testHandleCommandThrowsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\BadRequestException::class);
 

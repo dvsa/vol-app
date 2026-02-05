@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender\Section;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address;
@@ -30,7 +32,7 @@ class LicenceDetailsServiceTest extends MockeryTestCase
         $this->sut = new LicenceDetailsService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $organisation = m::mock(Organisation::class);
         $organisation->shouldReceive('getName')->andReturn('OrgName');

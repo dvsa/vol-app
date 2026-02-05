@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -8,9 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\OrganisationUser
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationUser::class)]
 class OrganisationUserTest extends RepositoryTestCase
 {
     /**
@@ -23,7 +23,7 @@ class OrganisationUserTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
     }
 
-    public function testFetchByUserId()
+    public function testFetchByUserId(): void
     {
         $userId = 1;
 
@@ -70,7 +70,7 @@ class OrganisationUserTest extends RepositoryTestCase
         $this->assertEquals(['res'], $this->sut->fetchByUserId($userId));
     }
 
-    public function testDeleteByUserId()
+    public function testDeleteByUserId(): void
     {
         $userId = 1;
 

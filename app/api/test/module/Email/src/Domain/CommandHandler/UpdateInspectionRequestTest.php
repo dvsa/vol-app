@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Inspection Request Test
  *
@@ -43,7 +45,8 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             InspectionRequest::RESULT_TYPE_NEW,
@@ -54,10 +57,8 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider successProvider
-     */
-    public function testHandleCommandSuccess($id, $status, $expectedResultType, $expectedTaskDescription)
+    #[\PHPUnit\Framework\Attributes\DataProvider('successProvider')]
+    public function testHandleCommandSuccess(mixed $id, mixed $status, mixed $expectedResultType, mixed $expectedTaskDescription): void
     {
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setId(7);
@@ -114,7 +115,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public function successProvider()
+    public static function successProvider(): array
     {
         return [
             'satisfactory' => [
@@ -132,7 +133,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandNotFound()
+    public function testHandleCommandNotFound(): void
     {
         $this->expectException(NotFoundException::class);
 
@@ -158,7 +159,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public function testHandleCommandInvalidStatusCode()
+    public function testHandleCommandInvalidStatusCode(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -180,7 +181,7 @@ class UpdateInspectionRequestTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $response->toArray());
     }
 
-    public function testHandleCommandNoOp()
+    public function testHandleCommandNoOp(): void
     {
         $id = 123;
         $status = 'S';

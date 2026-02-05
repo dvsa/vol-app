@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\Command as DomainCmd;
@@ -12,9 +14,8 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\PrintLetter::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class PrintLetterTest extends AbstractCommandHandlerTestCase
 {
     public const LIC_ID = 8001;
@@ -55,10 +56,8 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($method, array $canDo, array $expect)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $method, array $canDo, array $expect): void
     {
         $data = [
             'id' => self::DOC_ID,
@@ -92,7 +91,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expect['result'], $actual->getMessages());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             'method:Email;canEmail&Print;' => [
@@ -165,7 +164,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function assertAttemptPrint()
+    private function assertAttemptPrint(): void
     {
         $data = [
             'documentId' => self::DOC_ID,
@@ -178,7 +177,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(DomainCmd\PrintScheduler\Enqueue::class, $data, $result);
     }
 
-    private function assertSendEmail()
+    private function assertSendEmail(): void
     {
         $data = [
             'licence' => self::LIC_ID,
@@ -192,7 +191,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(DomainCmd\Email\CreateCorrespondenceRecord::class, $data, $result);
     }
 
-    private function assertCreateTranslationTask()
+    private function assertCreateTranslationTask(): void
     {
         $data = [
             'description' => self::DOC_DESC,
@@ -205,7 +204,7 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(DomainCmd\Task\CreateTranslateToWelshTask::class, $data, $result);
     }
 
-    public function testNulls()
+    public function testNulls(): void
     {
         $mockDocE = m::mock(Entity\Doc\Document::class)->makePartial();
         $mockDocE->shouldReceive('getRelatedLicence')->andReturnNull();

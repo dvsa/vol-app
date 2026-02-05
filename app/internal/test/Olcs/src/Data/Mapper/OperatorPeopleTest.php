@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -19,7 +21,7 @@ class OperatorPeopleTest extends MockeryTestCase
         $this->sut = new \Olcs\Data\Mapper\OperatorPeople();
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'organisation' => 23,
@@ -58,7 +60,7 @@ class OperatorPeopleTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->mapFromResult($data));
     }
 
-    public function testMapFromResultNoBirthDate()
+    public function testMapFromResultNoBirthDate(): void
     {
         $data = [
             'organisation' => 23,
@@ -91,7 +93,7 @@ class OperatorPeopleTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'organisation' => 23,
@@ -124,7 +126,7 @@ class OperatorPeopleTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(\Laminas\Form\FormInterface::class);
         $this->assertSame(['ERRORS'], $this->sut->mapFromErrors($mockForm, ['ERRORS']));

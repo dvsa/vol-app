@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Query\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark;
 
 class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
-    public function testStructure($bookmarkClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
+    public function testStructure(mixed $bookmarkClass): void
     {
         $id = 1;
         $bundle = ['bundle'];
@@ -25,7 +25,7 @@ class IdentityBundleBookmarkTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($bundle, $query->getBundle());
     }
 
-    public function dataProvider()
+    public static function dataProvider(): array
     {
         return [
             [Bookmark\BusFeeTypeBundle::class],

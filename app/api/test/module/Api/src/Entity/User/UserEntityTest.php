@@ -44,17 +44,15 @@ class UserEntityTest extends EntityTester
         $this->entity = $this->instantiate($this->entityClass);
     }
 
-    /**
-     * @dataProvider getUserTypeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUserTypeDataProvider')]
     public function testGetUserType(
-        $team,
-        $localAuthority,
-        $transportManager,
-        $partnerContactDetails,
-        $expected,
-        $expectedIsInternal
-    ) {
+        mixed $team,
+        mixed $localAuthority,
+        mixed $transportManager,
+        mixed $partnerContactDetails,
+        mixed $expected,
+        mixed $expectedIsInternal
+    ): void {
         $this->entity->setTeam($team);
         $this->entity->setLocalAuthority($localAuthority);
         $this->entity->setTransportManager($transportManager);
@@ -62,14 +60,13 @@ class UserEntityTest extends EntityTester
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($this->entity, $expected);
 
         $this->assertEquals($expected, $this->entity->getUserType());
         $this->assertEquals($expectedIsInternal, $this->entity->isInternal());
     }
 
-    public function getUserTypeDataProvider()
+    public static function getUserTypeDataProvider(): array
     {
         $team = m::mock(TeamEntity::class);
         $localAuthority = m::mock(LocalAuthorityEntity::class);
@@ -85,10 +82,8 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpCreateInternal
-     */
-    public function testCreateInternal($role)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCreateInternal')]
+    public function testCreateInternal(mixed $role): void
     {
         $roleMock = m::mock(RoleEntity::class)->makePartial();
         $roleMock->setRole($role);
@@ -126,7 +121,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function dpCreateInternal()
+    public static function dpCreateInternal(): array
     {
         return [
             [RoleEntity::ROLE_SYSTEM_ADMIN],
@@ -137,10 +132,8 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpUpdateInternal
-     */
-    public function testUpdateInternal($role)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateInternal')]
+    public function testUpdateInternal(mixed $role): void
     {
         $roleMock = m::mock(RoleEntity::class)->makePartial();
         $roleMock->setRole($role);
@@ -198,7 +191,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function dpUpdateInternal()
+    public static function dpUpdateInternal(): array
     {
         return [
             [RoleEntity::ROLE_SYSTEM_ADMIN],
@@ -209,9 +202,6 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpOperatorAdminRoles
-     */
     public function testCreateTransportManager(): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
@@ -255,7 +245,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isConsultantAdministrator());
     }
 
-    public function testUpdateTransportManager()
+    public function testUpdateTransportManager(): void
     {
         $nonAdminRole = m::mock(RoleEntity::class)->makePartial();
         $nonAdminRole->setRole(RoleEntity::ROLE_OPERATOR_USER);
@@ -316,7 +306,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function testCreatePartner()
+    public function testCreatePartner(): void
     {
         $role = m::mock(RoleEntity::class)->makePartial();
         $role->setRole(RoleEntity::ROLE_PARTNER_USER);
@@ -358,7 +348,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function testUpdatePartner()
+    public function testUpdatePartner(): void
     {
         $role = m::mock(RoleEntity::class)->makePartial();
         $role->setRole(RoleEntity::ROLE_PARTNER_USER);
@@ -420,7 +410,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function testCreateLocalAuthority()
+    public function testCreateLocalAuthority(): void
     {
         $role = m::mock(RoleEntity::class)->makePartial();
         $role->setRole(RoleEntity::ROLE_LOCAL_AUTHORITY_USER);
@@ -462,7 +452,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public function testUpdateLocalAuthority()
+    public function testUpdateLocalAuthority(): void
     {
         $role = m::mock(RoleEntity::class)->makePartial();
         $role->setRole(RoleEntity::ROLE_LOCAL_AUTHORITY_USER);
@@ -524,9 +514,6 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    /**
-     * @dataProvider dpOperatorAdminRoles
-     */
     public function testCreateOperatorAdmin(): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
@@ -613,7 +600,7 @@ class UserEntityTest extends EntityTester
         $this->assertTrue($entity->isConsultantAdministrator());
     }
 
-    public function testUpdateOperatorUser()
+    public function testUpdateOperatorUser(): void
     {
         $nonAdminRole = m::mock(RoleEntity::class)->makePartial();
         $nonAdminRole->setRole(RoleEntity::ROLE_OPERATOR_USER);
@@ -674,9 +661,7 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($entity->isAdministrator());
     }
 
-    /**
-     * @dataProvider dpOperatorAdminRoles
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOperatorAdminRoles')]
     public function testUpdateOperatorIsAdministratorOnly(string $adminRoleAsString): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
@@ -714,7 +699,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
     }
 
-    public function testCreateThrowsInvalidRoleException()
+    public function testCreateThrowsInvalidRoleException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -737,7 +722,7 @@ class UserEntityTest extends EntityTester
         Entity::create('pid', Entity::USER_TYPE_OPERATOR, $data);
     }
 
-    public function testUpdateThrowsInvalidRoleException()
+    public function testUpdateThrowsInvalidRoleException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -779,7 +764,7 @@ class UserEntityTest extends EntityTester
         $entity->update($data);
     }
 
-    public function testMissingRoleException()
+    public function testMissingRoleException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -805,10 +790,8 @@ class UserEntityTest extends EntityTester
         $entity->update($data);
     }
 
-    /**
-     * @dataProvider getPermissionProvider
-     */
-    public function testGetPermission($userType, $roleIds, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPermissionProvider')]
+    public function testGetPermission(mixed $userType, mixed $roleIds, mixed $expected): void
     {
         $roles = array_map(
             function ($id) {
@@ -837,7 +820,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->getPermission());
     }
 
-    public function getPermissionProvider()
+    public static function getPermissionProvider(): array
     {
         return [
             // local authority - admin
@@ -909,7 +892,7 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    public function testAnon()
+    public function testAnon(): void
     {
         $user = Entity::anon();
 
@@ -922,7 +905,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(true, $user->isAnonymous());
     }
 
-    public function testIsSystemUserYes()
+    public function testIsSystemUserYes(): void
     {
         $user = new Entity('PID', 'type');
         $user->setId(IdentityProviderInterface::SYSTEM_USER);
@@ -930,7 +913,7 @@ class UserEntityTest extends EntityTester
         $this->assertTrue($user->isSystemUser());
     }
 
-    public function testIsSystemUserNo()
+    public function testIsSystemUserNo(): void
     {
         $user = new Entity('PID', 'type');
         $user->setId(123);
@@ -938,14 +921,14 @@ class UserEntityTest extends EntityTester
         $this->assertFalse($user->isSystemUser());
     }
 
-    public function testAnonUsernameReserved()
+    public function testAnonUsernameReserved(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
         Entity::create('123456', Entity::USER_TYPE_INTERNAL, ['loginId' => 'anon']);
     }
 
-    public function testHasActivePsvLicence()
+    public function testHasActivePsvLicence(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
         $this->assertEquals(false, $user->hasActivePsvLicence());
@@ -961,7 +944,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(true, $user->hasActivePsvLicence());
     }
 
-    public function testGetNumberOfVehicles()
+    public function testGetNumberOfVehicles(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
 
@@ -991,7 +974,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(3, $user->getNumberOfVehicles());
     }
 
-    public function testReturnGetNumberOfVehiclesWithNoRelatedOrg()
+    public function testReturnGetNumberOfVehiclesWithNoRelatedOrg(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_INTERNAL);
 
@@ -1001,22 +984,20 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(0, $user->getNumberOfVehicles());
     }
 
-    public function testGetRolesByUserTypeNoRoles()
+    public function testGetRolesByUserTypeNoRoles(): void
     {
         $user = new Entity('pid', 'foo');
         $this->assertEquals([], $user->getRolesByUserType('foo', 'bar'));
     }
 
-    public function testGetPermissionNoRoles()
+    public function testGetPermissionNoRoles(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_PARTNER);
         $this->assertNull($user->getPermission());
     }
 
-    /**
-     * @dataProvider dataProviderHasRoles
-     */
-    public function testHasRoles(array $roles, bool $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHasRoles')]
+    public function testHasRoles(array $roles, bool $expectedResult): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
         $adminRole->setRole(RoleEntity::ROLE_OPERATOR_ADMIN);
@@ -1031,7 +1012,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function dataProviderHasRoles(): array
+    public static function dataProviderHasRoles(): array
     {
         return [
             'User has no roles' => [
@@ -1053,9 +1034,7 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpOperatorAdminRoles
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpOperatorAdminRoles')]
     public function testUpdateOperatorWithOrganisationUsers(string $adminRoleAsString): void
     {
         $adminRole = m::mock(RoleEntity::class)->makePartial();
@@ -1100,10 +1079,8 @@ class UserEntityTest extends EntityTester
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
     }
 
-    /**
-     * @dataProvider dpAssignedDataRetention
-     */
-    public function testCanBeAssignedDataRetention($userType, $accountDisabled, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpAssignedDataRetention')]
+    public function testCanBeAssignedDataRetention(mixed $userType, mixed $accountDisabled, mixed $expectedResult): void
     {
         $data = [
             'accountDisabled' => $accountDisabled,
@@ -1120,7 +1097,7 @@ class UserEntityTest extends EntityTester
      *
      * @return array
      */
-    public function dpAssignedDataRetention()
+    public static function dpAssignedDataRetention(): array
     {
         return [
             [Entity::USER_TYPE_INTERNAL, 'N', true],
@@ -1138,10 +1115,8 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsEligibleForPermits
-     */
-    public function testIsEligibleForPermits($isOrgEligibleForPermits, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEligibleForPermits')]
+    public function testIsEligibleForPermits(mixed $isOrgEligibleForPermits, mixed $expected): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
 
@@ -1159,7 +1134,7 @@ class UserEntityTest extends EntityTester
         $this->assertSame($expected, $user->isEligibleForPermits());
     }
 
-    public function dpIsEligibleForPermits()
+    public static function dpIsEligibleForPermits(): array
     {
         return [
             [null, false],
@@ -1168,10 +1143,8 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsAllowedToPerformActionOnRoles
-     */
-    public function testIsAllowedToPerformActionOnRoles($rolesOwn, $rolesToCheck, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAllowedToPerformActionOnRoles')]
+    public function testIsAllowedToPerformActionOnRoles(mixed $rolesOwn, mixed $rolesToCheck, mixed $expected): void
     {
         $entity = Entity::create(
             'pid',
@@ -1185,7 +1158,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->isAllowedToPerformActionOnRoles($rolesToCheck));
     }
 
-    public function dpIsAllowedToPerformActionOnRoles()
+    public static function dpIsAllowedToPerformActionOnRoles(): array
     {
         $systemAdminRole = m::mock(RoleEntity::class)->makePartial();
         $systemAdminRole->setRole(RoleEntity::ROLE_SYSTEM_ADMIN);
@@ -1419,14 +1392,14 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    public function testHasOrganisationSubmittedLicenceApplicationWithNoOrgAssumesNoExistingLicences()
+    public function testHasOrganisationSubmittedLicenceApplicationWithNoOrgAssumesNoExistingLicences(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
 
         $this->assertFalse($user->hasOrganisationSubmittedLicenceApplication());
     }
 
-    public function testHasOrganisationSubmittedLicenceApplicationWithOrgCallsHasNeverHadLicenceDecisionOnOrgEntity()
+    public function testHasOrganisationSubmittedLicenceApplicationWithOrgCallsHasNeverHadLicenceDecisionOnOrgEntity(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
 
@@ -1441,9 +1414,7 @@ class UserEntityTest extends EntityTester
         $this->assertTrue($user->hasOrganisationSubmittedLicenceApplication());
     }
 
-    /**
-     * @dataProvider dpCanResetPassword
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanResetPassword')]
     public function testCanResetPassword(string $accountDisabled, bool $resetAllowed): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_INTERNAL);
@@ -1451,7 +1422,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($resetAllowed, $user->canResetPassword());
     }
 
-    public function dpCanResetPassword(): array
+    public static function dpCanResetPassword(): array
     {
         return [
             'account disabled, reset not allowed' => ['Y', false],
@@ -1459,7 +1430,7 @@ class UserEntityTest extends EntityTester
         ];
     }
 
-    public function dpOperatorAdminRoles(): array
+    public static function dpOperatorAdminRoles(): array
     {
         return [
             [RoleEntity::ROLE_OPERATOR_ADMIN],

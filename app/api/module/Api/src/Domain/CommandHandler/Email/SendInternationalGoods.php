@@ -19,8 +19,8 @@ final class SendInternationalGoods extends AbstractCommandHandler implements Ema
 {
     use EmailAwareTrait;
 
-    public const EMAIL_TEMPLATE = 'report-international-goods';
-    public const EMAIL_SUBJECT = 'email.notification.subject';
+    public const string EMAIL_TEMPLATE = 'report-international-goods';
+    public const string EMAIL_SUBJECT = 'email.notification.subject';
 
     /**
      * @var string

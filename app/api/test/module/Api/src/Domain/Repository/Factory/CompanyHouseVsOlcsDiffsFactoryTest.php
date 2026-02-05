@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Factory;
 
 use Dvsa\Olcs\Api\Domain\Repository\CompaniesHouseVsOlcsDiffs;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CompanyHouseVsOlcsDiffsFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockConn = m::mock(\Doctrine\DBAL\Connection::class)
             ->shouldReceive('close')

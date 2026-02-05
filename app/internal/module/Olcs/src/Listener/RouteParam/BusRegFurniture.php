@@ -37,7 +37,7 @@ class BusRegFurniture implements
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'busRegId',
-            [$this, 'onBusRegFurniture'],
+            $this->onBusRegFurniture(...),
             $priority
         );
     }

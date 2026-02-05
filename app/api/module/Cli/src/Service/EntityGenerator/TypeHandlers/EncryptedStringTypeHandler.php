@@ -18,10 +18,10 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
             $fieldConfig = $config['fieldConfig'];
             return $fieldConfig->type !== null && $fieldConfig->type->value === 'encrypted_string';
         }
-        
+
         // Legacy support: Check if config is passed as array with column name as key
         $columnConfig = $config[$column->getName()] ?? null;
-        
+
         if ($columnConfig !== null) {
             // Handle both FieldConfig object and array formats
             if (is_object($columnConfig) && method_exists($columnConfig, 'type') && $columnConfig->type !== null) {
@@ -38,7 +38,7 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
     public function generateAnnotation(ColumnMetadata $column, array $config = []): string
     {
         $options = [];
-        
+
         // Add nullable option
         if ($column->isNullable()) {
             $options[] = 'nullable=true';
@@ -63,6 +63,7 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
     /**
      * Override to not remove _id suffix for regular columns
      */
+    #[\Override]
     protected function generatePropertyName(string $columnName): string
     {
         // For regular columns, just convert to camelCase without removing _id
@@ -73,8 +74,8 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
     {
         $propertyName = $this->generatePropertyName($column->getName());
         $comment = $this->generateComment($column, $config);
-        
-        $defaultValue = $column->getDefault() !== null 
+
+        $defaultValue = $column->getDefault() !== null
             ? $this->generateDefaultValue($column->getDefault())
             : ($column->isNullable() ? 'null' : "''");
 
@@ -88,6 +89,7 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
         ];
     }
 
+    #[\Override]
     public function getPriority(): int
     {
         return 100; // High priority for custom types
@@ -99,11 +101,11 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
     private function generateComment(ColumnMetadata $column, array $config): string
     {
         $comment = $column->getComment() ?: $this->generatePropertyName($column->getName());
-        
+
         // Clean up the comment (remove doctrine type hints)
         $comment = preg_replace('/\s*\(DC2Type:[^)]+\)\s*/', '', $comment);
-        $comment = trim($comment);
-        
+        $comment = trim((string) $comment);
+
         if (empty($comment)) {
             $comment = ucfirst(str_replace('_', ' ', $column->getName()));
         }

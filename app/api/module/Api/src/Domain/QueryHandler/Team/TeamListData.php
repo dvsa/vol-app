@@ -18,6 +18,7 @@ class TeamListData extends AbstractListQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         assert($query instanceof TeamListDataQry);

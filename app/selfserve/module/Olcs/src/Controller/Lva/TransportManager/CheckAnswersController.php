@@ -19,9 +19,6 @@ class CheckAnswersController extends AbstractController
     use ExternalControllerTrait;
     use TransportManagerApplicationTrait;
 
-    protected AnnotationBuilder $transferAnnotationBuilder;
-    protected CommandService $commandService;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -35,15 +32,13 @@ class CheckAnswersController extends AbstractController
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
         protected TranslationHelperService $translationHelper,
-        AnnotationBuilder $transferAnnotationBuilder,
-        CommandService $commandService
+        protected AnnotationBuilder $transferAnnotationBuilder,
+        protected CommandService $commandService
     ) {
-        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
-        $this->commandService = $commandService;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 
+    #[\Override]
     public function indexAction()
     {
 

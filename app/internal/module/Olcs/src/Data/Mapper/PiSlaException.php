@@ -38,7 +38,7 @@ class PiSlaException implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $fields = $data['fields'] ?? [];
-        
+
         return [
             'case' => $fields['case'] ?? null,
             'slaException' => $fields['slaException'] ?? null,

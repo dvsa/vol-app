@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\ActionLink;
@@ -31,7 +33,8 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
         parent::setUp();
     }
 
-    public function testGetForm()
+    #[\Override]
+    public function testGetForm(): void
     {
         // Mocks
         $mockForm = m::mock(\Common\Form\Form::class);

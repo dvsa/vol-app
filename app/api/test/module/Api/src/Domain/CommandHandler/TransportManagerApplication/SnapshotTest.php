@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Snapshot Test
  *
@@ -38,10 +40,8 @@ class SnapshotTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider dpTestHandleCommand
-     */
-    public function testHandleCommand($tmaStatus, $expectedString)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleCommand')]
+    public function testHandleCommand(mixed $tmaStatus, mixed $expectedString): void
     {
         $command = Command::create(['id' => 111, 'user' => 1]);
 
@@ -97,7 +97,7 @@ class SnapshotTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpTestHandleCommand()
+    public static function dpTestHandleCommand(): array
     {
         return [
             [

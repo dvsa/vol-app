@@ -95,6 +95,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
             $this->getRepo('ApplicationOperatingCentre')
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

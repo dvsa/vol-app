@@ -26,7 +26,7 @@ class Markers extends AbstractHelper
                 $content = $this->insertPlaceholders($marker);
 
                 // make first line bold
-                $content = explode("\n", $content);
+                $content = explode("\n", (string) $content);
                 $content[0] = '<b>' . $content[0] . '</b>';
                 $content = implode("\n", $content);
 

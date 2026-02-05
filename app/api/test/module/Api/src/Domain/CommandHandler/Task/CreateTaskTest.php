@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Task;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,9 +29,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\Task\CreateTask
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\CreateTask::class)]
 class CreateTaskTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CreateTask */
@@ -79,7 +79,8 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Init references
      */
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->categoryReferences = [
             1 => m::mock(Category::class)
@@ -137,7 +138,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command
      */
-    public function testHandleCommandX()
+    public function testHandleCommandX(): void
     {
         $data = [
             'category' => 1,
@@ -207,10 +208,9 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handle command with assign by category
-     *
-     * @dataProvider rulesProvider
      */
-    public function testHandleCommandWithAssignByCategory($rules)
+    #[\PHPUnit\Framework\Attributes\DataProvider('rulesProvider')]
+    public function testHandleCommandWithAssignByCategory(mixed $rules): void
     {
         $command = Cmd::create($this->getData(null));
 
@@ -242,7 +242,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function rulesProvider()
+    public static function rulesProvider(): array
     {
         return [
             [
@@ -260,7 +260,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicence()
+    public function testHandleCommandWithAutoAssignmentGoodsLicence(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -283,7 +283,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence, rules not found
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceRulesNotFound()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceRulesNotFound(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -311,7 +311,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with PSV licence
      */
-    public function testHandleCommandWithAutoAssignmentPsvLicence()
+    public function testHandleCommandWithAutoAssignmentPsvLicence(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -334,7 +334,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with PSV licence search rules by category and TA
      */
-    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategoryAndTa()
+    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategoryAndTa(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -361,7 +361,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with PSV licence search rules by category and Operator Type
      */
-    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategoryAndOpType()
+    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategoryAndOpType(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -392,7 +392,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with PSV licence search rules by category
      */
-    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategory()
+    public function testHandleCommandWithAutoAssignmentPsvLicenceSearchRulesByCategory(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -427,7 +427,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence, alpha split / no user
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitNoUser()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitNoUser(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -447,7 +447,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence, alpha split / no letter found
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitNoLetterFound()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitNoLetterFound(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -498,7 +498,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence, no alpha split found
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceNoAlphaSplitFound()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceNoAlphaSplitFound(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -540,7 +540,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence, alpha split, unknown organisation type
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitUnknownOrgType()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitUnknownOrgType(): void
     {
         $command = Cmd::create($this->getData());
 
@@ -580,9 +580,9 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      * Test handle command with auto assignment with goods licence, alpha split, organisation type - sole trader
      *
      * @param string $orgType
-     * @dataProvider orgTypeProvider
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitOrgTypeSoleTraderOrPartnership($orgType)
+    #[\PHPUnit\Framework\Attributes\DataProvider('orgTypeProvider')]
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceAlphaSplitOrgTypeSoleTraderOrPartnership(mixed $orgType): void
     {
         $command = Cmd::create($this->getData());
 
@@ -651,7 +651,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function orgTypeProvider()
+    public static function orgTypeProvider(): array
     {
         return [
             [Organisation::ORG_TYPE_SOLE_TRADER],
@@ -665,7 +665,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      * @param int $licenceId
      * @return array
      */
-    protected function getData($licenceId = 222)
+    protected function getData(?int $licenceId = 222): array
     {
         return [
             'category' => 1,
@@ -686,7 +686,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      *
      * @param Mock|null $user
      */
-    protected function mockSaveTask($user = null)
+    protected function mockSaveTask(mixed $user = null): void
     {
         $this->repoMap[Repository\Task::class]->shouldReceive('save')
             ->once()
@@ -706,7 +706,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
      * @param sting $operatorType
      * @param bool $mockOrganisation
      */
-    protected function mockLicence($operatorType = Licence::LICENCE_CATEGORY_PSV, $mockOrganisation = false)
+    protected function mockLicence(mixed $operatorType = Licence::LICENCE_CATEGORY_PSV, bool $mockOrganisation = false): void
     {
         $this->mockLicence
             ->shouldReceive('getGoodsOrPsv')
@@ -747,7 +747,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Test handle command with auto assignment with goods licence with no operator type
      */
-    public function testHandleCommandWithAutoAssignmentGoodsLicenceNoOperatorType()
+    public function testHandleCommandWithAutoAssignmentGoodsLicenceNoOperatorType(): void
     {
         $command = Cmd::create($this->getData());
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -14,7 +16,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-abstract class AbstractCreateSnapshotHandlerTest extends AbstractCommandHandlerTestCase
+abstract class AbstractCreateSnapshotHandlerTestCase extends AbstractCommandHandlerTestCase
 {
     public $documentLinkValue;
     protected $cmdClass = 'changeMe';
@@ -40,7 +42,7 @@ abstract class AbstractCreateSnapshotHandlerTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 999;
         $html = '<html></html>';
@@ -104,7 +106,7 @@ abstract class AbstractCreateSnapshotHandlerTest extends AbstractCommandHandlerT
     /**
      * Override this method in case of needing specific entity assertions i.e. for a permit application reference
      */
-    protected function extraEntityAssertions(m\MockInterface $entity)
+    protected function extraEntityAssertions(m\MockInterface $entity): mixed
     {
         return $entity;
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreatQueue;
@@ -36,7 +38,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleMaxBatchSizeReached()
+    public function testHandleMaxBatchSizeReached(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('ERR_PERMIT_PRINTING_MAX_BATCH_SIZE_REACHED');
@@ -50,7 +52,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleMaxBatchSizeReachedConfig()
+    public function testHandleMaxBatchSizeReachedConfig(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('ERR_PERMIT_PRINTING_MAX_BATCH_SIZE_REACHED');
@@ -68,7 +70,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandlePrintingAlreadyInProgress()
+    public function testHandlePrintingAlreadyInProgress(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $this->expectExceptionMessage('ERR_PERMIT_PRINTING_ALREADY_IN_PROGRESS');
@@ -90,7 +92,7 @@ class PrintPermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 1;
         $p1Id = 10;

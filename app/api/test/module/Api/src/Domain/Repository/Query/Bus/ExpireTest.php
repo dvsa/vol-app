@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Bus;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Bus\Expire as ExpireBusQry;
@@ -43,7 +45,7 @@ class ExpireTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         $today = new DateTime();
 
@@ -61,12 +63,12 @@ class ExpireTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): ExpireBusQry
     {
         return new ExpireBusQry();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE br_table br '
             . 'SET br.status = :expiredStatus, '

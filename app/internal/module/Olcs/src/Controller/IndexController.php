@@ -30,8 +30,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
 
-    protected SubCategory $subCategoryDataService;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -40,7 +38,7 @@ class IndexController extends AbstractController implements LeftViewProvider
         protected FlashMessengerHelperService $flashMessengerHelper,
         protected UserListInternal $userListInternalDataService,
         protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService,
-        SubCategory $subCategoryDataService,
+        protected SubCategory $subCategoryDataService,
         protected TaskSubCategory $taskSubCategoryDataService,
         protected DocumentSubCategory $documentSubCategoryDataService,
         protected DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService,
@@ -56,7 +54,6 @@ class IndexController extends AbstractController implements LeftViewProvider
             $tableFactory,
             $viewHelperManager
         );
-        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**
@@ -65,6 +62,7 @@ class IndexController extends AbstractController implements LeftViewProvider
      * @return bool|\Laminas\Http\Response|ViewModel
      * @throws \Exception
      */
+    #[\Override]
     public function indexAction()
     {
         $redirect = $this->processTasksActions();

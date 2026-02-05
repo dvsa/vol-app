@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Command\Variation;
 
 use Dvsa\Olcs\Api\Domain\Command\Variation\ResetVariation;
@@ -10,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ResetVariationTest extends TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $id = 140;
         $confirm = true;

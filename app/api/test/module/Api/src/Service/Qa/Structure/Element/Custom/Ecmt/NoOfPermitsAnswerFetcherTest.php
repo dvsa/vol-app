@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Ecmt;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -44,7 +46,7 @@ class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
         $this->noOfPermitsAnswerFetcher = new NoOfPermitsAnswerFetcher($this->namedAnswerFetcher);
     }
 
-    public function testFetchValuePresent()
+    public function testFetchValuePresent(): void
     {
         $fetchedAnswer = '40';
         $expectedAnswer = '40';
@@ -59,7 +61,7 @@ class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
         );
     }
 
-    public function testFetchConvertEmptyToZero()
+    public function testFetchConvertEmptyToZero(): void
     {
         $fetchedAnswer = '';
         $expectedAnswer = '0';
@@ -74,7 +76,7 @@ class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
         );
     }
 
-    public function testFetchConvertMissingToZero()
+    public function testFetchConvertMissingToZero(): void
     {
         $expectedAnswer = '0';
 

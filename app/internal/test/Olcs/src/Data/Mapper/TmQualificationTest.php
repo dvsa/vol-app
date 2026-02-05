@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
  */
 class TmQualificationTest extends MockeryTestCase
 {
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = new Form();
 
@@ -28,7 +30,7 @@ class TmQualificationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'qualification-details' => ['foo' => 'bar'],
@@ -43,15 +45,13 @@ class TmQualificationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    /**
-     * @dataProvider mapFromResultProvider
-     */
-    public function testMapFromResult($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultProvider')]
+    public function testMapFromResult(mixed $data, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function mapFromResultProvider()
+    public static function mapFromResultProvider(): array
     {
         return [
             [
@@ -94,7 +94,7 @@ class TmQualificationTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromDocumentsResult()
+    public function testMapFromDocumentsResult(): void
     {
         $this->assertEquals(
             'foo',

@@ -74,6 +74,7 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
         return $view;
     }
 
+    #[\Override]
     public function indexAction()
     {
         // If an IRHP Permit Stock ID is not specified then redirect the user to the Permits System Settings page.

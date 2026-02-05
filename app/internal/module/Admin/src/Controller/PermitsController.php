@@ -31,6 +31,7 @@ class PermitsController extends AbstractInternalController
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->redirectToRoute('admin-dashboard/admin-permits/stocks', [], null, true);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application\Grant;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\CreatePostDeletePeopleGrantTask as CreatePostGrantPeopleTasksCommand;
@@ -30,7 +32,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithNoVariationType()
+    public function testHandleCommandWithNoVariationType(): void
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
 
@@ -41,7 +43,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['id' => [], 'messages' => []], $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testHandleCommandWithNonDirectorChangeVariation()
+    public function testHandleCommandWithNonDirectorChangeVariation(): void
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
 
@@ -52,7 +54,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(['id' => [], 'messages' => []], $this->sut->handleCommand($command)->toArray());
     }
 
-    public function testHandleCommandWhenPeopleRemain()
+    public function testHandleCommandWhenPeopleRemain(): void
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
 
@@ -68,13 +70,13 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider provideCreateTaskWhenNoPeopleRemainCases
      *
      * @param $organisationType
      * @param $expectedTaskDescription
      * @param $expectedSubCategory
      */
-    public function testCreateTaskWhenNoPeopleRemain($organisationType, $expectedTaskDescription, $expectedSubCategory)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCreateTaskWhenNoPeopleRemainCases')]
+    public function testCreateTaskWhenNoPeopleRemain(mixed $organisationType, mixed $expectedTaskDescription, mixed $expectedSubCategory): void
     {
         $command = CreatePostGrantPeopleTasksCommand::create(['applicationId' => 'TEST_APPLICATION_ID']);
 
@@ -103,7 +105,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function provideCreateTaskWhenNoPeopleRemainCases()
+    public static function provideCreateTaskWhenNoPeopleRemainCases(): array
     {
         return [
             [
@@ -117,7 +119,7 @@ class CreatePostDeletePeopleGrantTaskTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    private function createMockApplication($variationType, $organisationType = null)
+    private function createMockApplication(mixed $variationType, mixed $organisationType = null): mixed
     {
         /** @var Organisation|m\Mock $organisation */
         $organisation = m::mock(Organisation::class)->makePartial();

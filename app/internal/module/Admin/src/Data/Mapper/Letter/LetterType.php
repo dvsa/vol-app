@@ -53,12 +53,12 @@ class LetterType implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         $commandData = $data['letterType'] ?? [];
-        
+
         // Remove the id field if it's empty (for create operations)
         if (empty($commandData['id'])) {
             unset($commandData['id']);
         }
-        
+
         // Ensure boolean value for isActive
         if (isset($commandData['isActive'])) {
             $commandData['isActive'] = (bool) $commandData['isActive'];
@@ -68,15 +68,15 @@ class LetterType implements MapperInterface
         if (empty($commandData['masterTemplate'])) {
             unset($commandData['masterTemplate']);
         }
-        
+
         if (empty($commandData['category'])) {
             unset($commandData['category']);
         }
-        
+
         if (empty($commandData['subCategory'])) {
             unset($commandData['subCategory']);
         }
-        
+
         if (empty($commandData['letterTestData'])) {
             unset($commandData['letterTestData']);
         }

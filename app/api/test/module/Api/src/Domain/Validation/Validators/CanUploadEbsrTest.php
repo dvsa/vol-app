@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Validators;
 
 use Dvsa\Olcs\Api\Domain\Validation\Validators\CanUploadEbsr;
@@ -28,10 +30,9 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
 
     /**
      * Test that the result of isValid is the same as hasActiveLicences, whether the result is true or false
-     *
-     * @dataProvider hasActiveLicencesProvider
      */
-    public function testIsValid($hasActiveLicences)
+    #[\PHPUnit\Framework\Attributes\DataProvider('hasActiveLicencesProvider')]
+    public function testIsValid(mixed $hasActiveLicences): void
     {
         $entityId = 111;
 
@@ -50,7 +51,7 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
     /**
      * @return array
      */
-    public function hasActiveLicencesProvider()
+    public static function hasActiveLicencesProvider(): array
     {
         return [
             [true],
@@ -61,7 +62,7 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
     /**
      * Test that if there is no organisation we return false
      */
-    public function testIsValidWithNullEntity()
+    public function testIsValidWithNullEntity(): void
     {
         $this->assertFalse($this->sut->isValid(null));
     }

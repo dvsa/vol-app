@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Metadata;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -36,10 +38,8 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         $this->currentFieldValuesGenerator = new CurrentFieldValuesGenerator();
     }
 
-    /**
-     * @dataProvider dpGenerate
-     */
-    public function testGenerate($bilateralRequired, $permitUsageSelection, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
+    public function testGenerate(mixed $bilateralRequired, mixed $permitUsageSelection, mixed $expected): void
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock')
             ->withNoArgs()
@@ -57,7 +57,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function dpGenerate()
+    public static function dpGenerate(): array
     {
         return [
             [
@@ -97,7 +97,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         ];
     }
 
-    public function testGenerateNoIrhpPermitApplication()
+    public function testGenerateNoIrhpPermitApplication(): void
     {
         $expected = [
             RefData::JOURNEY_SINGLE => [
@@ -116,7 +116,7 @@ class CurrentFieldValuesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGenerateNonMatchingIrhpPermitApplication()
+    public function testGenerateNonMatchingIrhpPermitApplication(): void
     {
         $this->irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock')
             ->withNoArgs()

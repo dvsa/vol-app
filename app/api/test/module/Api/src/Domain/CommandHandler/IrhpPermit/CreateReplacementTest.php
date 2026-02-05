@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermit;
 
 use DateTime;
@@ -30,7 +32,8 @@ class CreateReplacementTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrhpPermit::STATUS_PENDING
@@ -42,7 +45,7 @@ class CreateReplacementTest extends AbstractCommandHandlerTestCase
     /**
      * Test
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $cmdData = [
             'replaces' => '201',
@@ -99,7 +102,7 @@ class CreateReplacementTest extends AbstractCommandHandlerTestCase
     /**
      * Tests exception thrown for missing config
      */
-    public function testCantSaveException()
+    public function testCantSaveException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

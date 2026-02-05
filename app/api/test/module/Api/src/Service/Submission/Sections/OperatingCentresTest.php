@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre;
 
-/**
- * @covers \Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres
- */
-class OperatingCentresTest extends AbstractSubmissionSectionTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class)]
+class OperatingCentresTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\OperatingCentres::class;
 
@@ -16,21 +16,21 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getApplicationCase();
+        $case = static::getApplicationCase();
 
-        $case2 = $this->getApplicationCase();
+        $case2 = static::getApplicationCase();
         $oc = $case2->getLicence()->getOperatingCentres();
         $oc->current()->getOperatingCentre()->setAddress(null);
 
         //  --  prepare data for 'add, update, delete oc in application'
-        $case3 = $this->getApplicationCase();
+        $case3 = static::getApplicationCase();
         $app = $case3->getApplication();
         $appOcRels = $case3->getApplication()->getOperatingCentres();
 
         //  add operation center
-        $ocNew = $this->generateOperatingCentre(3);
+        $ocNew = static::generateOperatingCentre(3);
         $ocNew->getAddress()->setPostcode('A_first');
 
         $appOcRels->add(
@@ -41,7 +41,7 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
         );
 
         //  update operation center in licence
-        $ocUpd = $this->generateOperatingCentre(2);
+        $ocUpd = static::generateOperatingCentre(2);
         $ocUpd->getAddress()->setPostcode('Z_last');
 
         $appOcRels->add(
@@ -53,18 +53,18 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
 
         //  delete operation center in licence
         $appOcRels->add(
-            (new ApplicationOperatingCentre($app, $this->generateOperatingCentre(1)))
+            (new ApplicationOperatingCentre($app, static::generateOperatingCentre(1)))
                 ->setAction(ApplicationOperatingCentre::ACTION_DELETE)
         );
 
         //  --  prepare data for 'no oper centres'
-        $case4 = $this->getApplicationCase();
+        $case4 = static::getApplicationCase();
         $case4->getLicence()->getOperatingCentres()->clear();
 
         return [
             [
-                'input' => $case,
-                'expect' => [
+                $case,
+                [
                     'data' => [
                         'tables' => [
                             'operating-centres' => [
@@ -104,8 +104,8 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
                 ],
             ],
             [
-                'input' => $case2,
-                'expect' => [
+                $case2,
+                [
                     'data' => [
                         'tables' => [
                             'operating-centres' => [
@@ -137,8 +137,8 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
                 ],
             ],
             'add, update, delete oc in application' => [
-                'input' => $case3,
-                'expect' => [
+                $case3,
+                [
                     'data' => [
                         'tables' => [
                             'operating-centres' => [
@@ -178,8 +178,8 @@ class OperatingCentresTest extends AbstractSubmissionSectionTest
                 ],
             ],
             'empty ocs' => [
-                'input' => $case4,
-                'expect' => [
+                $case4,
+                [
                     'data' => [
                         'tables' => [
                             'operating-centres' => []

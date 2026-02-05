@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TransportManagerApplication;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -41,7 +43,8 @@ class OperatorSignedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransportManagerApplication::STATUS_OPERATOR_SIGNED,
@@ -51,7 +54,7 @@ class OperatorSignedTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithVersion()
+    public function testHandleCommandWithVersion(): void
     {
         $command = Command::create(['id' => 863, 'version' => 234]);
 
@@ -105,7 +108,7 @@ class OperatorSignedTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithoutVersion()
+    public function testHandleCommandWithoutVersion(): void
     {
         $command = Command::create(['id' => 863]);
 
@@ -158,7 +161,7 @@ class OperatorSignedTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    private function assertEmailSent($tma)
+    private function assertEmailSent(mixed $tma): void
     {
         $tma->shouldReceive('getApplication->getLicence->getTranslateToWelsh')->with()->once()->andReturn('Y');
         $tma->shouldReceive('getApplication->getLicence->getOrganisation->getName')->with()->once()

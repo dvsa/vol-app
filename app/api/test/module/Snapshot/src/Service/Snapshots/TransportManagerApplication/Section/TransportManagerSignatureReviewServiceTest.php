@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\TransportManagerApplication\Section;
 
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
@@ -40,10 +42,8 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerSignatureReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider getConfigProvider
-     */
-    public function testGetConfig($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('getConfigProvider')]
+    public function testGetConfig(mixed $data, mixed $expected): void
     {
         $this->mockTranslator
             ->shouldReceive('translate')
@@ -95,7 +95,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['markup' => $expectedMarkup], $this->sut->getConfig($tma));
     }
 
-    public function getConfigProvider()
+    public static function getConfigProvider(): array
     {
 
         $digitalSignature = m::mock(DigitalSignature::class);
@@ -177,12 +177,12 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
     /**
      * testAppropriateTemplateUsedForDigitalSignatures
      *
-     * @dataProvider digitalSignatureDataProvider
      *
      * @param $conditions
      * @param $expected
      */
-    public function notestAppropriateTemplateUsedForDigitalSignatures($conditions, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('digitalSignatureDataProvider')]
+    public function notestAppropriateTemplateUsedForDigitalSignatures(mixed $conditions, mixed $expected): void
     {
         $this->mockTranslator
             ->shouldReceive('translate')
@@ -213,7 +213,7 @@ class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         ], $actual);
     }
 
-    public function digitalSignatureDataProvider()
+    public static function digitalSignatureDataProvider(): array
     {
         $opDigitalSignature = m::mock(DigitalSignature::class);
         $opDigitalSignature->shouldReceive('getSignatureName')->andReturn('OpName');

@@ -54,6 +54,7 @@ abstract class AbstractConversationListController extends AbstractInternalContro
         return $view;
     }
 
+    #[\Override]
     public function modifyListQueryParameters($parameters)
     {
         $filterForm = $this->getForm(ConversationFilter::class);

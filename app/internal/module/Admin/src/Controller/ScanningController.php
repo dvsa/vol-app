@@ -29,6 +29,7 @@ class ScanningController extends LaminasAbstractActionController
      *
      * @return array|\Laminas\Http\Response|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $prg = $this->prg();

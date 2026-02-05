@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section;
 
 use Mockery as m;
@@ -42,10 +44,8 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($withAd, $adDocuments, $expectedAdvertisements, $needToMockTranslator, $totAuthLgvVehicles, $expectedTotalVehiclesLabel)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $withAd, mixed $adDocuments, mixed $expectedAdvertisements, mixed $needToMockTranslator, mixed $totAuthLgvVehicles, mixed $expectedTotalVehiclesLabel): void
     {
         $data = [
             'id' => 321,
@@ -141,51 +141,51 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             [
-                ApplicationOperatingCentre::AD_POST,
-                [],
-                [
+                "withAd" => ApplicationOperatingCentre::AD_POST,
+                "adDocuments" => [],
+                "expectedAdvertisements" => [
                     [
                         'label' => 'review-operating-centre-advertisement-ad-placed',
                         'value' => 'review-operating-centre-advertisement-post'
                     ]
                 ],
-                true,
+                "needToMockTranslator" => true,
                 'totAuthLgvVehicles' => null,
                 'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
             ],
             [
-                ApplicationOperatingCentre::AD_POST,
-                [],
-                [
+                "withAd" => ApplicationOperatingCentre::AD_POST,
+                "adDocuments" => [],
+                "expectedAdvertisements" => [
                     [
                         'label' => 'review-operating-centre-advertisement-ad-placed',
                         'value' => 'review-operating-centre-advertisement-post'
                     ]
                 ],
-                true,
+                "needToMockTranslator" => true,
                 'totAuthLgvVehicles' => 5,
                 'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles-hgv',
             ],
             [
-                ApplicationOperatingCentre::AD_UPLOAD_LATER,
-                [],
-                [
+                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_LATER,
+                "adDocuments" => [],
+                "expectedAdvertisements" => [
                     [
                         'label' => 'review-operating-centre-advertisement-ad-placed',
                         'value' => 'review-operating-centre-advertisement-upload-later'
                     ]
                 ],
-                true,
+                "needToMockTranslator" => true,
                 'totAuthLgvVehicles' => null,
                 'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
             ],
             [
-                ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                [
+                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                "adDocuments" => [
                     // This file should be ignored, as the app id doesn't match
                     [
                         'description' => 'somefile.pdf',
@@ -207,7 +207,7 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
                         ]
                     ]
                 ],
-                [
+                "expectedAdvertisements" => [
                     [
                         'label' => 'review-operating-centre-advertisement-ad-placed',
                         'value' => 'review-operating-centre-advertisement-upload-now'
@@ -226,14 +226,14 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
                         'value' => 'file1.pdf<br>file2.pdf'
                     ]
                 ],
-                true,
+                "needToMockTranslator" => true,
                 'totAuthLgvVehicles' => null,
                 'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
             ],
             [
-                ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                [],
-                [
+                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                "adDocuments" => [],
+                "expectedAdvertisements" => [
                     [
                         'label' => 'review-operating-centre-advertisement-ad-placed',
                         'value' => 'review-operating-centre-advertisement-upload-now'
@@ -252,7 +252,7 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
                         'value' => 'no-files-uploaded-translated'
                     ]
                 ],
-                true,
+                "needToMockTranslator" => true,
                 'totAuthLgvVehicles' => null,
                 'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
             ]

@@ -75,7 +75,7 @@ class PiReportController extends AbstractInternalController implements LeftViewP
         $request = $this->getRequest();
 
         $eomDate = $this->dateHelperService->getDate('Y-m-t');
-        [$year, $month, $lastDay] = explode('-', $eomDate);
+        [$year, $month, $lastDay] = explode('-', (string) $eomDate);
 
         $filters = array_merge(
             [
@@ -101,6 +101,7 @@ class PiReportController extends AbstractInternalController implements LeftViewP
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $this->setPageTitle();

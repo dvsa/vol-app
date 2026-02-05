@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\AbstractGeneratorServices;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class AbstractGeneratorServicesTest extends MockeryTestCase
 {
-    public function testGetRenderer()
+    public function testGetRenderer(): void
     {
         $renderer = m::mock(RendererInterface::class);
 

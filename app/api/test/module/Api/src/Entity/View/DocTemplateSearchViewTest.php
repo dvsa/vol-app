@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\View;
 
 use Dvsa\Olcs\Api\Entity\View\DocTemplateSearchView;
@@ -32,17 +34,16 @@ class DocTemplateSearchViewTest extends \PHPUnit\Framework\TestCase
         $this->sut = new DocTemplateSearchView();
     }
 
-    public function testSetGetters()
+    public function testSetGetters(): void
     {
         $ref = new \ReflectionObject($this->sut);
 
         // test all the getters
         foreach ($this->testData as $property => $value) {
-            $methodName = ucfirst($property);
+            $methodName = ucfirst((string) $property);
 
             if (!method_exists($this->sut, 'set' . $methodName)) {
                 $refProperty = $ref->getProperty($property);
-                $refProperty->setAccessible(true);
                 $refProperty->setValue($this->sut, $value);
             } else {
                 $this->sut->{'set' . $methodName}($value);
@@ -51,7 +52,7 @@ class DocTemplateSearchViewTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testIsDelete()
+    public function testIsDelete(): void
     {
         static::assertFalse($this->sut->isDeleted());
         $this->sut->setDeletedDate(new \DateTime());

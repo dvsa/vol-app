@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Bus\Ebsr;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -24,12 +26,12 @@ class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @dataProvider provider
      *
      * @param $canAccess
      * @param $expected
      */
-    public function testIsValid($canAccess, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $id = 111;
@@ -44,7 +46,7 @@ class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
     /**
      * @return array
      */
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true],

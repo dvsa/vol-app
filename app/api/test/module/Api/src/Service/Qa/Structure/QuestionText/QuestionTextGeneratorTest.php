@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText;
 
 use Dvsa\Olcs\Api\Entity\Generic\QuestionText as QuestionTextEntity;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class QuestionTextGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $questionKey = '{"questionKeyJson"}';
         $questionSummaryKey = '{"questionSummaryKeyJson"}';

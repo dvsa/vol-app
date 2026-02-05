@@ -57,14 +57,14 @@ class SendErruErrors extends AbstractCommandHandler implements EmailAwareInterfa
         $erruFailure = $repo->fetchUsingId($command);
 
         //we will always have errors saved
-        $errors = json_decode($erruFailure->getErrors(), true);
+        $errors = json_decode((string) $erruFailure->getErrors(), true);
 
         //we won't always have input data saved e.g. when the XML file couldn't be parsed
         $jsonInputData = $erruFailure->getInput();
         $input = [];
 
         if (!empty($jsonInputData)) {
-            $input = json_decode($jsonInputData, true);
+            $input = json_decode((string) $jsonInputData, true);
         }
 
         //get the email message, and assign addresses

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  *
  * View Model Test
@@ -28,7 +30,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->sut = new ViewModel();
     }
 
-    public function testSimpleSetters()
+    public function testSimpleSetters(): void
     {
         $this->sut->setHorizontalNavigationId('navId');
         $this->sut->setContentTitle('Some title');
@@ -41,7 +43,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Some page sub title', $this->sut->pageSubTitle);
     }
 
-    public function testSetIsAjax()
+    public function testSetIsAjax(): void
     {
         $this->assertEquals('layout/base', $this->sut->getTemplate());
 
@@ -54,7 +56,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('layout/base', $this->sut->getTemplate());
     }
 
-    public function testSetContent()
+    public function testSetContent(): void
     {
         $content = new \Laminas\View\Model\ViewModel();
 
@@ -65,7 +67,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($content, $contents[0]);
     }
 
-    public function testSetLeft()
+    public function testSetLeft(): void
     {
         $content = new \Laminas\View\Model\ViewModel();
 
@@ -76,7 +78,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($content, $contents[0]);
     }
 
-    public function testSetRight()
+    public function testSetRight(): void
     {
         $content = new \Laminas\View\Model\ViewModel();
 
@@ -87,7 +89,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($content, $contents[0]);
     }
 
-    public function testClearLeft()
+    public function testClearLeft(): void
     {
         $content = new \Laminas\View\Model\ViewModel();
 

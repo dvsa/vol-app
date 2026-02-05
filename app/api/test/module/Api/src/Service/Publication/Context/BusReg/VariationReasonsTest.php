@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\BusReg;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,12 +21,12 @@ class VariationReasonsTest extends MockeryTestCase
     /**
      * Tests bus reg variation reasons filter
      *
-     * @group publicationFilter
-     * @dataProvider dpProvideDataProvider
      *
      * @param string $expectedString
      */
-    public function testProvide(ArrayCollection $variationReasons, $expectedString)
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpProvideDataProvider')]
+    public function testProvide(ArrayCollection $variationReasons, mixed $expectedString): void
     {
         $busReg = m::mock(BusRegEntity::class);
         $busReg->shouldReceive('getVariationReasons')->andReturn($variationReasons);
@@ -43,7 +45,7 @@ class VariationReasonsTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $sut->provide($publication, new \ArrayObject()));
     }
 
-    public function dpProvideDataProvider()
+    public static function dpProvideDataProvider(): array
     {
         $reason1 = 'reason 1';
         $reason2 = 'reason 2';

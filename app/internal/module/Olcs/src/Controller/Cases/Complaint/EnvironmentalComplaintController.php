@@ -113,6 +113,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         return $this->notFoundAction();
@@ -123,6 +124,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
      *
      * @return ViewModel
      */
+    #[\Override]
     public function detailsAction()
     {
         return $this->notFoundAction();

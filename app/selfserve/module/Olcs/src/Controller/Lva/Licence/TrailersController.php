@@ -36,8 +36,6 @@ class TrailersController extends Lva\AbstractTrailersController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -60,7 +58,7 @@ class TrailersController extends Lva\AbstractTrailersController
         ScriptFactory $scriptFactory,
         DateHelperService $dateHelper,
         QuerySender $querySender,
-        LicenceLvaAdapter $lvaAdapter
+        protected LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -73,7 +71,6 @@ class TrailersController extends Lva\AbstractTrailersController
             $dateHelper,
             $querySender
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 
     /**
@@ -83,6 +80,7 @@ class TrailersController extends Lva\AbstractTrailersController
      *
      * @return array|null|\Laminas\Http\Response
      */
+    #[\Override]
     public function onDispatch(MvcEvent $e)
     {
         return $this->fetchDataForLva()['niFlag'] === 'Y'

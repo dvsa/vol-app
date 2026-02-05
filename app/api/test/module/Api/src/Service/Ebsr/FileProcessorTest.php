@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr;
 
 use Dvsa\Olcs\Api\Filesystem\Filesystem;
@@ -18,7 +20,7 @@ use org\bovigo\vfs\vfsStream;
  */
 class FileProcessorTest extends TestCase
 {
-    public function testFetchXmlFileNameFromDocumentStore()
+    public function testFetchXmlFileNameFromDocumentStore(): void
     {
         vfsStream::setup();
 
@@ -57,7 +59,7 @@ class FileProcessorTest extends TestCase
         );
     }
 
-    public function testFetchXmlFileNameFromDocumentStoreExGt1()
+    public function testFetchXmlFileNameFromDocumentStoreExGt1(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\EbsrPackException::class);
 
@@ -94,7 +96,7 @@ class FileProcessorTest extends TestCase
         $sut->fetchXmlFileNameFromDocumentStore($fileIdentifier);
     }
 
-    public function testFetchXmlFileNameFromDocumentStoreEx0()
+    public function testFetchXmlFileNameFromDocumentStoreEx0(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\EbsrPackException::class);
 
@@ -127,7 +129,7 @@ class FileProcessorTest extends TestCase
         $sut->fetchXmlFileNameFromDocumentStore($fileIdentifier);
     }
 
-    public function testFetchXmlFileNameFromDocumentStoreWithCorruptZip()
+    public function testFetchXmlFileNameFromDocumentStoreWithCorruptZip(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\EbsrPackException::class);
 
@@ -163,7 +165,7 @@ class FileProcessorTest extends TestCase
         $sut->fetchXmlFileNameFromDocumentStore($fileIdentifier);
     }
 
-    public function testFetchXmlFileNameFromDocumentStoreMissingTmpDir()
+    public function testFetchXmlFileNameFromDocumentStoreMissingTmpDir(): void
     {
         $this->expectException(\RuntimeException::class);
 
