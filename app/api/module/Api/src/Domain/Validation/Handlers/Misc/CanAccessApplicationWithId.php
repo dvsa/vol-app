@@ -20,6 +20,7 @@ class CanAccessApplicationWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessApplication($this->getId($dto));

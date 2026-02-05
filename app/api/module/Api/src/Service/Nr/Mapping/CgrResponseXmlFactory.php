@@ -10,6 +10,7 @@ use Psr\Container\ContainerInterface;
 
 class CgrResponseXmlFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CgrResponseXml
     {
         $config = $container->get('config');

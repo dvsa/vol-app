@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Scan;
 
 use DateTime;
@@ -34,7 +36,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandInvalidMime()
+    public function testHandleCommandInvalidMime(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -47,7 +49,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithoutScan()
+    public function testHandleCommandWithoutScan(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -66,7 +68,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'content' => base64_encode((string) $this->validPdf),
@@ -147,7 +149,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandBackScan()
+    public function testHandleCommandBackScan(): void
     {
         $data = [
             'content' => base64_encode((string) $this->validPdf),

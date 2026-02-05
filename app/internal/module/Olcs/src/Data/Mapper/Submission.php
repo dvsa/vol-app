@@ -19,6 +19,7 @@ class Submission implements MapperInterface
      *
      * @return array $formData
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         // always set assigned date to today as string for field
@@ -32,7 +33,7 @@ class Submission implements MapperInterface
         }
 
         if (isset($data['submissionType']['id'])) {
-            $snapshot = json_decode($data['dataSnapshot'], true);
+            $snapshot = json_decode((string) $data['dataSnapshot'], true);
 
             $formData['fields']['submissionSections'] = [
                 'submissionType' => $data['submissionType']['id'],

@@ -28,6 +28,7 @@ final readonly class WithPersonContactDetails implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         $column = $arguments[0] ?? 'contactDetails';

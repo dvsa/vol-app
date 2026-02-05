@@ -32,6 +32,7 @@ final class CreateIrfoGvPermit extends AbstractCommandHandler implements Transac
         'FeeType'
     ];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irfoGvPermit = $this->createIrfoGvPermitObject($command);

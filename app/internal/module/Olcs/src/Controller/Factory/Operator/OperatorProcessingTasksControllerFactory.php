@@ -26,6 +26,7 @@ class OperatorProcessingTasksControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return OperatorProcessingTasksController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorProcessingTasksController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

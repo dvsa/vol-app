@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -240,7 +240,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -263,7 +264,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -286,7 +288,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the irfo gv permit type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
+     */
     public function getIrfoGvPermitType()
     {
         return $this->irfoGvPermitType;
@@ -309,7 +312,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the irfo permit status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getIrfoPermitStatus()
     {
         return $this->irfoPermitStatus;
@@ -332,7 +336,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the withdrawn reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWithdrawnReason()
     {
         return $this->withdrawnReason;
@@ -355,7 +360,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -378,7 +384,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -401,7 +408,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the irfo fee id
      *
-     * @return string     */
+     * @return string
+     */
     public function getIrfoFeeId()
     {
         return $this->irfoFeeId;
@@ -424,7 +432,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the exemption details
      *
-     * @return string     */
+     * @return string
+     */
     public function getExemptionDetails()
     {
         return $this->exemptionDetails;
@@ -449,7 +458,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiryDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -476,7 +486,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the is fee exempt
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFeeExempt()
     {
         return $this->isFeeExempt;
@@ -501,7 +512,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInForceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -528,7 +540,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the no of copies
      *
-     * @return int     */
+     * @return int
+     */
     public function getNoOfCopies()
     {
         return $this->noOfCopies;
@@ -551,7 +564,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the note
      *
-     * @return string     */
+     * @return string
+     */
     public function getNote()
     {
         return $this->note;
@@ -574,7 +588,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the permit printed
      *
-     * @return string     */
+     * @return string
+     */
     public function getPermitPrinted()
     {
         return $this->permitPrinted;
@@ -597,7 +612,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the year required
      *
-     * @return int     */
+     * @return int
+     */
     public function getYearRequired()
     {
         return $this->yearRequired;
@@ -620,7 +636,8 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -629,6 +646,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -21,6 +21,7 @@ class FinancialHistoryControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return FinancialHistoryController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FinancialHistoryController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

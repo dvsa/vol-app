@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Db\Service\Search\Indices\Terms;
 
 class TransportManagerLicenceStatus implements ComplexTermInterface
 {
+    #[\Override]
     public function applySearch(array &$params): void
     {
         $params['must_not'][] = [

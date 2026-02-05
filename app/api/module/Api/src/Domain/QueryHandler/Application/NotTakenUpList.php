@@ -23,6 +23,7 @@ class NotTakenUpList extends AbstractQueryHandler
 
     protected $extraRepos = ['TrafficArea', 'PublicHoliday'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $results = $this->getApplicationsForNtu($query->getDate());

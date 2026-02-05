@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Access Licence Vehicles With Ids Test
  *
@@ -32,10 +34,8 @@ class CanAccessLicenceVehiclesWithIdsTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccess1, $canAccess2, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccess1, mixed $canAccess2, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -47,7 +47,7 @@ class CanAccessLicenceVehiclesWithIdsTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true, true],

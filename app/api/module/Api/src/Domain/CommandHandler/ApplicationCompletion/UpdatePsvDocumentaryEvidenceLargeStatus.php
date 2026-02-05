@@ -10,6 +10,7 @@ final class UpdatePsvDocumentaryEvidenceLargeStatus extends AbstractUpdateStatus
 {
     protected $section = 'PsvDocumentaryEvidenceLarge';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

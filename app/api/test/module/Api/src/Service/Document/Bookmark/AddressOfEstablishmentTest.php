@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\AddressOfEstablishment;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\AddressOfEstablishment;
  */
 class AddressOfEstablishmentTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new AddressOfEstablishment();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class AddressOfEstablishmentTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoAddressOfEstablishment()
+    public function testRenderWithNoAddressOfEstablishment(): void
     {
         $bookmark = new AddressOfEstablishment();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class AddressOfEstablishmentTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithAddressOfEstablishment()
+    public function testRenderWithAddressOfEstablishment(): void
     {
         $bookmark = new AddressOfEstablishment();
         $bookmark->setData(

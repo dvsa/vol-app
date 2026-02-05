@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Common\RefData;
@@ -23,7 +25,7 @@ class IrhpApplicationTest extends MockeryTestCase
         $this->sut = new \Olcs\Data\Mapper\IrhpApplication($this->applicationStepsPostDataTransformer);
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = [
             'id' => '123',
@@ -75,7 +77,7 @@ class IrhpApplicationTest extends MockeryTestCase
         );
     }
 
-    public function testMapApplicationData()
+    public function testMapApplicationData(): void
     {
         $formData =
             [
@@ -248,7 +250,7 @@ class IrhpApplicationTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->mapApplicationData($windowData, 4, $formData));
     }
 
-    public function testMapFromFormShortTerm()
+    public function testMapFromFormShortTerm(): void
     {
         $preTransformedQaData = ['foo' => 'bar'];
         $postTransformedQaData = ['transformedFoo' => 'transformedBar'];
@@ -295,7 +297,7 @@ class IrhpApplicationTest extends MockeryTestCase
         $this->assertSame($expected, $this->sut->mapFromForm($formData, $applicationSteps));
     }
 
-    public function testMapFromFormBilateral()
+    public function testMapFromFormBilateral(): void
     {
         $topFields = [
             'irhpPermitType' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,

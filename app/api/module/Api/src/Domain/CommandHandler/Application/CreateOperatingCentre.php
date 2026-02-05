@@ -40,6 +40,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Application $application */
@@ -95,6 +96,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
             $this->getRepo('ApplicationOperatingCentre')
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -36,6 +36,7 @@ final class EditSuspension extends AbstractCommandHandler implements Transaction
      * @throws ValidationException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

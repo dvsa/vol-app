@@ -16,6 +16,7 @@ class PermitUsageAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function shouldIncludeSlug(QaEntityInterface $qaEntity)
     {
         /** @var IrhpPermitApplication $qaEntity */
@@ -29,6 +30,7 @@ class PermitUsageAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'generic';
@@ -37,6 +39,7 @@ class PermitUsageAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         return ['answer' => $qaContext->getAnswerValue()];

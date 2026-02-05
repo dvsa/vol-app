@@ -14,6 +14,7 @@ class Get extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $query \Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get */

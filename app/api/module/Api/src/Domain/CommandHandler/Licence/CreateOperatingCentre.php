@@ -49,6 +49,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         if (!$this->isGranted(Permission::INTERNAL_USER)) {
@@ -96,6 +97,7 @@ final class CreateOperatingCentre extends AbstractCommandHandler implements Tran
             $this->getRepo('LicenceOperatingCentre')
         );
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

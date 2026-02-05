@@ -45,7 +45,7 @@ return [
             'title' => 'Heading',
             'name' => 'heading',
             'sort' => 'heading',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get heading from current version
                 if (isset($row['currentVersion']['heading'])) {
                     return Escape::html($row['currentVersion']['heading']);
@@ -56,7 +56,7 @@ return [
         [
             'title' => 'Category',
             'name' => 'category',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get category from current version
                 if (isset($row['currentVersion']['category']['description'])) {
                     return Escape::html($row['currentVersion']['category']['description']);
@@ -70,7 +70,7 @@ return [
         [
             'title' => 'Sub Category',
             'name' => 'subCategory',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get subCategory from current version
                 if (isset($row['currentVersion']['subCategory']['subCategoryName'])) {
                     return Escape::html($row['currentVersion']['subCategory']['subCategoryName']);
@@ -84,7 +84,7 @@ return [
         [
             'title' => 'Issue Type',
             'name' => 'letterIssueType',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get letterIssueType from current version
                 if (isset($row['currentVersion']['letterIssueType']['name'])) {
                     return Escape::html($row['currentVersion']['letterIssueType']['name']);
@@ -98,7 +98,7 @@ return [
         [
             'title' => 'Current Version',
             'name' => 'currentVersion',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 if (isset($row['currentVersion']['versionNumber'])) {
                     return 'v' . Escape::html($row['currentVersion']['versionNumber']);
                 }

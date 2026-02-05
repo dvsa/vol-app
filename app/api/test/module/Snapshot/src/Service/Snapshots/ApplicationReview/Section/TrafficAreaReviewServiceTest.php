@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Traffic Area Review Service Test
  *
@@ -35,7 +37,7 @@ class TrafficAreaReviewServiceTest extends MockeryTestCase
         $this->sut = new TrafficAreaReviewService($abstractReviewServiceServices);
     }
 
-    public function testGetConfigFromData()
+    public function testGetConfigFromData(): void
     {
         $data = [
             'licence' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\CommunityLic;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,16 +30,14 @@ class CommunityLicencesTest extends QueryHandlerTestCase
     use MocksServicesTrait;
     use MocksLicenceRepositoryTrait;
 
-    public function testHandleQueryIsDefined()
+    public function testHandleQueryIsDefined(): void
     {
         // Assert
         $this->assertIsCallable($this->sut->handleQuery(...));
     }
 
-    /**
-     * @depends testHandleQueryIsDefined
-     */
-    public function testHandleQuery()
+    #[\PHPUnit\Framework\Attributes\Depends('testHandleQueryIsDefined')]
+    public function testHandleQuery(): void
     {
         $this->mockRepo('CommunityLic', CommunityLicRepo::class);
         $this->mockRepo('Licence', LicenceRepo::class);
@@ -109,7 +109,7 @@ class CommunityLicencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function setUpDefaultServices(ServiceManager $serviceManager)
+    public function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->repositoryServiceManager();
         $this->licenceRepository();

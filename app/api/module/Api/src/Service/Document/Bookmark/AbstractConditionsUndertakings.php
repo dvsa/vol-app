@@ -15,6 +15,7 @@ abstract class AbstractConditionsUndertakings extends DynamicBookmark
 {
     public const CONDITION_TYPE = null;
 
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(
@@ -26,6 +27,7 @@ abstract class AbstractConditionsUndertakings extends DynamicBookmark
         );
     }
 
+    #[\Override]
     public function render()
     {
         return implode(

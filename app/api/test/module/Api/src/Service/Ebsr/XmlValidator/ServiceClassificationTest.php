@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\XmlValidator;
 
 use Dvsa\Olcs\Api\Service\Ebsr\XmlValidator\ServiceClassification;
@@ -14,9 +16,9 @@ class ServiceClassificationTest extends TestCase
     /**
      * @param $xml
      * @param $valid
-     * @dataProvider isValidProvider
      */
-    public function testIsValid($xml, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $xml, mixed $valid): void
     {
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
@@ -26,7 +28,7 @@ class ServiceClassificationTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         $multiServiceXml = '
             <Services>

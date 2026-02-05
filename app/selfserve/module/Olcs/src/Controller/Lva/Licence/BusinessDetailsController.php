@@ -35,8 +35,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $lvaAdapter;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -58,7 +56,7 @@ class BusinessDetailsController extends AbstractBusinessDetailsController
         ScriptFactory $scriptFactory,
         IdentityProviderInterface $identityProvider,
         TableFactory $tableFactory,
-        LicenceLvaAdapter $lvaAdapter,
+        protected LicenceLvaAdapter $lvaAdapter,
         FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
@@ -72,6 +70,5 @@ class BusinessDetailsController extends AbstractBusinessDetailsController
             $tableFactory,
             $uploadHelper
         );
-        $this->lvaAdapter = $lvaAdapter;
     }
 }

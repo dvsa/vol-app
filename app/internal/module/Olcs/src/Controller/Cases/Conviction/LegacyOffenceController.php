@@ -35,6 +35,7 @@ class LegacyOffenceController extends AbstractInternalController implements Case
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -24,6 +24,7 @@ final class ByLicence implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         [$licenceId] = $arguments;

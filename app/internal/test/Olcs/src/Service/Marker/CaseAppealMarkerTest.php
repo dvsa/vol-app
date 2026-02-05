@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class CaseAppealMarkerTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\CaseAppealMarker();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderEmptyAppeal()
+    public function testCanRenderEmptyAppeal(): void
     {
         $data = [
             'cases' => [
@@ -43,7 +45,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithAppeal()
+    public function testCanRenderWithAppeal(): void
     {
         $data = [
             'cases' => [
@@ -63,7 +65,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testCanRenderWithOutcome()
+    public function testCanRenderWithOutcome(): void
     {
         $data = [
             'cases' => [
@@ -85,7 +87,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testCanRenderWithoutDecisionDate()
+    public function testCanRenderWithoutDecisionDate(): void
     {
         $data = [
             'cases' => [
@@ -107,7 +109,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testCanRenderWithoutDecisionDateAndOutcome()
+    public function testCanRenderWithoutDecisionDateAndOutcome(): void
     {
         $data = [
             'cases' => [
@@ -129,7 +131,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithWithdrawn()
+    public function testCanRenderWithWithdrawn(): void
     {
         $data = [
             'cases' => [
@@ -150,7 +152,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithCaseClosed()
+    public function testCanRenderWithCaseClosed(): void
     {
         $data = [
             'cases' => [
@@ -169,7 +171,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderWithCaseNotClosed()
+    public function testCanRenderWithCaseNotClosed(): void
     {
         $data = [
             'cases' => [
@@ -195,7 +197,7 @@ class CaseAppealMarkerTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'cases' => [

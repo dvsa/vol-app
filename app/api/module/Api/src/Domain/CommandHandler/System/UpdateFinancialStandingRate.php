@@ -28,6 +28,7 @@ final class UpdateFinancialStandingRate extends AbstractCommandHandler
 
     protected $repoServiceName = 'FinancialStandingRate';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $rate = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());

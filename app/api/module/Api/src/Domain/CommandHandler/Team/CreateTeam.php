@@ -25,6 +25,7 @@ final class CreateTeam extends AbstractCommandHandler
     protected $repoServiceName = 'Team';
     protected $extraRepos = ['Printer'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $this->checkIfTeamAlreadyExists($command->getName());

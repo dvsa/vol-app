@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Hearing Test
  */
@@ -42,7 +44,8 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'tc_r_dhtru'
@@ -61,13 +64,13 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param $isTm
      * @param $extraTaskKey
      * @param $venue
      */
-    public function testHandleCommand($isTm, $extraTaskKey, $venue)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $isTm, mixed $extraTaskKey, mixed $venue): void
     {
         $piId = 99;
         $hearingId = 11;
@@ -156,7 +159,7 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(PublishHearingCmd::class, $publishData, $result1);
 
         $result2 = new Result();
-        $actionDate = date('Y-m-d', mktime(date("H"), date("i"), date("s"), date("n"), date("j") + 7, date("Y")));
+        $actionDate = date('Y-m-d', mktime((int) date("H"), (int) date("i"), (int) date("s"), (int) date("n"), (int) date("j") + 7, (int) date("Y")));
         $taskData = [
             'category' => TaskEntity::CATEGORY_COMPLIANCE,
             'subCategory' => TaskEntity::SUB_CATEGORY_HEARINGS_APPEALS,
@@ -191,7 +194,7 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
     /**
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [true, 'transportManager', null],

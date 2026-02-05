@@ -61,6 +61,7 @@ class Login extends AbstractCommandHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof \Dvsa\Olcs\Transfer\Command\Auth\Login);

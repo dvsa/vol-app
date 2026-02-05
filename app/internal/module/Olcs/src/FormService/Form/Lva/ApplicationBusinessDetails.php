@@ -21,6 +21,7 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails
         parent::__construct($formHelper, $formServiceLocator);
     }
 
+    #[\Override]
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);

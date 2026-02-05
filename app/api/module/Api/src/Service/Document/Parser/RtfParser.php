@@ -16,6 +16,7 @@ class RtfParser implements ParserInterface
      *
      * @return string
      */
+    #[\Override]
     public function getFileExtension()
     {
         return 'rtf';
@@ -28,6 +29,7 @@ class RtfParser implements ParserInterface
      *
      * @return array
      */
+    #[\Override]
     public function extractTokens($content)
     {
         $matches = $this->getMatches($content);
@@ -46,6 +48,7 @@ class RtfParser implements ParserInterface
      *
      * @return mixed
      */
+    #[\Override]
     public function replace($content, $data)
     {
         $matches = $this->getMatches($content);
@@ -88,6 +91,7 @@ class RtfParser implements ParserInterface
      *
      * @return string
      */
+    #[\Override]
     public function renderImage($binData, $width, $height, $type)
     {
         return sprintf(

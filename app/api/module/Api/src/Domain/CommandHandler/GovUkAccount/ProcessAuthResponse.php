@@ -32,6 +32,7 @@ class ProcessAuthResponse extends AbstractCommandHandler implements Transactione
     {
     }
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         assert($command instanceof ProcessAuthResponseCmd);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -9,9 +11,7 @@ use Dvsa\Olcs\Api\Domain\Repository\DataGovUk;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataGovUk
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataGovUk::class)]
 class DataGovUkTest extends MockeryTestCase
 {
     public $mockResult;
@@ -36,7 +36,7 @@ class DataGovUkTest extends MockeryTestCase
         $this->sut = new DataGovUk($this->mockConn);
     }
 
-    public function testFetchPsvOperatorList()
+    public function testFetchPsvOperatorList(): void
     {
         $this->mockConn
             ->shouldReceive('prepare')
@@ -50,7 +50,7 @@ class DataGovUkTest extends MockeryTestCase
         );
     }
 
-    public function testFetchOperatorLicences()
+    public function testFetchOperatorLicences(): void
     {
         $areas = ['areaKey1', 'areaKey2', 'areaKey3'];
 
@@ -71,7 +71,7 @@ class DataGovUkTest extends MockeryTestCase
         );
     }
 
-    public function testBusRegisteredOnly()
+    public function testBusRegisteredOnly(): void
     {
         $areas = ['areaKey1', 'areaKey2', 'areaKey3'];
 
@@ -92,7 +92,7 @@ class DataGovUkTest extends MockeryTestCase
         );
     }
 
-    public function testBusVariation()
+    public function testBusVariation(): void
     {
         $areas = ['areaKey1'];
 

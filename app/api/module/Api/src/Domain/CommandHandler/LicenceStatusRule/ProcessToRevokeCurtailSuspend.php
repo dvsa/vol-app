@@ -28,6 +28,7 @@ final class ProcessToRevokeCurtailSuspend extends AbstractCommandHandler impleme
         \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_REVOKED => Command\Licence\RevokeLicence::class
     ];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // command not required, unset to remove PMD error

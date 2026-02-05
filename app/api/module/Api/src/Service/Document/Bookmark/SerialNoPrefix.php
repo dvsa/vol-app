@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\CommunityLicBundle as Qry;
  */
 class SerialNoPrefix extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['communityLic']]);
     }
 
+    #[\Override]
     public function render()
     {
         return $this->data['serialNoPrefix'];

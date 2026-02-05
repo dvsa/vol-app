@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Dvsa\Olcs\Api\Domain\Repository\IrhpCandidatePermit as IrhpCandidatePermitRepository;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CandidatePermitsAvailableCountCalculatorTest extends MockeryTestCase
 {
-    public function testGetCount()
+    public function testGetCount(): void
     {
         $rangeId = 12;
         $rangeSize = 120;

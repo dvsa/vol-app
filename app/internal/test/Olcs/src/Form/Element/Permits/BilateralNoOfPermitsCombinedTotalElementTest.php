@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * BilateralNoOfPermitsCombinedTotalElement Test
  *
@@ -20,7 +22,7 @@ use Laminas\Validator\Callback;
  */
 class BilateralNoOfPermitsCombinedTotalElementTest extends TestCase
 {
-    public function testGetInputSpecification()
+    public function testGetInputSpecification(): void
     {
         $elementName = 'elementName';
 
@@ -31,10 +33,7 @@ class BilateralNoOfPermitsCombinedTotalElementTest extends TestCase
                 [
                     'name' => Callback::class,
                     'options' => [
-                        'callback' => [
-                            BilateralNoOfPermitsCombinedTotalValidator::class,
-                            'validateNonZeroValuePresent'
-                        ],
+                        'callback' => BilateralNoOfPermitsCombinedTotalValidator::validateNonZeroValuePresent(...),
                         'messages' => [
                             Callback::INVALID_VALUE => 'Enter a number of permits in at least one field'
                         ]

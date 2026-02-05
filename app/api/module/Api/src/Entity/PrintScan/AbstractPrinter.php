@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="printer")
  */
-abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -109,7 +109,8 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -132,7 +133,8 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Get the printer tray
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrinterTray()
     {
         return $this->printerTray;
@@ -155,7 +157,8 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Get the printer name
      *
-     * @return string     */
+     * @return string
+     */
     public function getPrinterName()
     {
         return $this->printerName;
@@ -178,7 +181,8 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -250,6 +254,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -42,6 +42,7 @@ class ReviewController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    #[\Override]
     public function indexAction()
     {
         return $this->createView();
@@ -50,6 +51,7 @@ class ReviewController extends AbstractSurrenderController
     /**
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function confirmationAction()
     {
         $this->updateSurrender(RefData::SURRENDER_STATUS_DETAILS_CONFIRMED);
@@ -60,6 +62,7 @@ class ReviewController extends AbstractSurrenderController
      * @return array
      *
      */
+    #[\Override]
     protected function getViewVariables(): array
     {
         return [
@@ -70,6 +73,7 @@ class ReviewController extends AbstractSurrenderController
         ];
     }
 
+    #[\Override]
     public function alterForm($form)
     {
         $form->get('form-actions')->get('submit')->setLabel('licence.surrender.review.action');
@@ -77,6 +81,7 @@ class ReviewController extends AbstractSurrenderController
     }
 
 
+    #[\Override]
     protected function getLink(string $route): string
     {
         if ($this->isInternationalLicence()) {

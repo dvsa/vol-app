@@ -48,6 +48,7 @@ class MissingReason extends AbstractValidator
      * @param array $context
      * @return bool
      */
+    #[\Override]
     public function isValid($value, $context = [])
     {
         /** @var BusRegEntity $busReg */

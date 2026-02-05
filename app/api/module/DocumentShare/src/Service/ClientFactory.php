@@ -84,6 +84,7 @@ class ClientFactory implements FactoryInterface
         }
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $clientOptions = $this->getOptions($container, 'client');

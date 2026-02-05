@@ -18,6 +18,7 @@ abstract class AbstractEcmtPermitUsageRefDataSourceFactory implements FactoryInt
      * @param array|null $options
      * @return EcmtPermitUsageRefDataSource
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EcmtPermitUsageRefDataSource
     {
         return new EcmtPermitUsageRefDataSource(

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Initializer;
 
 use Common\Controller\AbstractOlcsController;

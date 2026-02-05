@@ -20,6 +20,7 @@ abstract class AbstractBrRegOrVary extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data[DynamicBookmark::PARAM_BUSREG_ID]]);
@@ -31,6 +32,7 @@ abstract class AbstractBrRegOrVary extends DynamicBookmark
      * @return string
      * @throws \Exception
      */
+    #[\Override]
     public function render()
     {
         if (isset($this->data['variationNo'])) {

@@ -12,6 +12,7 @@ class RightHandNavigationFactory extends AbstractNavigationFactory
     /**
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return 'right-sidebar';

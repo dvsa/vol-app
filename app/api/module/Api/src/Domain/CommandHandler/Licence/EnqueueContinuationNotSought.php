@@ -25,6 +25,7 @@ final class EnqueueContinuationNotSought extends AbstractCommandHandler implemen
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licences = $command->getLicences();

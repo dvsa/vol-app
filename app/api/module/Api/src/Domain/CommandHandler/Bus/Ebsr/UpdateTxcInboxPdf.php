@@ -32,6 +32,7 @@ final class UpdateTxcInboxPdf extends AbstractCommandHandler implements Transact
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

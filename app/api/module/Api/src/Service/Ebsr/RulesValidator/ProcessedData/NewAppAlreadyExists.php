@@ -28,6 +28,7 @@ class NewAppAlreadyExists extends AbstractValidator
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($value, $context = [])
     {
         //this check is only done for new applications

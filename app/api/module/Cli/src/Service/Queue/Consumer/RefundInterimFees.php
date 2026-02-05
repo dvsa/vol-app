@@ -29,11 +29,13 @@ class RefundInterimFees extends AbstractCommandConsumer
         $this->feeRepo = $feeRepo;
     }
 
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return ['id' => $item->getEntityId()];
     }
 
+    #[\Override]
     public function processMessage(QueueEntity $item)
     {
         /** @var FeeEntity $fee */

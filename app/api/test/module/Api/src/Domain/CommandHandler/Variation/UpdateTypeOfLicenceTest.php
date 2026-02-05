@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Type of Licence Test
  *
@@ -52,7 +54,8 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -70,7 +73,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $data = [
             'licenceType' => LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -104,15 +107,13 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithChangeWhenNotAllowed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithChangeWhenNotAllowed')]
     public function testHandleCommandWithChangeWhenNotAllowed(
-        $applicationLicenceType,
-        $applicationVehicleType,
-        $commandLicenceType,
-        $commandVehicleType
-    ) {
+        mixed $applicationLicenceType,
+        mixed $applicationVehicleType,
+        mixed $commandLicenceType,
+        mixed $commandVehicleType
+    ): void {
         $this->expectException(ForbiddenException::class);
 
         $data = [
@@ -142,7 +143,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpHandleCommandWithChangeWhenNotAllowed()
+    public static function dpHandleCommandWithChangeWhenNotAllowed(): array
     {
         return [
             'standard national to standard international' => [
@@ -160,7 +161,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWithSrChangeWithoutPermission()
+    public function testHandleCommandWithSrChangeWithoutPermission(): void
     {
         $this->expectException(ValidationException::class);
 
@@ -191,17 +192,15 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpHandleCommandWithReset
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithReset')]
     public function testHandleCommandWithReset(
-        $existingLicenceType,
-        $existingVehicleType,
-        $applicationLicenceType,
-        $applicationVehicleType,
-        $commandData,
-        $expectedResetData
-    ) {
+        mixed $existingLicenceType,
+        mixed $existingVehicleType,
+        mixed $applicationLicenceType,
+        mixed $applicationVehicleType,
+        mixed $commandData,
+        mixed $expectedResetData
+    ): void {
         $command = Cmd::create($commandData);
 
         /** @var LicenceEntity $licence */
@@ -233,7 +232,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame($resetResult, $result);
     }
 
-    public function dpHandleCommandWithReset()
+    public static function dpHandleCommandWithReset(): array
     {
         return [
             'change from mixed fleet to lgv, then to goods sn, not confirmed' => [
@@ -320,19 +319,17 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpHandleCommand
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommand')]
     public function testHandleCommand(
-        $existingLicenceType,
-        $existingVehicleType,
-        $existingGoodsOrPsv,
-        $applicationLicenceType,
-        $applicationVehicleType,
-        $applicationGoodsOrPsv,
-        $commandData,
-        $isInternalUser
-    ) {
+        mixed $existingLicenceType,
+        mixed $existingVehicleType,
+        mixed $existingGoodsOrPsv,
+        mixed $applicationLicenceType,
+        mixed $applicationVehicleType,
+        mixed $applicationGoodsOrPsv,
+        mixed $commandData,
+        mixed $isInternalUser
+    ): void {
         $command = Cmd::create($commandData);
 
         /** @var LicenceEntity $licence */
@@ -416,7 +413,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function dpHandleCommand()
+    public static function dpHandleCommand(): array
     {
         return [
             'change from standard national goods to mixed fleet' => [
@@ -467,7 +464,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandWhenAuthHasChanged()
+    public function testHandleCommandWhenAuthHasChanged(): void
     {
         $data = [
             'id' => 111,
@@ -562,7 +559,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandWithOperatingCentresToBeRemoved()
+    public function testHandleCommandWithOperatingCentresToBeRemoved(): void
     {
         $data = [
             'id' => 111,

@@ -24,6 +24,7 @@ class NoOfPermitsAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $applicationStepEntity = $qaContext->getApplicationStepEntity();

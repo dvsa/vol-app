@@ -51,6 +51,7 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      *
      * @return array
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $params = empty($context) ? $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());

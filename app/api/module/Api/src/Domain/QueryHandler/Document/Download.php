@@ -17,6 +17,7 @@ class Download extends AbstractDownload
      * @throws NotFoundException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $this->setIsInline($query->isInline());

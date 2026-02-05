@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker\TransportManager;
  */
 class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -24,6 +25,7 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
         return false;
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

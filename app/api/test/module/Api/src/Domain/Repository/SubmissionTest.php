@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Mockery as m;
@@ -18,7 +20,7 @@ class SubmissionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class);
     }
 
-    public function testFetchByUserWithOpenOnly()
+    public function testFetchByUserWithOpenOnly(): void
     {
         $submissionId = 1;
         $qb = m::mock(QueryBuilder::class);

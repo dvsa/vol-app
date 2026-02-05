@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\InspectionRequest;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\InspectionRequest\OperatingCentres as QueryHandler;
@@ -30,7 +32,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryForLicence()
+    public function testHandleQueryForLicence(): void
     {
         $query = Query::create(['type' => 'licence', 'identifier' => self::ID]);
 
@@ -63,7 +65,7 @@ class OperatingCentresTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryForApplication()
+    public function testHandleQueryForApplication(): void
     {
         $query = Query::create(['type' => 'application', 'identifier' => self::ID]);
 

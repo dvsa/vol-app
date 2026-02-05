@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -22,7 +24,7 @@ class IrhpApplicationReadAuditEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testConstrunctor()
+    public function testConstrunctor(): void
     {
         /** @var UserEntity $mockUser */
         $mockUser = m::mock(UserEntity::class);

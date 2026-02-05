@@ -26,8 +26,8 @@ final class SendInspectionRequest extends AbstractCommandHandler implements Emai
     use EmailAwareTrait;
     use AuthAwareTrait;
 
-    public const SUBJECT_LINE = "[ Maintenance Inspection ] REQUEST=%s,STATUS=";
-    public const SUBJECT_LINE_W = '[ Archwiliad Cynnal a Chadw] CAIS=%s,STATWS=';
+    public const string SUBJECT_LINE = "[ Maintenance Inspection ] REQUEST=%s,STATUS=";
+    public const string SUBJECT_LINE_W = '[ Archwiliad Cynnal a Chadw] CAIS=%s,STATWS=';
 
     protected $repoServiceName = 'InspectionRequest';
 
@@ -64,6 +64,7 @@ final class SendInspectionRequest extends AbstractCommandHandler implements Emai
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var array - just to save the time during migration process,

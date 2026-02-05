@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class OperatorUsersControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorUsersController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);

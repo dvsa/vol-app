@@ -22,6 +22,7 @@ class IsAnonymousUser extends AbstractHandler implements AuthAwareInterface
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->isAnonymousUser();

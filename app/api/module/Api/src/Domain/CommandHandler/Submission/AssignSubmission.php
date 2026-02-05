@@ -49,6 +49,7 @@ final class AssignSubmission extends AbstractCommandHandler implements
      * @throws ValidationException
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
 

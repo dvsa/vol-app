@@ -22,6 +22,7 @@ class WebServiceClientFactory implements FactoryInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WebServiceClient
     {
         $config = $container->get('config');

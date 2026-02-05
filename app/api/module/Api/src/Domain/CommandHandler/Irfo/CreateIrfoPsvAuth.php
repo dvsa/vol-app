@@ -28,6 +28,7 @@ final class CreateIrfoPsvAuth extends AbstractCommandHandler implements Transact
 
     protected $extraRepos = ['IrfoPsvAuthNumber', 'FeeType'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         // create and save a record

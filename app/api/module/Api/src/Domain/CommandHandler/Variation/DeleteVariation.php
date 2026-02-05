@@ -29,6 +29,7 @@ class DeleteVariation extends AbstractCommandHandler implements TransactionedInt
      * @return Result
      * @throws BadVariationTypeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $application = $this->getApplication($command);

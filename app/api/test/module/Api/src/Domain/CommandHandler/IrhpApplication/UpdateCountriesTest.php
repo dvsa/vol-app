@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpApplication;
 
 use DateTime;
@@ -35,7 +37,8 @@ class UpdateCountriesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             Country::class => [
@@ -48,7 +51,7 @@ class UpdateCountriesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWhenNoCountrySelected()
+    public function testHandleCommandWhenNoCountrySelected(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('At least one country must be selected.');
@@ -87,7 +90,7 @@ class UpdateCountriesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWhenCannotUpdate()
+    public function testHandleCommandWhenCannotUpdate(): void
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('IRHP application cannot be updated.');
@@ -122,7 +125,7 @@ class UpdateCountriesTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandWithoutExistingData()
+    public function testHandleCommandWithoutExistingData(): void
     {
         $id = 1;
         $countries = ['DE', 'FR', 'NL'];
@@ -199,7 +202,7 @@ class UpdateCountriesTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandWithExistingData()
+    public function testHandleCommandWithExistingData(): void
     {
         $id = 1;
         $countries = ['DE', 'FR', 'NL'];

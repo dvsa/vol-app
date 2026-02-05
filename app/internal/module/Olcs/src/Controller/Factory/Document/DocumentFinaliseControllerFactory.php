@@ -20,6 +20,7 @@ class DocumentFinaliseControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return DocumentFinaliseController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentFinaliseController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

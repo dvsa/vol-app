@@ -31,9 +31,7 @@ class CreateUserFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -44,10 +42,8 @@ class CreateUserFactoryTest extends MockeryTestCase
     }
 
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsWrappedCreateUserCommandHandler(): void
     {
         // Setup
@@ -79,7 +75,7 @@ class CreateUserFactoryTest extends MockeryTestCase
         $this->setupRespositories();
     }
 
-    private function setupRespositories()
+    private function setupRespositories(): void
     {
         $repositoryServiceManager = $this->serviceManager->get('RepositoryServiceManager');
         assert($repositoryServiceManager instanceof RepositoryServiceManager);

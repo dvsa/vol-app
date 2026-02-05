@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -80,7 +80,8 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -103,7 +104,8 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Get the event code
      *
-     * @return string     */
+     * @return string
+     */
     public function getEventCode()
     {
         return $this->eventCode;
@@ -126,7 +128,8 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -135,6 +138,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

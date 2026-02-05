@@ -49,6 +49,7 @@ class LetterIssueController extends AbstractInternalController implements LeftVi
         'editAction' => ['forms/letter-issue'],
     ];
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(

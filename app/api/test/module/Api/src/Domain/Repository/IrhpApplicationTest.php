@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
@@ -23,7 +25,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         $this->setUpSut(IrhpApplication::class, true);
     }
 
-    public function testFetchByWindowId()
+    public function testFetchByWindowId(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -46,7 +48,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchAllAwaitingFee()
+    public function testFetchAllAwaitingFee(): void
     {
         $queryBuilder = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
@@ -82,7 +84,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchForRoadworthinessReport()
+    public function testFetchForRoadworthinessReport(): void
     {
         $startDate = '2020-12-25';
         $endDate = '2020-12-31';
@@ -108,7 +110,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         self::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchAllValidRoadworthiness()
+    public function testFetchAllValidRoadworthiness(): void
     {
         $queryBuilder = $this->createMockQb('BLAH');
 
@@ -130,13 +132,13 @@ class IrhpApplicationTest extends RepositoryTestCase
         self::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testMarkAsExpired()
+    public function testMarkAsExpired(): void
     {
         $this->expectQueryWithData(ExpireIrhpApplicationsQuery::class, []);
         $this->sut->markAsExpired();
     }
 
-    public function testFetchApplicationIdsAwaitingScoring()
+    public function testFetchApplicationIdsAwaitingScoring(): void
     {
         $stockId = 14;
 
@@ -185,7 +187,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchInScopeUnderConsiderationApplicationIds()
+    public function testFetchInScopeUnderConsiderationApplicationIds(): void
     {
         $stockId = 14;
 
@@ -226,10 +228,8 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHasInScopeUnderConsiderationApplications
-     */
-    public function testHasInScopeUnderConsiderationApplications($applicationIds, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasInScopeUnderConsiderationApplications')]
+    public function testHasInScopeUnderConsiderationApplications(mixed $applicationIds, mixed $expected): void
     {
         $stockId = 47;
 
@@ -243,7 +243,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function dpHasInScopeUnderConsiderationApplications()
+    public static function dpHasInScopeUnderConsiderationApplications(): array
     {
         return [
             [
@@ -261,7 +261,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         ];
     }
 
-    public function testClearScope()
+    public function testClearScope(): void
     {
         $stockId = 7;
 
@@ -288,7 +288,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         $this->sut->clearScope($stockId);
     }
 
-    public function testApplyScope()
+    public function testApplyScope(): void
     {
         $stockId = 7;
 
@@ -328,7 +328,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         $this->sut->applyScope($stockId);
     }
 
-    public function testGetScoreOrderedBySectorInScope()
+    public function testGetScoreOrderedBySectorInScope(): void
     {
         $stockId = 6;
         $sectorsId = 8;
@@ -398,7 +398,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetSuccessfulDaCountInScope()
+    public function testGetSuccessfulDaCountInScope(): void
     {
         $successfulDaCount = 35;
         $stockId = 8;
@@ -465,7 +465,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetUnsuccessfulScoreOrderedInScopeWithoutTrafficAreaId()
+    public function testGetUnsuccessfulScoreOrderedInScopeWithoutTrafficAreaId(): void
     {
         $result = [
             ['id' => 35, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -528,7 +528,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetUnsuccessfulScoreOrderedInScopeWithTrafficAreaId()
+    public function testGetUnsuccessfulScoreOrderedInScopeWithTrafficAreaId(): void
     {
         $result = [
             ['id' => 35, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
@@ -604,7 +604,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetSuccessfulCountInScopeWithoutEmissionsCategoryId()
+    public function testGetSuccessfulCountInScopeWithoutEmissionsCategoryId(): void
     {
         $stockId = 7;
         $successfulCount = 15;
@@ -657,7 +657,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetSuccessfulCountInScopeWithEmissionsCategoryId()
+    public function testGetSuccessfulCountInScopeWithEmissionsCategoryId(): void
     {
         $stockId = 7;
         $assignedEmissionsCategoryId = RefData::EMISSIONS_CATEGORY_EURO5_REF;
@@ -720,7 +720,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testGetSuccessfulScoreOrderedInScope()
+    public function testGetSuccessfulScoreOrderedInScope(): void
     {
         $stockId = 7;
 
@@ -783,7 +783,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchDeviationSourceValues()
+    public function testFetchDeviationSourceValues(): void
     {
         $deviationSourceValues = [
             [
@@ -854,7 +854,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchApplicationIdToCountryIdAssociations()
+    public function testFetchApplicationIdToCountryIdAssociations(): void
     {
         $stockId = 14;
 
@@ -893,7 +893,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchScoringReport()
+    public function testFetchScoringReport(): void
     {
         $scoringReport = [
             'row1' => 'rowContent1',
@@ -988,7 +988,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchSelfserveIssuedPermitsSummary()
+    public function testFetchSelfserveIssuedPermitsSummary(): void
     {
         $rows = [
             ['data1'],
@@ -1055,7 +1055,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchSelfserveApplicationsSummary()
+    public function testFetchSelfserveApplicationsSummary(): void
     {
         $rows = [
             ['data1'],
@@ -1117,7 +1117,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchInternalApplicationsSummary()
+    public function testFetchInternalApplicationsSummary(): void
     {
         $rows = [
             ['data1'],
@@ -1187,7 +1187,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchInternalApplicationsSummaryWithStatus()
+    public function testFetchInternalApplicationsSummaryWithStatus(): void
     {
         $rows = [
             ['data1'],
@@ -1246,7 +1246,7 @@ class IrhpApplicationTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchNotYetSubmittedBilateralApplications()
+    public function testFetchNotYetSubmittedBilateralApplications(): void
     {
         $qb = $this->createMockQb('BLAH');
 

@@ -2,7 +2,7 @@
   "name": "olcs/backend",
   "description": "Back End Application for OLCS Project",
   "require": {
-    "php": "~8.2.0",
+    "php": "~8.3.0",
     "ext-intl": "*",
     "ext-json": "*",
     "ext-curl": "*",
@@ -95,20 +95,13 @@
   "config": {
     "platform": {
       "ext-redis": "6.2.6"
-    },
-    "allow-plugins": {
-      "bamarni/composer-bin-plugin": true
     }
   },
   "scripts": {
-    "bin": "echo 'bin not installed'",
-    "post-install-cmd": [
-      "@composer bin all install"
-    ],
-    "test": "phpunit",
-    "phpcs": "phpcs",
-    "psalm": "psalm",
-    "phpstan": "phpstan",
+    "test": "vendor/bin/phpunit",
+    "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
+    "psalm": "vendor/bin/psalm",
+    "phpstan": "vendor/bin/phpstan --memory-limit=1G",
     "all": [
       "@test",
       "@phpcs",
@@ -117,18 +110,15 @@
     ]
   },
   "require-dev": {
-    "bamarni/composer-bin-plugin": "^1.8",
-    "phpunit/phpunit": "^9.6",
+    "phpunit/phpunit": "^12.5",
     "mockery/mockery": "^1.6",
-    "johnkary/phpunit-speedtrap": "^4.0",
     "mikey179/vfsstream": "^1.6",
-    "dms/phpunit-arraysubset-asserts": "^0.5.0",
-    "dvsa/authentication-ldap": "^3.1"
-  },
-  "extra": {
-    "bamarni-bin": {
-      "bin-links": true,
-      "forward-command": true
-    }
+    "dvsa/authentication-ldap": "^3.1",
+    "rector/rector": "^2.3",
+    "squizlabs/php_codesniffer": "^3.7",
+    "dvsa/coding-standards": "^2.0",
+    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-doctrine": "^2.0",
+    "vimeo/psalm": "^6.0"
   }
 }

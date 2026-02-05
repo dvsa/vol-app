@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Organisation;
 
 use Mockery as m;
@@ -21,7 +23,7 @@ class TradingNameEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $organisation = m::mock(Organisation::class);
 

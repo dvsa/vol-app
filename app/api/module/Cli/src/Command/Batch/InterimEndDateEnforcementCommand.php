@@ -10,12 +10,14 @@ class InterimEndDateEnforcementCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:interim-end-date-enforcement';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Enforces interim end date by checking applications under consideration with an in-force interim that have an end date of the previous day or earlier.');
         $this->addCommonOptions();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->initializeOutputInterface($output);

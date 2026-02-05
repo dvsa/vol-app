@@ -20,6 +20,7 @@ class PeopleReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         $organisation = $continuationDetail->getLicence()->getOrganisation();

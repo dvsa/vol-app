@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Availability;
 
 use Doctrine\DBAL\Connection;
@@ -61,7 +63,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public function testGetCountEmissionsCategoriesAllocationMode()
+    public function testGetCountEmissionsCategoriesAllocationMode(): void
     {
         $irhpPermitStockId = 22;
         $emissionsCategoryId = RefData::EMISSIONS_CATEGORY_EURO5_REF;
@@ -120,7 +122,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public function testGetCountCandidatePermitsAllocationMode()
+    public function testGetCountCandidatePermitsAllocationMode(): void
     {
         $irhpPermitStockId = 22;
         $emissionsCategoryId = RefData::EMISSIONS_CATEGORY_EURO5_REF;
@@ -179,7 +181,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public function testReturnZeroOnNullCombinedRangeSize()
+    public function testReturnZeroOnNullCombinedRangeSize(): void
     {
         $irhpPermitStockId = 47;
         $emissionsCategoryId = RefData::EMISSIONS_CATEGORY_EURO6_REF;
@@ -210,10 +212,8 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestExceptionOnUnexpectedIsolationLevel
-     */
-    public function testExceptionOnUnexpectedIsolationLevel($isolationLevel)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExceptionOnUnexpectedIsolationLevel')]
+    public function testExceptionOnUnexpectedIsolationLevel(mixed $isolationLevel): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(EmissionsCategoryAvailabilityCounter::ERR_BAD_ISOLATION_LEVEL);
@@ -225,7 +225,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         $this->emissionsCategoryAvailabilityCounter->getCount(47, RefData::EMISSIONS_CATEGORY_EURO6_REF);
     }
 
-    public function dpTestExceptionOnUnexpectedIsolationLevel()
+    public static function dpTestExceptionOnUnexpectedIsolationLevel(): array
     {
         return [
             [TransactionIsolationLevel::READ_UNCOMMITTED],

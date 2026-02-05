@@ -35,6 +35,7 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
      */
     protected $feeRepo;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -153,6 +154,7 @@ final class UpdateDeclaration extends AbstractCommandHandler implements Transact
 
         return false;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

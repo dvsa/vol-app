@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Form;
@@ -26,7 +28,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->sut = new ApplicationPeople($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true)->once();

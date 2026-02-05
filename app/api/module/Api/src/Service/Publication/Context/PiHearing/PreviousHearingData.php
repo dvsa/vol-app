@@ -24,6 +24,7 @@ final class PreviousHearingData extends AbstractContext
      *
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         $params = [

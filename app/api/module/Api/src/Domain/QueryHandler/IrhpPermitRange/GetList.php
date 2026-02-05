@@ -24,6 +24,7 @@ class GetList extends AbstractQueryHandler
         'journey'
     ];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpPermitRanges = $this->getRepo()->fetchByIrhpPermitStockId($query->getIrhpPermitStock());

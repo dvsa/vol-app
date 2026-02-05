@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Licence;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text3Test extends MockeryTestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $sut = new LicenceText3();
 
@@ -31,7 +33,7 @@ class Text3Test extends MockeryTestCase
         $this->assertEquals($expectedString, $publicationLink->getText3());
     }
 
-    public function testProcessMinData()
+    public function testProcessMinData(): void
     {
         $sut = new LicenceText3();
 

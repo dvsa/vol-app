@@ -21,6 +21,7 @@ class ByApplicationToLicence extends AbstractQueryHandler implements ToggleRequi
     protected $extraRepos = [ApplicationRepo::class];
 
     /** @param GetConversationsByApplicationToLicenceQuery|QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $applicationRepository = $this->getRepo(ApplicationRepo::class);

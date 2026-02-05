@@ -21,6 +21,7 @@ final class With implements QueryPartialInterface
      * @param QueryBuilder $qb
      * @param array $arguments
      */
+    #[\Override]
     public function modifyQuery(QueryBuilder $qb, array $arguments = [])
     {
         $property = $arguments[0];

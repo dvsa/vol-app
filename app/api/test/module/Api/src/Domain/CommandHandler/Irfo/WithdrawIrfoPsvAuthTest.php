@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Withdraw Irfo Psv Auth Test
  */
@@ -30,7 +32,8 @@ class WithdrawIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             IrfoPsvAuthEntity::JOURNEY_FREQ_DAILY,
@@ -49,7 +52,7 @@ class WithdrawIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
     /**
      * testHandleCommand
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99;
 

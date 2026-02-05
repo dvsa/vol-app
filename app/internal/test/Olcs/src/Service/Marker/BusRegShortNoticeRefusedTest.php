@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
@@ -23,12 +25,12 @@ class BusRegShortNoticeRefusedTest extends TestCase
         $this->sut = new \Olcs\Service\Marker\BusRegShortNoticeRefused();
     }
 
-    public function testCanRenderWithNoData()
+    public function testCanRenderWithNoData(): void
     {
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderN()
+    public function testCanRenderN(): void
     {
         $data = [
             'busReg' => ['shortNoticeRefused' => 'N']
@@ -39,7 +41,7 @@ class BusRegShortNoticeRefusedTest extends TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-    public function testCanRenderY()
+    public function testCanRenderY(): void
     {
         $data = [
             'busReg' => ['shortNoticeRefused' => 'Y']
@@ -50,7 +52,7 @@ class BusRegShortNoticeRefusedTest extends TestCase
         $this->assertTrue($this->sut->canRender());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $data = [
             'busReg' => ['shortNoticeRefused' => 'Y']

@@ -30,8 +30,6 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
 
     protected $helperClass = \Olcs\Helper\ApplicationProcessingHelper::class;
 
-    protected TreeRouteStack $router;
-
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -41,7 +39,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        TreeRouteStack $router,
+        protected TreeRouteStack $router,
         $navigation
     ) {
         parent::__construct(
@@ -55,7 +53,6 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
             $flashMessengerHelper,
             $navigation
         );
-        $this->router = $router;
     }
 
     /**

@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractMessagingUserMessageRead implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessagingUserMessageRead implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -150,7 +150,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -173,7 +174,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -196,7 +198,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the messaging message
      *
-     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage     */
+     * @return \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
+     */
     public function getMessagingMessage()
     {
         return $this->messagingMessage;
@@ -219,7 +222,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -242,7 +246,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -267,7 +272,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastReadOn($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -294,7 +300,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -303,6 +310,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

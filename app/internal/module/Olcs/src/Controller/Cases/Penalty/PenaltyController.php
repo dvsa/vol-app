@@ -76,6 +76,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -89,6 +90,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $data = $this->getPenaltyData();

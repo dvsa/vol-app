@@ -12,6 +12,7 @@ class DashboardNavigationFactory extends AbstractNavigationFactory
     /**
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return 'dashboard';

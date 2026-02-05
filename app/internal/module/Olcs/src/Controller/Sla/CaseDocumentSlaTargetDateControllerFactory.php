@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CaseDocumentSlaTargetDateControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CaseDocumentSlaTargetDateController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

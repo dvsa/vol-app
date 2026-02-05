@@ -29,7 +29,7 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
 {
     use ConfigAwareTrait;
 
-    public const BATCH_SIZE = 30;
+    public const int BATCH_SIZE = 30;
 
     protected $repoServiceName = 'GoodsDisc';
     protected $extraRepos = ['PsvDisc'];
@@ -53,6 +53,7 @@ final class PrintDiscs extends AbstractCommandHandler implements TransactionedIn
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $config = $this->getConfig();

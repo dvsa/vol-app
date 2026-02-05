@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Queue Complete Command Handler Test
  *
@@ -38,7 +40,7 @@ class CompleteTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand method
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 1234;
 

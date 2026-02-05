@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Grant People Test
  *
@@ -39,7 +41,8 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
@@ -48,7 +51,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutRecords()
+    public function testHandleCommandWithoutRecords(): void
     {
         $data = [
             'id' => 'TEST_APPLICATION_ID'
@@ -74,7 +77,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutAdd()
+    public function testHandleCommandWithoutAdd(): void
     {
         $data = [
             'id' => 'TEST_APPLICATION_ID'
@@ -138,7 +141,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutUpdate()
+    public function testHandleCommandWithoutUpdate(): void
     {
         $data = [
             'id' => 'TEST_APPLICATION_ID'
@@ -216,7 +219,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutDelete()
+    public function testHandleCommandWithoutDelete(): void
     {
         $data = [
             'id' => 'TEST_APPLICATION_ID'
@@ -273,7 +276,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    private function createMockApplication($applicationOrganisationPersons)
+    private function createMockApplication(mixed $applicationOrganisationPersons): mixed
     {
         /** @var ApplicationEntity $application */
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -281,7 +284,7 @@ class GrantPeopleTest extends AbstractCommandHandlerTestCase
         return $application;
     }
 
-    private function expectCreatePostGrantTasks()
+    private function expectCreatePostGrantTasks(): void
     {
         $deleteTaskResult = new Result();
         $deleteTaskResult->addMessage('create-post-delete-tasks-grant-message-1');

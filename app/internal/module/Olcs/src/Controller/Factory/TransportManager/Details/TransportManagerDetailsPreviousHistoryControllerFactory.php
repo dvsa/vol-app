@@ -22,6 +22,7 @@ class TransportManagerDetailsPreviousHistoryControllerFactory implements Factory
      * @param  array|null         $options
      * @return TransportManagerDetailsPreviousHistoryController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerDetailsPreviousHistoryController
     {
         $scriptFactory = $container->get(ScriptFactory::class);

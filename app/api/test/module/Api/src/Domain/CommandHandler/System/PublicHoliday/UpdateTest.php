@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System\PublicHoliday;
 
 use Doctrine\ORM\Query;
@@ -24,7 +26,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99999;
         $holidayDate = (new \DateTime())->format('Y-m-d');

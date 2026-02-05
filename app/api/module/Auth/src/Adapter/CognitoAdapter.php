@@ -47,6 +47,7 @@ class CognitoAdapter extends AbstractAdapter
     /**
      * @return Result
      */
+    #[\Override]
     public function authenticate(): Result
     {
         try {
@@ -319,6 +320,7 @@ class CognitoAdapter extends AbstractAdapter
     /**
      * @return mixed|string
      */
+    #[\Override]
     public function getIdentity()
     {
         $identity = parent::getIdentity();

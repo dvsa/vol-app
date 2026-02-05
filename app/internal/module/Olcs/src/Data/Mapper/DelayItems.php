@@ -18,6 +18,7 @@ class DelayItems implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         return $data;

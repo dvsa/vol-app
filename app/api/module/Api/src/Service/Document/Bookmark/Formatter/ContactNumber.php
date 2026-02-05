@@ -16,6 +16,7 @@ class ContactNumber implements FormatterInterface
      *
      * @return false|string
      */
+    #[\Override]
     public static function format(array $phoneContacts)
     {
         $phoneNumber = '';

@@ -26,6 +26,7 @@ final class DeleteApplication extends AbstractCommandHandler
 {
     protected $repoServiceName = 'Application';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

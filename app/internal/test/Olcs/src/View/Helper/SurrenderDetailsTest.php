@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Common\RefData;
@@ -19,7 +21,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $surrenderData = [
             'id' => 4,
@@ -32,10 +34,8 @@ class SurrenderDetailsTest extends MockeryTestCase
         $this->assertInstanceOf(SurrenderDetails::class, $this->sut->__invoke($surrenderData));
     }
 
-    /**
-     * @dataProvider dpTestGetDeclarationSignatureText
-     */
-    public function testGetDeclarationSignatureText($surrenderData, $expectedText)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetDeclarationSignatureText')]
+    public function testGetDeclarationSignatureText(mixed $surrenderData, mixed $expectedText): void
     {
         $this->assertSame(
             $expectedText,
@@ -43,7 +43,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestGetDeclarationSignatureText()
+    public static function dpTestGetDeclarationSignatureText(): array
     {
         return [
             'digital_signature' => [
@@ -74,10 +74,8 @@ class SurrenderDetailsTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestReturnCommunityLicenceDocumentDetailsText
-     */
-    public function testReturnCommunityLicenceDocumentDetailsText($surrenderData, $expectedText)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestReturnCommunityLicenceDocumentDetailsText')]
+    public function testReturnCommunityLicenceDocumentDetailsText(mixed $surrenderData, mixed $expectedText): void
     {
         $this->assertSame(
             $expectedText,
@@ -85,7 +83,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestReturnCommunityLicenceDocumentDetailsText()
+    public static function dpTestReturnCommunityLicenceDocumentDetailsText(): array
     {
         return [
             [
@@ -94,7 +92,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                     ],
                 ],
-                'expected' => 'Details of stolen community licence document'
+                'expectedText' => 'Details of stolen community licence document'
             ],
             [
                 'surrenderData' => [
@@ -102,15 +100,13 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_LOST
                     ],
                 ],
-                'expected' => 'Details of lost community licence document'
+                'expectedText' => 'Details of lost community licence document'
             ]
         ];
     }
 
-    /**
-     * @dataProvider dpTestReturnLicenceDocumentDetailsText
-     */
-    public function testReturnLicenceDocumentDetailsText($surrenderData, $expectedText)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestReturnLicenceDocumentDetailsText')]
+    public function testReturnLicenceDocumentDetailsText(mixed $surrenderData, mixed $expectedText): void
     {
         $this->assertSame(
             $expectedText,
@@ -118,7 +114,7 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public function dpTestReturnLicenceDocumentDetailsText()
+    public static function dpTestReturnLicenceDocumentDetailsText(): array
     {
         return [
             [
@@ -127,7 +123,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                     ],
                 ],
-                'expected' => 'Details of stolen operator licence document'
+                'expectedText' => 'Details of stolen operator licence document'
             ],
             [
                 'surrenderData' => [
@@ -135,7 +131,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'id' => RefData::SURRENDER_DOC_STATUS_LOST
                     ],
                 ],
-                'expected' => 'Details of lost operator licence document'
+                'expectedText' => 'Details of lost operator licence document'
             ]
         ];
     }

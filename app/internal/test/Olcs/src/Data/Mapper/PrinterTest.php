@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Printer mapper test
  *
@@ -20,14 +22,14 @@ use Laminas\Form\FormInterface;
  */
 class PrinterTest extends MockeryTestCase
 {
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $data = ['foo' => 'bar'];
         $expected = ['printer-details' => ['foo' => 'bar']];
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = ['printer-details' => ['foo' => 'bar']];
         $expected = ['foo' => 'bar'];
@@ -35,7 +37,7 @@ class PrinterTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($data));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $errors = [
             'messages' => [

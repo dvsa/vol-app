@@ -22,6 +22,7 @@ final class UpdatePublicationLink extends AbstractCommandHandler implements Tran
 {
     protected $repoServiceName = 'PublicationLink';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

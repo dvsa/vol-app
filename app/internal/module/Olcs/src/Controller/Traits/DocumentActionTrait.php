@@ -134,7 +134,7 @@ trait DocumentActionTrait
             return $this->viewBuilder()->buildView($response);
         }
 
-        $ids = explode(',', $id);
+        $ids = explode(',', (string) $id);
         $deleteResponse = $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
 
         if ($deleteResponse->isOk()) {

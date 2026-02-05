@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCategory implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCategory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -170,7 +170,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -193,7 +194,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the task allocation type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTaskAllocationType()
     {
         return $this->taskAllocationType;
@@ -216,7 +218,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -239,7 +242,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -262,7 +266,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -285,7 +290,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is doc category
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDocCategory()
     {
         return $this->isDocCategory;
@@ -308,7 +314,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is task category
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsTaskCategory()
     {
         return $this->isTaskCategory;
@@ -331,7 +338,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is scan category
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsScanCategory()
     {
         return $this->isScanCategory;
@@ -354,7 +362,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the is messaging
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsMessaging()
     {
         return $this->isMessaging;
@@ -377,7 +386,8 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -386,6 +396,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

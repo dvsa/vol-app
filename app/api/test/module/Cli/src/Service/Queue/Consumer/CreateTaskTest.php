@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
 use Dvsa\Olcs\Cli\Service\Queue\Consumer\CreateTask as Sut;
@@ -9,7 +11,7 @@ class CreateTaskTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $taskData = [
             'category' => 'some_category',

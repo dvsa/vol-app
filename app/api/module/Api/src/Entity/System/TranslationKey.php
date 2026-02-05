@@ -23,6 +23,7 @@ class TranslationKey extends AbstractTranslationKey implements DeletableInterfac
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return $this->translationKeyTexts->isEmpty();

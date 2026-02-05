@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="document_to_delete")
  */
-abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDocumentToDelete implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -94,7 +94,8 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -117,7 +118,8 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Get the document store id
      *
-     * @return string     */
+     * @return string
+     */
     public function getDocumentStoreId()
     {
         return $this->documentStoreId;
@@ -140,7 +142,8 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Get the document id
      *
-     * @return int     */
+     * @return int
+     */
     public function getDocumentId()
     {
         return $this->documentId;
@@ -163,7 +166,8 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Get the attempts
      *
-     * @return int     */
+     * @return int
+     */
     public function getAttempts()
     {
         return $this->attempts;
@@ -188,7 +192,8 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getProcessAfterDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -201,6 +206,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

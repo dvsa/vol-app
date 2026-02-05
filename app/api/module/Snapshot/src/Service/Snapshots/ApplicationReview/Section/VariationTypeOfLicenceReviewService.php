@@ -25,6 +25,7 @@ class VariationTypeOfLicenceReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         $licenceLicenceType = $data['licence']['licenceType']['id'];

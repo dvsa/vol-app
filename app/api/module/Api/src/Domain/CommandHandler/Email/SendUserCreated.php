@@ -23,6 +23,7 @@ final class SendUserCreated extends AbstractCommandHandler implements \Dvsa\Olcs
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $user \Dvsa\Olcs\Api\Entity\User\User */

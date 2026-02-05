@@ -35,6 +35,7 @@ class ApplicationFinancialHistory extends FinancialHistory
      *
      * @return Form
      */
+    #[\Override]
     protected function alterForm(Form $form, array $data = [])
     {
         parent::alterForm($form, $data);

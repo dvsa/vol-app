@@ -21,6 +21,7 @@ final class UpdateConditionUndertaking extends AbstractCommandHandler implements
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */

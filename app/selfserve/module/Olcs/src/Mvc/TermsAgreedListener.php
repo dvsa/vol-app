@@ -31,9 +31,10 @@ class TermsAgreedListener implements ListenerAggregateInterface
     ) {
     }
 
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], $priority);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, $this->onDispatch(...), $priority);
     }
 
     /**

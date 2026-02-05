@@ -18,6 +18,7 @@ final class DeleteList extends AbstractCommandHandler implements TransactionedIn
 
     protected $extraRepos = ['TaskAlphaSplit'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $rules = $this->getRepo()->fetchByIds($command->getIds());

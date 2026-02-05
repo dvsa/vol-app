@@ -15,7 +15,7 @@ final class Builder extends AbstractBuilder
      * @param $headerViewTemplate
      * @param string $baseTemplate
      */
-    public function __construct(private OlcsViewModel $layout)
+    public function __construct(private readonly OlcsViewModel $layout)
     {
     }
 
@@ -33,6 +33,7 @@ final class Builder extends AbstractBuilder
      * @param string|null $pageSubTitle
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     protected function decorateView(ViewModel $view)
     {
         $this->layout->setContent($view);

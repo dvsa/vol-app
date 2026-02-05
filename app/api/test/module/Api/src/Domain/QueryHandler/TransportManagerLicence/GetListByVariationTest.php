@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\TransportManagerLicence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\TransportManagerLicence\GetListByVariation as QueryHandler;
@@ -26,12 +28,12 @@ class GetListByVariationTest extends QueryHandlerTestCase
     }
 
     /**
-     * @dataProvider dpHandleQuery
      *
      * @param $licenceType Application licence type id . eg Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL
      * @param $expected
      */
-    public function testHandleQuery($licenceType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQuery(mixed $licenceType, mixed $expected): void
     {
         $query = Query::create(['variation' => 1]);
 
@@ -79,7 +81,7 @@ class GetListByVariationTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function dpHandleQuery()
+    public static function dpHandleQuery(): array
     {
         return [
             [

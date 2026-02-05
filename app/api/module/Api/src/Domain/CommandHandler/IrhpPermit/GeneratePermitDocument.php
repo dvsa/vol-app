@@ -90,6 +90,7 @@ final class GeneratePermitDocument extends AbstractCommandHandler
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $irhpPermit = $this->getRepo()->fetchById($command->getIrhpPermit(), Query::HYDRATE_OBJECT);

@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  */
 final class CreateViExtractFiles extends AbstractCommandHandler
 {
-    public const PHP_EOL_WIN = "\r\n";
+    public const string PHP_EOL_WIN = "\r\n";
 
     protected $extraRepos = [
         'ViOcView',
@@ -73,6 +73,7 @@ final class CreateViExtractFiles extends AbstractCommandHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         if ($command->getPath()) {
@@ -179,6 +180,7 @@ final class CreateViExtractFiles extends AbstractCommandHandler
             . $dt->format('His')
             . '.bak';
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('config');

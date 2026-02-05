@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Licence History Status Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateLicenceHistoryStatu
  */
 class UpdateLicenceHistoryStatusTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateLicenceHistoryStatus::create(['id' => 111, 'foo' => 'bar']);
 

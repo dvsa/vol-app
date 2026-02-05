@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\BusReg;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -15,12 +17,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class GrantCancelText3Test extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the Bus Reg GrantCancelText3 filter
-     */
-    public function testProcess()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the Bus Reg GrantCancelText3 filter')]
+    public function testProcess(): void
     {
         $sut = new GrantCancelText3();
 

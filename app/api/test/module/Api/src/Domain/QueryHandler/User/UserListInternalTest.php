@@ -46,7 +46,6 @@ class UserListInternalTest extends QueryHandlerTestCase
         $user->setId(74);
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
-        $property->setAccessible(true);
         $property->setValue($user, \Dvsa\Olcs\Api\Entity\User\User::USER_TYPE_INTERNAL);
 
         $this->repoMap['User']->shouldReceive('fetchList')->andReturn([$user]);

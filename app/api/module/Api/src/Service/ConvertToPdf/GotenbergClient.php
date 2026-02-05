@@ -53,7 +53,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
      * @param LoggerInterface|null $logger Optional logger
      */
     public function __construct(
-        HttpClient $httpClient, 
+        HttpClient $httpClient,
         string $baseUri,
         ?S3Client $s3Client = null,
         ?string $s3Bucket = null,
@@ -77,6 +77,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
      */
+    #[\Override]
     public function convert($fileName, $destination)
     {
         $this->httpClient->reset();
@@ -85,7 +86,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
         $this->httpClient->setFileUpload($fileName, 'files');
 
         $response = $this->httpClient->send();
-        
+
         if (!$response->isOk()) {
             $body = $response->getBody();
             $message = $body ?: $response->getReasonPhrase();
@@ -97,10 +98,10 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
         }
 
         $pdfContent = $response->getBody();
-        
+
         // Save to local file system
         file_put_contents($destination, $pdfContent);
-        
+
         // If S3 is configured, also upload to S3
         if ($this->s3Client && $this->s3Bucket) {
             if ($this->logger) {
@@ -132,6 +133,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
      */
+    #[\Override]
     public function convertHtml(string $htmlContent, string $destination): void
     {
         $this->httpClient->reset();
@@ -166,6 +168,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
      */
+    #[\Override]
     public function mergePdfs(array $pdfFilePaths, string $destination): void
     {
         $this->httpClient->reset();
@@ -209,21 +212,21 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
                 'content_size' => strlen($pdfContent)
             ]);
         }
-        
+
         try {
             $date = new DateTime();
             $dateFolder = $date->format('Y-m-d');
             $timestamp = $date->format('YmdHis');
-            
+
             // Sanitize the original filename for S3 key
             $baseName = pathinfo($originalFileName, PATHINFO_FILENAME);
             $sanitizedName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $baseName);
-            $sanitizedName = substr($sanitizedName, 0, 100); // Limit length
-            
+            $sanitizedName = substr((string) $sanitizedName, 0, 100); // Limit length
+
             // Build S3 key: domain/pdf-conversions/YYYY-MM-DD/timestamp_filename.pdf
-            $s3Key = trim($this->s3KeyPrefix, '/') . '/pdf-conversions/' . $dateFolder . '/' 
+            $s3Key = trim((string) $this->s3KeyPrefix, '/') . '/pdf-conversions/' . $dateFolder . '/'
                    . $timestamp . '_' . $sanitizedName . '.pdf';
-            
+
             $this->s3Client->putObject([
                 'Bucket' => $this->s3Bucket,
                 'Key' => $s3Key,
@@ -234,7 +237,7 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
                     'conversion-timestamp' => $timestamp,
                 ]
             ]);
-            
+
             if ($this->logger) {
                 $this->logger->info('PDF uploaded to S3', [
                     'bucket' => $this->s3Bucket,

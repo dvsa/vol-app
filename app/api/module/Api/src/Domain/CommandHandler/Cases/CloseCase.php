@@ -27,6 +27,7 @@ final class CloseCase extends AbstractCommandHandler implements TransactionedInt
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var CloseCaseCmd $command **/

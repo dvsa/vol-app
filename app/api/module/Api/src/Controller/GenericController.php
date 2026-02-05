@@ -28,6 +28,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|Response\Stream|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function get($id)
     {
         $dto = $this->params('dto');
@@ -56,6 +57,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function getList()
     {
         $dto = $this->params('dto');
@@ -99,6 +101,7 @@ class GenericController extends AbstractRestfulController
      * @inheritdoc
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function update($id, $data)
     {
         $dto = $this->params('dto');
@@ -131,6 +134,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function replaceList($data)
     {
         $dto = $this->params('dto');
@@ -157,6 +161,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function create($data)
     {
         $dto = $this->params('dto');
@@ -183,6 +188,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function delete($id)
     {
         $dto = $this->params('dto');
@@ -209,6 +215,7 @@ class GenericController extends AbstractRestfulController
      *
      * @return Response|\Laminas\View\Model\JsonModel
      */
+    #[\Override]
     public function deleteList($data = null)
     {
         $dto = $this->params('dto');

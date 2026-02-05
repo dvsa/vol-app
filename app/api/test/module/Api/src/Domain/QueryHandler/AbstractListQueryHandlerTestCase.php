@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * @author Dmitry Golubev <d.e.golubev@gmail.com>
  */
-abstract class AbstractListQueryHandlerTest extends QueryHandlerTestCase
+abstract class AbstractListQueryHandlerTestCase extends QueryHandlerTestCase
 {
     /** @var  string */
     protected $sutClass;

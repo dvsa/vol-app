@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractRolePermission implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractRolePermission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -137,7 +137,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -160,7 +161,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the role
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Role     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Role
+     */
     public function getRole()
     {
         return $this->role;
@@ -183,7 +185,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the permission
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\Permission     */
+     * @return \Dvsa\Olcs\Api\Entity\User\Permission
+     */
     public function getPermission()
     {
         return $this->permission;
@@ -206,7 +209,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -229,7 +233,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -252,7 +257,8 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -261,6 +267,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

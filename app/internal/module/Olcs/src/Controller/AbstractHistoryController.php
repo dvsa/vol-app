@@ -45,6 +45,7 @@ class AbstractHistoryController extends AbstractInternalController implements Le
      *
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractMessagingSubject implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessagingSubject implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -155,7 +155,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -178,7 +179,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -201,7 +203,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -224,7 +227,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -247,7 +251,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -270,7 +275,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -293,7 +299,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -316,7 +323,8 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the is active
      *
-     * @return int     */
+     * @return int
+     */
     public function getIsActive()
     {
         return $this->isActive;
@@ -325,6 +333,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

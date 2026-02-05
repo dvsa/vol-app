@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Domain\Query\Bookmark\HearingBundle;
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Meetingvenue as Sut;
  */
 class MeetingvenueTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['case' => 123]);
@@ -20,7 +22,7 @@ class MeetingvenueTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['venue'], $query->getBundle());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new Sut();
         $bookmark->setData(['venue' => ['name' => 'VENUE']]);
@@ -28,7 +30,7 @@ class MeetingvenueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('VENUE', $bookmark->render());
     }
 
-    public function testRenderVenueOther()
+    public function testRenderVenueOther(): void
     {
         $bookmark = new Sut();
         $bookmark->setData(['venueOther' => 'OTHER_VENUE']);

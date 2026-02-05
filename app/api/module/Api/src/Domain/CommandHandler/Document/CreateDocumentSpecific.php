@@ -37,6 +37,7 @@ final class CreateDocumentSpecific extends AbstractCommandHandler implements Aut
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

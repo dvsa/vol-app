@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Continuation Not Sought email test
  *
@@ -39,7 +41,7 @@ class SendContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licences = [];
 

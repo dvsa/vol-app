@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -31,7 +33,7 @@ class CreateViExtractFilesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $params = [
             'op' => true,

@@ -12,6 +12,7 @@ class UserDetailsNavigationFactory extends AbstractNavigationFactory
     /**
      * @return string
      */
+    #[\Override]
     public function getName()
     {
         return 'user-details';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Overpayment Fee Test
  *
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CreateOverpaymentFeeTest extends MockeryTestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $fee1 = m::mock(Fee::class);
         $fee2 = m::mock(Fee::class);

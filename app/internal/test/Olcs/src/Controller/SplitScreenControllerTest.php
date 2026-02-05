@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Split Screen Controller Test
  *
@@ -30,7 +32,7 @@ class SplitScreenControllerTest extends MockeryTestCase
         $this->sut = new SplitScreenController($this->mockScriptFactory);
     }
 
-    public function testIndexAction()
+    public function testIndexAction(): void
     {
 
         // Expectations

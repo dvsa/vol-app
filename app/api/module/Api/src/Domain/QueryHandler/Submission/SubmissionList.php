@@ -14,6 +14,7 @@ final class SubmissionList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Submission';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var SubmissionRepo $repo */

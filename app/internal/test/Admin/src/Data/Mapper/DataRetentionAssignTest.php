@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AdminTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Laminas\Form\FormInterface;
  */
 class DataRetentionAssignTest extends MockeryTestCase
 {
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $assignedTo = 'assigned to';
         $ids = 'ids';
@@ -32,13 +34,13 @@ class DataRetentionAssignTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($input));
     }
 
-    public function testMapFromResult()
+    public function testMapFromResult(): void
     {
         $inputData = ['inputData'];
         $this->assertEquals($inputData, Sut::mapFromResult($inputData));
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data'];

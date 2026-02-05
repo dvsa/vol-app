@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Entity\User\Permission;
@@ -27,7 +29,7 @@ class IsInternalEditTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidInternalEdit()
+    public function testIsValidInternalEdit(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -37,7 +39,7 @@ class IsInternalEditTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidInternalEditFail()
+    public function testIsValidInternalEditFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

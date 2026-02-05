@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTypeSection implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTypeSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -134,7 +134,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the letter_type_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_type_id()
     {
         return $this->letter_type_id;
@@ -157,7 +158,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the letter_section_version_id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLetter_section_version_id()
     {
         return $this->letter_section_version_id;
@@ -180,7 +182,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -203,7 +206,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -226,7 +230,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the display order
      *
-     * @return int     */
+     * @return int
+     */
     public function getDisplayOrder()
     {
         return $this->displayOrder;
@@ -249,7 +254,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get the override content
      *
-     * @return array     */
+     * @return array
+     */
     public function getOverrideContent()
     {
         return $this->overrideContent;
@@ -258,6 +264,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

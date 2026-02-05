@@ -23,6 +23,7 @@ class UnlicensedCases extends AbstractQueryHandler
 
     protected $extraRepos = ['Cases'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $organisation \Dvsa\Olcs\Api\Entity\Organisation\Organisation */

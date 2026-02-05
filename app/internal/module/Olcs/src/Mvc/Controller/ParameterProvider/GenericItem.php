@@ -11,6 +11,7 @@ class GenericItem extends AbstractParameterProvider
         $this->paramNames = (array) $paramNames;
     }
 
+    #[\Override]
     public function provideParameters()
     {
         $params = [];

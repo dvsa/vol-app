@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Api\Domain\Repository;
@@ -7,9 +9,7 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DataService
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataService::class)]
 class DataServiceTest extends RepositoryTestCase
 {
     public const ORG_ID = 9001;
@@ -22,7 +22,7 @@ class DataServiceTest extends RepositoryTestCase
         $this->setUpSut(Repository\DataService::class);
     }
 
-    public function testFetchByOrgAndStatusForActiveLicences()
+    public function testFetchByOrgAndStatusForActiveLicences(): void
     {
         $qb = $this->createMockQb('{{QUERY}}');
         $qb->shouldReceive('getQuery->execute')->andReturn('EXPECT');

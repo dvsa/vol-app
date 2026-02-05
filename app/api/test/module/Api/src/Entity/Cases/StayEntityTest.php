@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Entity\Cases\Cases;
@@ -24,17 +26,17 @@ class StayEntityTest extends EntityTester
     /**
      * @param array $valuesForEntity          Values to set into Entity
      * @param array $expectedValuesFromEntity Expected values from Entity
-     * @dataProvider stayValuesDataProvided
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('stayValuesDataProvided')]
     public function testValuesSetReturnsExpectedEntity(
-        $valuesForEntity,
-        $expectedValuesFromEntity
-    ) {
+        mixed $valuesForEntity,
+        mixed $expectedValuesFromEntity
+    ): void {
         /** @var Cases $case */
-        $case = $this->createMock(Cases::class);
+        $case = $this->createStub(Cases::class);
 
         /** @var RefData $stayType */
-        $stayType = $this->createMock(RefData::class);
+        $stayType = $this->createStub(RefData::class);
 
         $stayEntity = new Entity($case, $stayType);
         $stayEntity->values(
@@ -83,7 +85,7 @@ class StayEntityTest extends EntityTester
      *
      * @return array
      */
-    public function stayValuesDataProvided()
+    public static function stayValuesDataProvided(): array
     {
         return [
             'all values null to return null' => [

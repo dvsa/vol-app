@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterTestData implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterTestData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -133,7 +133,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -156,7 +157,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -179,7 +181,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -202,7 +205,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -225,7 +229,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the json
      *
-     * @return array     */
+     * @return array
+     */
     public function getJson()
     {
         return $this->json;
@@ -248,7 +253,8 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -257,6 +263,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

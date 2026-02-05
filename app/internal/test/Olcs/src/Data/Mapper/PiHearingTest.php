@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -13,12 +15,12 @@ use Laminas\Form\FormInterface;
 class PiHearingTest extends MockeryTestCase
 {
     /**
-     * @dataProvider mapFromFormDataProvider
      *
      * @param $inData
      * @param $expected
      */
-    public function testMapFromForm($inData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromFormDataProvider')]
+    public function testMapFromForm(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
@@ -28,7 +30,7 @@ class PiHearingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromFormDataProvider()
+    public static function mapFromFormDataProvider(): array
     {
         $venueOther = 'pi venue other';
         $adjournedReason = 'cancelled reason';
@@ -104,14 +106,14 @@ class PiHearingTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider mapFromResultDataProvider
      *
      * @param $inData
      * @param $expected
      *
      * Tests mapFromResult
      */
-    public function testMapFromResult($inData, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
+    public function testMapFromResult(mixed $inData, mixed $expected): void
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
@@ -121,7 +123,7 @@ class PiHearingTest extends MockeryTestCase
      *
      * @return array
      */
-    public function mapFromResultDataProvider()
+    public static function mapFromResultDataProvider(): array
     {
         $venueOther = 'pi venue other';
         $otherFieldId = 99;
@@ -186,7 +188,7 @@ class PiHearingTest extends MockeryTestCase
         ];
     }
 
-    public function testMapFromErrors()
+    public function testMapFromErrors(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $errors = ['field' => 'data', 'messages' => []];
@@ -194,7 +196,7 @@ class PiHearingTest extends MockeryTestCase
         $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public function testMapFromErrorsHearDateBeforePi()
+    public function testMapFromErrorsHearDateBeforePi(): void
     {
         $mockForm = m::mock(FormInterface::class);
         $mockForm->shouldReceive('get->get->setMessages')

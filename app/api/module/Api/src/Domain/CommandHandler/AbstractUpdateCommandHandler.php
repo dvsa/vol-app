@@ -27,6 +27,7 @@ class AbstractUpdateCommandHandler extends AbstractCommandHandler
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $cmdMethod = $this->commandMethodName;

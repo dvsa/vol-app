@@ -29,6 +29,7 @@ class TmQualification extends AbstractRepository
      * @param QueryBuilder $qb
      * @param TmQualificationsList $query
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.transportManager', ':transportManager'));
@@ -40,6 +41,7 @@ class TmQualification extends AbstractRepository
      *
      * @param \Doctrine\ORM\QueryBuilder $qb
      */
+    #[\Override]
     protected function applyListJoins(\Doctrine\ORM\QueryBuilder $qb)
     {
         $this->getQueryBuilder()

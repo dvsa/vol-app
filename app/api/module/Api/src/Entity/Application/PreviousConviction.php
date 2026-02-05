@@ -27,6 +27,7 @@ class PreviousConviction extends AbstractPreviousConviction implements Organisat
      * @return array
      * @deprecated
      */
+    #[\Override]
     protected function getCalculatedValues()
     {
         return [
@@ -40,6 +41,7 @@ class PreviousConviction extends AbstractPreviousConviction implements Organisat
      * @inheritdoc
      * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
+    #[\Override]
     public function getRelatedOrganisation()
     {
         if (!$this->getApplication()) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Test
  *
@@ -46,14 +48,15 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [];
 
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111,
@@ -124,7 +127,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandCreatesEventHistoryWhenVersionChanges()
+    public function testHandleCommandCreatesEventHistoryWhenVersionChanges(): void
     {
         $data = [
             'id' => 111,
@@ -192,7 +195,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
             ->with($oc->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_OPERATING_CENTRE, null, $licence)
             ->once();
-        
+
         $this->mockedSmServices[AuthorizationService::class]
                 ->shouldReceive('isGranted')
                 ->with(Permission::SELFSERVE_USER, null)

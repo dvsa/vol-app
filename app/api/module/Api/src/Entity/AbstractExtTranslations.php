@@ -28,7 +28,7 @@ use Doctrine\ORM\Mapping as ORM;
  *    }
  * )
  */
-abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -108,7 +108,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -131,7 +132,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the locale
      *
-     * @return string     */
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
@@ -154,7 +156,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the object class
      *
-     * @return string     */
+     * @return string
+     */
     public function getObjectClass()
     {
         return $this->objectClass;
@@ -177,7 +180,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the field
      *
-     * @return string     */
+     * @return string
+     */
     public function getField()
     {
         return $this->field;
@@ -200,7 +204,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the foreign key
      *
-     * @return string     */
+     * @return string
+     */
     public function getForeignKey()
     {
         return $this->foreignKey;
@@ -223,7 +228,8 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get the content
      *
-     * @return string     */
+     * @return string
+     */
     public function getContent()
     {
         return $this->content;
@@ -232,6 +238,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

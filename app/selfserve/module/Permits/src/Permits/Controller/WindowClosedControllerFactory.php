@@ -21,6 +21,7 @@ class WindowClosedControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WindowClosedController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

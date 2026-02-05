@@ -10,11 +10,13 @@ class DuplicateVehicleRemovalCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:duplicate-vehicle-removal';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Duplicate vehicle removal');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

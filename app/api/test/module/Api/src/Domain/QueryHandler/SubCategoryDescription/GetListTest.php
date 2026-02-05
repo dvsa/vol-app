@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\SubCategoryDescription;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\SubCategoryDescription\GetList as QueryHandler;
@@ -21,7 +23,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockResult = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface::class);

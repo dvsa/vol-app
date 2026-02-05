@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\PiHearing;
 
 use Dvsa\Olcs\Api\Entity\Publication\PublicationLink;
@@ -14,12 +16,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class VenueTest extends MockeryTestCase
 {
-    /**
-     * @group publicationFilter
-     *
-     * Test the pi venue filter
-     */
-    public function testProvide()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the pi venue filter')]
+    public function testProvide(): void
     {
         $venueAddress = 'al1, al2, Town, pc';
         $venueName = 'venue name';

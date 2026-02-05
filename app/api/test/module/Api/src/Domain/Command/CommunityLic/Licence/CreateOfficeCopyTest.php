@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Office Copy Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\Licence\CreateOfficeCopy;
  */
 class CreateOfficeCopyTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CreateOfficeCopy::create(
             [

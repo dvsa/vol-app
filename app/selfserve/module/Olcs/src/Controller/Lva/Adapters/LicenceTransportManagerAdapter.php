@@ -34,6 +34,7 @@ class LicenceTransportManagerAdapter extends CommonAdapter
      *
      * @return void
      */
+    #[\Override]
     public function addMessages($licenceId)
     {
         // add message saying to create a variation

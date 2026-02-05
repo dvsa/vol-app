@@ -23,6 +23,7 @@ class Update extends AbstractCommandHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(Command\CommandInterface $command)
     {
         $phoneContactRepo = $this->getRepo();

@@ -16,6 +16,7 @@ class EmailAwareTraitTestStub extends AbstractCommandHandler implements EmailAwa
 {
     use EmailAwareTrait;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         return new Result();

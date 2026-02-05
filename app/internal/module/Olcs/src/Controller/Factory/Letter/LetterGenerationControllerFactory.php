@@ -24,6 +24,7 @@ class LetterGenerationControllerFactory implements FactoryInterface
      * @param array|null $options Options
      * @return LetterGenerationController
      */
+    #[\Override]
     public function __invoke(
         ContainerInterface $container,
         $requestedName,

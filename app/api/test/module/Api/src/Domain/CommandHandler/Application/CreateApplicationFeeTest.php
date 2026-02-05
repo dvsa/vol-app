@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\ORM\Query;
@@ -43,7 +45,8 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             FeeTypeEntity::FEE_TYPE_APP,
@@ -61,10 +64,8 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider feeTypeProvider
-     */
-    public function testHandleCommand($feeTypeFeeType, $description, $expectedDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('feeTypeProvider')]
+    public function testHandleCommand(mixed $feeTypeFeeType, mixed $description, mixed $expectedDate): void
     {
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('isGranted')
             ->once()
@@ -167,7 +168,7 @@ class CreateApplicationFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function feeTypeProvider()
+    public static function feeTypeProvider(): array
     {
         return [
             [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\GrantPeople;
@@ -28,7 +30,8 @@ class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             ApplicationEntity::APPLICATION_STATUS_VALID,
@@ -38,7 +41,7 @@ class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testCommandHandler()
+    public function testCommandHandler(): void
     {
         $createSnapshotResult = new Result();
 
@@ -95,7 +98,7 @@ class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
         $this->assertContains('CREATE_SNAPSHOT_CALLED', $result->getMessages());
     }
 
-    public function testThatNullDirectorChangeVariationsAreRejected()
+    public function testThatNullDirectorChangeVariationsAreRejected(): void
     {
         $command = Command::create(
             [
@@ -117,7 +120,7 @@ class GrantDirectorChangeTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testThatNonDirectorChangeVariationsAreRejected()
+    public function testThatNonDirectorChangeVariationsAreRejected(): void
     {
         $command = Command::create(
             [

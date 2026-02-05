@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Common Grant Test
  *
@@ -39,7 +41,7 @@ class CommonGrantTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'id' => 111
@@ -102,7 +104,7 @@ class CommonGrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $data = [
             'id' => 111
@@ -179,7 +181,7 @@ class CommonGrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandRestricted()
+    public function testHandleCommandRestricted(): void
     {
         $data = [
             'id' => 111
@@ -247,7 +249,7 @@ class CommonGrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandPsvRestricted()
+    public function testHandleCommandPsvRestricted(): void
     {
         $data = [
             'id' => 111

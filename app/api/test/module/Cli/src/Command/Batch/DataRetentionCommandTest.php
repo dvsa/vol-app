@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Command\Batch;
 
 use Dvsa\Olcs\Api\Domain\Command\DataRetention\DeleteEntities;
@@ -18,6 +20,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class DataRetentionCommandTest extends TestCase
 {
     public $mockQueryHandlerManager;
@@ -31,16 +34,14 @@ class DataRetentionCommandTest extends TestCase
         $this->mockQueryHandlerManager = $this->createMock(QueryHandlerManager::class);
         $this->command = new DataRetentionCommand($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function testPopulateOption()
+    public function testPopulateOption(): void
     {
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
@@ -52,7 +53,7 @@ class DataRetentionCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
-    public function testDeleteOption()
+    public function testDeleteOption(): void
     {
         $limit = 10;
         $this->mockCommandHandlerManager->expects($this->once())
@@ -65,7 +66,7 @@ class DataRetentionCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
-    public function testPrecheckOption()
+    public function testPrecheckOption(): void
     {
         $limit = 10;
         $this->mockCommandHandlerManager->expects($this->once())
@@ -78,7 +79,7 @@ class DataRetentionCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
-    public function testPostcheckOption()
+    public function testPostcheckOption(): void
     {
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
@@ -90,7 +91,7 @@ class DataRetentionCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
-    public function testNoOption()
+    public function testNoOption(): void
     {
         $this->commandTester->execute([]);
         $this->assertEquals(Command::FAILURE, $this->commandTester->getStatusCode());

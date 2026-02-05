@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Snapshot
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\TransportManagerApplication\Snapshot;
  */
 class SnapshotTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = Snapshot::create(
             [

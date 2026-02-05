@@ -19,6 +19,7 @@ class ForgotPasswordFactory implements FactoryInterface
      * @param array|null $options
      * @return ForgotPassword
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ForgotPassword
     {
         $pluginManager = $container;

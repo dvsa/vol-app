@@ -74,6 +74,7 @@ class LetterAppendixController extends AbstractInternalController implements Lef
     /**
      * @return mixed
      */
+    #[\Override]
     public function addAction()
     {
         $request = $this->getRequest();
@@ -98,6 +99,7 @@ class LetterAppendixController extends AbstractInternalController implements Lef
     /**
      * @return mixed
      */
+    #[\Override]
     public function editAction()
     {
         $request = $this->getRequest();
@@ -253,6 +255,7 @@ class LetterAppendixController extends AbstractInternalController implements Lef
         );
     }
 
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(

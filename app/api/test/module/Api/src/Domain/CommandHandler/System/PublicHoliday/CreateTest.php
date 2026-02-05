@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\System\PublicHoliday;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\System\PublicHoliday\Create as Handler;
@@ -21,7 +23,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 99999;
         $holidayDate = (new \DateTime())->setTime(0, 0, 0);

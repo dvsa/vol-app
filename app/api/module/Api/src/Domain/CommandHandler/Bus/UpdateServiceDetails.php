@@ -34,6 +34,7 @@ final class UpdateServiceDetails extends AbstractCommandHandler implements Trans
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateServiceDetailsCmd $command */

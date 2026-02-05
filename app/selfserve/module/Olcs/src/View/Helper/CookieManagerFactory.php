@@ -15,6 +15,7 @@ class CookieManagerFactory implements FactoryInterface
      * @return CookieManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CookieManager
     {
         $config = $container->get('Config');

@@ -37,7 +37,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractVenue implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractVenue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -177,7 +177,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -200,7 +201,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the address
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     */
     public function getAddress()
     {
         return $this->address;
@@ -223,7 +225,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -246,7 +249,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -269,7 +273,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -292,7 +297,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -317,7 +323,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -346,7 +353,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -373,7 +381,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -396,7 +405,8 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -405,6 +415,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

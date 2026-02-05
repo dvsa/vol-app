@@ -30,6 +30,7 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Entity\Doc\Document $document */
@@ -129,6 +130,7 @@ final class PrintLetter extends AbstractCommandHandler implements TransactionedI
         );
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

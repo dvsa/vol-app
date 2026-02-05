@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\DataServiceException;
@@ -7,6 +9,7 @@ use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
 use Common\Service\Data\Surrender;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\Page\Mvc;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
@@ -41,16 +44,23 @@ class LicenceTest extends TestCase
         $this->signatureType = null;
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
-        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
-        $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicence'], 1);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->expects('attach')
+            ->with(
+                RouteParams::EVENT_PARAM . 'licence',
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onLicence';
+                }),
+                1
+            );
 
         $this->sut->attach($mockEventManager);
     }
 
-    protected function onLicenceSetup($licenceId, $licenceData)
+    protected function onLicenceSetup(mixed $licenceId, mixed $licenceData): void
     {
         $mockAnnotationBuilder = m::mock();
         $this->sut->setAnnotationBuilderService($mockAnnotationBuilder);
@@ -132,7 +142,7 @@ class LicenceTest extends TestCase
         }
     }
 
-    public function testOnLicenceQueryError()
+    public function testOnLicenceQueryError(): void
     {
         $this->onLicenceSetup(32, false);
         $routeParam = new RouteParam();
@@ -145,7 +155,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithValidGoodsLicence()
+    public function testOnLicenceWithValidGoodsLicence(): void
     {
         $licenceId = 4;
         $licence = [
@@ -225,7 +235,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithValidPsvLicence()
+    public function testOnLicenceWithValidPsvLicence(): void
     {
         $licenceId = 4;
         $licence = [
@@ -268,7 +278,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithTerminatedPsvLicence()
+    public function testOnLicenceWithTerminatedPsvLicence(): void
     {
         $licenceId = 4;
         $licence = [
@@ -317,7 +327,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithSurrenderedGoodsLicence()
+    public function testOnLicenceWithSurrenderedGoodsLicence(): void
     {
         $licenceId = 4;
         $licence = [
@@ -367,7 +377,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithNotSubmittedPsvSpecialRestricted()
+    public function testOnLicenceWithNotSubmittedPsvSpecialRestricted(): void
     {
         $licenceId = 4;
         $licence = [
@@ -418,7 +428,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithValidGoodsLicenceAndPendingChange()
+    public function testOnLicenceWithValidGoodsLicenceAndPendingChange(): void
     {
         $licenceId = 4;
         $licence = [
@@ -473,7 +483,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithValidPsvLicenceAndPendingChange()
+    public function testOnLicenceWithValidPsvLicenceAndPendingChange(): void
     {
         $licenceId = 4;
         $licence = [
@@ -527,7 +537,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceWithRevokedLicence()
+    public function testOnLicenceWithRevokedLicence(): void
     {
         $licenceId = 4;
         $licence = [
@@ -582,7 +592,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockLicenceService = m::mock(\Common\Service\Data\Licence::class);
@@ -617,7 +627,7 @@ class LicenceTest extends TestCase
         $this->assertSame($mainNav, $sut->getMainNavigationService());
     }
 
-    public function testOnLicenceSurrenderDigitallySigned()
+    public function testOnLicenceSurrenderDigitallySigned(): void
     {
         $licenceId = 4;
         $licence = [
@@ -679,7 +689,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testOnLicenceSurrenderedPhysicallySigned()
+    public function testOnLicenceSurrenderedPhysicallySigned(): void
     {
         $licenceId = 4;
         $licence = [
@@ -752,7 +762,7 @@ class LicenceTest extends TestCase
      * @param string       $navId
      * @param int          $times
      */
-    protected function mockHideButton($mockSidebar, $navId, $times = 1)
+    protected function mockHideButton(mixed $mockSidebar, mixed $navId, int $times = 1): void
     {
         $mockSidebar
             ->shouldReceive('findById')
@@ -766,7 +776,7 @@ class LicenceTest extends TestCase
             );
     }
 
-    protected function mockMainNavigation($type, $surrender = false): void
+    protected function mockMainNavigation(mixed $type, bool $surrender = false): void
     {
         $mainNav = m::mock(Navigation::class);
 
@@ -813,7 +823,7 @@ class LicenceTest extends TestCase
         $this->sut->setMainNavigationService($mainNav);
     }
 
-    public function testSurrenderServiceFails()
+    public function testSurrenderServiceFails(): void
     {
         $licenceId = 4;
         $licence = [
@@ -878,7 +888,7 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
-    public function testMessagingTabsVisibleWithCountOnToggleEnabled()
+    public function testMessagingTabsVisibleWithCountOnToggleEnabled(): void
     {
         $licenceId = 4;
         $licence = [

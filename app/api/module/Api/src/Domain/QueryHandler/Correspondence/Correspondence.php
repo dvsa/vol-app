@@ -14,6 +14,7 @@ class Correspondence extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Correspondence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return $this->result(

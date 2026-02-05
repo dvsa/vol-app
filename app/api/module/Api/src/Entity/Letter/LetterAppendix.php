@@ -274,9 +274,7 @@ class LetterAppendix extends AbstractLetterAppendix
      */
     public function getPublishedVersions()
     {
-        return $this->versions->filter(function (LetterAppendixVersion $version) {
-            return $version->isPublished();
-        });
+        return $this->versions->filter(fn(LetterAppendixVersion $version) => $version->isPublished());
     }
 
     /**
@@ -286,8 +284,6 @@ class LetterAppendix extends AbstractLetterAppendix
      */
     public function getVersionsWithDocuments()
     {
-        return $this->versions->filter(function (LetterAppendixVersion $version) {
-            return $version->getDocument() !== null;
-        });
+        return $this->versions->filter(fn(LetterAppendixVersion $version) => $version->getDocument() !== null);
     }
 }

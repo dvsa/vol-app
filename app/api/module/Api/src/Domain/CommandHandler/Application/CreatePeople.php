@@ -23,6 +23,7 @@ final class CreatePeople extends AbstractCommandHandler implements Transactioned
     protected $repoServiceName = 'Application';
     protected $extraRepos = ['OrganisationPerson', 'ApplicationOrganisationPerson', 'Person'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command \Dvsa\Olcs\Transfer\Command\Application\CreatePeople */

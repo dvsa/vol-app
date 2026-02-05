@@ -21,6 +21,7 @@ final class WithdrawIrfoGvPermit extends AbstractCommandHandler implements Trans
 {
     protected $repoServiceName = 'IrfoGvPermit';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -20,6 +20,7 @@ class TaAddressPhone extends DynamicBookmark
      *
      * @return Qry
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -40,6 +41,7 @@ class TaAddressPhone extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $trafficArea = $this->data['trafficArea'];

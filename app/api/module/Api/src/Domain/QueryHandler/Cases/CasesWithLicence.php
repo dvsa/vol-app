@@ -16,6 +16,7 @@ final class CasesWithLicence extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Cases';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $case = $this->getRepo()->fetchWithLicenceUsingId($query);

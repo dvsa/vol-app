@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -351,7 +351,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -374,7 +375,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -397,7 +399,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the irfo psv auth type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType     */
+     * @return \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
+     */
     public function getIrfoPsvAuthType()
     {
         return $this->irfoPsvAuthType;
@@ -420,7 +423,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -443,7 +447,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the journey frequency
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getJourneyFrequency()
     {
         return $this->journeyFrequency;
@@ -466,7 +471,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the withdrawn reason
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getWithdrawnReason()
     {
         return $this->withdrawnReason;
@@ -489,7 +495,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -512,7 +519,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -535,7 +543,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the exemption details
      *
-     * @return string     */
+     * @return string
+     */
     public function getExemptionDetails()
     {
         return $this->exemptionDetails;
@@ -560,7 +569,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getExpiryDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -587,7 +597,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the is fee exempt application
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFeeExemptApplication()
     {
         return $this->isFeeExemptApplication;
@@ -610,7 +621,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the is fee exempt annual
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFeeExemptAnnual()
     {
         return $this->isFeeExemptAnnual;
@@ -635,7 +647,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getInForceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -662,7 +675,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the irfo fee id
      *
-     * @return string     */
+     * @return string
+     */
     public function getIrfoFeeId()
     {
         return $this->irfoFeeId;
@@ -685,7 +699,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the irfo file no
      *
-     * @return string     */
+     * @return string
+     */
     public function getIrfoFileNo()
     {
         return $this->irfoFileNo;
@@ -708,7 +723,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the copies issued
      *
-     * @return int     */
+     * @return int
+     */
     public function getCopiesIssued()
     {
         return $this->copiesIssued;
@@ -731,7 +747,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the copies required
      *
-     * @return int     */
+     * @return int
+     */
     public function getCopiesRequired()
     {
         return $this->copiesRequired;
@@ -754,7 +771,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the copies required total
      *
-     * @return int     */
+     * @return int
+     */
     public function getCopiesRequiredTotal()
     {
         return $this->copiesRequiredTotal;
@@ -777,7 +795,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the copies issued total
      *
-     * @return int     */
+     * @return int
+     */
     public function getCopiesIssuedTotal()
     {
         return $this->copiesIssuedTotal;
@@ -802,7 +821,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getLastDateCopiesReq($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -831,7 +851,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getRenewalDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -858,7 +879,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the service route from
      *
-     * @return string     */
+     * @return string
+     */
     public function getServiceRouteFrom()
     {
         return $this->serviceRouteFrom;
@@ -881,7 +903,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the service route to
      *
-     * @return string     */
+     * @return string
+     */
     public function getServiceRouteTo()
     {
         return $this->serviceRouteTo;
@@ -904,7 +927,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the validity period
      *
-     * @return int     */
+     * @return int
+     */
     public function getValidityPeriod()
     {
         return $this->validityPeriod;
@@ -929,7 +953,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getApplicationSentDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -956,7 +981,8 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -1091,6 +1117,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

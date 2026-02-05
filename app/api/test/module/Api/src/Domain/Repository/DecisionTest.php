@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Decision repo test
  *
@@ -27,7 +29,7 @@ class DecisionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
     }
 
-    public function testApplyListFilters()
+    public function testApplyListFilters(): void
     {
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
 
@@ -47,7 +49,7 @@ class DecisionTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testApplyListFiltersForTm()
+    public function testApplyListFiltersForTm(): void
     {
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn(['RESULTS']);
 

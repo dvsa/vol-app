@@ -25,6 +25,7 @@ final class UpdateAddresses extends AbstractCommandHandler implements AuthAwareI
 
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var \Dvsa\Olcs\Api\Entity\Licence\Licence $licence */

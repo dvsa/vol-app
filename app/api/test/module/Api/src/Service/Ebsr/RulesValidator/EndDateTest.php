@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -11,10 +13,8 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\EndDate;
  */
 class EndDateTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
-    public function testIsValid($txcApp, $endDate, $isValid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
+    public function testIsValid(mixed $txcApp, mixed $endDate, mixed $isValid): void
     {
         $value = [
             'txcAppType' => $txcApp,
@@ -28,7 +28,7 @@ class EndDateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function dpIsValid()
+    public static function dpIsValid(): array
     {
         $date = '2017-12-25';
 

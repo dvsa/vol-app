@@ -23,6 +23,7 @@ class SafetyReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(ContinuationDetail $continuationDetail)
     {
         /** @var Licence $licence */

@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 abstract class AbstractBundle extends AbstractQueryHandler
 {
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         try {

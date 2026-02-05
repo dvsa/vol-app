@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
@@ -13,11 +15,11 @@ use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\MiscSnJustification;
 class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider provideFilter
      * @param array $expected
      * @param array $value
      */
-    public function testFilter($expected, $value)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFilter')]
+    public function testFilter(mixed $expected, mixed $value): void
     {
         $sut = new MiscSnJustification();
 
@@ -30,7 +32,7 @@ class MiscSnJustificationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function provideFilter()
+    public static function provideFilter(): array
     {
         $unforseenDetailValue = 'unforseen detail text';
         $unforseenDetailKey = 'unforseenDetail';

@@ -14,6 +14,7 @@ class VariationVehiclesDeclarationsPsvOperateNovelty extends CommonVehiclesDecla
      * @param \Laminas\Form\Form $form
      * @return \Laminas\Form\Form
      */
+    #[\Override]
     protected function alterForm($form)
     {
         parent::alterForm($form);

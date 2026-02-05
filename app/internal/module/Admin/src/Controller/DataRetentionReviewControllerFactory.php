@@ -11,6 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class DataRetentionReviewControllerFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DataRetentionReviewController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

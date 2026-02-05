@@ -34,7 +34,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -105,7 +105,8 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -128,7 +129,8 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -151,7 +153,8 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
     /**
      * Get the user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getUser()
     {
         return $this->user;
@@ -160,6 +163,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

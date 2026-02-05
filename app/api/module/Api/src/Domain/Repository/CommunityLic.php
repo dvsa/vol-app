@@ -24,6 +24,7 @@ class CommunityLic extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query->getStatuses() !== null) {

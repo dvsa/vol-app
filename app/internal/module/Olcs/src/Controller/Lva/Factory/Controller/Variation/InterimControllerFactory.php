@@ -22,6 +22,7 @@ class InterimControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return InterimController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): InterimController
     {
 

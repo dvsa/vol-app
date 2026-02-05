@@ -49,7 +49,7 @@ class InterimRefundsController extends AbstractInternalController implements Lef
         $request = $this->getRequest();
 
         $eomDate = $this->dateHelper->getDate('Y-m-t');
-        [$year, $month, $lastDay] = explode('-', $eomDate);
+        [$year, $month, $lastDay] = explode('-', (string) $eomDate);
 
         $filters = array_merge(
             [
@@ -70,6 +70,7 @@ class InterimRefundsController extends AbstractInternalController implements Lef
         $request->getQuery()->fromArray($filters);
     }
 
+    #[\Override]
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Interim Refunds');

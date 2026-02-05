@@ -34,6 +34,7 @@ final class TransferVehicles extends AbstractCommandHandler implements Transacti
 
     protected $extraRepos = ['LicenceVehicle'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

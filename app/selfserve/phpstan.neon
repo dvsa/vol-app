@@ -2,9 +2,12 @@ parameters:
     level: 0
     paths:
         - module
-    excludes_analyse:
     ignoreErrors:
       - # PHPStan does not let you bind a different variable to $this: https://github.com/phpstan/phpstan/issues/8327.
         message: '#Undefined variable: \$this#'
         path: '**/*.table.php'
+
+      # === Suppressed Laminas @final class/property extension (third-party, cannot be changed) ===
+      - message: '#extends @final class Laminas\\#'
+      - message: '#overrides @final property Laminas\\#'
 

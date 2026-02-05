@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Organisation Permits Test
  */
@@ -39,7 +41,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQueryTypeMismatch()
+    public function testHandleQueryTypeMismatch(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(OrganisationAvailableLicences::ERR_TYPE_MISMATCH);
@@ -61,10 +63,8 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    /**
-     * @dataProvider dpHandleQueryProvider
-     */
-    public function testHandleQuery($isShortTerm, $permitsAvailable, $eligibleLicences, $hasEligibleLicences)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryProvider')]
+    public function testHandleQuery(mixed $isShortTerm, mixed $permitsAvailable, mixed $eligibleLicences, mixed $hasEligibleLicences): void
     {
         $permitTypeId = 22;
         $stockId = 33;
@@ -128,7 +128,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         static::assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function dpHandleQueryProvider()
+    public static function dpHandleQueryProvider(): array
     {
         return [
             [true, false, ['eligiblelicences'], true],
@@ -140,7 +140,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         ];
     }
 
-    public function testHandleQueryMultiStockNoStockId()
+    public function testHandleQueryMultiStockNoStockId(): void
     {
         $permitTypeId = 22;
         $isBilateral = false;
@@ -198,7 +198,7 @@ class OrganisationAvailableLicencesTest extends QueryHandlerTestCase
         static::assertEquals($expected, $this->sut->handleQuery($query));
     }
 
-    public function testHandleQueryMultiStockNoStockIdOrWindow()
+    public function testHandleQueryMultiStockNoStockIdOrWindow(): void
     {
         $permitTypeId = 22;
         $isBilateral = false;

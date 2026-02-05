@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PresidingTc data service test
  *
@@ -34,7 +36,7 @@ class PresidingTcTest extends AbstractDataServiceTestCase
     /**
      * Test fetchUserListData
      */
-    public function testFetchUserListData()
+    public function testFetchUserListData(): void
     {
         $results = ['results' => 'results'];
         $params = [
@@ -71,7 +73,7 @@ class PresidingTcTest extends AbstractDataServiceTestCase
     /**
      * Test fetchUserListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

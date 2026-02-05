@@ -33,6 +33,7 @@ final class UpdateStay extends AbstractCommandHandler implements TransactionedIn
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

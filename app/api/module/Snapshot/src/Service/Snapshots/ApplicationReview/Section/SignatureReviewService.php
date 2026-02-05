@@ -14,6 +14,7 @@ class SignatureReviewService extends AbstractReviewService
      * @param array $data
      * @return mixed
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         if ($data['signatureType']->getId() === RefData::SIG_PHYSICAL_SIGNATURE) {

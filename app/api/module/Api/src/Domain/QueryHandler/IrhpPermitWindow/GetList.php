@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
     protected $repoServiceName = 'IrhpPermitWindow';
     protected $bundle = ['irhpPermitStock' => ['irhpPermitType' => ['name']]];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $irhpPermitWindows = $this->getRepo()->fetchByIrhpPermitStockId($query->getIrhpPermitStock());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ConditionUndertaking Test
  *
@@ -32,7 +34,7 @@ class ConditionUndertakingTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $data = ['id' => 234];
         $query = Qry::create($data);

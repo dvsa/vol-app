@@ -13,23 +13,24 @@ use Dvsa\Olcs\Transfer\Command\Letter\LetterType\Update as Cmd;
 final class Update extends AbstractCommandHandler
 {
     protected $repoServiceName = 'LetterType';
-    
+
     protected $extraRepos = ['LetterType', 'MasterTemplate', 'LetterSection', 'LetterIssue', 'LetterAppendix'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         /** @var Cmd $command */
-        
+
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType */
         $letterType = $this->getRepo()->fetchUsingId($command);
-        
+
         $letterType->setName($command->getName());
         $letterType->setDescription($command->getDescription());
-        
+
         if ($command->getIsActive() !== null) {
             $letterType->setIsActive($command->getIsActive());
         }
-        
+
         // Update master template if provided
         if ($command->getMasterTemplate() !== null) {
             if ($command->getMasterTemplate()) {
@@ -39,7 +40,7 @@ final class Update extends AbstractCommandHandler
                 $letterType->setMasterTemplate(null);
             }
         }
-        
+
         // Update sections if provided
         if ($command->getSections() !== null) {
             $letterType->getLetterTypeSections()->clear();
@@ -57,7 +58,7 @@ final class Update extends AbstractCommandHandler
                 $letterType->addLetterTypeIssue($issue);
             }
         }
-        
+
         // Update appendices if provided
         if ($command->getAppendices() !== null) {
             // Clear existing appendices (orphanRemoval handles deletion)
@@ -85,7 +86,7 @@ final class Update extends AbstractCommandHandler
 
         $this->result->addId('letterType', $letterType->getId());
         $this->result->addMessage("Letter type '{$letterType->getName()}' updated");
-        
+
         return $this->result;
     }
 }

@@ -24,6 +24,7 @@ class ConditionUndertaking extends AbstractRepository
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return $this->getQueryBuilder()->modifyQuery($qb)
@@ -68,6 +69,7 @@ class ConditionUndertaking extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.case', ':byCase'))
@@ -81,6 +83,7 @@ class ConditionUndertaking extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

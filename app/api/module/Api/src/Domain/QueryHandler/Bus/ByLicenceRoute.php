@@ -17,6 +17,7 @@ class ByLicenceRoute extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Bus';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

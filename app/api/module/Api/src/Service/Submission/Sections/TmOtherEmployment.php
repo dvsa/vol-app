@@ -20,6 +20,7 @@ final class TmOtherEmployment extends AbstractSection
      *
      * @return array Data array containing information for the submission section
      */
+    #[\Override]
     public function generateSection(CasesEntity $case)
     {
         $data = [];

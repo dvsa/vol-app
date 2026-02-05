@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Util\DoctrineExtension;
 
 use Olcs\Logging\Log\Logger;
@@ -10,11 +12,10 @@ use Olcs\Logging\Log\Logger;
  */
 class LoggerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStopQuery()
+    public function testStopQuery(): void
     {
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
 
         $sut = new \Dvsa\Olcs\Api\Domain\Util\DoctrineExtension\Logger();

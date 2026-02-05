@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTranslationKey implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTranslationKey implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -147,7 +147,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -170,7 +171,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -193,7 +195,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -216,7 +219,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the translation key
      *
-     * @return string     */
+     * @return string
+     */
     public function getTranslationKey()
     {
         return $this->translationKey;
@@ -239,7 +243,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -262,7 +267,8 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -334,6 +340,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

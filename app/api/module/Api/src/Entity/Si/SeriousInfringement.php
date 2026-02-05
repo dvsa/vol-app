@@ -80,6 +80,7 @@ class SeriousInfringement extends AbstractSeriousInfringement
     /**
      * Calculated values to be added to a bundle
      */
+    #[\Override]
     public function getCalculatedBundleValues(): array
     {
         return [

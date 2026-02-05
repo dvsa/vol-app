@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cookie Banner Listener Test
  *
@@ -52,7 +54,16 @@ class CookieBannerListenerTest extends MockeryTestCase
     public function testAttach(): void
     {
         $em = m::mock(EventManagerInterface::class);
-        $em->expects('attach')->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1);
+        $em->expects('attach')
+            ->with(
+                MvcEvent::EVENT_ROUTE,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onRoute';
+                }),
+                1
+            );
+
         $this->sut->attach($em);
     }
 
@@ -166,9 +177,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    /**
-     * @dataProvider provideBannerVisibilityScenarios
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideBannerVisibilityScenarios')]
     public function testOnRouteDisplayBanner(bool $bannerVisible, string $expectedMode): void
     {
         $request = m::mock(Request::class);
@@ -194,7 +203,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function provideBannerVisibilityScenarios(): array
+    public static function provideBannerVisibilityScenarios(): array
     {
         return [
             'banner visible' => [true, 'banner'],

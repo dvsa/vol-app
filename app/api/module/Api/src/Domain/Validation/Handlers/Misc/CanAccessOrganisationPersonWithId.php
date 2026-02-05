@@ -20,6 +20,7 @@ class CanAccessOrganisationPersonWithId extends AbstractHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function isValid($dto)
     {
         return $this->canAccessOrganisationPerson($this->getId($dto));

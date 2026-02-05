@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Bilateral\Internal;
 
 use Dvsa\Olcs\Api\Service\Permits\Bilateral\Internal\FixedAnswerQuestionHandler;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class FixedAnswerQuestionHandlerTest extends MockeryTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $answer = 'some_answer';
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Trading Names Test
  *
@@ -37,7 +39,8 @@ class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
 
@@ -56,7 +59,7 @@ class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
         $this->references[TradingNameEntity::class][2]->setName('Bar');
     }
 
-    public function testHandleCommandWithLicence()
+    public function testHandleCommandWithLicence(): void
     {
         $data = [
             'licence' => 111,
@@ -122,7 +125,7 @@ class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
         $this->assertSame($licence, $createdTradingName->getLicence());
     }
 
-    public function testHandleCommandWithOrg()
+    public function testHandleCommandWithOrg(): void
     {
         $orgId = 111;
 
@@ -187,7 +190,7 @@ class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
         $this->assertSame($organisation, $createdTradingName->getOrganisation());
     }
 
-    public function testHandleCommandWithoutLicenceWithoutChange()
+    public function testHandleCommandWithoutLicenceWithoutChange(): void
     {
         $data = [
             'organisation' => 111,

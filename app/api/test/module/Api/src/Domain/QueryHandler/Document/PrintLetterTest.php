@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Document;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Document\PrintLetter;
@@ -11,9 +13,7 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Document\PrintLetter
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\PrintLetter::class)]
 class PrintLetterTest extends QueryHandlerTestCase
 {
     public $container;
@@ -36,10 +36,8 @@ class PrintLetterTest extends QueryHandlerTestCase
             ->andReturn($this->mockPrintLetterSrv);
     }
 
-    /**
-     * @dataProvider dpTestHandleQuery
-     */
-    public function testHandleQuery($params, $expect): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQuery')]
+    public function testHandleQuery(mixed $params, mixed $expect): void
     {
         $query = TransferQry\Document\PrintLetter::create(['id' => self::DOC_ID]);
 
@@ -59,7 +57,7 @@ class PrintLetterTest extends QueryHandlerTestCase
         static::assertEquals($expect, $actual);
     }
 
-    public function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): array
     {
         return [
             [

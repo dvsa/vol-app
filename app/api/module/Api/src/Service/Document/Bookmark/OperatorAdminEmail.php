@@ -22,6 +22,7 @@ class OperatorAdminEmail extends DynamicBookmark
      * @param array $data The context data containing licence ID
      * @return Qry The query for fetching licence with organisation users
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create([
@@ -43,6 +44,7 @@ class OperatorAdminEmail extends DynamicBookmark
      *
      * @return string Comma-separated list of admin email addresses, or empty string if none found
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data['organisation']['organisationUsers'])) {

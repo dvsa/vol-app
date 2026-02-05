@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Context\Licence;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -16,14 +18,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 class BusNoteTest extends MockeryTestCase
 {
     /**
-     * @dataProvider provideTestProvider
      *
      * @param $section
      * @param $expectedString
      *
      * Test the application bus note filter
      */
-    public function testProvide($section, $expectedString)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestProvider')]
+    public function testProvide(mixed $section, mixed $expectedString): void
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 
@@ -48,7 +50,7 @@ class BusNoteTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $context);
     }
 
-    public function testProvideNotPsv()
+    public function testProvideNotPsv(): void
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 
@@ -76,7 +78,7 @@ class BusNoteTest extends MockeryTestCase
      *
      * @return array
      */
-    public function provideTestProvider()
+    public static function provideTestProvider(): array
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
 

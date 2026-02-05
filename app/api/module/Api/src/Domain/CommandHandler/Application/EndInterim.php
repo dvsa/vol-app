@@ -27,6 +27,7 @@ final class EndInterim extends AbstractCommandHandler
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $application = $this->getRepo()->fetchById($command->getId());

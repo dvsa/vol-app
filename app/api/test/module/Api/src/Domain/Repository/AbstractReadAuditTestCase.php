@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -11,12 +13,12 @@ use Mockery as m;
  *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-abstract class AbstractReadAuditTest extends RepositoryTestCase
+abstract class AbstractReadAuditTestCase extends RepositoryTestCase
 {
     /** @var AbstractReadAudit|m\MockInterface */
     protected $sut;
 
-    protected function commonTestFetchOneOrMore($entityProperty)
+    protected function commonTestFetchOneOrMore(mixed $entityProperty): void
     {
         $userId = 111;
         $entityId = 222;
@@ -37,7 +39,7 @@ abstract class AbstractReadAuditTest extends RepositoryTestCase
         static::assertEquals($expected, $this->query);
     }
 
-    protected function commonTestDeleteOlderThan($entityClass)
+    protected function commonTestDeleteOlderThan(mixed $entityClass): void
     {
         $query = m::mock()
             ->shouldReceive('setParameter')
@@ -59,7 +61,7 @@ abstract class AbstractReadAuditTest extends RepositoryTestCase
         static::assertEquals(10, $result);
     }
 
-    protected function commonTestFetchList($queryDto, $whereClause)
+    protected function commonTestFetchList(mixed $queryDto, mixed $whereClause): void
     {
         $this->sut->shouldReceive('fetchPaginatedList')
             ->andReturn(['result']);

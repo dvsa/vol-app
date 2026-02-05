@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Permits;
 
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -27,17 +29,15 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testHandleQuery(
-        $lastOpenWindow,
-        $applicationIds,
-        $combinedRangeSize,
-        $permitCount,
-        $expectedResult,
-        $expectedMessage
-    ) {
+        mixed $lastOpenWindow,
+        mixed $applicationIds,
+        mixed $combinedRangeSize,
+        mixed $permitCount,
+        mixed $expectedResult,
+        mixed $expectedMessage
+    ): void {
         $stockId = 25;
 
         if (is_null($lastOpenWindow)) {
@@ -75,7 +75,7 @@ class CheckRunScoringPrerequisitesTest extends QueryHandlerTestCase
         );
     }
 
-    public function scenariosProvider()
+    public static function scenariosProvider(): array
     {
         return [
             [

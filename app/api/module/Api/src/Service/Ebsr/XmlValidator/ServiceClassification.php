@@ -31,6 +31,7 @@ class ServiceClassification extends AbstractValidator
      * @return bool
      * @throws Exception\RuntimeException If validation of $value is impossible
      */
+    #[\Override]
     public function isValid($value)
     {
         $serviceElements = $value->getElementsByTagName('Service');

@@ -19,6 +19,7 @@ class DefectList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ProhibitionDefect';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var Query $query */

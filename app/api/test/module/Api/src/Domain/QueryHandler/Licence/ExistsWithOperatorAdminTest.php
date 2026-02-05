@@ -38,9 +38,7 @@ class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $this->sut->handleQuery($query));
     }
 
-    /**
-     * @dataProvider dpHandleQuery
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
     public function testHandleQuery(bool $isOperatorAdmin): void
     {
         $licNo = 'PB2141421';
@@ -62,7 +60,7 @@ class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $this->sut->handleQuery($query));
     }
 
-    public function dpHandleQuery(): array
+    public static function dpHandleQuery(): array
     {
         return [
             [true],

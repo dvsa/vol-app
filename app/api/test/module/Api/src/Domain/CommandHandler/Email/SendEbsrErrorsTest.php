@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send Ebsr Errors Email Test
  *
@@ -26,8 +28,8 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrErrors as Cmd;
  * Ebsr Error emails follow a different code path if there is no bus reg created. This class tests this behaviour.
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @group ebsrEmails
  */
+#[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
 class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
 {
     protected $template = ['ebsr-data-error-start', 'ebsr-data-error-list', 'ebsr-data-error-end'];
@@ -50,7 +52,6 @@ class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @dataProvider handleCommandProvider
      *
      * @param string $orgEmail
      * @param string $adminEmail
@@ -58,7 +59,8 @@ class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
      * @param array $templateVars
      * @param string $subject
      */
-    public function testHandleCommand($orgEmail, $adminEmail, $expectedToAddress, $templateVars, $subject)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $orgEmail, mixed $adminEmail, mixed $expectedToAddress, mixed $templateVars, mixed $subject): void
     {
         $ebsrSubmissionId = 1234;
         $orgAdminEmails = [0 => $adminEmail];
@@ -118,7 +120,7 @@ class SendEbsrErrorsTest extends AbstractCommandHandlerTestCase
      *
      * @return array
      */
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         $templateData = [
             'registrationNumber' => SendEbsrErrors::UNKNOWN_REG_NO

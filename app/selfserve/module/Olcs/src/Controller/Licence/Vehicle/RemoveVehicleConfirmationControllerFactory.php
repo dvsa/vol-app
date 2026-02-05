@@ -20,6 +20,7 @@ class RemoveVehicleConfirmationControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RemoveVehicleConfirmationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);

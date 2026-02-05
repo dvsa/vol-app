@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Organisation;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -14,9 +16,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Dashboard
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Dashboard::class)]
 class DashboardTest extends QueryHandlerTestCase
 {
     /** @var  Dashboard | m\MockInterface */
@@ -32,7 +32,7 @@ class DashboardTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $organisationId = 69;
         $licenceId = 7;

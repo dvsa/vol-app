@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence;
 
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as CreateVehicleListDocumentCommand;
@@ -33,7 +35,7 @@ class BatchVehicleListGeneratorForGoodsDiscsTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $licences = $this->getLicences();
         $data = [
@@ -68,7 +70,7 @@ class BatchVehicleListGeneratorForGoodsDiscsTest extends AbstractCommandHandlerT
         $this->assertEquals($expected, $result->toArray());
     }
 
-    protected function getLicences()
+    protected function getLicences(): mixed
     {
         $licences = [];
         for ($i = 0; $i < $this->batchSize + 2; $i++) {

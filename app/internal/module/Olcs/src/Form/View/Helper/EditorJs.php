@@ -47,10 +47,10 @@ class EditorJs extends AbstractHelper
             '<div id="%s" class="editorjs-editor"></div>' .
             '<input type="hidden" name="%s" value="%s" class="%s" %s />' .
             '</div>',
-            htmlspecialchars($name, ENT_QUOTES),
+            htmlspecialchars((string) $name, ENT_QUOTES),
             $required,
             htmlspecialchars($id, ENT_QUOTES),
-            htmlspecialchars($name, ENT_QUOTES),
+            htmlspecialchars((string) $name, ENT_QUOTES),
             $escapedValue,
             htmlspecialchars($classes, ENT_QUOTES),
             $required

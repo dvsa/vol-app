@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Document test
  *
@@ -33,7 +35,7 @@ class DocumentTest extends RepositoryTestCase
         $this->setUpSut(DocumentRepo::class);
     }
 
-    public function testFetchListForTm()
+    public function testFetchListForTm(): void
     {
         $sut = m::mock(DocumentRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -82,10 +84,8 @@ class DocumentTest extends RepositoryTestCase
         $this->assertEquals('result', $sut->fetchListForTm(1));
     }
 
-    /**
-     * @dataProvider tmProvider
-     */
-    public function testFetchListForTmApplication($type)
+    #[\PHPUnit\Framework\Attributes\DataProvider('tmProvider')]
+    public function testFetchListForTmApplication(mixed $type): void
     {
         $sut = m::mock(DocumentRepo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
@@ -145,7 +145,7 @@ class DocumentTest extends RepositoryTestCase
         }
     }
 
-    public function tmProvider()
+    public static function tmProvider(): array
     {
         return [
             ['licence'],
@@ -153,7 +153,7 @@ class DocumentTest extends RepositoryTestCase
         ];
     }
 
-    public function testFetchUnlinkedOcDocumentsForEntity()
+    public function testFetchUnlinkedOcDocumentsForEntity(): void
     {
         $category = m::mock(Category::class)->makePartial();
         $subCategory = m::mock(SubCategory::class)->makePartial();
@@ -188,7 +188,7 @@ class DocumentTest extends RepositoryTestCase
         $this->assertEquals($doc2, $collection->first());
     }
 
-    public function testFetchListForContinuationDetail()
+    public function testFetchListForContinuationDetail(): void
     {
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);
@@ -204,7 +204,7 @@ class DocumentTest extends RepositoryTestCase
         static::assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchListForStatement()
+    public function testFetchListForStatement(): void
     {
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);

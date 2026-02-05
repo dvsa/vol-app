@@ -45,6 +45,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
     private $contentStore;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command): \Dvsa\Olcs\Api\Domain\Command\Result
     {
         /** @var Cmd $command */
@@ -263,6 +264,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     /**
      * Factory method for dependency injection
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
     {
         $this->previewService = $container->get(LetterPreviewService::class);

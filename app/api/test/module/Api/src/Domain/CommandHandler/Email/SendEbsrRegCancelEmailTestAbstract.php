@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Abstract for testing ebsr registered and cancelled emails
  */
@@ -27,7 +29,7 @@ abstract class SendEbsrRegCancelEmailTestAbstract extends AbstractCommandHandler
 {
     protected $template = null;
     protected $sutClass = null;
-    protected $cmdClass = null;
+    protected const CMD_CLASS = null;
 
     /**
      * @var CommandInterface
@@ -53,11 +55,10 @@ abstract class SendEbsrRegCancelEmailTestAbstract extends AbstractCommandHandler
     }
 
     /**
-     * @dataProvider handleCommandProvider
-     *
      * @param string $cmdClass
      */
-    public function testHandleCommand($cmdClass)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $cmdClass): void
     {
         $ebsrSubmissionId = 1234;
         $regNo = 5678;
@@ -135,11 +136,11 @@ abstract class SendEbsrRegCancelEmailTestAbstract extends AbstractCommandHandler
         $this->assertSame(['Email sent'], $result->getMessages());
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
-            [$this->cmdClass],
-            [$this->cmdClass]
+            [static::CMD_CLASS],
+            [static::CMD_CLASS]
         ];
     }
 }

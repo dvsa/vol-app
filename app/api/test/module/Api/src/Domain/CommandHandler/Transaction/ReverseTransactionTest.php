@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reverse Transaction Test
  *
@@ -60,7 +62,8 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             TransactionEntity::STATUS_COMPLETE,
@@ -94,9 +97,9 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
 
     /**
      * @param string $paymentMethod
-     * @dataProvider handleCommandProvider
      */
-    public function testHandleCommand($paymentMethod)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $paymentMethod): void
     {
         $now = new DateTime();
         $transactionId = 123;
@@ -229,7 +232,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         $this->assertSame('Bob', $savedTransaction->getPayerName());
     }
 
-    public function handleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             'cheque' => [FeeEntity::METHOD_CHEQUE],
@@ -240,7 +243,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandCpmsResponseException()
+    public function testHandleCommandCpmsResponseException(): void
     {
         $transactionId = 123;
 
@@ -288,7 +291,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testValidateIncompleteTransaction()
+    public function testValidateIncompleteTransaction(): void
     {
         $transaction = m::mock(TransactionEntity::class)
             ->shouldReceive('isComplete')
@@ -300,7 +303,7 @@ class ReverseTransactionTest extends AbstractCommandHandlerTestCase
         $this->sut->validate($transaction);
     }
 
-    public function testValidateIrreversibleTransaction()
+    public function testValidateIrreversibleTransaction(): void
     {
         $transaction = m::mock(TransactionEntity::class)
             ->shouldReceive('isComplete')

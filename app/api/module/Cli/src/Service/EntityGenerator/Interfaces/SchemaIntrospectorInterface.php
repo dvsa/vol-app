@@ -6,7 +6,7 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces;
 
 /**
  * Interface for database schema introspection
- * 
+ *
  * Abstracts the database schema reading process to make it swappable
  * across different Doctrine versions or even different ORMs
  */

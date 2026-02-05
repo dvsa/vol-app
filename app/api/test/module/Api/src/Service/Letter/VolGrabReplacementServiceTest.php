@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Letter;
 
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
@@ -42,9 +44,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         );
 
         // Initialize Logger properly (Logger is static)
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
@@ -53,14 +54,14 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         m::close();
     }
 
-    public function testReplaceGrabsReturnsEmptyStringWhenGivenEmptyString()
+    public function testReplaceGrabsReturnsEmptyStringWhenGivenEmptyString(): void
     {
         $result = $this->service->replaceGrabs('', []);
 
         $this->assertEquals('', $result);
     }
 
-    public function testReplaceGrabsReturnsOriginalJsonWhenNoTokensFound()
+    public function testReplaceGrabsReturnsOriginalJsonWhenNoTokensFound(): void
     {
         $json = json_encode(['blocks' => [['type' => 'paragraph', 'data' => ['text' => 'Hello World']]]]);
 
@@ -69,7 +70,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertEquals($json, $result);
     }
 
-    public function testReplaceGrabsSuccessfullyReplacesStaticBookmark()
+    public function testReplaceGrabsSuccessfullyReplacesStaticBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -96,7 +97,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[TODAYS_DATE]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsSuccessfullyReplacesDynamicBookmark()
+    public function testReplaceGrabsSuccessfullyReplacesDynamicBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -138,7 +139,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsInjectsTranslatorInterfaceIntoBookmark()
+    public function testReplaceGrabsInjectsTranslatorInterfaceIntoBookmark(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -163,7 +164,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertNotEmpty($result);
     }
 
-    public function testReplaceGrabsHandlesBookmarkCreationException()
+    public function testReplaceGrabsHandlesBookmarkCreationException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -184,7 +185,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesQueryExecutionException()
+    public function testReplaceGrabsHandlesQueryExecutionException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -220,7 +221,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesRenderException()
+    public function testReplaceGrabsHandlesRenderException(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -248,7 +249,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[TEST_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsHandlesTopLevelException()
+    public function testReplaceGrabsHandlesTopLevelException(): void
     {
         // Pass invalid JSON to trigger exception in main try/catch
         $invalidJson = 'invalid{json';
@@ -259,7 +260,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertEquals($invalidJson, $result);
     }
 
-    public function testReplaceGrabsHandlesMultipleTokensWithMixedSuccess()
+    public function testReplaceGrabsHandlesMultipleTokensWithMixedSuccess(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -293,7 +294,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[BAD_TOKEN]]', $decoded['blocks'][0]['data']['text']);
     }
 
-    public function testReplaceGrabsSkipsStaticBookmarksInQueryExecution()
+    public function testReplaceGrabsSkipsStaticBookmarksInQueryExecution(): void
     {
         $json = json_encode([
             'blocks' => [
@@ -322,14 +323,14 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
 
     // Tests for replaceGrabsInHtml method
 
-    public function testReplaceGrabsInHtmlReturnsEmptyStringWhenGivenEmptyString()
+    public function testReplaceGrabsInHtmlReturnsEmptyStringWhenGivenEmptyString(): void
     {
         $result = $this->service->replaceGrabsInHtml('', []);
 
         $this->assertEquals('', $result);
     }
 
-    public function testReplaceGrabsInHtmlReturnsOriginalHtmlWhenNoTokensFound()
+    public function testReplaceGrabsInHtmlReturnsOriginalHtmlWhenNoTokensFound(): void
     {
         $html = '<html><body><p>Hello World</p></body></html>';
 
@@ -338,7 +339,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertEquals($html, $result);
     }
 
-    public function testReplaceGrabsInHtmlSuccessfullyReplacesStaticBookmark()
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesStaticBookmark(): void
     {
         $html = '<html><body><p>Date: [[TODAYS_DATE]]</p></body></html>';
 
@@ -357,7 +358,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[TODAYS_DATE]]', $result);
     }
 
-    public function testReplaceGrabsInHtmlSuccessfullyReplacesDynamicBookmark()
+    public function testReplaceGrabsInHtmlSuccessfullyReplacesDynamicBookmark(): void
     {
         $html = '<div>Operator: [[OP_NAME]]</div>';
 
@@ -391,7 +392,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[OP_NAME]]', $result);
     }
 
-    public function testReplaceGrabsInHtmlInjectsTranslatorInterfaceIntoBookmark()
+    public function testReplaceGrabsInHtmlInjectsTranslatorInterfaceIntoBookmark(): void
     {
         $html = '<p>[[TEST_TOKEN]]</p>';
 
@@ -410,7 +411,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('Translated Value', $result);
     }
 
-    public function testReplaceGrabsInHtmlHandlesBookmarkCreationException()
+    public function testReplaceGrabsInHtmlHandlesBookmarkCreationException(): void
     {
         $html = '<p>[[UNKNOWN_TOKEN]]</p>';
 
@@ -424,7 +425,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $result);
     }
 
-    public function testReplaceGrabsInHtmlHandlesMultipleTokens()
+    public function testReplaceGrabsInHtmlHandlesMultipleTokens(): void
     {
         $html = '<html>Date: [[TODAYS_DATE]] Name: [[OP_NAME]]</html>';
 
@@ -467,7 +468,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringNotContainsString('[[OP_NAME]]', $result);
     }
 
-    public function testReplaceGrabsInHtmlPreservesHtmlStructure()
+    public function testReplaceGrabsInHtmlPreservesHtmlStructure(): void
     {
         $html = '<div class="header">
             <h1>Letter</h1>
@@ -491,7 +492,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $this->assertStringContainsString('23rd January 2026', $result);
     }
 
-    public function testReplaceGrabsInHtmlConvertsNewlinesToBrTags()
+    public function testReplaceGrabsInHtmlConvertsNewlinesToBrTags(): void
     {
         $html = '<div>Address: [[TA_ADDRESS]]</div>';
 

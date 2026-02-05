@@ -99,6 +99,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      *
      * @return array|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function editAction()
     {
         $this->formClass = EditForm::class;

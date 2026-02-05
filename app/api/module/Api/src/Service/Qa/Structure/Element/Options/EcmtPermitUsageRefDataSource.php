@@ -22,6 +22,7 @@ class EcmtPermitUsageRefDataSource implements SourceInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function populateOptionList(OptionList $optionList, array $options)
     {
         $this->refDataSource->populateOptionList($optionList, $options);

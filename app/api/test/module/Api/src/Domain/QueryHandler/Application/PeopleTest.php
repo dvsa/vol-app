@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Application;
 
 use DMS\PHPUnitExtensions\ArraySubset\Assert;
@@ -13,9 +15,8 @@ use Mockery as m;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Application\People
-
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Application\People::class)]
 class PeopleTest extends QueryHandlerTestCase
 {
     /** @var  People */
@@ -33,7 +34,7 @@ class PeopleTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $orgId = 923;
         $appId = 111;

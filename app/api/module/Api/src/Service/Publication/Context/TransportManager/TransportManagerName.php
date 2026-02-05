@@ -18,6 +18,7 @@ final class TransportManagerName extends AbstractContext
      * @param \ArrayObject $context
      * @return \ArrayObject
      */
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         $tm = $publication->getTransportManager()->getHomeCd()->getPerson();

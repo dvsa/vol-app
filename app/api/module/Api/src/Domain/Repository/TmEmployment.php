@@ -27,6 +27,7 @@ class TmEmployment extends AbstractRepository
      * @param QueryBuilder $qb
      * @param int          $id
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         parent::buildDefaultQuery($qb, $id);
@@ -56,6 +57,7 @@ class TmEmployment extends AbstractRepository
         return $dqb->getQuery()->getResult();
     }
 
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()
@@ -64,6 +66,7 @@ class TmEmployment extends AbstractRepository
             ->with('add.countryCode');
     }
 
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, \Dvsa\Olcs\Transfer\Query\QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.transportManager', ':transportManager'))

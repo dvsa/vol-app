@@ -26,6 +26,7 @@ class OperatorAdminForOrganisationHasLoggedIn extends AbstractQueryHandler
      *
      * @throws BadRequestException|RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         if (!$query instanceof Qry) {

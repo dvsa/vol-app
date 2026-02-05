@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 /**
@@ -7,11 +9,11 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  *
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class LinkedLicencesTest extends AbstractSubmissionSectionTest
+class LinkedLicencesTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\LinkedLicences::class;
 
-    protected $expectedResult = [
+    protected const EXPECTED_RESULT = [
         'data' => [
             'tables' => [
                 'linked-licences-app-numbers' => [
@@ -47,12 +49,12 @@ class LinkedLicencesTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         return [
-            [$case, $this->expectedResult],
+            [$case, static::EXPECTED_RESULT],
         ];
     }
 }

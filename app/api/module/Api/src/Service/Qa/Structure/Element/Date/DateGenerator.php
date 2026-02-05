@@ -23,6 +23,7 @@ class DateGenerator implements ElementGeneratorInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function generate(ElementGeneratorContext $context)
     {
         return $this->dateFactory->create(

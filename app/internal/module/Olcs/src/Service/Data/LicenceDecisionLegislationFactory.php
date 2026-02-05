@@ -18,6 +18,7 @@ class LicenceDecisionLegislationFactory implements FactoryInterface
      * @return LicenceDecisionLegislation
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceDecisionLegislation
     {
         return new LicenceDecisionLegislation(

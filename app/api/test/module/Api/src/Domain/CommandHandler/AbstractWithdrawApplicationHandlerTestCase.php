@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\WithdrawApplicationInterface;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHandlerTestCase
+abstract class AbstractWithdrawApplicationHandlerTestCase extends AbstractCommandHandlerTestCase
 {
     protected $repoServiceName = 'changeMe';
     protected $entityClass = 'changeMe';
@@ -32,7 +34,8 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
@@ -46,10 +49,8 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpReasonProvider
-     */
-    public function testHandleCommandWithEmail($withdrawReason, $isInternalUser, $expectedCheckReasonAgainstStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpReasonProvider')]
+    public function testHandleCommandWithEmail(mixed $withdrawReason, mixed $isInternalUser, mixed $expectedCheckReasonAgainstStatus): void
     {
         $id = 4096;
         $feeId1 = 111;
@@ -117,10 +118,8 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         $this->assertEquals(['Application withdrawn'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider dpReasonProvider
-     */
-    public function testHandleCommandWithoutEmail($withdrawReason, $isInternalUser, $expectedCheckReasonAgainstStatus)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpReasonProvider')]
+    public function testHandleCommandWithoutEmail(mixed $withdrawReason, mixed $isInternalUser, mixed $expectedCheckReasonAgainstStatus): void
     {
         $id = 4096;
         $feeId1 = 111;
@@ -183,7 +182,7 @@ abstract class AbstractWithdrawApplicationHandlerTest extends AbstractCommandHan
         $this->assertEquals(['Application withdrawn'], $result->getMessages());
     }
 
-    public function dpReasonProvider()
+    public static function dpReasonProvider(): array
     {
         return [
             [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, false, true],

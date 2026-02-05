@@ -24,6 +24,7 @@ final class CreateChangeOfEntity extends AbstractCommandHandler
 
     protected $extraRepos = ['Application'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $changeOfEntity = new ChangeOfEntityEntity();

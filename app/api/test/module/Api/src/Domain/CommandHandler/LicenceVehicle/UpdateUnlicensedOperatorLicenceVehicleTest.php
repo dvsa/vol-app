@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Unlicensed Operator Licence Vehicle Test
  *
@@ -33,7 +35,7 @@ class UpdateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerT
         parent::setUp();
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $id = 69;
         $version = 2;
@@ -86,7 +88,7 @@ class UpdateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerT
         );
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $id = 69;
         $version = 2;

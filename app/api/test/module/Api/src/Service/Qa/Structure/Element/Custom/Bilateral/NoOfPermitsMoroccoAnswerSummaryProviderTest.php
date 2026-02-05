@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\Element\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -21,7 +23,7 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         $this->sut = new NoOfPermitsMoroccoAnswerSummaryProvider();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'generic',
@@ -29,10 +31,8 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTemplateVariables
-     */
-    public function testGetTemplateVariables($isSnapshot)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTemplateVariables')]
+    public function testGetTemplateVariables(mixed $isSnapshot): void
     {
         $permitsRequired = 45;
 
@@ -60,7 +60,7 @@ class NoOfPermitsMoroccoAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpGetTemplateVariables()
+    public static function dpGetTemplateVariables(): array
     {
         return [
             [true],

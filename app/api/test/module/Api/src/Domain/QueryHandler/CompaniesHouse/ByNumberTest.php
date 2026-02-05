@@ -27,7 +27,7 @@ class ByNumberTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $queryData = ['companyNumber' => "00000001"];
         $this->mockedSmServices[Client::class]->shouldReceive('getCompanyProfile')
@@ -45,7 +45,7 @@ class ByNumberTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testExpectedExceptionWhenCompanyNotFound()
+    public function testExpectedExceptionWhenCompanyNotFound(): void
     {
         $queryData = ['companyNumber' => "0000"];
         $this->mockedSmServices[Client::class]->shouldReceive('getCompanyProfile')
@@ -64,7 +64,7 @@ class ByNumberTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testExpectedExceptionWhenCompanyServiceFails()
+    public function testExpectedExceptionWhenCompanyServiceFails(): void
     {
         $queryData = ['companyNumber' => "12345678"];
         $this->mockedSmServices[Client::class]->shouldReceive('getCompanyProfile')
@@ -77,7 +77,7 @@ class ByNumberTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public function testCompanyNumberFormat()
+    public function testCompanyNumberFormat(): void
     {
         $queryData = ['companyNumber' => "1000"];
         $this->mockedSmServices[Client::class]->shouldReceive('getCompanyProfile')

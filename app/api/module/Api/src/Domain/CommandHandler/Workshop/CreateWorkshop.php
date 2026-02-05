@@ -33,6 +33,7 @@ final class CreateWorkshop extends AbstractCommandHandler implements Transaction
 
     private EventHistoryCreator $eventHistoryCreator;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -70,6 +71,7 @@ final class CreateWorkshop extends AbstractCommandHandler implements Transaction
         return $result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');

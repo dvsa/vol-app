@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\InsMoreFreqNo;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InsMoreFreqNo;
  */
 class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new InsMoreFreqNo();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,11 +21,9 @@ class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider safetyInsProvider
-     * @group InsMoreFreqNoTest
-     */
-    public function testRenderWithInsMoreFreqNo($flag, $expected)
+    #[\PHPUnit\Framework\Attributes\Group('InsMoreFreqNoTest')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('safetyInsProvider')]
+    public function testRenderWithInsMoreFreqNo(mixed $flag, mixed $expected): void
     {
         $bookmark = new InsMoreFreqNo();
         $bookmark->setData(
@@ -38,7 +38,7 @@ class InsMoreFreqNoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function safetyInsProvider()
+    public static function safetyInsProvider(): array
     {
         return [
             [0, 'X'],

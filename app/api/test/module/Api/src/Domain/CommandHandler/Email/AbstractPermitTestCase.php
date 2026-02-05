@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -19,7 +21,7 @@ use Laminas\I18n\Translator\Translator;
 /**
  * Abstract permit email tester
  */
-abstract class AbstractPermitTest extends AbstractCommandHandlerTestCase
+abstract class AbstractPermitTestCase extends AbstractCommandHandlerTestCase
 {
     /**
      * @var string

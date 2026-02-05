@@ -20,6 +20,7 @@ class UnreadCountByLicenceAndRoles extends AbstractConversationQueryHandler impl
     protected $extraRepos = [Repository\Message::class];
 
     /** @param UnreadCountByLicenceAndRolesQuery | QueryInterface $query */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $messageRepository = $this->getRepo(Repository\Message::class);

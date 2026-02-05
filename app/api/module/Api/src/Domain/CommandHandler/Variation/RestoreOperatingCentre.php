@@ -28,6 +28,7 @@ final class RestoreOperatingCentre extends AbstractCommandHandler implements Tra
      * @param Cmd $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $applicationId = $command->getApplication();

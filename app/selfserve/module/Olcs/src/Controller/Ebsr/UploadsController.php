@@ -24,16 +24,12 @@ class UploadsController extends AbstractController
     use GenericMethods;
     use FlashMessengerTrait;
 
-    protected FormHelperService $formHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         protected FileUploadHelperService $uploadHelper
     ) {
-        $this->formHelper = $formHelper;
-
         parent::__construct($niTextTranslationUtil, $authService);
     }
 

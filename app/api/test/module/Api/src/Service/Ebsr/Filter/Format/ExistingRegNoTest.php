@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format;
 
 use Dvsa\Olcs\Api\Service\Ebsr\Filter\Format\ExistingRegNo;
@@ -14,7 +16,7 @@ class ExistingRegNoTest extends TestCase
     /**
      * Tests filter
      */
-    public function testFilter()
+    public function testFilter(): void
     {
         $sut = new ExistingRegNo();
 

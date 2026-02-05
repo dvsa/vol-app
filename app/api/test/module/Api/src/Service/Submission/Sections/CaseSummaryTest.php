@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
+
+use Dvsa\Olcs\Api\Service\Submission\Sections\CaseSummary;
 
 /**
  * Class CaseSummaryTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class CaseSummaryTest extends AbstractSubmissionSectionTest
+class CaseSummaryTest extends AbstractSubmissionSectionTestCase
 {
-    protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\CaseSummary::class;
+    protected $submissionSection = CaseSummary::class;
 
-    protected $licenceStartDate = '2012-01-01 15:00:00';
+    protected const LICENCE_START_DATE = '2012-01-01 15:00:00';
 
-    protected $baseExpectedResult = [
+    protected const BASE_EXPECTED_RESULT = [
         'id' => 99,
         'caseType' => 'case type 1',
         'ecmsNo' => 'ecms1234',
@@ -35,12 +39,12 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
         $preLgvExpectedResult = [
             'data' => [
                 'overview' => array_merge(
-                    $this->baseExpectedResult,
+                    static::BASE_EXPECTED_RESULT,
                     [
                         'totAuthorisedVehicles' => null,
                         'totAuthorisedTrailers' => 5,
@@ -53,7 +57,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
         $mixedFleetExpectedResult = [
             'data' => [
                 'overview' => array_merge(
-                    $this->baseExpectedResult,
+                    static::BASE_EXPECTED_RESULT,
                     [
                         'totAuthorisedHgvVehicles' => 7,
                         'totAuthorisedLgvVehicles' => 3,
@@ -67,7 +71,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
         $lgvOnlyExpectedResult = [
             'data' => [
                 'overview' => array_merge(
-                    $this->baseExpectedResult,
+                    static::BASE_EXPECTED_RESULT,
                     [
                         'totAuthorisedLgvVehicles' => 4
                      ]
@@ -77,7 +81,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* existing pre lgv licence only */
 
-        $preLgvLicenceCase = $this->getCase();
+        $preLgvLicenceCase = static::getCase();
         $preLgvLicenceCase->setApplication(null);
         $preLgvLicenceCase->getLicence()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
@@ -85,7 +89,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* mixed fleet with lgv licence only */
 
-        $mixedFleetLicenceCase = $this->getCase();
+        $mixedFleetLicenceCase = static::getCase();
         $mixedFleetLicenceCase->setApplication(null);
         $mixedFleetLicenceCase->getLicence()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
@@ -95,7 +99,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* lgv only licence only */
 
-        $lgvOnlyLicenceCase = $this->getCase();
+        $lgvOnlyLicenceCase = static::getCase();
         $lgvOnlyLicenceCase->setApplication(null);
         $lgvOnlyLicenceCase->getLicence()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
@@ -104,7 +108,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* existing pre lgv application */
 
-        $preLgvApplicationCase = $this->getCase();
+        $preLgvApplicationCase = static::getCase();
         $preLgvApplicationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
             ->andReturn(['totAuthVehicles', 'totAuthTrailers']);
@@ -113,7 +117,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* mixed fleet with lgv application */
 
-        $mixedFleetApplicationCase = $this->getCase();
+        $mixedFleetApplicationCase = static::getCase();
         $mixedFleetApplicationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
             ->andReturn(['totAuthHgvVehicles', 'totAuthLgvVehicles', 'totAuthTrailers']);
@@ -124,7 +128,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* lgv only application */
 
-        $lgvOnlyApplicationCase = $this->getCase();
+        $lgvOnlyApplicationCase = static::getCase();
         $lgvOnlyApplicationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->withNoArgs()
             ->andReturn(['totAuthLgvVehicles']);
@@ -134,7 +138,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* existing pre lgv variation */
 
-        $preLgvVariationCase = $this->getCase();
+        $preLgvVariationCase = static::getCase();
         $preLgvVariationCase->getApplication()->setIsVariation(true);
         $preLgvVariationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->never();
@@ -144,7 +148,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* mixed fleet with lgv variation */
 
-        $mixedFleetVariationCase = $this->getCase();
+        $mixedFleetVariationCase = static::getCase();
         $mixedFleetVariationCase->getApplication()->setIsVariation(true);
         $mixedFleetVariationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->never();
@@ -156,7 +160,7 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
 
         /* lgv only variation */
 
-        $lgvOnlyVariationCase = $this->getCase();
+        $lgvOnlyVariationCase = static::getCase();
         $lgvOnlyVariationCase->getApplication()->setIsVariation(true);
         $lgvOnlyVariationCase->getApplication()->shouldReceive('getApplicableAuthProperties')
             ->never();
@@ -178,11 +182,11 @@ class CaseSummaryTest extends AbstractSubmissionSectionTest
          ];
     }
 
-    protected function getCase()
+    public static function getCase(): mixed
     {
         $case = parent::getCase();
 
-        $case->getLicence()->setInForceDate($this->licenceStartDate);
+        $case->getLicence()->setInForceDate(static::LICENCE_START_DATE);
 
         return $case;
     }

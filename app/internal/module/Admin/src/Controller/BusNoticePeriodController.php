@@ -26,6 +26,7 @@ class BusNoticePeriodController extends AbstractInternalController implements Le
     /**
      * @return ViewModel
      */
+    #[\Override]
     public function getLeftView(): ViewModel
     {
         $view = new ViewModel(

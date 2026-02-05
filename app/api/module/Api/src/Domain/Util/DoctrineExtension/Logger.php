@@ -13,6 +13,7 @@ class Logger extends \Doctrine\DBAL\Logging\DebugStack
      *
      * @return void
      */
+    #[\Override]
     public function stopQuery()
     {
         parent::stopQuery();

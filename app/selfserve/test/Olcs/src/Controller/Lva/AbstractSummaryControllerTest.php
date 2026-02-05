@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva;
 
 use Mockery as m;
@@ -28,12 +30,12 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider indexActionProvider
      *
      * @param $niFlag
      * @param $isNi
      */
-    public function testIndexAction($niFlag, $isNi): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionProvider')]
+    public function testIndexAction(?string $niFlag, bool $isNi): void
     {
         $applicationData = [
             'id' => 712,
@@ -97,7 +99,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{'Y', true}, list{'N', false}, list{null, false}}
      */
-    public function indexActionProvider(): array
+    public static function indexActionProvider(): array
     {
         return [
             ['Y', true],
@@ -106,10 +108,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderImportantText
-     */
-    public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderImportantText')]
+    public function testImportantText(bool $isVariation, string $goodsOrPsv, string $licenceType, string $expected): void
     {
         $applicationData = [
             'id' => 712,
@@ -147,7 +147,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      *
      * @psalm-return list{list{true, 'lcat_gv', 'XX', 'application-summary-important-goods-var'}, list{false, 'lcat_gv', 'XX', 'application-summary-important-goods-app'}, list{true, 'lcat_psv', 'XX', 'application-summary-important-psv-var'}, list{false, 'lcat_psv', 'XX', 'application-summary-important-psv-app'}, list{false, 'lcat_psv', 'ltyp_sr', 'application-summary-important-psv-app-sr'}}
      */
-    public function dataProviderImportantText(): array
+    public static function dataProviderImportantText(): array
     {
         return [
             // isVariation, goodsOrPsv, licence type, expected

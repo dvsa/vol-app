@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
@@ -21,7 +23,7 @@ class FStandingCapitalReservesTest extends MockeryTestCase
         $this->sut = new FStandingCapitalReserves();
     }
 
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $organisation = m::mock(Organisation::class);
         $data = [
@@ -33,7 +35,7 @@ class FStandingCapitalReservesTest extends MockeryTestCase
         $this->assertSame($organisation, $query->getOrganisation());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $this->sut->setData('12345');
         $this->assertEquals('12,345', $this->sut->render());

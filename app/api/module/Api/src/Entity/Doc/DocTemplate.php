@@ -104,6 +104,7 @@ class DocTemplate extends AbstractDocTemplate implements DeletableInterface
      *
      * @return boolean
      */
+    #[\Override]
     public function canDelete()
     {
         return true;

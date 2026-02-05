@@ -39,6 +39,7 @@ final class CreateOverpaymentFee extends AbstractCommandHandler implements
      * Given a payment amount and an array of fees, will create an overpayment
      * balancing fee if required.
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $fees = $command->getFees();
@@ -79,6 +80,7 @@ final class CreateOverpaymentFee extends AbstractCommandHandler implements
 
         return $this->result;
     }
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

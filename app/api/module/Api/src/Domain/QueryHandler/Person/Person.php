@@ -15,6 +15,7 @@ class Person extends AbstractQueryHandler
     protected $repoServiceName = 'Person';
 
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $person \Dvsa\Olcs\Api\Entity\Person\Person */

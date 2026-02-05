@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Data\Mapper;
 
 use Olcs\Data\Mapper\IrhpCandidatePermit;
@@ -17,15 +19,13 @@ class IrhpCandidatePermitTest extends MockeryTestCase
         $this->sut = new IrhpCandidatePermit();
     }
 
-    /**
-     * @dataProvider dpMapApplicationData
-     */
-    public function testMapApplicationData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapApplicationData')]
+    public function testMapApplicationData(mixed $data, mixed $expected): void
     {
         $this->assertSame($expected, $this->sut->mapApplicationData($data));
     }
 
-    public function dpMapApplicationData()
+    public static function dpMapApplicationData(): array
     {
         return [
             [

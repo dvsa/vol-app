@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractQuestionText implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractQuestionText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -226,7 +226,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -249,7 +250,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the question
      *
-     * @return \Dvsa\Olcs\Api\Entity\Generic\Question     */
+     * @return \Dvsa\Olcs\Api\Entity\Generic\Question
+     */
     public function getQuestion()
     {
         return $this->question;
@@ -272,7 +274,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -295,7 +298,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -320,7 +324,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEffectiveFrom($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -347,7 +352,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the question short key
      *
-     * @return string     */
+     * @return string
+     */
     public function getQuestionShortKey()
     {
         return $this->questionShortKey;
@@ -370,7 +376,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the question summary key
      *
-     * @return string     */
+     * @return string
+     */
     public function getQuestionSummaryKey()
     {
         return $this->questionSummaryKey;
@@ -393,7 +400,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the question key
      *
-     * @return string     */
+     * @return string
+     */
     public function getQuestionKey()
     {
         return $this->questionKey;
@@ -416,7 +424,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the warning key
      *
-     * @return string     */
+     * @return string
+     */
     public function getWarningKey()
     {
         return $this->warningKey;
@@ -439,7 +448,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the details key
      *
-     * @return string     */
+     * @return string
+     */
     public function getDetailsKey()
     {
         return $this->detailsKey;
@@ -462,7 +472,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the guidance key
      *
-     * @return string     */
+     * @return string
+     */
     public function getGuidanceKey()
     {
         return $this->guidanceKey;
@@ -485,7 +496,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the additional guidance key
      *
-     * @return string     */
+     * @return string
+     */
     public function getAdditionalGuidanceKey()
     {
         return $this->additionalGuidanceKey;
@@ -508,7 +520,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the hint key
      *
-     * @return string     */
+     * @return string
+     */
     public function getHintKey()
     {
         return $this->hintKey;
@@ -531,7 +544,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the bullet list key
      *
-     * @return string     */
+     * @return string
+     */
     public function getBulletListKey()
     {
         return $this->bulletListKey;
@@ -554,7 +568,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the label key
      *
-     * @return string     */
+     * @return string
+     */
     public function getLabelKey()
     {
         return $this->labelKey;
@@ -577,7 +592,8 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -586,6 +602,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

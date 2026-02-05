@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\StatementBundle as Qry;
  */
 class StatementNameBodyAddress extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['statement'])) {
@@ -29,6 +30,7 @@ class StatementNameBodyAddress extends DynamicBookmark
         return Qry::create(['id' => $data['statement'], 'bundle' => $bundle]);
     }
 
+    #[\Override]
     public function render()
     {
         $person = $this->data['requestorsContactDetails']['person'];

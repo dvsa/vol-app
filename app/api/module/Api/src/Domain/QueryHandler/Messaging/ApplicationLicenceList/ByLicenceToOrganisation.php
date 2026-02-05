@@ -26,6 +26,7 @@ class ByLicenceToOrganisation extends AbstractQueryHandler implements ToggleRequ
      * @param GetApplicationListByLicenceToOrganisationQuery $query
      * @throws NotFoundException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $licenceRepository = $this->getLicenceRepository();

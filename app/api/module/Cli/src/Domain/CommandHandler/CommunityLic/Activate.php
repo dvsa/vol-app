@@ -28,6 +28,7 @@ final class Activate extends AbstractCommandHandler implements TransactionedInte
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getCommunityLicenceIds();

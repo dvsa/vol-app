@@ -69,7 +69,8 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             CasesEntity::LICENCE_CASE_TYPE,
@@ -94,7 +95,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests processing the XML and creating the serious infringement
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $xmlString = 'xml string';
         $documentId = 111;
@@ -281,7 +282,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests errors are thrown for erru requests which already exist
      */
-    public function testErrorsForDoctrinePenaltyAndCategoryData()
+    public function testErrorsForDoctrinePenaltyAndCategoryData(): void
     {
         $xmlString = 'xml string';
         $memberStateCode = 'PL';
@@ -401,7 +402,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * tests errors are returned when licence data is missing
      */
-    public function testErrorsForMissingLicenceData()
+    public function testErrorsForMissingLicenceData(): void
     {
         $xmlString = 'xml string';
         $documentId = 111;
@@ -455,7 +456,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * tests errors are returned when licence data is missing
      */
-    public function testErrorsForMissingMemberState()
+    public function testErrorsForMissingMemberState(): void
     {
         $xmlString = 'xml string';
         $documentId = 111;
@@ -508,7 +509,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests errors are thrown for erru requests which already exist
      */
-    public function testErrorsForExistingErruRequest()
+    public function testErrorsForExistingErruRequest(): void
     {
         $xmlString = 'xml string';
         $memberStateCode = 'PL';
@@ -561,7 +562,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests errors are thrown for erru requests which already exist
      */
-    public function testErrorsForSeriousInfringementInputFailure()
+    public function testErrorsForSeriousInfringementInputFailure(): void
     {
         $xmlString = 'xml string';
         $memberStateCode = 'PL';
@@ -642,7 +643,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests errors in the XML are handled correctly
      */
-    public function testErrorsForXmlInputFailure()
+    public function testErrorsForXmlInputFailure(): void
     {
         $xmlString = 'xml string';
         $documentId = 111;
@@ -678,7 +679,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Tests errors in the XML are handled correctly
      */
-    public function testErrorsForComplianceEpisodeInputFailure()
+    public function testErrorsForComplianceEpisodeInputFailure(): void
     {
         $xmlString = 'xml string';
         $documentId = 111;
@@ -721,7 +722,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
     /**
      * Gets the email command to send the erru error email
      */
-    private function handleErrors()
+    private function handleErrors(): void
     {
         $erruFailureId = 12345;
 
@@ -748,7 +749,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $documentId
      * @param int $documentIdTimes
      */
-    private function fetchDocumentAndXml($command, $xmlString, $documentId, $documentIdTimes = 0)
+    private function fetchDocumentAndXml(mixed $command, mixed $xmlString, mixed $documentId, int $documentIdTimes = 0): void
     {
         $docIdentifier = 'doc/identifier';
 
@@ -774,7 +775,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $erruData
      * @param $xmlDomDocument
      */
-    private function validInitialInput($xmlString, $xmlData, $erruData, $xmlDomDocument)
+    private function validInitialInput(mixed $xmlString, mixed $xmlData, mixed $erruData, mixed $xmlDomDocument): void
     {
         $this->validXml($xmlString, $xmlDomDocument);
         $this->mapXmlFile($xmlData, $xmlDomDocument);
@@ -787,7 +788,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $xmlString
      * @param $xmlDomDocument
      */
-    private function validXml($xmlString, $xmlDomDocument)
+    private function validXml(mixed $xmlString, mixed $xmlDomDocument): void
     {
         $this->mockedSmServices['ComplianceXmlStructure']
             ->expects('setValue')
@@ -810,7 +811,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $erruData
      * @param $xmlData
      */
-    private function validComplianceEpisodeInput($erruData, $xmlData)
+    private function validComplianceEpisodeInput(mixed $erruData, mixed $xmlData): void
     {
         $this->mockedSmServices['ComplianceEpisodeInput']
             ->expects('setValue')
@@ -831,7 +832,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $si
      * @param $filteredSi
      */
-    private function validSiInput($si, $filteredSi)
+    private function validSiInput(mixed $si, mixed $filteredSi): void
     {
         $this->mockedSmServices['SeriousInfringementInput']
             ->expects('setValue')
@@ -852,7 +853,7 @@ class ComplianceEpisodeTest extends AbstractCommandHandlerTestCase
      * @param $xmlData
      * @param $xmlDomDocument
      */
-    private function mapXmlFile($xmlData, $xmlDomDocument)
+    private function mapXmlFile(mixed $xmlData, mixed $xmlDomDocument): void
     {
         $this->mockedSmServices['ComplianceEpisodeXmlMapping']
             ->shouldReceive('mapData')

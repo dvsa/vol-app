@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'TransportManagerLicence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $query \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList */

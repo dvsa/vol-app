@@ -56,6 +56,7 @@ class Surrender extends AbstractSurrender implements ContextProviderInterface
         $this->licence->setStatus($licenceStatus);
     }
 
+    #[\Override]
     public function getContextValue()
     {
         return $this->getId();

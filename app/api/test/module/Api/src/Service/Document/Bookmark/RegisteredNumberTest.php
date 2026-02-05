@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\RegisteredNumber;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\RegisteredNumber;
  */
 class RegisteredNumberTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new RegisteredNumber();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -19,7 +21,7 @@ class RegisteredNumberTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoRegisteredNumber()
+    public function testRenderWithNoRegisteredNumber(): void
     {
         $bookmark = new RegisteredNumber();
         $bookmark->setData(
@@ -34,7 +36,7 @@ class RegisteredNumberTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testRenderWithRegisteredNumber()
+    public function testRenderWithRegisteredNumber(): void
     {
         $bookmark = new RegisteredNumber();
         $bookmark->setData(

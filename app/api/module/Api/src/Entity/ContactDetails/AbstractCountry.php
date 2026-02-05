@@ -31,7 +31,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCountry implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCountry implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -199,7 +199,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return string     */
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -222,7 +223,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -245,7 +247,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -268,7 +271,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the country desc
      *
-     * @return string     */
+     * @return string
+     */
     public function getCountryDesc()
     {
         return $this->countryDesc;
@@ -291,7 +295,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is member state
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsMemberState()
     {
         return $this->isMemberState;
@@ -314,7 +319,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is permit state
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsPermitState()
     {
         return $this->isPermitState;
@@ -337,7 +343,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is ecmt state
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsEcmtState()
     {
         return $this->isEcmtState;
@@ -360,7 +367,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the is eea state
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsEeaState()
     {
         return $this->isEeaState;
@@ -383,7 +391,8 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -644,6 +653,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

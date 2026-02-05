@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Cases;
 
 use Dvsa\Olcs\Api\Entity\System\RefData;
@@ -24,7 +26,7 @@ class AppealEntityTest extends EntityTester
     /**
      * Tests updating an appeal
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $reason = m::mock(RefData::class);
         $appealDate = '2017-05-10';
@@ -84,7 +86,7 @@ class AppealEntityTest extends EntityTester
     /**
      * Tests existing withdrawn date is removed and new withdrawn date is ignored, when isWithdrawn is set to 'N'
      */
-    public function testUpdateNotWithdrawn()
+    public function testUpdateNotWithdrawn(): void
     {
         $entity = new Entity('appealNo1234');
         $entity->setWithdrawnDate(new \DateTime('2017-05-20'));

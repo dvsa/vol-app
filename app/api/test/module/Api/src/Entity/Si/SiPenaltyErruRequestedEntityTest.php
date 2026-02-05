@@ -44,9 +44,7 @@ class SiPenaltyErruRequestedEntityTest extends EntityTester
         $this->assertEquals($penaltyRequestedIdentifier, $entity->getPenaltyRequestedIdentifier());
     }
 
-    /**
-     * @dataProvider dpHasRequestedPenalties
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasRequestedPenalties')]
     public function testHasAppliedPenalty(ArrayCollection $appliedPenalties, bool $expectedResult): void
     {
         /** @var Entity|m\LegacyMockInterface $entity */
@@ -55,7 +53,7 @@ class SiPenaltyErruRequestedEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $entity->hasAppliedPenalty());
     }
 
-    public function dpHasRequestedPenalties(): array
+    public static function dpHasRequestedPenalties(): array
     {
         return [
             [new ArrayCollection(), false],

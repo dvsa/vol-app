@@ -27,6 +27,7 @@ class LvaVehicleControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return LvaVehicleController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LvaVehicleController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

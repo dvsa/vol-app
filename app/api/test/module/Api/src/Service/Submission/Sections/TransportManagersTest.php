@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication as TmApplicationRepo;
@@ -14,7 +16,7 @@ use Mockery as m;
  * Class TransportManagersTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class TransportManagersTest extends AbstractSubmissionSectionTest
+class TransportManagersTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TransportManagers::class;
 
@@ -23,9 +25,9 @@ class TransportManagersTest extends AbstractSubmissionSectionTest
      *
      * @return array
      */
-    public function sectionTestProvider()
+    public static function sectionTestProvider(): array
     {
-        $case = $this->getCase();
+        $case = static::getCase();
 
         $expectedResult = [
             'data' => [
@@ -80,7 +82,8 @@ class TransportManagersTest extends AbstractSubmissionSectionTest
         ];
     }
 
-    protected function mockSetRepos($sut): void
+    #[\Override]
+    protected function mockSetRepos(mixed $sut): void
     {
         $mockTmLicenceRepo = m::mock(TmLicenceRepo::class);
         $mockLicence = m::mock(Licence::class)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Financial History Status Test
  *
@@ -19,6 +21,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'FinancialHistory';
@@ -31,21 +34,21 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandUnconfirmed()
+    public function testHandleCommandUnconfirmed(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -54,7 +57,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandUnansweredQuestions()
+    public function testHandleCommandUnansweredQuestions(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -63,7 +66,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandShortInsolvencyDetails()
+    public function testHandleCommandShortInsolvencyDetails(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -80,7 +83,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithLongDetails()
+    public function testHandleCommandWithLongDetails(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -97,7 +100,7 @@ class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandWithNos()
+    public function testHandleCommandWithNos(): void
     {
         $this->applicationCompletion->setFinancialHistoryStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

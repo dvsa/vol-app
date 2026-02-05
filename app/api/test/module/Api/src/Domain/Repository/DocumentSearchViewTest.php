@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -9,9 +11,7 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Dvsa\Olcs\Api\Entity\View\DocumentSearchView as DocumentSearchViewEntity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\DocumentSearchView
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DocumentSearchView::class)]
 class DocumentSearchViewTest extends RepositoryTestCase
 {
     public function setUp(): void
@@ -19,7 +19,7 @@ class DocumentSearchViewTest extends RepositoryTestCase
         $this->setUpSut(DocumentSearchViewRepo::class, true);
     }
 
-    public function testFetchListWithoutFilters()
+    public function testFetchListWithoutFilters(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -42,7 +42,7 @@ class DocumentSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchList()
+    public function testFetchList(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -82,7 +82,7 @@ class DocumentSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchListWithShowSelfOnly()
+    public function testFetchListWithShowSelfOnly(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -119,7 +119,7 @@ class DocumentSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchListWithExcludeIrhp()
+    public function testFetchListWithExcludeIrhp(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $this->mockCreateQueryBuilder($mockQb);
@@ -147,7 +147,7 @@ class DocumentSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public function testFetchDistinctListExtensions()
+    public function testFetchDistinctListExtensions(): void
     {
         $mockQb = $this->createMockQb('{QUERY}');
         $mockQb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn(

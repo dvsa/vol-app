@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * ReviveApplication.php
  *
@@ -34,7 +36,7 @@ class ReviveApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithNtu()
+    public function testHandleCommandWithNtu(): void
     {
         $status = m::mock(RefData::class)
             ->shouldReceive('getId')
@@ -72,7 +74,7 @@ class ReviveApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Application 1 has been revived"], $result->getMessages());
     }
 
-    public function testHandleCommandWithWithdrawn()
+    public function testHandleCommandWithWithdrawn(): void
     {
         $status = m::mock(RefData::class)
             ->shouldReceive('getId')

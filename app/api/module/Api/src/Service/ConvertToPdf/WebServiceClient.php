@@ -57,6 +57,7 @@ class WebServiceClient implements ConvertToPdfInterface
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
      */
+    #[\Override]
     public function convert($fileName, $destination)
     {
         $this->getHttpClient()->reset();

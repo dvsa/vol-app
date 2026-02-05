@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Opposition Test Controller
  *
@@ -56,7 +58,7 @@ class OppositionControllerTest extends MockeryTestCase
         parent::setUp();
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $data = [
             'licence' => [
@@ -126,7 +128,7 @@ class OppositionControllerTest extends MockeryTestCase
     /**
      * Tests the generate action
      */
-    public function testGenerateAction()
+    public function testGenerateAction(): void
     {
         $caseId = 12;
         $oppositionId = 123;

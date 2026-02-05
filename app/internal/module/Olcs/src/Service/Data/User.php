@@ -59,6 +59,7 @@ class User extends AbstractDataService implements ListDataInterface
      *
      * @return array
      */
+    #[\Override]
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchUserListData($context);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Permits\Allocate;
 
 use DateTime;
@@ -33,10 +35,8 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         $this->irhpPermitAllocator = new IrhpPermitAllocator($this->irhpPermitRepo);
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
-    public function testAllocatePermitInFirstRange($criteria, $expiryDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
+    public function testAllocatePermitInFirstRange(mixed $criteria, mixed $expiryDate): void
     {
         $pendingStatus = m::mock(RefData::class);
         $this->irhpPermitRepo->shouldReceive('getRefdataReference')
@@ -96,10 +96,8 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
-    public function testFirstRangeFullAllocatePermitInSecondRange($criteria, $expiryDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
+    public function testFirstRangeFullAllocatePermitInSecondRange(mixed $criteria, mixed $expiryDate): void
     {
         $criteria = m::mock(RangeMatchingCriteriaInterface::class);
 
@@ -169,10 +167,8 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpCriteriaAndExpiryDate
-     */
-    public function testExceptionOnAllRangesFull($criteria, $expiryDate)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCriteriaAndExpiryDate')]
+    public function testExceptionOnAllRangesFull(mixed $criteria, mixed $expiryDate): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find range with free permits for irhp permit application 400');
@@ -218,7 +214,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    public function dpCriteriaAndExpiryDate()
+    public static function dpCriteriaAndExpiryDate(): array
     {
         return [
             [m::mock(RangeMatchingCriteriaInterface::class), null],
@@ -227,7 +223,7 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         ];
     }
 
-    private function createMockRange($id, $fromNo, $toNo, $size, DateTime $stockValidTo)
+    private function createMockRange(mixed $id, mixed $fromNo, mixed $toNo, mixed $size, DateTime $stockValidTo): mixed
     {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
         $irhpPermitRange->shouldReceive('getId')

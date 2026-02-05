@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 
 use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
@@ -42,17 +44,17 @@ class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
         ],
     ];
 
-    protected function getSut()
+    protected function getSut(): CreatePsvDiscs
     {
         return new CreatePsvDiscs();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return '';
     }
 
-    public function testExecuteInsert()
+    public function testExecuteInsert(): void
     {
         $this->connection->shouldReceive('quote')->with(1102)->times(4)->andReturn("'1102'");
         $this->connection->shouldReceive('quote')->with(0)->times(4)->andReturn("'0'");
@@ -70,12 +72,12 @@ class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
         $this->assertEquals(100, $this->sut->executeInsert(1102, 4, false));
     }
 
-    public function testExecuteZeroDiscs()
+    public function testExecuteZeroDiscs(): void
     {
         $this->assertEquals(0, $this->sut->executeInsert(1102, 0, false));
     }
 
-    public function testExecuteInsertException()
+    public function testExecuteInsertException(): void
     {
         $this->expectException(RuntimeException::class);
 

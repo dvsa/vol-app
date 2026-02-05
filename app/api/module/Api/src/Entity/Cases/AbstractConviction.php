@@ -41,7 +41,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractConviction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractConviction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -310,7 +310,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -333,7 +334,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the defendant type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getDefendantType()
     {
         return $this->defendantType;
@@ -356,7 +358,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -379,7 +382,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the conviction category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getConvictionCategory()
     {
         return $this->convictionCategory;
@@ -402,7 +406,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -425,7 +430,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -448,7 +454,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -473,7 +480,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getOffenceDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -502,7 +510,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getConvictionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -529,7 +538,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the court
      *
-     * @return string     */
+     * @return string
+     */
     public function getCourt()
     {
         return $this->court;
@@ -552,7 +562,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the penalty
      *
-     * @return string     */
+     * @return string
+     */
     public function getPenalty()
     {
         return $this->penalty;
@@ -575,7 +586,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the costs
      *
-     * @return string     */
+     * @return string
+     */
     public function getCosts()
     {
         return $this->costs;
@@ -598,7 +610,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the msi
      *
-     * @return string     */
+     * @return string
+     */
     public function getMsi()
     {
         return $this->msi;
@@ -621,7 +634,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the is dealt with
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDealtWith()
     {
         return $this->isDealtWith;
@@ -644,7 +658,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the is declared
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsDeclared()
     {
         return $this->isDeclared;
@@ -669,7 +684,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -696,7 +712,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the person firstname
      *
-     * @return string     */
+     * @return string
+     */
     public function getPersonFirstname()
     {
         return $this->personFirstname;
@@ -719,7 +736,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the person lastname
      *
-     * @return string     */
+     * @return string
+     */
     public function getPersonLastname()
     {
         return $this->personLastname;
@@ -742,7 +760,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -765,7 +784,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the taken into consideration
      *
-     * @return string     */
+     * @return string
+     */
     public function getTakenIntoConsideration()
     {
         return $this->takenIntoConsideration;
@@ -788,7 +808,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the category text
      *
-     * @return string     */
+     * @return string
+     */
     public function getCategoryText()
     {
         return $this->categoryText;
@@ -811,7 +832,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the operator name
      *
-     * @return string     */
+     * @return string
+     */
     public function getOperatorName()
     {
         return $this->operatorName;
@@ -834,7 +856,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -857,7 +880,8 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -866,6 +890,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

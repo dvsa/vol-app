@@ -27,6 +27,7 @@ final class UpdateAnnualTestHistory extends AbstractCommandHandler implements Tr
      * @param CommandInterface $command
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateAnnualTestHistoryCmd $command **/

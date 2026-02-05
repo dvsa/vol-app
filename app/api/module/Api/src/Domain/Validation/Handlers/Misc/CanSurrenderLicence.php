@@ -10,6 +10,7 @@ class CanSurrenderLicence extends AbstractHandler implements AuthAwareInterface
 {
     use AuthAwareTrait;
 
+    #[\Override]
     public function isValid($dto): bool
     {
         return $this->canAccessLicence($dto->getId()) && $this->isLicenceSurrenderable($dto->getId());

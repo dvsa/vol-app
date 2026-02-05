@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Application Business Details Review Service Test
  *
@@ -39,10 +41,8 @@ class ApplicationBusinessDetailsReviewServiceTest extends MockeryTestCase
         $this->sut = new ApplicationBusinessDetailsReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider providerGetConfigFromData
-     */
-    public function testGetConfigFromData($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerGetConfigFromData')]
+    public function testGetConfigFromData(mixed $data, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
@@ -52,7 +52,7 @@ class ApplicationBusinessDetailsReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public function providerGetConfigFromData()
+    public static function providerGetConfigFromData(): array
     {
         return [
             'Sole Trader (Without trading names)' => [

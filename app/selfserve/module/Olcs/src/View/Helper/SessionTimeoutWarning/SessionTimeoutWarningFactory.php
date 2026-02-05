@@ -50,6 +50,7 @@ class SessionTimeoutWarningFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SessionTimeoutWarning
     {
         $config = $container->get('Config')['session-timeout-warning-modal-helper'] ?? [];

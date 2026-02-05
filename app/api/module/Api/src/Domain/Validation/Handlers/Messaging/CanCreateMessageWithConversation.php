@@ -27,6 +27,7 @@ class CanCreateMessageWithConversation extends AbstractHandler implements AuthAw
      *
      * @return bool
      */
+    #[\Override]
     public function isValid($dto)
     {
         // Exit early if no permission

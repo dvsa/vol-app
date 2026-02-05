@@ -46,6 +46,7 @@ class TmDeclarationController extends AbstractDeclarationController
         );
     }
 
+    #[\Override]
     protected function getSignAsRole(): string
     {
         return $this->tma['isOwner'] === "N" ? RefData::TMA_SIGN_AS_TM : RefData::TMA_SIGN_AS_TM_OP;
@@ -56,6 +57,7 @@ class TmDeclarationController extends AbstractDeclarationController
      *
      * @return string
      */
+    #[\Override]
     protected function getBackLink(): string
     {
         return $this->url()->fromRoute(
@@ -71,6 +73,7 @@ class TmDeclarationController extends AbstractDeclarationController
     /**
      * @return \Common\Service\Cqrs\Response
      */
+    #[\Override]
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response
     {
         $response = $this->handleCommand(
@@ -82,6 +85,7 @@ class TmDeclarationController extends AbstractDeclarationController
     /**
      * @return string
      */
+    #[\Override]
     protected function getSubmitActionLabel(): string
     {
         $submitText = $this->tma['isOwner'] === "Y" ? 'submit' : 'submit-for-operator-approval';
@@ -111,6 +115,7 @@ class TmDeclarationController extends AbstractDeclarationController
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     protected function getTranslatedDeclarationMarkupParams(TranslationHelperService $translationHelper)
     {
         $translated = $translationHelper->translate(

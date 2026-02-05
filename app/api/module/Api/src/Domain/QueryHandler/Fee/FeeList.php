@@ -24,6 +24,7 @@ class FeeList extends AbstractQueryHandler
 
     protected $extraRepos = ['Licence', 'Application'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var FeeRepo $repo */
@@ -70,6 +71,7 @@ class FeeList extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

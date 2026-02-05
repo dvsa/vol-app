@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * UpdateDeclarationTest
  *
@@ -37,7 +39,8 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'int_sts_requested',
@@ -47,7 +50,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandNoInterimParam()
+    public function testHandleCommandNoInterimParam(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -94,7 +97,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('sig_physical_signature', $application->getSignatureType());
     }
 
-    public function testHandleCommandInterimNo()
+    public function testHandleCommandInterimNo(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -144,7 +147,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(null, $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesExistingFee()
+    public function testHandleCommandInterimYesExistingFee(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -200,7 +203,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesExistingFeeVar()
+    public function testHandleCommandInterimYesExistingFeeVar(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -266,7 +269,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    public function testHandleCommandInterimYesNoFee()
+    public function testHandleCommandInterimYesNoFee(): void
     {
         // Params
         $command = UpdateDeclarationCmd::create(
@@ -320,7 +323,7 @@ class UpdateDeclarationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('SOME REASON', $application->getInterimReason());
     }
 
-    protected function getApplication($command)
+    protected function getApplication(mixed $command): mixed
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId($command->getId());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Email;
 
 use Dvsa\Olcs\Api\Domain\Command\Email\SendEcmtShortTermAutomaticallyWithdrawn
@@ -15,7 +17,7 @@ use Mockery as m;
 /**
  * Test the short term permit automatically withdrawn email
  */
-class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTest
+class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -32,7 +34,7 @@ class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTest
     /**
      * test handle command
      */
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $paymentDeadlineNumDays = 10;
 
@@ -81,7 +83,7 @@ class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTest
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public function testHandleCommandForCreatedByInternalUser()
+    public function testHandleCommandForCreatedByInternalUser(): void
     {
         $paymentDeadlineNumDays = 10;
 

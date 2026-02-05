@@ -31,6 +31,7 @@ class Workshop extends AbstractRepository
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryBuilder
      */
+    #[\Override]
     protected function buildDefaultQuery(QueryBuilder $qb, $id)
     {
         return parent::buildDefaultQuery($qb, $id)->withContactDetails();
@@ -44,6 +45,7 @@ class Workshop extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     public function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query instanceof \Dvsa\Olcs\Transfer\Query\Licence\Safety) {

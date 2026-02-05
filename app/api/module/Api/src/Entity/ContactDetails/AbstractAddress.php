@@ -39,7 +39,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractAddress implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractAddress implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -271,7 +271,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -294,7 +295,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the admin area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea
+     */
     public function getAdminArea()
     {
         return $this->adminArea;
@@ -317,7 +319,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the country code
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getCountryCode()
     {
         return $this->countryCode;
@@ -340,7 +343,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -363,7 +367,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -386,7 +391,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the uprn
      *
-     * @return int     */
+     * @return int
+     */
     public function getUprn()
     {
         return $this->uprn;
@@ -409,7 +415,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the paon start
      *
-     * @return string     */
+     * @return string
+     */
     public function getPaonStart()
     {
         return $this->paonStart;
@@ -432,7 +439,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the paon end
      *
-     * @return string     */
+     * @return string
+     */
     public function getPaonEnd()
     {
         return $this->paonEnd;
@@ -455,7 +463,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line2
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine2()
     {
         return $this->addressLine2;
@@ -478,7 +487,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the saon start
      *
-     * @return string     */
+     * @return string
+     */
     public function getSaonStart()
     {
         return $this->saonStart;
@@ -501,7 +511,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the saon end
      *
-     * @return string     */
+     * @return string
+     */
     public function getSaonEnd()
     {
         return $this->saonEnd;
@@ -524,7 +535,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line1
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine1()
     {
         return $this->addressLine1;
@@ -547,7 +559,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line3
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine3()
     {
         return $this->addressLine3;
@@ -570,7 +583,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the address line4
      *
-     * @return string     */
+     * @return string
+     */
     public function getAddressLine4()
     {
         return $this->addressLine4;
@@ -593,7 +607,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the town
      *
-     * @return string     */
+     * @return string
+     */
     public function getTown()
     {
         return $this->town;
@@ -616,7 +631,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the postcode
      *
-     * @return string     */
+     * @return string
+     */
     public function getPostcode()
     {
         return $this->postcode;
@@ -639,7 +655,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -662,7 +679,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -685,7 +703,8 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -757,6 +776,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

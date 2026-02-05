@@ -23,6 +23,7 @@ class CanAccessDocument extends AbstractCanAccessEntity
     /**
      * @throws NotFoundException
      */
+    #[\Override]
     public function isValid($entityId): bool
     {
         if ($this->getUser()->hasRoles([Entity\User\Role::ROLE_OPERATOR_TM])) {

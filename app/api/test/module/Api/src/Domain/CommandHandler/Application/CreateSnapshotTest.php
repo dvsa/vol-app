@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Create Snapshot Test
  *
@@ -38,20 +40,18 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testHandleCommand(
-        $isVariation,
-        $isGoods,
-        $isRealUpgrade,
-        $isSpecialRestricted,
-        $event,
-        $fileName,
-        $description,
-        $subCategory,
-        $isExternal
-    ) {
+        mixed $isVariation,
+        mixed $isGoods,
+        mixed $isRealUpgrade,
+        mixed $isSpecialRestricted,
+        mixed $event,
+        mixed $fileName,
+        mixed $description,
+        mixed $subCategory,
+        mixed $isExternal
+    ): void {
         $isInternal = !$isExternal;
         $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('isGranted')
@@ -120,7 +120,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithoutEvent()
+    public function testHandleCommandWithoutEvent(): void
     {
         $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('isGranted')
@@ -157,7 +157,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [
@@ -166,7 +166,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'GV79 Application 111 Snapshot Grant.html',
+                'fileName' => 'GV79 Application 111 Snapshot Grant.html',
                 'description' => 'GV79 Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -177,7 +177,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => true,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'PSV356 Application 111 Snapshot Grant.html',
+                'fileName' => 'PSV356 Application 111 Snapshot Grant.html',
                 'description' => 'PSV356 Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -188,7 +188,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'PSV421 Application 111 Snapshot Grant.html',
+                'fileName' => 'PSV421 Application 111 Snapshot Grant.html',
                 'description' => 'PSV421 Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -199,7 +199,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'GV80A Application 111 Snapshot Grant.html',
+                'fileName' => 'GV80A Application 111 Snapshot Grant.html',
                 'description' => 'GV80A Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -210,7 +210,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => false,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'GV81 Application 111 Snapshot Grant.html',
+                'fileName' => 'GV81 Application 111 Snapshot Grant.html',
                 'description' => 'GV81 Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -221,7 +221,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'PSV431A Application 111 Snapshot Grant.html',
+                'fileName' => 'PSV431A Application 111 Snapshot Grant.html',
                 'description' => 'PSV431A Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -232,7 +232,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => false,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_GRANT,
-                'filename' => 'PSV431 Application 111 Snapshot Grant.html',
+                'fileName' => 'PSV431 Application 111 Snapshot Grant.html',
                 'description' => 'PSV431 Application 111 Snapshot (at grant/valid)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -243,7 +243,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_SUBMIT,
-                'filename' => 'GV79 Application 111 Snapshot Submit.html',
+                'fileName' => 'GV79 Application 111 Snapshot Submit.html',
                 'description' => 'GV79 Application 111 Snapshot (at submission)',
                 'subCategory' => 15,
                 'isExternal' => true,
@@ -254,7 +254,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_REFUSE,
-                'filename' => 'GV79 Application 111 Snapshot Refuse.html',
+                'fileName' => 'GV79 Application 111 Snapshot Refuse.html',
                 'description' => 'GV79 Application 111 Snapshot (at refuse)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -265,7 +265,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_WITHDRAW,
-                'filename' => 'GV79 Application 111 Snapshot Withdraw.html',
+                'fileName' => 'GV79 Application 111 Snapshot Withdraw.html',
                 'description' => 'GV79 Application 111 Snapshot (at withdraw)',
                 'subCategory' => 14,
                 'isExternal' => false,
@@ -276,7 +276,7 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
                 'isRealUpgrade' => true,
                 'isSpecialRestricted' => false,
                 'event' => Cmd::ON_NTU,
-                'filename' => 'GV79 Application 111 Snapshot NTU.html',
+                'fileName' => 'GV79 Application 111 Snapshot NTU.html',
                 'description' => 'GV79 Application 111 Snapshot (at NTU)',
                 'subCategory' => 14,
                 'isExternal' => false,

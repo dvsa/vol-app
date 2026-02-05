@@ -33,6 +33,7 @@ final class Create extends AbstractCommandHandler
      * @return Result
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

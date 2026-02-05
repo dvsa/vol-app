@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure;
 
 use Dvsa\Olcs\Api\Service\Qa\Structure\TranslateableText;
@@ -54,7 +56,7 @@ class TranslateableTextTest extends MockeryTestCase
         $this->translateableText->addParameter($this->parameter2);
     }
 
-    public function testGetRepresentation()
+    public function testGetRepresentation(): void
     {
         $expectedRepresentation = [
             'key' => $this->key,
@@ -70,7 +72,7 @@ class TranslateableTextTest extends MockeryTestCase
         );
     }
 
-    public function testSetKey()
+    public function testSetKey(): void
     {
         $newKey = 'new-key';
 
@@ -90,7 +92,7 @@ class TranslateableTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         $this->assertEquals(
             $this->key,
@@ -98,7 +100,7 @@ class TranslateableTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetParameter()
+    public function testGetParameter(): void
     {
         $this->assertSame(
             $this->parameter1,
@@ -111,7 +113,7 @@ class TranslateableTextTest extends MockeryTestCase
         );
     }
 
-    public function testGetParameterBadIndex()
+    public function testGetParameterBadIndex(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No parameter exists at index 4');

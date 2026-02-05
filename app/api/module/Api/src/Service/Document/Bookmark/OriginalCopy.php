@@ -12,11 +12,13 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\CommunityLicBundle as Qry;
  */
 class OriginalCopy extends DynamicBookmark
 {
+    #[\Override]
     public function getQuery(array $data)
     {
         return Qry::create(['id' => $data['communityLic']]);
     }
 
+    #[\Override]
     public function render()
     {
         if ($this->data['issueNo'] === 0) {

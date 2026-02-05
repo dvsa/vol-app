@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * VI Trading Name view test
  *
@@ -28,7 +30,7 @@ class ViTnmViewTest extends RepositoryTestCase
         $this->setUpSut(ViTnmViewRepo::class);
     }
 
-    public function testFetchDiscsToPrint()
+    public function testFetchDiscsToPrint(): void
     {
         $mockQb = m::mock(QueryBuilder::class)
             ->shouldReceive('select')
@@ -58,7 +60,7 @@ class ViTnmViewTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchForExport());
     }
 
-    public function testClearTradingNamesViIndicators()
+    public function testClearTradingNamesViIndicators(): void
     {
         $params = [['tradingNameId' => 1]];
 
@@ -66,7 +68,7 @@ class ViTnmViewTest extends RepositoryTestCase
         $this->sut->clearTradingNamesViIndicators($params);
     }
 
-    public function testClearTradingNamesViIndicatorsException()
+    public function testClearTradingNamesViIndicatorsException(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\RuntimeException::class);
 

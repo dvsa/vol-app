@@ -12,6 +12,7 @@ abstract class AbstractQuestionAnswerData extends SingleValueAbstract
      *
      * @return null|string
      */
+    #[\Override]
     protected function getValue()
     {
         return $this->data['questionAnswerData'][static::FIELD]['answer'] ?? null;

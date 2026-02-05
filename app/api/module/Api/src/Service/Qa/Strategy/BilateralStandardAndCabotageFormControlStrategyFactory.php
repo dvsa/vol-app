@@ -15,6 +15,7 @@ class BilateralStandardAndCabotageFormControlStrategyFactory implements FactoryI
      * @param array|null $options
      * @return BaseFormControlStrategy
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BaseFormControlStrategy
     {
         return new BaseFormControlStrategy(

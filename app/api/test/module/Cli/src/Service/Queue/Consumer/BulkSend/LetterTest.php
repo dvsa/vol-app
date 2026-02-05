@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer\BulkSend;
 
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
@@ -15,7 +17,7 @@ class LetterTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $item = new QueueEntity();
         $item->setOptions(

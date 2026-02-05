@@ -26,6 +26,7 @@ final class UpdateShortNotice extends AbstractCommandHandler implements Transact
      * @return Result
      * @throws \Exception
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var UpdateShortNoticeCmd $command */

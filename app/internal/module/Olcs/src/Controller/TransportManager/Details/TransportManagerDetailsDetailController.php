@@ -61,6 +61,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
+    #[\Override]
     public function getLeftView()
     {
         $tmId = $this->params()->fromRoute('transportManager');
@@ -74,6 +75,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
         return null;
     }
 
+    #[\Override]
     public function indexAction()
     {
         $tmId = $this->params()->fromRoute('transportManager');
@@ -119,6 +121,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
      * @param  array  $data
      * @return bool
      */
+    #[\Override]
     public function isButtonPressed($button, $data = null)
     {
         $request = $this->getRequest();

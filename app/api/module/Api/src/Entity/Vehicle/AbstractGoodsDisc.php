@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -204,7 +204,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -227,7 +228,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the licence vehicle
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle
+     */
     public function getLicenceVehicle()
     {
         return $this->licenceVehicle;
@@ -250,7 +252,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -273,7 +276,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -296,7 +300,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the disc no
      *
-     * @return string     */
+     * @return string
+     */
     public function getDiscNo()
     {
         return $this->discNo;
@@ -321,7 +326,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getIssuedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -350,7 +356,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getCeasedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -377,7 +384,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the is copy
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsCopy()
     {
         return $this->isCopy;
@@ -400,7 +408,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the is interim
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsInterim()
     {
         return $this->isInterim;
@@ -423,7 +432,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the reprint required
      *
-     * @return string     */
+     * @return string
+     */
     public function getReprintRequired()
     {
         return $this->reprintRequired;
@@ -446,7 +456,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the is printing
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsPrinting()
     {
         return $this->isPrinting;
@@ -469,7 +480,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -492,7 +504,8 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -501,6 +514,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

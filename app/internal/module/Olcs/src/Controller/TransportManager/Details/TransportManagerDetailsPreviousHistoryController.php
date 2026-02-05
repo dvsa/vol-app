@@ -15,6 +15,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     protected $navigationId = 'transport_manager_details_previous_history';
 
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -28,6 +29,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      *
      * @return ViewModel|Response
      */
+    #[\Override]
     public function indexAction()
     {
         /**
@@ -158,7 +160,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             $form = $this->populateEditForm($form, $formName);
         }
 
-        $this->formPost($form, [$this, 'processForm']);
+        $this->formPost($form, $this->processForm(...));
 
         if ($this->getResponse()->getContent() !== "") {
             return $this->getResponse();

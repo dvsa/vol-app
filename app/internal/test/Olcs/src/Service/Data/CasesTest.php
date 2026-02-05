@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\ResourceNotFoundException;
@@ -24,7 +26,7 @@ class CasesTest extends AbstractDataServiceTestCase
         $this->sut = new Cases($this->abstractDataServiceServices);
     }
 
-    public function testFetchData()
+    public function testFetchData(): void
     {
         $id = 123;
         $caseData = ['id' => $id];
@@ -52,7 +54,7 @@ class CasesTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(ResourceNotFoundException::class);
 

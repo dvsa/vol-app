@@ -25,6 +25,7 @@ class CreateCompanySubsidiary extends AbstractCompanySubsidiary implements AuthA
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $licenceId = $command->getLicence();

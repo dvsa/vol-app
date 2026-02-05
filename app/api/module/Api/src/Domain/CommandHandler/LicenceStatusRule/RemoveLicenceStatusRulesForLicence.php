@@ -25,6 +25,7 @@ final class RemoveLicenceStatusRulesForLicence extends AbstractCommandHandler im
 
     protected $extraRepos = ['Licence'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $rules = $this->getRepo()->fetchForLicence($command->getLicence());

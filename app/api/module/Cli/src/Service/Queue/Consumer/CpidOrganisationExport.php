@@ -39,6 +39,7 @@ class CpidOrganisationExport extends AbstractConsumer
      *
      * @return string
      */
+    #[\Override]
     public function processMessage(QueueEntity $item)
     {
         $options = (array)json_decode($item->getOptions());

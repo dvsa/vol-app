@@ -1,15 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SlaIndicator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SlaIndicatorTest
- *
- * @package OlcsTest\View\Helper
- */
-class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
+class SlaIndicatorTest extends TestCase
 {
     public const INACTIVE_HTML = '<span class="status grey">Inactive</span>';
     public const FAIL_HTML = '<span class="status red">Fail</span>';
@@ -18,24 +17,23 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests the invoke method.
      */
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $sut = new SlaIndicator();
 
-        $this->assertInstanceOf(\Olcs\View\Helper\SlaIndicator::class, $sut);
+        $this->assertInstanceOf(SlaIndicator::class, $sut);
         $this->assertSame($sut, $sut());
     }
 
     /**
-     * @dataProvider provideHasTargetBeenMetCases
      *
      * @param $date
      * @param $target
      * @param $result
-     *
      * @return void
      */
-    public function testHasTargetBeenMet($date, $target, $result)
+    #[DataProvider('provideHasTargetBeenMetCases')]
+    public function testHasTargetBeenMet(mixed $date, mixed $target, mixed $result): void
     {
         $sut = new SlaIndicator();
         $this->assertSame(
@@ -44,7 +42,7 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provideHasTargetBeenMetCases()
+    public static function provideHasTargetBeenMetCases(): array
     {
         return [
             [
@@ -81,14 +79,13 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider provideGenerateItemCases
      *
      * @param      $queryResult
      * @param bool $html
-     *
      * @return void
      */
-    public function testGenerateItem($queryResult, $html)
+    #[DataProvider('provideGenerateItemCases')]
+    public function testGenerateItem(mixed $queryResult, mixed $html): void
     {
         $sut = new SlaIndicator();
         $this->assertSame(
@@ -101,9 +98,9 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function provideGenerateItemCases()
+    public static function provideGenerateItemCases(): \Generator
     {
-        foreach ($this->provideHasTargetBeenMetCases() as [$date, $target, $result]) {
+        foreach (self::provideHasTargetBeenMetCases() as [$date, $target, $result]) {
             yield [
                 [
                     'date' => $date,

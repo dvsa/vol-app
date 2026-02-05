@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\PreviousConviction;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\PreviousConviction\GetList as QueryHandler;
@@ -24,7 +26,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['transportManager' => 1]);
 

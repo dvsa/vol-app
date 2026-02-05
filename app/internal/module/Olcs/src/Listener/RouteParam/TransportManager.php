@@ -104,11 +104,12 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'transportManager',
-            [$this, 'onTransportManager'],
+            $this->onTransportManager(...),
             $priority
         );
     }
@@ -209,6 +210,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));

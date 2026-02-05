@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Date Helper Service Test
  *
@@ -26,33 +28,31 @@ class DateTest extends MockeryTestCase
     {
         $this->sut = new Date();
 
-        $logWriter = new \Laminas\Log\Writer\Mock();
-        $logger = new \Laminas\Log\Logger();
-        $logger->addWriter($logWriter);
-
+        $logger = new \Dvsa\OlcsTest\SafeLogger();
+        $logger->addWriter(new \Laminas\Log\Writer\Mock());
         Logger::setLogger($logger);
     }
 
-    public function testGetDateWithNoParams()
+    public function testGetDateWithNoParams(): void
     {
         // as much as I don't like computed expectations in tests,
         // there's no real way round it here...
         $this->assertEquals(date('Y-m-d'), $this->sut->getDate());
     }
 
-    public function testGetDateWithParams()
+    public function testGetDateWithParams(): void
     {
         // as much as I don't like computed expectations in tests,
         // there's no real way round it here...
         $this->assertEquals(date('m-d'), $this->sut->getDate('m-d'));
     }
 
-    public function testGetDateObject()
+    public function testGetDateObject(): void
     {
         $this->assertInstanceOf('DateTime', $this->sut->getDateObject());
     }
 
-    public function testGetDateObjectFromArray()
+    public function testGetDateObjectFromArray(): void
     {
         $obj = $this->sut->getDateObjectFromArray(
             [
@@ -66,7 +66,7 @@ class DateTest extends MockeryTestCase
         $this->assertEquals('2015-01-07', $obj->format('Y-m-d'));
     }
 
-    public function testCalculateDate()
+    public function testCalculateDate(): void
     {
         $date = new \DateTime('2015-01-01');
 

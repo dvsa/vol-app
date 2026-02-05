@@ -46,6 +46,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application ApplicationEntity */

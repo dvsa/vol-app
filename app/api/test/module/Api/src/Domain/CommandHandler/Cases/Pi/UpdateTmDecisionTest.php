@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Decision Test
  */
@@ -33,7 +35,8 @@ class UpdateTmDecisionTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'tc_r_dhtru'
@@ -51,7 +54,7 @@ class UpdateTmDecisionTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 11;
         $version = 22;
@@ -115,7 +118,7 @@ class UpdateTmDecisionTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(Result::class, $result);
     }
 
-    public function testHandleCommandNoHearings()
+    public function testHandleCommandNoHearings(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 

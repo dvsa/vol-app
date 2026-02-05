@@ -17,6 +17,7 @@ class DataRetentionExport implements MapperInterface
      *
      * @return array
      */
+    #[\Override]
     public static function mapFromResult(array $data)
     {
         return $data;

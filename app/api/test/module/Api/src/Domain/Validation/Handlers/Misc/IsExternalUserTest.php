@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Is External User Test
  */
@@ -29,7 +31,7 @@ class IsExternalUserTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    public function testIsValidExternal()
+    public function testIsValidExternal(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -39,7 +41,7 @@ class IsExternalUserTest extends AbstractHandlerTestCase
         $this->assertTrue($this->sut->isValid($dto));
     }
 
-    public function testIsValidExternalFail()
+    public function testIsValidExternalFail(): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);

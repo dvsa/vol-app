@@ -21,6 +21,7 @@ class VariationDiscsReviewService extends AbstractReviewService
      * @param array $data
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         return ['freetext' => $this->translate('variation-review-discs-change')];

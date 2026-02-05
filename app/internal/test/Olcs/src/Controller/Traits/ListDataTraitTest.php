@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Traits;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Olcs\Controller\Traits\ListDataTrait
- */
+#[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\ListDataTrait::class)]
 class ListDataTraitTest extends MockeryTestCase
 {
     /**
@@ -25,7 +25,7 @@ class ListDataTraitTest extends MockeryTestCase
         $this->sut->setHandleQueryResponse($this->mockResponse);
     }
 
-    public function testGetListDataEnforcementArea()
+    public function testGetListDataEnforcementArea(): void
     {
         $this->mockResponse->shouldReceive('isOk')->andReturn(true);
         $this->mockResponse->shouldReceive('getResult')->andReturn(
@@ -42,7 +42,7 @@ class ListDataTraitTest extends MockeryTestCase
         $this->assertSame(['' => 'Option1', 'V15' => 'Foo', 'X16' => 'Bar'], $result);
     }
 
-    public function testGetListDataEnforcementAreaError()
+    public function testGetListDataEnforcementAreaError(): void
     {
         $this->mockResponse->shouldReceive('isOk')->andReturn(false);
 
@@ -51,14 +51,14 @@ class ListDataTraitTest extends MockeryTestCase
         $this->assertSame([], $result);
     }
 
-    public function testGetListDataOptionsApiErr()
+    public function testGetListDataOptionsApiErr(): void
     {
         $this->mockResponse->shouldReceive('isOk')->andReturn(false);
 
         static::assertEquals([], $this->sut->getListDataUser());
     }
 
-    public function testGetListDataOptions()
+    public function testGetListDataOptions(): void
     {
         $respResult = [
             'results' => [

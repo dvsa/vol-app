@@ -17,6 +17,7 @@ final class UpdateDeclarationsInternalStatus extends AbstractUpdateStatus
 
     protected $section = 'DeclarationsInternal';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return $application->getAuthSignature();

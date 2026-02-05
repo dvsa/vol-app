@@ -25,6 +25,7 @@ final class CreateS4 extends AbstractCommandHandler
 {
     protected $repoServiceName = 'S4';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $s4 = new S4($command->getApplication(), $command->getLicence());

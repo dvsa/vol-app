@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
@@ -8,9 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Task
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Task::class)]
 class TaskTest extends RepositoryTestCase
 {
     /** @var m\MockInterface | Repository\Task */
@@ -21,7 +21,7 @@ class TaskTest extends RepositoryTestCase
         $this->setUpSut(Repository\Task::class);
     }
 
-    public function testFetchByOrganisation()
+    public function testFetchByOrganisation(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -39,7 +39,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByTransportManager()
+    public function testFetchByTransportManager(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -57,7 +57,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByUser()
+    public function testFetchByUser(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -75,7 +75,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchByUserWithOpenOnly()
+    public function testFetchByUserWithOpenOnly(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -93,7 +93,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForTmCaseDecision()
+    public function testFetchForTmCaseDecision(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -117,7 +117,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFetchForAssignedToSubmission()
+    public function testFetchForAssignedToSubmission(): void
     {
         $qb = $this->createMockQb('BLAH');
 
@@ -140,7 +140,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public function testFlagUrgentsTasks()
+    public function testFlagUrgentsTasks(): void
     {
         $queryResponse = m::mock();
         $queryResponse->shouldReceive('fetchOne')->once()->andReturn(65);
@@ -157,7 +157,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertSame(65, $result);
     }
 
-    public function testGetTeamReferenceNull()
+    public function testGetTeamReferenceNull(): void
     {
         $userId = 6555;
 
@@ -167,7 +167,7 @@ class TaskTest extends RepositoryTestCase
         static::assertNull($this->sut->getTeamReference(null, null));
     }
 
-    public function testGetTeamReferenceByTeam()
+    public function testGetTeamReferenceByTeam(): void
     {
         $teamId = 999;
 
@@ -176,7 +176,7 @@ class TaskTest extends RepositoryTestCase
         static::assertEquals('EXPECT', $this->sut->getTeamReference($teamId, null));
     }
 
-    public function testGetTeamReferenceByUser()
+    public function testGetTeamReferenceByUser(): void
     {
         $userId = 666;
 
@@ -192,7 +192,7 @@ class TaskTest extends RepositoryTestCase
         static::assertEquals('EXPECT', $this->sut->getTeamReference(null, $userId));
     }
 
-    public function testFetchByAppIdAndDescription()
+    public function testFetchByAppIdAndDescription(): void
     {
         $this->setUpSut(Repository\Task::class);
 
@@ -221,7 +221,7 @@ class TaskTest extends RepositoryTestCase
         $this->assertEquals(['result'], $this->sut->fetchByAppIdAndDescription(1, 'foo'));
     }
 
-    public function testFetchOpenedTasksForLicences()
+    public function testFetchOpenedTasksForLicences(): void
     {
         $licenceIds = [];
         $categoryId = 1;
@@ -279,7 +279,7 @@ class TaskTest extends RepositoryTestCase
         );
     }
 
-    public function testFetchOpenTasksForSurrender()
+    public function testFetchOpenTasksForSurrender(): void
     {
         $surrenderId = 1;
         $qb = m::mock(QueryBuilder::class);

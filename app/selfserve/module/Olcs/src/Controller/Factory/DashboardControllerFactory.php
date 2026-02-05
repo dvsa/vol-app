@@ -20,6 +20,7 @@ class DashboardControllerFactory implements FactoryInterface
      * @param array|null $options
      * @return DashboardController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DashboardController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

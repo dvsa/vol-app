@@ -22,6 +22,7 @@ class AppendixSectionRenderer extends AbstractSectionRenderer
      * @return string HTML output
      * @throws \InvalidArgumentException if entity is not supported
      */
+    #[\Override]
     public function render(object $entity, array $context = []): string
     {
         if (!$this->supports($entity)) {
@@ -58,6 +59,7 @@ class AppendixSectionRenderer extends AbstractSectionRenderer
      * @param object $entity
      * @return bool
      */
+    #[\Override]
     public function supports(object $entity): bool
     {
         return $entity instanceof LetterInstanceAppendix;

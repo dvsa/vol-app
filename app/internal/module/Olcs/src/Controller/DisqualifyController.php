@@ -27,6 +27,7 @@ class DisqualifyController extends AbstractController
      *
      * @return ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $organisationId = (int)$this->params()->fromRoute('organisation');

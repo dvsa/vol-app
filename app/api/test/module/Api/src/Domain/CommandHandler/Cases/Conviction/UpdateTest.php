@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Conviction Test
  */
@@ -34,7 +36,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'conv_c_cat_1',
@@ -50,7 +53,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 150;
         $version = 2;
@@ -158,7 +161,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedResult, $result->toArray());
     }
 
-    public function testHandleCommandWithoutConvictionCategory()
+    public function testHandleCommandWithoutConvictionCategory(): void
     {
         $id = 150;
         $version = 2;

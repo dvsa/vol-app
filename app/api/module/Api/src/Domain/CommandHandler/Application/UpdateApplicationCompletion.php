@@ -72,6 +72,7 @@ final class UpdateApplicationCompletion extends AbstractCommandHandler implement
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $application Application  */

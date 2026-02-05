@@ -32,6 +32,7 @@ class DocTemplateSearchView extends AbstractReadonlyRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         if ($query->getCategory() !== null) {

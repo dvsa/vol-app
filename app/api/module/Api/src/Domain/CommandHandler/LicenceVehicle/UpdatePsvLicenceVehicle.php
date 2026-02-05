@@ -31,13 +31,14 @@ final class UpdatePsvLicenceVehicle extends AbstractCommandHandler implements Tr
 {
     use AuthAwareTrait;
 
-    public const ERR_PSV_VE_REMOVED_1 = 'ERR_PSV_VE_REMOVED_1';
+    public const string ERR_PSV_VE_REMOVED_1 = 'ERR_PSV_VE_REMOVED_1';
 
     protected $repoServiceName = 'LicenceVehicle';
 
     /**
      * @param Cmd $command
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var LicenceVehicle $licenceVehicle */

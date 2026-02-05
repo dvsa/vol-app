@@ -27,6 +27,7 @@ final class UpdateSi extends AbstractCommandHandler
      * @return Result
      * @throws Exception\ValidationException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

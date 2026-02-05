@@ -17,6 +17,7 @@ final class PreviousApplicationPublicationNo extends AbstractContext
 {
     private static $bundle = [];
 
+    #[\Override]
     public function provide(PublicationLink $publication, \ArrayObject $context)
     {
         $params = [

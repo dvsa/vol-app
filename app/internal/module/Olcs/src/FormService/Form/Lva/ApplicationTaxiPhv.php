@@ -29,6 +29,7 @@ class ApplicationTaxiPhv extends CommonTaxiPhv
      *
      * @return void
      */
+    #[\Override]
     public function alterForm($form, $params = [])
     {
         parent::alterForm($form, $params);

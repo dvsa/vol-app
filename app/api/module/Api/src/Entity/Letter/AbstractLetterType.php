@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -186,7 +186,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -209,7 +210,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the master template
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate
+     */
     public function getMasterTemplate()
     {
         return $this->masterTemplate;
@@ -232,7 +234,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the letter test data
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTestData     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterTestData
+     */
     public function getLetterTestData()
     {
         return $this->letterTestData;
@@ -255,7 +258,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\Category     */
+     * @return \Dvsa\Olcs\Api\Entity\System\Category
+     */
     public function getCategory()
     {
         return $this->category;
@@ -278,7 +282,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the sub category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory     */
+     * @return \Dvsa\Olcs\Api\Entity\System\SubCategory
+     */
     public function getSubCategory()
     {
         return $this->subCategory;
@@ -301,7 +306,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -324,7 +330,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -347,7 +354,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -370,7 +378,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -393,7 +402,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the is active
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsActive()
     {
         return $this->isActive;
@@ -416,7 +426,8 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -425,6 +436,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

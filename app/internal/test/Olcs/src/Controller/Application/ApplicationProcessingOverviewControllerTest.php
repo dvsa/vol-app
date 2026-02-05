@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Application\Processing;
 
 use Common\Service\Data\PluginManager as DataServiceManager;
@@ -21,9 +23,10 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
 {
-    public function testIndexActionRedirects()
+    public function testIndexActionRedirects(): void
     {
         $controller = $this->getController('index');
 
@@ -36,7 +39,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $controller->indexAction();
     }
 
-    private function getController($action)
+    private function getController(mixed $action): ApplicationProcessingOverviewController
     {
         $mockScriptFactory = m::mock(ScriptFactory::class);
         $mockFormHelper = m::mock(FormHelperService::class);
@@ -75,7 +78,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $event->setRouter($router);
         $event->setRouteMatch($routeMatch);
 
-        $pluginManager = new PluginManager($this->createMock(ContainerInterface::class));
+        $pluginManager = new PluginManager($this->createStub(ContainerInterface::class));
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);

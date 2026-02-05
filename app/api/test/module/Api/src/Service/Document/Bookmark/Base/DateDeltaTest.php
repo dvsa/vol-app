@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark\Base;
 
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class DateDeltaTest extends MockeryTestCase
 {
-    public function test()
+    public function test(): void
     {
         $sut = new DateDeltaStub();
 

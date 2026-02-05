@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section\Stub;
 
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\AbstractReviewService;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\AbstractRevie
  */
 class AbstractReviewServiceStub extends AbstractReviewService
 {
-    public function getConfigFromData(array $data = [])
+    public function getConfigFromData(array $data = []): void
     {
     }
 }

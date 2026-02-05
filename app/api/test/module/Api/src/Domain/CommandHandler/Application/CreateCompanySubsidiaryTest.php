@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -34,7 +36,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         /** @var m\MockInterface|Entity\Licence\Licence $mockLicEntity */
         $mockLicEntity = m::mock(Entity\Licence\Licence::class)

@@ -16,6 +16,7 @@ class RestrictedCountriesAnswerSummaryProvider implements AnswerSummaryProviderI
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'ecmt-restricted-countries';
@@ -24,6 +25,7 @@ class RestrictedCountriesAnswerSummaryProvider implements AnswerSummaryProviderI
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         $irhpApplicationEntity = $qaContext->getQaEntity();

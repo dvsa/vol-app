@@ -29,7 +29,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractMessageFailures implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractMessageFailures implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -99,7 +99,8 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -122,7 +123,8 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -145,7 +147,8 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get the queue type
      *
-     * @return string     */
+     * @return string
+     */
     public function getQueueType()
     {
         return $this->queueType;
@@ -154,6 +157,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

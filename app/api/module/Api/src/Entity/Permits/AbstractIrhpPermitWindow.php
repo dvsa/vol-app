@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -144,7 +144,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -167,7 +168,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get the irhp permit stock
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
+     */
     public function getIrhpPermitStock()
     {
         return $this->irhpPermitStock;
@@ -190,7 +192,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -213,7 +216,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -238,7 +242,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -267,7 +272,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getEndDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -294,7 +300,8 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -303,6 +310,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -22,6 +22,7 @@ class Overview extends AbstractQueryHandler
 
     protected $extraRepos = ['Fee', 'Opposition'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $application \Dvsa\Olcs\Api\Entity\Application\Application */

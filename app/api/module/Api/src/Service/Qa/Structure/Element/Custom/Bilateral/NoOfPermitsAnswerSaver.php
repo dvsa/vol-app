@@ -27,6 +27,7 @@ class NoOfPermitsAnswerSaver implements AnswerSaverInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function save(QaContext $qaContext, array $postData)
     {
         $irhpPermitApplication = $qaContext->getQaEntity();

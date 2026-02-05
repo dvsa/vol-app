@@ -51,6 +51,7 @@ class SubCategoryDescription extends AbstractListDataService
      *
      * @return array
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $subCatId = (int)$this->getSubCategory();

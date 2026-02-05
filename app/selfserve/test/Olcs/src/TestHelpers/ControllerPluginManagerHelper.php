@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\TestHelpers;
 
 use Mockery as m;
@@ -13,7 +15,7 @@ class ControllerPluginManagerHelper
      *
      * @psalm-param 'Params'|'Url'|'handleQuery' $class
      */
-    public function getMockPlugin(string $class)
+    public function getMockPlugin(string $class): m\MockInterface
     {
         if (!str_contains($class, '\\')) {
             $class = 'Laminas\Mvc\Controller\Plugin\\' . $class;
@@ -31,7 +33,7 @@ class ControllerPluginManagerHelper
      *
      * @psalm-param array{handleQuery: 'handleQuery', url: 'Url', params: 'Params'} $plugins
      */
-    public function getMockPluginManager(array $plugins)
+    public function getMockPluginManager(array $plugins): m\MockInterface
     {
         $mockPluginManager = m::mock(\Laminas\Mvc\Controller\PluginManager::class);
         $mockPluginManager->shouldReceive('setController');

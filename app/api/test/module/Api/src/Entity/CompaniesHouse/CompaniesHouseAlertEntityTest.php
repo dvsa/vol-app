@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\CompaniesHouse;
 
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
@@ -20,7 +22,7 @@ class CompaniesHouseAlertEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testAddReason()
+    public function testAddReason(): void
     {
         $sut = $this->instantiate($this->entityClass);
 

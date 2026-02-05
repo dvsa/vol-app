@@ -32,6 +32,7 @@ final class Queue extends AbstractCommandHandler implements AuthAwareInterface, 
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $ids = $command->getIds();

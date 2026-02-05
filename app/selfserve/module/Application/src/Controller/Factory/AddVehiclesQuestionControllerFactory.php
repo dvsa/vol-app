@@ -37,6 +37,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
     /**
      * @inheritDoc
      */
+    #[\Override]
     protected function getFeatureToggleNames(): array
     {
         return [FeatureToggle::NEW_GOODS_APP_VEHICLE];
@@ -48,6 +49,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      * @param array|null $options
      * @return Dispatcher
      */
+    #[\Override]
     protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
         $controllerPluginManager = $container->get('ControllerPluginManager');
@@ -78,6 +80,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      * @param array|null $options
      * @return LvaVehicleController
      */
+    #[\Override]
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): LvaVehicleController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

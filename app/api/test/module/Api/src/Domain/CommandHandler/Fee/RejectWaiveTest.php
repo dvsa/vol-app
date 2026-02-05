@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Reject Waive Test
  *
@@ -38,7 +40,8 @@ class RejectWaiveTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             TransactionEntity::STATUS_CANCELLED,
@@ -47,7 +50,7 @@ class RejectWaiveTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandRejectWaive()
+    public function testHandleCommandRejectWaive(): void
     {
         $feeId = 69;
         $transactionId = 99;
@@ -122,7 +125,7 @@ class RejectWaiveTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public function testHandleCommandRejectWaiveError()
+    public function testHandleCommandRejectWaiveError(): void
     {
         $feeId = 69;
 

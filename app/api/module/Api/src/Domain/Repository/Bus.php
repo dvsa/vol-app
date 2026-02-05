@@ -26,6 +26,7 @@ class Bus extends AbstractRepository
      * @throws Exception\NotFoundException
      * @throws Exception\VersionConflictException
      */
+    #[\Override]
     public function fetchUsingId(QryCmd $query, $hydrateMode = Query::HYDRATE_OBJECT, $version = null)
     {
         /* @var \Doctrine\Orm\QueryBuilder $qb*/
@@ -143,6 +144,7 @@ class Bus extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListFilters(QueryBuilder $qb, QueryInterface $query)
     {
         $qb->andWhere($qb->expr()->eq($this->alias . '.routeNo', ':byRouteNo'))
@@ -172,6 +174,7 @@ class Bus extends AbstractRepository
      *
      * @return void
      */
+    #[\Override]
     protected function applyListJoins(QueryBuilder $qb)
     {
         $this->getQueryBuilder()->modifyQuery($qb)

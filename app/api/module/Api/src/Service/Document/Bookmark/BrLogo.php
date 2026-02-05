@@ -29,6 +29,7 @@ class BrLogo extends ImageBookmark
      *
      * @return null|static
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         if (!isset($data['busRegId'])) {
@@ -48,6 +49,7 @@ class BrLogo extends ImageBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if (empty($this->data)) {

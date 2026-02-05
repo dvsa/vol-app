@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitJurisdiction;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota;
@@ -24,7 +26,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $idQuotaG = 111;
         $idQuotaM = 222;

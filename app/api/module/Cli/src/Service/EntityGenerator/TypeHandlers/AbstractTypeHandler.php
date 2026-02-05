@@ -12,11 +12,13 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TypeHandlerInterface;
  */
 abstract class AbstractTypeHandler implements TypeHandlerInterface
 {
+    #[\Override]
     public function getPriority(): int
     {
         return 0; // Default priority
     }
 
+    #[\Override]
     public function getRequiredImports(): array
     {
         return []; // Default: no imports required
@@ -29,9 +31,9 @@ abstract class AbstractTypeHandler implements TypeHandlerInterface
     {
         // Remove _id suffix if present for relationships
         $propertyName = preg_replace('/_id$/', '', $columnName);
-        
+
         // Convert to camelCase
-        return lcfirst(str_replace('_', '', ucwords($propertyName, '_')));
+        return lcfirst(str_replace('_', '', ucwords((string) $propertyName, '_')));
     }
 
     /**

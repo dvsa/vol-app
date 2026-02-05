@@ -16,6 +16,7 @@ final class CheckFkIntegrity extends AbstractQueryHandler
     /** @var PDO */
     private $pdo;
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $queries = $this->getQueryHandler()->handleQuery(GenerateCheckFkIntegritySqlCmd::create([]))['queries'];
@@ -45,6 +46,7 @@ final class CheckFkIntegrity extends AbstractQueryHandler
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $fullContainer = $container;

@@ -55,6 +55,7 @@ class BusDetailsController extends AbstractInternalController implements
      *
      * @return \Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function getLeftView()
     {
         $view = new ViewModel();

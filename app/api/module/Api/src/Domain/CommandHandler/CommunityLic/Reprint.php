@@ -35,6 +35,7 @@ final class Reprint extends AbstractCommandHandler implements TransactionedInter
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         //by default we make DB updates, unless it's a bulk reprint when we rely on system param

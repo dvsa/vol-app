@@ -16,6 +16,7 @@ class ReportList extends AbstractQueryHandler
     /**
      * @inheritdoc
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         return [

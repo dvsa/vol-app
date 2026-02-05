@@ -25,6 +25,7 @@ class HistoryController extends OperatorController
      *
      * @return array|ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $view = $this->getView();
@@ -110,6 +111,7 @@ class HistoryController extends OperatorController
      *
      * @return null|String
      */
+    #[\Override]
     public function getQueryOrRouteParam($name, $default = null)
     {
         if ($queryValue = $this->params()->fromQuery($name, $default)) {

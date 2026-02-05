@@ -24,6 +24,7 @@ class AbstractListQueryHandler extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         if ($this->modifyTrafficAreasForRbac) {

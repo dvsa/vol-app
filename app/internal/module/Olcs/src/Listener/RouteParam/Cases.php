@@ -34,6 +34,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
     protected $queryService;
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->navigationService = $container->get('navigation');
@@ -102,11 +103,12 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            [$this, 'onCase'],
+            $this->onCase(...),
             $priority
         );
     }

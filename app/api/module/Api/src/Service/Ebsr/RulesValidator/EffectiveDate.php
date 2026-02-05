@@ -33,6 +33,7 @@ class EffectiveDate extends AbstractValidator
      * @return bool
      * @throws Exception\RuntimeException If validation of $value is impossible
      */
+    #[\Override]
     public function isValid($value)
     {
         if ($value['txcAppType'] === BusRegEntity::TXC_APP_NEW) {

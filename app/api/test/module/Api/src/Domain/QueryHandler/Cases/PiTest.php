@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Cases;
 
 use Doctrine\ORM\Query;
@@ -37,7 +39,7 @@ class PiTest extends QueryHandlerTestCase
     /**
      * Tests an empty result is correctly dealt with
      */
-    public function testHandleQueryEmptyResult()
+    public function testHandleQueryEmptyResult(): void
     {
         $query = Qry::create(['id' => 1]);
 
@@ -49,7 +51,7 @@ class PiTest extends QueryHandlerTestCase
         $this->assertEquals([], $this->sut->handleQuery($query));
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Qry::create(['id' => 1]);
 

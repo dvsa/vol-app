@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Irfo;
 
 use Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth;
@@ -30,7 +32,7 @@ class IrfoPsvAuthNumberEntityTest extends EntityTester
         $this->mockIrfoPsvAuth = m::mock(IrfoPsvAuth::class);
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $name = 'unit_Name';
 
@@ -40,7 +42,7 @@ class IrfoPsvAuthNumberEntityTest extends EntityTester
         static::assertEquals($name, $sut->getName());
     }
 
-    public function testGetCalculatedValues()
+    public function testGetCalculatedValues(): void
     {
         $actual = (new Entity($this->mockIrfoPsvAuth, ''))->jsonSerialize();
         static::assertNull($actual['irfoPsvAuth']);

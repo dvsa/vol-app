@@ -15,6 +15,7 @@ class GetList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'Category';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $list = $this->getRepo()->fetchList($query, Query::HYDRATE_OBJECT);

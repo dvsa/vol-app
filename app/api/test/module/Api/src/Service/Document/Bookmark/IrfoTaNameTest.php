@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoTaName as Sut;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoTaName as Sut;
  */
 class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new Sut();
         $query = $bookmark->getQuery(['organisation' => 123]);
@@ -17,10 +19,8 @@ class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    /**
-     * @dataProvider dpRenderValidDataProvider
-     */
-    public function testRender($results, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderValidDataProvider')]
+    public function testRender(mixed $results, mixed $expected): void
     {
         $bookmark = new Sut();
         $bookmark->setData($results);
@@ -28,7 +28,7 @@ class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public function dpRenderValidDataProvider()
+    public static function dpRenderValidDataProvider(): array
     {
         return [
             [

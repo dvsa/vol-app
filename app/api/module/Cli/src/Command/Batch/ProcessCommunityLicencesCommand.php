@@ -14,6 +14,7 @@ class ProcessCommunityLicencesCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:process-community-licences';
 
+    #[\Override]
     protected function configure()
     {
         $this
@@ -21,6 +22,7 @@ class ProcessCommunityLicencesCommand extends AbstractBatchCommand
         $this->addCommonOptions();
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

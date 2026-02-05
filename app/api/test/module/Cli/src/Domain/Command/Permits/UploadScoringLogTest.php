@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\Command\Permits;
 
 use Dvsa\Olcs\Cli\Domain\Command\Permits\UploadScoringLog;
@@ -10,7 +12,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\UploadScoringLog;
  */
 class UploadScoringLogTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $sut = UploadScoringLog::create(
             [

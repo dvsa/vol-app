@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Operating Centres Status Test
  *
@@ -21,6 +23,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'OperatingCentres';
@@ -33,7 +36,8 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         parent::setUp();
     }
 
-    public function initReferences()
+    #[\Override]
+    public function initReferences(): void
     {
         $this->refData = [
             RefData::APP_VEHICLE_TYPE_HGV,
@@ -45,7 +49,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithChange()
+    public function testHandleCommandWithChange(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -55,7 +59,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandWithoutChange()
+    public function testHandleCommandWithoutChange(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_INCOMPLETE);
 
@@ -65,7 +69,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandHgvNoTotAuth()
+    public function testHandleCommandHgvNoTotAuth(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -75,7 +79,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandHgvNoTotAuthTrailers()
+    public function testHandleCommandHgvNoTotAuthTrailers(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -86,7 +90,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public function testHandleCommandHgv()
+    public function testHandleCommandHgv(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -98,7 +102,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandLgv()
+    public function testHandleCommandLgv(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -108,7 +112,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandMixed()
+    public function testHandleCommandMixed(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 
@@ -121,7 +125,7 @@ class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_COMPLETE);
     }
 
-    public function testHandleCommandPsv()
+    public function testHandleCommandPsv(): void
     {
         $this->applicationCompletion->setOperatingCentresStatus(ApplicationCompletionEntity::STATUS_NOT_STARTED);
 

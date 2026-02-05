@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Letter\LetterIssueType;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterIssueType\GetList as QueryHandler;
@@ -11,9 +13,8 @@ use Mockery as m;
 
 /**
  * Get List of Letter Issue Types Test
- *
- * @covers \Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterIssueType\GetList
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterIssueType\GetList::class)]
 class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
@@ -24,7 +25,7 @@ class GetListTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = Query::create(['sort' => 'displayOrder', 'order' => 'ASC']);
 

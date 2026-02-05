@@ -20,6 +20,7 @@ class LicenceProcessingOverviewController extends AbstractLicenceProcessingContr
      *
      * @return \Laminas\Http\Response
      */
+    #[\Override]
     public function indexAction()
     {
         $options = [

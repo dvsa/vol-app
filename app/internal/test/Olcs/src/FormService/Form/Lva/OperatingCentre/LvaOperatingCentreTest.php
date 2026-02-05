@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
 use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
@@ -18,6 +20,7 @@ use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class LvaOperatingCentreTest extends MockeryTestCase
 {
     protected $sut;
@@ -31,10 +34,8 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut = new LvaOperatingCentre($this->formHelper);
     }
 
-    /**
-     * @dataProvider alterFormProvider
-     */
-    public function testAlterForm($appliedVia)
+    #[\PHPUnit\Framework\Attributes\DataProvider('alterFormProvider')]
+    public function testAlterForm(mixed $appliedVia): void
     {
         $form = m::mock(Form::class)
             ->shouldReceive('get')
@@ -165,7 +166,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function alterFormProvider()
+    public static function alterFormProvider(): array
     {
         return [
             [RefData::APPLIED_VIA_POST],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Publication\Process\Impounding;
 
 use Common\Service\Data\RefData;
@@ -17,13 +19,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class Text2Test extends MockeryTestCase
 {
-    /**
-     *
-     * @group publicationFilter
-     *
-     * Test the hearing text1 filter
-     */
-    public function testProcess()
+    #[\PHPUnit\Framework\Attributes\Group('publicationFilter
+Test the hearing text1 filter')]
+    public function testProcess(): void
     {
 
         $sut = new Text2();

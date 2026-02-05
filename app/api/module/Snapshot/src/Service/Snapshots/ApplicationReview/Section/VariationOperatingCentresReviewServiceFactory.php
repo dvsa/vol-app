@@ -8,6 +8,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class VariationOperatingCentresReviewServiceFactory implements FactoryInterface
 {
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         return new VariationOperatingCentresReviewService(

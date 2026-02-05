@@ -47,7 +47,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractErruRequest implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractErruRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -274,7 +274,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -297,7 +298,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -320,7 +322,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the request document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getRequestDocument()
     {
         return $this->requestDocument;
@@ -343,7 +346,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the response document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getResponseDocument()
     {
         return $this->responseDocument;
@@ -366,7 +370,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the member state code
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\Country
+     */
     public function getMemberStateCode()
     {
         return $this->memberStateCode;
@@ -389,7 +394,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the msi type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getMsiType()
     {
         return $this->msiType;
@@ -412,7 +418,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the community licence status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getCommunityLicenceStatus()
     {
         return $this->communityLicenceStatus;
@@ -435,7 +442,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the response user
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getResponseUser()
     {
         return $this->responseUser;
@@ -458,7 +466,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -481,7 +490,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -504,7 +514,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the originating authority
      *
-     * @return string     */
+     * @return string
+     */
     public function getOriginatingAuthority()
     {
         return $this->originatingAuthority;
@@ -527,7 +538,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the transport undertaking name
      *
-     * @return string     */
+     * @return string
+     */
     public function getTransportUndertakingName()
     {
         return $this->transportUndertakingName;
@@ -550,7 +562,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the vrm
      *
-     * @return string     */
+     * @return string
+     */
     public function getVrm()
     {
         return $this->vrm;
@@ -573,7 +586,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the notification number
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotificationNumber()
     {
         return $this->notificationNumber;
@@ -596,7 +610,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the workflow id
      *
-     * @return string     */
+     * @return string
+     */
     public function getWorkflowId()
     {
         return $this->workflowId;
@@ -619,7 +634,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the community licence number
      *
-     * @return string     */
+     * @return string
+     */
     public function getCommunityLicenceNumber()
     {
         return $this->communityLicenceNumber;
@@ -642,7 +658,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the tot auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthVehicles()
     {
         return $this->totAuthVehicles;
@@ -667,7 +684,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getResponseTime($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -694,7 +712,8 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -703,6 +722,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

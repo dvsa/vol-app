@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Application;
 
 use Doctrine\ORM\Query;
@@ -37,7 +39,7 @@ class PublishTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = m::mock(\Dvsa\Olcs\Transfer\Command\CommandInterface::class);
 
@@ -71,7 +73,7 @@ class PublishTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandValidationErrors()
+    public function testHandleCommandValidationErrors(): void
     {
         $command = m::mock(\Dvsa\Olcs\Transfer\Command\CommandInterface::class);
 

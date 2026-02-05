@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cli\Domain\Command\MessageQueue;
 
 use Dvsa\Olcs\Cli\Domain\Command\MessageQueue\Enqueue;
@@ -7,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class EnqueueTest extends TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $sut = new Enqueue();
         $dto = $sut::create([

@@ -20,6 +20,7 @@ final class DispatchDocument extends CreateDocumentSpecific
      *
      * @return int
      */
+    #[\Override]
     public function getUser()
     {
         return $this->user;

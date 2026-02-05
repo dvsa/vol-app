@@ -25,7 +25,7 @@ class LicenceBuilder implements BuilderInterface
     /**
      * @param int|null $id
      */
-    public function __construct(int $id = null)
+    public function __construct(?int $id = null)
     {
         $this->instance = new Licence(OrganisationBuilder::anOrganisation()->build(), new RefData(Licence::LICENCE_STATUS_VALID));
         $this->instance->setId($id ?? static::AN_ID);
@@ -147,7 +147,7 @@ class LicenceBuilder implements BuilderInterface
      * @param int|null $id
      * @return static
      */
-    public static function aLicence(int $id = null): self
+    public static function aLicence(?int $id = null): self
     {
         return new static($id);
     }
@@ -156,7 +156,7 @@ class LicenceBuilder implements BuilderInterface
      * @param int|null $id
      * @return static
      */
-    public static function aGoodsLicence(int $id = null): self
+    public static function aGoodsLicence(?int $id = null): self
     {
         return static::aLicence($id)->forGoodsVehicles();
     }
@@ -164,7 +164,7 @@ class LicenceBuilder implements BuilderInterface
     /**
      * @return static
      */
-    public static function aPsvLicence(int $id = null): self
+    public static function aPsvLicence(?int $id = null): self
     {
         return static::aLicence($id)->forPublicServiceVehicles();
     }

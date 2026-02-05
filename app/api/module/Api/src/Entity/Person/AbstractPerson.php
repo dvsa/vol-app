@@ -40,7 +40,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPerson implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -238,7 +238,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -261,7 +262,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the title
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTitle()
     {
         return $this->title;
@@ -284,7 +286,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -307,7 +310,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -330,7 +334,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the forename
      *
-     * @return string     */
+     * @return string
+     */
     public function getForename()
     {
         return $this->forename;
@@ -353,7 +358,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the family name
      *
-     * @return string     */
+     * @return string
+     */
     public function getFamilyName()
     {
         return $this->familyName;
@@ -378,7 +384,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -405,7 +412,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the birth place
      *
-     * @return string     */
+     * @return string
+     */
     public function getBirthPlace()
     {
         return $this->birthPlace;
@@ -428,7 +436,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the other name
      *
-     * @return string     */
+     * @return string
+     */
     public function getOtherName()
     {
         return $this->otherName;
@@ -451,7 +460,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -474,7 +484,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -497,7 +508,8 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get the olbs type
      *
-     * @return string     */
+     * @return string
+     */
     public function getOlbsType()
     {
         return $this->olbsType;
@@ -758,6 +770,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

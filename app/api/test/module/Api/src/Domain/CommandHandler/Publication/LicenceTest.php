@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Publication;
 
 use Doctrine\ORM\Query;
@@ -36,7 +38,8 @@ class LicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->references = [
             PublicationSectionEntity::class => [
@@ -49,7 +52,7 @@ class LicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    private function getPublication()
+    private function getPublication(): mixed
     {
         $publication = new PublicationEntity(
             new TrafficAreaEntity(),
@@ -63,7 +66,7 @@ class LicenceTest extends AbstractCommandHandlerTestCase
         return $publication;
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $command = Cmd::Create(
             ['id' => 510]
@@ -91,7 +94,7 @@ class LicenceTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(ResultCmd::class, $result);
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $command = Cmd::Create(
             ['id' => 510]
@@ -120,7 +123,7 @@ class LicenceTest extends AbstractCommandHandlerTestCase
         $this->assertInstanceOf(ResultCmd::class, $result);
     }
 
-    public function testHandleCommandMissingPubSection()
+    public function testHandleCommandMissingPubSection(): void
     {
         $command = Cmd::Create(
             ['id' => 510]

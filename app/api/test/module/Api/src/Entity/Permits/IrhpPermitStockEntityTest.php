@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\Permits;
 
 use DateTime;
@@ -37,7 +39,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    public function testCreateUpdate()
+    public function testCreateUpdate(): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
         $validFrom = '2019-01-01';
@@ -82,7 +84,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($updateInitialStock, $entity->getInitialStock());
     }
 
-    public function testCreateUpdateAppPath()
+    public function testCreateUpdateAppPath(): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
         $validFrom = '2019-01-01';
@@ -132,7 +134,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($updatePeriodNameKey, $entity->getPeriodNameKey());
     }
 
-    public function testCreateUpdateAppPathBilateral()
+    public function testCreateUpdateAppPathBilateral(): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
         $country = m::mock(Country::class);
@@ -204,10 +206,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($updatePeriodNameKey, $entity->getPeriodNameKey());
     }
 
-    /**
-     * @dataProvider dpBilateralMoroccoException
-     */
-    public function testCreateBilateralMoroccoException($countryId, $permitCategory, $expectedMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
+    public function testCreateBilateralMoroccoException(mixed $countryId, mixed $permitCategory, mixed $expectedMessage): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('getId')
@@ -247,10 +247,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionRaised);
     }
 
-    /**
-     * @dataProvider dpBilateralMoroccoException
-     */
-    public function testUpdateBilateralMoroccoException($countryId, $permitCategory, $expectedMessage)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
+    public function testUpdateBilateralMoroccoException(mixed $countryId, mixed $permitCategory, mixed $expectedMessage): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('getId')
@@ -305,7 +303,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionRaised);
     }
 
-    public function dpBilateralMoroccoException()
+    public static function dpBilateralMoroccoException(): array
     {
         return [
             [
@@ -322,7 +320,7 @@ class IrhpPermitStockEntityTest extends EntityTester
     }
 
 
-    public function testGetOpenWindowTrue()
+    public function testGetOpenWindowTrue(): void
     {
         $window1 = m::mock(IrhpPermitWindow::class);
         $window1->shouldReceive('isActive')->once()->withNoArgs()->andReturnFalse();
@@ -339,7 +337,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function testGetOpenWindowNull()
+    public function testGetOpenWindowNull(): void
     {
         $window1 = m::mock(IrhpPermitWindow::class);
         $window1->shouldReceive('isActive')->once()->withNoArgs()->andReturnFalse();
@@ -352,10 +350,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider dpHasOpenWindow
-     */
-    public function testHasOpenWindow($openWindow, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasOpenWindow')]
+    public function testHasOpenWindow(mixed $openWindow, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('getOpenWindow')
@@ -368,7 +364,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpHasOpenWindow()
+    public static function dpHasOpenWindow(): array
     {
         return [
             [null, false],
@@ -376,7 +372,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testGetStatusDescription()
+    public function testGetStatusDescription(): void
     {
         $statusDescription = 'status description';
 
@@ -407,10 +403,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    /**
-     * @dataProvider canDeleteProvider
-     */
-    public function testCanDelete($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
+    public function testCanDelete(mixed $data, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -437,10 +431,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected, $stock->canDelete());
     }
 
-    /**
-     * @dataProvider emissionsRangeProvider
-     */
-    public function testHasEuro5Range($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
+    public function testHasEuro5Range(mixed $data, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -463,10 +455,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected['euro5'], $stock->hasEuro5Range());
     }
 
-    /**
-     * @dataProvider emissionsRangeProvider
-     */
-    public function testHasEuro6Range($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
+    public function testHasEuro6Range(mixed $data, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -494,7 +484,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      *
      * @return array
      */
-    public function emissionsRangeProvider()
+    public static function emissionsRangeProvider(): array
     {
         $euro5Range = m::mock(IrhpPermitRange::class)->makePartial();
         $euro5Range->setEmissionsCategory(new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF));
@@ -525,10 +515,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpHasCabotageOrStandardRange
-     */
-    public function testHasCabotageOrStandardRange($data, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCabotageOrStandardRange')]
+    public function testHasCabotageOrStandardRange(mixed $data, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -549,7 +537,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals($expected['standard'], $stock->hasStandardRange());
     }
 
-    public function dpHasCabotageOrStandardRange()
+    public static function dpHasCabotageOrStandardRange(): array
     {
         $cabotageRange = m::mock(IrhpPermitRange::class);
         $cabotageRange->shouldReceive('isCabotage')->withNoArgs()->andReturnTrue();
@@ -588,7 +576,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      *
      * @return array
      */
-    public function canDeleteProvider()
+    public static function canDeleteProvider(): array
     {
         return [
             'valid delete' => [
@@ -622,10 +610,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsQueueRunScoringProvider
-     */
-    public function testStatusAllowsQueueRunScoring($statusId, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsQueueRunScoringProvider')]
+    public function testStatusAllowsQueueRunScoring(mixed $statusId, mixed $expectedResult): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
 
@@ -635,7 +621,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsQueueRunScoringProvider()
+    public static function statusAllowsQueueRunScoringProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, true],
@@ -652,10 +638,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsRunScoringProvider
-     */
-    public function testStatusAllowsRunScoring($statusId, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsRunScoringProvider')]
+    public function testStatusAllowsRunScoring(mixed $statusId, mixed $expectedResult): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
 
@@ -665,7 +649,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsRunScoringProvider()
+    public static function statusAllowsRunScoringProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -682,10 +666,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsQueueAcceptScoringAndPostScoringReportProvider
-     */
-    public function testStatusAllowsQueueAcceptScoringAndPostScoringReport($statusId, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsQueueAcceptScoringAndPostScoringReportProvider')]
+    public function testStatusAllowsQueueAcceptScoringAndPostScoringReport(mixed $statusId, mixed $expectedResult): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
 
@@ -695,7 +677,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsQueueAcceptScoringAndPostScoringReportProvider()
+    public static function statusAllowsQueueAcceptScoringAndPostScoringReportProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -712,10 +694,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider statusAllowsAcceptScoringProvider
-     */
-    public function testStatusAllowsAcceptScoring($statusId, $expectedResult)
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsAcceptScoringProvider')]
+    public function testStatusAllowsAcceptScoring(mixed $statusId, mixed $expectedResult): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
 
@@ -725,7 +705,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function statusAllowsAcceptScoringProvider()
+    public static function statusAllowsAcceptScoringProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN, false],
@@ -742,10 +722,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToScoringPendingProvider
-     */
-    public function testProceedToScoringPending($statusId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingProvider')]
+    public function testProceedToScoringPending(mixed $statusId): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
         $newStatus = m::mock(RefData::class);
@@ -754,7 +732,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public function proceedToScoringPendingProvider()
+    public static function proceedToScoringPendingProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_NEVER_RUN],
@@ -766,10 +744,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToScoringPendingExceptionProvider
-     */
-    public function testProceedToScoringPendingException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingExceptionProvider')]
+    public function testProceedToScoringPendingException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -784,7 +760,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringPendingExceptionProvider()
+    public static function proceedToScoringPendingExceptionProvider(): array
     {
         return [
             [
@@ -815,7 +791,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToScoringPrerequisiteFail()
+    public function testProceedToScoringPrerequisiteFail(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_SCORING_PENDING);
         $newStatus = m::mock(RefData::class);
@@ -824,10 +800,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringPrerequisiteFailExceptionProvider
-     */
-    public function testProceedToScoringPrerequisiteFailException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPrerequisiteFailExceptionProvider')]
+    public function testProceedToScoringPrerequisiteFailException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -842,7 +816,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringPrerequisiteFailExceptionProvider()
+    public static function proceedToScoringPrerequisiteFailExceptionProvider(): array
     {
         return [
             [
@@ -898,7 +872,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToScoringInProgress()
+    public function testProceedToScoringInProgress(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_SCORING_PENDING);
         $newStatus = m::mock(RefData::class);
@@ -907,10 +881,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringInProgressExceptionProvider
-     */
-    public function testProceedToScoringInProgressException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringInProgressExceptionProvider')]
+    public function testProceedToScoringInProgressException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -925,7 +897,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringInProgressExceptionProvider()
+    public static function proceedToScoringInProgressExceptionProvider(): array
     {
         return [
             [
@@ -981,7 +953,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToScoringSuccessful()
+    public function testProceedToScoringSuccessful(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_SCORING_IN_PROGRESS);
         $newStatus = m::mock(RefData::class);
@@ -990,10 +962,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringSuccessfulExceptionProvider
-     */
-    public function testProceedToScoringSuccessfulException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringSuccessfulExceptionProvider')]
+    public function testProceedToScoringSuccessfulException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1008,7 +978,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringSuccessfulExceptionProvider()
+    public static function proceedToScoringSuccessfulExceptionProvider(): array
     {
         return [
             [
@@ -1064,7 +1034,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToScoringUnexpectedFail()
+    public function testProceedToScoringUnexpectedFail(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_SCORING_IN_PROGRESS);
         $newStatus = m::mock(RefData::class);
@@ -1073,10 +1043,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToScoringUnexpectedFailExceptionProvider
-     */
-    public function testProceedToScoringUnexpectedFailException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringUnexpectedFailExceptionProvider')]
+    public function testProceedToScoringUnexpectedFailException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1091,7 +1059,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToScoringUnexpectedFailExceptionProvider()
+    public static function proceedToScoringUnexpectedFailExceptionProvider(): array
     {
         return [
             [
@@ -1147,10 +1115,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToAcceptPendingProvider
-     */
-    public function testProceedToAcceptPending($statusId)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPendingProvider')]
+    public function testProceedToAcceptPending(mixed $statusId): void
     {
         $stock = $this->createEntityWithStatusId($statusId);
         $newStatus = m::mock(RefData::class);
@@ -1159,7 +1125,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public function proceedToAcceptPendingProvider()
+    public static function proceedToAcceptPendingProvider(): array
     {
         return [
             [Entity::STATUS_SCORING_SUCCESSFUL],
@@ -1169,10 +1135,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider proceedToAcceptPendingExceptionProvider
-     */
-    public function testProceedToAcceptPendingException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPendingExceptionProvider')]
+    public function testProceedToAcceptPendingException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1187,7 +1151,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptPendingExceptionProvider()
+    public static function proceedToAcceptPendingExceptionProvider(): array
     {
         return [
             [
@@ -1228,7 +1192,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToAcceptPrerequisiteFail()
+    public function testProceedToAcceptPrerequisiteFail(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_ACCEPT_PENDING);
         $newStatus = m::mock(RefData::class);
@@ -1237,10 +1201,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptPrerequisiteFailExceptionProvider
-     */
-    public function testProceedToAcceptPrerequisiteFailException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPrerequisiteFailExceptionProvider')]
+    public function testProceedToAcceptPrerequisiteFailException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1255,7 +1217,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptPrerequisiteFailExceptionProvider()
+    public static function proceedToAcceptPrerequisiteFailExceptionProvider(): array
     {
         return [
             [
@@ -1311,7 +1273,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToAcceptInProgress()
+    public function testProceedToAcceptInProgress(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_ACCEPT_PENDING);
         $newStatus = m::mock(RefData::class);
@@ -1320,10 +1282,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptInProgressExceptionProvider
-     */
-    public function testProceedToAcceptInProgressException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptInProgressExceptionProvider')]
+    public function testProceedToAcceptInProgressException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1338,7 +1298,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptInProgressExceptionProvider()
+    public static function proceedToAcceptInProgressExceptionProvider(): array
     {
         return [
             [
@@ -1394,7 +1354,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToAcceptSuccessful()
+    public function testProceedToAcceptSuccessful(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_ACCEPT_IN_PROGRESS);
         $newStatus = m::mock(RefData::class);
@@ -1403,10 +1363,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptSuccessfulExceptionProvider
-     */
-    public function testProceedToAcceptSuccessfulException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptSuccessfulExceptionProvider')]
+    public function testProceedToAcceptSuccessfulException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1421,7 +1379,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptSuccessfulExceptionProvider()
+    public static function proceedToAcceptSuccessfulExceptionProvider(): array
     {
         return [
             [
@@ -1477,7 +1435,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testProceedToAcceptUnexpectedFail()
+    public function testProceedToAcceptUnexpectedFail(): void
     {
         $stock = $this->createEntityWithStatusId(Entity::STATUS_ACCEPT_IN_PROGRESS);
         $newStatus = m::mock(RefData::class);
@@ -1486,10 +1444,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    /**
-     * @dataProvider proceedToAcceptUnexpectedFailExceptionProvider
-     */
-    public function testProceedToAcceptUnexpectedFailException($statusId, $statusDescription, $expectedExceptionMessages)
+    #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptUnexpectedFailExceptionProvider')]
+    public function testProceedToAcceptUnexpectedFailException(mixed $statusId, mixed $statusDescription, mixed $expectedExceptionMessages): void
     {
         $stock = $this->createEntityWithStatusIdAndDescription($statusId, $statusDescription);
         $exceptionThrown = false;
@@ -1504,7 +1460,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public function proceedToAcceptUnexpectedFailExceptionProvider()
+    public static function proceedToAcceptUnexpectedFailExceptionProvider(): array
     {
         return [
             [
@@ -1560,7 +1516,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    private function createEntityWithStatusIdAndDescription($statusId, $description)
+    private function createEntityWithStatusIdAndDescription(mixed $statusId, mixed $description): mixed
     {
         $status = m::mock(RefData::class);
         $status->shouldReceive('getId')
@@ -1571,7 +1527,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         return $this->createEntityWithStatus($status);
     }
 
-    private function createEntityWithStatusId($statusId)
+    private function createEntityWithStatusId(mixed $statusId): mixed
     {
         $status = m::mock(RefData::class);
         $status->shouldReceive('getId')
@@ -1580,7 +1536,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         return $this->createEntityWithStatus($status);
     }
 
-    private function createEntityWithStatus($status)
+    private function createEntityWithStatus(mixed $status): mixed
     {
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
         $irhpStockEntity = Entity::create(
@@ -1600,20 +1556,20 @@ class IrhpPermitStockEntityTest extends EntityTester
         return($irhpStockEntity);
     }
 
-    public function testGetNonReservedNonReplacementRangesOrderedByFromNo()
+    public function testGetNonReservedNonReplacementRangesOrderedByFromNo(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
-        $firstExpectedRange = $this->createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF);
-        $secondExpectedRange = $this->createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF);
-        $thirdExpectedRange = $this->createMockRange(false, false, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF);
+        $firstExpectedRange = self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF);
+        $secondExpectedRange = self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF);
+        $thirdExpectedRange = self::createMockRange(false, false, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF);
 
         $irhpPermitRanges = new ArrayCollection(
             [
                 $secondExpectedRange,
-                $this->createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF),
-                $this->createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF),
-                $this->createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF),
+                self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF),
+                self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF),
+                self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF),
                 $firstExpectedRange,
                 $thirdExpectedRange
             ]
@@ -1632,20 +1588,20 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($thirdExpectedRange, $resultAsArray[2]);
     }
 
-    public function testGetNonReservedNonReplacementRangesOrderedByFromNoWithEmissionsCategoryId()
+    public function testGetNonReservedNonReplacementRangesOrderedByFromNoWithEmissionsCategoryId(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
-        $range1 = $this->createMockRange(false, false, 600);
-        $range2 = $this->createMockRange(false, true, 700);
-        $range3 = $this->createMockRange(false, false, 500);
-        $range4 = $this->createMockRange(true, false, 800);
-        $range5 = $this->createMockRange(true, true, 900);
-        $range6 = $this->createMockRange(false, false, 300);
-        $range7 = $this->createMockRange(false, false, 1000);
-        $range8 = $this->createMockRange(false, true, 110);
-        $range9 = $this->createMockRange(true, false, 1200);
-        $range10 = $this->createMockRange(true, true, 1300);
+        $range1 = self::createMockRange(false, false, 600);
+        $range2 = self::createMockRange(false, true, 700);
+        $range3 = self::createMockRange(false, false, 500);
+        $range4 = self::createMockRange(true, false, 800);
+        $range5 = self::createMockRange(true, true, 900);
+        $range6 = self::createMockRange(false, false, 300);
+        $range7 = self::createMockRange(false, false, 1000);
+        $range8 = self::createMockRange(false, true, 110);
+        $range9 = self::createMockRange(true, false, 1200);
+        $range10 = self::createMockRange(true, true, 1300);
 
         $criteria = m::mock(RangeMatchingCriteriaInterface::class);
         $criteria->shouldReceive('matches')->with($range1)->andReturn(false);
@@ -1675,7 +1631,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($range3, $resultAsArray[1]);
     }
 
-    private function createMockRange($ssReserve, $lostReplacement, $fromNo, $emissionsCategoryId = null, $journey = null)
+    private static function createMockRange(mixed $ssReserve, mixed $lostReplacement, mixed $fromNo, mixed $emissionsCategoryId = null, mixed $journey = null): mixed
     {
         $irhpPermitRange = m::mock(IrhpPermitRange::class);
         $irhpPermitRange->shouldReceive('getSsReserve')
@@ -1692,7 +1648,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         return $irhpPermitRange;
     }
 
-    public function testGetValidityYear()
+    public function testGetValidityYear(): void
     {
         $dateTime = new DateTime('2015-12-31');
 
@@ -1704,7 +1660,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertEquals(2015, $entity->getValidityYear());
     }
 
-    public function testGetValidityYearNullValidTo()
+    public function testGetValidityYearNullValidTo(): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('getValidTo')
@@ -1717,7 +1673,7 @@ class IrhpPermitStockEntityTest extends EntityTester
     /**
      * Where all ranges have restricted countries, bring back the first range (VOL-1839)
      */
-    public function testGetFirstAvailableRangeWhereAllHaveRestrictedCountries()
+    public function testGetFirstAvailableRangeWhereAllHaveRestrictedCountries(): void
     {
         $emissionsStandardCriteria = m::mock(EmissionsStandardCriteria::class);
 
@@ -1748,7 +1704,7 @@ class IrhpPermitStockEntityTest extends EntityTester
      * We prefer to return a range with no restricted countries, here we return range 2
      * (hasCountries() evaluates to false on that range)
      */
-    public function testGetFirstAvailableRangeWhereRangeWithNoCountriesAvailable()
+    public function testGetFirstAvailableRangeWhereRangeWithNoCountriesAvailable(): void
     {
         $emissionsStandardCriteria = m::mock(EmissionsStandardCriteria::class);
 
@@ -1782,7 +1738,7 @@ class IrhpPermitStockEntityTest extends EntityTester
     /**
      * Test we throw exception if there are no available ranges
      */
-    public function testGetFirstAvailableRangePreferWithNoCountriesException()
+    public function testGetFirstAvailableRangePreferWithNoCountriesException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to find available range');
@@ -1799,10 +1755,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         $entity->getFirstAvailableRangePreferWithNoCountries($emissionsStandardCriteria);
     }
 
-    /**
-     * @dataProvider dpGetAllocationMode
-     */
-    public function testGetAllocationMode($irhpPermitTypeId, $businessProcessId, $validityYear, $expectedAllocationMode)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAllocationMode')]
+    public function testGetAllocationMode(mixed $irhpPermitTypeId, mixed $businessProcessId, mixed $validityYear, mixed $expectedAllocationMode): void
     {
         $businessProcess = m::mock(RefData::class);
         $businessProcess->shouldReceive('getId')
@@ -1828,7 +1782,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetAllocationMode()
+    public static function dpGetAllocationMode(): array
     {
         return [
             [
@@ -1942,7 +1896,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    public function testGetAllocationModeException()
+    public function testGetAllocationModeException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
@@ -1966,15 +1920,13 @@ class IrhpPermitStockEntityTest extends EntityTester
         $entity->getAllocationMode();
     }
 
-    /**
-     * @dataProvider dpGetCandidatePermitCreationMode
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetCandidatePermitCreationMode')]
     public function testGetCandidatePermitCreationMode(
-        $businessProcessId,
-        $isEcmtShortTerm,
-        $validityYear,
-        $expectedCandidatePermitCreationMode
-    ) {
+        mixed $businessProcessId,
+        mixed $isEcmtShortTerm,
+        mixed $validityYear,
+        mixed $expectedCandidatePermitCreationMode
+    ): void {
         $businessProcess = m::mock(RefData::class);
         $businessProcess->shouldReceive('getId')
             ->andReturn($businessProcessId);
@@ -1996,7 +1948,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetCandidatePermitCreationMode()
+    public static function dpGetCandidatePermitCreationMode(): array
     {
         return [
             [
@@ -2032,10 +1984,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetPermitUsageList
-     */
-    public function testGetPermitUsageList($irhpPermitRanges, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetPermitUsageList')]
+    public function testGetPermitUsageList(mixed $irhpPermitRanges, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
@@ -2047,7 +1997,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($expected, $result);
     }
 
-    public function dpGetPermitUsageList()
+    public static function dpGetPermitUsageList(): array
     {
         $journeyMultiple = (new RefData(RefData::JOURNEY_MULTIPLE))->setDisplayOrder(10);
         $journeySingle = (new RefData(RefData::JOURNEY_SINGLE))->setDisplayOrder(20);
@@ -2056,12 +2006,12 @@ class IrhpPermitStockEntityTest extends EntityTester
             [
                 new ArrayCollection(
                     [
-                        $this->createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                        $this->createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        $this->createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        $this->createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                        $this->createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        $this->createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
+                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                        self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                        self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                        self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
                     ]
                 ),
                 [
@@ -2072,9 +2022,9 @@ class IrhpPermitStockEntityTest extends EntityTester
             [
                 new ArrayCollection(
                     [
-                        $this->createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        $this->createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        $this->createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeyMultiple),
+                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeyMultiple),
                     ]
                 ),
                 [
@@ -2084,9 +2034,9 @@ class IrhpPermitStockEntityTest extends EntityTester
             [
                 new ArrayCollection(
                     [
-                        $this->createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        $this->createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        $this->createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
                     ]
                 ),
                 [
@@ -2096,10 +2046,10 @@ class IrhpPermitStockEntityTest extends EntityTester
             [
                 new ArrayCollection(
                     [
-                        $this->createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                        $this->createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        $this->createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                        $this->createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
+                        self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                        self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                        self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
                     ]
                 ),
                 [],
@@ -2107,10 +2057,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsMorocco
-     */
-    public function testIsMorocco($isMorocco)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMorocco')]
+    public function testIsMorocco(mixed $isMorocco): void
     {
         $entity = m::mock(Entity::class)->makePartial();
 
@@ -2127,7 +2075,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpIsMorocco()
+    public static function dpIsMorocco(): array
     {
         return [
             [true],
@@ -2135,10 +2083,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetBilateralAnswerSummaryLabelKey
-     */
-    public function testGetBilateralAnswerSummaryLabelKey($isMorocco, $isMultiStock, $expectedKey)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralAnswerSummaryLabelKey')]
+    public function testGetBilateralAnswerSummaryLabelKey(mixed $isMorocco, mixed $isMultiStock, mixed $expectedKey): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('isMorocco')
@@ -2151,7 +2097,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetBilateralAnswerSummaryLabelKey()
+    public static function dpGetBilateralAnswerSummaryLabelKey(): array
     {
         return [
             [true, false, 'permits.page.bilateral.permit-needed'],
@@ -2160,15 +2106,13 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpGetExcludedRestrictedCountryIds
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetExcludedRestrictedCountryIds')]
     public function testGetExcludedRestrictedCountryIds(
-        $isEcmtAnnual,
-        $hasEuro5Range,
-        $hasEuro6Range,
-        $expected
-    ) {
+        mixed $isEcmtAnnual,
+        mixed $hasEuro5Range,
+        mixed $hasEuro6Range,
+        mixed $expected
+    ): void {
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('isEcmtAnnual')
             ->andReturn($isEcmtAnnual);
@@ -2189,7 +2133,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpGetExcludedRestrictedCountryIds()
+    public static function dpGetExcludedRestrictedCountryIds(): array
     {
         return [
             [
@@ -2243,10 +2187,8 @@ class IrhpPermitStockEntityTest extends EntityTester
         ];
     }
 
-    /**
-     * @dataProvider dpIsCertificateOfRoadworthiness
-     */
-    public function testIsCertificateOfRoadworthiness($isCertificateOfRoadworthiness)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsCertificateOfRoadworthiness')]
+    public function testIsCertificateOfRoadworthiness(mixed $isCertificateOfRoadworthiness): void
     {
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('isCertificateOfRoadworthiness')
@@ -2262,7 +2204,7 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public function dpIsCertificateOfRoadworthiness()
+    public static function dpIsCertificateOfRoadworthiness(): array
     {
         return [
             [true],

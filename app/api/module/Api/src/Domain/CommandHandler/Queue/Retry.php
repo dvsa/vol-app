@@ -29,6 +29,7 @@ final class Retry extends AbstractCommandHandler implements TransactionedInterfa
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $processAfter = new DateTime();

@@ -436,9 +436,7 @@ class LetterIssue extends AbstractLetterIssue
      */
     public function getVersionsByCategory($categoryId)
     {
-        return $this->versions->filter(function (LetterIssueVersion $version) use ($categoryId) {
-            return $version->getCategory() && $version->getCategory()->getId() === $categoryId;
-        });
+        return $this->versions->filter(fn(LetterIssueVersion $version) => $version->getCategory() && $version->getCategory()->getId() === $categoryId);
     }
 
     /**
@@ -448,8 +446,6 @@ class LetterIssue extends AbstractLetterIssue
      */
     public function getPublishedVersions()
     {
-        return $this->versions->filter(function (LetterIssueVersion $version) {
-            return $version->isPublished();
-        });
+        return $this->versions->filter(fn(LetterIssueVersion $version) => $version->isPublished());
     }
 }

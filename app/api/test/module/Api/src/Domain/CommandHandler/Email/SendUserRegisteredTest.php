@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Send User Registered Email Test
  */
@@ -39,7 +41,7 @@ class SendUserRegisteredTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $userId = 111;
         $emailAddress = 'me@test.me';

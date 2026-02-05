@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTmEmployment implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTmEmployment implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -167,7 +167,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -190,7 +191,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -213,7 +215,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -236,7 +239,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -259,7 +263,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -282,7 +287,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the position
      *
-     * @return string     */
+     * @return string
+     */
     public function getPosition()
     {
         return $this->position;
@@ -305,7 +311,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the employer name
      *
-     * @return string     */
+     * @return string
+     */
     public function getEmployerName()
     {
         return $this->employerName;
@@ -328,7 +335,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the hours per week
      *
-     * @return string     */
+     * @return string
+     */
     public function getHoursPerWeek()
     {
         return $this->hoursPerWeek;
@@ -351,7 +359,8 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -360,6 +369,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

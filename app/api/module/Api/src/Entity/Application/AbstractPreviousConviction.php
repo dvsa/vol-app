@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractPreviousConviction implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractPreviousConviction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -223,7 +223,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -246,7 +247,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -269,7 +271,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -292,7 +295,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the title
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getTitle()
     {
         return $this->title;
@@ -315,7 +319,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -338,7 +343,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -363,7 +369,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getConvictionDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -390,7 +397,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the forename
      *
-     * @return string     */
+     * @return string
+     */
     public function getForename()
     {
         return $this->forename;
@@ -413,7 +421,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the family name
      *
-     * @return string     */
+     * @return string
+     */
     public function getFamilyName()
     {
         return $this->familyName;
@@ -438,7 +447,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getBirthDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -465,7 +475,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the category text
      *
-     * @return string     */
+     * @return string
+     */
     public function getCategoryText()
     {
         return $this->categoryText;
@@ -488,7 +499,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the notes
      *
-     * @return string     */
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -511,7 +523,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the court fpn
      *
-     * @return string     */
+     * @return string
+     */
     public function getCourtFpn()
     {
         return $this->courtFpn;
@@ -534,7 +547,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the penalty
      *
-     * @return string     */
+     * @return string
+     */
     public function getPenalty()
     {
         return $this->penalty;
@@ -557,7 +571,8 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -566,6 +581,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

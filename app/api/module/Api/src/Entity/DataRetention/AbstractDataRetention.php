@@ -42,7 +42,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDataRetention implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDataRetention implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -228,7 +228,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -251,7 +252,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the assigned to
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getAssignedTo()
     {
         return $this->assignedTo;
@@ -274,7 +276,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -297,7 +300,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the data retention rule
      *
-     * @return \Dvsa\Olcs\Api\Entity\DataRetentionRule     */
+     * @return \Dvsa\Olcs\Api\Entity\DataRetentionRule
+     */
     public function getDataRetentionRule()
     {
         return $this->dataRetentionRule;
@@ -320,7 +324,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -343,7 +348,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -366,7 +372,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the entity name
      *
-     * @return string     */
+     * @return string
+     */
     public function getEntityName()
     {
         return $this->entityName;
@@ -389,7 +396,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the entity pk
      *
-     * @return int     */
+     * @return int
+     */
     public function getEntityPk()
     {
         return $this->entityPk;
@@ -412,7 +420,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the organisation name
      *
-     * @return string     */
+     * @return string
+     */
     public function getOrganisationName()
     {
         return $this->organisationName;
@@ -435,7 +444,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the organisation id
      *
-     * @return int     */
+     * @return int
+     */
     public function getOrganisationId()
     {
         return $this->organisationId;
@@ -458,7 +468,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the licence id
      *
-     * @return int     */
+     * @return int
+     */
     public function getLicenceId()
     {
         return $this->licenceId;
@@ -481,7 +492,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the lic no
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicNo()
     {
         return $this->licNo;
@@ -504,7 +516,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get the action confirmation
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getActionConfirmation()
     {
         return $this->actionConfirmation;
@@ -529,7 +542,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getNextReviewDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -558,7 +572,8 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getActionedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -571,6 +586,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

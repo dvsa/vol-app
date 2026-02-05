@@ -14,6 +14,7 @@ class SlaCalculator implements SlaCalculatorInterface
     {
     }
 
+    #[\Override]
     public function applySla(\DateTime $date, Sla $sla, ?TrafficArea $trafficArea = null): \DateTime
     {
         Logger::debug(

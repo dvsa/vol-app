@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -320,7 +320,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -343,7 +344,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the ebsr submission status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getEbsrSubmissionStatus()
     {
         return $this->ebsrSubmissionStatus;
@@ -366,7 +368,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the ebsr submission type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getEbsrSubmissionType()
     {
         return $this->ebsrSubmissionType;
@@ -389,7 +392,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -412,7 +416,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -435,7 +440,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -460,7 +466,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSubmittedDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -487,7 +494,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the licence no
      *
-     * @return string     */
+     * @return string
+     */
     public function getLicenceNo()
     {
         return $this->licenceNo;
@@ -510,7 +518,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the organisation email address
      *
-     * @return string     */
+     * @return string
+     */
     public function getOrganisationEmailAddress()
     {
         return $this->organisationEmailAddress;
@@ -533,7 +542,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the application classification
      *
-     * @return string     */
+     * @return string
+     */
     public function getApplicationClassification()
     {
         return $this->applicationClassification;
@@ -556,7 +566,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the variation no
      *
-     * @return int     */
+     * @return int
+     */
     public function getVariationNo()
     {
         return $this->variationNo;
@@ -579,7 +590,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the registration no
      *
-     * @return string     */
+     * @return string
+     */
     public function getRegistrationNo()
     {
         return $this->registrationNo;
@@ -604,7 +616,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getValidationStart($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -633,7 +646,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getValidationEnd($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -662,7 +676,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishStart($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -691,7 +706,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getPublishEnd($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -720,7 +736,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getProcessStart($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -749,7 +766,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getProcessEnd($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -776,7 +794,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the ebsr submission result
      *
-     * @return string     */
+     * @return string
+     */
     public function getEbsrSubmissionResult()
     {
         return $this->ebsrSubmissionResult;
@@ -801,7 +820,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDistributeStart($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -830,7 +850,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDistributeEnd($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -859,7 +880,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getDistributeExpire($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -886,7 +908,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the is from ftp
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsFromFtp()
     {
         return $this->isFromFtp;
@@ -909,7 +932,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -932,7 +956,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the txc version
      *
-     * @return string     */
+     * @return string
+     */
     public function getTxcVersion()
     {
         return $this->txcVersion;
@@ -955,7 +980,8 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -964,6 +990,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Audit;
 
 use DateTime;
@@ -48,7 +50,7 @@ class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWhenExists()
+    public function testHandleCommandWhenExists(): void
     {
         $this->repoMap['IrhpApplicationReadAudit']->shouldReceive('fetchOneOrMore')
             ->once()
@@ -67,7 +69,7 @@ class ReadIrhpApplicationTest extends AbstractCommandHandlerTestCase
         static::assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $entity = m::mock(IrhpApplication::class);
 

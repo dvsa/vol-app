@@ -32,6 +32,7 @@ final class Delete extends AbstractDeleteCommandHandler
      *
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $conditionUndertaking ConditionUndertaking */
@@ -44,9 +45,9 @@ final class Delete extends AbstractDeleteCommandHandler
         $value = $result->getIds()['id' . $command->getId()] ?? null;
 
         if ($value == $command->getId() && $conditionUndertaking->getConditionType() instanceof RefData) {
-            $eventHistoryType = $conditionUndertaking->getConditionType()->getId() === ConditionUndertaking::TYPE_CONDITION ? 
+            $eventHistoryType = $conditionUndertaking->getConditionType()->getId() === ConditionUndertaking::TYPE_CONDITION ?
                 EventHistoryTypeEntity::EVENT_CODE_CONDITION_DELETED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_DELETED;
-            
+
             // create Event History record
             $this->eventHistoryCreator->create($conditionUndertaking, $eventHistoryType);
         }
@@ -54,6 +55,7 @@ final class Delete extends AbstractDeleteCommandHandler
         return $result;
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');

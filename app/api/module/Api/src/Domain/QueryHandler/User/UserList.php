@@ -30,6 +30,7 @@ class UserList extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         assert($query instanceof UserListQry);

@@ -33,6 +33,7 @@ class PublicInquiryDefinition extends AbstractPublicInquiryData
      *
      * @return array
      */
+    #[\Override]
     public function formatDataForGroups($data)
     {
         $groups = [];

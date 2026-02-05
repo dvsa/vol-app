@@ -19,6 +19,7 @@ class RemoveDeleteDocuments extends AbstractCommandConsumer
      *
      * @return array
      */
+    #[\Override]
     public function getCommandData(QueueEntity $item)
     {
         return [];

@@ -21,7 +21,8 @@ readonly class FieldConfig
         public string|null $indexBy = null,
         public bool $orphanRemoval = false,
         public array $orderBy = []
-    ) {}
+    ) {
+    }
 
     /**
      * Create from EntityConfig array data
@@ -46,8 +47,8 @@ readonly class FieldConfig
      */
     public function hasCustomizations(): bool
     {
-        return $this->type !== null 
-            || $this->inversedBy !== null 
+        return $this->type !== null
+            || $this->inversedBy !== null
             || !empty($this->cascade)
             || $this->property !== null
             || $this->fetch !== null

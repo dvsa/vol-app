@@ -31,6 +31,7 @@ final class ProcessDuplicateVehicleRemoval extends AbstractCommandHandler implem
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $results = $this->getRepo()->fetchForRemoval();

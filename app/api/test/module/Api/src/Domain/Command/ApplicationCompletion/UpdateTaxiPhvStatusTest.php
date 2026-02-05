@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update TaxiPhv Status Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateTaxiPhvStatus;
  */
 class UpdateTaxiPhvStatusTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = UpdateTaxiPhvStatus::create(['id' => 111, 'foo' => 'bar']);
 

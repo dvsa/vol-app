@@ -31,16 +31,14 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals(true, $this->sut->assert($this->auth));
     }
 
-    /**
-     * @dataProvider getAssertForPartnerDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertForPartnerDataProvider')]
     public function testAssertForPartner(
-        $isGranted,
-        $currentUserType,
-        $currentUserEntityId,
-        $userType,
-        $userEntityId,
-        $expected
+        mixed $isGranted,
+        mixed $currentUserType,
+        mixed $currentUserEntityId,
+        mixed $userType,
+        mixed $userEntityId,
+        mixed $expected
     ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
@@ -60,7 +58,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForPartnerDataProvider(): array
+    public static function getAssertForPartnerDataProvider(): array
     {
         return [
             [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, true],
@@ -70,16 +68,14 @@ class ManageUserSelfserveTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @dataProvider getAssertForLocalAuthorityDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAssertForLocalAuthorityDataProvider')]
     public function testAssertForLocalAuthority(
-        $isGranted,
-        $currentUserType,
-        $currentUserEntityId,
-        $userType,
-        $userEntityId,
-        $expected
+        mixed $isGranted,
+        mixed $currentUserType,
+        mixed $currentUserEntityId,
+        mixed $userType,
+        mixed $userEntityId,
+        mixed $expected
     ): void {
         $currentUser = m::mock(User::class);
         $currentUser->shouldReceive('getUserType')->andReturn($currentUserType);
@@ -99,7 +95,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public function getAssertForLocalAuthorityDataProvider(): array
+    public static function getAssertForLocalAuthorityDataProvider(): array
     {
         return [
             [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, true],
@@ -120,9 +116,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertFalse($this->sut->assert($this->auth, $user));
     }
 
-    /**
-     * @dataProvider dpCanRead
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanRead')]
     public function testAssertForOperatorAdmin(bool $canRead): void
     {
         $user = m::mock(User::class);
@@ -137,9 +131,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($canRead, $this->sut->assert($this->auth, $user));
     }
 
-    /**
-     * @dataProvider dpCanRead
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCanRead')]
     public function testAssertForOperatorTc(bool $canRead): void
     {
         $user = m::mock(User::class);
@@ -155,7 +147,7 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($canRead, $this->sut->assert($this->auth, $user));
     }
 
-    public function dpCanRead(): array
+    public static function dpCanRead(): array
     {
         return [
             [true],

@@ -25,6 +25,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
     private EventHistoryCreator $eventHistoryCreator;
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */
@@ -51,7 +52,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
         $this->getRepo()->save($conditionUndertaking);
 
-        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ? 
+        $eventHistoryType = $command->getType() === ConditionUndertaking::TYPE_CONDITION ?
             EventHistoryTypeEntity::EVENT_CODE_CONDITION_CHANGED : EventHistoryTypeEntity::EVENT_CODE_UNDERTAKING_CHANGED;
 
         // create Event History record
@@ -80,6 +81,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
         }
     }
 
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');

@@ -20,6 +20,7 @@ class NoOfPermits implements ElementInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepresentation()
     {
         $textRepresentations = [];

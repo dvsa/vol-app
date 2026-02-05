@@ -20,6 +20,7 @@ class OtherLicence extends AbstractQueryHandler
 {
     protected $repoServiceName = 'OtherLicence';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $otherLicence = $this->getRepo()->fetchUsingId($query);

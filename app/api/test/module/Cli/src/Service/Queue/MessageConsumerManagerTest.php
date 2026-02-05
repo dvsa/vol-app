@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Message Consumer Manager Test
  *
@@ -39,14 +41,14 @@ class MessageConsumerManagerTest extends MockeryTestCase
         $this->sut = new MessageConsumerManager($sm);
     }
 
-    public function testValidate()
+    public function testValidate(): void
     {
         $plugin = m::mock(MessageConsumerInterface::class);
 
         $this->assertNull($this->sut->validate($plugin));
     }
 
-    public function testValidateInvalid()
+    public function testValidateInvalid(): void
     {
         $this->expectException(InvalidServiceException::class);
 

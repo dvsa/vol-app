@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Can Transfer Test
  *
@@ -32,10 +34,8 @@ class CanTransferTest extends AbstractHandlerTestCase
         parent::setUp();
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testIsValid($canAccessSource, $canAccessTarget, $canAccessLv1, $canAccessLv2, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testIsValid(mixed $canAccessSource, mixed $canAccessTarget, mixed $canAccessLv1, mixed $canAccessLv2, mixed $expected): void
     {
         /** @var CommandInterface $dto */
         $dto = m::mock(CommandInterface::class);
@@ -51,7 +51,7 @@ class CanTransferTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         return [
             [true, true, true, true, true],

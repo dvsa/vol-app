@@ -29,15 +29,12 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
     protected $section = 'grace-periods';
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
-    protected FormHelperService $formHelper;
-
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FlashMessengerHelperService $flashMessengerHelper,
+        protected FlashMessengerHelperService $flashMessengerHelper,
         protected TableFactory $tableFactory,
-        FormHelperService $formHelper,
+        protected FormHelperService $formHelper,
         protected ScriptFactory $scriptFactory,
         protected $navigation
     ) {
@@ -45,8 +42,6 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
             $niTextTranslationUtil,
             $authService
         );
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formHelper = $formHelper;
     }
 
     /**
@@ -54,6 +49,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      *
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
+    #[\Override]
     public function indexAction()
     {
         $request = $this->getRequest();

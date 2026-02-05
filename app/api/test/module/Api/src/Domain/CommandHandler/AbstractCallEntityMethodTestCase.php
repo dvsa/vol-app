@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler;
 
 use Doctrine\ORM\Query;
@@ -7,35 +9,23 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-abstract class AbstractUpdateCommandHandlerTest extends AbstractCommandHandlerTestCase
+abstract class AbstractCallEntityMethodTestCase extends AbstractCommandHandlerTestCase
 {
     protected $repoServiceName = 'changeMe';
-    protected $commandMethodName = 'changeMe';
     protected $entityMethodName = 'changeMe';
     protected $entityClass = 'changeMe';
-
-    private $commandValue = 'commandValue';
+    protected $repoClass = 'changeMe';
+    protected $sutClass = 'changeMe';
 
     public function setUp(): void
     {
-        $this->mockRepo($this->repoServiceName, $this->entityClass);
+        $this->mockRepo($this->repoServiceName, $this->repoClass);
         $this->sut = new $this->sutClass();
 
         parent::setUp();
     }
 
-    protected function initReferences()
-    {
-        if ($this->sut->isRefData()) {
-            $this->refData = [
-                $this->commandValue
-            ];
-        }
-
-        parent::initReferences();
-    }
-
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $entityId = 43;
 
@@ -46,30 +36,18 @@ abstract class AbstractUpdateCommandHandlerTest extends AbstractCommandHandlerTe
 
         $command = m::mock(CommandInterface::class);
         $command->shouldReceive('getId')
-            ->withNoArgs()
             ->andReturn($entityId);
-        $command->shouldReceive($this->commandMethodName)
-            ->withNoArgs()
-            ->andReturn($this->commandValue);
 
         $this->repoMap[$this->repoServiceName]->shouldReceive('fetchUsingId')
             ->with($command, Query::HYDRATE_OBJECT)
             ->once()
             ->andReturn($entity);
 
-        if ($this->sut->isRefData()) {
-            $entity->shouldReceive($this->entityMethodName)
-                ->with($this->refData[$this->commandValue])
-                ->once()
-                ->globally()
-                ->ordered();
-        } else {
-            $entity->shouldReceive($this->entityMethodName)
-                ->with($this->commandValue)
-                ->once()
-                ->globally()
-                ->ordered();
-        }
+        $entity->shouldReceive($this->entityMethodName)
+            ->withNoArgs()
+            ->once()
+            ->globally()
+            ->ordered();
 
         $this->repoMap[$this->repoServiceName]->shouldReceive('save')
             ->with($entity)

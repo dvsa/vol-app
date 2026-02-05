@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Companies House Initial Load Command Handler Test
  *
@@ -41,10 +43,9 @@ class InitialLoadTest extends AbstractCommandHandlerTestCase
 
     /**
      * Test handleCommand method happy path
-     *
-     * @dataProvider successProvider
      */
-    public function testHandleCommandSuccess($companyNumber, $stubResponse, $expectedSaveData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('successProvider')]
+    public function testHandleCommandSuccess(mixed $companyNumber, mixed $stubResponse, mixed $expectedSaveData): void
     {
         // expectations
         $this->mockApi
@@ -73,7 +74,7 @@ class InitialLoadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expectedSaveData, $company->toArray());
     }
 
-    public function successProvider()
+    public static function successProvider(): array
     {
         return [
             'real example' => [
@@ -220,7 +221,7 @@ class InitialLoadTest extends AbstractCommandHandlerTestCase
     /**
      * Test handleCommand exception handling
      */
-    public function testHandleCommandException()
+    public function testHandleCommandException(): void
     {
         // data
         $companyNumber = '01234567';

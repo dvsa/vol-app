@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceVehicleMediumLimit;
@@ -11,21 +13,21 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceVehicleMediumLimit;
  */
 class LicenceVehicleMediumLimitTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new LicenceVehicleMediumLimit();
         $query = $bookmark->getQuery(['licence' => 123]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderEmpty()
+    public function testRenderEmpty(): void
     {
         $bookmark = new LicenceVehicleMediumLimit();
         $bookmark->setData(['totAuthMediumVehicles' => null]);
         $this->assertEquals(LicenceVehicleMediumLimit::EMPTY_AUTH, $bookmark->render());
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new LicenceVehicleMediumLimit();
         $bookmark->setData(['totAuthMediumVehicles' => 1]);

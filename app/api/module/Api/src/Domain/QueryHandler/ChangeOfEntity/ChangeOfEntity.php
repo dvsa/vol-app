@@ -21,6 +21,7 @@ class ChangeOfEntity extends AbstractQueryHandler
 {
     protected $repoServiceName = 'ChangeOfEntity';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         $changeOfEntity = $this->getRepo()->fetchUsingId($query);

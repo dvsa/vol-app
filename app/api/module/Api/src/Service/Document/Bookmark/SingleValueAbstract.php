@@ -35,6 +35,7 @@ abstract class SingleValueAbstract extends DynamicBookmark
      *
      * @return QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $data = [
@@ -62,6 +63,7 @@ abstract class SingleValueAbstract extends DynamicBookmark
      *
      * @return null|string
      */
+    #[\Override]
     public function render()
     {
         $value = $this->getValue();

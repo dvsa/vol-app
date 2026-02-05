@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Cancel Licence Fees Test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\CancelLicenceFees;
  */
 class CancelLicenceFeesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CancelLicenceFees::create(['id' => 111, 'foo' => 'bar']);
 

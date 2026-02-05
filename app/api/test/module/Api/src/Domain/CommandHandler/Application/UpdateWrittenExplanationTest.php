@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateWrittenExplanation as 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateWrittenExplanation as Command;
 use Mockery as m;
 
-class UpdateWrittenExplanationTest extends AbstractUpdateApplicationTest
+class UpdateWrittenExplanationTest extends AbstractUpdateApplicationTestCase
 {
     protected string $handlerClass = Handler::class;
     protected string $commandClass = Command::class;
@@ -22,6 +22,7 @@ class UpdateWrittenExplanationTest extends AbstractUpdateApplicationTest
         'psvSmallPartWritten',
     ];
 
+    #[\Override]
     protected function setupApplication(): m\MockInterface&m\LegacyMockInterface
     {
         $application = parent::setupApplication();

@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractSubmissionSectionComment implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSubmissionSectionComment implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -146,7 +146,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -169,7 +170,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the submission
      *
-     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission     */
+     * @return \Dvsa\Olcs\Api\Entity\Submission\Submission
+     */
     public function getSubmission()
     {
         return $this->submission;
@@ -192,7 +194,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the submission section
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSubmissionSection()
     {
         return $this->submissionSection;
@@ -215,7 +218,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -238,7 +242,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -261,7 +266,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the comment
      *
-     * @return string     */
+     * @return string
+     */
     public function getComment()
     {
         return $this->comment;
@@ -284,7 +290,8 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -293,6 +300,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

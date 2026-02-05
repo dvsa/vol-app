@@ -17,6 +17,7 @@ class LetterTodo extends AbstractVersionedRepository
      *
      * @return array
      */
+    #[\Override]
     protected function getVersionedFields(): array
     {
         return [
@@ -30,6 +31,7 @@ class LetterTodo extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getVersionEntityClass(): string
     {
         return LetterTodoVersion::class;
@@ -40,6 +42,7 @@ class LetterTodo extends AbstractVersionedRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getEntityShortName(): string
     {
         return 'LetterTodo';

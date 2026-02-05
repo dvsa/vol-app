@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\TransportManagerApplication\Section;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -42,10 +44,8 @@ class TransportManagerMainReviewServiceTest extends MockeryTestCase
         $this->sut = new TransportManagerMainReviewService($abstractReviewServiceServices);
     }
 
-    /**
-     * @dataProvider provider
-     */
-    public function testGetConfig($tma, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
+    public function testGetConfig(mixed $tma, mixed $expected): void
     {
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
@@ -55,7 +55,7 @@ class TransportManagerMainReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfig($tma));
     }
 
-    public function provider()
+    public static function provider(): array
     {
         /** @var RefData $title */
         $title = m::mock(RefData::class)->makePartial();

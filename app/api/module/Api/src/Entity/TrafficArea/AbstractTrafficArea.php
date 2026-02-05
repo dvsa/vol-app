@@ -32,7 +32,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -228,7 +228,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the id
      *
-     * @return string     */
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -251,7 +252,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the contact details
      *
-     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails     */
+     * @return \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     */
     public function getContactDetails()
     {
         return $this->contactDetails;
@@ -274,7 +276,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -297,7 +300,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -320,7 +324,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -343,7 +348,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the txc name
      *
-     * @return string     */
+     * @return string
+     */
     public function getTxcName()
     {
         return $this->txcName;
@@ -366,7 +372,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the is scotland
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsScotland()
     {
         return $this->isScotland;
@@ -389,7 +396,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the is wales
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsWales()
     {
         return $this->isWales;
@@ -412,7 +420,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the is ni
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsNi()
     {
         return $this->isNi;
@@ -435,7 +444,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the is england
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsEngland()
     {
         return $this->isEngland;
@@ -458,7 +468,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the sales person reference
      *
-     * @return string     */
+     * @return string
+     */
     public function getSalesPersonReference()
     {
         return $this->salesPersonReference;
@@ -481,7 +492,8 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -742,6 +754,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

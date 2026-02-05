@@ -10,6 +10,7 @@ final class UpdateVehiclesSizeStatus extends AbstractUpdateStatus
 {
     protected $section = 'VehiclesSize';
 
+    #[\Override]
     protected function isSectionValid(Application $application): bool
     {
         return $application->isSectionCompleted($this->section);

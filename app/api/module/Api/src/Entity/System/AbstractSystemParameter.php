@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass
  * @ORM\Table(name="system_parameter")
  */
-abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -72,7 +72,8 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get the id
      *
-     * @return string     */
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -95,7 +96,8 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get the param value
      *
-     * @return string     */
+     * @return string
+     */
     public function getParamValue()
     {
         return $this->paramValue;
@@ -118,7 +120,8 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get the description
      *
-     * @return string     */
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
@@ -127,6 +130,7 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

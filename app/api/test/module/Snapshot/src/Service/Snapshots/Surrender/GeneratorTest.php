@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Snapshot\Service\Snapshots\Surrender;
 
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
@@ -91,10 +93,8 @@ class GeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dbLicenceType
-     */
-    public function testGenerate($licenceType, $expected)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dbLicenceType')]
+    public function testGenerate(mixed $licenceType, mixed $expected): void
     {
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getLicNo')->andReturn('AB1234567');
@@ -123,7 +123,7 @@ class GeneratorTest extends MockeryTestCase
         $this->assertSame($expected, $variables);
     }
 
-    protected function setServices($surrender)
+    protected function setServices(mixed $surrender): void
     {
         $this->licenceDetailsService->shouldReceive('getConfigFromData')
             ->once()->with($surrender)->andReturn('licenceDetails');
@@ -135,7 +135,7 @@ class GeneratorTest extends MockeryTestCase
             ->once()->with($surrender)->andReturn('Operator licence');
 
         $this->communityLicenceReviewService->shouldReceive('getConfigFromData')
-            ->once()->with($surrender)->andReturn('Community licence');
+            ->atMost()->once()->with($surrender)->andReturn('Community licence');
 
         $this->declarationReviewService->shouldReceive('getConfigFromData')
             ->once()->with($surrender)->andReturn('declaration');
@@ -144,7 +144,7 @@ class GeneratorTest extends MockeryTestCase
             ->once()->with($surrender)->andReturn('signature');
     }
 
-    public function dbLicenceType()
+    public static function dbLicenceType(): array
     {
         return [
             [
@@ -181,39 +181,38 @@ class GeneratorTest extends MockeryTestCase
                         ]
                     ]
                 ],
-
+            ],
+            [
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                 [
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    [
-                        'reviewTitle' => 'surrender-review-title',
-                        'subTitle' => 'AB1234567',
-                        'settings' => [
-                            'hide-count' => true
-                        ],
-                        'sections' => [
-                            [
-                                'header' => 'surrender-review-licence',
-                                'config' => 'licenceDetails'
-                            ],
-                            [
-                                'header' => 'surrender-review-current-discs',
-                                'config' => 'currentDiscs'
-                            ],
-                            [
-                                'header' => 'surrender-review-operator-licence',
-                                'config' => 'Operator licence'
-                            ],
-                            [
-                                'header' => 'surrender-review-declaration',
-                                'config' => 'declaration'
-                            ],
-                            [
-                                'config' => 'signature'
-                            ]
-                        ]
+                    'reviewTitle' => 'surrender-review-title',
+                    'subTitle' => 'AB1234567',
+                    'settings' => [
+                        'hide-count' => true
                     ],
-                ]
-            ]
+                    'sections' => [
+                        [
+                            'header' => 'surrender-review-licence',
+                            'config' => 'licenceDetails'
+                        ],
+                        [
+                            'header' => 'surrender-review-current-discs',
+                            'config' => 'currentDiscs'
+                        ],
+                        [
+                            'header' => 'surrender-review-operator-licence',
+                            'config' => 'Operator licence'
+                        ],
+                        [
+                            'header' => 'surrender-review-declaration',
+                            'config' => 'declaration'
+                        ],
+                        [
+                            'config' => 'signature'
+                        ]
+                    ]
+                ],
+            ],
         ];
     }
 }

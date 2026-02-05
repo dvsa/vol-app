@@ -119,6 +119,7 @@ abstract class AbstractPublicationLinkSection extends DynamicBookmark
      *
      * @return QueryInterface
      */
+    #[\Override]
     public function getQuery(array $data)
     {
         $bundle = [
@@ -134,6 +135,7 @@ abstract class AbstractPublicationLinkSection extends DynamicBookmark
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $entries = [];

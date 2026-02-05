@@ -36,7 +36,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpPermitApplication implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpPermitApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -292,7 +292,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -315,7 +316,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the irhp permit window
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow
+     */
     public function getIrhpPermitWindow()
     {
         return $this->irhpPermitWindow;
@@ -338,7 +340,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -361,7 +364,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the irhp application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     */
     public function getIrhpApplication()
     {
         return $this->irhpApplication;
@@ -384,7 +388,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the sectors
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\Sectors
+     */
     public function getSectors()
     {
         return $this->sectors;
@@ -407,7 +412,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -430,7 +436,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -453,7 +460,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -478,7 +486,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getStartDate($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -505,7 +514,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the checked answers
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getCheckedAnswers()
     {
         return $this->checkedAnswers;
@@ -528,7 +538,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the permits required
      *
-     * @return int     */
+     * @return int
+     */
     public function getPermitsRequired()
     {
         return $this->permitsRequired;
@@ -551,7 +562,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the required euro5
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequiredEuro5()
     {
         return $this->requiredEuro5;
@@ -574,7 +586,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the required euro6
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequiredEuro6()
     {
         return $this->requiredEuro6;
@@ -597,7 +610,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the required standard
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequiredStandard()
     {
         return $this->requiredStandard;
@@ -620,7 +634,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the required cabotage
      *
-     * @return int     */
+     * @return int
+     */
     public function getRequiredCabotage()
     {
         return $this->requiredCabotage;
@@ -643,7 +658,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the properties
      *
-     * @return string     */
+     * @return string
+     */
     public function getProperties()
     {
         return $this->properties;
@@ -666,7 +682,8 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -990,6 +1007,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

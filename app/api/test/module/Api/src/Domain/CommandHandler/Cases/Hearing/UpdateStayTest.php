@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Stay Test
  *
@@ -43,7 +45,7 @@ class UpdateStayTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $mockAppeal = m::mock(AppealEntity::class);
         $mockCase = m::mock(CasesEntity::class)->makePartial();

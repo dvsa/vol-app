@@ -27,6 +27,7 @@ final class CreatePreviousConviction extends AbstractCommandHandler implements T
 {
     protected $repoServiceName = 'PreviousConviction';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

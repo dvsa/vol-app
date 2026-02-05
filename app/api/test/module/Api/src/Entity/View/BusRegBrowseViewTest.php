@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Entity\View;
 
 use Dvsa\Olcs\Api\Entity\View\BusRegBrowseView;
@@ -49,15 +51,14 @@ class BusRegBrowseViewTest extends \PHPUnit\Framework\TestCase
         $ref = new \ReflectionObject($this->entity);
         foreach (array_keys($this->testData) as $property) {
             $refProperty = $ref->getProperty($property);
-            $refProperty->setAccessible(true);
             $refProperty->setValue($this->entity, $this->testData[$property]);
         }
     }
 
-    public function testGetters()
+    public function testGetters(): void
     {
         foreach ($this->testData as $property => $value) {
-            $getter = ($property === 'isShortNotice') ? $property : 'get' . ucfirst($property);
+            $getter = ($property === 'isShortNotice') ? $property : 'get' . ucfirst((string) $property);
             $this->assertEquals($value, $this->entity->$getter());
         }
     }

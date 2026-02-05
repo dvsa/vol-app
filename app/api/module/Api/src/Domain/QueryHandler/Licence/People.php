@@ -23,6 +23,7 @@ class People extends AbstractQueryHandler
      *
      * @return \Dvsa\Olcs\Api\Domain\QueryHandler\Result
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence \Dvsa\Olcs\Api\Entity\Licence\Licence */

@@ -9,6 +9,7 @@ namespace Olcs\Service\Marker;
  */
 class CaseStayMarker extends AbstractMarker
 {
+    #[\Override]
     public function canRender()
     {
         $data = $this->getData();
@@ -20,6 +21,7 @@ class CaseStayMarker extends AbstractMarker
         return count($this->getCasesWithStays($data)) > 0;
     }
 
+    #[\Override]
     public function render()
     {
         $data = $this->getData();

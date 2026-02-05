@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\Collection;
  *    }
  * )
  */
-abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -101,7 +101,8 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -124,7 +125,8 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get the org type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOrgType()
     {
         return $this->orgType;
@@ -147,7 +149,8 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get the org person type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getOrgPersonType()
     {
         return $this->orgPersonType;
@@ -156,6 +159,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

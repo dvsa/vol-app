@@ -26,6 +26,7 @@ final class DigitalSendReminders extends AbstractCommandHandler implements Trans
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $reminderPeriodDays = $this->getRepo('SystemParameter')->getDigitalContinuationReminderPeriod();

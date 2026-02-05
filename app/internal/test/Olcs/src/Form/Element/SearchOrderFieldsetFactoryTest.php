@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Form\Element;
 
 use Common\Service\Data\Search\Search as SearchDataService;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class SearchOrderFieldsetFactoryTest extends TestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $options = [
             'name' => 'element_name'

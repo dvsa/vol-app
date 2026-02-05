@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Companies House CreateAlert command test
  *
@@ -17,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\CreateAlert;
  */
 class CreateAlertTest extends \PHPUnit\Framework\TestCase
 {
-    public function testStructure()
+    public function testStructure(): void
     {
         $command = CreateAlert::create(
             [

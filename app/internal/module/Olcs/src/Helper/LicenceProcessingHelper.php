@@ -22,6 +22,7 @@ class LicenceProcessingHelper extends AbstractProcessingHelper
      * @param string $activeSection
      * @return array
      */
+    #[\Override]
     public function getNavigation($id, $activeSection = null)
     {
         $sections = $this->getSections();

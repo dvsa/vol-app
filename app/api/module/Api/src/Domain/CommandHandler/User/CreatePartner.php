@@ -21,6 +21,7 @@ final class CreatePartner extends AbstractCommandHandler implements Transactione
 
     protected $extraRepos = ['ContactDetails'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $partner = ContactDetails::create(

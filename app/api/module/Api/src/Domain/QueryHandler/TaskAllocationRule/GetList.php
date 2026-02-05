@@ -22,6 +22,7 @@ class GetList extends AbstractQueryHandler
      * @return array
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query): array
     {
         $repo = $this->getRepo(Repository\TaskAllocationRule::class);

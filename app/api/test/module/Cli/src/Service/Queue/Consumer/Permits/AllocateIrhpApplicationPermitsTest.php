@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Allocate IRHP Application Permits Test
  *
@@ -21,7 +23,7 @@ class AllocateIrhpApplicationPermitsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = Sut::class;
 
-    public function testGetCommandData()
+    public function testGetCommandData(): void
     {
         $item = new QueueEntity();
         $item->setEntityId(763);

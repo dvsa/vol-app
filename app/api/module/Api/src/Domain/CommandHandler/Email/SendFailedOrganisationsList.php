@@ -14,6 +14,7 @@ class SendFailedOrganisationsList extends AbstractCommandHandler
     /**
      * @inheritDoc
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $organisationIds = $command->getOrganisationNumbers();

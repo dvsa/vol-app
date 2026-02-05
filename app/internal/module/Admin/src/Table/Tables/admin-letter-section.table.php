@@ -50,7 +50,7 @@ return [
             'title' => 'Name',
             'name' => 'name',
             'sort' => 'name',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get name from current version
                 if (isset($row['currentVersion']['name'])) {
                     return Escape::html($row['currentVersion']['name']);
@@ -61,7 +61,7 @@ return [
         [
             'title' => 'Section Type',
             'name' => 'sectionType',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get type from current version
                 if (isset($row['currentVersion']['sectionType'])) {
                     return Escape::html($row['currentVersion']['sectionType']);
@@ -72,7 +72,7 @@ return [
         [
             'title' => 'Goods/PSV',
             'name' => 'goodsOrPsv',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get goodsOrPsv from current version
                 if (isset($row['currentVersion']['goodsOrPsv']['description'])) {
                     return Escape::html($row['currentVersion']['goodsOrPsv']['description']);
@@ -86,7 +86,7 @@ return [
         [
             'title' => 'NI',
             'name' => 'isNi',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get isNi from current version
                 $isNi = false;
                 if (isset($row['currentVersion']['isNi'])) {
@@ -100,7 +100,7 @@ return [
         [
             'title' => 'Requires Input',
             'name' => 'requiresInput',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 // For versioned entity, get requiresInput from current version
                 $requiresInput = false;
                 if (isset($row['currentVersion']['requiresInput'])) {
@@ -114,7 +114,7 @@ return [
         [
             'title' => 'Current Version',
             'name' => 'currentVersion',
-            'formatter' => function($row) {
+            'formatter' => function ($row) {
                 if (isset($row['currentVersion']['version'])) {
                     return 'v' . Escape::html($row['currentVersion']['version']);
                 }
@@ -131,11 +131,11 @@ return [
                 } elseif (isset($row['publishFrom'])) {
                     $publishFrom = $row['publishFrom'];
                 }
-                
+
                 if (empty($publishFrom)) {
                     return 'Immediate';
                 }
-                
+
                 $column['formatter'] = Date::class;
                 $tempRow = ['publishFrom' => $publishFrom];
                 return (new Date())->format($tempRow, ['name' => 'publishFrom']);

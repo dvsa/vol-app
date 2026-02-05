@@ -24,6 +24,7 @@ class ApplicationConvictionsPenaltiesReviewService extends AbstractReviewService
      *
      * @return array
      */
+    #[\Override]
     public function getConfigFromData(array $data = [])
     {
         if ($data['prevConviction'] == 'N') {

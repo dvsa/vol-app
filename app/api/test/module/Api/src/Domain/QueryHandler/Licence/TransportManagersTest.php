@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\Licence;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\Licence\TransportManagers as QueryHandler;
@@ -25,7 +27,7 @@ class TransportManagersTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $licenceId = 1066;
         $query = Query::create(['id' => $licenceId]);

@@ -15,6 +15,7 @@ use Laminas\Stdlib\ResponseInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\TermsAgreedListener;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TermsAgreedListenerTest extends MockeryTestCase
 {
@@ -36,7 +37,15 @@ class TermsAgreedListenerTest extends MockeryTestCase
     {
         $priority = 999;
         $em = m::mock(EventManagerInterface::class);
-        $em->expects('attach')->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], $priority);
+        $em->expects('attach')
+            ->with(
+                MvcEvent::EVENT_DISPATCH,
+                m::on(function ($listener) {
+                    $rf = new \ReflectionFunction($listener);
+                    return $rf->getClosureThis() === $this->sut && $rf->getName() === 'onDispatch';
+                }),
+                $priority
+            );
 
         $this->sut->attach($em, $priority);
     }
@@ -50,17 +59,15 @@ class TermsAgreedListenerTest extends MockeryTestCase
         $this->sut->onDispatch($event);
     }
 
-    /**
-     * @dataProvider dpExcludedRoute
-     */
-    public function testOnDispatchExcludedRoute($route): void
+    #[DataProvider('dpExcludedRoute')]
+    public function testOnDispatchExcludedRoute(string $route): void
     {
         $this->sut->onDispatch(
             $this->getEvent($route)
         );
     }
 
-    public function dpExcludedRoute(): array
+    public static function dpExcludedRoute(): array
     {
         return [
             [TermsAgreedListener::ROUTE_WELCOME],
@@ -131,7 +138,7 @@ class TermsAgreedListenerTest extends MockeryTestCase
         $this->assertEquals($response, $this->sut->onDispatch($event));
     }
 
-    private function getEvent($route = 'route'): m\MockInterface&m\LegacyMockInterface
+    private function getEvent(string $route = 'route'): m\MockInterface&m\LegacyMockInterface
     {
         $request = m::mock(Request::class);
 

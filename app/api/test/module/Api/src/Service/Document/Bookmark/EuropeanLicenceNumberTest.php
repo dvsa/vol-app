@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\EuropeanLicenceNumber;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\EuropeanLicenceNumber;
  */
 class EuropeanLicenceNumberTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new EuropeanLicenceNumber();
         $query = $bookmark->getQuery(['communityLic' => 123]);
@@ -19,7 +21,7 @@ class EuropeanLicenceNumberTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new EuropeanLicenceNumber();
         $bookmark->setData(

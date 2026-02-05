@@ -23,6 +23,7 @@ final class Withdraw extends AbstractCommandHandler implements TransactionedInte
 {
     protected $repoServiceName = 'Licence';
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /** @var Licence $licence */

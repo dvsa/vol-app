@@ -38,7 +38,6 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
 
     protected $lva = 'application';
     protected string $location = 'internal';
-    protected StringHelperService $stringHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -64,14 +63,12 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
         TableFactory $tableFactory,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
-        StringHelperService $stringHelper,
+        protected StringHelperService $stringHelper,
         ApplicationFinancialEvidenceAdapter $lvaAdapter,
         FileUploadHelperService $fileUploadHelper,
         protected RestrictionHelperService $restrictionHelper,
         protected $navigation
     ) {
-        $this->stringHelper = $stringHelper;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

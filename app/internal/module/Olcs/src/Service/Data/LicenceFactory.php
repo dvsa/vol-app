@@ -16,6 +16,7 @@ class LicenceFactory implements FactoryInterface
      * @return Licence
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Licence
     {
         return new Licence(

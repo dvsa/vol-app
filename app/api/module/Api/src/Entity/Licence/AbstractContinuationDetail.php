@@ -41,7 +41,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractContinuationDetail implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractContinuationDetail implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -329,7 +329,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -352,7 +353,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the continuation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Continuation     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Continuation
+     */
     public function getContinuation()
     {
         return $this->continuation;
@@ -375,7 +377,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -398,7 +401,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the checklist document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getChecklistDocument()
     {
         return $this->checklistDocument;
@@ -421,7 +425,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -444,7 +449,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the signature type
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getSignatureType()
     {
         return $this->signatureType;
@@ -467,7 +473,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the digital signature
      *
-     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature     */
+     * @return \Dvsa\Olcs\Api\Entity\DigitalSignature
+     */
     public function getDigitalSignature()
     {
         return $this->digitalSignature;
@@ -490,7 +497,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -513,7 +521,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -536,7 +545,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the received
      *
-     * @return string     */
+     * @return string
+     */
     public function getReceived()
     {
         return $this->received;
@@ -559,7 +569,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the tot auth vehicles
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotAuthVehicles()
     {
         return $this->totAuthVehicles;
@@ -582,7 +593,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the tot psv discs
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotPsvDiscs()
     {
         return $this->totPsvDiscs;
@@ -605,7 +617,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the tot community licences
      *
-     * @return int     */
+     * @return int
+     */
     public function getTotCommunityLicences()
     {
         return $this->totCommunityLicences;
@@ -628,7 +641,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the average balance amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getAverageBalanceAmount()
     {
         return $this->averageBalanceAmount;
@@ -651,7 +665,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the has overdraft
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasOverdraft()
     {
         return $this->hasOverdraft;
@@ -674,7 +689,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the overdraft amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getOverdraftAmount()
     {
         return $this->overdraftAmount;
@@ -697,7 +713,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the has factoring
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasFactoring()
     {
         return $this->hasFactoring;
@@ -720,7 +737,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the factoring amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getFactoringAmount()
     {
         return $this->factoringAmount;
@@ -743,7 +761,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the has other finances
      *
-     * @return string     */
+     * @return string
+     */
     public function getHasOtherFinances()
     {
         return $this->hasOtherFinances;
@@ -766,7 +785,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the other finances amount
      *
-     * @return string     */
+     * @return string
+     */
     public function getOtherFinancesAmount()
     {
         return $this->otherFinancesAmount;
@@ -789,7 +809,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the other finances details
      *
-     * @return string     */
+     * @return string
+     */
     public function getOtherFinancesDetails()
     {
         return $this->otherFinancesDetails;
@@ -812,7 +833,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the financial evidence uploaded
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getFinancialEvidenceUploaded()
     {
         return $this->financialEvidenceUploaded;
@@ -835,7 +857,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the is digital
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getIsDigital()
     {
         return $this->isDigital;
@@ -858,7 +881,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the digital notification sent
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getDigitalNotificationSent()
     {
         return $this->digitalNotificationSent;
@@ -881,7 +905,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the digital reminder sent
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getDigitalReminderSent()
     {
         return $this->digitalReminderSent;
@@ -904,7 +929,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -913,6 +939,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

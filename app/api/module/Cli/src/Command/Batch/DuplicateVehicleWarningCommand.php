@@ -10,11 +10,13 @@ class DuplicateVehicleWarningCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:duplicate-vehicle-warning';
 
+    #[\Override]
     protected function configure()
     {
         $this->setDescription('Send duplicate vehicle warning letters');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->initializeOutputInterface($output);

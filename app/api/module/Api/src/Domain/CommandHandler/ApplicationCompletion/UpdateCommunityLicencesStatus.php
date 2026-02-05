@@ -23,6 +23,7 @@ final class UpdateCommunityLicencesStatus extends AbstractUpdateStatus
 
     protected $section = 'CommunityLicences';
 
+    #[\Override]
     protected function isSectionValid(Application $application)
     {
         return true;

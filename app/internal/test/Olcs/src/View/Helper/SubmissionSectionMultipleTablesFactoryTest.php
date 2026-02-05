@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\View\Helper;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -11,7 +13,7 @@ use Mockery as m;
 
 class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $mockTranslator = m::mock(TranslationHelperService::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\IrhpPermitRange;
 
 use Mockery as m;
@@ -34,7 +36,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             RefData::EMISSIONS_CATEGORY_EURO5_REF,
@@ -52,10 +55,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider dpShortTermAnnualTypeCombinations
-     */
-    public function testHandleCommand($isEcmtShortTerm, $isEcmtAnnual, $isBilateral)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShortTermAnnualTypeCombinations')]
+    public function testHandleCommand(mixed $isEcmtShortTerm, mixed $isEcmtAnnual, mixed $isBilateral): void
     {
         $id = 1;
         $cmdData = [
@@ -135,7 +136,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
      * Test for overlapping IRHP Permit Ranges - no values are asserted as this tests to ensure that a validation
      * exception is thrown.
      */
-    public function testHandleOverlap()
+    public function testHandleOverlap(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $cmdData = [
@@ -175,7 +176,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandBilateralNoJourney()
+    public function testHandleCommandBilateralNoJourney(): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
 
@@ -227,10 +228,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @dataProvider dpShortTermAnnualTypeCombinations
-     */
-    public function testHandleCommandBadEcmtEmissionsCategory($isEcmtShortTerm, $isEcmtAnnual, $isBilateral)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShortTermAnnualTypeCombinations')]
+    public function testHandleCommandBadEcmtEmissionsCategory(mixed $isEcmtShortTerm, mixed $isEcmtAnnual, mixed $isBilateral): void
     {
         $this->expectException(\Dvsa\Olcs\Api\Domain\Exception\ValidationException::class);
         $cmdData = [
@@ -282,7 +281,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function dpShortTermAnnualTypeCombinations()
+    public static function dpShortTermAnnualTypeCombinations(): array
     {
         return [
             [true, false, false],

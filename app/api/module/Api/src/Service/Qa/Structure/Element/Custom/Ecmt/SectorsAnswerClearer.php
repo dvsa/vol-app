@@ -24,6 +24,7 @@ class SectorsAnswerClearer implements AnswerClearerInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function clear(QaContext $qaContext)
     {
         $irhpApplicationEntity = $qaContext->getQaEntity();

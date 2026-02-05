@@ -25,6 +25,7 @@ class GetListByVariation extends AbstractQueryHandler
      *
      * @return array
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var \Dvsa\Olcs\Api\Entity\Application\Application $application */

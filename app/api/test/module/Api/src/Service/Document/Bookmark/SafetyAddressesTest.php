@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 
 use Dvsa\Olcs\Api\Service\Document\Bookmark\SafetyAddresses;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SafetyAddressesTest extends MockeryTestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new SafetyAddresses();
         $query = $bookmark->getQuery(['licence' => 123]);
@@ -21,7 +23,7 @@ class SafetyAddressesTest extends MockeryTestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public function testRenderWithNoSafetyAddresses()
+    public function testRenderWithNoSafetyAddresses(): void
     {
         $bookmark = new SafetyAddresses();
         $bookmark->setData([]);
@@ -32,7 +34,7 @@ class SafetyAddressesTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithSafetyAddresses()
+    public function testRenderWithSafetyAddresses(): void
     {
         /** @var SafetyAddresses|m\Mock $bookmark */
         $bookmark = m::mock(\Dvsa\Olcs\Api\Service\Document\Bookmark\SafetyAddresses::class)

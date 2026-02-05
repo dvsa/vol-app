@@ -38,7 +38,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractCompanySubsidiary implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractCompanySubsidiary implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -160,7 +160,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -183,7 +184,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -206,7 +208,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -229,7 +232,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -252,7 +256,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the name
      *
-     * @return string     */
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
@@ -275,7 +280,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the company no
      *
-     * @return string     */
+     * @return string
+     */
     public function getCompanyNo()
     {
         return $this->companyNo;
@@ -298,7 +304,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -321,7 +328,8 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get the olbs key
      *
-     * @return int     */
+     * @return int
+     */
     public function getOlbsKey()
     {
         return $this->olbsKey;
@@ -330,6 +338,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * LicenceDecisionLegislation data service test
  *
@@ -66,7 +68,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListData
      */
-    public function testFetchListData()
+    public function testFetchListData(): void
     {
         $results = ['results' => 'results'];
 
@@ -103,7 +105,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptionsUsingGroups()
+    public function testFetchListOptionsUsingGroups(): void
     {
         $this->sut->setData('licenceDecisionLegislation', $this->listData);
 
@@ -131,7 +133,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptionsWithoutGroups()
+    public function testFetchListOptionsWithoutGroups(): void
     {
         $this->sut->setData('licenceDecisionLegislation', $this->listData);
 
@@ -149,7 +151,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptionsEmpty
      */
-    public function testFetchListOptionsEmpty()
+    public function testFetchListOptionsEmpty(): void
     {
         $this->sut->setData('licenceDecisionLegislation', []);
 
@@ -163,7 +165,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     /**
      * Test fetchUserListData with exception
      */
-    public function testFetchListDataWithException()
+    public function testFetchListDataWithException(): void
     {
         $this->expectException(DataServiceException::class);
 

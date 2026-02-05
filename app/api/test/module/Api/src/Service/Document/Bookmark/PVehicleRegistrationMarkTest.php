@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * PVehicleRegistrationMark Test
  */
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\PVehicleRegistrationMark;
  */
 class PVehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
         $bookmark = new PVehicleRegistrationMark();
         $query = $bookmark->getQuery(['impounding' => 123]);
@@ -21,7 +23,7 @@ class PVehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(is_null($bookmark->getQuery([])));
     }
 
-    public function testRender()
+    public function testRender(): void
     {
         $bookmark = new PVehicleRegistrationMark();
         $bookmark->setData(['vrm' => 'AB12 CDE']);

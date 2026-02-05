@@ -47,5 +47,4 @@ class ProcessRequestMap extends AbstractIdOnlyCommand
     {
         return $this->regNo;
     }
-
 }

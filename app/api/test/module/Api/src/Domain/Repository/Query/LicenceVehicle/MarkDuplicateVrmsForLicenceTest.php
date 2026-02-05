@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\LicenceVehicle;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\LicenceVehicle\MarkDuplicateVrmsForLicence;
@@ -71,7 +73,7 @@ class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public function paramProvider()
+    public static function paramProvider(): array
     {
         return [
             [
@@ -98,12 +100,12 @@ class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
         ];
     }
 
-    protected function getSut()
+    protected function getSut(): MarkDuplicateVrmsForLicence
     {
         return new MarkDuplicateVrmsForLicence();
     }
 
-    protected function getExpectedQuery()
+    protected function getExpectedQuery(): string
     {
         return 'UPDATE licence_vehicle lv '
         . 'JOIN vehicle v '

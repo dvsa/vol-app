@@ -38,7 +38,7 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
      */
     public function __construct(
         AbstractDataServiceServices $abstractDataServiceServices,
-        private TranslationHelperService $translator
+        private readonly TranslationHelperService $translator
     ) {
         parent::__construct($abstractDataServiceServices);
     }
@@ -133,6 +133,7 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function fetchListOptions($context = null, $useGroups = false)
     {
         $data = $this->fetchListData();

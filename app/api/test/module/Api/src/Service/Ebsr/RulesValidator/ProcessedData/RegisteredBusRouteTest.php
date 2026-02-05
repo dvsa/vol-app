@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData;
 
 use Dvsa\Olcs\Api\Entity\Bus\BusReg as BusRegEntity;
@@ -15,13 +17,13 @@ class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
     /**
      * tests whether the bus route has a status of registered
      *
-     * @dataProvider isValidProvider
      *
      * @param string $txcAppType
      * @param string $status
      * @param bool $valid
      */
-    public function testIsValid($txcAppType, $status, $valid)
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
+    public function testIsValid(mixed $txcAppType, mixed $status, mixed $valid): void
     {
         $sut = new RegisteredBusRoute();
         $busReg = new BusRegEntity();
@@ -41,7 +43,7 @@ class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function isValidProvider()
+    public static function isValidProvider(): array
     {
         return [
             [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_NEW, true],

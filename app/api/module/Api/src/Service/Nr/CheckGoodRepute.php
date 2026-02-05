@@ -73,6 +73,6 @@ class CheckGoodRepute extends AbstractXmlRequest
                     ],
                 ],
             ],
-        ]];
+            ]];
     }
 }

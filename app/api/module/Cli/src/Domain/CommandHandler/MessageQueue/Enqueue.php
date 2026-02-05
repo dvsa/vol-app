@@ -29,6 +29,7 @@ class Enqueue extends AbstractCommandHandler implements QueueInterface
      *
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         /**

@@ -37,6 +37,7 @@ final class ResolvePayment extends AbstractCommandHandler implements
 
     protected $extraRepos = ['Fee', 'Task'];
 
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

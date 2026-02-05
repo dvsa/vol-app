@@ -25,6 +25,7 @@ final class DisableFileUpload extends AbstractCommandHandler implements ToggleRe
     protected $toggleConfig = [FeatureToggle::MESSAGING];
 
     /** @var CommandInterface|DisableFileUploadCommand $command */
+    #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
         $repo = $this->getRepo(OrganisationRepo::class);

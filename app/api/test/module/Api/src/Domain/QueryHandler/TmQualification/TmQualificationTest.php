@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * TmQualification Test
  *
@@ -30,7 +32,7 @@ class TmQualificationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $bundle = [
             'qualificationType',

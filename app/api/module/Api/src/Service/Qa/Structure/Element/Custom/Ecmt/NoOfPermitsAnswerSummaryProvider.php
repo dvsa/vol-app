@@ -16,6 +16,7 @@ class NoOfPermitsAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateName()
     {
         return 'ecmt-no-of-permits';
@@ -24,6 +25,7 @@ class NoOfPermitsAnswerSummaryProvider implements AnswerSummaryProviderInterface
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getTemplateVariables(QaContext $qaContext, ElementInterface $element, $isSnapshot)
     {
         $irhpPermitApplication = $qaContext->getQaEntity()->getFirstIrhpPermitApplication();

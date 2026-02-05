@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\CreateDocument as Cmd;
@@ -27,7 +29,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $data = [
             'filename' => 'a',
@@ -81,7 +83,7 @@ class CreateDocumentTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public function testHandleCommandDefaultExternal()
+    public function testHandleCommandDefaultExternal(): void
     {
         $data = [
             'filename' => 'a',

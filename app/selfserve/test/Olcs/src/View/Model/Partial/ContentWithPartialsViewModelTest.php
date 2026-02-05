@@ -28,10 +28,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
-    public function constructThrowsExceptionIfNoPartialsAreProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructThrowsExceptionIfNoPartialsAreProvided(): void
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -41,10 +39,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->setUpSut([]);
     }
 
-    /**
-     * @test
-     */
-    public function constructThrowsExceptionIfEmptyPartialsAreProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructThrowsExceptionIfEmptyPartialsAreProvided(): void
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -54,10 +50,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => []]);
     }
 
-    /**
-     * @test
-     */
-    public function constructSetsEmptyContentIfNoneProvided()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsEmptyContentIfNoneProvided(): void
     {
         // Execute
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -66,10 +60,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertEquals(static::AN_EMPTY_CONTENT, $this->sut->getVariable(static::THE_CONTENT_VARIABLE));
     }
 
-    /**
-     * @test
-     */
-    public function constructSetsTemplate()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function constructSetsTemplate(): void
     {
         // Execute
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -78,9 +70,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertEquals(static::THE_CONTENT_WITH_PARTIALS_TEMPLATE, $this->sut->getTemplate());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableIsCallable(): void
     {
         // Setup
@@ -90,11 +80,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->setVariable(...));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariableIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariableIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableSetsPartials(): void
     {
         // Setup
@@ -107,11 +94,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertEquals([static::A_SECOND_PARTIAL], $this->sut->getVariable(static::THE_PARTIALS_VARIABLE));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariableIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariableIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableThrowsExceptionWhenProvidingPartialsThatAreEmpty(): void
     {
         // Setup
@@ -125,11 +109,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->sut->setVariable(static::THE_PARTIALS_VARIABLE, []);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariableIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariableIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariableThrowsExceptionWhenProvidingPartialsThatAreNotAnArray(): void
     {
         // Setup
@@ -143,9 +124,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->sut->setVariable(static::THE_PARTIALS_VARIABLE, static::AN_INVALID_PARTIALS_VALUE);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesIsCallable(): void
     {
         // Setup
@@ -155,11 +134,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertIsCallable($this->sut->setVariables(...));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesSetsPartials(): void
     {
         // Setup
@@ -172,11 +148,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->assertEquals([static::A_SECOND_PARTIAL], $this->sut->getVariable(static::THE_PARTIALS_VARIABLE));
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionWhenAddingPartialsThatAreEmpty(): void
     {
         // Setup
@@ -190,11 +163,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->sut->setVariables([static::THE_PARTIALS_VARIABLE => []]);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionWhenOverwritingWithoutPartials(): void
     {
         // Setup
@@ -208,11 +178,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->sut->setVariables([], static::OVERWRITE_VARIABLES);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionWhenOverwritingWithInvalidPartials(): void
     {
         // Setup
@@ -226,11 +193,8 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
         $this->sut->setVariables([static::THE_PARTIALS_VARIABLE => static::AN_INVALID_PARTIALS_VALUE], static::OVERWRITE_VARIABLES);
     }
 
-    /**
-     * @test
-     *
-     * @depends setVariablesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setVariablesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setVariablesThrowsExceptionWhenOverwritingWithEmptyPartials(): void
     {
         // Setup

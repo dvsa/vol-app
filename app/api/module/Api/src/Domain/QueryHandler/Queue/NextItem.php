@@ -33,6 +33,7 @@ class NextItem extends AbstractQueryHandler
      *
      * @return QueueEntity|null
      */
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /**

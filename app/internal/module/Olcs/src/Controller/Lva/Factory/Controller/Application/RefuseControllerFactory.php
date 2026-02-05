@@ -21,6 +21,7 @@ class RefuseControllerFactory implements FactoryInterface
      * @param  array|null         $options
      * @return RefuseController
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefuseController
     {
 

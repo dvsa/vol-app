@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Type Of Licence Test
  *
@@ -42,7 +44,8 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             Licence::LICENCE_CATEGORY_PSV,
@@ -60,17 +63,17 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommandWithoutChanges()
+    public function testHandleCommandWithoutChanges(): void
     {
         // Params
-        $command = $this->getCommand(
+        $command = self::getCommand(
             'Y',
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE
         );
 
         // Mocks
-        $application = $this->getApplication(
+        $application = $this->buildApplication(
             'Y',
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE
@@ -94,15 +97,13 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    /**
-     * @dataProvider requireReset
-     */
-    public function testHandleCommandWithReset($command, $applicationData, $resetData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('requireReset')]
+    public function testHandleCommandWithReset(mixed $command, mixed $applicationData, mixed $resetData): void
     {
-        // Calling getApplication needs to be deferred to here rather than in the dataProvider to avoid initialising
-        // references twice and creating duplicate refdata entries in the process
+        // Calling buildApplication to use $this->mapRefData() so RefData objects
+        // match those from getRefdataReference (identity comparison)
         $application = call_user_func_array(
-            $this->getApplication(...),
+            $this->buildApplication(...),
             $applicationData
         );
 
@@ -121,13 +122,13 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame($resetResult, $result);
     }
 
-    public function testHandleCommandFirstTime()
+    public function testHandleCommandFirstTime(): void
     {
         // Params
-        $command = $this->getCommand('Y', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV);
+        $command = self::getCommand('Y', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV);
 
         // Mocks
-        $application = $this->getApplication(null, null, null);
+        $application = self::getApplication(null, null, null);
 
         // Expectations
         $application->shouldReceive('updateTypeOfLicence')
@@ -184,17 +185,17 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithAllowedUpdate()
+    public function testHandleCommandWithAllowedUpdate(): void
     {
         // Params
-        $command = $this->getCommand(
+        $command = self::getCommand(
             'Y',
             Licence::LICENCE_TYPE_STANDARD_NATIONAL,
             null,
             RefData::APP_VEHICLE_TYPE_HGV
         );
 
-        $application = $this->getApplication(
+        $application = self::getApplication(
             'Y',
             Licence::LICENCE_TYPE_RESTRICTED,
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE
@@ -265,12 +266,12 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function testHandleCommandWithPartPaidApplicationFee()
+    public function testHandleCommandWithPartPaidApplicationFee(): void
     {
         // Params
-        $command = $this->getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV);
+        $command = self::getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV);
 
-        $application = $this->getApplication(
+        $application = self::getApplication(
             'N',
             Licence::LICENCE_TYPE_RESTRICTED,
             Licence::LICENCE_CATEGORY_PSV
@@ -339,11 +340,11 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function requireReset()
+    public static function requireReset(): array
     {
         return [
             'niFlag changed' => [
-                $this->getCommand(
+                self::getCommand(
                     'Y',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE
@@ -363,7 +364,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ],
             ],
             'operatorType changed' => [
-                $this->getCommand(
+                self::getCommand(
                     'Y',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -385,7 +386,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'to SR' => [
-                $this->getCommand('N', Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, Licence::LICENCE_CATEGORY_PSV),
+                self::getCommand('N', Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, Licence::LICENCE_CATEGORY_PSV),
                 [
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -401,7 +402,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from SR' => [
-                $this->getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV),
+                self::getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV),
                 [
                     'N',
                     Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
@@ -417,7 +418,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from LGV to mixed' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -439,7 +440,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from mixed to LGV' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -461,7 +462,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from standard international lgv to standard national' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -483,7 +484,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from standard international mixed to standard national' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -505,7 +506,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from standard national to standard international lgv' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -527,7 +528,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 ]
             ],
             'from standard national to standard international mixed' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -551,14 +552,14 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    protected function getCommand(
-        $niFlag,
-        $licenceType,
-        $operatorType = null,
-        $vehicleType = null,
-        $confirm = false,
-        $lgvDeclarationConfirmation = null
-    ) {
+    protected static function getCommand(
+        mixed $niFlag,
+        mixed $licenceType,
+        mixed $operatorType = null,
+        mixed $vehicleType = null,
+        bool $confirm = false,
+        mixed $lgvDeclarationConfirmation = null
+    ): Cmd {
         $data = [
             'id' => 111,
             'version' => 1,
@@ -573,35 +574,59 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         return Cmd::create($data);
     }
 
-    protected function getApplication($niFlag, $licenceType, $operatorType, $vehicleType = null)
+    protected static function createRefDataMock(mixed $key): ?m\MockInterface
+    {
+        if ($key === null) {
+            return null;
+        }
+
+        return m::mock(RefData::class)->makePartial()->setId($key);
+    }
+
+    protected static function getApplication(mixed $niFlag, mixed $licenceType, mixed $operatorType, mixed $vehicleType = null): mixed
     {
         $application = m::mock(ApplicationEntity::class)->makePartial();
         $application->setId(111);
         $application->setNiFlag($niFlag);
-        $application->setLicenceType($this->mapRefData($licenceType));
-        $application->setGoodsOrPsv($this->mapRefData($operatorType));
-        $application->setVehicleType($this->mapRefData($vehicleType));
+        $application->setLicenceType(self::createRefDataMock($licenceType));
+        $application->setGoodsOrPsv(self::createRefDataMock($operatorType));
+        $application->setVehicleType(self::createRefDataMock($vehicleType));
         $application->setFees([]);
 
         return $application;
     }
 
     /**
-     * @dataProvider dpHandleCommandWithAllowedUpdateGb
+     * Build an application using mapRefData so RefData objects match those from getRefdataReference.
+     * Use this in test methods (not data providers) where identity comparison matters.
      */
+    private function buildApplication(mixed $niFlag, mixed $licenceType, mixed $operatorType, mixed $vehicleType = null): mixed
+    {
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setId(111);
+        $application->setNiFlag($niFlag);
+        $application->setLicenceType($licenceType ? $this->mapRefData($licenceType) : null);
+        $application->setGoodsOrPsv($operatorType ? $this->mapRefData($operatorType) : null);
+        $application->setVehicleType($vehicleType ? $this->mapRefData($vehicleType) : null);
+        $application->setFees([]);
+
+        return $application;
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleCommandWithAllowedUpdateGb')]
     public function testHandleCommandWithAllowedUpdateGb(
-        $command,
-        $applicationData,
-        $expectedNiFlag,
-        $expectedGoodsOrPsv,
-        $expectedLicenceType,
-        $expectedVehicleType,
-        $expectedLgvDeclarationConfirmation
-    ) {
-        // Calling getApplication needs to be deferred to here rather than in the dataProvider to avoid initialising
-        // references twice and creating duplicate refdata entries in the process
+        mixed $command,
+        mixed $applicationData,
+        mixed $expectedNiFlag,
+        mixed $expectedGoodsOrPsv,
+        mixed $expectedLicenceType,
+        mixed $expectedVehicleType,
+        mixed $expectedLgvDeclarationConfirmation
+    ): void {
+        // Calling buildApplication to use $this->mapRefData() so RefData objects
+        // match those from getRefdataReference (identity comparison)
         $application = call_user_func_array(
-            $this->getApplication(...),
+            $this->buildApplication(...),
             $applicationData
         );
 
@@ -670,11 +695,11 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public function dpHandleCommandWithAllowedUpdateGb()
+    public static function dpHandleCommandWithAllowedUpdateGb(): array
     {
         return [
             'goods standard international' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     Licence::LICENCE_CATEGORY_PSV,
@@ -694,7 +719,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 0
             ],
             'derive goods vehicle type for non standard international' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
@@ -714,7 +739,7 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
                 0
             ],
             'derive goods vehicle type for non standard international' => [
-                $this->getCommand(
+                self::getCommand(
                     'N',
                     Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                     Licence::LICENCE_CATEGORY_PSV,

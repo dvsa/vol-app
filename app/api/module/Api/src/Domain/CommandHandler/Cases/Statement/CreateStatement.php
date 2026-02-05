@@ -41,6 +41,7 @@ final class CreateStatement extends AbstractCommandHandler implements Transactio
      * @return Result
      * @throws RuntimeException
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();

@@ -29,6 +29,7 @@ class Overview extends AbstractQueryHandler
 
     protected $extraRepos = ['Application', 'TrafficArea', 'BusRegSearchView'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var LicenceEntity $licence */

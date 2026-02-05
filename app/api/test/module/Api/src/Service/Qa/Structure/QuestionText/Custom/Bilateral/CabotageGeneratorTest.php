@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Qa\Structure\QuestionText\Custom\Bilateral;
 
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class CabotageGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $countryCode = 'DE';
 

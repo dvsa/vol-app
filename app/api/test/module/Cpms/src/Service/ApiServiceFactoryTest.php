@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Cpms\Service;
 
 use Dvsa\Olcs\Cpms\Authenticate\CpmsIdentityProvider;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class ApiServiceFactoryTest extends TestCase
 {
-    public function testCreateApiService()
+    public function testCreateApiService(): void
     {
         $config = [
             'cpms_api' => [
@@ -56,7 +58,7 @@ class ApiServiceFactoryTest extends TestCase
             ],
         ];
 
-        $userId = 123;
+        $userId = '123';
 
         $sut = new ApiServiceFactory($config, $userId);
         $apiService = $sut->createApiService();
@@ -68,10 +70,8 @@ class ApiServiceFactoryTest extends TestCase
         $this->assertInstanceOf(CpmsIdentityProvider::class, $apiService->getIdentity());
     }
 
-    /**
-     * @dataProvider dpTestCreateApiServiceExceptionsThrown
-     */
-    public function testCreateApiServiceExceptionsThrown($dpData)
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCreateApiServiceExceptionsThrown')]
+    public function testCreateApiServiceExceptionsThrown(mixed $dpData): void
     {
         $config = [
             'cpms_api' => [
@@ -99,7 +99,7 @@ class ApiServiceFactoryTest extends TestCase
             'cpms_credentials' => $dpData['credentials']
         ];
 
-        $userId = 123;
+        $userId = '123';
 
         $this->expectException(\RuntimeException::class);
 
@@ -107,7 +107,7 @@ class ApiServiceFactoryTest extends TestCase
         $sut->createApiService();
     }
 
-    public function dpTestCreateApiServiceExceptionsThrown()
+    public static function dpTestCreateApiServiceExceptionsThrown(): array
     {
         return [
             'no-credentials' => [

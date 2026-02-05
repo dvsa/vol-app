@@ -35,7 +35,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -223,7 +223,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -246,7 +247,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the irhp permit application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     */
     public function getIrhpPermitApplication()
     {
         return $this->irhpPermitApplication;
@@ -269,7 +271,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the irhp permit range
      *
-     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange     */
+     * @return \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
+     */
     public function getIrhpPermitRange()
     {
         return $this->irhpPermitRange;
@@ -292,7 +295,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the requested emissions category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getRequestedEmissionsCategory()
     {
         return $this->requestedEmissionsCategory;
@@ -315,7 +319,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the assigned emissions category
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getAssignedEmissionsCategory()
     {
         return $this->assignedEmissionsCategory;
@@ -338,7 +343,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -361,7 +367,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -384,7 +391,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the application score
      *
-     * @return string     */
+     * @return string
+     */
     public function getApplicationScore()
     {
         return $this->applicationScore;
@@ -407,7 +415,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the intensity of use
      *
-     * @return string     */
+     * @return string
+     */
     public function getIntensityOfUse()
     {
         return $this->intensityOfUse;
@@ -430,7 +439,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the random factor
      *
-     * @return string     */
+     * @return string
+     */
     public function getRandomFactor()
     {
         return $this->randomFactor;
@@ -453,7 +463,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the randomized score
      *
-     * @return string     */
+     * @return string
+     */
     public function getRandomizedScore()
     {
         return $this->randomizedScore;
@@ -476,7 +487,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the successful
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getSuccessful()
     {
         return $this->successful;
@@ -499,7 +511,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the wanted
      *
-     * @return bool     */
+     * @return bool
+     */
     public function getWanted()
     {
         return $this->wanted;
@@ -522,7 +535,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -594,6 +608,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

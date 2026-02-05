@@ -48,6 +48,7 @@ class SubCategory extends Category
      * @return array
      * @throw DataServiceException
      */
+    #[\Override]
     public function fetchListData($context = null)
     {
         $catId = (int)$this->getCategory();
@@ -97,6 +98,7 @@ class SubCategory extends Category
      *
      * @return array
      */
+    #[\Override]
     public function formatData(array $data)
     {
         $optionData = [];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,9 +18,8 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
-/**
- * @covers \Dvsa\Olcs\Api\Domain\Repository\Organisation
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Organisation::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 class OrganisationTest extends RepositoryTestCase
 {
     /**
@@ -31,7 +32,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
     }
 
-    public function testFetchBusinessDetailsByIdNotFound()
+    public function testFetchBusinessDetailsByIdNotFound(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -73,7 +74,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->fetchBusinessDetailsUsingId($command);
     }
 
-    public function testFetchBusinessDetailsById()
+    public function testFetchBusinessDetailsById(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -121,7 +122,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->assertEquals(['foo' => 'bar'], $result);
     }
 
-    public function testFetchIrfoDetailsById()
+    public function testFetchIrfoDetailsById(): void
     {
         $command = m::mock(QueryInterface::class);
         $command->shouldReceive('getId')
@@ -181,7 +182,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->assertEquals(['foo' => 'bar'], $result);
     }
 
-    public function testGetByCompanyOrLlpNo()
+    public function testGetByCompanyOrLlpNo(): void
     {
         $companyNumber = '01234567';
 
@@ -276,7 +277,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->getByCompanyOrLlpNo($companyNumber);
     }
 
-    public function testGetByCompanyOrLlpNoNotFound()
+    public function testGetByCompanyOrLlpNoNotFound(): void
     {
         $companyNumber = '01234567';
 
@@ -343,7 +344,8 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->getByCompanyOrLlpNo($companyNumber);
     }
 
-    public function testFetchByStatusPaginatedWithNullStatus()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testFetchByStatusPaginatedWithNullStatus(): void
     {
         $query = m::mock(CpidOrganisation::class)->makePartial();
 
@@ -376,7 +378,8 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->fetchByStatusPaginated($query);
     }
 
-    public function testFetchByStatusPaginatedWithStatus()
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
+    public function testFetchByStatusPaginatedWithStatus(): void
     {
         $query = m::mock(CpidOrganisation::class)
             ->makePartial()
@@ -416,7 +419,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->fetchByStatusPaginated($query->getMock());
     }
 
-    public function testFetchAllByStatusForCpidExportWithStatus()
+    public function testFetchAllByStatusForCpidExportWithStatus(): void
     {
         /** @var m\MockInterface $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -449,7 +452,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->fetchAllByStatusForCpidExport('op_cpid_central_government');
     }
 
-    public function testFetchAllByStatusForCpidExportWithNullStatus()
+    public function testFetchAllByStatusForCpidExportWithNullStatus(): void
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -480,7 +483,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->sut->fetchAllByStatusForCpidExport(null);
     }
 
-    public function testFixIsIrfo()
+    public function testFixIsIrfo(): void
     {
         $this->dbQueryService->shouldReceive('get')->with(FixIsIrfo::class)->once()->andReturn(
             m::mock()->shouldReceive('execute')->with()->once()->andReturn(
@@ -493,7 +496,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->assertSame(52, $result);
     }
 
-    public function testFixIsUnlicenced()
+    public function testFixIsUnlicenced(): void
     {
         $this->dbQueryService->shouldReceive('get')->with(FixIsUnlicenced::class)->once()->andReturn(
             m::mock()->shouldReceive('execute')->with()->once()->andReturn(
@@ -506,7 +509,7 @@ class OrganisationTest extends RepositoryTestCase
         $this->assertSame(12, $result);
     }
 
-    public function testGetAllOrganisationsForCompaniesHouse()
+    public function testGetAllOrganisationsForCompaniesHouse(): void
     {
         $qb = $this->createMockQb('[QUERY]');
         $this->mockCreateQueryBuilder($qb);

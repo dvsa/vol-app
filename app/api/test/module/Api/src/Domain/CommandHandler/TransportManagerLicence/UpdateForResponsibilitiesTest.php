@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\TransportManagerLicence;
 
 use Doctrine\ORM\Query;
@@ -15,8 +17,8 @@ use Mockery as m;
  * TransportManagerLicence / UpdateForResponsibilities
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @covers \Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerLicence\UpdateForResponsibilities
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerLicence\UpdateForResponsibilities::class)]
 class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandHandler\TransportManagerLicence\UpdateForResponsibilities   */
@@ -31,7 +33,8 @@ class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'tmType'
@@ -46,7 +49,7 @@ class UpdateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public function testHandleCommand()
+    public function testHandleCommand(): void
     {
         $id = 1;
         $data = [

@@ -44,10 +44,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
     protected const LICENCE_ID_COMMAND_PROPERTY = 'id';
     protected const A_NUMBER_OF_VEHICLES = 2;
 
-    /**
-     * @test
-     */
-    public function handleCommandIsCallable()
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -56,10 +54,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertIsCallable($this->sut->handleCommand(...));
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandNoContinuationDetail()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandNoContinuationDetail(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -77,10 +73,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvSpecialRestricted()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvSpecialRestricted(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -120,10 +114,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvStandardNational()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvStandardNational(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -178,10 +170,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandPsvStandardInternational()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandPsvStandardInternational(): void
     {
         $this->setUpLegacy();
         $licenceId = 717;
@@ -264,10 +254,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandGoodsNotStandardInternational()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandGoodsNotStandardInternational(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -321,10 +309,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['1502 goods discs created', 'Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandGoodsStandardInternational()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandGoodsStandardInternational(): void
     {
         $this->setUpLegacy();
         $licenceId = 717;
@@ -403,11 +389,9 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['1502 goods discs created', 'Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @dataProvider signatureProvider
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandWithSnapshotAndSignature($signature, $description, $actionDate)
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('signatureProvider')]
+    public function testHandleCommandWithSnapshotAndSignature(mixed $signature, mixed $description, mixed $actionDate): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -491,7 +475,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    public function signatureProvider()
+    public static function signatureProvider(): array
     {
         return [
             [
@@ -507,10 +491,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandInsufficientFinancesTask()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandInsufficientFinancesTask(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -584,10 +566,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandInsufficientFinancesTaskSpecialRestricted()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandInsufficientFinancesTaskSpecialRestricted(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -639,10 +619,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandOtherFinancesTask()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandOtherFinancesTask(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -707,10 +685,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @depends handleCommandIsCallable
-     */
-    public function testHandleCommandOtherFinancesTaskNotCreated()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    public function testHandleCommandOtherFinancesTaskNotCreated(): void
     {
         $this->setUpLegacy();
         $data = ['id' => 717, 'version' => 654];
@@ -763,11 +739,9 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertSame(['Licence 717 continued'], $result->getMessages());
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandSetsTotAuthVehiclesForPsvLicencesThatHaveContinutationDetailsAndLicenceIsNotSpecialRestricted()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthVehiclesForPsvLicencesThatHaveContinutationDetailsAndLicenceIsNotSpecialRestricted(): void
     {
         // Setup
         $this->setUpSut();
@@ -789,11 +763,9 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    /**
-     * @test
-     * @depends handleCommandIsCallable
-     */
-    public function handleCommandSetsTotAuthHgvVehiclesForPsvLicencesThatHaveContinutationDetailsAndLicenceIsNotSpecialRestricted()
+    #[\PHPUnit\Framework\Attributes\Depends('handleCommandIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
+    public function handleCommandSetsTotAuthHgvVehiclesForPsvLicencesThatHaveContinutationDetailsAndLicenceIsNotSpecialRestricted(): void
     {
         // Setup
         $this->setUpSut();
@@ -815,12 +787,13 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->sut = new CommandHandler();
 
@@ -829,7 +802,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpDefaultServices(ServiceManager $serviceManager): void
     {
         $this->serviceManager()->setService('FinancialStandingHelperService', m::mock(FinancialStandingHelperService::class));
         $this->setUpAbstractCommandHandlerServices();
@@ -871,7 +844,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
         return $repositoryServiceManager->get('ContinuationDetail');
     }
 
-    protected function injectEntities(object ...$entities)
+    protected function injectEntities(object ...$entities): void
     {
         foreach ($entities as $entity) {
             switch ($entity::class) {
@@ -949,7 +922,8 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
     /**
      * @deprecated Use new test format
      */
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = [
             'con_det_sts_complete',
@@ -967,7 +941,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
     /**
      * @deprecated Use real instances for entities instead of mocks
      */
-    private function getGoodsLicence($licenceId, $type = LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL)
+    private function getGoodsLicence(mixed $licenceId, mixed $type = LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL): mixed
     {
         $organisation = m::mock(Organisation::class);
         $organisation->shouldReceive('getId')->withNoArgs()->andReturn(9999);
@@ -982,7 +956,7 @@ class ContinueLicenceTest extends AbstractCommandHandlerTestCase
     /**
      * @deprecated Use real instances for entities instead of mocks
      */
-    private function getPsvLicence($licenceId, $type = LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL)
+    private function getPsvLicence(mixed $licenceId, mixed $type = LicenceEntity::LICENCE_TYPE_STANDARD_NATIONAL): mixed
     {
         $organisation = m::mock(Organisation::class);
         $organisation->shouldReceive('getId')->withNoArgs()->andReturn(9999);

@@ -33,7 +33,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractDiscSequence implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractDiscSequence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -226,7 +226,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -249,7 +250,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the goods or psv
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getGoodsOrPsv()
     {
         return $this->goodsOrPsv;
@@ -272,7 +274,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the traffic area
      *
-     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea     */
+     * @return \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     */
     public function getTrafficArea()
     {
         return $this->trafficArea;
@@ -295,7 +298,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -318,7 +322,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -341,7 +346,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the restricted
      *
-     * @return int     */
+     * @return int
+     */
     public function getRestricted()
     {
         return $this->restricted;
@@ -364,7 +370,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the special restricted
      *
-     * @return int     */
+     * @return int
+     */
     public function getSpecialRestricted()
     {
         return $this->specialRestricted;
@@ -387,7 +394,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the standard national
      *
-     * @return int     */
+     * @return int
+     */
     public function getStandardNational()
     {
         return $this->standardNational;
@@ -410,7 +418,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the standard international
      *
-     * @return int     */
+     * @return int
+     */
     public function getStandardInternational()
     {
         return $this->standardInternational;
@@ -433,7 +442,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the r prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getRPrefix()
     {
         return $this->rPrefix;
@@ -456,7 +466,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the sr prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getSrPrefix()
     {
         return $this->srPrefix;
@@ -479,7 +490,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the sn prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getSnPrefix()
     {
         return $this->snPrefix;
@@ -502,7 +514,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the si prefix
      *
-     * @return string     */
+     * @return string
+     */
     public function getSiPrefix()
     {
         return $this->siPrefix;
@@ -525,7 +538,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the is self serve
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsSelfServe()
     {
         return $this->isSelfServe;
@@ -548,7 +562,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the is ni self serve
      *
-     * @return string     */
+     * @return string
+     */
     public function getIsNiSelfServe()
     {
         return $this->isNiSelfServe;
@@ -571,7 +586,8 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -580,6 +596,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

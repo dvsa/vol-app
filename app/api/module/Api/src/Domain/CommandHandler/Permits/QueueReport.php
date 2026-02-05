@@ -27,6 +27,7 @@ class QueueReport extends AbstractCommandHandler
      * @throws \Exception
      * @return Result
      */
+    #[\Override]
     public function handleCommand(CommandInterface $command)
     {
         $availableReports = PermitsReportService::COMMAND_MAP;

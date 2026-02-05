@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Update Addresses test
  *
@@ -41,7 +43,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleCommandWithDirtyAddresses()
+    public function testHandleCommandWithDirtyAddresses(): void
     {
         $data = [
             'id' => 123,

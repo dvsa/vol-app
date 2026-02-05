@@ -18,6 +18,7 @@ class FinancialStandingRateList extends AbstractQueryHandler
 {
     protected $repoServiceName = 'FinancialStandingRate';
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /** @var Repo $repo */

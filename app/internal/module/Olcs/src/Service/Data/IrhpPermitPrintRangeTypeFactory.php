@@ -16,6 +16,7 @@ class IrhpPermitPrintRangeTypeFactory implements FactoryInterface
      * @return IrhpPermitPrintRangeType
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpPermitPrintRangeType
     {
         return new IrhpPermitPrintRangeType(

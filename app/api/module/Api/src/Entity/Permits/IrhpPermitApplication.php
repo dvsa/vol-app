@@ -194,6 +194,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
      *
      * @return array
      */
+    #[\Override]
     public function getCalculatedBundleValues()
     {
         $relatedApplication = $this->irhpApplication;
@@ -503,6 +504,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function createAnswer(QuestionText $questionText)
     {
         return Answer::createNewForIrhpPermitApplication($questionText, $this);
@@ -511,6 +513,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * @return bool
      */
+    #[\Override]
     public function isNotYetSubmitted()
     {
         return $this->irhpApplication->isNotYetSubmitted();
@@ -531,6 +534,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
      *
      * @return ApplicationPath|null
      */
+    #[\Override]
     public function getActiveApplicationPath()
     {
         return $this->getIrhpPermitWindow()
@@ -544,6 +548,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
      *
      * @return mixed|null
      */
+    #[\Override]
     public function getAnswer(ApplicationStep $applicationStep)
     {
         $question = $applicationStep->getQuestion();
@@ -571,6 +576,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
      *
      * @return string
      */
+    #[\Override]
     public function getCamelCaseEntityName()
     {
         return 'irhpPermitApplication';
@@ -579,6 +585,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * Executed on submission of an application step
      */
+    #[\Override]
     public function onSubmitApplicationStep()
     {
         $this->resetCheckAnswers();
@@ -587,6 +594,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getAdditionalQaViewData(ApplicationStep $applicationStep)
     {
         $country = $this->irhpPermitWindow->getIrhpPermitStock()->getCountry();
@@ -601,6 +609,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function isApplicationPathEnabled()
     {
         return $this->irhpApplication->getIrhpPermitType()->isIrhpPermitApplicationPathEnabled();
@@ -609,6 +618,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function getRepositoryName()
     {
         return 'IrhpPermitApplication';

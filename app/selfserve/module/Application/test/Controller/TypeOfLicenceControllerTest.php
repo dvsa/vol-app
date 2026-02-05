@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Application\Controller;
 
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
@@ -9,6 +11,7 @@ use Common\View\Model\Section;
 
 class TypeOfLicenceControllerTest extends AbstractLvaControllerTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

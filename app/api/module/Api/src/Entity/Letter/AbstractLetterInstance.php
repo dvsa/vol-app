@@ -47,7 +47,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *    }
  * )
  */
-abstract class AbstractLetterInstance implements BundleSerializableInterface, JsonSerializable
+abstract class AbstractLetterInstance implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
@@ -250,7 +250,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the id
      *
-     * @return int     */
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -273,7 +274,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the letter type
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType     */
+     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     */
     public function getLetterType()
     {
         return $this->letterType;
@@ -296,7 +298,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the licence
      *
-     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence     */
+     * @return \Dvsa\Olcs\Api\Entity\Licence\Licence
+     */
     public function getLicence()
     {
         return $this->licence;
@@ -319,7 +322,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the application
      *
-     * @return \Dvsa\Olcs\Api\Entity\Application\Application     */
+     * @return \Dvsa\Olcs\Api\Entity\Application\Application
+     */
     public function getApplication()
     {
         return $this->application;
@@ -342,7 +346,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the case
      *
-     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases     */
+     * @return \Dvsa\Olcs\Api\Entity\Cases\Cases
+     */
     public function getCase()
     {
         return $this->case;
@@ -365,7 +370,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the bus reg
      *
-     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg     */
+     * @return \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     */
     public function getBusReg()
     {
         return $this->busReg;
@@ -388,7 +394,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the irfo organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getIrfoOrganisation()
     {
         return $this->irfoOrganisation;
@@ -411,7 +418,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the organisation
      *
-     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation     */
+     * @return \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     */
     public function getOrganisation()
     {
         return $this->organisation;
@@ -434,7 +442,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the transport manager
      *
-     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager     */
+     * @return \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     */
     public function getTransportManager()
     {
         return $this->transportManager;
@@ -457,7 +466,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the status
      *
-     * @return \Dvsa\Olcs\Api\Entity\System\RefData     */
+     * @return \Dvsa\Olcs\Api\Entity\System\RefData
+     */
     public function getStatus()
     {
         return $this->status;
@@ -480,7 +490,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the document
      *
-     * @return \Dvsa\Olcs\Api\Entity\Doc\Document     */
+     * @return \Dvsa\Olcs\Api\Entity\Doc\Document
+     */
     public function getDocument()
     {
         return $this->document;
@@ -503,7 +514,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the created by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getCreatedBy()
     {
         return $this->createdBy;
@@ -526,7 +538,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the last modified by
      *
-     * @return \Dvsa\Olcs\Api\Entity\User\User     */
+     * @return \Dvsa\Olcs\Api\Entity\User\User
+     */
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
@@ -549,7 +562,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the reference
      *
-     * @return string     */
+     * @return string
+     */
     public function getReference()
     {
         return $this->reference;
@@ -574,7 +588,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
      *
-     * @return \DateTime     */
+     * @return \DateTime
+     */
     public function getSentOn($asDateTime = false)
     {
         if ($asDateTime === true) {
@@ -601,7 +616,8 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get the version
      *
-     * @return int     */
+     * @return int
+     */
     public function getVersion()
     {
         return $this->version;
@@ -610,6 +626,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Get bundle data
      */
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getId();

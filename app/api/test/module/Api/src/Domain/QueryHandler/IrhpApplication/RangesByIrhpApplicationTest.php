@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Domain\QueryHandler\IrhpApplication;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,7 +33,7 @@ class RangesByIrhpApplicationTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery()
+    public function testHandleQuery(): void
     {
         $query = QryClass::create(['irhpApplication' => 100011]);
 
@@ -104,7 +106,7 @@ class RangesByIrhpApplicationTest extends QueryHandlerTestCase
         );
     }
 
-    public function testHandleQueryNoRanges()
+    public function testHandleQueryNoRanges(): void
     {
         $query = QryClass::create(['irhpApplication' => 100011]);
 

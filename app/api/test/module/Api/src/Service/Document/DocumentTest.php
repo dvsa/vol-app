@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Api\Service\Document;
 
 use Dvsa\Olcs\Api\Service\Date as DateService;
@@ -42,7 +44,7 @@ class DocumentTest extends TestCase
         );
     }
 
-    public function testGetBookmarkQueriesForNoBookmarks()
+    public function testGetBookmarkQueriesForNoBookmarks(): void
     {
         $file = new File();
         $file->setContent('');
@@ -51,7 +53,7 @@ class DocumentTest extends TestCase
         $this->assertEquals([], $queryData);
     }
 
-    public function testGetBookmarkQueriesForStaticBookmarks()
+    public function testGetBookmarkQueriesForStaticBookmarks(): void
     {
         $content = <<<TXT
 Bookmark 1: {\*\bkmkstart letter_date_add_14_days} {\*\bkmkend letter_date_add_14_days}.
@@ -64,7 +66,7 @@ TXT;
         $this->assertEquals([], $queryData);
     }
 
-    public function testGetBookmarkQueriesForDynamicConcreteBookmarks()
+    public function testGetBookmarkQueriesForDynamicConcreteBookmarks(): void
     {
         $content = <<<TXT
 Bookmark 1: {\*\bkmkstart caseworker_name} {\*\bkmkend caseworker_name}
@@ -85,7 +87,7 @@ TXT;
         $this->assertArrayHasKey('licence_number', $queryData);
     }
 
-    public function testGetBookmarkQueriesForDynamicTextBlockBookmarks()
+    public function testGetBookmarkQueriesForDynamicTextBlockBookmarks(): void
     {
         $content = <<<TXT
 Bookmark 1: {\*\bkmkstart para_one} {\*\bkmkend para_one}
@@ -113,7 +115,7 @@ TXT;
         $this->assertArrayNotHasKey('para_two', $queryData);
     }
 
-    public function testPopulateBookmarksWithStaticBookmarks()
+    public function testPopulateBookmarksWithStaticBookmarks(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart todays_date} {\*\bkmkend todays_date}.";
 
@@ -135,7 +137,7 @@ TXT;
         );
     }
 
-    public function testPopulateBookmarksWithDynamicBookmarks()
+    public function testPopulateBookmarksWithDynamicBookmarks(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart licence_number} {\*\bkmkend licence_number}.";
 
@@ -157,7 +159,7 @@ TXT;
         );
     }
 
-    public function testPopulateBookmarksWithDynamicBookmarksButNoData()
+    public function testPopulateBookmarksWithDynamicBookmarksButNoData(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart licence_number} {\*\bkmkend licence_number}.";
 
@@ -175,7 +177,7 @@ TXT;
         );
     }
 
-    public function testPopulateBookmarksWithDynamicBookmarksImplementingDateAwareInterface()
+    public function testPopulateBookmarksWithDynamicBookmarksImplementingDateAwareInterface(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart Serial_Num} {\*\bkmkend Serial_Num}.";
 
@@ -192,7 +194,7 @@ TXT;
         );
     }
 
-    public function testPopulateBookmarksWithDynamicBookmarksImplementingFileStoreAwareInterface()
+    public function testPopulateBookmarksWithDynamicBookmarksImplementingFileStoreAwareInterface(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart TC_SIGNATURE} {\*\bkmkend TC_SIGNATURE}.";
         $file = new File();
@@ -208,7 +210,7 @@ TXT;
         );
     }
 
-    public function testPopulateBookmarksWithDynamicBookmarksImplementingTranslatorAwareInterface()
+    public function testPopulateBookmarksWithDynamicBookmarksImplementingTranslatorAwareInterface(): void
     {
         $content = "Bookmark 1: {\*\bkmkstart User_Access} {\*\bkmkend User_Access}.";
 

@@ -19,6 +19,7 @@ class DeleteUserSelfserveFactory implements FactoryInterface
      * @param array|null $options
      * @return TransactioningCommandHandler
      */
+    #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransactioningCommandHandler
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * SurrenderTest
  *
@@ -45,7 +47,8 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    protected function initReferences()
+    #[\Override]
+    protected function initReferences(): void
     {
         $this->refData = ['lsts_terminated', 'lsts_surrendered', 'lcat_psv', 'lcat_gv'];
 
@@ -54,10 +57,8 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    /**
-     * @dataProvider testHandleCommandProvider
-     */
-    public function testHandleCommand($status, $terminated)
+    #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
+    public function testHandleCommand(mixed $status, mixed $terminated): void
     {
         $command = Command::create(['id' => 532, 'terminated' => $terminated]);
 
@@ -148,7 +149,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 surrendered"], $result->getMessages());
     }
 
-    public function testHandleCommandGoods()
+    public function testHandleCommandGoods(): void
     {
         $status = 'lsts_surrendered';
         $command = Command::create(['id' => 532, 'terminated' => false]);
@@ -239,7 +240,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 surrendered"], $result->getMessages());
     }
 
-    public function testHandleCommandPsvSpecialRestricted()
+    public function testHandleCommandPsvSpecialRestricted(): void
     {
         $command = Command::create(['id' => 532, 'terminated' => true]);
 
@@ -325,7 +326,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         $this->assertSame(["Licence ID 532 surrendered"], $result->getMessages());
     }
 
-    public function testHandleCommandProvider()
+    public static function handleCommandProvider(): array
     {
         return [
             [
@@ -339,7 +340,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
         ];
     }
 
-    public function testHandleCommandApplications()
+    public function testHandleCommandApplications(): void
     {
         $command = Command::create(['id' => 532]);
 
@@ -441,7 +442,7 @@ class SurrenderTest extends AbstractCommandHandlerTestCase
      *
      * @return Application
      */
-    private function stubApplication($licence, $id, $status, $isVariation = false)
+    private function stubApplication(mixed $licence, mixed $id, mixed $status, bool $isVariation = false): mixed
     {
         $application = new Application($licence, (new RefData())->setId($status), $isVariation);
         $application->setId($id);

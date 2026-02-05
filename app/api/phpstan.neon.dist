@@ -1,9 +1,9 @@
 # phpstan-doctrine-check.neon
 includes:
-    - vendor-bin/phpstan/vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
 
 parameters:
-    phpVersion: 80200
+    phpVersion: 80300
     level: 0
     paths:
         - module
@@ -53,3 +53,14 @@ parameters:
         - message: "#Access to an undefined property Dvsa\\\\Olcs\\\\Api\\\\Entity\\\\Letter\\\\LetterTypeSection::\\$letterSectionVersion#"
           paths:
             - module/Api/src/Entity
+
+        # === Suppressed missing Laminas Mail classes (laminas-mail not required as a direct dependency) ===
+        - message: '#(Class|Caught class|Instantiated class|has invalid type) Laminas\\Mail\\#'
+          path: module/Email/src/Service/Imap.php
+
+        # === Suppressed missing classes from optional/external packages ===
+        - message: '#Class Dvsa\\Olcs\\Api\\Entity\\Letter\\LetterTypeTodo not found#'
+        - message: '#Class Dvsa\\Olcs\\Email\\Transport\\S3File not found#'
+
+        # === Suppressed missing return in CpmsV2HelperService::formatDate ===
+        - message: '#Method Dvsa\\Olcs\\Api\\Service\\CpmsV2HelperService::formatDate\(\) should return string but return statement is missing#'

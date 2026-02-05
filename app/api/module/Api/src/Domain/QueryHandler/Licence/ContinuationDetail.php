@@ -15,6 +15,7 @@ class ContinuationDetail extends AbstractQueryHandler
     protected $repoServiceName = 'Licence';
     protected $extraRepos = ['ContinuationDetail', 'Fee'];
 
+    #[\Override]
     public function handleQuery(QueryInterface $query)
     {
         /* @var $licence \Dvsa\Olcs\Api\Entity\Licence\Licence */
