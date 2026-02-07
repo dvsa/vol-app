@@ -140,7 +140,6 @@ data "aws_lb_listener" "this" {
 }
 
 data "aws_lb_listener" "renderer" {
-
   load_balancer_arn = data.aws_lb.this["API"].arn
   port              = 443
 }
@@ -286,6 +285,8 @@ module "service" {
 
       set_custom_port = true
 
+      health_check_path = "/health"
+
       listener_rule_enable = true
 
       task_iam_role_statements = []
@@ -299,7 +300,7 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.renderer.arn
       lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = ["renderer.*"]
-      listener_rule_priority    = 5
+      priority    = 5
     }
   }
   batch = {

@@ -286,6 +286,8 @@ module "service" {
 
       set_custom_port = true
 
+      health_check_path = "/health"
+
       listener_rule_enable = true
 
       task_iam_role_statements = []
@@ -299,7 +301,7 @@ module "service" {
       lb_listener_arn           = data.aws_lb_listener.renderer.arn
       lb_arn                    = data.aws_lb.this["API"].arn
       listener_rule_host_header = ["renderer.*"]
-      listener_rule_priority    = 5
+      priority                  = 10
 
     }
   }
