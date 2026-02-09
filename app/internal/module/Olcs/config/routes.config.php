@@ -225,6 +225,28 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'edit' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/edit',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'edit',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
+            'save-issue-content' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/save-issue-content',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Letter\LetterGenerationController::class,
+                        'action' => 'saveIssueContent',
+                    ]
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
     'template_lists' => [

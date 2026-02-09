@@ -39,6 +39,7 @@ class LetterGenerationController extends AbstractInternalController implements T
     protected $inlineScripts = [
         'createAction' => ['forms/letter-generation'],
         'previewAction' => ['forms/letter-preview'],
+        'editAction' => ['forms/letter-edit'],
     ];
 
     /**
@@ -310,6 +311,139 @@ class LetterGenerationController extends AbstractInternalController implements T
         $httpResponse->setContent($result['previewHtml'] ?? '');
         $httpResponse->getHeaders()->addHeaderLine('Content-Type', 'text/html; charset=utf-8');
         return $httpResponse;
+    }
+
+    /**
+     * Edit letter sections action
+     *
+     * Query parameters expected:
+     * - id: Letter Instance ID (required)
+     * - sections[]: Selected issue IDs to edit (required)
+     *
+     * @return ViewModel|Response
+     */
+    public function editAction()
+    {
+        $letterInstanceId = $this->params()->fromQuery('id');
+        $selectedSections = $this->params()->fromQuery('sections', []);
+
+        if (!$letterInstanceId) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        if (empty($selectedSections)) {
+            $this->flashMessengerHelperService->addErrorMessage('No sections selected');
+            return $this->redirect()->toUrl('/letter/preview?id=' . urlencode($letterInstanceId));
+        }
+
+        $letterInstance = $this->fetchLetterInstanceById((int) $letterInstanceId);
+
+        if (!$letterInstance) {
+            $this->flashMessengerHelperService->addErrorMessage('Letter not found');
+            return $this->redirect()->toRoute('dashboard');
+        }
+
+        $groupedIssues = [];
+        foreach ($letterInstance['letterInstanceIssues'] ?? [] as $issue) {
+            if (!in_array($issue['id'], $selectedSections)) {
+                continue;
+            }
+
+            $issueVersion = $issue['letterIssueVersion'] ?? [];
+            $issueType = $issueVersion['letterIssueType'] ?? null;
+            $typeName = $issueType['name'] ?? 'Other';
+            $typeId = $issueType['id'] ?? 0;
+
+            if (!isset($groupedIssues[$typeId])) {
+                $groupedIssues[$typeId] = [
+                    'typeName' => $typeName,
+                    'issues' => [],
+                ];
+            }
+
+            $editedContent = $issue['editedContent'] ?? null;
+            $defaultContent = $issueVersion['defaultBodyContent'] ?? null;
+
+            if (!empty($editedContent)) {
+                $effectiveContent = is_string($editedContent)
+                    ? $editedContent
+                    : json_encode($editedContent);
+            } elseif (!empty($defaultContent)) {
+                $effectiveContent = is_string($defaultContent)
+                    ? $defaultContent
+                    : json_encode($defaultContent);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $groupedIssues[$typeId]['issues'][] = [
+                'id' => $issue['id'],
+                'heading' => $issueVersion['heading'] ?? 'Issue',
+                'content' => $effectiveContent,
+                'version' => $issue['version'] ?? 1,
+            ];
+        }
+
+        $view = new ViewModel([
+            'letterInstanceId' => $letterInstanceId,
+            'letterInstance' => $letterInstance,
+            'groupedIssues' => $groupedIssues,
+        ]);
+
+        $view->setTemplate('pages/letter/edit');
+
+        // Set navigation for breadcrumbs
+        $this->navigationId = 'letter_edit';
+        $this->setNavigationCurrentLocation();
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'Edit letter sections');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Save issue content action - AJAX endpoint
+     *
+     * Accepts POST with JSON body: { issueId, editedContent, version }
+     *
+     * @return Response
+     */
+    public function saveIssueContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['issueId']) || !isset($body['editedContent']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: issueId, editedContent, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceIssue\UpdateContent::create([
+            'id' => (int) $body['issueId'],
+            'editedContent' => is_string($body['editedContent'])
+                ? $body['editedContent']
+                : json_encode($body['editedContent']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'issueId' => (int) $body['issueId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
     }
 
     /**

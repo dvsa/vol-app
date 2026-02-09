@@ -19,8 +19,7 @@
             <input class="govuk-checkboxes__input" type="checkbox"
                    id="section-<?= $this->escapeHtmlAttr($section['id']) ?>"
                    name="sections[]"
-                   value="<?= $this->escapeHtmlAttr($section['id']) ?>"
-                   disabled>
+                   value="<?= $this->escapeHtmlAttr($section['id']) ?>">
             <label class="govuk-label govuk-checkboxes__label"
                    for="section-<?= $this->escapeHtmlAttr($section['id']) ?>">
                 <?= $this->escapeHtml($section['name']) ?>
@@ -38,9 +37,10 @@
     <p class="small-module__details">
         <button
             type="button"
+            id="continue-to-editor"
             class="govuk-button govuk-button--secondary"
+            data-letter-instance-id="<?= $this->escapeHtmlAttr($letterInstance['id'] ?? '') ?>"
             disabled
-            title="Coming soon in VOL-6403"
             style="margin-bottom: 10px; width: 100%;"
         >
             Continue to editor

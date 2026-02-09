@@ -1,0 +1,64 @@
+<?php
+/**
+ * Edit Letter Sections
+ *
+ * Displays EditorJS editors for selected letter instance issues,
+ * grouped by issue type, with per-issue save functionality.
+ *
+ * @var string $letterInstanceId Letter instance ID
+ * @var array $letterInstance Letter instance data
+ * @var array $groupedIssues Issues grouped by type: [typeId => ['typeName' => ..., 'issues' => [...]]]
+ */
+?>
+
+<div id="edit-error-summary" class="govuk-error-summary" data-module="govuk-error-summary" role="alert" tabindex="-1" style="display: none;">
+    <h2 class="govuk-error-summary__title">There is a problem</h2>
+    <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list" id="edit-error-list">
+        </ul>
+    </div>
+</div>
+
+<p class="govuk-body">
+    Use the sections below to modify your letter content.
+    You can format text using bold, italics, underline and bullets.
+</p>
+
+<?php foreach ($groupedIssues as $typeId => $group): ?>
+    <h2 class="govuk-heading-m"><?= $this->escapeHtml($group['typeName']) ?> section</h2>
+
+    <?php foreach ($group['issues'] as $issue): ?>
+        <div class="govuk-form-group issue-editor-group" data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>">
+            <h3 class="govuk-heading-s"><?= $this->escapeHtml($issue['heading']) ?></h3>
+
+            <div class="editorjs-container" data-element-name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>">
+                <div id="editor-<?= $this->escapeHtmlAttr($issue['id']) ?>" class="editorjs-editor"></div>
+                <input type="hidden"
+                       name="issue-<?= $this->escapeHtmlAttr($issue['id']) ?>"
+                       value="<?= $this->escapeHtmlAttr($issue['content']) ?>">
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="button"
+                        class="govuk-button save-issue-btn"
+                        data-issue-id="<?= $this->escapeHtmlAttr($issue['id']) ?>"
+                        data-version="<?= $this->escapeHtmlAttr($issue['version']) ?>">
+                    Save changes
+                </button>
+                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+                    Saved
+                </span>
+            </div>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <?php endforeach; ?>
+<?php endforeach; ?>
+
+<div style="margin-top: 30px;">
+    <a href="/letter/preview?id=<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
+       id="back-to-preview"
+       class="govuk-button govuk-button--secondary">
+        Back to letter preview
+    </a>
+</div>
