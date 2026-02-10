@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.11.0](https://github.com/dvsa/vol-app/compare/v6.10.2...v6.11.0) (2026-02-10)
+
+
+### Features
+
+* letter edit functionality ([#1309](https://github.com/dvsa/vol-app/issues/1309)) ([d8c8b56](https://github.com/dvsa/vol-app/commit/d8c8b56babb7c0c7e78fbdf17d2c301523b1126c))
+
 ## [6.10.2](https://github.com/dvsa/vol-app/compare/v6.10.1...v6.10.2) (2026-02-03)
 
 
