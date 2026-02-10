@@ -37,7 +37,9 @@ class GetTest extends QueryHandlerTestCase
                         'letterSectionVersion'
                     ],
                     'letterInstanceIssues' => [
-                        'letterIssueVersion'
+                        'letterIssueVersion' => [
+                            'letterIssueType'
+                        ]
                     ],
                     'letterInstanceTodos' => [
                         'letterTodoVersion'
