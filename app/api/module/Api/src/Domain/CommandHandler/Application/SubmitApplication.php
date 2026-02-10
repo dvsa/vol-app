@@ -21,6 +21,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot as CreateSnapshotCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
@@ -56,6 +57,22 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
         $this->result->merge($this->snapshotApplication($application));
 
         $this->updateStatus($application);
+
+        if ($application->canAutoGrant()) {
+            $application->setWasAutoGranted(true);
+            $grantResult = $this->handleSideEffectAsSystemUser(
+                \Dvsa\Olcs\Transfer\Command\Variation\Grant::create([
+                    'id' => $application->getId(),
+                    'version' => $application->getVersion(),
+                    'grantAuthority' => RefData::GRANT_AUTHORITY_DELEGATED,
+                    'isAutoGrant' => true,
+                ])
+            );
+            $this->getRepo()->save($application);
+                $this->result->addMessage('Application auto-granted');
+                $this->result->setFlag('autoGranted', true);
+                $this->result->merge($grantResult);
+        }
 
         try {
             $this->clearLicenceCaches($application->getLicence());

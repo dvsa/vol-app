@@ -16,6 +16,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Domain\Exception\BadVariationTypeException;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
+use Dvsa\Olcs\Api\Entity\Application\ApplicationTracking;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
@@ -50,9 +51,8 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
         $application = $this->getRepo()->fetchUsingId($command);
 
         $this->guardAgainstBadVariationType($application);
-
         // Auto-complete tracking for auto-granted variations
-        if ($this->isAutoGrant($command)) {
+        if ($application->getWasAutoGranted()) {
             $result->merge($this->autoCompleteTracking($application));
         }
 
@@ -73,7 +73,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
 
         // For auto-grants, update status as system user so change history shows "system"
         // For manual grants from internal, use the actual user who clicked grant
-        if ($this->isAutoGrant($command)) {
+        if ($application->getWasAutoGranted()) {
             $this->getIdentityProvider()->setMasqueradedAsSystemUser(true);
         }
 
@@ -81,7 +81,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
         $application->setGrantAuthority($this->refData($command->getGrantAuthority()));
         $this->getRepo()->save($application);
 
-        if ($this->isAutoGrant($command)) {
+        if ($application->getWasAutoGranted()) {
             $this->getIdentityProvider()->setMasqueradedAsSystemUser(false);
         }
 
@@ -118,19 +118,6 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
         $result->addId('Application', $application->getId());
         $result->addMessage('Application ' . $application->getId() . ' granted');
         return $result;
-    }
-
-    /**
-     * Check if this is an auto-grant (called from selfserve)
-     *
-     * @param Cmd $command
-     * @return bool
-     */
-    protected function isAutoGrant($command)
-    {
-        // Check if the command has an isAutoGrant flag
-        // This will be set to true when called from selfserve auto-grant
-        return method_exists($command, 'getIsAutoGrant') && $command->getIsAutoGrant() === true;
     }
 
     /**
@@ -173,12 +160,10 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
                 $updateCmd = UpdateVariationCompletionCmd::create([
                     'id' => $application->getId(),
                     'section' => $section,
-                    'data' => ['status' => \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking::STATUS_ACCEPTED]
+                    'data' => ['status' => ApplicationTracking::STATUS_ACCEPTED]
                 ]);
-
                 $result->merge($this->handleSideEffectAsSystemUser($updateCmd));
             }
-
             $result->addMessage('Auto-completed tracking for auto-grant');
 
         } catch (\Exception $e) {
