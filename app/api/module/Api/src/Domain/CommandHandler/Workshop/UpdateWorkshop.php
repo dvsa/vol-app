@@ -60,7 +60,7 @@ final class UpdateWorkshop extends AbstractCommandHandler implements Transaction
             $this->eventHistoryCreator->create($contactDetails, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence());
         }
 
-        if ($workshop->getContactDetails()->getAddress() != $addressData['version']) {
+        if ($workshop->getContactDetails()->getAddress()->getVersion() != $addressData['version']) {
             // create Event History record
             $this->eventHistoryCreator->create($address, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence());
         }
