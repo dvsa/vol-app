@@ -12,6 +12,11 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
 use Dvsa\Olcs\Api\Entity\User\User;
 use RuntimeException;
 use LmcRbacMvc\Service\AuthorizationService;
+use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertaking;
+use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContact;
+use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetails;
+use Dvsa\Olcs\Api\Entity\Licence\Workshop as Workshop;
+use Dvsa\Olcs\Api\Entity\ContactDetails\Address as Address;
 
 class Creator
 {
@@ -37,7 +42,7 @@ class Creator
      * @param string $eventHistoryType
      * @return void
      */
-    public function create(mixed $entity, $eventHistoryType, $eventData = null)
+    public function create(mixed $entity, $eventHistoryType, $eventData = null, $licence = null)
     {
         // create event history record
         $eventHistory = new EventHistoryEntity(
@@ -62,6 +67,28 @@ class Creator
             case $entity instanceof Application:
                 $eventHistory->setApplication($entity);
                 $eventHistory->setEntityType('application');
+                break;
+            case $entity instanceof ConditionUndertaking:
+                $eventHistory->setCase($entity->getCase());
+                $eventHistory->setApplication($entity->getApplication());
+                $eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setEntityType('condition_undertaking');
+                break;
+            case $entity instanceof PhoneContact:
+                $eventHistory->setLicence($licence);
+                $eventHistory->setEntityType('phone_contact');
+                break;
+            case $entity instanceof ContactDetails:
+                $eventHistory->setLicence($licence);
+                $eventHistory->setEntityType('contact_details');
+                break;
+            case $entity instanceof Workshop:
+                $eventHistory->setLicence($entity->getLicence());
+                $eventHistory->setEntityType('workshop');
+                break;
+            case $entity instanceof Address:
+                $eventHistory->setLicence($licence);
+                $eventHistory->setEntityType('address');
                 break;
             default:
                 throw new RuntimeException('Cannot create event history for the entity');

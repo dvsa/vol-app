@@ -14,6 +14,9 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Save LVA Addresses
@@ -33,6 +36,8 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         'primary' => PhoneContact::TYPE_PRIMARY,
         'secondary' => PhoneContact::TYPE_SECONDARY,
     ];
+
+    private EventHistoryCreator $eventHistoryCreator;
 
     /**
      * Handle command
@@ -113,6 +118,9 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         if ($correspondenceCd->getVersion() != $version) {
             $result->setFlag('hasChanged', true);
             $result->addMessage('Contact details updated');
+
+            // create Event History record
+            $this->eventHistoryCreator->create($correspondenceCd, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
         }
 
         $this->handleSideEffectResult($result);
@@ -130,7 +138,8 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
     {
         $this->updatePhoneContacts(
             $command->getContact(),
-            $licence->getCorrespondenceCd()
+            $licence->getCorrespondenceCd(),
+            $licence
         );
     }
 
@@ -139,11 +148,12 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
      *
      * @param array          $data           Phone Contact data
      * @param ContactDetails $contactDetails Contact Details entity
+     * @param Licence $licence entity 
      *
      * @return void
      * @throws \Dvsa\Olcs\Api\Domain\Exception\RuntimeException
      */
-    private function updatePhoneContacts($data, ContactDetails $contactDetails)
+    private function updatePhoneContacts($data, ContactDetails $contactDetails, ?Licence $licence = null)
     {
         foreach ($this->phoneTypes as $phoneType => $phoneRefName) {
             $result = new Result();
@@ -185,6 +195,9 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
                 } elseif ($contact->getVersion() != $version) {
                     $result->addMessage('Phone contact ' . $phoneType . ' updated');
                     $result->setFlag('hasChanged', true);
+                    
+                    // create Event History record
+                    $this->eventHistoryCreator->create($contact, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence);
                 }
             } elseif ($hasContact && $contact->getId() > 0) {
                 $contactDetails->getPhoneContacts()->removeElement($contact);
@@ -289,5 +302,11 @@ final class SaveAddresses extends AbstractCommandHandler implements Transactione
         }
 
         $this->handleSideEffectResult($result);
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

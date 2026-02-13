@@ -25,6 +25,8 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContactEntity;
 use Dvsa\Olcs\Api\Domain\Command\Licence\SaveAddresses as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\ContactDetails\SaveAddress;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Save Addresses test
@@ -43,8 +45,9 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices = [
             CacheEncryption::class => m::mock(CacheEncryption::class),
+            'EventHistoryCreator' => m::mock(EventHistoryCreator::class)
         ];
-
+    
         parent::setUp();
     }
 
@@ -262,6 +265,10 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
             // transport consultant phone contacts
             ->times(4);
 
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($correspondenceCd, EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence)
+            ->once();
+
         $result = $this->sut->handleCommand($command);
 
         $expected = [
@@ -390,6 +397,10 @@ class SaveAddressesTest extends AbstractCommandHandlerTestCase
                 ->getMock()
             )
             ->getMock();
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with(m::type(PhoneContactEntity::class), EventHistoryTypeEntity::EVENT_CODE_CHANGE_CORRESPONDENCE_ADDRESS, null, $licence)
+            ->twice();
 
         $result = $this->sut->handleCommand($command);
 

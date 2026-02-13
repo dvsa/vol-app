@@ -16,6 +16,9 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Create Workshop
@@ -27,6 +30,8 @@ final class CreateWorkshop extends AbstractCommandHandler implements Transaction
     protected $repoServiceName = 'Workshop';
 
     protected $extraRepos = ['ContactDetails', 'Licence'];
+
+    private EventHistoryCreator $eventHistoryCreator;
 
     public function handleCommand(CommandInterface $command)
     {
@@ -57,6 +62,17 @@ final class CreateWorkshop extends AbstractCommandHandler implements Transaction
         $result->addId('workshop', $workshop->getId());
         $result->addMessage('Workshop created');
 
+        // create Event History record
+        $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR);
+        $this->eventHistoryCreator->create($contactDetails, EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $workshop->getLicence());
+        $this->eventHistoryCreator->create($contactDetails->getAddress(), EventHistoryTypeEntity::EVENT_CODE_ADD_SAFETY_INSPECTOR, null, $workshop->getLicence());
+
         return $result;
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($container, $requestedName, $options);
     }
 }
