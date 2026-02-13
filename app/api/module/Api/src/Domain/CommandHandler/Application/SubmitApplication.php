@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
 use Dvsa\Olcs\Api\Domain\CacheAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
+use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -45,9 +46,9 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param \Dvsa\Olcs\Transfer\Command\Application\SubmitApplication $command Command
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command) : Result
     {
         /* @var $application ApplicationEntity */
         $application = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());
@@ -177,7 +178,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Applicaiton Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     private function snapshotApplication(ApplicationEntity $application)
     {
@@ -193,7 +194,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     private function createTask(ApplicationEntity $application)
     {
@@ -346,7 +347,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function createPublication(ApplicationEntity $application)
     {
@@ -365,7 +366,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function createTexTask(ApplicationEntity $application)
     {
@@ -382,7 +383,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      * Maybe create light goods vehicle condition
      *
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function maybeCreateLightGoodsVehicleCondition(ApplicationEntity $application)
     {

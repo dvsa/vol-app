@@ -167,8 +167,6 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
             $result->addMessage('Auto-completed tracking for auto-grant');
 
         } catch (\Exception $e) {
-            // Log the error but don't fail the grant
-            error_log('Error auto-completing tracking: ' . $e->getMessage());
             $result->addMessage('Warning: Could not auto-complete tracking: ' . $e->getMessage());
         }
 

@@ -5,7 +5,7 @@
     echo $this->partial(
       'partials/page-header-simple',
       [
-        'pageTitle' => $this->translate('lva-summary-title'),
+        'pageTitle' => $this->escapeHtml($this->translate('lva-summary-title')),
         'pageSubTitle' => $this->licence . ' / ' . $this->application,
       ]
     );
