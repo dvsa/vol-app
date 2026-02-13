@@ -70,6 +70,22 @@ class Summary extends AbstractQueryHandler
             }
         }
 
+        // Check if auto-granted and return early with special response
+        if ($application->getWasAutoGranted()) {
+            return $this->result(
+                $application,
+                $bundle,
+                [
+                    'wasAutoGranted' => true,
+                    'autoGrantChanges' => $application->getAutoGrantChangeSummary(),
+                    'actions' => [],
+                    'reference' => $this->getLatestPaymentReference($application->getId()),
+                    'outstandingFee' => false,
+                    'canWithdraw' => false
+                ]
+            );
+        }
+
         return $this->result(
             $application,
             $bundle,

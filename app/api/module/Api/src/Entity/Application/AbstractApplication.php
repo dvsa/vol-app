@@ -3827,4 +3827,31 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     {
         return (string) $this->getId();
     }
+
+    /**
+     *  Was auto granted
+     * @var boolean
+     * @ORM\Column(name="was_auto_granted", type="boolean", options={"default": false})
+     */
+    protected $wasAutoGranted = false;
+
+    /**
+     * Set was auto granted
+     * @param boolean $wasAutoGranted
+     * @return $this
+     */
+    public function setWasAutoGranted(bool $wasAutoGranted)
+    {
+        $this->wasAutoGranted = $wasAutoGranted;
+        return $this;
+    }
+
+    /**
+     * Get was auto granted
+     * @return boolean
+     */
+    public function getWasAutoGranted(): bool
+    {
+        return $this->wasAutoGranted;
+    }
 }

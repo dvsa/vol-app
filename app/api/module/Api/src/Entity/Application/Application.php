@@ -2738,4 +2738,90 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         $this->interimAuthVehicles = ($this->interimAuthHgvVehicles ?? 0) + ($this->interimAuthLgvVehicles ?? 0);
         return $this;
     }
+
+    /**
+     *  Check if variation is eligible for auto grant
+     * @return bool
+     */
+    public function canAutoGrant(): bool
+    {
+        //has to be a variation
+        if (!$this->isVariation()) {
+            return false;
+        }
+        $variationCompletion = $this->getVariationCompletion();
+        $hasOCChanges = false;
+        $hasOtherChanges = false;
+        //check only OC removals
+        foreach ($variationCompletion as $section => $status) {
+            if ($section === 'undertakings') continue;
+            if ($status === self::VARIATION_STATUS_UPDATED) {
+                if ($section === 'operating_centres') {
+                    $hasOCChanges = true;
+                } else {
+                    $hasOtherChanges = true;
+                }
+            }
+        }
+        if (!$hasOCChanges || $hasOtherChanges) {
+            return false;
+        }
+        //check how many OCs have been removed/are left
+        $applicationOperatingCentres = $this->getOperatingCentres();
+        $removalCount = 0;
+        $hasAdditions = false;
+        $hasModifications = false;
+
+        foreach ($applicationOperatingCentres as $aoc) {
+            $action = $aoc->getAction();
+            if ($aoc->getAction() === ApplicationOperatingCentre::ACTION_DELETE) {
+                $removalCount++;
+            } elseif ($aoc->getAction() === ApplicationOperatingCentre::ACTION_ADD) {
+                $hasAdditions = true;
+            } elseif ($aoc->getAction() === ApplicationOperatingCentre::ACTION_UPDATE) {
+                $hasModifications = true;
+            }
+        }
+        $currentTotalOCs = count($this->getLicence()->getOperatingCentres());
+        $remainingOCs = $currentTotalOCs - $removalCount;
+        return !$hasAdditions && !$hasModifications && $remainingOCs >= 1 && $removalCount > 0;
+    }
+
+    /**
+     * Get summary of autogrant changes
+     *
+     * @return array
+     */
+    public function getAutoGrantChangeSummary() : array
+    {
+        $summary = [];
+
+        $applicationOperatingCentres = $this->getOperatingCentres();
+        $vehicleReduction = 0;
+        foreach ($applicationOperatingCentres as $aoc) {
+            if ($aoc->getAction() === ApplicationOperatingCentre::ACTION_DELETE) {
+                $oc = $aoc->getOperatingCentre();
+                $address = $oc->getAddress();
+                $addressParts = array_filter([
+                    $address->getAddressLine1(),
+                    $address->getAddressLine2(),
+                    $address->getAddressLine3(),
+                    $address->getTown(),
+                    $address->getPostcode()
+                ]);
+                $addressLine = strtoupper(implode(' ', $addressParts));
+                if (!empty($addressLine)) {
+                    $summary[] = "The operating centre at {$addressLine} has been removed.";
+                }
+                $vehicleReduction += (int) $aoc->getNoOfVehiclesRequired();
+            }
+        }
+        if ($vehicleReduction > 0) {
+            $currentTotal = $this->getTotAuthVehicles();
+            $newTotal = $currentTotal - $vehicleReduction;
+            $summary[] = "The total number of vehicles authorized has been reduced by {$vehicleReduction}. Your updated \
+            authorised vehicle count is now {$newTotal}.";
+        }
+        return $summary;
+    }
 }

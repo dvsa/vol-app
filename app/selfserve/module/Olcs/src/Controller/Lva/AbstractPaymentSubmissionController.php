@@ -14,7 +14,10 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Variation\Grant as GrantVariationCmd;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Application\Summary as SummaryQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
@@ -149,21 +152,19 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      */
     protected function submitApplication($applicationId, $version)
     {
-        $dto = SubmitApplicationCmd::create(
-            [
-                'id' => $applicationId,
-                'version' => $version,
-            ]
-        );
+        $dto = SubmitApplicationCmd::create([
+            'id' => $applicationId,
+            'version' => $version,
+        ]);
 
         $response = $this->handleCommand($dto);
 
-        if ($response->isOk()) {
-            return $this->redirectToSummary();
+        if (!$response->isOk()) {
+            $this->flashMessengerHelper->addUnknownError();
+            return $this->redirectToOverview();
         }
 
-        $this->flashMessengerHelper->addUnknownError();
-        return $this->redirectToOverview();
+        return $this->redirectToSummary();
     }
 
     /**
