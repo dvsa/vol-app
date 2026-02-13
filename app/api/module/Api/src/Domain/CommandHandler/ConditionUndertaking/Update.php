@@ -23,6 +23,8 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     public function handleCommand(CommandInterface $command)
     {
         /* @var $command Command */
@@ -80,9 +82,7 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fullContainer = $container;
-
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');
-        return parent::__invoke($fullContainer, $requestedName, $options);
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

@@ -41,6 +41,8 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
      */
     protected $helper;
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     /**
      * @param Cmd $command
      */
@@ -98,10 +100,8 @@ final class Update extends AbstractCommandHandler implements TransactionedInterf
     }
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fullContainer = $container;
-
         $this->helper = $container->get('OperatingCentreHelper');
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');
-        return parent::__invoke($fullContainer, $requestedName, $options);
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

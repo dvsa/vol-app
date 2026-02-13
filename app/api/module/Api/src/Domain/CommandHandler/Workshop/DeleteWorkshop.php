@@ -29,6 +29,8 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
     protected $repoServiceName = 'Workshop';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -70,9 +72,7 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fullContainer = $container;
-
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');
-        return parent::__invoke($fullContainer, $requestedName, $options);
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

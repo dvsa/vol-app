@@ -23,6 +23,8 @@ final class Delete extends AbstractDeleteCommandHandler
 {
     protected $repoServiceName = 'ConditionUndertaking';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     /**
      * Handle command
      *
@@ -54,9 +56,7 @@ final class Delete extends AbstractDeleteCommandHandler
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fullContainer = $container;
-
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');
-        return parent::__invoke($fullContainer, $requestedName, $options);
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertaking;
 use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact as PhoneContact;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetails;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop as Workshop;
-use Dvsa\Olcs\Api\Domain\Command\ContactDetails\SaveAddress as SaveAddress;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as Address;
 
 class Creator
