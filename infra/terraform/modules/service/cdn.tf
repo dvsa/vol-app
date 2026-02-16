@@ -33,7 +33,7 @@ locals {
 
 module "acm" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 5.0"
+  version = "~> 6.3"
 
   domain_name = "${local.subdomain}.${local.domain_name}"
   zone_id     = data.aws_route53_zone.public.id
@@ -50,7 +50,7 @@ module "acm" {
 
 module "route53_records" {
   source  = "terraform-aws-modules/acm/aws"
-  version = "~> 5.0"
+  version = "~> 6.3"
 
   create_certificate          = false
   create_route53_records_only = true
@@ -69,7 +69,7 @@ locals {
 
 module "cloudfront" {
   source  = "terraform-aws-modules/cloudfront/aws"
-  version = "~> 3.4"
+  version = "~> 6.4"
 
   aliases = ["${local.subdomain}.${local.domain_name}"]
 
@@ -174,7 +174,7 @@ data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 
 module "log_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
-  version = "~> 4.0"
+  version = "~> 5.10"
 
   bucket = "vol-app-${var.environment}-assets-logs"
 
@@ -197,7 +197,7 @@ module "log_bucket" {
 
 module "records" {
   source  = "terraform-aws-modules/route53/aws//modules/records"
-  version = "~> 4.0"
+  version = "~> 6.4"
 
   zone_id = data.aws_route53_zone.public.zone_id
 
