@@ -58,7 +58,7 @@ jobs:
 
       # Build and push to NONPROD
       - name: Configure AWS credentials (NONPROD)
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -92,7 +92,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=printpit
 
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.34.0
         continue-on-error: true
         with:
           image-ref: printpit:test
@@ -136,7 +136,7 @@ jobs:
       # Optionally push to PROD
       - name: Configure AWS credentials (PROD)
         if: ${{ inputs.push_to_prod }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
