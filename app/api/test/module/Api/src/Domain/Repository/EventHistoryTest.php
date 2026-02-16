@@ -227,6 +227,63 @@ class EventHistoryTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->sut->fetchEventHistoryDetails($id, $version, $table));
     }
 
+    public function testFetchEventHistoryDetailsWithDeletedDate()
+    {
+        $table = 'application_hist';
+        $id = 1;
+        $version = 2;
+
+        $results = [
+            [ // new row
+                'foo' => 'bar2',
+                'cake' => 'baz2',
+                'same' => 'value',
+                'deleted_date' => '2026-01-28',
+                'version' => 2
+            ],
+            [ // old row
+                'foo' => 'bar1',
+                'cake' => 'baz1',
+                'same' => 'value',
+                'deleted_date' => null,
+                'version' => 1
+            ]
+        ];
+
+        $mockQuery = m::mock()
+            ->shouldReceive('setHistoryTable')->with($table)->once()->andReturnSelf()
+            ->shouldReceive('execute')
+            ->with(['id' => $id, 'version' => [$version, $version - 1]])
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('fetchAll')
+                ->andReturn($results)
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->dbQueryService->shouldReceive('get')
+            ->with('EventHistory\GetEventHistoryDetails')
+            ->andReturn($mockQuery);
+
+        $expected = [
+            ['name' => 'foo', 'oldValue' => 'bar1', 'newValue' => ''],
+            ['name' => 'cake', 'oldValue' => 'baz1', 'newValue' => ''],
+            ['name' => 'same', 'oldValue' => 'value', 'newValue' => ''],
+            ['name' => 'deleted_date', 'oldValue' => '', 'newValue' => ''], 
+        ];
+
+
+        $this->assertEquals(
+            $expected,
+            $this->sut->fetchEventHistoryDetails($id, $version, $table)
+        );
+    }
+
+
+
     public function testApplyListJoins()
     {
         $this->setUpSut(Repo::class, true);

@@ -18,6 +18,9 @@ use Dvsa\Olcs\Transfer\Command\Workshop\DeleteWorkshop as Cmd;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop as WorkshopEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\Address as AddressEntity;
 use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails as ContactDetailsEntity;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 
 /**
  * Delete Workshop Test
@@ -32,6 +35,8 @@ class DeleteWorkshopTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('Workshop', Workshop::class);
         $this->mockRepo('ContactDetails', ContactDetails::class);
         $this->mockRepo('Address', Address::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
+
         parent::setUp();
     }
 
@@ -54,10 +59,14 @@ class DeleteWorkshopTest extends AbstractCommandHandlerTestCase
         $workshopEntity1 = m::mock(WorkshopEntity::class);
         $contactDetails1 = m::mock(ContactDetailsEntity::class);
         $address1 = m::mock(AddressEntity::class);
+        $licence1 = m::mock(LicenceEntity::class);
         $contactDetails1->shouldReceive('getAddress')->andReturn($address1);
         $workshopEntity1->shouldReceive('getContactDetails')->andReturn($contactDetails1);
+        $workshopEntity1->shouldReceive('getLicence')->andReturn($licence1);
         $workshopEntity2 = m::mock(WorkshopEntity::class);
         $workshopEntity2->shouldReceive('getContactDetails')->andReturn(null);
+        $workshopEntity2->shouldReceive('getLicence')->andReturnNull();
+
         $this->repoMap['Address']->shouldReceive('delete')
                                  ->once()
                                  ->with($address1);
@@ -79,6 +88,19 @@ class DeleteWorkshopTest extends AbstractCommandHandlerTestCase
             ->once()
             ->shouldReceive('delete')
             ->with($workshopEntity2)
+            ->once();
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($workshopEntity1, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR)
+            ->once()
+            ->shouldReceive('create')
+            ->with($workshopEntity2, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR)
+            ->once()
+            ->shouldReceive('create')
+            ->with($contactDetails1, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null, $licence1)
+            ->once()
+            ->shouldReceive('create')
+            ->with($address1, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, null, $licence1)
             ->once();
 
         $result = $this->sut->handleCommand($command);

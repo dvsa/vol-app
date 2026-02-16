@@ -14,6 +14,9 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Traits\DeleteContactDetailsAndAddressTra
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Delete Workshop
@@ -26,6 +29,8 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
 
     protected $repoServiceName = 'Workshop';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     public function handleCommand(CommandInterface $command)
     {
         $result = new Result();
@@ -33,12 +38,41 @@ final class DeleteWorkshop extends AbstractCommandHandler implements Transaction
         foreach ($command->getIds() as $id) {
             /** @var Workshop $workshop */
             $workshop = $this->getRepo()->fetchById($id);
-            $this->maybeDeleteContactDetailsAndAddress($workshop->getContactDetails());
+            $contactDetails = $workshop->getContactDetails();
+            $this->maybeDeleteContactDetailsAndAddress($contactDetails);
             $this->getRepo()->delete($workshop);
+
+            // create Event History record
+            $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR);
+            
+            if ($contactDetails) {
+                
+                $this->eventHistoryCreator->create(
+                    $contactDetails, 
+                    EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
+                    null,
+                    $workshop->getLicence());  
+
+                $address = $contactDetails->getAddress();
+
+                if ($address) {
+                    $this->eventHistoryCreator->create(
+                        $address, 
+                        EventHistoryTypeEntity::EVENT_CODE_DELETE_SAFETY_INSPECTOR, 
+                        null, 
+                        $workshop->getLicence());
+                }
+            }
         }
 
         $result->addMessage(count($command->getIds()) . ' Workshop(s) removed');
 
         return $result;
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($container, $requestedName, $options);
     }
 }
