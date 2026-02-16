@@ -77,7 +77,7 @@ jobs:
 
       - name: Configure AWS credentials
         if: ${{ inputs.push }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
