@@ -23,6 +23,8 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Repository;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Entity\User\Permission;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
 
 /**
  * Update Test
@@ -40,6 +42,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices['OperatingCentreHelper'] = m::mock(OperatingCentreHelper::class);
         $this->mockedSmServices[AuthorizationService::class] = m::mock(AuthorizationService::class);
+        $this->mockedSmServices ['EventHistoryCreator'] = m::mock(EventHistoryCreator::class);
 
         parent::setUp();
     }
@@ -59,6 +62,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             'address' => [
                 'addressLine1' => '123 Street',
                 'postcode' => 'SM1 7ZZ',
+                'version' => 1
             ]
         ];
         $command = Cmd::create($data);
@@ -66,7 +70,10 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         /* @var $oc OperatingCentre */
         $oc = m::mock(OperatingCentre::class)->makePartial();
         $oc->setId(333);
-        $oc->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address());
+
+        $addressEntity = new \Dvsa\Olcs\Api\Entity\ContactDetails\Address();
+        $addressEntity->setVersion(2);
+        $oc->setAddress($addressEntity);
 
         $application = $this->getTestingApplication();
         $application->setId(222);
@@ -91,9 +98,9 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with($aoc, $application, $command, $this->repoMap['ApplicationOperatingCentre']);
 
-        $data = [
+        $dataSideEffect = [
             'id' => null,
-            'version' => null,
+            'version' => 1,
             'addressLine1' => '123 Street',
             'addressLine2' => null,
             'addressLine3' => null,
@@ -105,15 +112,15 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         ];
         $result1 = new Result();
         $result1->addMessage('SaveAddress');
-        $this->expectedSideEffect(SaveAddress::class, $data, $result1);
+        $this->expectedSideEffect(SaveAddress::class, $dataSideEffect, $result1);
 
-        $data = [
-            'id' => 222,
+        $completionData = [
+            'id' => $application->getId(),
             'section' => 'operatingCentres'
         ];
         $result2 = new Result();
         $result2->addMessage('UpdateApplicationCompletion');
-        $this->expectedSideEffect(UpdateApplicationCompletion::class, $data, $result2);
+        $this->expectedSideEffect(UpdateApplicationCompletion::class, $completionData, $result2);
 
         $this->mockedSmServices[AuthorizationService::class]
             ->shouldReceive('isGranted')
@@ -126,6 +133,10 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             ['id' => 222, 'operatingCentre' => 333],
             (new Result())->addMessage('SET_TA')
         );
+
+        $this->mockedSmServices['EventHistoryCreator']->shouldReceive('create')
+            ->with($oc->getAddress(), EventHistoryTypeEntity::EVENT_CODE_EDIT_OPERATING_CENTRE, null, $application->getLicence())
+            ->once();
 
         $result = $this->sut->handleCommand($command);
 
