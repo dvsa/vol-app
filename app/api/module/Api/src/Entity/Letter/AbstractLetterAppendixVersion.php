@@ -74,6 +74,24 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     protected $document;
 
     /**
+     * Appendix type: 'pdf' or 'editable'
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="appendix_type", length=20, nullable=false, options={"default": "pdf"})
+     */
+    protected $appendixType = 'pdf';
+
+    /**
+     * Default EditorJS content for editable type
+     *
+     * @var array|null
+     *
+     * @ORM\Column(type="json", name="default_content", nullable=true)
+     */
+    protected $defaultContent;
+
+    /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
@@ -233,6 +251,52 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
     public function getDocument()
     {
         return $this->document;
+    }
+
+    /**
+     * Set the appendix type
+     *
+     * @param string $appendixType new value being set
+     *
+     * @return LetterAppendixVersion
+     */
+    public function setAppendixType($appendixType)
+    {
+        $this->appendixType = $appendixType;
+
+        return $this;
+    }
+
+    /**
+     * Get the appendix type
+     *
+     * @return string     */
+    public function getAppendixType()
+    {
+        return $this->appendixType;
+    }
+
+    /**
+     * Set the default content
+     *
+     * @param array|null $defaultContent new value being set
+     *
+     * @return LetterAppendixVersion
+     */
+    public function setDefaultContent($defaultContent)
+    {
+        $this->defaultContent = $defaultContent;
+
+        return $this;
+    }
+
+    /**
+     * Get the default content
+     *
+     * @return array|null     */
+    public function getDefaultContent()
+    {
+        return $this->defaultContent;
     }
 
     /**

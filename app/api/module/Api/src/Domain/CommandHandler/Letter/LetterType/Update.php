@@ -70,10 +70,21 @@ final class Update extends AbstractCommandHandler
         
         // Update appendices if provided
         if ($command->getAppendices() !== null) {
-            $letterType->getAppendices()->clear();
+            // Clear existing appendices (orphanRemoval handles deletion)
+            foreach ($letterType->getLetterTypeAppendices()->toArray() as $existing) {
+                $letterType->removeLetterTypeAppendix($existing);
+            }
+
+            $displayOrder = 0;
             foreach ($command->getAppendices() as $appendixId) {
-                $appendix = $this->getRepo('LetterAppendix')->fetchById($appendixId);
-                $letterType->addAppendix($appendix);
+                $letterAppendix = $this->getRepo('LetterAppendix')->fetchById($appendixId);
+                $appendixVersion = $letterAppendix->getCurrentVersion();
+                if ($appendixVersion) {
+                    $lta = new \Dvsa\Olcs\Api\Entity\Letter\LetterTypeAppendix();
+                    $lta->setLetterAppendixVersion($appendixVersion);
+                    $lta->setDisplayOrder($displayOrder++);
+                    $letterType->addLetterTypeAppendix($lta);
+                }
             }
         }
 

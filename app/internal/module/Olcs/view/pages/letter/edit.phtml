@@ -55,6 +55,37 @@
     <?php endforeach; ?>
 <?php endforeach; ?>
 
+<?php if (!empty($groupedAppendices)): ?>
+    <h2 class="govuk-heading-m">Appendices</h2>
+
+    <?php foreach ($groupedAppendices as $appendix): ?>
+        <div class="govuk-form-group appendix-editor-group" data-appendix-id="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+            <h3 class="govuk-heading-s"><?= $this->escapeHtml($appendix['name']) ?></h3>
+
+            <div class="editorjs-container" data-element-name="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+                <div id="editor-appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>" class="editorjs-editor"></div>
+                <input type="hidden"
+                       name="appendix-<?= $this->escapeHtmlAttr($appendix['id']) ?>"
+                       value="<?= $this->escapeHtmlAttr($appendix['content']) ?>">
+            </div>
+
+            <div style="margin-top: 10px;">
+                <button type="button"
+                        class="govuk-button save-appendix-btn"
+                        data-appendix-id="<?= $this->escapeHtmlAttr($appendix['id']) ?>"
+                        data-version="<?= $this->escapeHtmlAttr($appendix['version']) ?>">
+                    Save changes
+                </button>
+                <span class="save-indicator govuk-tag govuk-tag--green" style="display: none; margin-left: 10px;">
+                    Saved
+                </span>
+            </div>
+        </div>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    <?php endforeach; ?>
+<?php endif; ?>
+
 <div style="margin-top: 30px;">
     <a href="/letter/preview?id=<?= $this->escapeHtmlAttr($letterInstanceId) ?>"
        id="back-to-preview"

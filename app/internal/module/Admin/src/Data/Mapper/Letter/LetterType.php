@@ -17,6 +17,16 @@ class LetterType implements MapperInterface
      */
     public static function mapFromResult(array $data): array
     {
+        // Extract appendix IDs from letterTypeAppendices collection
+        $appendixIds = [];
+        if (!empty($data['letterTypeAppendices'])) {
+            foreach ($data['letterTypeAppendices'] as $lta) {
+                if (isset($lta['letterAppendixVersion']['letterAppendix']['id'])) {
+                    $appendixIds[] = $lta['letterAppendixVersion']['letterAppendix']['id'];
+                }
+            }
+        }
+
         $formData = [
             'letterType' => [
                 'id' => $data['id'] ?? null,
@@ -27,6 +37,7 @@ class LetterType implements MapperInterface
                 'category' => isset($data['category']['id']) ? $data['category']['id'] : null,
                 'subCategory' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
                 'letterTestData' => isset($data['letterTestData']['id']) ? $data['letterTestData']['id'] : null,
+                'appendices' => $appendixIds,
             ]
         ];
 
@@ -68,6 +79,11 @@ class LetterType implements MapperInterface
         
         if (empty($commandData['letterTestData'])) {
             unset($commandData['letterTestData']);
+        }
+
+        // Ensure appendices is an array (even if empty) so the handler processes it
+        if (isset($commandData['appendices'])) {
+            $commandData['appendices'] = array_filter((array)$commandData['appendices']);
         }
 
         return $commandData;

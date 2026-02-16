@@ -10,7 +10,7 @@ use Aws\S3\Exception\S3Exception;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Laminas\Log\LoggerInterface;
 
-class GotenbergClient implements ConvertToPdfInterface
+class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterface
 {
     /**
      * @var HttpClient
@@ -121,6 +121,71 @@ class GotenbergClient implements ConvertToPdfInterface
                 ]);
             }
         }
+    }
+
+    /**
+     * Convert HTML content to PDF using Gotenberg's Chromium endpoint
+     *
+     * @param string $htmlContent  HTML content to convert
+     * @param string $destination  Destination file path for the PDF
+     *
+     * @return void
+     * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
+     */
+    public function convertHtml(string $htmlContent, string $destination): void
+    {
+        $this->httpClient->reset();
+        $this->httpClient->setUri($this->baseUri . '/forms/chromium/convert/html');
+        $this->httpClient->setMethod(Request::METHOD_POST);
+        $this->httpClient->setFileUpload('index.html', 'files', $htmlContent, 'text/html');
+
+        $response = $this->httpClient->send();
+
+        if (!$response->isOk()) {
+            $body = $response->getBody();
+            $message = $body ?: $response->getReasonPhrase();
+
+            throw new RestResponseException(
+                'ConvertHtmlToPdf failed, Gotenberg service response : ' . $message,
+                $response->getStatusCode()
+            );
+        }
+
+        $pdfContent = $response->getBody();
+
+        // Save to local file system
+        file_put_contents($destination, $pdfContent);
+    }
+
+    /**
+     * Merge multiple PDF files into one using Gotenberg's PDF engines merge endpoint
+     *
+     * @param array $pdfFilePaths Array of paths to PDF files to merge
+     * @param string $destination Destination file path for the merged PDF
+     *
+     * @return void
+     * @throws \Dvsa\Olcs\Api\Domain\Exception\RestResponseException
+     */
+    public function mergePdfs(array $pdfFilePaths, string $destination): void
+    {
+        $this->httpClient->reset();
+        $this->httpClient->setUri($this->baseUri . '/forms/pdfengines/merge');
+        $this->httpClient->setMethod(Request::METHOD_POST);
+
+        foreach ($pdfFilePaths as $filePath) {
+            $this->httpClient->setFileUpload($filePath, 'files');
+        }
+
+        $response = $this->httpClient->send();
+
+        if (!$response->isOk()) {
+            throw new RestResponseException(
+                'PDF merge failed: ' . ($response->getBody() ?: $response->getReasonPhrase()),
+                $response->getStatusCode()
+            );
+        }
+
+        file_put_contents($destination, $response->getBody());
     }
 
     /**

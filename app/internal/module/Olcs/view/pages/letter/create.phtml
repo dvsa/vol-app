@@ -4,7 +4,7 @@
 <p class="govuk-body">Use the checkboxes in the sections below to choose what to include in your letter. You can also add attachments.</p>
 
 <div id="validation-error" class="govuk-error-message" style="display: none; margin-bottom: 1rem;">
-    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue
+    <span class="govuk-visually-hidden">Error:</span> Please choose at least one issue or appendix
 </div>
 
 <p class="govuk-body">
@@ -50,6 +50,29 @@
     <?php endforeach; ?>
 </div>
 
+<?php if (!empty($appendicesData)): ?>
+<div class="letter-appendices" style="margin-top: 2rem;">
+    <h3 class="govuk-heading-s">Appendices</h3>
+    <div class="govuk-checkboxes govuk-checkboxes--small">
+        <?php foreach ($appendicesData as $appendix): ?>
+            <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" name="letterAppendices[]"
+                       type="checkbox" value="<?= $appendix['id'] ?>"
+                       id="letter-appendix-<?= $appendix['id'] ?>"
+                       <?= $appendix['isMandatory'] ? 'checked disabled' : '' ?>>
+                <label class="govuk-label govuk-checkboxes__label" for="letter-appendix-<?= $appendix['id'] ?>">
+                    <?= $this->escapeHtml($appendix['name']) ?>
+                    <span class="govuk-hint">(<?= $appendix['appendixType'] === 'editable' ? 'Editable' : 'PDF' ?>)</span>
+                </label>
+                <?php if ($appendix['isMandatory']): ?>
+                    <input type="hidden" name="letterAppendices[]" value="<?= $appendix['id'] ?>">
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+
 <div class="govuk-button-group" style="margin-top: 2rem;">
     <button type="button" id="create-letter-btn" class="govuk-button govuk-button--disabled" data-module="govuk-button" disabled>
         Create letter
@@ -82,7 +105,7 @@
     </p>
 
     <div class="govuk-button-group">
-        <button type="button" id="prepare-to-send-btn" class="govuk-button" disabled title="Coming soon in VOL-5520">
+        <button type="button" id="prepare-to-send-btn" class="govuk-button" data-module="govuk-button">
             Prepare to send
         </button>
         <a class="govuk-link" href="#" id="back-to-issues-btn">Back</a>

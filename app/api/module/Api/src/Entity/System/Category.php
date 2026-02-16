@@ -28,6 +28,9 @@ class Category extends AbstractCategory
     public const CATEGORY_APPLICATION = 9;
     public const CATEGORY_SUBMISSION = 10;
     public const CATEGORY_REPORT = 12;
+    public const CATEGORY_SYSTEM = 13;
+
+    public const DOC_SUB_CATEGORY_LETTER_APPENDIX = 217;
 
     // @NOTE create constants for all sub categories as required. Only a subset
     // will ever be needed programatically so this list should be manageable

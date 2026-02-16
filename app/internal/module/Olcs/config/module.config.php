@@ -932,6 +932,7 @@ return [
             DataService\Letter\MasterTemplate::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterTestData::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterIssueType::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterAppendix::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\LetterType::class => DataService\LetterTypeFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,

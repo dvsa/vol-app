@@ -6,6 +6,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 
@@ -21,6 +22,7 @@ final class Generate extends AbstractCommandHandler
     protected $extraRepos = [
         'LetterType',
         'LetterIssue',
+        'LetterAppendix',
         'Licence',
         'Application',
         'Cases',
@@ -66,6 +68,24 @@ final class Generate extends AbstractCommandHandler
                     $instanceIssue->setDisplayOrder($displayOrder++);
 
                     $letterInstance->addLetterInstanceIssue($instanceIssue);
+                }
+            }
+        }
+
+        // Create instance appendices from selected appendices
+        if (!empty($command->getSelectedAppendices())) {
+            $displayOrder = 0;
+            foreach ($command->getSelectedAppendices() as $appendixId) {
+                $letterAppendix = $this->getRepo('LetterAppendix')->fetchById($appendixId);
+                $appendixVersion = $letterAppendix->getCurrentVersion();
+
+                if ($appendixVersion) {
+                    $instanceAppendix = new LetterInstanceAppendix();
+                    $instanceAppendix->setLetterInstance($letterInstance);
+                    $instanceAppendix->setLetterAppendixVersion($appendixVersion);
+                    $instanceAppendix->setDisplayOrder($displayOrder++);
+
+                    $letterInstance->addLetterInstanceAppendix($instanceAppendix);
                 }
             }
         }

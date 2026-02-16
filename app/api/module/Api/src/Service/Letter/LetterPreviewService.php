@@ -47,16 +47,17 @@ class LetterPreviewService
         // Render all sections
         $sectionsHtml = $this->renderSections($letterInstance);
         $issuesHtml = $this->renderIssues($letterInstance);
+        $appendicesHtml = $this->renderAppendices($letterInstance);
         $closingHtml = ''; // Closing sections would be rendered similarly when implemented
 
         $context = $this->buildVolGrabContext($letterInstance);
 
         // If no master template, return just the content
         if ($masterTemplate === null) {
-            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml);
+            $html = $this->renderWithoutTemplate($sectionsHtml, $issuesHtml, $appendicesHtml);
         } else {
             // Build placeholder values
-            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml);
+            $placeholders = $this->buildPlaceholders($letterInstance, $sectionsHtml, $issuesHtml, $closingHtml, $appendicesHtml);
 
 
             $html = $this->populateTemplate($masterTemplate->getTemplateContent(), $placeholders);
@@ -131,13 +132,36 @@ class LetterPreviewService
     }
 
     /**
+     * Render appendix sections
+     *
+     * @param LetterInstance $letterInstance
+     * @return string HTML for all appendices
+     */
+    private function renderAppendices(LetterInstance $letterInstance): string
+    {
+        $appendixRenderer = $this->rendererManager->get('appendix');
+        $context = $this->buildVolGrabContext($letterInstance);
+        $html = '';
+
+        foreach ($letterInstance->getLetterInstanceAppendices() as $appendix) {
+            $html .= $appendixRenderer->render($appendix, $context);
+        }
+
+        if (!empty($html)) {
+            $html = '<div class="appendices"><h2 class="appendices-heading">Appendices</h2>' . $html . '</div>';
+        }
+        return $html;
+    }
+
+    /**
      * Render without a master template (fallback)
      *
      * @param string $sectionsHtml
      * @param string $issuesHtml
+     * @param string $appendicesHtml
      * @return string Basic HTML structure
      */
-    private function renderWithoutTemplate(string $sectionsHtml, string $issuesHtml): string
+    private function renderWithoutTemplate(string $sectionsHtml, string $issuesHtml, string $appendicesHtml = ''): string
     {
         $html = '<div class="letter-content">';
 
@@ -147,6 +171,10 @@ class LetterPreviewService
 
         if (!empty($issuesHtml)) {
             $html .= '<div class="issues">' . $issuesHtml . '</div>';
+        }
+
+        if (!empty($appendicesHtml)) {
+            $html .= $appendicesHtml;
         }
 
         $html .= '</div>';
@@ -167,7 +195,8 @@ class LetterPreviewService
         LetterInstance $letterInstance,
         string $sectionsHtml,
         string $issuesHtml,
-        string $closingHtml
+        string $closingHtml,
+        string $appendicesHtml = ''
     ): array {
         return [
             '{{LOGO_IMAGE}}' => $this->buildLogoImage(),
@@ -183,7 +212,7 @@ class LetterPreviewService
             '{{SIGNATURE_NAME}}' => '', // To be populated from user/config
             '{{SIGNATURE_TITLE}}' => '', // To be populated from user/config
             '{{FOOTER_CONTENT}}' => '',
-            '{{APPENDICES_CONTENT}}' => '',
+            '{{APPENDICES_CONTENT}}' => $appendicesHtml,
         ];
     }
 
