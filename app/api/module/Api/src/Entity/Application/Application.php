@@ -2741,7 +2741,6 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
     /**
      *  Check if variation is eligible for auto grant
-     * @return bool
      */
     public function canAutoGrant(): bool
     {
@@ -2774,11 +2773,11 @@ class Application extends AbstractApplication implements ContextProviderInterfac
 
         foreach ($applicationOperatingCentres as $aoc) {
             $action = $aoc->getAction();
-            if ($aoc->getAction() === ApplicationOperatingCentre::ACTION_DELETE) {
+            if ($action === ApplicationOperatingCentre::ACTION_DELETE) {
                 $removalCount++;
-            } elseif ($aoc->getAction() === ApplicationOperatingCentre::ACTION_ADD) {
+            } elseif ($action === ApplicationOperatingCentre::ACTION_ADD) {
                 $hasAdditions = true;
-            } elseif ($aoc->getAction() === ApplicationOperatingCentre::ACTION_UPDATE) {
+            } elseif ($action === ApplicationOperatingCentre::ACTION_UPDATE) {
                 $hasModifications = true;
             }
         }
@@ -2790,7 +2789,6 @@ class Application extends AbstractApplication implements ContextProviderInterfac
     /**
      * Get summary of autogrant changes
      *
-     * @return array
      */
     public function getAutoGrantChangeSummary() : array
     {
