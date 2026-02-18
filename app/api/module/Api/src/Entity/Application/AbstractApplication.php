@@ -787,6 +787,15 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $applicationReferredToPi;
 
     /**
+     * Was auto granted
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="was_auto_granted", nullable=false, options={"default": 0})
+     */
+    protected $wasAutoGranted = 0;
+
+    /**
      * ApplicationCompletion
      *
      * @var \Dvsa\Olcs\Api\Entity\ApplicationCompletion
@@ -2830,6 +2839,29 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     }
 
     /**
+     * Set the was auto granted
+     *
+     * @param bool $wasAutoGranted new value being set
+     *
+     * @return Application
+     */
+    public function setWasAutoGranted($wasAutoGranted)
+    {
+        $this->wasAutoGranted = $wasAutoGranted;
+
+        return $this;
+    }
+
+    /**
+     * Get the was auto granted
+     *
+     * @return bool     */
+    public function getWasAutoGranted()
+    {
+        return $this->wasAutoGranted;
+    }
+
+    /**
      * Set the application completion
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion $applicationCompletion entity being set as the value
@@ -3826,32 +3858,5 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     public function __toString(): string
     {
         return (string) $this->getId();
-    }
-
-    /**
-     *  Was auto granted
-     * @var boolean
-     * @ORM\Column(name="was_auto_granted", type="boolean", options={"default": false})
-     */
-    protected $wasAutoGranted = false;
-
-    /**
-     * Set was auto granted
-     * @param boolean $wasAutoGranted
-     * @return $this
-     */
-    public function setWasAutoGranted(bool $wasAutoGranted)
-    {
-        $this->wasAutoGranted = $wasAutoGranted;
-        return $this;
-    }
-
-    /**
-     * Get was auto granted
-     * @return boolean
-     */
-    public function getWasAutoGranted(): bool
-    {
-        return $this->wasAutoGranted;
     }
 }
