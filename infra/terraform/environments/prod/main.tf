@@ -638,7 +638,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/ni_dvacomplaince.sh"],
         type     = "scripts"
       },
     ]
