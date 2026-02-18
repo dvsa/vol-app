@@ -1,7 +1,6 @@
 <?php
 
-namespace Dvsa\Olcs\Api\Domain\CommandHandler\Application\Grant;
-
+namespace Dvsa\Olcs\Api\Domain\CommandHandler\Variation;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;

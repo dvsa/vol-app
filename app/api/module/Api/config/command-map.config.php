@@ -96,7 +96,7 @@ return [
         => CommandHandler\Application\Grant\ProcessApplicationOperatingCentres::class,
     Command\Application\Grant\CommonGrant::class => CommandHandler\Application\Grant\CommonGrant::class,
     \Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant::class =>
-        \Dvsa\Olcs\Api\Domain\CommandHandler\Application\Grant\AutoGrant::class,
+        \Dvsa\Olcs\Api\Domain\CommandHandler\Variation\AutoGrant::class,
     Command\Application\Grant\GrantConditionUndertaking::class
         => CommandHandler\Application\Grant\GrantConditionUndertaking::class,
     Command\Application\Grant\GrantCommunityLicence::class
