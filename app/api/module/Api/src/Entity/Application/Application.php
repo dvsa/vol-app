@@ -2790,12 +2790,17 @@ class Application extends AbstractApplication implements ContextProviderInterfac
      * Get summary of autogrant changes
      *
      */
-    public function getAutoGrantChangeSummary() : array
+    public function getAutoGrantChangeSummary(): array
     {
         $summary = [];
+        if (!$this->wasAutoGranted) {
+            return $summary;
+        }
 
         $applicationOperatingCentres = $this->getOperatingCentres();
         $vehicleReduction = 0;
+        $messages = [];
+
         foreach ($applicationOperatingCentres as $aoc) {
             if ($aoc->getAction() === ApplicationOperatingCentre::ACTION_DELETE) {
                 $oc = $aoc->getOperatingCentre();
@@ -2809,18 +2814,23 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                 ]);
                 $addressLine = strtoupper(implode(' ', $addressParts));
                 if (!empty($addressLine)) {
-                    $summary['addressLine'] = "The operating centre at {$addressLine} has been removed.";
+                    $summary['addressLine'] = $addressLine;
+                    $messages[] = "The operating centre at {$addressLine} has been removed.";
                 }
                 $vehicleReduction += (int) $aoc->getNoOfVehiclesRequired();
             }
         }
+
         if ($vehicleReduction > 0) {
             $currentTotal = $this->getTotAuthVehicles();
             $newTotal = $currentTotal - $vehicleReduction;
-            $summary['vehicleReduction'] = "The total number of vehicles authorized has been reduced by {$vehicleReduction}. Your updated \
-            authorised vehicle count is now {$newTotal}.";
+            $summary['vehicleReduction'] = $vehicleReduction;
             $summary['newTotal'] = $newTotal;
+            $messages[] = "The total number of vehicles authorised has been reduced by {$vehicleReduction}. Your updated authorised vehicle count is now {$newTotal}.";
         }
+
+        $summary['messages'] = $messages;
+
         return $summary;
     }
 }

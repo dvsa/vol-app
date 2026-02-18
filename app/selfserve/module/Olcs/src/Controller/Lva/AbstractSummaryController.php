@@ -62,22 +62,15 @@ abstract class AbstractSummaryController extends AbstractController
      */
     public function renderSummary($params)
     {
-        if (!empty($params['getWasAutoGranted'])) {
-            $view = new ViewModel([
-                'changes' => $params['autoGrantChanges'],
-                'application' => $params['application'],
-                'licence' => $params['licence'],
-                'status' => $params['status'],
-                'submittedDate' => $params['submittedDate'],
-                'lva' => $params['lva'],
-            ]);
-            $view->setTemplate('pages/auto-grant-success');
+        $template = 'pages/application-summary';
 
-            return $this->render($view);
+        if (!empty($params['autoGrantChanges'])) {
+            $template = 'pages/auto-grant-success';
+            $params['changes'] = $params['autoGrantChanges']['messages'] ?? [];
         }
-        $view = new ViewModel($params);
-        $view->setTemplate('pages/application-summary');
 
+        $view = new ViewModel($params);
+        $view->setTemplate($template);
         return $this->render($view);
     }
 
