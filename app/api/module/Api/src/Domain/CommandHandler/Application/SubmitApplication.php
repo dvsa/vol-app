@@ -7,6 +7,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
 use Dvsa\Olcs\Api\Domain\CacheAwareTrait;
+use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
@@ -60,19 +61,13 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
         $this->updateStatus($application);
 
         if ($application->canAutoGrant()) {
-            $application->setWasAutoGranted(true);
-            $grantResult = $this->handleSideEffectAsSystemUser(
-                \Dvsa\Olcs\Transfer\Command\Variation\Grant::create([
-                    'id' => $application->getId(),
-                    'version' => $application->getVersion(),
-                    'grantAuthority' => RefData::GRANT_AUTHORITY_DELEGATED,
-                    'isAutoGrant' => true,
-                ])
+            $this->result->merge(
+                $this->handleSideEffectAsSystemUser(
+                    AutoGrant::create([
+                        'id' => $application->getId(),
+                    ])
+                )
             );
-            $this->getRepo()->save($application);
-                $this->result->addMessage('Application auto-granted');
-                $this->result->setFlag('autoGranted', true);
-                $this->result->merge($grantResult);
         }
 
         try {

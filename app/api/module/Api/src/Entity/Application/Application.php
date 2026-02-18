@@ -2809,7 +2809,7 @@ class Application extends AbstractApplication implements ContextProviderInterfac
                 ]);
                 $addressLine = strtoupper(implode(' ', $addressParts));
                 if (!empty($addressLine)) {
-                    $summary[] = "The operating centre at {$addressLine} has been removed.";
+                    $summary['addressLine'] = "The operating centre at {$addressLine} has been removed.";
                 }
                 $vehicleReduction += (int) $aoc->getNoOfVehiclesRequired();
             }
@@ -2817,8 +2817,9 @@ class Application extends AbstractApplication implements ContextProviderInterfac
         if ($vehicleReduction > 0) {
             $currentTotal = $this->getTotAuthVehicles();
             $newTotal = $currentTotal - $vehicleReduction;
-            $summary[] = "The total number of vehicles authorized has been reduced by {$vehicleReduction}. Your updated \
+            $summary['vehicleReduction'] = "The total number of vehicles authorized has been reduced by {$vehicleReduction}. Your updated \
             authorised vehicle count is now {$newTotal}.";
+            $summary['newTotal'] = $newTotal;
         }
         return $summary;
     }
