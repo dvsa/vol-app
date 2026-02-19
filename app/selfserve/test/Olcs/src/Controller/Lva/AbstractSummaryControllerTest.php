@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Controller\Lva;
 
+use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
@@ -166,5 +167,47 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 'application-summary-important-psv-app-sr'
             ],
         ];
+    }
+
+    public function testRenderSummaryWithAutoGrantChanges()
+    {
+        $params = [
+            'autoGrantChanges' => [
+                'messages' => [
+                    'Operating centre at TEST ADDRESS removed',
+                    'Vehicles reduced by 5 to 10'
+                ],
+                'vehicleReduction' => 5,
+                'newTotal' => 10
+            ],
+            'wasAutoGranted' => true,
+            'application' => 123,
+            'licence' => 'ABC123',
+            'status' => 'Granted',
+            'submittedDate' => '2024-01-01',
+            'lva' => 'variation'
+        ];
+
+        $sut = m::mock(\Olcs\Controller\Lva\AbstractSummaryController::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $sut->shouldReceive('render')
+            ->once()
+            ->andReturnUsing(function ($view) use ($params) {
+                $this->assertInstanceOf(ViewModel::class, $view);
+                $this->assertEquals('pages/auto-grant-success', $view->getTemplate());
+
+                $variables = $view->getVariables();
+                $this->assertArrayHasKey('changes', $variables);
+                $this->assertCount(2, $variables['changes']);
+                $this->assertEquals($params['autoGrantChanges']['messages'], $variables['changes']);
+
+                return 'RENDERED';
+            });
+
+        $result = $sut->renderSummary($params);
+
+        $this->assertEquals('RENDERED', $result);
     }
 }
