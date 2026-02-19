@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller\Letter;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -17,21 +15,12 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
  * Letter Generation Controller
  * Handles database-driven letter creation workflow
  */
-class LetterGenerationController extends AbstractInternalController implements ToggleAwareInterface, LeftViewProvider
+class LetterGenerationController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Left sidebar view for preview page
      */
     protected ?ViewModel $leftView = null;
-
-    /**
-     * Feature toggle configuration
-     */
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::LETTERS_DATABASE_DRIVEN,
-        ],
-    ];
 
     /**
      * Inline scripts for form handling
@@ -776,14 +765,23 @@ class LetterGenerationController extends AbstractInternalController implements T
     /**
      * Fetch appendices available for a letter type
      *
-     * @param int $templateId Template/letter type ID
+     * @param int $templateId Doc template ID
      * @return array Array of appendix data
      */
     protected function fetchAppendicesForLetterType(int $templateId): array
     {
+        // Resolve doc template to letter type ID
+        $template = $this->fetchTemplateById($templateId);
+
+        if (!$template || empty($template['letterType']['id'])) {
+            return [];
+        }
+
+        $letterTypeId = (int) $template['letterType']['id'];
+
         // Fetch the letter type to get its assigned appendices
         $query = \Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get::create([
-            'id' => $templateId,
+            'id' => $letterTypeId,
         ]);
 
         $response = $this->handleQuery($query);

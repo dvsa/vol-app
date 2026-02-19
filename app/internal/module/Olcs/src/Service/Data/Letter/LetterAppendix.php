@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
  */
 class LetterAppendix extends AbstractListDataService
 {
-    protected static $sort = 'name';
+    protected static $sort = 'appendixKey';
     protected static $order = 'ASC';
 
     /**

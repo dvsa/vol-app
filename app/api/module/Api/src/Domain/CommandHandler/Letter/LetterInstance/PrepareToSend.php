@@ -17,6 +17,7 @@ use Dvsa\Olcs\Api\Service\Document\NamingServiceAwareInterface;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\PrepareToSend as Cmd;
+use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -60,7 +61,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
         $masterTemplate = $this->getMasterTemplate($letterInstance);
 
         // Render preview HTML
-        $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate);
+        $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate, excludePdfAppendices: true);
 
         // Convert HTML to PDF via Gotenberg
         $tempPdfFile = tempnam(sys_get_temp_dir(), 'letter_') . '.pdf';
@@ -85,7 +86,10 @@ final class PrepareToSend extends AbstractCommandHandler implements
                                     $tempFiles[] = $appendixTempFile;
                                 }
                             } catch (\Exception $e) {
-                                // Skip this appendix if content store fails
+                                Logger::warn(
+                                    'PrepareToSend: Failed to read PDF appendix from content store: '
+                                    . $e->getMessage()
+                                );
                             }
                         }
                     }
@@ -170,9 +174,6 @@ final class PrepareToSend extends AbstractCommandHandler implements
         if ($letterInstance->getTransportManager()) {
             $documentData['transportManager'] = $letterInstance->getTransportManager()->getId();
         }
-        if ($letterInstance->getIrhpApplication()) {
-            $documentData['irhpApplication'] = $letterInstance->getIrhpApplication()->getId();
-        }
 
         if ($this->getCurrentUser()) {
             $documentData['user'] = $this->getCurrentUser()->getId();
@@ -227,7 +228,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
                 return $result[0];
             }
         } catch (\Exception $e) {
-            // Continue without template
+            Logger::warn('PrepareToSend: Failed to fetch default master template: ' . $e->getMessage());
         }
 
         return null;
@@ -255,9 +256,6 @@ final class PrepareToSend extends AbstractCommandHandler implements
         if ($letterInstance->getLicence()) {
             $data['licence'] = $letterInstance->getLicence()->getId();
         }
-        if ($letterInstance->getIrhpApplication()) {
-            $data['irhpApplication'] = $letterInstance->getIrhpApplication()->getId();
-        }
 
         return $data;
     }
@@ -265,7 +263,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
     /**
      * Factory method for dependency injection
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): self
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
     {
         $this->previewService = $container->get(LetterPreviewService::class);
         $this->convertHtmlToPdf = $container->get('ConvertToPdf');

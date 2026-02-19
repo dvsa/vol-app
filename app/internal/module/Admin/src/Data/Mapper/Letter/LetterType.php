@@ -81,10 +81,9 @@ class LetterType implements MapperInterface
             unset($commandData['letterTestData']);
         }
 
-        // Ensure appendices is an array (even if empty) so the handler processes it
-        if (isset($commandData['appendices'])) {
-            $commandData['appendices'] = array_filter((array)$commandData['appendices']);
-        }
+        // Ensure appendices is always an array (even if empty) so the handler processes removals.
+        // When a multi-select has nothing selected, browsers don't submit the field at all.
+        $commandData['appendices'] = array_filter((array)($commandData['appendices'] ?? []));
 
         return $commandData;
     }

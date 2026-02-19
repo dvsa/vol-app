@@ -22,7 +22,9 @@ class LetterAppendix extends AbstractVersionedRepository
         return [
             'name',
             'description',
-            'document'
+            'document',
+            'appendixType',
+            'defaultContent',
         ];
     }
 

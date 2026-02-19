@@ -84,6 +84,7 @@
 
 <!-- Preview or edit letter modal content (hidden until letter is created) -->
 <div id="letter-preview-modal" style="display: none;">
+    <input type="hidden" name="letterType" value="<?= $this->escapeHtmlAttr($templateId) ?>">
     <p class="govuk-body">
         <strong>Category</strong><br>
         <span id="preview-category">-</span>

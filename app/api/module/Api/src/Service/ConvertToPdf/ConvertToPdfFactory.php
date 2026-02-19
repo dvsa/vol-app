@@ -33,7 +33,8 @@ class ConvertToPdfFactory implements FactoryInterface
 
         // Use protocol to determine which client to use
         // HTTPS = Gotenberg (modern), HTTP = WebService (legacy)
-        if (str_starts_with($uri, 'https://')) {
+        // Local Docker Gotenberg runs on HTTP so check explicitly
+        if (str_starts_with($uri, 'https://') || $uri === 'http://pdf-converter:3000') {
             $httpClient = new HttpClient($uri, $httpOptions);
             $wrapper = new ClientAdapterLoggingWrapper();
             $wrapper->wrapAdapter($httpClient);

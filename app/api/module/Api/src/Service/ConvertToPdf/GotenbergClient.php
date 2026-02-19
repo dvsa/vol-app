@@ -172,8 +172,12 @@ class GotenbergClient implements ConvertToPdfInterface, ConvertHtmlToPdfInterfac
         $this->httpClient->setUri($this->baseUri . '/forms/pdfengines/merge');
         $this->httpClient->setMethod(Request::METHOD_POST);
 
-        foreach ($pdfFilePaths as $filePath) {
-            $this->httpClient->setFileUpload($filePath, 'files');
+        // Gotenberg merges files in alphabetical order by filename,
+        // so prefix each with a zero-padded index to preserve input order.
+        foreach ($pdfFilePaths as $index => $filePath) {
+            $orderedName = sprintf('%03d_%s', $index, basename($filePath));
+            $content = file_get_contents($filePath);
+            $this->httpClient->setFileUpload($orderedName, 'files', $content, 'application/pdf');
         }
 
         $response = $this->httpClient->send();

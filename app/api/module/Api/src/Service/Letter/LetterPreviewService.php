@@ -42,12 +42,12 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
     {
         // Render all sections
         $sectionsHtml = $this->renderSections($letterInstance);
         $issuesHtml = $this->renderIssues($letterInstance);
-        $appendicesHtml = $this->renderAppendices($letterInstance);
+        $appendicesHtml = $this->renderAppendices($letterInstance, $excludePdfAppendices);
         $closingHtml = ''; // Closing sections would be rendered similarly when implemented
 
         $context = $this->buildVolGrabContext($letterInstance);
@@ -137,13 +137,16 @@ class LetterPreviewService
      * @param LetterInstance $letterInstance
      * @return string HTML for all appendices
      */
-    private function renderAppendices(LetterInstance $letterInstance): string
+    private function renderAppendices(LetterInstance $letterInstance, bool $excludePdf = false): string
     {
         $appendixRenderer = $this->rendererManager->get('appendix');
         $context = $this->buildVolGrabContext($letterInstance);
         $html = '';
 
         foreach ($letterInstance->getLetterInstanceAppendices() as $appendix) {
+            if ($excludePdf && $appendix->isPdf()) {
+                continue;
+            }
             $html .= $appendixRenderer->render($appendix, $context);
         }
 

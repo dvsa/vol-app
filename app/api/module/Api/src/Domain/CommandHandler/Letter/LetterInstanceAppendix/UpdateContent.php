@@ -26,9 +26,13 @@ final class UpdateContent extends AbstractCommandHandler
             throw new ValidationException(['This appendix is not editable']);
         }
 
-        $letterInstanceAppendix->setEditedContentFromArray(
-            json_decode($command->getEditedContent(), true)
-        );
+        $decoded = json_decode($command->getEditedContent(), true);
+
+        if (!is_array($decoded)) {
+            throw new ValidationException(['editedContent must be valid JSON']);
+        }
+
+        $letterInstanceAppendix->setEditedContentFromArray($decoded);
 
         $this->getRepo()->save($letterInstanceAppendix);
 

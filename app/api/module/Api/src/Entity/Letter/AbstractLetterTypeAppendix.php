@@ -42,26 +42,24 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     use ModifiedOnTrait;
 
     /**
-     * Letter type
+     * Primary key
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     * @var int
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", inversedBy="letterTypeAppendices", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="integer", name="letter_type_id", nullable=false)
      */
-    protected $letterType;
+    protected $letter_type_id = 0;
 
     /**
-     * Letter appendix version
+     * Primary key
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
+     * @var int
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_appendix_version_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="integer", name="letter_appendix_version_id", nullable=false)
      */
-    protected $letterAppendixVersion;
+    protected $letter_appendix_version_id = 0;
 
     /**
      * Created by
@@ -130,51 +128,49 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
 
 
     /**
-     * Set the letter type
+     * Set the letter_type_id
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
+     * @param int $letter_type_id new value being set
      *
      * @return LetterTypeAppendix
      */
-    public function setLetterType($letterType)
+    public function setLetter_type_id($letter_type_id)
     {
-        $this->letterType = $letterType;
+        $this->letter_type_id = $letter_type_id;
 
         return $this;
     }
 
     /**
-     * Get the letter type
+     * Get the letter_type_id
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     */
-    public function getLetterType()
+     * @return int     */
+    public function getLetter_type_id()
     {
-        return $this->letterType;
+        return $this->letter_type_id;
     }
 
     /**
-     * Set the letter appendix version
+     * Set the letter_appendix_version_id
      *
-     * @param \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion $letterAppendixVersion new value being set
+     * @param int $letter_appendix_version_id new value being set
      *
      * @return LetterTypeAppendix
      */
-    public function setLetterAppendixVersion($letterAppendixVersion)
+    public function setLetter_appendix_version_id($letter_appendix_version_id)
     {
-        $this->letterAppendixVersion = $letterAppendixVersion;
+        $this->letter_appendix_version_id = $letter_appendix_version_id;
 
         return $this;
     }
 
     /**
-     * Get the letter appendix version
+     * Get the letter_appendix_version_id
      *
-     * @return \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
-     */
-    public function getLetterAppendixVersion()
+     * @return int     */
+    public function getLetter_appendix_version_id()
     {
-        return $this->letterAppendixVersion;
+        return $this->letter_appendix_version_id;
     }
 
     /**
@@ -293,12 +289,10 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
     }
 
     /**
-     * Get string representation
+     * Get bundle data
      */
     public function __toString(): string
     {
-        $typeId = $this->letterType ? $this->letterType->getId() : '?';
-        $versionId = $this->letterAppendixVersion ? $this->letterAppendixVersion->getId() : '?';
-        return $typeId . '-' . $versionId;
+        return (string) $this->getId();
     }
 }
