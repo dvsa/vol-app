@@ -14,6 +14,9 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
 use Dvsa\Olcs\Api\Entity\Licence\Workshop;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Api\Service\EventHistory\Creator as EventHistoryCreator;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
+use Psr\Container\ContainerInterface;
 
 /**
  * Update Workshop
@@ -24,6 +27,8 @@ final class UpdateWorkshop extends AbstractCommandHandler implements Transaction
 {
     protected $repoServiceName = 'Workshop';
 
+    private EventHistoryCreator $eventHistoryCreator;
+
     public function handleCommand(CommandInterface $command)
     {
         /** @var Workshop $workshop */
@@ -33,6 +38,8 @@ final class UpdateWorkshop extends AbstractCommandHandler implements Transaction
         $addressData = $command->getContactDetails()['address'];
         $addressResult = $this->handleSideEffect(SaveAddress::create($addressData));
         $this->result->merge($addressResult);
+
+        $address = $workshop->getContactDetails()->getAddress();
 
         // Update the Contact Details
         $contactDetails = $workshop->getContactDetails();
@@ -45,6 +52,27 @@ final class UpdateWorkshop extends AbstractCommandHandler implements Transaction
         $this->result->addMessage('Workshop updated');
         $this->result->setFlag('hasChanged', ($command->getVersion() != $workshop->getVersion()));
 
+        if ($command->getVersion() != $workshop->getVersion()) {
+            // create Event History record
+            $this->eventHistoryCreator->create($workshop, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR);
+        }
+
+        if ($contactDetails->getVersion() != $command->getContactDetails()['version']) {
+            // create Event History record
+            $this->eventHistoryCreator->create($contactDetails, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence());
+        }
+
+        if ($workshop->getContactDetails()->getAddress()->getVersion() != $addressData['version']) {
+            // create Event History record
+            $this->eventHistoryCreator->create($address, EventHistoryTypeEntity::EVENT_CODE_EDIT_SAFETY_INSPECTOR, null, $workshop->getLicence());
+        }
+
         return $this->result;
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->eventHistoryCreator = $container->get('EventHistoryCreator');
+        return parent::__invoke($container, $requestedName, $options);
     }
 }
