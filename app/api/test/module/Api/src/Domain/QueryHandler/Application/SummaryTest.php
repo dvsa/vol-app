@@ -1022,4 +1022,82 @@ class SummaryTest extends QueryHandlerTestCase
             $result->serialize()
         );
     }
+
+    public function testHandleQueryWithAutoGrantedApplication()
+    {
+        $query = Qry::create(['id' => 111]);
+
+        /** @var Entity\Application\Application|m\MockInterface $mockApplication */
+        $application = m::mock(Entity\Application\Application::class)->makePartial();
+        $application->setId(111);
+        $application->shouldReceive('getWasAutoGranted')->andReturn(true);
+        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([
+            'messages' => [
+                'Operating centre removed',
+                'Vehicles reduced by 5'
+            ],
+            'vehicleReduction' => 5,
+            'newTotal' => 10
+        ]);
+
+        $this->repoMap['Application']
+            ->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->andReturn($application);
+
+        $this->repoMap['Fee']
+            ->shouldReceive('fetchLatestPaidFeeByApplicationId')
+            ->with(111)
+            ->andReturn(null);
+
+        $this->repoMap['Cases']
+            ->shouldReceive('fetchOpenCasesForApplication')
+            ->with(111)
+            ->andReturn([]);
+
+        $result = $this->sut->handleQuery($query);
+
+        $resultArray = $result->serialize();
+
+        $this->assertTrue($resultArray['wasAutoGranted']);
+        $this->assertArrayHasKey('autoGrantChanges', $resultArray);
+        $this->assertIsArray($resultArray['autoGrantChanges']);
+        $this->assertEquals(5, $resultArray['autoGrantChanges']['vehicleReduction']);
+        $this->assertEquals(10, $resultArray['autoGrantChanges']['newTotal']);
+        $this->assertCount(2, $resultArray['autoGrantChanges']['messages']);
+    }
+
+    public function testHandleQueryWithNonAutoGrantedApplication()
+    {
+        $query = Qry::create(['id' => 111]);
+
+        /** @var Entity\Application\Application|m\MockInterface $mockApplication */
+        $application = m::mock(Entity\Application\Application::class)->makePartial();
+        $application->setId(111);
+        $application->shouldReceive('getWasAutoGranted')->andReturn(false);
+        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([]);
+
+        $this->repoMap['Application']
+            ->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->andReturn($application);
+
+        $this->repoMap('Fee')
+            ->shouldReceive('fetchLatestPaidFeeByApplicationId')
+            ->with(111)
+            ->andReturn(null);
+
+        $this->repoMap['Cases']
+            ->shouldReceive('fetchOpenCasesForApplication')
+            ->with(111)
+            ->andReturn([]);
+
+        $result = $this->sut->handleQuery($query);
+
+        $resultArray = $result->serialize();
+
+        $this->assertFalse($resultArray['wasAutoGranted']);
+        $this->assertArrayHasKey('autoGrantChanges', $resultArray);
+        $this->assertEmpty($resultArray['autoGrantChanges']);
+    }
 }
