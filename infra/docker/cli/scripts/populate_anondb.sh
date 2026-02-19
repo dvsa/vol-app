@@ -8,7 +8,7 @@ export http_proxy=http://${PROXY}
 export https_proxy=http://${PROXY}
 export NO_PROXY=169.254.169.254
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
-readdb=${READDB_HOST}
+readdb=${READDB_ID}
 domain=${FULL_DOMAIN}
 env=${ENVIRONMENT_NAME}
 
