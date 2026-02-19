@@ -53,7 +53,9 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 'description' => 'In-Force'
             ],
             'niFlag' => $niFlag,
-            'canWithdraw' => false
+            'canWithdraw' => false,
+            'wasAutoGranted' => false,
+            'autoGrantChanges' => []
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -81,6 +83,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                             'interimStatus' => 'In-Force',
                             'interimStart' => '2016-01-01',
                             'isNi' => $isNi,
+                            'wasAutoGranted' => false,
+                            'autoGrantChanges' => []
                         ],
                         $view->getVariables()
                     );

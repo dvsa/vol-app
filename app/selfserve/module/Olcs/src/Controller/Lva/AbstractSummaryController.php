@@ -108,7 +108,7 @@ abstract class AbstractSummaryController extends AbstractController
             'interimStatus' => isset($data['interimStatus']) ? $data['interimStatus']['description'] : null,
             'interimStart' => isset($data['interimStatus']) ? $data['interimStart'] : null,
             'isNi' => isset($data['niFlag']) && $data['niFlag'] === 'Y' ? true : false,
-            'getWasAutoGranted' => $data['wasAutoGranted'] ?? false,
+            'wasAutoGranted' => $data['wasAutoGranted'] ?? false,
             'autoGrantChanges' => $data['autoGrantChanges'] ?? []
         ];
     }
