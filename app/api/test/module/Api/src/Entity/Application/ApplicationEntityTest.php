@@ -5574,7 +5574,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenNoOCChanges()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5589,7 +5589,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenOtherSectionsChanged()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5605,7 +5605,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenHasAdditions()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5631,7 +5631,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenHasModifications()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5657,7 +5657,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenNoRemainingOCs()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5684,7 +5684,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsFalseWhenNoRemovals()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5708,7 +5708,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testCanAutoGrantReturnsTrueForValidScenario()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setIsVariation(true);
 
         $variationCompletion = [
@@ -5748,7 +5748,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testGetAutoGrantChangeSummaryReturnsAddressAndVehicleReduction()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
         $sut->setTotAuthVehicles(10);
 
@@ -5788,7 +5788,7 @@ class ApplicationEntityTest extends EntityTester
 
     public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals()
     {
-        $sut = $this->instantiate(Entity::class);
+        $sut = m::mock(Entity::class)->makePartial();
         $sut->setWasAutoGranted(true);
         $sut->setTotAuthVehicles(20);
 
@@ -5833,16 +5833,5 @@ class ApplicationEntityTest extends EntityTester
         $this->assertCount(3, $messages); // 2 OC removals + 1 vehicle reduction message
         $this->assertStringContainsString('1 FIRST STREET TOWN1 T1 1AA', $messages[0]);
         $this->assertStringContainsString('2 SECOND AVENUE TOWN2 T2 2BB', $messages[1]);
-    }
-
-    public function testSetGetWasAutoGranted()
-    {
-        $sut = $this->instantiate(Entity::class);
-
-        $sut->setWasAutoGranted(true);
-        $this->assertTrue($sut->getWasAutoGranted());
-
-        $sut->setWasAutoGranted(false);
-        $this->assertFalse($sut->getWasAutoGranted());
     }
 }

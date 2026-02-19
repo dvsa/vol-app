@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCon
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant as AutoGrantCmd;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Organisation;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository\Sla;
@@ -884,18 +885,26 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
             ->with('application', 'receivedDate', 'targetCompletionDate')
             ->andReturn($mockedSlaEntity);
 
-        // Mock the application to be eligible for auto-grant
         $this->mockApp
             ->setIsVariation(true)
             ->setS4s(new \Doctrine\Common\Collections\ArrayCollection())
             ->setApplicationCompletion(new \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion($this->mockApp))
-            ->shouldReceive('setStatus')
-            ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
-            ->andReturnSelf()
+            ->setGoodsOrPsv($this->mapRefdata(\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_CATEGORY_GOODS_VEHICLE))
+            ->setConditionUndertakings(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setApplicationOrganisationPersons(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setLicenceVehicles(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setTransportManagers(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setStatus($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED));
+
+        $this->mockApp
             ->shouldReceive('canAutoGrant')
             ->andReturn(true)
             ->shouldReceive('getCode')
-            ->andReturn('GV79');
+            ->andReturn('GV79')
+            ->shouldReceive('setStatus')
+            ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
+            ->andReturnSelf();
+
 
         $expectedTargetCompletionDate = clone $now;
         $expectedTargetCompletionDate->modify('+8 week');
@@ -935,13 +944,27 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         );
 
         // Expect task creation
+        // Expect task creation - must match exact structure
+        $expectedTaskData = [
+            'category' => CategoryEntity::CATEGORY_APPLICATION,
+            'subCategory' => CategoryEntity::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            'description' => 'GV79 Application',
+            'actionDate' => $now->format('Y-m-d'),
+            'assignedToUser' => null,
+            'assignedToTeam' => null,
+            'isClosed' => false,
+            'urgent' => false,
+            'application' => self::APP_ID,
+            'licence' => self::LIC_ID,
+            'busReg' => null,
+            'case' => null,
+            'transportManager' => null,
+            'irfoOrganisation' => null,
+        ];
         $taskResult = new Result();
         $taskResult->addId('task', self::TASK_ID);
-        $this->expectedSideEffect(
-            \Dvsa\Olcs\Api\Domain\Command\Task\CreateTask::class,
-            m::type('array'),
-            $taskResult
-        );
+        $taskResult->addMessage('task created');
+        $this->expectedSideEffect(CreateTaskCmd::class, $expectedTaskData, $taskResult);
 
         // Expect light goods vehicle condition check
         $lgvResult = new Result();

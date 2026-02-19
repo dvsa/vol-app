@@ -3,6 +3,7 @@
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Variation;
 
 use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant as AutoGrantCmd;
+use Dvsa\Olcs\Transfer\Command\Variation\Grant as VariationGrantCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Variation\AutoGrant as AutoGrantHandler;
 use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
@@ -29,7 +30,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
     protected function initReferences()
     {
         $this->refData = [
-            RefData::GRANT_AUTHORITY_DELEGATED
+            RefData::GRANT_AUTHORITY_DELEGATED => m::mock(RefData::class)->makePartial()
         ];
 
         parent::initReferences();
@@ -52,6 +53,8 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $application->shouldReceive('getApplicationReferredToPi')->andReturn('N');
         $application->shouldReceive('setWasAutoGranted')->with(true)->once();
 
+        $refData = $this->refData;
+
         $this->repoMap['Application']
             ->shouldReceive('fetchUsingId')
             ->with($command)
@@ -66,14 +69,28 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
 
         $this->expectedSideEffectAsSystemUser(
             OverviewCmd::class,
-            m::on(function ($command) {
-                return $command instanceof OverviewCmd
-                    && $command->getId() === 111
-                    && $command->getVersion() === 5
-                    && is_array($command->getTracking())
-                    && $command->getOverrideOppositionDate() === 'N'
-                    && $command->getApplicationReferredToPi() === 'N';
-            }),
+            [
+                'id' => 111,
+                'version' => 5,
+                'tracking' => [
+                    'id' => 222,
+                    'version' => 1,
+                    'addressesStatus' => '1',
+                    'businessDetailsStatus' => '1',
+                    'businessTypeStatus' => '1',
+                    'communityLicencesStatus' => '1',
+                    'conditionsUndertakingsStatus' => '1',
+                    'operatingCentresStatus' => '1',
+                    'peopleStatus' => '1',
+                    'safetyStatus' => '1',
+                    'transportManagersStatus' => '1',
+                    'typeOfLicenceStatus' => '1',
+                    'declarationsInternalStatus' => '1',
+                    'vehiclesStatus' => '1'
+                ],
+                'overrideOppositionDate' => 'N',
+                'applicationReferredToPi' => 'N'
+            ],
             $overviewResult
         );
 
@@ -82,9 +99,12 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $grantResult->addMessage('Application granted');
 
         $this->expectedSideEffectAsSystemUser(
-            OverviewCmd::class,
-            m::type(OverviewCmd::class),
-            $overviewResult
+            VariationGrantCmd::class,
+            [
+                'id' => 111,
+                'grantAuthority' => $refData[RefData::GRANT_AUTHORITY_DELEGATED]
+            ],
+            $grantResult
         );
 
         $result = $this->sut->handleCommand($command);
@@ -109,6 +129,7 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
         $application->shouldReceive('getOverrideOoo')->andReturn(true);
         $application->shouldReceive('getApplicationReferredToPi')->andReturn('Y');
         $application->shouldReceive('setWasAutoGranted')->with(true)->once();
+        $refData = $this->refData;
 
         $this->repoMap['Application']
             ->shouldReceive('fetchUsingId')
@@ -120,44 +141,42 @@ class AutoGrantTest extends AbstractCommandHandlerTestCase
 
         $overviewResult = new Result();
 
-        // Verify the tracking data structure
+        // Verify the tracking data structure with override values
         $this->expectedSideEffectAsSystemUser(
             OverviewCmd::class,
-            m::on(function ($command) {
-                if (!$command instanceof OverviewCmd) {
-                    return false;
-                }
-
-                $tracking = $command->getTracking();
-
-                if ($tracking['id'] !== 222 || $tracking['version'] !== 1) {
-                    return false;
-                }
-                foreach (['addressesStatus', 'operatingCentresStatus', 'vehiclesStatus'] as $section) {
-                    if (($tracking[$section] ?? null) !== '1') {
-                        return false;
-                    }
-                }
-
-                return $command->getId() === 111
-                    && $command->getVersion() === 5
-                    && $command->getOverrideOppositionDate() === 'Y'
-                    && $command->getApplicationReferredToPi() === 'Y';
-            }),
+            [
+                'id' => 111,
+                'version' => 5,
+                'tracking' => [
+                    'id' => 222,
+                    'version' => 1,
+                    'addressesStatus' => '1',
+                    'businessDetailsStatus' => '1',
+                    'businessTypeStatus' => '1',
+                    'communityLicencesStatus' => '1',
+                    'conditionsUndertakingsStatus' => '1',
+                    'operatingCentresStatus' => '1',
+                    'peopleStatus' => '1',
+                    'safetyStatus' => '1',
+                    'transportManagersStatus' => '1',
+                    'typeOfLicenceStatus' => '1',
+                    'declarationsInternalStatus' => '1',
+                    'vehiclesStatus' => '1'
+                ],
+                'overrideOppositionDate' => 'Y',
+                'applicationReferredToPi' => 'Y'
+            ],
             $overviewResult
         );
 
+        $grantResult = new Result();
         $this->expectedSideEffectAsSystemUser(
-            OverviewCmd::class,
-            m::on(function ($command) {
-                return $command instanceof OverviewCmd
-                    && $command->getId() === 111
-                    && $command->getVersion() === 5
-                    && is_array($command->getTracking())
-                    && $command->getOverrideOppositionDate() === 'N'
-                    && $command->getApplicationReferredToPi() === 'N';
-            }),
-            $overviewResult
+            VariationGrantCmd::class,
+            [
+                'id' => 111,
+                'grantAuthority' => $refData[RefData::GRANT_AUTHORITY_DELEGATED]
+            ],
+            $grantResult
         );
 
         $result = $this->sut->handleCommand($command);

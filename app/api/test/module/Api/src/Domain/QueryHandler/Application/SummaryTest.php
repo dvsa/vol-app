@@ -1027,7 +1027,10 @@ class SummaryTest extends QueryHandlerTestCase
     {
         $query = Qry::create(['id' => 111]);
 
-        /** @var Entity\Application\Application|m\MockInterface $mockApplication */
+        $mockRefData = m::mock(Entity\System\RefData::class);
+        $mockRefData->shouldReceive('getId')->andReturn('apsts_consideration');
+
+        /** @var Entity\Application\Application|m\MockInterface $application */
         $application = m::mock(Entity\Application\Application::class)->makePartial();
         $application->setId(111);
         $application->shouldReceive('getWasAutoGranted')->andReturn(true);
@@ -1039,11 +1042,23 @@ class SummaryTest extends QueryHandlerTestCase
             'vehicleReduction' => 5,
             'newTotal' => 10
         ]);
+        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('getLicence->getId')->andReturn(1);
+        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->setIsVariation(0);
+        $application->setAuthSignature(1);
 
-        $this->repoMap['Application']
-            ->shouldReceive('fetchUsingId')
+        $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->with($query)
             ->andReturn($application);
+
+        $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
+            ->andReturn('apsts_consideration');
 
         $this->repoMap['Fee']
             ->shouldReceive('fetchLatestPaidFeeByApplicationId')
@@ -1071,18 +1086,33 @@ class SummaryTest extends QueryHandlerTestCase
     {
         $query = Qry::create(['id' => 111]);
 
-        /** @var Entity\Application\Application|m\MockInterface $mockApplication */
+        $mockRefData = m::mock(Entity\System\RefData::class);
+        $mockRefData->shouldReceive('getId')->andReturn('apsts_consideration');
+
+        /** @var Entity\Application\Application|m\MockInterface $application */
         $application = m::mock(Entity\Application\Application::class)->makePartial();
         $application->setId(111);
         $application->shouldReceive('getWasAutoGranted')->andReturn(false);
         $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([]);
+        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('getLicence->getId')->andReturn(1);
+        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->setIsVariation(0);
+        $application->setAuthSignature(1);
 
-        $this->repoMap['Application']
-            ->shouldReceive('fetchUsingId')
+        $this->mockAppRepo->shouldReceive('fetchUsingId')
             ->with($query)
             ->andReturn($application);
 
-        $this->repoMap('Fee')
+        $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
+            ->andReturn('apsts_consideration');
+
+        $this->repoMap['Fee']
             ->shouldReceive('fetchLatestPaidFeeByApplicationId')
             ->with(111)
             ->andReturn(null);
