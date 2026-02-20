@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCon
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Application\SubmitApplication;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
+use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant as AutoGrantCmd;
 use Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Organisation;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository\Sla;
@@ -865,5 +866,123 @@ class SubmitApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectException(ValidationException::class);
 
         $this->sut->handleCommand($command);
+    }
+
+    public function testHandleCommandWithAutoGrant()
+    {
+        $this->setupIsInternalUser(false);
+
+        $now = new \DateTime();
+        $command = Cmd::create([
+            'id' => self::APP_ID,
+            'version' => self::VERSION,
+        ]);
+
+        $mockedSlaEntity = m::mock(\Dvsa\Olcs\Api\Entity\System\Sla::class);
+
+        $this->repoMap['Sla']
+            ->expects('fetchByCategoryFieldAndCompareTo')
+            ->with('application', 'receivedDate', 'targetCompletionDate')
+            ->andReturn($mockedSlaEntity);
+
+        $this->mockApp
+            ->setIsVariation(true)
+            ->setS4s(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setApplicationCompletion(new \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion($this->mockApp))
+            ->setGoodsOrPsv($this->mapRefdata(\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_CATEGORY_GOODS_VEHICLE))
+            ->setConditionUndertakings(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setApplicationOrganisationPersons(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setLicenceVehicles(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setTransportManagers(new \Doctrine\Common\Collections\ArrayCollection())
+            ->setStatus($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_NOT_SUBMITTED));
+
+        $this->mockApp
+            ->shouldReceive('canAutoGrant')
+            ->andReturn(true)
+            ->shouldReceive('getCode')
+            ->andReturn('GV79')
+            ->shouldReceive('setStatus')
+            ->with($this->mapRefdata(ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION))
+            ->andReturnSelf();
+
+
+        $expectedTargetCompletionDate = clone $now;
+        $expectedTargetCompletionDate->modify('+8 week');
+
+        $this->mockedSmServices[\Dvsa\Olcs\Api\Domain\Util\SlaCalculatorInterface::class]
+            ->expects('applySla')
+            ->with(m::type(\DateTimeInterface::class), $mockedSlaEntity, null)
+            ->andReturn($expectedTargetCompletionDate);
+
+        $this->repoMap['Application']
+            ->shouldReceive('fetchUsingId')
+            ->with($command, Query::HYDRATE_OBJECT, self::VERSION)
+            ->andReturn($this->mockApp);
+
+        $this->repoMap['Application']
+            ->shouldReceive('save')
+            ->with($this->mockApp)
+            ->once();
+
+        // Expect snapshot to be created
+        $snapshotResult = new Result();
+        $snapshotResult->addMessage('Snapshot created');
+        $this->expectedSideEffect(
+            \Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot::class,
+            ['id' => self::APP_ID, 'event' => \Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot::ON_SUBMIT],
+            $snapshotResult
+        );
+
+        // Expect auto-grant command to be called
+        $autoGrantResult = new Result();
+        $autoGrantResult->addMessage('Application auto-granted');
+        $autoGrantResult->setFlag('autoGranted', true);
+        $this->expectedSideEffectAsSystemUser(
+            AutoGrantCmd::class,
+            ['id' => self::APP_ID],
+            $autoGrantResult
+        );
+
+        // Expect task creation
+        // Expect task creation - must match exact structure
+        $expectedTaskData = [
+            'category' => CategoryEntity::CATEGORY_APPLICATION,
+            'subCategory' => CategoryEntity::TASK_SUB_CATEGORY_APPLICATION_FORMS_DIGITAL,
+            'description' => 'GV79 Application',
+            'actionDate' => $now->format('Y-m-d'),
+            'assignedToUser' => null,
+            'assignedToTeam' => null,
+            'isClosed' => false,
+            'urgent' => false,
+            'application' => self::APP_ID,
+            'licence' => self::LIC_ID,
+            'busReg' => null,
+            'case' => null,
+            'transportManager' => null,
+            'irfoOrganisation' => null,
+        ];
+        $taskResult = new Result();
+        $taskResult->addId('task', self::TASK_ID);
+        $taskResult->addMessage('task created');
+        $this->expectedSideEffect(CreateTaskCmd::class, $expectedTaskData, $taskResult);
+
+        // Expect light goods vehicle condition check
+        $lgvResult = new Result();
+        $this->expectedSideEffectAsSystemUser(
+            \Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition::class,
+            ['applicationId' => self::APP_ID],
+            $lgvResult
+        );
+
+        $this->expectedLicenceCacheClear($this->mockLic);
+
+        $result = $this->sut->handleCommand($command);
+
+        // Verify the auto-grant message is in the results
+        $messages = $result->getMessages();
+        $this->assertContains('Application auto-granted', $messages);
+
+        // Verify the auto-granted flag is set
+        $this->assertTrue($result->getFlag('autoGranted'));
     }
 }

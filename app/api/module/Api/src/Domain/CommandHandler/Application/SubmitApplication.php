@@ -7,8 +7,10 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
 use Dvsa\Olcs\Api\Domain\CacheAwareTrait;
+use Dvsa\Olcs\Api\Domain\Command\Application\Grant\AutoGrant;
 use Dvsa\Olcs\Api\Domain\Command\ConditionUndertaking\CreateLightGoodsVehicleCondition
     as CreateLightGoodsVehicleConditionCmd;
+use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask as CreateTaskCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -21,6 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CreateSnapshot as CreateSnapshotCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
@@ -44,9 +47,9 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param \Dvsa\Olcs\Transfer\Command\Application\SubmitApplication $command Command
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
-    public function handleCommand(CommandInterface $command)
+    public function handleCommand(CommandInterface $command) : Result
     {
         /* @var $application ApplicationEntity */
         $application = $this->getRepo()->fetchUsingId($command, Query::HYDRATE_OBJECT, $command->getVersion());
@@ -56,6 +59,16 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
         $this->result->merge($this->snapshotApplication($application));
 
         $this->updateStatus($application);
+
+        if ($application->canAutoGrant()) {
+            $this->result->merge(
+                $this->handleSideEffectAsSystemUser(
+                    AutoGrant::create([
+                        'id' => $application->getId(),
+                    ])
+                )
+            );
+        }
 
         try {
             $this->clearLicenceCaches($application->getLicence());
@@ -160,7 +173,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Applicaiton Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     private function snapshotApplication(ApplicationEntity $application)
     {
@@ -176,7 +189,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     private function createTask(ApplicationEntity $application)
     {
@@ -329,7 +342,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function createPublication(ApplicationEntity $application)
     {
@@ -348,7 +361,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      *
      * @param ApplicationEntity $application Application Entity
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function createTexTask(ApplicationEntity $application)
     {
@@ -365,7 +378,7 @@ final class SubmitApplication extends AbstractCommandHandler implements Transact
      * Maybe create light goods vehicle condition
      *
      *
-     * @return \Dvsa\Olcs\Api\Domain\Command\Result
+     * @return Result
      */
     protected function maybeCreateLightGoodsVehicleCondition(ApplicationEntity $application)
     {

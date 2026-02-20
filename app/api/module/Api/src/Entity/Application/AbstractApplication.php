@@ -787,6 +787,15 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $applicationReferredToPi;
 
     /**
+     * Was auto granted
+     *
+     * @var bool
+     *
+     * @ORM\Column(type="boolean", name="was_auto_granted", nullable=false, options={"default": 0})
+     */
+    protected $wasAutoGranted = 0;
+
+    /**
      * ApplicationCompletion
      *
      * @var \Dvsa\Olcs\Api\Entity\ApplicationCompletion
@@ -2827,6 +2836,29 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     public function getApplicationReferredToPi()
     {
         return $this->applicationReferredToPi;
+    }
+
+    /**
+     * Set the was auto granted
+     *
+     * @param bool $wasAutoGranted new value being set
+     *
+     * @return Application
+     */
+    public function setWasAutoGranted($wasAutoGranted)
+    {
+        $this->wasAutoGranted = $wasAutoGranted;
+
+        return $this;
+    }
+
+    /**
+     * Get the was auto granted
+     *
+     * @return bool     */
+    public function getWasAutoGranted()
+    {
+        return $this->wasAutoGranted;
     }
 
     /**

@@ -1,0 +1,62 @@
+<div class="row">
+
+  <div class="two-thirds">
+    <?php
+    echo $this->partial(
+      'partials/page-header-simple',
+      [
+        'pageTitle' => $this->escapeHtml($this->translate('lva-summary-title')),
+        'pageSubTitle' => $this->licence . ' / ' . $this->application,
+      ]
+    );
+    ?>
+
+    <div class="article">
+      <h2>Application processed</h2>
+
+      <p>Your licence has been successfully updated. The following changes have been made:</p>
+
+      <ul class="list list-bullet">
+        <?php foreach ($changes as $change): ?>
+          <li><?php echo $this->escapeHtml($change); ?></li>
+        <?php endforeach; ?>
+      </ul>
+
+      <p>You do not need to take any further action. Please continue to operate as per your licence conditions.</p>
+    </div>
+
+    <div class="govuk-button-group">
+      <a class="govuk-button" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a>
+    </div>
+
+  </div>
+
+  <div class="one-third">
+    <div class="sidebar" role="complementary">
+
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('application.status')); ?></h3>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($this->translate($status)); ?></p>
+
+        <ul class="govuk-list">
+          <li>
+            <?php
+            echo $this->linkNewWindow($this->url('lva-' . $lva . '/review', [], [], true), 'view-full-application');
+            ?>
+          </li>
+        </ul>
+
+      </div>
+
+      <div class="info-box info-box--blue">
+        <h3 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('summary')); ?></h3>
+        <dl class="meta">
+          <dt><?php echo $this->escapeHtml($this->translate('submitted-date.title')); ?></dt>
+          <dd><?php echo date('d F Y', strtotime($submittedDate)); ?></dd>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+
+</div>

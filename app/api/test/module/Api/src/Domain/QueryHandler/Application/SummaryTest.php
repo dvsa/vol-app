@@ -73,6 +73,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -108,7 +109,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => true,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -144,6 +147,7 @@ class SummaryTest extends QueryHandlerTestCase
 
         $mockApplication->setId(111);
         $mockApplication->setIsVariation(0);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
             ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
@@ -177,7 +181,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => true,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -212,6 +218,7 @@ class SummaryTest extends QueryHandlerTestCase
 
         $mockApplication->setId(111);
         $mockApplication->setIsVariation(0);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
             ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
@@ -252,7 +259,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => '',
                 'outstandingFee' => false,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -287,6 +296,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -321,7 +331,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => '',
                 'outstandingFee' => false,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -356,6 +368,7 @@ class SummaryTest extends QueryHandlerTestCase
 
         $mockApplication->setId(111);
         $mockApplication->setIsVariation(0);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
             ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
@@ -388,7 +401,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -422,6 +437,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(1);
         $mockApplication->shouldReceive('getTransportManagers')->andReturn($tms);
@@ -456,7 +472,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -492,6 +510,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(1);
         $mockApplication->setAuthSignature(1);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -526,7 +545,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -562,6 +583,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(1);
         $mockApplication->setAuthSignature(1);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -594,7 +616,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -636,6 +660,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(1);
         $mockApplication->setAuthSignature(1);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -668,7 +693,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -711,6 +738,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(1);
         $mockApplication->setAuthSignature(1);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -740,7 +768,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -760,6 +790,7 @@ class SummaryTest extends QueryHandlerTestCase
             ->andReturn(Entity\Application\Application::VARIATION_STATUS_UNCHANGED);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(1);
         $mockApplication->shouldReceive('getLicenceType->getId')
             ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
@@ -795,7 +826,9 @@ class SummaryTest extends QueryHandlerTestCase
                 'actions' => [],
                 'reference' => 'ref',
                 'outstandingFee' => false,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -825,6 +858,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -855,7 +889,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => true,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -885,6 +921,7 @@ class SummaryTest extends QueryHandlerTestCase
         $tms->add($tm1);
 
         $mockApplication->setId(111);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(0);
         $mockApplication->shouldReceive('getLicenceType->getId')
@@ -914,7 +951,9 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => true,
-                'canWithdraw' => false
+                'canWithdraw' => false,
+                'wasAutoGranted'=>false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
@@ -946,6 +985,7 @@ class SummaryTest extends QueryHandlerTestCase
         $mockApplication->setId(111);
         $mockApplication->setIsVariation(0);
         $mockApplication->setAuthSignature(0);
+        $mockApplication->setWasAutoGranted(false);
         $mockApplication->shouldReceive('getLicenceType->getId')
             ->andReturn(Entity\Licence\Licence::LICENCE_TYPE_SPECIAL_RESTRICTED);
         $mockApplication->shouldReceive('getTransportManagers->matching')->andReturn($tms);
@@ -975,9 +1015,119 @@ class SummaryTest extends QueryHandlerTestCase
                 ],
                 'reference' => 'ref',
                 'outstandingFee' => true,
-                'canWithdraw' => true
+                'canWithdraw' => true,
+                'wasAutoGranted' => false,
+                'autoGrantChanges' => []
             ],
             $result->serialize()
         );
+    }
+
+    public function testHandleQueryWithAutoGrantedApplication()
+    {
+        $query = Qry::create(['id' => 111]);
+
+        $mockRefData = m::mock(Entity\System\RefData::class);
+        $mockRefData->shouldReceive('getId')->andReturn('apsts_consideration');
+
+        /** @var Entity\Application\Application|m\MockInterface $application */
+        $application = m::mock(Entity\Application\Application::class)->makePartial();
+        $application->setId(111);
+        $application->shouldReceive('getWasAutoGranted')->andReturn(true);
+        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([
+            'messages' => [
+                'Operating centre removed',
+                'Vehicles reduced by 5'
+            ],
+            'vehicleReduction' => 5,
+            'newTotal' => 10
+        ]);
+        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('getLicence->getId')->andReturn(1);
+        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->setIsVariation(0);
+        $application->setAuthSignature(1);
+
+        $this->mockAppRepo->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->andReturn($application);
+
+        $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
+            ->andReturn('apsts_consideration');
+
+        $this->repoMap['Fee']
+            ->shouldReceive('fetchLatestPaidFeeByApplicationId')
+            ->with(111)
+            ->andReturn(null);
+
+        $this->repoMap['Cases']
+            ->shouldReceive('fetchOpenCasesForApplication')
+            ->with(111)
+            ->andReturn([]);
+
+        $result = $this->sut->handleQuery($query);
+
+        $resultArray = $result->serialize();
+
+        $this->assertTrue($resultArray['wasAutoGranted']);
+        $this->assertArrayHasKey('autoGrantChanges', $resultArray);
+        $this->assertIsArray($resultArray['autoGrantChanges']);
+        $this->assertEquals(5, $resultArray['autoGrantChanges']['vehicleReduction']);
+        $this->assertEquals(10, $resultArray['autoGrantChanges']['newTotal']);
+        $this->assertCount(2, $resultArray['autoGrantChanges']['messages']);
+    }
+
+    public function testHandleQueryWithNonAutoGrantedApplication()
+    {
+        $query = Qry::create(['id' => 111]);
+
+        $mockRefData = m::mock(Entity\System\RefData::class);
+        $mockRefData->shouldReceive('getId')->andReturn('apsts_consideration');
+
+        /** @var Entity\Application\Application|m\MockInterface $application */
+        $application = m::mock(Entity\Application\Application::class)->makePartial();
+        $application->setId(111);
+        $application->shouldReceive('getWasAutoGranted')->andReturn(false);
+        $application->shouldReceive('getAutoGrantChangeSummary')->andReturn([]);
+        $application->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
+        $application->shouldReceive('getStatus')->andReturn($mockRefData);
+        $application->shouldReceive('getLicence->getId')->andReturn(1);
+        $application->shouldReceive('getLicenceType->getId')->andReturn(Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL);
+        $application->shouldReceive('getTransportManagers')->andReturn(new ArrayCollection());
+        $application->shouldReceive('getLatestOutstandingApplicationFee')->andReturn(null);
+        $application->shouldReceive('canAddOperatingCentresEvidence')->andReturn(false);
+        $application->shouldReceive('canAddFinancialEvidence')->andReturn(false);
+        $application->setIsVariation(0);
+        $application->setAuthSignature(1);
+
+        $this->mockAppRepo->shouldReceive('fetchUsingId')
+            ->with($query)
+            ->andReturn($application);
+
+        $this->mockAppRepo->shouldReceive('getRefdataReference->getId')
+            ->andReturn('apsts_consideration');
+
+        $this->repoMap['Fee']
+            ->shouldReceive('fetchLatestPaidFeeByApplicationId')
+            ->with(111)
+            ->andReturn(null);
+
+        $this->repoMap['Cases']
+            ->shouldReceive('fetchOpenCasesForApplication')
+            ->with(111)
+            ->andReturn([]);
+
+        $result = $this->sut->handleQuery($query);
+
+        $resultArray = $result->serialize();
+
+        $this->assertFalse($resultArray['wasAutoGranted']);
+        $this->assertArrayHasKey('autoGrantChanges', $resultArray);
+        $this->assertEmpty($resultArray['autoGrantChanges']);
     }
 }
