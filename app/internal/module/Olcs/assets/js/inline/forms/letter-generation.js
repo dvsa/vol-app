@@ -42,10 +42,11 @@ OLCS.ready(function () {
 
   // Function to update button state based on checkbox selection
   function updateCreateButtonState() {
-    var $checkboxes = $('input[name="letterIssues[]"]:checked');
+    var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+    var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
     var $createBtn = $("#create-letter-btn");
 
-    if ($checkboxes.length > 0) {
+    if ($issueCheckboxes.length > 0 || $appendixCheckboxes.length > 0) {
       $createBtn.prop("disabled", false).removeClass("govuk-button--disabled");
     } else {
       $createBtn.prop("disabled", true).addClass("govuk-button--disabled");
@@ -58,12 +59,13 @@ OLCS.ready(function () {
 
     var $form = $("#letter-create-form");
     var $allCheckboxes = $('input[name="letterIssues[]"]');
-    var $checkboxes = $('input[name="letterIssues[]"]:checked');
+    var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+    var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
     var $errorDiv = $("#validation-error");
     var $button = $(this);
 
-    // Validate at least one issue is selected
-    if ($checkboxes.length === 0) {
+    // Validate at least one issue or appendix is selected
+    if ($issueCheckboxes.length === 0 && $appendixCheckboxes.length === 0) {
       $errorDiv.show();
       $errorDiv[0].scrollIntoView({ behavior: "smooth", block: "nearest" });
       return false;
@@ -158,14 +160,19 @@ OLCS.ready(function () {
   });
 
   // Update button state and hide messages when checkbox changes
-  $("body").on("change", 'input[name="letterIssues[]"]', function () {
-    updateCreateButtonState();
-    var $checkboxes = $('input[name="letterIssues[]"]:checked');
-    if ($checkboxes.length > 0) {
-      $("#validation-error").hide();
-    }
-    $("#placeholder-message").hide(); // Hide placeholder when selection changes
-  });
+  $("body").on(
+    "change",
+    'input[name="letterIssues[]"], input[name="letterAppendices[]"]',
+    function () {
+      updateCreateButtonState();
+      var $issueCheckboxes = $('input[name="letterIssues[]"]:checked');
+      var $appendixCheckboxes = $('input[name="letterAppendices[]"]:checked');
+      if ($issueCheckboxes.length > 0 || $appendixCheckboxes.length > 0) {
+        $("#validation-error").hide();
+      }
+      $("#placeholder-message").hide();
+    },
+  );
 
   // Cancel button - close modal (on create form)
   $("body").on("click", "#cancel-letter-btn", function (e) {
@@ -190,11 +197,61 @@ OLCS.ready(function () {
     window.location.reload();
   });
 
-  // Prepare to send button (placeholder - VOL-5520)
+  // Prepare to send button - converts letter to PDF and loads send modal
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
-    // This will be implemented in VOL-5520
-    alert("Prepare to send functionality coming soon (VOL-5520)");
+    var $btn = $(this);
+    $btn.prop("disabled", true).text("Preparing...");
+
+    // Get letterInstanceId from the preview link (set during generateAction success)
+    var previewHref = $("#preview-link").attr("href") || "";
+    var match = previewHref.match(/[?&]id=(\d+)/);
+    var letterInstanceId = match ? match[1] : null;
+
+    // Get docTemplate ID from the hidden input
+    var docTemplateId = $('input[name="letterType"]').val();
+
+    if (!letterInstanceId || !docTemplateId) {
+      $btn.prop("disabled", false).text("Prepare to send");
+      return;
+    }
+
+    $.ajax({
+      url: "/letter/prepare-to-send",
+      type: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        letterInstanceId: letterInstanceId,
+        docTemplate: docTemplateId,
+      }),
+      success: function (response) {
+        if (response.success && response.printUrl) {
+          // Load the existing printAction into the modal
+          if (
+            typeof OLCS !== "undefined" &&
+            OLCS.modal &&
+            OLCS.modal.updateBody
+          ) {
+            OLCS.modal.updateBody("<p>Loading...</p>");
+          }
+          $.get(response.printUrl, function (html) {
+            if (
+              typeof OLCS !== "undefined" &&
+              OLCS.modal &&
+              OLCS.modal.updateBody
+            ) {
+              OLCS.modal.updateBody(html);
+              $(".modal__title").text("Send letter");
+            }
+          });
+        } else {
+          $btn.prop("disabled", false).text("Prepare to send");
+        }
+      },
+      error: function () {
+        $btn.prop("disabled", false).text("Prepare to send");
+      },
+    });
   });
 
   // Set initial button state on page load

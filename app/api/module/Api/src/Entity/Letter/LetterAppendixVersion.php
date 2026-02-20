@@ -112,4 +112,55 @@ class LetterAppendixVersion extends AbstractLetterAppendixVersion
 
         return $this->document->getIdentifier();
     }
+
+    /**
+     * Check if this is a PDF appendix
+     *
+     * @return bool
+     */
+    public function isPdf(): bool
+    {
+        return $this->appendixType === 'pdf';
+    }
+
+    /**
+     * Check if this is an editable appendix
+     *
+     * @return bool
+     */
+    public function isEditable(): bool
+    {
+        return $this->appendixType === 'editable';
+    }
+
+    /**
+     * Get default content as array
+     *
+     * @return array
+     */
+    public function getDefaultContentAsArray(): array
+    {
+        if ($this->defaultContent === null) {
+            return [];
+        }
+
+        if (is_string($this->defaultContent)) {
+            $decoded = json_decode($this->defaultContent, true);
+            return is_array($decoded) ? $decoded : [];
+        }
+
+        return $this->defaultContent;
+    }
+
+    /**
+     * Set default content from array
+     *
+     * @param array $content
+     * @return self
+     */
+    public function setDefaultContentFromArray(array $content): self
+    {
+        $this->defaultContent = $content;
+        return $this;
+    }
 }

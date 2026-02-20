@@ -82,3 +82,5 @@ packages/local-refresh/.cache/
 # JetBrains
 .idea
 
+# VOL project config
+
