@@ -45,7 +45,9 @@ class GetTest extends QueryHandlerTestCase
                         'letterTodoVersion'
                     ],
                     'letterInstanceAppendices' => [
-                        'letterAppendixVersion'
+                        'letterAppendixVersion' => [
+                            'document'
+                        ]
                     ]
                 ]
             )->once()->andReturn(['id' => 123, 'reference' => 'LTR20251202ABC123'])->getMock();

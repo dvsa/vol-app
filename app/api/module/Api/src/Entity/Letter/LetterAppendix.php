@@ -37,6 +37,8 @@ class LetterAppendix extends AbstractLetterAppendix
     private $name;
     private $description;
     private $document;
+    private $appendixType;
+    private $defaultContent;
 
     /**
      * Initialise collections
@@ -122,6 +124,56 @@ class LetterAppendix extends AbstractLetterAppendix
     }
 
     /**
+     * Proxy getter for appendixType
+     *
+     * @return string
+     */
+    public function getAppendixType()
+    {
+        if ($this->appendixType !== null) {
+            return $this->appendixType;
+        }
+        return $this->currentVersion ? $this->currentVersion->getAppendixType() : 'pdf';
+    }
+
+    /**
+     * Proxy setter for appendixType
+     *
+     * @param string $appendixType
+     * @return self
+     */
+    public function setAppendixType($appendixType)
+    {
+        $this->appendixType = $appendixType;
+        return $this;
+    }
+
+    /**
+     * Proxy getter for defaultContent
+     *
+     * @return array|null
+     */
+    public function getDefaultContent()
+    {
+        if ($this->defaultContent !== null) {
+            return $this->defaultContent;
+        }
+        return $this->currentVersion ? $this->currentVersion->getDefaultContent() : null;
+    }
+
+    /**
+     * Proxy setter for defaultContent
+     *
+     * @param array|null $defaultContent
+     * @return self
+     */
+    public function setDefaultContent($defaultContent)
+    {
+        $this->defaultContent = $defaultContent;
+        return $this;
+    }
+
+    /**
      * Get all versions
      *
      * @return ArrayCollection
@@ -175,6 +227,8 @@ class LetterAppendix extends AbstractLetterAppendix
         $newVersion->setName($currentVersion->getName());
         $newVersion->setDescription($currentVersion->getDescription());
         $newVersion->setDocument($currentVersion->getDocument());
+        $newVersion->setAppendixType($currentVersion->getAppendixType());
+        $newVersion->setDefaultContent($currentVersion->getDefaultContent());
         $newVersion->setIsLocked(false);
         $newVersion->setVersionNumber($currentVersion->getVersionNumber() + 1);
 

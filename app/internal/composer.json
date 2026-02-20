@@ -31,7 +31,7 @@
     "olcs/olcs-auth": "^9.0",
     "olcs/olcs-common": "^9.8",
     "olcs/olcs-logging": "^8.0",
-    "olcs/olcs-transfer": "^8.6.0",
+    "olcs/olcs-transfer": "^8.6.1",
     "olcs/olcs-utils": "^7.0",
     "saeven/zf3-purifier": "^1.1",
     "doctrine/doctrine-module": "^6.3",
