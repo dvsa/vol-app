@@ -1,5 +1,19 @@
 # Changelog
 
+## [6.11.0](https://github.com/dvsa/vol-app/compare/v6.10.2...v6.11.0) (2026-02-20)
+
+
+### Features
+
+* letter edit functionality ([#1309](https://github.com/dvsa/vol-app/issues/1309)) ([d8c8b56](https://github.com/dvsa/vol-app/commit/d8c8b56babb7c0c7e78fbdf17d2c301523b1126c))
+* send letter and Letter Appendix/Attachment work ([#1315](https://github.com/dvsa/vol-app/issues/1315)) ([a18a98b](https://github.com/dvsa/vol-app/commit/a18a98b6b9a2a17244aee5ed9025504e47d7e11d))
+* vol5958 addchangehistoryentries ([#1297](https://github.com/dvsa/vol-app/issues/1297)) ([f98a04a](https://github.com/dvsa/vol-app/commit/f98a04ae9fffa1ec65b016b5639548da66118022))
+
+
+### Bug Fixes
+
+* bump common version for appenix categories ([#1318](https://github.com/dvsa/vol-app/issues/1318)) ([a87477a](https://github.com/dvsa/vol-app/commit/a87477ab8a62444986c47d8d56ff64395fe4dca0))
+
 ## [6.10.2](https://github.com/dvsa/vol-app/compare/v6.10.1...v6.10.2) (2026-02-03)
 
 
