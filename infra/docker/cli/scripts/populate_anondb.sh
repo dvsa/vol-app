@@ -4,11 +4,11 @@
 # It sends a dump of the anonymized database to a non-prod S3 bucket, as well as creating a snapshot for use in non-production environments
 # Anonymised database tables for use in local development environments are also dumped and stored in a non-prod S3 bucket
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
+export http_proxy=http://${PROXY}
+export https_proxy=http://${PROXY}
 export NO_PROXY=169.254.169.254
 nonprod_assume_external_id=${PRODTODEV_ASSUME_ROLE_ID}
-readdb=${READDB_HOST}
+readdb=${READDB_ID}
 domain=${FULL_DOMAIN}
 env=${ENVIRONMENT_NAME}
 
@@ -252,17 +252,18 @@ if [ $? -ne 0 ]; then
 fi
 cleanup_items+=("snapshot:${anondb_snapshot_id}")
 
-<% if @env == 'prod' -%>
-# Share newly created snapshot with nonprod
-log_msg "Adding restoreSnapshot permissions for non-production account on ${anondb_snapshot_id}"
-/usr/local/bin/aws rds modify-db-snapshot-attribute --db-snapshot-identifier $anondb_snapshot_id --attribute-name restore --values-to-add "054614622558" --region $ec2_region
-if [ $? -ne 0 ]; then
-  log_err "Unable to add restoreSnapshot permissions to snapshot."
-  cleanup
-  exit 1
+
+if [ "${env}" = "APP" ]; then
+  # Share newly created snapshot with nonprod
+  log_msg "Adding restoreSnapshot permissions for non-production account on ${anondb_snapshot_id}"
+  /usr/local/bin/aws rds modify-db-snapshot-attribute --db-snapshot-identifier $anondb_snapshot_id --attribute-name restore --values-to-add "054614622558" --region $ec2_region
+  if [ $? -ne 0 ]; then
+    log_err "Unable to add restoreSnapshot permissions to snapshot."
+    cleanup
+    exit 1
+  fi
+  log_msg "restoreSnapshot permissions successfully added for non-production account."
 fi
-log_msg "restoreSnapshot permissions successfully added for non-production account."
-<% end %>
 
 mysqldump_bin=$(which mysqldump)
 log_msg "Dumping ${db_instance_endpoint} database"
